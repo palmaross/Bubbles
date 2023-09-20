@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Mindjet.MindManager.Interop;
-using System.Data;
-using System.IO;
-using Image = System.Drawing.Image;
 using PRAManager;
-using PRMapCompanion;
 using System.Runtime.InteropServices;
 
 namespace Bubbles
@@ -23,8 +17,10 @@ namespace Bubbles
 
         public static void Init()
         {
-            FriendlyAddinName = "Calendar Manager";
+            Registered_AddinName = "Bubbles23.Connect";
+            FriendlyAddinName = "Bubbles";
             I18n = MMUtils._hashtable;
+            I18n_common = MMUtils._hashtableCommon;
             ImagesPath = MMUtils.m_imagesPath;
             dllPath = MMUtils.m_dllPath;
             Language = MMUtils.Language;
@@ -33,43 +29,14 @@ namespace Bubbles
             m_dataPath = MMUtils.m_dataPath;
             m_localDataPath = MMUtils.m_localDataPath;
 
-            m_userIconsPath = m_defaultDataPath + "UserIcons\\"; // CM Topic Rules icons
-            m_userSmartRulesPath = m_defaultDataPath + "SmartRules\\";
-            m_CMIconsPath = m_defaultDataPath + "CMIcons\\";
-
-            MMUtils.CreateDirectories(m_localDataPath + "Credentials");
-            MMUtils.CreateDirectories(m_CMIconsPath); // Calendar Manager service icons
-            MMUtils.CreateDirectories(m_userIconsPath);
-            MMUtils.CreateDirectories(m_userSmartRulesPath);
-
             m_dataPath = getRegistry("DataPath");
 
             if (m_dataPath == "")
                 m_dataPath = m_defaultDataPath;
             else
             {
-                m_userIconsPath = m_dataPath + "UserIcons\\";
-                m_userSmartRulesPath = m_dataPath + "SmartRules\\";
-                m_CMIconsPath = m_dataPath + "CMIcons\\";
 
-                MMUtils.CreateDirectories(m_CMIconsPath);
-                MMUtils.CreateDirectories(m_userIconsPath);
-                MMUtils.CreateDirectories(m_userSmartRulesPath);
             }
-
-            if (!File.Exists(m_userSmartRulesPath + "TopicPreview.mmap"))
-                File.Copy(dllPath + "Resources\\TopicPreview.mmap", m_userSmartRulesPath + "TopicPreview.mmap");
-            if (!File.Exists(m_userSmartRulesPath + "defaultPreview.png"))
-                File.Copy(dllPath + "Resources\\defaultPreview.png", m_userSmartRulesPath + "defaultPreview.png");
-
-            if (!File.Exists(m_dataPath + "CMIcons\\" + "notsync.ico"))
-                File.Copy(ImagesPath + "notsync.ico", m_dataPath + "CMIcons\\" + "notsync.ico");
-            if (!File.Exists(m_userIconsPath + "arrowsarrow_08.ico"))
-                File.Copy(ImagesPath + "arrowsarrow_08.ico", m_userIconsPath + "arrowsarrow_08.ico");
-            if (!File.Exists(m_userIconsPath + "people_02.ico"))
-                File.Copy(ImagesPath + "people_02.ico", m_userIconsPath + "people_02.ico");
-            if (!File.Exists(m_userIconsPath + "birthday.ico"))
-                File.Copy(ImagesPath + "birthday.ico", m_userIconsPath + "birthday.ico");
         }
 
         /// <summary>
@@ -82,7 +49,7 @@ namespace Bubbles
         {
             MMUtils.Company = Company;
             MMUtils.AddinName = AddinName;
-            return MMUtils.getRegistry(aKey, aDefValue);
+            return MMUtils.getRegistry("", aKey, aDefValue);
         }
 
         /// <summary>
@@ -95,7 +62,7 @@ namespace Bubbles
         {
             MMUtils.Company = Company;
             MMUtils.AddinName = AddinName;
-            return MMUtils.setRegistry(aKey, aValue, "");
+            return MMUtils.setRegistry("", aKey, aValue);
         }
 
         public static string getString(string name)
@@ -103,6 +70,13 @@ namespace Bubbles
             MMUtils._hashtable = I18n;
             return MMUtils.getString(name);
         }
+
+        public static string getCommonString(string name)
+        {
+            MMUtils._hashtableCommon = I18n_common;
+            return MMUtils.getCommonString(name);
+        }
+
 
         /// <summary>
         /// Change RRULE in the reccurence list. Insert new or replace old UNTIL part with new date.
@@ -182,20 +156,11 @@ namespace Bubbles
             return licenseStatus == "Unlicensed";
         }
 
-        public static bool IsIndividual()
-        {
-            return licenseStatus == "Limited";
-        }
-
-        public static bool IsCorporate()
-        {
-            return licenseStatus == "Full";
-        }
-
         /// <summary>
         /// Hashtable of localization file (I18n.ini)
         /// </summary>
         public static System.Collections.Hashtable I18n;
+        public static System.Collections.Hashtable I18n_common;
 
         public static string ImagesPath = "";
         public static string dllPath = "";
@@ -214,11 +179,6 @@ namespace Bubbles
         /// Path with last backslash!
         /// </summary>
 		public static string m_defaultDataPath, m_dataPath, m_localDataPath;
-
-        /// <summary>
-        /// Path with last backslash!
-        /// </summary>
-        public static string m_userIconsPath, m_userSmartRulesPath, m_CMIconsPath;
     }
 
     class ScalingFactor

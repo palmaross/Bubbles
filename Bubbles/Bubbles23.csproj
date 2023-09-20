@@ -59,20 +59,61 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppManager\DatabaseWrapper.cs" />
     <Compile Include="Bubbles.cs" />
     <Compile Include="Bubbles23.cs" />
     <Compile Include="AssemblyInfo23.cs" />
+    <Compile Include="BubblesBookmarks.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BubblesBookmarks.Designer.cs">
+      <DependentUpon>BubblesBookmarks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BubblesMenuDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BubblesMenuDlg.Designer.cs">
+      <DependentUpon>BubblesMenuDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="BubblesPaste.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="BubblesPaste.Designer.cs">
       <DependentUpon>BubblesPaste.cs</DependentUpon>
     </Compile>
+    <Compile Include="BubblesIcons.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BubblesIcons.Designer.cs">
+      <DependentUpon>BubblesIcons.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SelectIconDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectIconDlg.Designer.cs">
+      <DependentUpon>SelectIconDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsDlg.Designer.cs">
+      <DependentUpon>SettingsDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BubblesDB.cs" />
+    <Compile Include="SnippetsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SnippetsDlg.Designer.cs">
+      <DependentUpon>SnippetsDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app21.config" />
     <None Include="I18n.default.ini">
@@ -83,10 +124,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="images\addsubtopic.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\addtopic.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\addtotopic.png">
+    <Content Include="images\addTextToTopic.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\folder.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pasteTextToTopic.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\bubble.png">
@@ -98,16 +148,31 @@
     <Content Include="images\close_float.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\copyText.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\PasteLink.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\PasteNotes.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\pasteText.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\rotate.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\snippets.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\tag.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\tag_s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\unformatText.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -123,8 +188,30 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BubblesBookmarks.resx">
+      <DependentUpon>BubblesBookmarks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BubblesMenuDlg.resx">
+      <DependentUpon>BubblesMenuDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BubblesPaste.resx">
       <DependentUpon>BubblesPaste.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BubblesIcons.resx">
+      <DependentUpon>BubblesIcons.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectIconDlg.resx">
+      <DependentUpon>SelectIconDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsDlg.resx">
+      <DependentUpon>SettingsDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SnippetsDlg.resx">
+      <DependentUpon>SnippetsDlg.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -51,27 +51,24 @@
                 MMUtils.Version = 23;
                 MMUtils.Registered_AddinName = "Bubbles23.Connect";
                 MMUtils.CLSID = "A6E25E96-3200-4C90-9D4C-58BB430A8406";
-                MMUtils.CreateAddinFolder = false;
+                MMUtils.CreateAddinFolder = true;
                 MMUtils.CreateAddinAppDataFolder = false;
                 MMUtils.checkForUpdates = true;
 
-                MMUtils.AddinName = "Bubbles23";
-                MMUtils.FriendlyAddinName = "Bubbles23";
+                MMUtils.AddinName = "Bubbles";
+                MMUtils.FriendlyAddinName = "Bubbles";
                 MMUtils.Company = "PalmaRoss";
-                MMUtils.Language = BubblesButton.getRegistry("", "language", "english");
-                MMUtils.AddinVersion = BubblesButton.getRegistry("", "version");
+                Utils.Company = "PalmaRoss";
+                Utils.AddinName = "Bubbles";
+                MMUtils.Language = Utils.getRegistry("language", "english");
+                MMUtils.AddinVersion = Utils.getRegistry("version");
                 MMUtils.licenseKeyStartsWith = "BB";
 
                 MMUtils.MindManager = (Application)application;
                 if (MMUtils.DoNotStartAddin)
                     return;
 
-                BubblesButton.Registered_AddinName = "MapNavigator23.Connect";
-                BubblesButton.I18n = MMUtils._hashtable;
-                BubblesButton.I18n_common = MMUtils._hashtableCommon;
-                BubblesButton.ImagesPath = MMUtils.m_imagesPath;
-                BubblesButton.dllPath = MMUtils.m_dllPath;
-                BubblesButton.Language = MMUtils.Language;
+                Utils.Init();
 
                 PRMapCompanion.DocumentStorage.Init();
 
