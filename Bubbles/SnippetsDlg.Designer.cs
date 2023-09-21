@@ -1,6 +1,6 @@
 ﻿namespace Bubbles
 {
-    partial class SnippetsDlg
+    partial class BubbleSnippets
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SnippetsDlg));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BubbleSnippets));
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.txtAddItem = new System.Windows.Forms.TextBox();
             this.btnOK = new System.Windows.Forms.Button();

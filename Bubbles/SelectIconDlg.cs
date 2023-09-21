@@ -105,7 +105,7 @@ namespace Bubbles
             iconPath = icon.Name;
             string filename = Path.GetFileNameWithoutExtension(iconPath);
 
-            foreach (var item in BubblesIcons.Icons) // проверим, есть ли в пузыре этот значок
+            foreach (var item in BubbleIcons.Icons) // проверим, есть ли в пузыре этот значок
             {
                 if (item.FileName == filename + ".ico" || // custom icon
                     item.FileName == "stock" + filename) // stock icon

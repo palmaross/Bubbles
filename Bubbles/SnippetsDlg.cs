@@ -9,9 +9,9 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Bubbles
 {
-    internal partial class SnippetsDlg : Form
+    internal partial class BubbleSnippets : Form
     {
-        public SnippetsDlg()
+        public BubbleSnippets()
         {
             InitializeComponent();
 

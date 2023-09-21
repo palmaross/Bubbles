@@ -34,10 +34,10 @@ namespace Bubbles
 
         private void ClipBoard_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (BubblesButton.m_Snippets.Visible)
-                BubblesButton.m_Snippets.Hide();
+            if (BubblesButton.m_bubbleSnippets.Visible)
+                BubblesButton.m_bubbleSnippets.Hide();
             else
-                BubblesButton.m_Snippets.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                BubblesButton.m_bubbleSnippets.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
 
             this.Close();
         }
@@ -57,6 +57,16 @@ namespace Bubbles
                 BubblesButton.m_bubbleIcons.Hide();
             else
                 BubblesButton.m_bubbleIcons.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+
+            this.Close();
+        }
+
+        private void linkBookmarks_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (BubblesButton.m_bubbleBookmarks.Visible)
+                BubblesButton.m_bubbleBookmarks.Hide();
+            else
+                BubblesButton.m_bubbleBookmarks.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
 
             this.Close();
         }

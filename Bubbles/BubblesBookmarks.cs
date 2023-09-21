@@ -8,12 +8,13 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Bubbles
 {
-    internal partial class BubblesBookmarks : Form
+    internal partial class BubbleBookmarks : Form
     {
-        public BubblesBookmarks()
+        public BubbleBookmarks()
         {
             InitializeComponent();
 
@@ -57,9 +58,9 @@ namespace Bubbles
 
             // Context menu
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
-            contextMenuStrip1.Items["BI_new"].Text = MMUtils.getString("bookmarks.contextmenu.delete");
-            contextMenuStrip1.Items["BI_delete"].Text = MMUtils.getString("bookmarks.contextmenu.maintopics");
-            contextMenuStrip1.Items["BI_rename"].Text = MMUtils.getString("bookmarks.contextmenu.deletemaintopics");
+            contextMenuStrip1.Items["BI_delete"].Text = MMUtils.getString("bookmarks.contextmenu.delete");
+            contextMenuStrip1.Items["BI_main"].Text = MMUtils.getString("bookmarks.contextmenu.maintopics");
+            contextMenuStrip1.Items["BI_deletemain"].Text = MMUtils.getString("bookmarks.contextmenu.deletemaintopics");
 
             contextMenuStrip1.Items["BI_rotate"].Text = MMUtils.getString("float_icons.contextmenu.rotate");
             contextMenuStrip1.Items["BI_close"].Text = MMUtils.getString("float_icons.contextmenu.close");
@@ -90,6 +91,7 @@ namespace Bubbles
                 return;
 
             pCentral.Tag = new BookmarkItem(MMUtils.ActiveDocument.CentralTopic.Text, "", false);
+            toolTip1.SetToolTip(pCentral, MMUtils.ActiveDocument.CentralTopic.Text);
 
             if (BookmarkedDocuments.Keys.Contains(MMUtils.ActiveDocument))
             {
@@ -101,12 +103,25 @@ namespace Bubbles
                 // Add Main Topics
                 foreach (Topic t in MMUtils.ActiveDocument.CentralTopic.AllSubTopics)
                 {
-                    Bookmarks.Add(new BookmarkItem(t.Text.Trim(), t.Guid, false));
-                    AddIcon(t.Text, t.Guid, true);
+                    if (t.GetAttributes(ATTR_NAMESPACE).HasAttribute(ATTR_BOOKMARKED))
+                    {
+                        AddIcon(t.Text, t.Guid, true);
+                    }
                 }
 
+                // Add the rest bookmarks exept floating
                 LoadFromMapRecursive(MMUtils.ActiveDocument.CentralTopic);
 
+                // Add Floating Topics
+                foreach (Topic t in MMUtils.ActiveDocument.AllFloatingTopics)
+                {
+                    if (t.GetAttributes(ATTR_NAMESPACE).HasAttribute(ATTR_BOOKMARKED))
+                    {
+                        AddIcon(t.Text, t.Guid, false, true);
+                    }
+                }
+
+                // Add bookmarks from the floating topic branches
                 foreach (Topic _t in MMUtils.ActiveDocument.AllFloatingTopics)
                     LoadFromMapRecursive(_t);
             }
@@ -116,7 +131,7 @@ namespace Bubbles
         {
             if (_t.GetAttributes(ATTR_NAMESPACE).HasAttribute(ATTR_BOOKMARKED))
             {
-                if (!_t.IsMainTopic) // main topics are already handled
+                if (!_t.IsMainTopic && !_t.IsFloatingTopic) // main and floating topics are already handled
                 {
                     Bookmarks.Add(new BookmarkItem(_t.Text.Trim(), _t.Guid, false));
                     AddIcon(_t.Text.Trim(), _t.Guid, false);
@@ -235,7 +250,7 @@ namespace Bubbles
             return null;
         }
 
-        void AddIcon(string tooltip, string guid, bool maintopic = false)
+        void AddIcon(string tooltip, string guid, bool maintopic = false, bool floattopic = false)
         {
             int iconOrder = icondist.Width * Bookmarks.Count;
             PictureBox pBox = new PictureBox();
@@ -245,6 +260,8 @@ namespace Bubbles
 
             if (maintopic)
                 pBox.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "bookmarkMain.png");
+            else if (floattopic)
+                pBox.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "bookmarkFloat.png");
             else
                 pBox.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "bookmarkRest.png");
 
@@ -253,7 +270,7 @@ namespace Bubbles
             toolTip1.SetToolTip(pBox, tooltip);
             pBox.BringToFront();
 
-            pBox.Tag = new BookmarkItem(tooltip, guid);
+            pBox.Tag = new BookmarkItem(tooltip, guid, maintopic);
             Bookmarks.Add((BookmarkItem)pBox.Tag);
 
             if (orientation == "H")
@@ -365,6 +382,9 @@ namespace Bubbles
         private void AddBookmark_Click(object sender, EventArgs e)
         {
             Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
+            if (t == null)
+                return;
+
             if (t.GetAttributes(ATTR_NAMESPACE).HasAttribute(ATTR_BOOKMARKED))
             {
                 MessageBox.Show("", "", 
@@ -373,7 +393,7 @@ namespace Bubbles
             else
             {
                 t.GetAttributes(ATTR_NAMESPACE).SetAttributeValue(ATTR_BOOKMARKED, "1");
-
+                //AddIcon();
                 // add bookmark to bubble
             }
         }
@@ -411,14 +431,16 @@ namespace Bubbles
 
     internal class BookmarkItem
     {
-        public BookmarkItem(string topicName, string topicGuid, bool maintopic)
+        public BookmarkItem(string topicName, string topicGuid, bool maintopic = false, bool floattopic = false)
         {
             TopicName = topicName;
             TopicGuid = topicGuid;
             MainTopic = maintopic;
+            FloatTopic = floattopic;
         }
         public string TopicName = "";
         public string TopicGuid = "";
-        public bool MainTopic = false;
+        public bool MainTopic;
+        public bool FloatTopic;
     }
 }

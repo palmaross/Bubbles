@@ -23,9 +23,10 @@ namespace Bubbles
             m_cmdBubbles.Click += new ICommandEvents_ClickEventHandler(m_cmdBubbles_Click);
             m_ctrlBubbles = MMUtils.MindManager.StatusBarControls.AddButton(m_cmdBubbles);
 
-            m_bubblePaste = new BubblesPaste();
-            m_bubbleIcons = new BubblesIcons();
-            m_Snippets = new SnippetsDlg();
+            m_bubblePaste = new BubblePaste();
+            m_bubbleIcons = new BubbleIcons();
+            m_bubbleSnippets = new BubbleSnippets();
+            m_bubbleBookmarks = new BubbleBookmarks();
 
             DocumentStorage.Subscribe(this);
 
@@ -41,7 +42,10 @@ namespace Bubbles
                 m_bubblePaste.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
 
             if (Utils.getRegistry("StartSnippets", "0") == "1")
-                m_Snippets.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                m_bubbleSnippets.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+
+            if (Utils.getRegistry("StartBookmarks", "0") == "1")
+                m_bubbleBookmarks.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
         private void m_cmdBubbles_Click()
@@ -79,10 +83,10 @@ namespace Bubbles
             m_bubbleIcons.Dispose();
             m_bubbleIcons = null;
 
-            if (m_Snippets.Visible)
-                m_Snippets.Hide();
-            m_Snippets.Dispose();
-            m_Snippets = null;
+            if (m_bubbleSnippets.Visible)
+                m_bubbleSnippets.Hide();
+            m_bubbleSnippets.Dispose();
+            m_bubbleSnippets = null;
 
             DocumentStorage.Unsubscribe(this);
 
@@ -90,9 +94,10 @@ namespace Bubbles
         }
 
         private bool m_bCreated;
-        public static BubblesPaste m_bubblePaste = null;
-        public static BubblesIcons m_bubbleIcons = null;
-        public static SnippetsDlg m_Snippets = null;
+        public static BubblePaste m_bubblePaste = null;
+        public static BubbleIcons m_bubbleIcons = null;
+        public static BubbleSnippets m_bubbleSnippets = null;
+        public static BubbleBookmarks m_bubbleBookmarks = null;
 
         private Command m_cmdBubbles;
         private Control m_ctrlBubbles;

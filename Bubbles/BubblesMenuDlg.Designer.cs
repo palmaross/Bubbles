@@ -33,6 +33,7 @@
             this.ClipBoard = new System.Windows.Forms.LinkLabel();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.linkSettings = new System.Windows.Forms.LinkLabel();
+            this.linkBookmarks = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // PasteBubble
@@ -79,7 +80,7 @@
             // linkSettings
             // 
             this.linkSettings.AutoSize = true;
-            this.linkSettings.Location = new System.Drawing.Point(12, 56);
+            this.linkSettings.Location = new System.Drawing.Point(12, 75);
             this.linkSettings.Name = "linkSettings";
             this.linkSettings.Size = new System.Drawing.Size(62, 13);
             this.linkSettings.TabIndex = 4;
@@ -87,12 +88,24 @@
             this.linkSettings.Text = "Настройки";
             this.linkSettings.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkSettings_LinkClicked);
             // 
+            // linkBookmarks
+            // 
+            this.linkBookmarks.AutoSize = true;
+            this.linkBookmarks.Location = new System.Drawing.Point(12, 58);
+            this.linkBookmarks.Name = "linkBookmarks";
+            this.linkBookmarks.Size = new System.Drawing.Size(56, 13);
+            this.linkBookmarks.TabIndex = 5;
+            this.linkBookmarks.TabStop = true;
+            this.linkBookmarks.Text = "Закладки";
+            this.linkBookmarks.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkBookmarks_LinkClicked);
+            // 
             // BubblesMenuDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(225, 88);
+            this.ClientSize = new System.Drawing.Size(225, 95);
             this.ControlBox = false;
+            this.Controls.Add(this.linkBookmarks);
             this.Controls.Add(this.linkSettings);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.ClipBoard);
@@ -115,5 +128,6 @@
         private System.Windows.Forms.LinkLabel ClipBoard;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.LinkLabel linkSettings;
+        private System.Windows.Forms.LinkLabel linkBookmarks;
     }
 }

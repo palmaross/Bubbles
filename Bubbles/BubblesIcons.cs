@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Bubbles
 {
-    internal partial class BubblesIcons : Form
+    internal partial class BubbleIcons : Form
     {
-        public BubblesIcons()
+        public BubbleIcons()
         {
             InitializeComponent();
 

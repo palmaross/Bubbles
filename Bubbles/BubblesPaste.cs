@@ -8,9 +8,9 @@ using System.Xml.Linq;
 
 namespace Bubbles
 {
-    internal partial class BubblesPaste : Form
+    internal partial class BubblePaste : Form
     {
-        public BubblesPaste()
+        public BubblePaste()
         {
             InitializeComponent();
 
