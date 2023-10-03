@@ -1,7 +1,6 @@
 ﻿using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using Mindjet.MindManager.Interop;
 using PRAManager;
 using Image = System.Drawing.Image;
@@ -10,17 +9,23 @@ namespace Bubbles
 {
     public partial class SelectIconDlg : Form
     {
-        public SelectIconDlg()
+        public SelectIconDlg(bool manage)
         {
             InitializeComponent();
 
-            Text = Utils.getString("SelectIconDlg.text");
+            Text = Utils.getString("SelectIconDlg.caption");
+            rbtnLeft.Text = Utils.getString("SelectIconDlg.rbtnLeft");
+            rbtnRight.Text = Utils.getString("SelectIconDlg.rbtnRight");
+            rbtnEnd.Text = Utils.getString("SelectIconDlg.rbtnEnd");
+            rbtnBegin.Text = Utils.getString("SelectIconDlg.rbtnBegin");
 
             imageList1.Images.Add(Image.FromFile(Utils.ImagesPath + "folder.png"));
             space = pSpace.Width;
 
             string path = MMUtils.MindManager.GetPath(MmDirectory.mmDirectoryIcons);
             ListDirectory(treeView1, path);
+
+            rbtnLeft.Enabled = !manage; rbtnRight.Enabled = !manage;
 
             txtIconName.KeyUp += TxtIconName_KeyUp;
         }

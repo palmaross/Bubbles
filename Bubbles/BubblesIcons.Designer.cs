@@ -34,6 +34,7 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.BI_new = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
+            this.BI_deleteall = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_rename = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.BI_rotate = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,11 +58,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
             this.SuspendLayout();
             // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
+            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.BI_new,
             this.BI_delete,
+            this.BI_deleteall,
             this.BI_rename,
             this.toolStripSeparator2,
             this.BI_rotate,
@@ -70,7 +76,7 @@
             this.BI_help,
             this.BI_store});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(162, 170);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(162, 192);
             // 
             // BI_new
             // 
@@ -83,6 +89,12 @@
             this.BI_delete.Name = "BI_delete";
             this.BI_delete.Size = new System.Drawing.Size(161, 22);
             this.BI_delete.Text = "Удалить";
+            // 
+            // BI_deleteall
+            // 
+            this.BI_deleteall.Name = "BI_deleteall";
+            this.BI_deleteall.Size = new System.Drawing.Size(161, 22);
+            this.BI_deleteall.Text = "Удалить все";
             // 
             // BI_rename
             // 
@@ -173,9 +185,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.Controls.Add(this.p1);
-            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Location = new System.Drawing.Point(26, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(110, 30);
+            this.panel1.Size = new System.Drawing.Size(84, 30);
             this.panel1.TabIndex = 78;
             // 
             // txtName
@@ -197,7 +209,7 @@
             this.pictureHandle.TabIndex = 77;
             this.pictureHandle.TabStop = false;
             // 
-            // BubblesIcons
+            // BubbleIcons
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -211,7 +223,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.Manage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "BubblesIcons";
+            this.Name = "BubbleIcons";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.contextMenuStrip1.ResumeLayout(false);
@@ -245,5 +257,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem BI_help;
         private System.Windows.Forms.ToolStripMenuItem BI_store;
+        private System.Windows.Forms.ToolStripMenuItem BI_deleteall;
     }
 }

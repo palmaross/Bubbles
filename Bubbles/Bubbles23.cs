@@ -40,7 +40,7 @@
             string myDocumentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             try
             {
-                string logfile = myDocumentsFolder + "\\MapNavigator_logfile.txt";
+                string logfile = myDocumentsFolder + "\\Bubbles_logfile.txt";
                 if (System.IO.File.Exists(logfile))
                     System.IO.File.Delete(logfile);
             }

@@ -42,6 +42,9 @@ namespace Bubbles
             {
                 string[] xy = location.Split(',');
                 Location = new Point(Convert.ToInt32(xy[0]), Convert.ToInt32(xy[1]));
+
+                if (!Utils.IsOnScreen(Location, this.Size))
+                    Location = new Point(MMUtils.MindManager.Left + MMUtils.MindManager.Width - this.Width - label1.Width * 2, MMUtils.MindManager.Top + label1.Width);
             }
 
             toolTip1.SetToolTip(PasteLink, getString("BubblesPaste.PasteLink.tooltip"));
@@ -53,6 +56,9 @@ namespace Bubbles
             toolTip1.SetToolTip(pasteToTopic, getString("BubblesPaste.pastetotopic.tooltip"));
             toolTip1.SetToolTip(copyTopicText, getString("BubblesPaste.copyTopicText.tooltip"));
             toolTip1.SetToolTip(UnformatText, getString("BubblesPaste.unformate.tooltip"));
+
+            toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
+            toolTip1.SetToolTip(pictureHandle, Utils.getString("copypaste.bubble.tooltip"));
 
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
             contextMenuStrip1.Items["BI_rotate"].Text = MMUtils.getString("float_icons.contextmenu.rotate");

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using PRAManager;
 using System.Runtime.InteropServices;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace Bubbles
 {
@@ -157,6 +159,43 @@ namespace Bubbles
         }
 
         /// <summary>
+		/// Return True if a certain percent of a rectangle is shown across the 
+		/// total screen area of all monitors, otherwise return False.
+		/// </summary>
+		/// <param name="RecLocation"></param>
+		/// <param name="RecSize"></param>
+		/// <param name="MinPercentOnScreen"></param>
+		/// <returns>False if form is totally off screen</returns>
+		public static bool IsOnScreen(Point RecLocation, Size RecSize, double MinPercentOnScreen = 1)
+        {
+            double PixelsVisible = 0;
+            Rectangle Rec = new Rectangle(RecLocation, RecSize);
+
+            foreach (Screen Scrn in Screen.AllScreens)
+            {
+                Rectangle r = Rectangle.Intersect(Rec, Scrn.WorkingArea);
+                // intersect rectangle with screen
+                if (r.Width != 0 & r.Height != 0)
+                {
+                    PixelsVisible += (r.Width * r.Height);
+                    // tally visible pixels
+                }
+            }
+            return PixelsVisible >= (Rec.Width * Rec.Height) * MinPercentOnScreen;
+        }
+
+        public static bool IsOnMMWindow(Point WandLocation, Size WandSize)
+        {
+            if (WandLocation.X + WandSize.Width < MMUtils.MindManager.Left || // wand is totally to the left
+                WandLocation.X > MMUtils.MindManager.Left + MMUtils.MindManager.Width) // wand is totally to the right
+                return false;
+            if (WandLocation.Y + WandSize.Height < MMUtils.MindManager.Top || // wand is totally above
+                WandLocation.Y > MMUtils.MindManager.Top + MMUtils.MindManager.Height) // wand is totally below
+                return false;
+            return true;
+        }
+
+        /// <summary>
         /// Hashtable of localization file (I18n.ini)
         /// </summary>
         public static System.Collections.Hashtable I18n;
@@ -175,9 +214,7 @@ namespace Bubbles
         public static string Language;
         public static string licenseStatus = "";
 
-        /// <summary>
-        /// Path with last backslash!
-        /// </summary>
+        /// <summary>Path with last backslash!</summary>
 		public static string m_defaultDataPath, m_dataPath, m_localDataPath;
     }
 

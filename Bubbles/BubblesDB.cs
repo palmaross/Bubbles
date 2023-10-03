@@ -34,6 +34,18 @@ namespace Bubbles
                 );
         }
 
+        public void AddSource(string title, string path, string type, int order)
+        {
+            m_db.ExecuteNonQuery("insert into SOURCES values(`"
+                + title + "`, `"
+                + path + "`, `"
+                + type + "`, "
+                + order + ", "
+                + "'', '', 0, 0"
+                + ");"
+                );
+        }
+
         public override void CreateDatabase()
         {
             base.CreateDatabase();
@@ -42,6 +54,9 @@ namespace Bubbles
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
             m_db.ExecuteNonQuery("CREATE TABLE ICONS(name text, filename text, _order integer, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE SOURCES(title text, path text, type, _order integer, " +
+                "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
+                // bubbles: bubble_name;bubble_orientation (H or V);bubble_location_X:bubble_location_Y
             m_db.ExecuteNonQuery("END");
         }
     }

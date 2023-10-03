@@ -21,6 +21,7 @@ namespace Bubbles
             //helpProvider1.SetHelpKeyword(this, "bookmarks_express.htm");
 
             toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
+            toolTip1.SetToolTip(pictureHandle, Utils.getString("icons.bubble.tooltip"));
 
             string location = Utils.getRegistry("PositionIcons", "");
             orientation = Utils.getRegistry("OrientationIcons", "H");
@@ -28,6 +29,7 @@ namespace Bubbles
             MinLength = this.Width;
             MaxLength = this.Width * 4;
             Thickness = this.Height;
+            panel1MinLength = panel1.Width;
 
             this.MinimumSize = this.Size;
             this.MaximumSize = new Size(MaxLength, Thickness);
@@ -45,6 +47,9 @@ namespace Bubbles
             {
                 string[] xy = location.Split(',');
                 Location = new Point(Convert.ToInt32(xy[0]), Convert.ToInt32(xy[1]));
+
+                if (!Utils.IsOnScreen(Location, this.Size))
+                    Location = new Point(MMUtils.MindManager.Left + MMUtils.MindManager.Width - this.Width - label1.Width * 2, MMUtils.MindManager.Top + label1.Width);
             }
 
             // Resizing window causes black strips...
@@ -55,6 +60,7 @@ namespace Bubbles
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
             contextMenuStrip1.Items["BI_new"].Text = MMUtils.getString("float_icons.contextmenu.new");
             contextMenuStrip1.Items["BI_delete"].Text = MMUtils.getString("float_icons.contextmenu.delete");
+            contextMenuStrip1.Items["BI_deleteall"].Text = MMUtils.getString("float_icons.contextmenu.deleteall");
             contextMenuStrip1.Items["BI_rename"].Text = MMUtils.getString("float_icons.contextmenu.edit");
 
             contextMenuStrip1.Items["BI_rotate"].Text = MMUtils.getString("float_icons.contextmenu.rotate");
@@ -87,7 +93,11 @@ namespace Bubbles
                     }
 
                     if (File.Exists(rootPath + _filename))
-                        AddIcon(name, rootPath + _filename, filename);
+                    {
+                        IconItem item = new IconItem(name, filename, Convert.ToInt32(row["_order"]), rootPath + _filename);
+                        Icons.Add(item);
+                        AddIcon(item, rootPath + _filename);
+                    }
                 }
             }
         }
@@ -100,8 +110,10 @@ namespace Bubbles
             contextMenuStrip1.Items["BI_delete"].Visible = false;
             contextMenuStrip1.Items["BI_rename"].Visible = false;
 
+            manage = true;
             contextMenuStrip1.Show(Cursor.Position);
         }
+        bool manage = false;
 
         private void PictureHandle_MouseDown(object sender, MouseEventArgs e)
         {
@@ -144,15 +156,18 @@ namespace Bubbles
 
         private void ContextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            string iconPath, iconName;
+            string iconPath, iconName, position;
             if (e.ClickedItem.Name == "BI_new")
             {
-                using (SelectIconDlg _dlg = new SelectIconDlg())
+                using (SelectIconDlg _dlg = new SelectIconDlg(manage))
                 {
                     if (_dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
                         return;
                     iconPath = _dlg.iconPath;
                     iconName = _dlg.iconName;
+                    position = _dlg.rbtnEnd.Checked ? "end" : 
+                        _dlg.rbtnBegin.Checked ? "begin" :
+                        _dlg.rbtnLeft.Checked ? "left" : "right";
                 }
 
                 string fileName = "stock" + Path.GetFileNameWithoutExtension(iconPath);
@@ -165,68 +180,63 @@ namespace Bubbles
                 }
 
                 // Add icon to bubble and to Icons list
-                AddIcon(iconName, iconPath, fileName);
+                int order = Icons.Count + 1; // at the end
+                if (position == "begin")
+                    order = 1;
+                if (position == "left" || position == "right")
+                {
+                    IconItem _item = (IconItem)selectedIcon.Tag;
+                    if (position == "left")
+                        order = _item.Order == 1 ? 1 : _item.Order;
+                    else
+                        order = _item.Order == Icons.Count ? Icons.Count + 1 : _item.Order + 1;
+                }
 
-                // Add icon to db
+                IconItem item = new IconItem(iconName, fileName, order, iconPath);
                 using (BubblesDB db = new BubblesDB())
-                    db.AddIcon(iconName, fileName, Icons.Count);
+                    db.AddIcon(iconName, fileName, order);
+
+                Icons.Insert(order - 1, item);
+                for (int i = 0; i < Icons.Count; i++)
+                    Icons[i].Order = i + 1;
+
+                RefreshBubble();
             }
             else if (e.ClickedItem.Name == "BI_delete")
             {
                 IconItem _item = (IconItem)selectedIcon.Tag;
-                int k = _item.Order;
                 string filename = _item.FileName;
 
-                if (_item != null) 
+                if (_item == null) return;
+
+                _item = Icons.Find(x => x.FileName == filename);
+                Icons.Remove(_item);
+
+                for (int i = 0; i < Icons.Count; i++)
+                    Icons[i].Order = i + 1;
+
+                // Delete file from IconDB if exists
+                if (!filename.StartsWith("stock"))
                 {
-                    Icons.Remove(_item);
-                    selectedIcon.Dispose();
-
-                    // Delete file from IconDB if exists
-                    if (!filename.StartsWith("stock"))
+                    string path = Utils.m_dataPath + "IconDB\\" + filename;
+                    if (File.Exists(path))
                     {
-                        string path = Utils.m_dataPath + "IconDB\\" + filename;
-                        if (File.Exists(path))
-                        {
-                            File.SetAttributes(path, FileAttributes.Normal);
-                            File.Delete(path);
-                        }
-                    }
-
-                    int i = 0;
-                    using (BubblesDB db = new BubblesDB())
-                    {
-                        // delete icon from db
-                        db.ExecuteNonQuery("delete from ICONS where filename=`" + filename + "`");
-
-                        foreach (var item in Icons)
-                        {
-                            item.Order = ++i;
-                            if (i >= k)
-                            {
-                                PictureBox p = FindByTag(item);
-                                if (p != null)
-                                {
-                                    if (orientation == "H")
-                                        p.Location = new Point(p.Location.X - icondist.Width, p.Location.Y);
-                                    else
-                                        p.Location = new Point(p.Location.X, p.Location.Y - icondist.Width);
-                                    ((IconItem)p.Tag).Order = item.Order;
-                                }
-                                // Update icon orders
-                                db.ExecuteNonQuery("update ICONS set _order=" + i + " where filename=`" + item.FileName + "`");
-                            }
-                        }
-                    }
-
-                    if (Icons.Count > 3) 
-                    { 
-                        if (orientation == "H")
-                            this.Width -= icondist.Width;
-                        else
-                            this.Height -= icondist.Width;
+                        File.SetAttributes(path, FileAttributes.Normal);
+                        File.Delete(path);
                     }
                 }
+
+                using (BubblesDB db = new BubblesDB())
+                {
+                    // delete icon from db
+                    db.ExecuteNonQuery("delete from ICONS where filename=`" + filename + "`");
+                }
+
+                RefreshBubble();
+            }
+            else if (e.ClickedItem.Name == "BI_deleteall")
+            {
+                RefreshBubble(true);
             }
             else if (e.ClickedItem.Name == "BI_rename")
             {
@@ -260,6 +270,45 @@ namespace Bubbles
 
                 Utils.setRegistry("OrientationIcons", orientation);
                 Utils.setRegistry("PositionIcons", x.ToString() + "," + y.ToString());
+            }
+        }
+        void RefreshBubble(bool deleteall = false)
+        {
+            // Remove all icons
+            foreach (PictureBox p in panel1.Controls.OfType<PictureBox>().Reverse())
+            {
+                if (p.Name != "p1")
+                    p.Dispose();
+            }
+
+            // Reset bubble size to minimum
+            if (orientation == "H")
+            {
+                this.Size = new Size(MinLength, Thickness);
+                panel1.Width = panel1MinLength;
+            }
+            else
+            {
+                this.Size = new Size(Thickness, MinLength);
+                panel1.Width = panel1MinLength;
+            }
+
+            using (BubblesDB db = new BubblesDB())
+            {
+                if (deleteall) // Clean bubble and database
+                {
+                    Icons.Clear();
+                    db.ExecuteNonQuery("delete from ICONS");
+                }
+                else // Add icons to bubble
+                {
+                    k = 0;
+                    foreach (var item in Icons)
+                    {
+                        AddIcon(item, item.Path);
+                        db.ExecuteNonQuery("update ICONS set _order=" + item.Order + " where filename=`" + item.FileName + "`");
+                    }
+                }
             }
         }
 
@@ -313,33 +362,74 @@ namespace Bubbles
             return null;
         }
 
-        void AddIcon(string name, string path, string fileName)
+        void AddIcon(IconItem item, string path)
         {
-            int iconOrder = icondist.Width * Icons.Count;
             PictureBox pBox = new PictureBox();
             pBox.Size = p1.Size;
             pBox.SizeMode = PictureBoxSizeMode.Zoom;
             pBox.MouseClick += Icon_Click;
+            pBox.AllowDrop = true;
+            pBox.MouseMove += PBox_MouseMove;
+            pBox.DragEnter += PBox_DragEnter;
+            pBox.DragDrop += PBox_DragDrop;
             pBox.Image = System.Drawing.Image.FromFile(path);
             panel1.Controls.Add(pBox);
             pBox.Visible = true;
-            toolTip1.SetToolTip(pBox, name);
+            toolTip1.SetToolTip(pBox, item.IconName);
             pBox.BringToFront();
-
-            pBox.Tag = new IconItem(name, fileName, Icons.Count + 1);
-            Icons.Add((IconItem)pBox.Tag);
+            pBox.Tag = new IconItem(item.IconName, item.FileName, item.Order, path);
 
             if (orientation == "H")
             {
-                pBox.Location = new Point(p1.Location.X + iconOrder, p1.Location.Y);
-                if (Icons.Count > 4)
+                pBox.Location = new Point(icondist.Width * k++, p1.Location.Y);
+                if (k > 4)
                     this.Width += icondist.Width;
             }
             else
             {
-                pBox.Location = new Point(p1.Location.X, p1.Location.Y + iconOrder);
-                if (Icons.Count > 4)
+                pBox.Location = new Point(p1.Location.X, icondist.Width * k++);
+                if (k > 4)
                     this.Height += icondist.Width;
+            }
+        }
+        int k = 0;
+
+        private void PBox_DragDrop(object sender, DragEventArgs e)
+        {
+            var target = (PictureBox)sender;
+            if (e.Data.GetDataPresent(typeof(PictureBox)))
+            {
+                var source = (PictureBox)e.Data.GetData(typeof(PictureBox));
+                if (source != target)
+                {
+                    try
+                    {
+                        int sourceIndex = (source.Tag as IconItem).Order;
+                        int targetIndex = (target.Tag as IconItem).Order;
+                        Icons.RemoveAt(sourceIndex - 1);
+                        if (sourceIndex < targetIndex) { targetIndex--; }
+                        Icons.Insert(targetIndex, source.Tag as IconItem);
+                        for (int i = 0; i < Icons.Count; i++)
+                            Icons[i].Order = i + 1;
+
+                        RefreshBubble();
+                    }
+                    catch { }
+                }
+            }
+        }
+
+        private void PBox_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void PBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                var pb = (PictureBox)sender;
+                pb.DoDragDrop(pb, DragDropEffects.Move);
             }
         }
 
@@ -445,6 +535,7 @@ namespace Bubbles
                 contextMenuStrip1.Items["BI_new"].Visible = true;
                 contextMenuStrip1.Items["BI_delete"].Visible = true;
                 contextMenuStrip1.Items["BI_rename"].Visible = true;
+                manage = false;
                 contextMenuStrip1.Show(Cursor.Position);
             }
         }
@@ -710,13 +801,12 @@ namespace Bubbles
         }
 
         /// <summary>
-        /// Get or add MapMarkerGroup (only text label group)
+        /// Check if icon exists in the Map Index. If not, add icon to Map Index
         /// </summary>
-        /// <param name="aDocument"></param>
-        /// <param name="aName">Name of marker group</param>
-        /// <param name="aCreateNew">if to create marker group if not found</param>
-        /// <param name="mutex">If group must be MutuallyExclusive</param>
-        /// <returns>MapMarkerGroup</returns>
+        /// <param name="aIcon">Stock Icon to check</param>
+        /// <param name="signature">Custom Icon signature</param>
+        /// <param name="iconName">Icon name</param>
+        /// <param name="path">Path to custom icon</param>
 		public void GetIcon(MmStockIcon aIcon, string signature, string iconName, string path)
         {
             foreach (MapMarkerGroup mg in MMUtils.ActiveDocument.MapMarkerGroups)
@@ -751,7 +841,7 @@ namespace Bubbles
         PictureBox selectedIcon = null;
         string orientation = "H";
 
-        int MinLength, MaxLength, Thickness;
+        int MinLength, MaxLength, Thickness, panel1MinLength;
 
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;
@@ -765,14 +855,16 @@ namespace Bubbles
 
     internal class IconItem
     {
-        public IconItem(string name, string filename, int order) 
+        public IconItem(string name, string filename, int order, string path) 
         {
             IconName = name;
             FileName = filename;
             Order = order;
+            Path = path;
         }
         public string IconName = "";
         public string FileName = "";
         public int Order = 0;
+        public string Path = "";
     }
 }

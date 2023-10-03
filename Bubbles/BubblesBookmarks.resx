@@ -130,7 +130,7 @@
   <data name="pCentral.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAA
-        nAAAAJwBXTUFigAAAAd0SU1FB+cJFAkVG6f/N1QAAAGtSURBVEhLtZXNTsJAFIV5CRf+QHwdEyW+hiI1
+        nAAAAJwBXTUFigAAAAd0SU1FB+cJFgkJARbjW/gAAAGtSURBVEhLtZXNTsJAFIV5CRf+QHwdEyW+hiI1
         PoFuXLpwYzAaFy7do2yMcUNCNNEdGHeA7hQq7IDUc4bbpi3XaUnxJl9K7r1zTmfKzORs8eC0C/dOu4xn
         Dc8WnkMiv2tgD+SlPX1AYBUDz8EYeAlMwA3GrMtwe6B5Gwxk8Dz8gKLI6IGGfcA30gTSMMFMHJGLBop8
         8yziPtSIzgSua0iqy/IInk+6KqxpYwCXa0XkzdtfhYoB9YO21++7nuvqsFZXxhG89IUvXgDqv+W18qkK
@@ -156,46 +156,20 @@
         jlh/+2RKEr4nB6L6m5BMSM0EQwvISgAfHk8epS6RKbncJ3aTt3c1wiJ1AAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="NextBookmark.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAA
-        nAAAAJwBXTUFigAAAAd0SU1FB+cJFAodINxr6iEAAAF8SURBVDhPjdRNLwNRFMbx2giq34UFkgpp0kjs
-        rO1ECBKEiHTBwnweipSF+BzWEirUS7xbCAn/p3GTM3cOY/FL2jvPPe3MnHsKSZJ4elBBDXU00UIDG6ii
-        F5m9mQUMQRu/chxhBKn99ks3lnAOr4DnCusoIVNwEZ/wNuZR0VTBAVzChk4whhU8/6z95g7DaBfUCzhE
-        HNpD+MEFvCDOWMcoKTxqFi09nymEovN4hJcNqgqqNbyLoluZRig6h3t4WdlUaD9ajD1gFqGoPt/CyzYU
-        0K15F603TCAU1V29I861dPE/fadnN45QcAsfiHNNXdyOFmM3mISyHVAbPcHL1hVaixata4Risoy/erKm
-        UDlaDC5gi+lY5vViRcEu7JrFYAe22CvijKXDUQwb+nEGGwhHbxV5/0yjTVMqNRxm4LVCHg0UPdt2HVuw
-        EzoJp/A2ejR4VUyjL1Mw6IOen1fAOsAgUvtTXwy9KI0jtZT6VM2vE6VjqlOigaIpFe1LCt+7+GjmpNZV
-        xgAAAABJRU5ErkJggg==
-</value>
-  </data>
   <data name="pictureHandle.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAA
-        qAAAAKgBefSzxgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAIjSURBVEhL7ZTN
-        a9RAGMajBcGTHksvXgS9iFoQL4InLyLixYvYq/+AJ3cXGiu1svRDN8mKgqDFXvwDBA97k3qzzbbJJP1w
-        N5nJbAuiSEWrdX19Z/YthLput1mP/cEDmXmfPG8yk4mxTyYcjx+3AzFtB8k66itq1mLyBpV7w1kSZzDw
-        IwqUKskneLf2WV/bTE6QLRsAcACD3O1wpcbGd9j49gMeh1KPy6xxkeyaghvdz7nRMA07U1pOzqbDlZ6v
-        NGDmw1p67hnZNXm3PqpEw85YobyWCvqXKmTfO/YSP69CRhdjsFjbcKWXZN87eg/CZPmBF7eatGvgJ5fI
-        bliMn7JDOY4+x2biCk13xgnlBQzaLPocih7f0UBMk81QjR754qd6kElf6Dq+9RiVO2P7chBvqKCaFB47
-        TNx+BdBHFgPn5u8uRDDFWuGkJt57jCy7M8n54Serq0doaOTmo5umV+tX17gszbHFnW+I6nap2pGvRm/u
-        VGv6HGCY/1d4kPwuB8kJbe4VO+SXMXAr3QD34CmVu6e16bKMAUU8JydpWuOEjXMqFGsz+DUNmQAHqdQd
-        uM5X8eZfE4zDyEIMDxnfLIXiNJUNc652lC6zgeGz6tWVSoEA9dXgX/WFqhWq9RH8RWzl3PqgNmcBg9l2
-        A6VxPBdOIF6rGm749YJbf2u+jwe0OQu49vfSDbSYvEXl3jE97xCe3ikM/oJatwKRV78TKu/zPzCMPzNG
-        DixQ35+1AAAAAElFTkSuQmCC
-</value>
-  </data>
-  <data name="PreviousBookmark.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAA
-        nAAAAJwBXTUFigAAAAd0SU1FB+cJFAoeAMwomSoAAAF+SURBVDhPjdVNL0NBGMXx2khVfRcWSEgbiUjs
-        rO1ECJIS0kgXLNzPUy8NFuJzWEuUqLd4txAS/qfxJHPnPsril7TTMye305lpLkkSTwFl1NBAC03UUcUo
-        8sjMzQxgCAf4+sM2+pGaH77pwQrO4RV4TrGAbmQKVfYJb2In75hDqnAYV/AmmBesYQInP2PmDANoF/bi
-        EGEg9opl2ANo/eLMLvL6cCwY9OjJwrJpXMDLjiigreF9KM/Q2oZl1/CyUlVoJxo0T1hFF6zsBl7W1BX0
-        tskHtmBPNolHxLlYU2Hv19VW0FJY4RTeEOdiLYX3o0Fzi3lYqV4/wMuahoKb0WDoHjoJVjqLO3hZqSk0
-        Hg3GtHaLsNIZ6LLwsmUF+nAcDHq0F5dgpXuIMzocBQvoOur0VUR7UtvIO3qXGETqclhHGPovXSgVtHvC
-        Qn11lf62Ph5dujqWuvoyhaaEI3gFIW033VKp+ak3gSL0629AE7X5daJ0TLXhdaHobyKal+S+AXk2aOYK
-        hipTAAAAAElFTkSuQmCC
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAAALAAAACwARRqq2kAAAAZdEVYdFNvZnR3YXJlAHd3dy5pbmtzY2FwZS5vcmeb7jwa
+        AAACI0lEQVRIS+2UzWvUQBjGowXBkx5LL14EvYhaEC+CJy8i4sWL2Kv/gCd3FxortbL0QzfJioKgxV78
+        AwQPe5N6s822yST9cDeZyWwLokhFq3V9fWf2LYS6brdZj/3BA5l5nzxvMpOJsU8mHI8ftwMxbQfJOuor
+        atZi8gaVe8NZEmcw8CMKlCrJJ3i39llf20xOkC0bAHAAg9ztcKXGxnfY+PYDHodSj8uscZHsmoIb3c+5
+        0TANO1NaTs6mw5WerzRg5sNaeu4Z2TV5tz6qRMPOWKG8lgr6lypk3zv2Ej+vQkYXY7BY23Cll2TfO3oP
+        wmT5gRe3mrRr4CeXyG5YjJ+yQzmOPsdm4gpNd8YJ5QUM2iz6HIoe39FATJPNUI0e+eKnepBJX+g6vvUY
+        lTtj+3IQb6igmhQeO0zcfgXQRxYD5+bvLkQwxVrhpCbee4wsuzPJ+eEnq6tHaGjk5qObplfrV9e4LM2x
+        xZ1viOp2qdqRr0Zv7lRr+hxgmP9XeJD8LgfJCW3uFTvklzFwK90A9+AplbuntemyjAFFPCcnaVrjhI1z
+        KhRrM/g1DZkAB6nUHbjOV/HmXxOMw8hCDA8Z3yyF4jSVDXOudpQus4Hhs+rVlUqBAPXV4F/1haoVqvUR
+        /EVs5dz6oDZnAYPZdgOlcTwXTiBeqxpu+PWCW39rvo8HtDkLuPb30g20mLxF5d4xPe8Qnt4pDP6CWrcC
+        kVe/Eyrv8z8wjD8zRg4sUN+ftQAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="AddBookmark.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

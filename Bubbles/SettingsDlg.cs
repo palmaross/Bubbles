@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Bubbles
@@ -18,7 +11,13 @@ namespace Bubbles
 
             StartIcons.Checked = Utils.getRegistry("StartIcons", "0") == "1";
             StartPaste.Checked = Utils.getRegistry("StartPaste", "0") == "1";
-            startSnippets.Checked = Utils.getRegistry("StartSnippets", "0") == "1";
+            startPriPro.Checked = Utils.getRegistry("StartPriPro", "0") == "1";
+            startBookmarks.Checked = Utils.getRegistry("StartBookmarks", "0") == "1";
+
+            int screens = 1;
+            try { screens = Convert.ToInt32(Utils.getRegistry("Screens", "1")); }
+            catch { }
+            numericUpDown1.Value = screens;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -31,9 +30,16 @@ namespace Bubbles
             if (StartPaste.Checked ^ start)
                 Utils.setRegistry("StartPaste", StartPaste.Checked ? "1" : "0");
 
-            start = Utils.getRegistry("StartSnippets", "0") == "1";
-            if (startSnippets.Checked ^ start)
-                Utils.setRegistry("StartSnippets", startSnippets.Checked ? "1" : "0");
+            start = Utils.getRegistry("StartBookmarks", "0") == "1";
+            if (startBookmarks.Checked ^ start)
+                Utils.setRegistry("StartBookmarks", startBookmarks.Checked ? "1" : "0");
+
+            start = Utils.getRegistry("StartPriPro", "0") == "1";
+            if (startPriPro.Checked ^ start)
+                Utils.setRegistry("StartPriPro", startPriPro.Checked ? "1" : "0");
+
+            Utils.setRegistry("Screens", numericUpDown1.Value.ToString());
+            BubblesMenuDlg.screenCount = (int)numericUpDown1.Value;
         }
     }
 }

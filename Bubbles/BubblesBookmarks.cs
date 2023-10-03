@@ -2,13 +2,9 @@
 using PRAManager;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Bubbles
 {
@@ -23,16 +19,16 @@ namespace Bubbles
             //helpProvider1.SetHelpKeyword(this, "bookmarks_express.htm");
 
             toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
-            toolTip1.SetToolTip(Manage, Utils.getString("bookmarks.addbookmark.tooltip"));
-            toolTip1.SetToolTip(Manage, Utils.getString("bookmarks.forward.tooltip"));
-            toolTip1.SetToolTip(Manage, Utils.getString("bookmarks.back.tooltip"));
+            toolTip1.SetToolTip(AddBookmark, Utils.getString("bookmarks.addbookmark.tooltip"));
+            toolTip1.SetToolTip(pictureHandle, Utils.getString("bookmarks.bubble.tooltip"));
 
             string location = Utils.getRegistry("PositionBookmarks", "");
             orientation = Utils.getRegistry("OrientationBookmarks", "H");
 
             MinLength = this.Width;
-            MaxLength = this.Width * 3;
+            MaxLength = this.Width * 5;
             Thickness = this.Height;
+            panel1MinLength = panel1.Width;
 
             this.MinimumSize = this.Size;
             this.MaximumSize = new Size(MaxLength, Thickness);
@@ -50,6 +46,9 @@ namespace Bubbles
             {
                 string[] xy = location.Split(',');
                 Location = new Point(Convert.ToInt32(xy[0]), Convert.ToInt32(xy[1]));
+
+                if (!Utils.IsOnScreen(Location, this.Size))
+                    Location = new Point(MMUtils.MindManager.Left + MMUtils.MindManager.Width - this.Width - label1.Width * 2, MMUtils.MindManager.Top + label1.Width);
             }
 
             // Resizing window causes black strips...
@@ -67,7 +66,6 @@ namespace Bubbles
             contextMenuStrip1.Items["BI_help"].Text = MMUtils.getString("float_icons.contextmenu.help");
             contextMenuStrip1.Items["BI_store"].Text = MMUtils.getString("float_icons.contextmenu.settings");
 
-            panel1.MouseClick += Panel1_MouseClick;
             panel1.MouseDown += Panel1_MouseDown;
             pictureHandle.MouseDown += PictureHandle_MouseDown;
             Manage.Click += Manage_Click;
@@ -76,54 +74,56 @@ namespace Bubbles
                 this.Size = new Size(MinLength, Thickness);
             else
                 this.Size = new Size(Thickness, MinLength);
-
             Init();
         }
 
         public void Init()
         {
+            List<BookmarkItem> BookmarkList = new List<BookmarkItem>();
+            BookmarkList.AddRange(Bookmarks);
             Bookmarks.Clear();
-            foreach (PictureBox p in panel1.Controls)
+
+            foreach (PictureBox p in panel1.Controls.OfType<PictureBox>().Reverse())
+            {
                 if (p.Name != "p1")
                     p.Dispose();
+            }
+
+            if (orientation == "H")
+            {
+                this.Size = new Size(MinLength, Thickness);
+                panel1.Width = panel1MinLength;
+            }
+            else
+            {
+                this.Size = new Size(Thickness, MinLength);
+                panel1.Height = panel1MinLength;
+            }
 
             if (MMUtils.ActiveDocument == null)
                 return;
 
-            pCentral.Tag = new BookmarkItem(MMUtils.ActiveDocument.CentralTopic.Text, "", false);
-            toolTip1.SetToolTip(pCentral, MMUtils.ActiveDocument.CentralTopic.Text);
+            Topic cTopic = MMUtils.ActiveDocument.CentralTopic;
+            pCentral.Tag = new BookmarkItem(cTopic.Text, cTopic.Guid, false);
+            toolTip1.SetToolTip(pCentral, cTopic.Text);
+            pCentral.MouseClick += Icon_Click;
+            cTopic = null;
 
             if (BookmarkedDocuments.Keys.Contains(MMUtils.ActiveDocument))
             {
-                foreach (BookmarkItem item in Bookmarks)
-                    AddIcon(item.TopicName, item.TopicGuid, item.MainTopic);
+                foreach (BookmarkItem item in BookmarkList)
+                    AddIcon(item.TopicName, item.TopicGuid, item.MainTopic, item.FloatTopic);
             }
             else
             {
-                // Add Main Topics
-                foreach (Topic t in MMUtils.ActiveDocument.CentralTopic.AllSubTopics)
-                {
-                    if (t.GetAttributes(ATTR_NAMESPACE).HasAttribute(ATTR_BOOKMARKED))
-                    {
-                        AddIcon(t.Text, t.Guid, true);
-                    }
-                }
-
-                // Add the rest bookmarks exept floating
+                // Add bookmarks exept floating topics
                 LoadFromMapRecursive(MMUtils.ActiveDocument.CentralTopic);
-
-                // Add Floating Topics
-                foreach (Topic t in MMUtils.ActiveDocument.AllFloatingTopics)
-                {
-                    if (t.GetAttributes(ATTR_NAMESPACE).HasAttribute(ATTR_BOOKMARKED))
-                    {
-                        AddIcon(t.Text, t.Guid, false, true);
-                    }
-                }
 
                 // Add bookmarks from the floating topic branches
                 foreach (Topic _t in MMUtils.ActiveDocument.AllFloatingTopics)
                     LoadFromMapRecursive(_t);
+
+                BookmarkedDocuments.Add(MMUtils.ActiveDocument, Bookmarks);
             }
         }
 
@@ -131,13 +131,8 @@ namespace Bubbles
         {
             if (_t.GetAttributes(ATTR_NAMESPACE).HasAttribute(ATTR_BOOKMARKED))
             {
-                if (!_t.IsMainTopic && !_t.IsFloatingTopic) // main and floating topics are already handled
-                {
-                    Bookmarks.Add(new BookmarkItem(_t.Text.Trim(), _t.Guid, false));
-                    AddIcon(_t.Text.Trim(), _t.Guid, false);
-                }
+                AddIcon(_t.Text.Trim(), _t.Guid, _t.IsMainTopic, _t.IsFloatingTopic);
             }
-
             foreach (Topic t in _t.AllSubTopics)
                 LoadFromMapRecursive(t);
         }
@@ -148,6 +143,7 @@ namespace Bubbles
             foreach (ToolStripItem item in contextMenuStrip1.Items)
                 item.Visible = true;
 
+            contextMenuStrip1.Items["BI_delete"].Visible = false;
             contextMenuStrip1.Show(Cursor.Position);
         }
 
@@ -167,13 +163,39 @@ namespace Bubbles
         {
             if (e.ClickedItem.Name == "BI_delete")
             {
+                BookmarkItem _item = (BookmarkItem)selectedIcon.Tag;
+                if (_item != null)
+                {
+                    Topic t = MMUtils.ActiveDocument.FindByGuid(_item.TopicGuid) as Topic;
+                    if (t != null)
+                        t.GetAttributes(ATTR_NAMESPACE).DeleteAll();
 
+                    Bookmarks.Remove(_item);
+                    selectedIcon.Dispose();
+                    prev = null;
+                    Init();
+                }
             }
-            else if (e.ClickedItem.Name == "BI_maintopics")
+            else if (e.ClickedItem.Name == "BI_main")
             {
+                foreach (Topic t in MMUtils.ActiveDocument.CentralTopic.AllSubTopics)
+                    t.GetAttributes(ATTR_NAMESPACE).SetAttributeValue(ATTR_BOOKMARKED, "1");
 
+                if (BookmarkedDocuments.ContainsKey(MMUtils.ActiveDocument))
+                    BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
+
+                prev = null;
+                Init();
             }
-            else if (e.ClickedItem.Name == "BI_deletemaintopics")
+            else if (e.ClickedItem.Name == "BI_deletemain")
+            {
+                foreach (Topic t in MMUtils.ActiveDocument.CentralTopic.AllSubTopics)
+                    t.GetAttributes(ATTR_NAMESPACE).DeleteAll();
+                BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
+                prev = null;
+                Init();
+            }
+            else if (e.ClickedItem.Name == "BI_close")
             {
                 this.Hide();
             }
@@ -195,8 +217,8 @@ namespace Bubbles
                 int x = this.Location.X;
                 int y = this.Location.Y;
 
-                Utils.setRegistry("OrientationIcons", orientation);
-                Utils.setRegistry("PositionIcons", x.ToString() + "," + y.ToString());
+                Utils.setRegistry("OrientationBookmarks", orientation);
+                Utils.setRegistry("PositionBookmarks", x.ToString() + "," + y.ToString());
             }
         }
 
@@ -221,6 +243,8 @@ namespace Bubbles
             Size panel1Size = new Size(panel1.Height, panel1.Width);
             Point panel1Location = new Point(panel1.Location.Y, panel1.Location.X);
             Point ManageLocation = new Point(Manage.Location.Y, Manage.Location.X);
+            Point pCentralLocation = new Point(pCentral.Location.Y, pCentral.Location.X);
+            Point addBookmarkLocation = new Point(AddBookmark.Location.Y, AddBookmark.Location.X);
 
             if (orientation == "H")
             {
@@ -235,16 +259,18 @@ namespace Bubbles
 
             this.Size = new Size(thisHeight, thisWidth);
 
+            pCentral.Location = pCentralLocation;
             panel1.Size = panel1Size;
             panel1.Location = panel1Location;
+            AddBookmark.Location = addBookmarkLocation;
             Manage.Location = ManageLocation;
         }
 
-        PictureBox FindByTag(IconItem item)
+        PictureBox FindByTag(BookmarkItem item)
         {
             foreach (PictureBox p in panel1.Controls.OfType<PictureBox>())
             {
-                if (p.Tag != null && (p.Tag as IconItem) == item)
+                if (p.Tag != null && (p.Tag as BookmarkItem) == item)
                     return p;
             }
             return null;
@@ -252,7 +278,6 @@ namespace Bubbles
 
         void AddIcon(string tooltip, string guid, bool maintopic = false, bool floattopic = false)
         {
-            int iconOrder = icondist.Width * Bookmarks.Count;
             PictureBox pBox = new PictureBox();
             pBox.Size = p1.Size;
             pBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -263,29 +288,54 @@ namespace Bubbles
             else if (floattopic)
                 pBox.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "bookmarkFloat.png");
             else
+            {
+                pBox.Size = p2.Size;
                 pBox.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "bookmarkRest.png");
+            }
 
             panel1.Controls.Add(pBox);
             pBox.Visible = true;
             toolTip1.SetToolTip(pBox, tooltip);
             pBox.BringToFront();
 
-            pBox.Tag = new BookmarkItem(tooltip, guid, maintopic);
+            pBox.Tag = new BookmarkItem(tooltip, guid, maintopic, floattopic);
             Bookmarks.Add((BookmarkItem)pBox.Tag);
+
+            int locX;
+            if (prev == null)
+                locX = 0;
+            else
+                locX = prev.Location.X + prev.Width + p3.Height;
 
             if (orientation == "H")
             {
-                pBox.Location = new Point(p1.Location.X + iconOrder, p1.Location.Y);
+                if (maintopic || floattopic)
+                    pBox.Location = new Point(locX, p1.Location.Y);
+                else
+                    pBox.Location = new Point(locX, p2.Location.Y);
+
                 if (Bookmarks.Count > 2)
-                    this.Width += icondist.Width;
+                    this.Width += pBox.Width + p3.Height;
             }
             else
             {
-                pBox.Location = new Point(p1.Location.X, p1.Location.Y + iconOrder);
+                int locY;
+                if (prev == null)
+                    locY = 0;
+                else
+                    locY = prev.Location.Y + prev.Width + p3.Height;
+
+                if (maintopic || floattopic)
+                    pBox.Location = new Point(p1.Location.Y, locY);
+                else
+                    pBox.Location = new Point(p2.Location.Y, locY);
+
                 if (Bookmarks.Count > 2)
-                    this.Height += icondist.Width;
+                    this.Height += pBox.Width + p3.Height;
             }
+            prev = pBox;
         }
+        PictureBox prev = null;
 
         #region resize dialog
         protected override void WndProc(ref Message m)
@@ -351,34 +401,27 @@ namespace Bubbles
 
             if (e.Button == MouseButtons.Left)
             {
-                IconItem item = selectedIcon.Tag as IconItem;
+                BookmarkItem item = selectedIcon.Tag as BookmarkItem;
+                Topic t = MMUtils.ActiveDocument.FindByGuid(item.TopicGuid) as Topic;
+                if (t != null)
+                {
+                    t.SelectOnly();
+                    t.SnapIntoView();
+                }
             }
             else if (e.Button == MouseButtons.Right)
             {
                 foreach (ToolStripItem item in contextMenuStrip1.Items)
                     item.Visible = false;
 
-                contextMenuStrip1.Items["BI_new"].Visible = true;
+                if (selectedIcon == pCentral)
+                    return;
+
                 contextMenuStrip1.Items["BI_delete"].Visible = true;
-                contextMenuStrip1.Items["BI_rename"].Visible = true;
                 contextMenuStrip1.Show(Cursor.Position);
             }
         }
 
-        private void Panel1_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                foreach (ToolStripItem item in contextMenuStrip1.Items)
-                    item.Visible = true;
-
-                contextMenuStrip1.Items["BI_delete"].Visible = false;
-                contextMenuStrip1.Items["BI_rename"].Visible = false;
-
-                contextMenuStrip1.Show(Cursor.Position);
-            }
-        }
-        
         private void AddBookmark_Click(object sender, EventArgs e)
         {
             Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
@@ -387,34 +430,27 @@ namespace Bubbles
 
             if (t.GetAttributes(ATTR_NAMESPACE).HasAttribute(ATTR_BOOKMARKED))
             {
-                MessageBox.Show("", "", 
+                MessageBox.Show(Utils.getString("bookmarks.addbookmark.error"), "", 
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
             }
-            else
-            {
-                t.GetAttributes(ATTR_NAMESPACE).SetAttributeValue(ATTR_BOOKMARKED, "1");
-                //AddIcon();
-                // add bookmark to bubble
-            }
+
+            t.GetAttributes(ATTR_NAMESPACE).SetAttributeValue(ATTR_BOOKMARKED, "1");
+
+            if (BookmarkedDocuments.ContainsKey(MMUtils.ActiveDocument))
+                BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
+
+            prev = null;
+            Init();
         }
 
-        private void PreviousBookmark_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void NextBookmark_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        Dictionary<Document, List<BookmarkItem>> BookmarkedDocuments = new Dictionary<Document, List<BookmarkItem>>();
+        public Dictionary<Document, List<BookmarkItem>> BookmarkedDocuments = new Dictionary<Document, List<BookmarkItem>>();
 
         public static List<BookmarkItem> Bookmarks = new List<BookmarkItem>();
         PictureBox selectedIcon = null;
         string orientation = "H";
 
-        int MinLength, MaxLength, Thickness;
+        int MinLength, MaxLength, Thickness, panel1MinLength;
 
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;
