@@ -166,7 +166,7 @@ namespace Bubbles
 		/// <param name="RecSize"></param>
 		/// <param name="MinPercentOnScreen"></param>
 		/// <returns>False if form is totally off screen</returns>
-		public static bool IsOnScreen(Point RecLocation, Size RecSize, double MinPercentOnScreen = 1)
+		public static bool WandIsOnScreen(Point RecLocation, Size RecSize, double MinPercentOnScreen = 1)
         {
             double PixelsVisible = 0;
             Rectangle Rec = new Rectangle(RecLocation, RecSize);
@@ -182,6 +182,17 @@ namespace Bubbles
                 }
             }
             return PixelsVisible >= (Rec.Width * Rec.Height) * MinPercentOnScreen;
+        }
+
+        public static Point MMScreen(int x, int y)
+        {
+            foreach (Screen Scr in Screen.AllScreens)
+            {
+                if (x > Scr.WorkingArea.Left && x < Scr.WorkingArea.Right &&
+                    y > Scr.WorkingArea.Top && y < Scr.WorkingArea.Bottom)
+                    return Scr.WorkingArea.Location;
+            }
+            return new Point();
         }
 
         public static bool IsOnMMWindow(Point WandLocation, Size WandSize)

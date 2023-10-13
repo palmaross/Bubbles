@@ -43,6 +43,25 @@ namespace Bubbles
                 + order + ", "
                 + "'', '', 0, 0"
                 + ");"
+            );
+        }
+
+        public void AddSticker(string content, string textcolor, string fillcolor, 
+            string fontfamily, int textsize, int textbold, string sticksize, string image, string alignment,  string type)
+        {
+            m_db.ExecuteNonQuery("insert into STICKERS values(NULL, `"
+                + content + "`, `"
+                + textcolor + "`, `"
+                + fillcolor + "`, `"
+                + fontfamily + "`, "
+                + textsize + ", "
+                + textbold + ", `"
+                + sticksize + "`, `"
+                + image + "`, `"
+                + alignment + "`, `"
+                + type + "`, "
+                + "'', '', 0, 0"
+                + ");"
                 );
         }
 
@@ -50,14 +69,32 @@ namespace Bubbles
         {
             base.CreateDatabase();
             m_db.ExecuteNonQuery("BEGIN EXCLUSIVE");
-            m_db.ExecuteNonQuery("CREATE TABLE SNIPPETS(snippet text, " +
-                "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
             m_db.ExecuteNonQuery("CREATE TABLE ICONS(name text, filename text, _order integer, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
             m_db.ExecuteNonQuery("CREATE TABLE SOURCES(title text, path text, type, _order integer, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
-                // bubbles: bubble_name;bubble_orientation (H or V);bubble_location_X:bubble_location_Y
+            m_db.ExecuteNonQuery("CREATE TABLE NOTEPADS(content text, reserved1 text, reserved2 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE IDEAS(content text, reserved1 text, reserved2 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE NOTES(info text, link text, reserved1 text, reserved2 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE LINKS(title text, link text, reserved1 text, reserved2 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE SNIPPETS(content text, reserved1 text, reserved2 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE TODOS(content text, reserved1 text, reserved2 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE STICKERS(id INTEGER PRIMARY KEY, content text, textcolor text, fillcolor text, " +
+                "fontfamily text, textsize integer, textbold integer, sticksize text, image text, alignment text, type text, " +
+                "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
+                // type:
+                // "sticker"
+                // "template"
+                // "reminder:12:05"
             m_db.ExecuteNonQuery("END");
+
+            // Add a couple of templates
+            AddSticker(Utils.getString("stickertemplate1.text"), "#ff0000ff", "#ff00ffff", "Segoe Print", 
+                14, 1, StickerDummy.DummyStickerWidth + ":" + StickerDummy.DummyStickerHeight, "", "center", "template");
+            AddSticker(Utils.getString("stickertemplate2.text"), "#ff0000ff", "#ff0000ff", "Segoe Print", 
+                14, 1, StickerDummy.DummyStickerWidth + ":" + StickerDummy.DummyStickerHeight, "", "center", "template");
+            AddSticker(Utils.getString("stickertemplate3.text"), "#ff0000ff", "#ff00ff00", "Segoe Print", 
+                14, 1, StickerDummy.DummyStickerWidth + ":" + StickerDummy.DummyStickerHeight, "", "center", "template");
         }
     }
 }

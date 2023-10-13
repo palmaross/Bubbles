@@ -30,23 +30,20 @@
         {
             this.btnClose = new System.Windows.Forms.Button();
             this.groupBoxAtStart = new System.Windows.Forms.GroupBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.startMySources = new System.Windows.Forms.CheckBox();
             this.startPriPro = new System.Windows.Forms.CheckBox();
             this.startBookmarks = new System.Windows.Forms.CheckBox();
             this.StartIcons = new System.Windows.Forms.CheckBox();
             this.StartPaste = new System.Windows.Forms.CheckBox();
             this.btnSave = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.groupBoxAtStart.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(267, 186);
+            this.btnClose.Location = new System.Drawing.Point(267, 167);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 1;
@@ -55,7 +52,7 @@
             // 
             // groupBoxAtStart
             // 
-            this.groupBoxAtStart.Controls.Add(this.checkBox1);
+            this.groupBoxAtStart.Controls.Add(this.startMySources);
             this.groupBoxAtStart.Controls.Add(this.startPriPro);
             this.groupBoxAtStart.Controls.Add(this.startBookmarks);
             this.groupBoxAtStart.Controls.Add(this.StartIcons);
@@ -67,15 +64,15 @@
             this.groupBoxAtStart.TabStop = false;
             this.groupBoxAtStart.Text = "Запускать при старте MindManager";
             // 
-            // checkBox1
+            // startMySources
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(9, 112);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(102, 17);
-            this.checkBox1.TabIndex = 7;
-            this.checkBox1.Text = "Мои источники";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.startMySources.AutoSize = true;
+            this.startMySources.Location = new System.Drawing.Point(9, 112);
+            this.startMySources.Name = "startMySources";
+            this.startMySources.Size = new System.Drawing.Size(102, 17);
+            this.startMySources.TabIndex = 7;
+            this.startMySources.Text = "Мои источники";
+            this.startMySources.UseVisualStyleBackColor = true;
             // 
             // startPriPro
             // 
@@ -121,7 +118,7 @@
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSave.Location = new System.Drawing.Point(186, 186);
+            this.btnSave.Location = new System.Drawing.Point(186, 167);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 3;
@@ -129,45 +126,12 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 160);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(66, 13);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Мониторов:";
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(89, 157);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            9,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(30, 20);
-            this.numericUpDown1.TabIndex = 5;
-            this.numericUpDown1.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
             // SettingsDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(352, 218);
-            this.Controls.Add(this.numericUpDown1);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(352, 199);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.groupBoxAtStart);
             this.Controls.Add(this.btnClose);
@@ -181,9 +145,7 @@
             this.Text = "Settings";
             this.groupBoxAtStart.ResumeLayout(false);
             this.groupBoxAtStart.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -195,8 +157,6 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.CheckBox startBookmarks;
         private System.Windows.Forms.CheckBox startPriPro;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.CheckBox startMySources;
     }
 }

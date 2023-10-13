@@ -23,7 +23,6 @@ namespace Bubbles
             toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
             toolTip1.SetToolTip(pictureHandle, Utils.getString("pripro.bubble.tooltip"));
 
-            string location = Utils.getRegistry("PositionPriPro", "");
             orientation = Utils.getRegistry("OrientationPriPro", "H");
 
             MinLength = this.Width;
@@ -39,17 +38,6 @@ namespace Bubbles
                 orientation = "H";
                 RotateBubble();
                 p1.Location = new Point(p1.Location.Y, p1.Location.X);
-            }
-
-            if (String.IsNullOrEmpty(location))
-                Location = new Point(MMUtils.MindManager.Left + MMUtils.MindManager.Width - this.Width - label1.Width * 2, MMUtils.MindManager.Top + label1.Width);
-            else
-            {
-                string[] xy = location.Split(',');
-                Location = new Point(Convert.ToInt32(xy[0]), Convert.ToInt32(xy[1]));
-
-                if (!Utils.IsOnScreen(Location, this.Size))
-                    Location = new Point(MMUtils.MindManager.Left + MMUtils.MindManager.Width - this.Width - label1.Width * 2, MMUtils.MindManager.Top + label1.Width);
             }
 
             // Resizing window causes black strips...
@@ -69,7 +57,6 @@ namespace Bubbles
             contextMenuStrip1.Items["BI_store"].Text = MMUtils.getString("float_icons.contextmenu.settings");
 
             ToolStripMenuItem addPriority = contextMenuStrip1.Items["BI_addpriority"] as ToolStripMenuItem;
-            addPriority.Text = MMUtils.getString("pripro.contextmenu.priority");
             addPriority.DropDown.Items[0].Text = MMUtils.getString("pripro.priority.caption") + " 1";
             addPriority.DropDown.Items[1].Text = MMUtils.getString("pripro.priority.caption") + " 2";
             addPriority.DropDown.Items[2].Text = MMUtils.getString("pripro.priority.caption") + " 3";
@@ -80,7 +67,6 @@ namespace Bubbles
             PriorityCollection = addPriority.DropDown.Items;
 
             ToolStripMenuItem addProgress = contextMenuStrip1.Items["BI_addprogress"] as ToolStripMenuItem;
-            addProgress.Text = MMUtils.getString("pripro.contextmenu.progress");
             addProgress.DropDown.ItemClicked += ContextMenuStrip1_ItemClicked;
             ProgressCollection = addProgress.DropDown.Items;
 
@@ -212,6 +198,7 @@ namespace Bubbles
             else if (e.ClickedItem.Name == "BI_close")
             {
                 this.Hide();
+                BubblesButton.m_bubblesMenu.PriPro.Image = BubblesButton.m_bubblesMenu.mwPriPro;
             }
             else if (e.ClickedItem.Name == "BI_rotate")
             {

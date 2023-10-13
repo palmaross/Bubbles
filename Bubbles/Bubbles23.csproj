@@ -47,6 +47,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Common\PalmaRossCommon23.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -57,6 +58,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsInput, Version=1.0.4.0, Culture=neutral, PublicKeyToken=9b287f7dc5073cad, processorArchitecture=MSIL">
+      <HintPath>..\packages\InputSimulator.1.0.4.0\lib\net20\WindowsInput.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddSourceDlg.cs">
@@ -65,15 +69,28 @@
     <Compile Include="AddSourceDlg.Designer.cs">
       <DependentUpon>AddSourceDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="AphorismDB.cs" />
     <Compile Include="AppManager\DatabaseWrapper.cs" />
+    <Compile Include="BubbleFormat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BubbleFormat.Designer.cs">
+      <DependentUpon>BubbleFormat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BubbleNotepad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BubbleNotepad.Designer.cs">
+      <DependentUpon>BubbleNotepad.cs</DependentUpon>
+    </Compile>
     <Compile Include="Bubbles.cs" />
     <Compile Include="Bubbles23.cs" />
     <Compile Include="AssemblyInfo23.cs" />
-    <Compile Include="BubblesBookmarks.cs">
+    <Compile Include="BubbleBookmarks.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BubblesBookmarks.Designer.cs">
-      <DependentUpon>BubblesBookmarks.cs</DependentUpon>
+    <Compile Include="BubbleBookmarks.Designer.cs">
+      <DependentUpon>BubbleBookmarks.cs</DependentUpon>
     </Compile>
     <Compile Include="BubblePriPro.cs">
       <SubType>Form</SubType>
@@ -87,35 +104,26 @@
     <Compile Include="BubbleMySources.Designer.cs">
       <DependentUpon>BubbleMySources.cs</DependentUpon>
     </Compile>
+    <Compile Include="ColorPicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MySourcesListDlg.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MySourcesListDlg.Designer.cs">
       <DependentUpon>MySourcesListDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormerBubblesMenuDlg.cs">
+    <Compile Include="BubblePaste.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormerBubblesMenuDlg.Designer.cs">
-      <DependentUpon>FormerBubblesMenuDlg.cs</DependentUpon>
+    <Compile Include="BubblePaste.Designer.cs">
+      <DependentUpon>BubblePaste.cs</DependentUpon>
     </Compile>
-    <Compile Include="BubblesPaste.cs">
+    <Compile Include="BubbleIcons.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BubblesPaste.Designer.cs">
-      <DependentUpon>BubblesPaste.cs</DependentUpon>
-    </Compile>
-    <Compile Include="BubblesIcons.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BubblesIcons.Designer.cs">
-      <DependentUpon>BubblesIcons.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CreateConfigurationDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CreateConfigurationDlg.Designer.cs">
-      <DependentUpon>CreateConfigurationDlg.cs</DependentUpon>
+    <Compile Include="BubbleIcons.Designer.cs">
+      <DependentUpon>BubbleIcons.cs</DependentUpon>
     </Compile>
     <Compile Include="BubblesMenuDlg.cs">
       <SubType>Form</SubType>
@@ -147,6 +155,18 @@
     <Compile Include="SnippetsDlg.Designer.cs">
       <DependentUpon>SnippetsDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="CreateStickerDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateStickerDlg.Designer.cs">
+      <DependentUpon>CreateStickerDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StickerDummy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StickerDummy.Designer.cs">
+      <DependentUpon>StickerDummy.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -158,6 +178,7 @@
     <None Include="I18n.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="images\addsubtopic.png">
@@ -182,6 +203,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\folder.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\f_bold.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\f_boldActive.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\ms_audio.png">
@@ -223,10 +250,55 @@
     <Content Include="images\ms_youtube.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\pasteTextToTopic.png">
+    <Content Include="images\mwBookmarks.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\bubble.png">
+    <Content Include="images\mwBookmarksActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwCopyPaste.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwCopyPasteActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwFormat.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwFormatActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwIcons.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwIcons24.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwIconsActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwNotepad.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwNotepadActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwPriPro.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwPriProActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwSettings.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwSources.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwSourcesActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pasteTextToTopic.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\callout.png">
@@ -292,34 +364,10 @@
     <Content Include="images\rotate.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\screen1.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\screen2.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\screen3.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\screen4.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\screen5.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\screen6.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\screen7.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\screen8.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\screen9.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="images\snippets.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\STICKS.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\tag.png">
@@ -347,8 +395,14 @@
     <EmbeddedResource Include="AddSourceDlg.resx">
       <DependentUpon>AddSourceDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BubblesBookmarks.resx">
-      <DependentUpon>BubblesBookmarks.cs</DependentUpon>
+    <EmbeddedResource Include="BubbleFormat.resx">
+      <DependentUpon>BubbleFormat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BubbleNotepad.resx">
+      <DependentUpon>BubbleNotepad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BubbleBookmarks.resx">
+      <DependentUpon>BubbleBookmarks.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BubblePriPro.resx">
       <DependentUpon>BubblePriPro.cs</DependentUpon>
@@ -359,17 +413,11 @@
     <EmbeddedResource Include="MySourcesListDlg.resx">
       <DependentUpon>MySourcesListDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormerBubblesMenuDlg.resx">
-      <DependentUpon>FormerBubblesMenuDlg.cs</DependentUpon>
+    <EmbeddedResource Include="BubblePaste.resx">
+      <DependentUpon>BubblePaste.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BubblesPaste.resx">
-      <DependentUpon>BubblesPaste.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="BubblesIcons.resx">
-      <DependentUpon>BubblesIcons.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CreateConfigurationDlg.resx">
-      <DependentUpon>CreateConfigurationDlg.cs</DependentUpon>
+    <EmbeddedResource Include="BubbleIcons.resx">
+      <DependentUpon>BubbleIcons.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BubblesMenuDlg.resx">
       <DependentUpon>BubblesMenuDlg.cs</DependentUpon>
@@ -386,6 +434,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SnippetsDlg.resx">
       <DependentUpon>SnippetsDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CreateStickerDlg.resx">
+      <DependentUpon>CreateStickerDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StickerDummy.resx">
+      <DependentUpon>StickerDummy.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

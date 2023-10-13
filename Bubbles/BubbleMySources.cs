@@ -1,5 +1,4 @@
-﻿using Mindjet.MindManager.Interop;
-using PRAManager;
+﻿using PRAManager;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,9 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Image = System.Drawing.Image;
 
 namespace Bubbles
@@ -30,7 +27,6 @@ namespace Bubbles
             if (Utils.getRegistry("ListIconView", "icons") == "list")
                 toolTip1.SetToolTip(SourceList, Utils.getString("mysources.contextmenu.icons"));
 
-            string location = Utils.getRegistry("PositionSources", "");
             orientation = Utils.getRegistry("OrientationSources", "H");
 
             MinLength = this.Width;
@@ -46,17 +42,6 @@ namespace Bubbles
                 orientation = "H";
                 RotateBubble();
                 p1.Location = new Point(p1.Location.Y, p1.Location.X);
-            }
-
-            if (String.IsNullOrEmpty(location))
-                Location = new Point(MMUtils.MindManager.Left + MMUtils.MindManager.Width - this.Width - label1.Width * 2, MMUtils.MindManager.Top + label1.Width);
-            else
-            {
-                string[] xy = location.Split(',');
-                Location = new Point(Convert.ToInt32(xy[0]), Convert.ToInt32(xy[1]));
-
-                if (!Utils.IsOnScreen(Location, this.Size))
-                    Location = new Point(MMUtils.MindManager.Left + MMUtils.MindManager.Width - this.Width - label1.Width * 2, MMUtils.MindManager.Top + label1.Width);
             }
 
             // Resizing window causes black strips...
@@ -203,6 +188,7 @@ namespace Bubbles
             else if (e.ClickedItem.Name == "BI_close")
             {
                 this.Hide();
+                BubblesButton.m_bubblesMenu.MySources.Image = BubblesButton.m_bubblesMenu.mwSources;
             }
             else if (e.ClickedItem.Name == "BI_rotate")
             {

@@ -13,11 +13,7 @@ namespace Bubbles
             StartPaste.Checked = Utils.getRegistry("StartPaste", "0") == "1";
             startPriPro.Checked = Utils.getRegistry("StartPriPro", "0") == "1";
             startBookmarks.Checked = Utils.getRegistry("StartBookmarks", "0") == "1";
-
-            int screens = 1;
-            try { screens = Convert.ToInt32(Utils.getRegistry("Screens", "1")); }
-            catch { }
-            numericUpDown1.Value = screens;
+            startMySources.Checked = Utils.getRegistry("StartMySources", "0") == "1";
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -38,8 +34,9 @@ namespace Bubbles
             if (startPriPro.Checked ^ start)
                 Utils.setRegistry("StartPriPro", startPriPro.Checked ? "1" : "0");
 
-            Utils.setRegistry("Screens", numericUpDown1.Value.ToString());
-            BubblesMenuDlg.screenCount = (int)numericUpDown1.Value;
+            start = Utils.getRegistry("StartMySources", "0") == "1";
+            if (startMySources.Checked ^ start)
+                Utils.setRegistry("StartMySources", startMySources.Checked ? "1" : "0");
         }
     }
 }
