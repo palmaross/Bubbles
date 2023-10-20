@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Mindjet.MindManager.Interop;
@@ -9,7 +10,7 @@ namespace Bubbles
 {
     public partial class SelectIconDlg : Form
     {
-        public SelectIconDlg(bool manage)
+        public SelectIconDlg(List<IconItem> icons, bool manage)
         {
             InitializeComponent();
 
@@ -18,6 +19,8 @@ namespace Bubbles
             rbtnRight.Text = Utils.getString("SelectIconDlg.rbtnRight");
             rbtnEnd.Text = Utils.getString("SelectIconDlg.rbtnEnd");
             rbtnBegin.Text = Utils.getString("SelectIconDlg.rbtnBegin");
+
+            Icons = icons;
 
             imageList1.Images.Add(Image.FromFile(Utils.ImagesPath + "folder.png"));
             space = pSpace.Width;
@@ -58,7 +61,7 @@ namespace Bubbles
             };
             if (topdir)
             {
-                directoryNode.Text = "MindManager"; // Utils.getString("SelectIconDlg.Icons");
+                directoryNode.Text = "MindManager";
                 directoryNode.Expand();
                 topdir = false;
             }
@@ -110,7 +113,7 @@ namespace Bubbles
             iconPath = icon.Name;
             string filename = Path.GetFileNameWithoutExtension(iconPath);
 
-            foreach (var item in BubbleIcons.Icons) // проверим, есть ли в пузыре этот значок
+            foreach (var item in Icons) // проверим, есть ли в пузыре этот значок
             {
                 if (item.FileName == filename + ".ico" || // custom icon
                     item.FileName == "stock" + filename) // stock icon
@@ -147,5 +150,7 @@ namespace Bubbles
         /// <summary>Full path to icon file</summary>
         public string iconPath = "";
         public string iconName = "";
+
+        private List<IconItem> Icons = new List<IconItem>();
     }
 }

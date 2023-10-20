@@ -11,12 +11,26 @@ namespace Bubbles
 {
     public partial class StickerDummy : Form
     {
-        public StickerDummy(StickerItem item, Point location)
+        public StickerDummy(StickerItem item, Point location, int ID = 0)
         {
             InitializeComponent();
 
             if (item == null)
                 return;
+
+            toolTip1.SetToolTip(btnNew, Utils.getString("stickers.btnNew.tooltip"));
+            toolTip1.SetToolTip(pSave, Utils.getString("stickers.pSave.tooltip"));
+            toolTip1.SetToolTip(pDelete, Utils.getString("stickers.pDelete.tooltip"));
+            toolTip1.SetToolTip(pHelp, Utils.getString("stickers.pHelp.tooltip"));
+            toolTip1.SetToolTip(btnClose, Utils.getString("button.close"));
+            toolTip1.SetToolTip(fontcolor, Utils.getString("stickers.fontcolor.tooltip"));
+            toolTip1.SetToolTip(fillcolor, Utils.getString("stickers.fillcolor.tooltip"));
+            toolTip1.SetToolTip(pFont, Utils.getString("stickers.pFont.tooltip"));
+            toolTip1.SetToolTip(pBold, Utils.getString("stickers.pBold.tooltip"));
+            toolTip1.SetToolTip(pIncreaseFont, Utils.getString("stickers.pIncreaseFont.tooltip"));
+            toolTip1.SetToolTip(pDecreaseFont, Utils.getString("stickers.pDecreaseFont.tooltip"));
+            toolTip1.SetToolTip(pAlign, Utils.getString("stickers.pAlign.tooltip"));
+            toolTip1.SetToolTip(pAddImage, Utils.getString("stickers.pAddImage.tooltip"));
 
             // Rounded corners
             var attribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
@@ -26,79 +40,96 @@ namespace Bubbles
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
             this.ResizeRedraw = true;
+            // ... for the image as well
+            this.Resize += (object sender, EventArgs e) => { pStickerImage.Refresh(); };
 
-            // Allow move the form with Editor control and Control panels (top and bottom)
+            // Allow to move the form with Editor panel and Control top and bottom panels
             Editor.MouseDown += Editor_MouseDown;
             panelControlTop.MouseDown += PanelControl_MouseDown;
             panelControlBottom.MouseDown += PanelControl_MouseDown;
 
-            // 
-            Editor.SelectAll();
-            Editor.SelectionAlignment = HorizontalAlignment.Center;
-            this.Resize += StickerDummy_Resize;
+            /////// Context Menus ///////
 
-            // Font Family context menu
-            contextMenuFontFamily.ItemClicked += ContextMenuFontFamily_ItemClicked;
-
-            // Font Size context menu
-            F_Size.SelectedIndexChanged += F_Size_SelectedIndexChanged;
-
-            // Editor context menu
-            contextMenuEditor.ItemClicked += ContextMenuEditor_ItemClicked;
-            contextMenuEditor.Items["CM_pasteinside"].Text = MMUtils.getString("DummySticker.contextmenu.pasteinside");
-
-            // Buttton New context menus
+            // Button New context menus
             contextMenuMain.ItemClicked += ContextMenuMain_ItemClicked;
 
-            ToolStripMenuItem Templates = contextMenuMain.Items["CM_templates"] as ToolStripMenuItem;
-            contextMenuMain.Items["CM_mystickers"].Text = MMUtils.getString("stickers.contextmenu.mystickers");
-            contextMenuMain.Items["CM_templates"].Text = MMUtils.getString("stickers.contextmenu.templates");
+            contextMenuMain.Items["CM_newsticker"].Text = Utils.getString("stickers.contextmenu.newsticker");
+            contextMenuMain.Items["CM_mystickers"].Text = Utils.getString("stickers.contextmenu.mystickers");
+            contextMenuMain.Items["CM_templates"].Text = Utils.getString("stickers.contextmenu.templates");
             AddStickers();
+
+            // Font Family context menu
+            contextMenuFontFamily.ItemClicked += (object sender, ToolStripItemClickedEventArgs e) =>
+            {
+                Editor.Font = new Font(e.ClickedItem.Text, Editor.Font.Size, Editor.Font.Style);
+            };
+
+            // Font Size context menu
+            F_Size.SelectedIndexChanged += (object sender, EventArgs e) =>
+            {
+                int fsize = Convert.ToInt32(F_Size.SelectedItem.ToString());
+                Editor.Font = new Font(Editor.Font.FontFamily, fsize, Editor.Font.Style);
+            };
+
+            // Editor context menu
+            contextMenuEditor.Items["CM_copy"].Text = Utils.getString("DummySticker.contextmenu.copy");
+            contextMenuEditor.Items["CM_paste"].Text = Utils.getString("DummySticker.contextmenu.paste");
+            contextMenuEditor.Items["CM_pasteinside"].Text = Utils.getString("DummySticker.contextmenu.pasteinside");
+            contextMenuEditor.Items["CM_edit"].Text = Utils.getString("DummySticker.contextmenu.editmode");
+            contextMenuEditor.ItemClicked += ContextMenuEditor_ItemClicked;
 
             // Other context menus
             contextMenuOther.ItemClicked += ContextMenuOther_ItemClicked;
 
-            // To hide caret and selection in Move Mode
-            Editor.GotFocus += Editor_GotFocus;
+            // To hide caret and selection in the Not-Edit Mode
             Editor.MouseEnter += Editor_GotFocus;
-            Editor.MouseClick += Editor_MouseClick;
-            Editor.SelectionChanged += Editor_SelectionChanged;
-            Editor.LostFocus += Editor_LostFocus;
             Editor.MouseLeave += Editor_MouseLeave;
+            Editor.GotFocus += Editor_GotFocus;
+            Editor.LostFocus += Editor_LostFocus;
+            Editor.SelectionChanged += (object sender, EventArgs e) => { if (!edit) Editor.DeselectAll(); };
+
             panelControlTop.MouseLeave += Editor_LostFocus;
             panelControlBottom.MouseLeave += Editor_LostFocus;
 
-            this.Deactivate += StickerDummy_Deactivate;
+            // Hide control panels
+            this.Deactivate += (object sender, EventArgs e) =>
+            {
+                panelControlTop.Visible = false;
+                panelControlBottom.Visible = false;
+            };
 
-            Editor.Select(0, (Environment.NewLine + Environment.NewLine).Length);
-            Editor.SelectionProtected = true;
-
+            // Fill Editor content
             Editor.Text = item.Content;
             Editor.ForeColor = ColorTranslator.FromHtml(item.TextColor);
             Editor.BackColor = ColorTranslator.FromHtml(item.FillColor);
             this.BackColor = Editor.BackColor;
             Editor.Font = new Font(item.FontFamily, item.TextSize, item.TextBold == 1 ? FontStyle.Bold : FontStyle.Regular);
 
+            // Editor text alignment. We can do this only with editor in edit mode
+            edit = true;
             Editor.SelectAll();
             Editor.SelectionAlignment = item.Alignment == "left" ? HorizontalAlignment.Left :
                 item.Alignment == "center" ? HorizontalAlignment.Center : HorizontalAlignment.Right;
+            Editor.DeselectAll();
+            edit = false;
 
-            if (location.X + location.Y == 0)
-            {
+            // Set stick location
+            if (location.X + location.Y == 0)  // "Starting" stick (Stick button in the main menu)
                 Location = new Point(MMUtils.MindManager.Left + MMUtils.MindManager.Width / 2,
                     MMUtils.MindManager.Top + MMUtils.MindManager.Height / 2);
-                this.Tag = "0";
-            }
             else
-                Location = location;
+                Location = location; // Stick from database or new created by user
 
+            this.Tag = ID; // Stick ID
+
+            // Set Stick image (if any)
             if (item.aImage != "")
             {
                 string image = item.aImage;
                 string[] parts = item.aImage.Split(':');
-                if (File.Exists(Utils.m_dataPath + "IconDB\\" + parts[0]))
+                if (File.Exists(Utils.m_dataPath + "ImageDB\\" + parts[0]))
                 {
-                    pStickerImage.ImageLocation = Utils.m_dataPath + "IconDB\\" + parts[0];
+                    pStickerImage.ImageLocation = Utils.m_dataPath + "ImageDB\\" + parts[0];
                     pStickerImage.Location = new Point(Convert.ToInt32(parts[1]), Convert.ToInt32(parts[2]));
                     pStickerImage.Size = new Size(Convert.ToInt32(parts[3]), Convert.ToInt32(parts[4]));
                     pStickerImage.Visible = true;
@@ -111,125 +142,115 @@ namespace Bubbles
                 this.Size = new Size(Convert.ToInt32(size[0]), Convert.ToInt32(size[1]));
             }
 
-            foreach(Control ctrl in this.Controls)
-            if (ctrl.GetType() == typeof(VScrollBar))
-                ctrl.Width = 20;
-
             fontcolor.Tag = item.TextColor;
             fontcolor.Paint += pVisualStatus_Paint;
             fillcolor.Tag = item.FillColor;
+            // Paint picture box with given color
             fillcolor.Paint += pVisualStatus_Paint;
 
-            pPaste.MouseEnter += PPaste_MouseEnter;
-            this.KeyUp += StickerDummy_KeyUp;
-            this.KeyDown += StickerDummy_KeyDown;
-
-            // Register mouse events
-            pStickerImage.MouseUp += (sender, args) =>
-            {
-                var c = sender as PictureBox;
-                if (null == c) return;
-                _dragging = false;
-                // Return the picture if it goes beyond the sticker
-                if (c.Top < 0) c.Top = 0;
-                if (c.Left < 0) c.Left = 0;
-                if (c.Bottom > this.Height) c.Top = this.Height - c.Height;
-                if (c.Right > this.Width) c.Left = this.Width - c.Width;
-            };
-
-            pStickerImage.MouseDown += (sender, args) =>
-            {
-                if (args.Button == MouseButtons.Left)
-                {
-                    _dragging = true;
-                    _xPos = args.X;
-                    _yPos = args.Y;
-                }
-                else if (args.Button == MouseButtons.Right)
-                {
-                    foreach (ToolStripItem _item in contextMenuMain.Items)
-                        _item.Visible = false;
-
-                    contextMenuOther.Items["CM_DeleteImage"].Visible = true;
-                    contextMenuOther.Show(Cursor.Position);
-                }
-            };
-
-            pStickerImage.MouseMove += (sender, args) =>
-            {
-                var c = sender as PictureBox;
-                if (!_dragging || null == c) return;
-                // Don't let the picture go beyond the sticker
-                if (c.Top < 0) c.Top = 0;
-                else if (c.Left < 0) c.Left = 0;
-                else if (c.Bottom > this.Height) c.Top = this.Height - c.Height;
-                else if (c.Right > this.Width) c.Left = this.Width - c.Width;
-                else
-                {
-                    c.Top = args.Y + c.Top - _yPos;
-                    c.Left = args.X + c.Left - _xPos;
-                }
-            };
+            // DragDrop images from library to sticker
+            this.DragEnter += StickerDummy_DragEnter;
+            this.DragDrop += StickerDummy_DragDrop;
+            Editor.AllowDrop = true;
+            HookChildrenEvents();
         }
 
-        // Global Variables
-        private int _xPos;
-        private int _yPos;
-        private bool _dragging;
+        private void HookChildrenEvents()
+        {
+            foreach (Control child in this.Controls)
+            {
+                child.DragEnter += StickerDummy_DragEnter;
+                child.DragDrop += StickerDummy_DragDrop;
+            }
+        }
 
+        private void StickerDummy_DragDrop(object sender, DragEventArgs e)
+        {
+            foreach (string pic in ((string[])e.Data.GetData(DataFormats.FileDrop)))
+            {
+                Image img = Image.FromFile(pic);
+                pStickerImage.Image = img;
+            }
+        }
+
+        private void StickerDummy_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Copy;
+        }
+
+        /// <summary>
+        /// My Stickers and Templates dropdowns (Add New button context menu)
+        /// </summary>
         void AddStickers()
         {
             ToolStripMenuItem MyStickers = contextMenuMain.Items["CM_mystickers"] as ToolStripMenuItem;
             ToolStripMenuItem Templates = contextMenuMain.Items["CM_templates"] as ToolStripMenuItem;
-            ToolStripItem item;
+            ToolStripMenuItem Reminders = contextMenuMain.Items["CM_Reminders"] as ToolStripMenuItem;
+            ToolStripItem item = null;
 
             using (BubblesDB db = new BubblesDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from STICKERS");
                 foreach (DataRow row in dt.Rows)
                 {
-                    if (row["template"].ToString() == "1")
+                    if (row["type"].ToString() == "template")
                     {
                         item = Templates.DropDown.Items.Add(row["content"].ToString());
                         item.Name = "template";
                     }
-                    else
+                    else if (row["type"].ToString() == "sticker")
                     {
-                        item = MyStickers.DropDown.Items.Add(row["id"].ToString());
+                        item = MyStickers.DropDown.Items.Add(row["content"].ToString());
                         item.Name = "mysticker";
                     }
+                    else if (row["type"].ToString() == "reminder")
+                    {
+                        item = Reminders.DropDown.Items.Add(row["content"].ToString());
+                        item.Name = "reminder";
+                    }
+                    item.Tag = row["id"];
                 }
             }
-            MyStickers.DropDown.ItemClicked += ContextMenuOther_ItemClicked;
-            Templates.DropDown.ItemClicked += ContextMenuOther_ItemClicked;
-        }
-
-        private void ContextMenuFontFamily_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-            if (e.ClickedItem.Name == "F_Verdana" ||
-                e.ClickedItem.Name == "F_SansSerif" ||
-                e.ClickedItem.Name == "F_ComicSans" ||
-                e.ClickedItem.Name == "F_Comfortaa" ||
-                e.ClickedItem.Name == "F_Impact" ||
-                e.ClickedItem.Name == "F_MiamaNueva" ||
-                e.ClickedItem.Name == "F_Pecita" ||
-                e.ClickedItem.Name == "F_SegoePrint")
-            {
-                Editor.Font = new Font(e.ClickedItem.Text, Editor.Font.Size, Editor.Font.Style);
-            }
+            MyStickers.DropDown.ItemClicked += ContextMenuMain_ItemClicked;
+            Templates.DropDown.ItemClicked += ContextMenuMain_ItemClicked;
+            Reminders.DropDown.ItemClicked += ContextMenuMain_ItemClicked;
         }
 
         private void ContextMenuEditor_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Name == "CM_pasteinside")
+            if (e.ClickedItem.Name == "CM_copy")
             {
-
+                if (String.IsNullOrEmpty(Editor.SelectedText))
+                    Clipboard.SetText(Editor.Text);
+                else
+                    Clipboard.SetText(Editor.SelectedText);
+            }
+            else if (e.ClickedItem.Name == "CM_paste")
+            {
+                Editor.Text = Clipboard.GetText();
+            }
+            else if (e.ClickedItem.Name == "CM_pasteinside")
+            {
+                Editor.SelectedText = "";
+                Clipboard.SetText(Clipboard.GetText());
+                Editor.Paste();
+            }
+            else if (e.ClickedItem.Name == "CM_edit")
+            {
+                if (edit)
+                    edit = false;
+                else
+                    edit = true;
             }
         }
 
         private void ContextMenuMain_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Name == "mysticker" || e.ClickedItem.Name == "template")
+            if (e.ClickedItem.Name == "CM_newsticker")
+            {
+                NewSticker();
+            }
+            else if (e.ClickedItem.Name == "mysticker" || e.ClickedItem.Name == "template")
             {
                 int template = e.ClickedItem.Name == "template" ? 1 : 0;
                 StickerDummy form = null;// new StickerDummy(null);
@@ -259,49 +280,100 @@ namespace Bubbles
                 pStickerImage.Visible = false;
                 pStickerImage.ImageLocation = "";
             }
-        }
-
-        private void StickerDummy_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (pPaste.Focused && !pasteFinish)
+            else if (e.ClickedItem.Name == "CM_FromLibrary" || e.ClickedItem.Name == "CM_FromFile")
             {
-                pasteFinish = true;
-                if ((ModifierKeys & Keys.Control) == Keys.Control)
+                string imagePath = ""; bool fromLibrary = false;
+
+                if (e.ClickedItem.Name == "CM_FromLibrary")
                 {
-                    ctrlPressed = true;
+                    using (SelectImageDlg dlg = new SelectImageDlg())
+                    {
+                        if (dlg.ShowDialog() == DialogResult.OK)
+                            imagePath = dlg.iconPath;
+                        else
+                            return;
+                        fromLibrary = true;
+                    }
                 }
+                else if (e.ClickedItem.Name == "CM_FromFile")
+                {
+                    openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    openFileDialog1.Title = Utils.getString("stickerdummy.openfiledialog.title");
+                    openFileDialog1.Filter = "Image Files|*.bmp;*.gif;*.ico;*.jpg;*.jpeg;*.png;";
+                    openFileDialog1.RestoreDirectory = true;
+
+                    if (openFileDialog1.ShowDialog(this) != DialogResult.OK)
+                        return;
+
+                    imagePath = openFileDialog1.FileName;
+                    string filename = Path.GetFileName(imagePath);
+
+                    try {
+                        File.Copy(imagePath, Utils.m_dataPath + "ImageDB\\" + filename, false);
+                    } catch { }
+                }
+
+                Image img = Image.FromFile(imagePath);
+                if (fromLibrary)
+                    img = new Bitmap(img, pImageLibrary.Size);
+
+                if (img.Width > Editor.Width || img.Height > Editor.Height)
+                {
+                    pStickerImage.Size = SetImage(img.Size);
+                    pStickerImage.Location = new Point(Editor.Location.X, Editor.Location.Y);
+                    pStickerImage.ImageLocation = imagePath;
+                }
+                else
+                {
+                    if (!fromLibrary)
+                    {
+                        float sf = ScalingFactor.GetScalingFactor();
+                        pStickerImage.Size = new Size((int)(img.Width * sf), (int)(img.Height * sf));
+                    }
+                    pStickerImage.ImageLocation = imagePath;
+                }
+                pStickerImage.Visible = true;
             }
         }
-        bool ctrlPressed = false;
 
-        private void StickerDummy_KeyUp(object sender, KeyEventArgs e)
+        private Size SetImage(Size size)
         {
-            pasteFinish = true;
-        }
-        bool pasteFinish = false;
+            float s = (float)size.Width / size.Height;
 
-        private void PPaste_MouseEnter(object sender, EventArgs e)
-        {
-            pPaste.Focus();
-        }
+            if (size.Width > Editor.Width)
+            {
+                size.Width = Editor.Width;
+                size.Height = (int)(size.Width / s);
+            }
+            if (size.Height > Editor.Height)
+            {
+                size.Height = Editor.Height;
+                size.Width = (int)(size.Height * s);
+            }
 
-        private void StickerDummy_Resize(object sender, EventArgs e)
-        {
-            Editor.Height = this.Height - panelControlTop.Height * 2;
-        }
-
-        private void pEdit_Click(object sender, EventArgs e)
-        {
-            if (edit)
-                edit = false;
-            else
-                edit = true;
+            //img = new Bitmap(img, new Size(imgSize.Width, imgSize.Height));
+            return size;
         }
 
-        private void btnNew_Click(object sender, EventArgs e)
+        private void btnNew_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                NewSticker();
+            }
+            if (e.Button == MouseButtons.Right)
+            {
+                foreach (ToolStripMenuItem item in contextMenuMain.Items)
+                {
+                    item.Visible = true;
+                }
+                contextMenuMain.Show(Cursor.Position);
+            }
+        }
+
+        private void NewSticker()
         {
             Point location = new Point(this.Location.X, this.Location.Y + this.Height);
-
             Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
 
             if (location.Y + this.Height > area.Bottom)
@@ -318,15 +390,10 @@ namespace Bubbles
             }
 
             StickerDummy form = new StickerDummy(
-                new StickerItem("Your Text...", fontcolor.Tag.ToString(), fillcolor.Tag.ToString(), 
+                new StickerItem(0, "Your Text...", fontcolor.Tag.ToString(), fillcolor.Tag.ToString(),
                 Editor.Font.FontFamily.Name, (int)Editor.Font.Size, Convert.ToInt32(Editor.Font.Bold),
                 this.Width + ":" + this.Height, image, alignment, pStickerType.Tag.ToString()), location);
             form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-        }
-
-        private void pMore_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void fontcolor_Click(object sender, EventArgs e)
@@ -433,11 +500,11 @@ namespace Bubbles
             }
         }
 
-        private void F_Size_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            int fsize = Convert.ToInt32(F_Size.SelectedItem.ToString());
-            Editor.Font = new Font(Editor.Font.FontFamily, fsize, Editor.Font.Style);
-        }
+        //private void F_Size_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    int fsize = Convert.ToInt32(F_Size.SelectedItem.ToString());
+        //    Editor.Font = new Font(Editor.Font.FontFamily, fsize, Editor.Font.Style);
+        //}
 
         private void pDecreaseFont_MouseClick(object sender, MouseEventArgs e)
         {
@@ -509,12 +576,6 @@ namespace Bubbles
             edit = _edit;
         }
 
-        private void StickerDummy_Deactivate(object sender, EventArgs e)
-        {
-            panelControlTop.Visible = false;
-            panelControlBottom.Visible = false;
-        }
-
         private void Editor_LostFocus(object sender, EventArgs e)
         {
             if (CursorIsInsideSticker())
@@ -583,40 +644,14 @@ namespace Bubbles
         {
             if (this.Tag == null || String.IsNullOrEmpty(this.Tag.ToString())) return;
 
-            using (BubblesDB db = new BubblesDB())
-                db.ExecuteNonQuery("delete from STICKERS where id=" + Convert.ToInt32(this.Tag) + "");
-
-            this.Close();
-        }
-
-        private void pCopy_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (String.IsNullOrEmpty(Editor.SelectedText))
-                Clipboard.SetText(Editor.Text);
-            else
-                Clipboard.SetText(Editor.SelectedText);
-        }
-
-        private void pPaste_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
+            if (MessageBox.Show(Utils.getString("stickers.deletesticker.text"), 
+                Utils.getString("stickers.deletesticker.title"), 
+                MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                if (ctrlPressed)
-                {
-                    Editor.SelectedText = "";
-                    Clipboard.SetText(Clipboard.GetText());
-                    Editor.Paste();
-                }
-                else
-                    Editor.Text = Clipboard.GetText();
-            }
-            else if (e.Button == MouseButtons.Right)
-            {
-                foreach (ToolStripItem item in contextMenuMain.Items)
-                    item.Visible = false;
+                using (BubblesDB db = new BubblesDB())
+                    db.ExecuteNonQuery("delete from STICKERS where id=" + Convert.ToInt32(this.Tag) + "");
 
-                contextMenuMain.Items["CM_pasteinside"].Visible = true;
-                contextMenuMain.Show(Cursor.Position);
+                this.Close();
             }
         }
 
@@ -626,25 +661,29 @@ namespace Bubbles
         /// </summary>
         private void Editor_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left && e.Clicks == 1)
+            if (e.Button == MouseButtons.Left)
             {
-                if (e.Button == MouseButtons.Left && !edit)
+                if (e.Clicks == 1) // single click
                 {
-                    ReleaseCapture();
-                    SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+                    if (!edit)
+                    {
+                        ReleaseCapture();
+                        SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+                    }
                 }
+                else // double click turn on Edit Mode
+                    edit = true;
             }
-            else // double click, turn on Edit Mode
+            else if (e.Button == MouseButtons.Right)
             {
-                edit = true;
+                foreach (ToolStripItem item in contextMenuEditor.Items)
+                    item.Visible = true;
+
+                if (!edit)
+                    contextMenuEditor.Items["CM_pasteinside"].Visible = false;
+
+                contextMenuEditor.Show(Cursor.Position);
             }
-
-        }
-
-        private void Editor_SelectionChanged(object sender, EventArgs e)
-        {
-            if (!edit)
-                Editor.DeselectAll();
         }
 
         [DllImport("user32.dll", EntryPoint = "ShowCaret")]
@@ -669,19 +708,26 @@ namespace Bubbles
         }
         bool justCreated = true;
 
-        private void Editor_MouseClick(object sender, MouseEventArgs e)
+        private void pAddImage_Click(object sender, EventArgs e)
         {
-            if (edit)
-                ShowCaret(Editor.Handle);
-            else
-                HideCaret(Editor.Handle);
+            foreach (ToolStripItem item in contextMenuOther.Items)
+                item.Visible = false;
 
-            if (!edit)
-                panelControlTop.Visible = true;
-            panelControlBottom.Visible = true;
+            contextMenuOther.Items["CM_FromFile"].Visible = true;
+            contextMenuOther.Items["CM_FromLibrary"].Visible = true;
+            contextMenuOther.Show(Cursor.Position);
         }
 
         private void pStickerImage_MouseClick(object sender, MouseEventArgs e)
+        {
+            foreach (ToolStripItem item in contextMenuOther.Items)
+                item.Visible = false;
+
+            contextMenuOther.Items["CM_DeleteImage"].Visible = true;
+            contextMenuOther.Show(Cursor.Position);
+        }
+
+        private void pHelp_Click(object sender, EventArgs e)
         {
 
         }
@@ -786,18 +832,14 @@ namespace Bubbles
                                                          DWMWINDOWATTRIBUTE attribute,
                                                          ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute,
                                                          uint cbAttribute);
-
-        private void pAddImage_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 
     public class StickerItem
     {
-        public StickerItem(string content, string textcolor, string fillcolor, string fontfamily, 
+        public StickerItem(int id, string content, string textcolor, string fillcolor, string fontfamily, 
             int textsize, int textbold, string sticksize, string image, string alignment, string type)
         {
+            ID = id;
             Content = content;
             TextColor = textcolor;
             FillColor = fillcolor;
@@ -809,6 +851,7 @@ namespace Bubbles
             Alignment = alignment;
             Type = type;
         }
+        public int ID;
         public string Content = "/n/nText...";
         public string TextColor = "";
         public string FillColor = "";

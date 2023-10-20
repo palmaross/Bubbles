@@ -77,6 +77,12 @@
     <Compile Include="BubbleFormat.Designer.cs">
       <DependentUpon>BubbleFormat.cs</DependentUpon>
     </Compile>
+    <Compile Include="NewStickDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewStickDlg.Designer.cs">
+      <DependentUpon>NewStickDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="BubbleNotepad.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,9 +110,6 @@
     <Compile Include="BubbleMySources.Designer.cs">
       <DependentUpon>BubbleMySources.cs</DependentUpon>
     </Compile>
-    <Compile Include="ColorPicker.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="MySourcesListDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -125,11 +128,11 @@
     <Compile Include="BubbleIcons.Designer.cs">
       <DependentUpon>BubbleIcons.cs</DependentUpon>
     </Compile>
-    <Compile Include="BubblesMenuDlg.cs">
+    <Compile Include="MainMenuDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BubblesMenuDlg.Designer.cs">
-      <DependentUpon>BubblesMenuDlg.cs</DependentUpon>
+    <Compile Include="MainMenuDlg.Designer.cs">
+      <DependentUpon>MainMenuDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -142,6 +145,18 @@
     <Compile Include="SelectIconDlg.Designer.cs">
       <DependentUpon>SelectIconDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="SelectImageDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectImageDlg.Designer.cs">
+      <DependentUpon>SelectImageDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SelectStickDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectStickDlg.Designer.cs">
+      <DependentUpon>SelectStickDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="SettingsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -149,17 +164,14 @@
       <DependentUpon>SettingsDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="BubblesDB.cs" />
+    <Compile Include="SizeablePictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SnippetsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SnippetsDlg.Designer.cs">
       <DependentUpon>SnippetsDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CreateStickerDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CreateStickerDlg.Designer.cs">
-      <DependentUpon>CreateStickerDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="StickerDummy.cs">
       <SubType>Form</SubType>
@@ -167,6 +179,7 @@
     <Compile Include="StickerDummy.Designer.cs">
       <DependentUpon>StickerDummy.cs</DependentUpon>
     </Compile>
+    <Compile Include="StickUtils.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -179,6 +192,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="Sticks.chm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="images\addsubtopic.png">
@@ -202,6 +218,27 @@
     <Content Include="images\bookmarkRest.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\chm.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\close_sticker.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\collapse.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\deleteall.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\deleteStick.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\edit.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\expand.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\folder.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -209,6 +246,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\f_boldActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\helpSticker.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\ms_audio.png">
@@ -298,6 +338,12 @@
     <Content Include="images\mwSourcesActive.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\newStick.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\newsticker.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\pasteTextToTopic.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -361,6 +407,9 @@
     <Content Include="images\pro90.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\remember.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\rotate.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -398,6 +447,9 @@
     <EmbeddedResource Include="BubbleFormat.resx">
       <DependentUpon>BubbleFormat.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="NewStickDlg.resx">
+      <DependentUpon>NewStickDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BubbleNotepad.resx">
       <DependentUpon>BubbleNotepad.cs</DependentUpon>
     </EmbeddedResource>
@@ -419,8 +471,8 @@
     <EmbeddedResource Include="BubbleIcons.resx">
       <DependentUpon>BubbleIcons.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BubblesMenuDlg.resx">
-      <DependentUpon>BubblesMenuDlg.cs</DependentUpon>
+    <EmbeddedResource Include="MainMenuDlg.resx">
+      <DependentUpon>MainMenuDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -429,14 +481,17 @@
     <EmbeddedResource Include="SelectIconDlg.resx">
       <DependentUpon>SelectIconDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SelectImageDlg.resx">
+      <DependentUpon>SelectImageDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectStickDlg.resx">
+      <DependentUpon>SelectStickDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SettingsDlg.resx">
       <DependentUpon>SettingsDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SnippetsDlg.resx">
       <DependentUpon>SnippetsDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CreateStickerDlg.resx">
-      <DependentUpon>CreateStickerDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StickerDummy.resx">
       <DependentUpon>StickerDummy.cs</DependentUpon>

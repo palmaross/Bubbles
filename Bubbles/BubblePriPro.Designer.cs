@@ -51,11 +51,7 @@
             this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_deleteall = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.BI_rotate = new System.Windows.Forms.ToolStripMenuItem();
-            this.BI_close = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.BI_help = new System.Windows.Forms.ToolStripMenuItem();
-            this.BI_store = new System.Windows.Forms.ToolStripMenuItem();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.label1 = new System.Windows.Forms.Label();
             this.p1 = new System.Windows.Forms.PictureBox();
@@ -63,12 +59,14 @@
             this.Manage = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureHandle = new System.Windows.Forms.PictureBox();
+            this.p2 = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.icondist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -83,13 +81,9 @@
             this.BI_delete,
             this.BI_deleteall,
             this.toolStripSeparator2,
-            this.BI_rotate,
-            this.BI_close,
-            this.toolStripSeparator1,
-            this.BI_help,
-            this.BI_store});
+            this.toolStripSeparator1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(188, 192);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(188, 104);
             // 
             // BI_addpriority
             // 
@@ -235,34 +229,10 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(184, 6);
             // 
-            // BI_rotate
-            // 
-            this.BI_rotate.Name = "BI_rotate";
-            this.BI_rotate.Size = new System.Drawing.Size(187, 22);
-            this.BI_rotate.Text = "Повернуть";
-            // 
-            // BI_close
-            // 
-            this.BI_close.Name = "BI_close";
-            this.BI_close.Size = new System.Drawing.Size(187, 22);
-            this.BI_close.Text = "Закрыть";
-            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(184, 6);
-            // 
-            // BI_help
-            // 
-            this.BI_help.Name = "BI_help";
-            this.BI_help.Size = new System.Drawing.Size(187, 22);
-            this.BI_help.Text = "Справка";
-            // 
-            // BI_store
-            // 
-            this.BI_store.Name = "BI_store";
-            this.BI_store.Size = new System.Drawing.Size(187, 22);
-            this.BI_store.Text = "Запомнить";
             // 
             // label1
             // 
@@ -329,6 +299,16 @@
             this.pictureHandle.TabIndex = 77;
             this.pictureHandle.TabStop = false;
             // 
+            // p2
+            // 
+            this.p2.Location = new System.Drawing.Point(63, 9);
+            this.p2.Name = "p2";
+            this.p2.Size = new System.Drawing.Size(12, 12);
+            this.p2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.p2.TabIndex = 79;
+            this.p2.TabStop = false;
+            this.p2.Visible = false;
+            // 
             // BubblePriPro
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -336,6 +316,7 @@
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(138, 30);
             this.ControlBox = false;
+            this.Controls.Add(this.p2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureHandle);
             this.Controls.Add(this.icondist);
@@ -351,6 +332,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -368,12 +350,8 @@
         private System.Windows.Forms.ToolStripMenuItem BI_delete;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureHandle;
-        private System.Windows.Forms.ToolStripMenuItem BI_close;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem BI_rotate;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem BI_help;
-        private System.Windows.Forms.ToolStripMenuItem BI_store;
         private System.Windows.Forms.ToolStripMenuItem BI_addprogress;
         private System.Windows.Forms.ToolStripMenuItem pro0;
         private System.Windows.Forms.ToolStripMenuItem pri1;
@@ -390,5 +368,6 @@
         private System.Windows.Forms.ToolStripMenuItem pro90;
         private System.Windows.Forms.ToolStripMenuItem pro100;
         private System.Windows.Forms.ToolStripMenuItem BI_deleteall;
+        private System.Windows.Forms.PictureBox p2;
     }
 }

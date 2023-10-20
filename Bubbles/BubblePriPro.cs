@@ -12,32 +12,28 @@ namespace Bubbles
 {
     internal partial class BubblePriPro : Form
     {
-        public BubblePriPro()
+        public BubblePriPro(int ID, string _orientation, string stickname = "")
         {
             InitializeComponent();
 
-            //helpProvider1.HelpNamespace = MMMapNavigator.dllPath + "MapNavigator.chm";
-            //helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            //helpProvider1.SetHelpKeyword(this, "bookmarks_express.htm");
+            this.Tag = ID; // correct
+            orientation = _orientation;
+
+            helpProvider1.HelpNamespace = Utils.dllPath + "Sticks.chm";
+            helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
+            helpProvider1.SetHelpKeyword(this, "PriProStick.htm");
 
             toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
-            toolTip1.SetToolTip(pictureHandle, Utils.getString("pripro.bubble.tooltip"));
-
-            orientation = Utils.getRegistry("OrientationPriPro", "H");
+            toolTip1.SetToolTip(pictureHandle, stickname);
 
             MinLength = this.Width;
-            MaxLength = this.Width * 4;
+            RealLength = this.Width;
             Thickness = this.Height;
             panel1MinLength = panel1.Width;
 
-            this.MinimumSize = this.Size;
-            this.MaximumSize = new Size(MaxLength, Thickness);
-
             if (orientation == "V")
             {
-                orientation = "H";
-                RotateBubble();
-                p1.Location = new Point(p1.Location.Y, p1.Location.X);
+                orientation = StickUtils.RotateStick(this, p1, panel1, Manage, "H", true);
             }
 
             // Resizing window causes black strips...
@@ -46,15 +42,20 @@ namespace Bubbles
 
             // Context menu
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
-            contextMenuStrip1.Items["BI_addpriority"].Text = MMUtils.getString("pripro.contextmenu.priority");
-            contextMenuStrip1.Items["BI_addprogress"].Text = MMUtils.getString("pripro.contextmenu.progress");
-            contextMenuStrip1.Items["BI_delete"].Text = MMUtils.getString("float_icons.contextmenu.delete");
-            contextMenuStrip1.Items["BI_deleteall"].Text = MMUtils.getString("float_icons.contextmenu.deleteall");
 
-            contextMenuStrip1.Items["BI_rotate"].Text = MMUtils.getString("float_icons.contextmenu.rotate");
-            contextMenuStrip1.Items["BI_close"].Text = MMUtils.getString("float_icons.contextmenu.close");
-            contextMenuStrip1.Items["BI_help"].Text = MMUtils.getString("float_icons.contextmenu.help");
-            contextMenuStrip1.Items["BI_store"].Text = MMUtils.getString("float_icons.contextmenu.settings");
+            contextMenuStrip1.Items["BI_addpriority"].Text = MMUtils.getString("pripro.contextmenu.priority");
+            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_addpriority"], p2, "pr1.png");
+
+            contextMenuStrip1.Items["BI_addprogress"].Text = MMUtils.getString("pripro.contextmenu.progress");
+            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_addprogress"], p2, "pro25.png");
+
+            contextMenuStrip1.Items["BI_delete"].Text = MMUtils.getString("float_icons.contextmenu.delete");
+            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_delete"], p2, "deleteall.png");
+
+            contextMenuStrip1.Items["BI_deleteall"].Text = MMUtils.getString("float_icons.contextmenu.deleteall");
+            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_deleteall"], p2, "deleteall.png");
+            
+            StickUtils.SetCommonContextMenu(contextMenuStrip1, p2);
 
             ToolStripMenuItem addPriority = contextMenuStrip1.Items["BI_addpriority"] as ToolStripMenuItem;
             addPriority.DropDown.Items[0].Text = MMUtils.getString("pripro.priority.caption") + " 1";
@@ -103,34 +104,42 @@ namespace Bubbles
             pictureHandle.MouseDown += PictureHandle_MouseDown;
             Manage.Click += Manage_Click;
 
-            string priority = Utils.getRegistry("Priority", "new");
-            string progress = Utils.getRegistry("Progress", "new");
-
-            if (priority == "new" && progress == "new")
+            using (BubblesDB db = new BubblesDB())
             {
-                PriPros.Add(new PriProItem("pri", 1));
-                PriPros.Add(new PriProItem("pri", 2));
-                PriPros.Add(new PriProItem("pro", 0));
-                PriPros.Add(new PriProItem("pro", 100));
-            }
-            else 
-            {
-                if (priority != "")
-                {
-                    string[] _priority = priority.Split(',');
-                    foreach (string pri in _priority)
-                        PriPros.Add(new PriProItem("pri", Convert.ToInt32(pri)));
-                }
-                if (progress != "")
-                {
-                    string[] _progress = progress.Split(',');
-                    foreach (string pro in _progress)
-                        PriPros.Add(new PriProItem("pro", Convert.ToInt32(pro)));
-                }
-            }
+                DataTable dt = db.ExecuteQuery("select * from PRIPRO where stickID=" + ID + "");
+                
+                List<int> pri = new List<int>();
+                List<int> pro = new List<int>();
 
-            foreach (var item in PriPros)
-                AddIcon(item.Type, item.Value);
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (row["type"].ToString() == "pri")
+                        pri.Add(Convert.ToInt32(row["value"]));
+                    else if (row["type"].ToString() == "pro")
+                        pro.Add(Convert.ToInt32(row["value"]));
+                }
+
+                pri.Sort(); pro.Sort();
+
+                int k = 0;
+                foreach (var value in pri)
+                {
+                    PriProItem item = new PriProItem("pri", value);
+                    PriPros.Add(item);
+                    PictureBox pBox = StickUtils.AddPriPro(this, p1, item, panel1, orientation, icondist.Width, k++);
+                    try { pBox.Image = StickUtils.GetImage(item.Type, item.Value); } catch { continue; }
+                    pBox.MouseClick += Icon_Click;
+                }
+                foreach (var value in pro)
+                {
+                    PriProItem item = new PriProItem("pro", value);
+                    PriPros.Add(item);
+                    PictureBox pBox = StickUtils.AddPriPro(this, p1, item, panel1, orientation, icondist.Width, k++);
+                    try { pBox.Image = StickUtils.GetImage(item.Type, item.Value); } catch { continue; }
+                    pBox.MouseClick += Icon_Click;
+                }
+            }
+            RealLength = this.Width;
         }
 
         private void Manage_Click(object sender, EventArgs e)
@@ -167,264 +176,101 @@ namespace Bubbles
 
         private void ContextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Name.StartsWith("pr"))
+            if (e.ClickedItem.Name.StartsWith("pr")) // new PriPro
             {
                 string type = e.ClickedItem.Name.Substring(0, 3);
                 int value = Convert.ToInt32(e.ClickedItem.Name.Substring(3));
 
                 PriPros.Add(new PriProItem(type, value));
-
                 PriPros = PriPros.OrderBy(item => item.Type).ThenBy(item => item.Value).ToList();
+                using (BubblesDB db = new BubblesDB())
+                    db.AddPriPro(type, value, (int)this.Tag);
 
-                RefreshBubble();
+                RefreshStick();
             }
             else if (e.ClickedItem.Name == "BI_delete")
             {
-                PriProItem _item = (PriProItem)selectedIcon.Tag;
-
-                if (_item != null)
-                {
-                    PriProItem __item = PriPros.Find(x => x.Type == _item.Type && x.Value == _item.Value);
-                    if (__item != null)
-                        PriPros.Remove(__item);
-
-                    RefreshBubble();
-                }
+                StickUtils.PriPros.Clear(); StickUtils.PriPros.AddRange(PriPros);
+                StickUtils.DeleteIcon(selectedIcon, (int)this.Tag, StickUtils.typepripro);
+                PriPros.Clear(); PriPros.AddRange(StickUtils.PriPros);
+                RefreshStick();
             }
             else if (e.ClickedItem.Name == "BI_deleteall")
             {
-                RefreshBubble(true);
+                PriPros.Clear();
+                RefreshStick(true);
+                if (collapsed)
+                {
+                    collapsed = false;
+                    this.BackColor = System.Drawing.Color.Lavender;
+                }
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
-                this.Hide();
-                BubblesButton.m_bubblesMenu.PriPro.Image = BubblesButton.m_bubblesMenu.mwPriPro;
+                BubblesButton.STICKS.Remove((int)this.Tag);
+                this.Close();
             }
             else if (e.ClickedItem.Name == "BI_rotate")
             {
-                RotateBubble();
-
-                foreach (PictureBox p in panel1.Controls.OfType<PictureBox>())
-                {
-                    p.Location = new Point(p.Location.Y, p.Location.X);
-                }
+                orientation = StickUtils.RotateStick(this, p1, panel1, Manage, orientation);
             }
             else if (e.ClickedItem.Name == "BI_help")
             {
-
+                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "PriProStick.htm");
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
-                int x = this.Location.X;
-                int y = this.Location.Y;
-
-                Utils.setRegistry("OrientationPriPro", orientation);
-                Utils.setRegistry("PositionPriPro", x.ToString() + "," + y.ToString());
+                StickUtils.SaveStick(this.Bounds, (int)this.Tag, orientation);
             }
-        }
-
-        void RefreshBubble(bool deleteall = false)
-        {
-            // Remove all icons
-            foreach (PictureBox p in panel1.Controls.OfType<PictureBox>().Reverse())
+            else if (e.ClickedItem.Name == "BI_newstick") // correct
             {
-                if (p.Name != "p1")
-                    p.Dispose();
-            }
-
-            // Reset bubble size to minimum
-            if (orientation == "H")
-            {
-                this.Size = new Size(MinLength, Thickness);
-                panel1.Width = panel1MinLength;
-            }
-            else
-            {
-                this.Size = new Size(Thickness, MinLength);
-                panel1.Width = panel1MinLength;
-            }
-
-            if (deleteall) // Clean bubble and database
-            {
-                PriPros.Clear();
-                Utils.setRegistry("Priority", "");
-                Utils.setRegistry("Progress", "");
-            }
-            else
-            {
-                // Add icons to bubble
-                k = 0;
-                string priority = "", progress = "";
-                foreach (var item in PriPros)
+                string name = StickUtils.RenameStick(this, orientation, "");
+                if (name != "")
                 {
-                    AddIcon(item.Type, item.Value);
-                    if (item.Type == "pri")
-                        priority += item.Value.ToString() + ",";
-                    else
-                        progress += item.Value.ToString() + ",";
-                }
-
-                // Store bubble in registry
-                Utils.setRegistry("Priority", priority.TrimEnd(','));
-                Utils.setRegistry("Progress", progress.TrimEnd(','));
-            }
-        }
-
-        void RotateBubble()
-        {
-            if (orientation == "H")
-            {
-                orientation = "V";
-                panel1.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
-                Manage.Anchor = AnchorStyles.Left | AnchorStyles.Bottom;
-            }
-            else
-            {
-                orientation = "H";
-                panel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-                Manage.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            }
-
-            int thisWidth = this.Width;
-            int thisHeight = this.Height;
-
-            Size panel1Size = new Size(panel1.Height, panel1.Width);
-            Point panel1Location = new Point(panel1.Location.Y, panel1.Location.X);
-            Point ManageLocation = new Point(Manage.Location.Y, Manage.Location.X);
-
-            if (orientation == "H")
-            {
-                this.MinimumSize = new Size(MinLength, Thickness);
-                this.MaximumSize = new Size(MaxLength, Thickness);
-            }
-            else
-            {
-                this.MinimumSize = new Size(Thickness, MinLength);
-                this.MaximumSize = new Size(Thickness, MaxLength);
-            }
-
-            this.Size = new Size(thisHeight, thisWidth);
-
-            panel1.Size = panel1Size;
-            panel1.Location = panel1Location;
-            Manage.Location = ManageLocation;
-        }
-
-        void AddIcon(string type, int value)
-        {
-            PictureBox pBox = new PictureBox();
-            try { pBox.Image = GetImage(type, value); } catch { return; }
-            pBox.Size = p1.Size;
-            pBox.SizeMode = PictureBoxSizeMode.Zoom;
-            pBox.MouseClick += Icon_Click;
-            panel1.Controls.Add(pBox);
-            pBox.Visible = true;
-            pBox.BringToFront();
-            pBox.Tag = new PriProItem(type, value);
-
-            if (orientation == "H")
-            {
-                pBox.Location = new Point(icondist.Width * k++, p1.Location.Y);
-                if (k > 4)
-                    this.Width += icondist.Width;
-            }
-            else
-            {
-                pBox.Location = new Point(p1.Location.X, icondist.Width * k++);
-                if (k > 4)
-                    this.Height += icondist.Width;
-            }
-        }
-        int k = 0;
-
-        Image GetImage(string type, int value)
-        {
-            if (type == "pri")
-            {
-                switch (value) 
-                {
-                    case 1: return PR1;
-                    case 2: return PR2;
-                    case 3: return PR3;
-                    case 4: return PR4;
-                    case 5: return PR5;
+                    BubblePriPro form = new BubblePriPro(0, orientation, name);
+                    StickUtils.CreateStick(form, name);
                 }
             }
-            else
+            else if (e.ClickedItem.Name == "BI_renamestick")
             {
-                switch (value)
+                string newName = StickUtils.RenameStick(this, orientation, toolTip1.GetToolTip(pictureHandle));
+                if (newName != "") toolTip1.SetToolTip(pictureHandle, newName);
+            }
+            else if (e.ClickedItem.Name == "BI_expand")
+            {
+                if (this.Width < RealLength)
+                    this.Width = RealLength;
+                this.BackColor = System.Drawing.Color.Lavender;
+                collapsed = false;
+            }
+            else if (e.ClickedItem.Name == "BI_collapse")
+            {
+                if (this.Width > MinLength)
                 {
-                    case 0: return PRG0;
-                    case 10: return PRG10;
-                    case 25: return PRG25;
-                    case 35: return PRG35;
-                    case 50: return PRG50;
-                    case 65: return PRG65;
-                    case 75: return PRG75;
-                    case 90: return PRG90;
-                    case 100: return PRG100;
+                    this.Width = MinLength;
+                    this.BackColor = System.Drawing.Color.Gainsboro;
+                    collapsed = true;
                 }
             }
-            return null;
-        }
-
-        #region resize dialog
-        protected override void WndProc(ref Message m)
-        {
-            const int RESIZE_HANDLE_SIZE = 10;
-
-            switch (m.Msg)
+            else if (e.ClickedItem.Name == "BI_delete_stick") // correct
             {
-                case 0x0084/*NCHITTEST*/ :
-                    base.WndProc(ref m);
-
-                    if ((int)m.Result == 0x01/*HTCLIENT*/)
-                    {
-                        Point screenPoint = new Point(m.LParam.ToInt32());
-                        Point clientPoint = this.PointToClient(screenPoint);
-                        if (clientPoint.Y <= RESIZE_HANDLE_SIZE)
-                        {
-                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
-                                m.Result = (IntPtr)13/*HTTOPLEFT*/ ;
-                            else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
-                                m.Result = (IntPtr)12/*HTTOP*/ ;
-                            else
-                                m.Result = (IntPtr)14/*HTTOPRIGHT*/ ;
-                        }
-                        else if (clientPoint.Y <= (Size.Height - RESIZE_HANDLE_SIZE))
-                        {
-                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
-                                m.Result = (IntPtr)10/*HTLEFT*/ ;
-                            else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
-                                m.Result = (IntPtr)2/*HTCAPTION*/ ;
-                            else
-                                m.Result = (IntPtr)11/*HTRIGHT*/ ;
-                        }
-                        else
-                        {
-                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
-                                m.Result = (IntPtr)16/*HTBOTTOMLEFT*/ ;
-                            else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
-                                m.Result = (IntPtr)15/*HTBOTTOM*/ ;
-                            else
-                                m.Result = (IntPtr)17/*HTBOTTOMRIGHT*/ ;
-                        }
-                    }
-                    return;
-            }
-            base.WndProc(ref m);
-        }
-
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams cp = base.CreateParams;
-                cp.Style |= 0x20000; // <--- use 0x20000
-                return cp;
+                if (StickUtils.DeleteStick((int)this.Tag, StickUtils.typepripro))
+                    this.Close();
             }
         }
-        #endregion
+
+        void RefreshStick(bool deleteall = false)
+        {
+            StickUtils.PriPros.Clear(); StickUtils.PriPros.AddRange(PriPros);
+            List<PictureBox> pBoxs = StickUtils.RefreshStick(this, p1, panel1, orientation, Thickness,
+                MinLength, panel1MinLength, icondist.Width, ref RealLength, StickUtils.typepripro, deleteall);
+
+            foreach (PictureBox pBox in pBoxs)
+                pBox.MouseClick += Icon_Click;
+
+            if (collapsed)
+                this.Width = MinLength;
+        }
 
         private void Icon_Click(object sender, MouseEventArgs e)
         {
@@ -477,10 +323,11 @@ namespace Bubbles
         public static List<PriProItem> PriPros = new List<PriProItem>();
         PictureBox selectedIcon = null;
         string orientation = "H";
+        bool collapsed = false;
 
-        int MinLength, MaxLength, Thickness, panel1MinLength;
+        int MinLength, RealLength, Thickness, panel1MinLength;
 
-        Image PR1, PR2, PR3, PR4, PR5, PRG0, PRG10, PRG25, PRG35, PRG50, PRG65, PRG75, PRG90, PRG100;
+        public static Image PR1, PR2, PR3, PR4, PR5, PRG0, PRG10, PRG25, PRG35, PRG50, PRG65, PRG75, PRG90, PRG100;
         ToolStripItemCollection PriorityCollection;
         ToolStripItemCollection ProgressCollection;
 

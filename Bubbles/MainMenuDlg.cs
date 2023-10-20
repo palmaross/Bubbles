@@ -1,13 +1,16 @@
 ﻿using PRAManager;
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Bubbles
 {
-    public partial class BubblesMenuDlg : Form
+    public partial class MainMenuDlg : Form
     {
-        public BubblesMenuDlg()
+        public MainMenuDlg()
         {
             InitializeComponent();
 
@@ -46,26 +49,144 @@ namespace Bubbles
 
         private void This_Deactivate(object sender, EventArgs e)
         {
-            this.Hide();
+            if (!keepmenu)
+                this.Hide();
         }
+
+        /// <summary>
+        /// Get stick from database by its ID
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="position"></param>
+        /// <param name="name"></param>
+        /// <returns>0 - Very new stick, -1 - User don't want select a stick, N - stick ID
+        /// </returns>
+        private int GetStick(string type, ref string position, ref string name)
+        {
+            using (BubblesDB db = new BubblesDB())
+            {
+                DataTable dt = db.ExecuteQuery("select * from STICKS where type=`" + type + "`");
+                if (dt.Rows.Count == 0) // there are not sticks of this type
+                    return 0;
+                else if (dt.Rows.Count == 1) // only one stick, do not show SelectStickDlg
+                {
+                    position = dt.Rows[0]["position"].ToString();
+                    name = dt.Rows[0]["name"].ToString();
+                    return Convert.ToInt32(dt.Rows[0]["id"]);
+                }
+                else // more than one stick, show SelectStickDlg
+                {
+                    keepmenu = true;
+
+                    Dictionary<int, string> dict = new Dictionary<int, string>();
+                    foreach (DataRow row in dt.Rows)
+                        dict.Add(Convert.ToInt32(row["id"]), row["name"].ToString());
+
+                    using (SelectStickDlg dlg = new SelectStickDlg(dict))
+                    {
+                        dlg.Location = new Point(this.Bounds.X + lblSelectStickLocation.Location.X, this.Bounds.Y);
+
+                        if (dlg.ShowDialog() == DialogResult.Cancel)
+                            return -1;
+
+                        dt = db.ExecuteQuery("select * from STICKS where id=" + dlg.StickID + "");
+                        if (dt.Rows.Count > 0)
+                        {
+                            position = dt.Rows[0]["position"].ToString();
+                            name = dt.Rows[0]["name"].ToString();
+                            return dlg.StickID;
+                        }
+                        return -1;
+                    }
+                }
+            }
+        }
+        bool keepmenu = false;
 
         public void Icons_Click(object sender, EventArgs e)
         {
-            if (BubblesButton.m_bubbleIcons.Visible)
+            string orientation = "H", location = "", name = ""; int id = 0;
+
+            if (StickClicked(StickUtils.typeicons, ref orientation, ref location, ref name, ref id) == false)
+                return; // user don't want select a stick, or stick already running, or stick troubles
+
+            if (name == "")
+                name = Utils.getString("icons.bubble.tooltip");
+            BubbleIcons form = new BubbleIcons(id, orientation, name);
+            form.Location = GetStickLocation(location);
+            BubblesButton.STICKS.Add(id, form);
+            form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+        }
+
+        public void PriPro_Click(object sender, EventArgs e)
+        {
+            string orientation = "H", location = "", name = ""; int id = 0;
+
+            if (StickClicked(StickUtils.typepripro, ref orientation, ref location, ref name, ref id) == false)
+                return; // user don't want select a stick, or stick already running, or stick troubles
+
+            if (name == "")
+                name = Utils.getString("pripro.bubble.tooltip");
+            BubblePriPro form = new BubblePriPro(id, orientation, name);
+            form.Location = GetStickLocation(location);
+            BubblesButton.STICKS.Add(id, form);
+            form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+        }
+
+        public void MySources_Click(object sender, EventArgs e)
+        {
+            string orientation = "H", location = "", name = ""; int id = 0;
+
+            if (StickClicked(StickUtils.typesources, ref orientation, ref location, ref name, ref id) == false)
+                return; // user don't want select a stick, or stick already running, or stick troubles
+
+            if (name == "")
+                name = Utils.getString("mysources.bubble.tooltip");
+            BubbleMySources form = new BubbleMySources(id, orientation, name);
+            form.Location = GetStickLocation(location);
+            BubblesButton.STICKS.Add(id, form);
+            form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+        }
+
+        bool StickClicked(string type, ref string orientation, ref string location, ref string name, ref int id)
+        {
+            string position = "";
+            id = GetStick(type, ref position, ref name);
+            keepmenu = false;
+
+            if (id == -1) // Cancel button
+                return false;
+            if (id == 0) // The very first stick
             {
-                BubblesButton.m_bubbleIcons.Hide();
-                Icons.Image = mwIcons;
-            }
-            else
-            {
-                if (firstIcons)
+                using (BubblesDB db = new BubblesDB())
                 {
-                    firstIcons = false;
-                    BubblesButton.m_bubbleIcons.Location = GetStickLocation("PositionIcons");
+                    // create "My Icons" stick
+                    name = Utils.getString(type + ".bubble.tooltip");
+                    db.AddStick(name, type, 0, "");
+
+                    // Get auto-created ID
+                    DataTable dt = db.ExecuteQuery("SELECT last_insert_rowid()");
+                    if (dt.Rows.Count > 0)
+                        id = Convert.ToInt32(dt.Rows[0][0]);
+                    else
+                        return false; // todo
                 }
-                BubblesButton.m_bubbleIcons.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-                Icons.Image = mwIconsActive;
             }
+
+            if (BubblesButton.STICKS.Keys.Contains(id))
+            {
+                MessageBox.Show(Utils.getString("sticks.stickalreadyrunning"));
+                return false;
+            }
+
+            orientation = "H"; location = "";
+            if (position != "")
+            {
+                string[] parts = position.Split('#');
+                orientation = parts[0];
+                location = parts[1];
+            }
+            return true;
         }
 
         public void Bookmarks_Click(object sender, EventArgs e)
@@ -87,25 +208,6 @@ namespace Bubbles
             }
         }
 
-        public void PriPro_Click(object sender, EventArgs e)
-        {
-            if (BubblesButton.m_bubblePriPro.Visible)
-            {
-                BubblesButton.m_bubblePriPro.Hide();
-                PriPro.Image = mwPriPro;
-            }
-            else
-            {
-                if (firstPriPro)
-                {
-                    firstPriPro = false;
-                    BubblesButton.m_bubblePriPro.Location = GetStickLocation("PositionPriPro");
-                }
-                BubblesButton.m_bubblePriPro.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-                PriPro.Image = mwPriProActive;
-            }
-        }
-
         public void PasteBubble_Click(object sender, EventArgs e)
         {
             if (BubblesButton.m_bubblePaste.Visible)
@@ -122,25 +224,6 @@ namespace Bubbles
                 }
                 BubblesButton.m_bubblePaste.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                 Paste.Image = mwCopyPasteActive;
-            }
-        }
-
-        public void MySources_Click(object sender, EventArgs e)
-        {
-            if (BubblesButton.m_bubbleMySources.Visible)
-            {
-                BubblesButton.m_bubbleMySources.Hide();
-                MySources.Image = mwSources;
-            }
-            else
-            {
-                if (firstMySources)
-                {
-                    firstMySources = false;
-                    BubblesButton.m_bubbleMySources.Location = GetStickLocation("PositionMySources");
-                }
-                BubblesButton.m_bubbleMySources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-                MySources.Image = mwSourcesActive;
             }
         }
 
@@ -191,18 +274,18 @@ namespace Bubbles
         private void pSticker_Click(object sender, EventArgs e)
         {
             StickerDummy form = new StickerDummy(
-                new StickerItem("\nHello!", "#515151", "#B9B9F9", "Verdana", 9, 0, "0",
+                new StickerItem(0, "\nHello!", "#515151", "#B9B9F9", "Verdana", 9, 0, "0",
                 "hello1.png:" + 
                 StickerDummy.DummyStickerImageX + ":" + StickerDummy.DummyStickerImageY + ":" +
-                pSticker.Width + ":" + pSticker.Height, 
-                "center", "sticker"), new Point(0, 0));
+                pSticker.Width + ":" + pSticker.Height, "center", "sticker"), new Point(0, 0));
+
             form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
-        public Point GetStickLocation(string stick)
+        public Point GetStickLocation(string location, bool start = false)
         {
             Point thisLocation = new Point();
-            string location = Utils.getRegistry(stick, "");
+
             // Example: location = "5120,0:5126,363;0,0:2,358"
             // 5120,0 - screen1.Location, 5126,363 - this.Location on the screen1
             // 0,0 - screen2.Location, 2,358 - this.Location on the screen2
@@ -227,7 +310,7 @@ namespace Bubbles
                     }
                 }
 
-                if (!Utils.WandIsOnScreen(thisLocation, this.Size))
+                if (!Utils.StickIsOnScreen(thisLocation, this.Size))
                     thisLocation = new Point(MMUtils.MindManager.Left + MMUtils.MindManager.Width - this.Width - label1.Width * 2, MMUtils.MindManager.Top + label1.Width);
             }
             return thisLocation;

@@ -7,7 +7,7 @@ namespace Bubbles
 {
     public partial class MySourcesListDlg : Form
     {
-        public MySourcesListDlg(int X, int Y, string orientation)
+        public MySourcesListDlg() //(int X, int Y, string orientation)
         {
             InitializeComponent();
 
@@ -38,7 +38,7 @@ namespace Bubbles
 
             //this.Location = new Point(pos.X, pos.Y);
 
-            imageList1.ImageSize = btnClose.Size;
+            imageList1.ImageSize = p2.Size;
             listView1.SmallImageList = imageList1;
 
             imageList1.Images.Add("audio", Image.FromFile(Utils.ImagesPath + "ms_audio.png"));
@@ -54,6 +54,7 @@ namespace Bubbles
             imageList1.Images.Add("excel", Image.FromFile(Utils.ImagesPath + "ms_excel.png"));
             imageList1.Images.Add("youtube", Image.FromFile(Utils.ImagesPath + "ms_youtube.png"));
             imageList1.Images.Add("video", Image.FromFile(Utils.ImagesPath + "ms_video.png"));
+            imageList1.Images.Add("chm", Image.FromFile(Utils.ImagesPath + "chm.png"));
 
             // Add a dummy column        
             ColumnHeader header = new ColumnHeader();
@@ -66,7 +67,6 @@ namespace Bubbles
             listView1.View = View.Details;
 
             this.Paint += MySourcesListDlg_Paint; // paint the border
-            listView1.MouseDown += ListView1_MouseDown;
             listView1.SelectedIndexChanged += ListView1_SelectedIndexChanged;
         }
 
@@ -82,12 +82,8 @@ namespace Bubbles
                     Process.Start(selectedItem.Tag.ToString());
                 } catch { }
             }
-        }
 
-        private void ListView1_MouseDown(object sender, MouseEventArgs e)
-        {
-            ReleaseCapture();
-            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            DialogResult = DialogResult.OK;
         }
 
         private void MySourcesListDlg_Paint(object sender, PaintEventArgs e)
@@ -97,16 +93,7 @@ namespace Bubbles
 
         private void btnClose_Click(object sender, System.EventArgs e)
         {
-            this.Hide();
+            this.Close();
         }
-
-        // For this_MouseDown
-        public const int WM_NCLBUTTONDOWN = 0xA1;
-        public const int HT_CAPTION = 0x2;
-
-        [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-        [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
-        public static extern bool ReleaseCapture();
     }
 }

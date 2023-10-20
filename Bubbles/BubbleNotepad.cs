@@ -52,7 +52,7 @@ namespace Bubbles
             contextMenuStrip1.Items["BI_mystickers"].Text = MMUtils.getString("stickers.contextmenu.mystickers");
             contextMenuStrip1.Items["BI_templates"].Text = MMUtils.getString("stickers.contextmenu.templates");
             contextMenuStrip1.Items["BI_newsticker"].Text = MMUtils.getString("stickers.contextmenu.newsticker");
-            AddMyStickers();
+            //AddMyStickers();
 
             contextMenuStrip1.Items["BI_rotate"].Text = MMUtils.getString("float_icons.contextmenu.rotate");
             contextMenuStrip1.Items["BI_close"].Text = MMUtils.getString("float_icons.contextmenu.close");
@@ -97,8 +97,8 @@ namespace Bubbles
         {
             if (e.ClickedItem.Name == "BI_newsticker")
             {
-                using (CreateStickerDlg dlg = new CreateStickerDlg())
-                    dlg.ShowDialog();
+                //using (CreateStickerDlg dlg = new CreateStickerDlg())
+                //    dlg.ShowDialog();
             }
             else if (e.ClickedItem.Name == "mysticker" || e.ClickedItem.Name == "template")
             {
@@ -142,7 +142,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
-                if (!Utils.IsOnMMWindow(this.Location, this.Size))
+                if (!Utils.IsOnMMWindow(this.Bounds))
                 {
                     if (MessageBox.Show("Стик находится вне окна MindManager! Уверены, что хотите запомнить эту позицитю?",
                         "Подтвердите позицию",
@@ -372,7 +372,7 @@ namespace Bubbles
             }
 
             StickerDummy form = new StickerDummy(
-                new StickerItem("Your Text...", "#515151", "#B9B9F9", "Verdana", 9, 0, "0", "", "center", "sticker"), location);
+                new StickerItem(0, "Your Text...", "#515151", "#B9B9F9", "Verdana", 9, 0, "0", "", "center", "sticker"), location);
             form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 

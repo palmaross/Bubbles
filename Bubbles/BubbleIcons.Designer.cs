@@ -36,18 +36,13 @@
             this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_deleteall = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_rename = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.BI_rotate = new System.Windows.Forms.ToolStripMenuItem();
-            this.BI_close = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.BI_help = new System.Windows.Forms.ToolStripMenuItem();
-            this.BI_store = new System.Windows.Forms.ToolStripMenuItem();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.label1 = new System.Windows.Forms.Label();
             this.p1 = new System.Windows.Forms.PictureBox();
             this.icondist = new System.Windows.Forms.PictureBox();
             this.Manage = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.p2 = new System.Windows.Forms.PictureBox();
             this.txtName = new System.Windows.Forms.TextBox();
             this.pictureHandle = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1.SuspendLayout();
@@ -55,6 +50,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.icondist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
             this.SuspendLayout();
             // 
@@ -68,15 +64,9 @@
             this.BI_new,
             this.BI_delete,
             this.BI_deleteall,
-            this.BI_rename,
-            this.toolStripSeparator2,
-            this.BI_rotate,
-            this.BI_close,
-            this.toolStripSeparator1,
-            this.BI_help,
-            this.BI_store});
+            this.BI_rename});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(162, 192);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(162, 92);
             // 
             // BI_new
             // 
@@ -102,40 +92,6 @@
             this.BI_rename.Size = new System.Drawing.Size(161, 22);
             this.BI_rename.Text = "Переименовать";
             // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(158, 6);
-            // 
-            // BI_rotate
-            // 
-            this.BI_rotate.Name = "BI_rotate";
-            this.BI_rotate.Size = new System.Drawing.Size(161, 22);
-            this.BI_rotate.Text = "Повернуть";
-            // 
-            // BI_close
-            // 
-            this.BI_close.Name = "BI_close";
-            this.BI_close.Size = new System.Drawing.Size(161, 22);
-            this.BI_close.Text = "Закрыть";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
-            // 
-            // BI_help
-            // 
-            this.BI_help.Name = "BI_help";
-            this.BI_help.Size = new System.Drawing.Size(161, 22);
-            this.BI_help.Text = "Справка";
-            // 
-            // BI_store
-            // 
-            this.BI_store.Name = "BI_store";
-            this.BI_store.Size = new System.Drawing.Size(161, 22);
-            this.BI_store.Text = "Запомнить";
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -149,7 +105,7 @@
             // 
             // p1
             // 
-            this.p1.Location = new System.Drawing.Point(26, 7);
+            this.p1.Location = new System.Drawing.Point(0, 7);
             this.p1.Name = "p1";
             this.p1.Size = new System.Drawing.Size(16, 16);
             this.p1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -181,14 +137,26 @@
             // 
             // panel1
             // 
+            this.panel1.AllowDrop = true;
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(this.p2);
             this.panel1.Controls.Add(this.p1);
             this.panel1.Location = new System.Drawing.Point(26, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(84, 30);
             this.panel1.TabIndex = 78;
+            // 
+            // p2
+            // 
+            this.p2.Location = new System.Drawing.Point(47, 7);
+            this.p2.Name = "p2";
+            this.p2.Size = new System.Drawing.Size(12, 12);
+            this.p2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.p2.TabIndex = 76;
+            this.p2.TabStop = false;
+            this.p2.Visible = false;
             // 
             // txtName
             // 
@@ -231,6 +199,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.icondist)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -251,12 +220,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.PictureBox pictureHandle;
-        private System.Windows.Forms.ToolStripMenuItem BI_close;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem BI_rotate;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem BI_help;
-        private System.Windows.Forms.ToolStripMenuItem BI_store;
         private System.Windows.Forms.ToolStripMenuItem BI_deleteall;
+        private System.Windows.Forms.PictureBox p2;
     }
 }

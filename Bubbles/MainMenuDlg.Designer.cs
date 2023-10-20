@@ -1,6 +1,6 @@
 ﻿namespace Bubbles
 {
-    partial class BubblesMenuDlg
+    partial class MainMenuDlg
     {
         /// <summary>
         /// Required designer variable.
@@ -29,8 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BubblesMenuDlg));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenuDlg));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblSticker = new System.Windows.Forms.Label();
+            this.pSticker = new System.Windows.Forms.PictureBox();
             this.lblNotepad = new System.Windows.Forms.Label();
             this.Notepad = new System.Windows.Forms.PictureBox();
             this.lblFormat = new System.Windows.Forms.Label();
@@ -49,9 +51,9 @@
             this.PriPro = new System.Windows.Forms.PictureBox();
             this.Settings = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.pSticker = new System.Windows.Forms.PictureBox();
-            this.lblSticker = new System.Windows.Forms.Label();
+            this.lblSelectStickLocation = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pSticker)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Notepad)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Format)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Help)).BeginInit();
@@ -61,12 +63,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.Icons)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PriPro)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Settings)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pSticker)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.panel1.Controls.Add(this.lblSelectStickLocation);
             this.panel1.Controls.Add(this.lblSticker);
             this.panel1.Controls.Add(this.pSticker);
             this.panel1.Controls.Add(this.lblNotepad);
@@ -90,6 +92,26 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(436, 143);
             this.panel1.TabIndex = 21;
+            // 
+            // lblSticker
+            // 
+            this.lblSticker.Location = new System.Drawing.Point(188, 104);
+            this.lblSticker.Name = "lblSticker";
+            this.lblSticker.Size = new System.Drawing.Size(59, 13);
+            this.lblSticker.TabIndex = 35;
+            this.lblSticker.Text = "Sticker";
+            this.lblSticker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // pSticker
+            // 
+            this.pSticker.Image = ((System.Drawing.Image)(resources.GetObject("pSticker.Image")));
+            this.pSticker.Location = new System.Drawing.Point(202, 69);
+            this.pSticker.Name = "pSticker";
+            this.pSticker.Size = new System.Drawing.Size(32, 32);
+            this.pSticker.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pSticker.TabIndex = 34;
+            this.pSticker.TabStop = false;
+            this.pSticker.Click += new System.EventHandler(this.pSticker_Click);
             // 
             // lblNotepad
             // 
@@ -262,25 +284,15 @@
             this.Settings.TabStop = false;
             this.Settings.Click += new System.EventHandler(this.Settings_Click);
             // 
-            // pSticker
+            // lblSelectStickLocation
             // 
-            this.pSticker.Image = ((System.Drawing.Image)(resources.GetObject("pSticker.Image")));
-            this.pSticker.Location = new System.Drawing.Point(202, 69);
-            this.pSticker.Name = "pSticker";
-            this.pSticker.Size = new System.Drawing.Size(32, 32);
-            this.pSticker.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pSticker.TabIndex = 34;
-            this.pSticker.TabStop = false;
-            this.pSticker.Click += new System.EventHandler(this.pSticker_Click);
-            // 
-            // lblSticker
-            // 
-            this.lblSticker.Location = new System.Drawing.Point(188, 104);
-            this.lblSticker.Name = "lblSticker";
-            this.lblSticker.Size = new System.Drawing.Size(59, 13);
-            this.lblSticker.TabIndex = 35;
-            this.lblSticker.Text = "Sticker";
-            this.lblSticker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblSelectStickLocation.AutoSize = true;
+            this.lblSelectStickLocation.Location = new System.Drawing.Point(111, 0);
+            this.lblSelectStickLocation.Name = "lblSelectStickLocation";
+            this.lblSelectStickLocation.Size = new System.Drawing.Size(35, 13);
+            this.lblSelectStickLocation.TabIndex = 36;
+            this.lblSelectStickLocation.Text = "label2";
+            this.lblSelectStickLocation.Visible = false;
             // 
             // BubblesMenuDlg
             // 
@@ -295,6 +307,7 @@
             this.Text = "Dublicate";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pSticker)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Notepad)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Format)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Help)).EndInit();
@@ -304,7 +317,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.Icons)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PriPro)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Settings)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pSticker)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -332,5 +344,6 @@
         public System.Windows.Forms.PictureBox Notepad;
         public System.Windows.Forms.PictureBox pSticker;
         private System.Windows.Forms.Label lblSticker;
+        private System.Windows.Forms.Label lblSelectStickLocation;
     }
 }

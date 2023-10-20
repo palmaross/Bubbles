@@ -6,6 +6,7 @@ using System.IO;
 using PRMapCompanion;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Collections.Generic;
 
 namespace Bubbles
 {
@@ -26,16 +27,12 @@ namespace Bubbles
             m_ctrlBubbles = MMUtils.MindManager.StatusBarControls.AddButton(m_cmdBubbles);
 
             m_bubblePaste = new BubblePaste();
-            m_bubbleIcons = new BubbleIcons();
             m_bubbleBookmarks = new BubbleBookmarks();
-            m_bubblePriPro = new BubblePriPro();
-            m_bubbleMySources = new BubbleMySources();
             m_bubbleFormat = new BubbleFormat();
             m_bubbleNotepad = new BubbleNotepad();
 
             m_bubbleSnippets = new BubbleSnippets();
-            m_bubblesMenu = new BubblesMenuDlg();
-            m_MySourcesList = new MySourcesListDlg(0, 0, "H");
+            m_bubblesMenu = new MainMenuDlg();
 
             DocumentStorage.Subscribe(this);
 
@@ -49,7 +46,10 @@ namespace Bubbles
                 StickerDummy.DummyStickerImageY = dlg.pStickerImage.Location.Y;
             }
 
-            try { Directory.CreateDirectory(Utils.m_dataPath + "IconDB"); }
+            try { 
+                Directory.CreateDirectory(Utils.m_dataPath + "IconDB");
+                Directory.CreateDirectory(Utils.m_dataPath + "ImageDB");
+            }
             catch { };
 
             if (Utils.getRegistry("StartIcons", "0") == "1")
@@ -121,10 +121,10 @@ namespace Bubbles
             m_bubblePaste.Dispose();
             m_bubblePaste = null;
 
-            if (m_bubbleIcons.Visible)
-                m_bubbleIcons.Hide();
-            m_bubbleIcons.Dispose();
-            m_bubbleIcons = null;
+            //if (m_bubbleIcons.Visible)
+            //    m_bubbleIcons.Hide();
+            //m_bubbleIcons.Dispose();
+            //m_bubbleIcons = null;
 
             if (m_bubbleSnippets.Visible)
                 m_bubbleSnippets.Hide();
@@ -139,16 +139,6 @@ namespace Bubbles
             m_bubbleBookmarks.Dispose();
             m_bubbleBookmarks = null;
 
-            if (m_bubblePriPro.Visible)
-                m_bubblePriPro.Hide();
-            m_bubblePriPro.Dispose();
-            m_bubblePriPro = null;
-
-            if (m_bubbleMySources.Visible)
-                m_bubbleMySources.Hide();
-            m_bubbleMySources.Dispose();
-            m_bubbleMySources = null;
-
             if (m_bubbleFormat.Visible)
                 m_bubbleFormat.Hide();
             m_bubbleFormat.Dispose();
@@ -159,15 +149,17 @@ namespace Bubbles
             m_bubbleNotepad.Dispose();
             m_bubbleNotepad = null;
 
-            if (m_MySourcesList.Visible)
-                m_MySourcesList.Hide();
-            m_MySourcesList.Dispose();
-            m_MySourcesList = null;
-
             if (m_bubblesMenu.Visible)
                 m_bubblesMenu.Hide();
             m_bubblesMenu.Dispose();
             m_bubblesMenu = null;
+
+            foreach (var stick in STICKS)
+            {
+                if (stick.Value.Visible)
+                    stick.Value.Hide();
+                stick.Value.Dispose();
+            }
 
             DocumentStorage.Unsubscribe(this);
 
@@ -176,18 +168,16 @@ namespace Bubbles
 
         private bool m_bCreated;
         public static BubblePaste m_bubblePaste = null;
-        public static BubbleIcons m_bubbleIcons = null;
         public static BubbleSnippets m_bubbleSnippets = null;
         public static BubbleBookmarks m_bubbleBookmarks = null;
-        public static BubblePriPro m_bubblePriPro = null;
-        public static BubbleMySources m_bubbleMySources = null;
         public static BubbleFormat m_bubbleFormat = null;
         public static BubbleNotepad m_bubbleNotepad = null;
 
-        public static BubblesMenuDlg m_bubblesMenu = null;
-        public static MySourcesListDlg m_MySourcesList = null;
+        public static MainMenuDlg m_bubblesMenu = null;
 
         private Command m_cmdBubbles;
         private Mindjet.MindManager.Interop.Control m_ctrlBubbles;
+
+        public static Dictionary<int, Form> STICKS = new Dictionary<int, Form>();
     }
 }

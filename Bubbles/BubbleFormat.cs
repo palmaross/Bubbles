@@ -157,7 +157,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
-                if (!Utils.IsOnMMWindow(this.Location, this.Size))
+                if (!Utils.IsOnMMWindow(this.Bounds))
                 {
                     if (MessageBox.Show("Стик находится вне окна MindManager! Уверены, что хотите запомнить эту позицитю?",
                         "Подтвердите позицию",

@@ -39,9 +39,6 @@
             this.fillcolor = new System.Windows.Forms.PictureBox();
             this.pIncreaseFont = new System.Windows.Forms.PictureBox();
             this.pDecreaseFont = new System.Windows.Forms.PictureBox();
-            this.pUnder = new System.Windows.Forms.PictureBox();
-            this.pStrike = new System.Windows.Forms.PictureBox();
-            this.pItalic = new System.Windows.Forms.PictureBox();
             this.Editor = new System.Windows.Forms.RichTextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panelControlTop = new System.Windows.Forms.Panel();
@@ -51,10 +48,6 @@
             this.pSave = new System.Windows.Forms.PictureBox();
             this.btnClose = new System.Windows.Forms.PictureBox();
             this.btnNew = new System.Windows.Forms.PictureBox();
-            this.pMore = new System.Windows.Forms.PictureBox();
-            this.pEdit = new System.Windows.Forms.PictureBox();
-            this.pPaste = new System.Windows.Forms.PictureBox();
-            this.pCopy = new System.Windows.Forms.PictureBox();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.contextMenuFontFamily = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.F_Verdana = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,7 +60,7 @@
             this.F_SegoePrint = new System.Windows.Forms.ToolStripMenuItem();
             this.p1 = new System.Windows.Forms.PictureBox();
             this.contextMenuMain = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.CM_New = new System.Windows.Forms.ToolStripMenuItem();
+            this.CM_newsticker = new System.Windows.Forms.ToolStripMenuItem();
             this.CM_mystickers = new System.Windows.Forms.ToolStripMenuItem();
             this.CM_templates = new System.Windows.Forms.ToolStripMenuItem();
             this.CM_Reminders = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,14 +68,18 @@
             this.contextMenuFontSize = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.F_Size = new System.Windows.Forms.ToolStripComboBox();
             this.contextMenuEditor = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.CM_Copy = new System.Windows.Forms.ToolStripMenuItem();
-            this.CM_Paste = new System.Windows.Forms.ToolStripMenuItem();
-            this.CM_PasteInside = new System.Windows.Forms.ToolStripMenuItem();
+            this.CM_copy = new System.Windows.Forms.ToolStripMenuItem();
+            this.CM_paste = new System.Windows.Forms.ToolStripMenuItem();
+            this.CM_pasteinside = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.CM_Edit = new System.Windows.Forms.ToolStripMenuItem();
-            this.pStickerImage = new System.Windows.Forms.PictureBox();
+            this.CM_edit = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuOther = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.CM_DeleteImage = new System.Windows.Forms.ToolStripMenuItem();
+            this.CM_FromLibrary = new System.Windows.Forms.ToolStripMenuItem();
+            this.CM_FromFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.pImageLibrary = new System.Windows.Forms.PictureBox();
+            this.pStickerImage = new Bubbles.SizeablePictureBox();
             this.panelControlBottom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pAddImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pAlign)).BeginInit();
@@ -92,9 +89,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.fillcolor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIncreaseFont)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pDecreaseFont)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pUnder)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pStrike)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pItalic)).BeginInit();
             this.panelControlTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pStickerType)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHelp)).BeginInit();
@@ -102,17 +96,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.pSave)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnClose)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnNew)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pMore)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pEdit)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pPaste)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pCopy)).BeginInit();
             this.contextMenuFontFamily.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             this.contextMenuMain.SuspendLayout();
             this.contextMenuFontSize.SuspendLayout();
             this.contextMenuEditor.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pStickerImage)).BeginInit();
             this.contextMenuOther.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pImageLibrary)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pStickerImage)).BeginInit();
             this.SuspendLayout();
             // 
             // panelControlBottom
@@ -224,45 +215,10 @@
             this.pDecreaseFont.TabStop = false;
             this.pDecreaseFont.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pDecreaseFont_MouseClick);
             // 
-            // pUnder
-            // 
-            this.pUnder.Image = ((System.Drawing.Image)(resources.GetObject("pUnder.Image")));
-            this.pUnder.Location = new System.Drawing.Point(208, 114);
-            this.pUnder.Name = "pUnder";
-            this.pUnder.Size = new System.Drawing.Size(16, 16);
-            this.pUnder.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pUnder.TabIndex = 107;
-            this.pUnder.TabStop = false;
-            this.pUnder.Tag = "";
-            this.pUnder.Visible = false;
-            // 
-            // pStrike
-            // 
-            this.pStrike.Image = ((System.Drawing.Image)(resources.GetObject("pStrike.Image")));
-            this.pStrike.Location = new System.Drawing.Point(228, 114);
-            this.pStrike.Name = "pStrike";
-            this.pStrike.Size = new System.Drawing.Size(16, 16);
-            this.pStrike.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pStrike.TabIndex = 106;
-            this.pStrike.TabStop = false;
-            this.pStrike.Tag = "";
-            this.pStrike.Visible = false;
-            // 
-            // pItalic
-            // 
-            this.pItalic.Image = ((System.Drawing.Image)(resources.GetObject("pItalic.Image")));
-            this.pItalic.Location = new System.Drawing.Point(188, 114);
-            this.pItalic.Name = "pItalic";
-            this.pItalic.Size = new System.Drawing.Size(16, 16);
-            this.pItalic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pItalic.TabIndex = 105;
-            this.pItalic.TabStop = false;
-            this.pItalic.Tag = "";
-            this.pItalic.Visible = false;
-            // 
             // Editor
             // 
-            this.Editor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.Editor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Editor.BackColor = System.Drawing.SystemColors.Control;
             this.Editor.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -314,6 +270,7 @@
             this.pHelp.TabIndex = 113;
             this.pHelp.TabStop = false;
             this.pHelp.Tag = "";
+            this.pHelp.Click += new System.EventHandler(this.pHelp_Click);
             // 
             // pDelete
             // 
@@ -362,60 +319,7 @@
             this.btnNew.TabIndex = 105;
             this.btnNew.TabStop = false;
             this.btnNew.Tag = "";
-            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
-            // 
-            // pMore
-            // 
-            this.pMore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pMore.Image = ((System.Drawing.Image)(resources.GetObject("pMore.Image")));
-            this.pMore.Location = new System.Drawing.Point(159, 45);
-            this.pMore.Name = "pMore";
-            this.pMore.Size = new System.Drawing.Size(16, 16);
-            this.pMore.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pMore.TabIndex = 112;
-            this.pMore.TabStop = false;
-            this.pMore.Tag = "";
-            this.pMore.Visible = false;
-            this.pMore.Click += new System.EventHandler(this.pMore_Click);
-            // 
-            // pEdit
-            // 
-            this.pEdit.Image = ((System.Drawing.Image)(resources.GetObject("pEdit.Image")));
-            this.pEdit.Location = new System.Drawing.Point(181, 45);
-            this.pEdit.Name = "pEdit";
-            this.pEdit.Size = new System.Drawing.Size(16, 16);
-            this.pEdit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pEdit.TabIndex = 111;
-            this.pEdit.TabStop = false;
-            this.pEdit.Tag = "";
-            this.pEdit.Visible = false;
-            this.pEdit.Click += new System.EventHandler(this.pEdit_Click);
-            // 
-            // pPaste
-            // 
-            this.pPaste.Image = ((System.Drawing.Image)(resources.GetObject("pPaste.Image")));
-            this.pPaste.Location = new System.Drawing.Point(226, 45);
-            this.pPaste.Name = "pPaste";
-            this.pPaste.Size = new System.Drawing.Size(16, 16);
-            this.pPaste.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pPaste.TabIndex = 109;
-            this.pPaste.TabStop = false;
-            this.pPaste.Tag = "";
-            this.pPaste.Visible = false;
-            this.pPaste.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pPaste_MouseClick);
-            // 
-            // pCopy
-            // 
-            this.pCopy.Image = ((System.Drawing.Image)(resources.GetObject("pCopy.Image")));
-            this.pCopy.Location = new System.Drawing.Point(206, 45);
-            this.pCopy.Name = "pCopy";
-            this.pCopy.Size = new System.Drawing.Size(16, 16);
-            this.pCopy.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pCopy.TabIndex = 108;
-            this.pCopy.TabStop = false;
-            this.pCopy.Tag = "";
-            this.pCopy.Visible = false;
-            this.pCopy.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pCopy_MouseClick);
+            this.btnNew.MouseClick += new System.Windows.Forms.MouseEventHandler(this.btnNew_MouseClick);
             // 
             // contextMenuFontFamily
             // 
@@ -491,7 +395,6 @@
             // 
             // p1
             // 
-            this.p1.Image = ((System.Drawing.Image)(resources.GetObject("p1.Image")));
             this.p1.Location = new System.Drawing.Point(55, 89);
             this.p1.Name = "p1";
             this.p1.Size = new System.Drawing.Size(39, 25);
@@ -504,43 +407,43 @@
             // contextMenuMain
             // 
             this.contextMenuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CM_New,
+            this.CM_newsticker,
             this.CM_mystickers,
             this.CM_templates,
             this.CM_Reminders,
             this.CM_Aphorisms});
             this.contextMenuMain.Name = "contextMenuStrip2";
             this.contextMenuMain.ShowImageMargin = false;
-            this.contextMenuMain.Size = new System.Drawing.Size(110, 114);
+            this.contextMenuMain.Size = new System.Drawing.Size(112, 114);
             // 
-            // CM_New
+            // CM_newsticker
             // 
-            this.CM_New.Name = "CM_New";
-            this.CM_New.Size = new System.Drawing.Size(109, 22);
-            this.CM_New.Text = "New Stick";
+            this.CM_newsticker.Name = "CM_newsticker";
+            this.CM_newsticker.Size = new System.Drawing.Size(111, 22);
+            this.CM_newsticker.Text = "New Sticker";
             // 
             // CM_mystickers
             // 
             this.CM_mystickers.Name = "CM_mystickers";
-            this.CM_mystickers.Size = new System.Drawing.Size(109, 22);
+            this.CM_mystickers.Size = new System.Drawing.Size(111, 22);
             this.CM_mystickers.Text = "My Stickers";
             // 
             // CM_templates
             // 
             this.CM_templates.Name = "CM_templates";
-            this.CM_templates.Size = new System.Drawing.Size(109, 22);
+            this.CM_templates.Size = new System.Drawing.Size(111, 22);
             this.CM_templates.Text = "Templates";
             // 
             // CM_Reminders
             // 
             this.CM_Reminders.Name = "CM_Reminders";
-            this.CM_Reminders.Size = new System.Drawing.Size(109, 22);
+            this.CM_Reminders.Size = new System.Drawing.Size(111, 22);
             this.CM_Reminders.Text = "Reminders";
             // 
             // CM_Aphorisms
             // 
             this.CM_Aphorisms.Name = "CM_Aphorisms";
-            this.CM_Aphorisms.Size = new System.Drawing.Size(109, 22);
+            this.CM_Aphorisms.Size = new System.Drawing.Size(111, 22);
             this.CM_Aphorisms.Text = "Aphorisms";
             // 
             // contextMenuFontSize
@@ -585,90 +488,111 @@
             // contextMenuEditor
             // 
             this.contextMenuEditor.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CM_Copy,
-            this.CM_Paste,
-            this.CM_PasteInside,
+            this.CM_copy,
+            this.CM_paste,
+            this.CM_pasteinside,
             this.toolStripSeparator1,
-            this.CM_Edit});
+            this.CM_edit});
             this.contextMenuEditor.Name = "contextMenuStrip2";
             this.contextMenuEditor.ShowImageMargin = false;
             this.contextMenuEditor.Size = new System.Drawing.Size(182, 98);
             // 
-            // CM_Copy
+            // CM_copy
             // 
-            this.CM_Copy.Name = "CM_Copy";
-            this.CM_Copy.Size = new System.Drawing.Size(181, 22);
-            this.CM_Copy.Text = "Copy";
+            this.CM_copy.Name = "CM_copy";
+            this.CM_copy.Size = new System.Drawing.Size(181, 22);
+            this.CM_copy.Text = "Copy";
             // 
-            // CM_Paste
+            // CM_paste
             // 
-            this.CM_Paste.Name = "CM_Paste";
-            this.CM_Paste.Size = new System.Drawing.Size(181, 22);
-            this.CM_Paste.Text = "Paste (replace stick text)";
+            this.CM_paste.Name = "CM_paste";
+            this.CM_paste.Size = new System.Drawing.Size(181, 22);
+            this.CM_paste.Text = "Paste (replace stick text)";
             // 
-            // CM_PasteInside
+            // CM_pasteinside
             // 
-            this.CM_PasteInside.Name = "CM_PasteInside";
-            this.CM_PasteInside.Size = new System.Drawing.Size(181, 22);
-            this.CM_PasteInside.Text = "Paste Inside";
+            this.CM_pasteinside.Name = "CM_pasteinside";
+            this.CM_pasteinside.Size = new System.Drawing.Size(181, 22);
+            this.CM_pasteinside.Text = "Paste Inside";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(178, 6);
             // 
-            // CM_Edit
+            // CM_edit
             // 
-            this.CM_Edit.Name = "CM_Edit";
-            this.CM_Edit.Size = new System.Drawing.Size(181, 22);
-            this.CM_Edit.Text = "Edit Mode (Double Click)";
-            // 
-            // pStickerImage
-            // 
-            this.pStickerImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pStickerImage.Location = new System.Drawing.Point(120, 78);
-            this.pStickerImage.Name = "pStickerImage";
-            this.pStickerImage.Size = new System.Drawing.Size(16, 16);
-            this.pStickerImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pStickerImage.TabIndex = 115;
-            this.pStickerImage.TabStop = false;
-            this.pStickerImage.Tag = "";
-            this.pStickerImage.Visible = false;
-            this.pStickerImage.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pStickerImage_MouseClick);
+            this.CM_edit.Name = "CM_edit";
+            this.CM_edit.Size = new System.Drawing.Size(181, 22);
+            this.CM_edit.Text = "Edit Mode (Double Click)";
             // 
             // contextMenuOther
             // 
             this.contextMenuOther.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CM_DeleteImage});
+            this.CM_DeleteImage,
+            this.CM_FromLibrary,
+            this.CM_FromFile});
             this.contextMenuOther.Name = "contextMenuOther";
-            this.contextMenuOther.Size = new System.Drawing.Size(144, 26);
+            this.contextMenuOther.Size = new System.Drawing.Size(151, 70);
             // 
             // CM_DeleteImage
             // 
             this.CM_DeleteImage.Name = "CM_DeleteImage";
-            this.CM_DeleteImage.Size = new System.Drawing.Size(143, 22);
+            this.CM_DeleteImage.Size = new System.Drawing.Size(150, 22);
             this.CM_DeleteImage.Text = "Delete Image";
+            // 
+            // CM_FromLibrary
+            // 
+            this.CM_FromLibrary.Name = "CM_FromLibrary";
+            this.CM_FromLibrary.Size = new System.Drawing.Size(150, 22);
+            this.CM_FromLibrary.Text = "From Library...";
+            // 
+            // CM_FromFile
+            // 
+            this.CM_FromFile.Name = "CM_FromFile";
+            this.CM_FromFile.Size = new System.Drawing.Size(150, 22);
+            this.CM_FromFile.Text = "From File...";
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // pImageLibrary
+            // 
+            this.pImageLibrary.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pImageLibrary.Location = new System.Drawing.Point(25, 45);
+            this.pImageLibrary.Name = "pImageLibrary";
+            this.pImageLibrary.Size = new System.Drawing.Size(32, 32);
+            this.pImageLibrary.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pImageLibrary.TabIndex = 116;
+            this.pImageLibrary.TabStop = false;
+            this.pImageLibrary.Tag = "";
+            this.pImageLibrary.Visible = false;
+            // 
+            // pStickerImage
+            // 
+            this.pStickerImage.Location = new System.Drawing.Point(116, 78);
+            this.pStickerImage.Name = "pStickerImage";
+            this.pStickerImage.Size = new System.Drawing.Size(16, 16);
+            this.pStickerImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pStickerImage.TabIndex = 117;
+            this.pStickerImage.TabStop = false;
+            this.pStickerImage.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pStickerImage_MouseClick);
             // 
             // StickerDummy
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Red;
             this.ClientSize = new System.Drawing.Size(268, 160);
             this.Controls.Add(this.pStickerImage);
-            this.Controls.Add(this.pEdit);
-            this.Controls.Add(this.pMore);
-            this.Controls.Add(this.pUnder);
-            this.Controls.Add(this.pPaste);
-            this.Controls.Add(this.pCopy);
-            this.Controls.Add(this.pStrike);
-            this.Controls.Add(this.pItalic);
+            this.Controls.Add(this.pImageLibrary);
             this.Controls.Add(this.p1);
             this.Controls.Add(this.Editor);
             this.Controls.Add(this.panelControlBottom);
             this.Controls.Add(this.panelControlTop);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.KeyPreview = true;
             this.Name = "StickerDummy";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "StickerTemplate";
@@ -681,9 +605,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.fillcolor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIncreaseFont)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pDecreaseFont)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pUnder)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pStrike)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pItalic)).EndInit();
             this.panelControlTop.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pStickerType)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHelp)).EndInit();
@@ -691,17 +612,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.pSave)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnClose)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnNew)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pMore)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pEdit)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pPaste)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pCopy)).EndInit();
             this.contextMenuFontFamily.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
             this.contextMenuMain.ResumeLayout(false);
             this.contextMenuFontSize.ResumeLayout(false);
             this.contextMenuEditor.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pStickerImage)).EndInit();
             this.contextMenuOther.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pImageLibrary)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pStickerImage)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -721,14 +639,7 @@
         private System.Windows.Forms.PictureBox btnNew;
         private System.Windows.Forms.PictureBox pSave;
         private System.Windows.Forms.Panel panelControlBottom;
-        private System.Windows.Forms.PictureBox pItalic;
-        private System.Windows.Forms.PictureBox pUnder;
-        private System.Windows.Forms.PictureBox pStrike;
-        private System.Windows.Forms.PictureBox pCopy;
-        private System.Windows.Forms.PictureBox pPaste;
         private System.Windows.Forms.PictureBox pDelete;
-        private System.Windows.Forms.PictureBox pEdit;
-        private System.Windows.Forms.PictureBox pMore;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.ContextMenuStrip contextMenuFontFamily;
         private System.Windows.Forms.ToolStripMenuItem F_Verdana;
@@ -747,18 +658,22 @@
         private System.Windows.Forms.ToolStripMenuItem CM_templates;
         private System.Windows.Forms.ToolStripMenuItem CM_mystickers;
         private System.Windows.Forms.ContextMenuStrip contextMenuEditor;
-        private System.Windows.Forms.ToolStripMenuItem CM_PasteInside;
-        private System.Windows.Forms.ToolStripMenuItem CM_Paste;
-        private System.Windows.Forms.ToolStripMenuItem CM_Copy;
+        private System.Windows.Forms.ToolStripMenuItem CM_pasteinside;
+        private System.Windows.Forms.ToolStripMenuItem CM_paste;
+        private System.Windows.Forms.ToolStripMenuItem CM_copy;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem CM_Edit;
-        private System.Windows.Forms.ToolStripMenuItem CM_New;
+        private System.Windows.Forms.ToolStripMenuItem CM_edit;
+        private System.Windows.Forms.ToolStripMenuItem CM_newsticker;
         private System.Windows.Forms.ToolStripMenuItem CM_Aphorisms;
         private System.Windows.Forms.PictureBox pStickerType;
         private System.Windows.Forms.ToolStripMenuItem CM_Reminders;
         private System.Windows.Forms.PictureBox pAddImage;
-        public System.Windows.Forms.PictureBox pStickerImage;
         private System.Windows.Forms.ContextMenuStrip contextMenuOther;
         private System.Windows.Forms.ToolStripMenuItem CM_DeleteImage;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.ToolStripMenuItem CM_FromLibrary;
+        private System.Windows.Forms.ToolStripMenuItem CM_FromFile;
+        public System.Windows.Forms.PictureBox pImageLibrary;
+        public SizeablePictureBox pStickerImage;
     }
 }

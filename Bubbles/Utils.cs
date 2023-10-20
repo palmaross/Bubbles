@@ -166,7 +166,7 @@ namespace Bubbles
 		/// <param name="RecSize"></param>
 		/// <param name="MinPercentOnScreen"></param>
 		/// <returns>False if form is totally off screen</returns>
-		public static bool WandIsOnScreen(Point RecLocation, Size RecSize, double MinPercentOnScreen = 1)
+		public static bool StickIsOnScreen(Point RecLocation, Size RecSize, double MinPercentOnScreen = 1)
         {
             double PixelsVisible = 0;
             Rectangle Rec = new Rectangle(RecLocation, RecSize);
@@ -195,13 +195,24 @@ namespace Bubbles
             return new Point();
         }
 
-        public static bool IsOnMMWindow(Point WandLocation, Size WandSize)
+        public static bool _IsOnMMWindow(Point StickLocation, Size StickSize)
         {
-            if (WandLocation.X + WandSize.Width < MMUtils.MindManager.Left || // wand is totally to the left
-                WandLocation.X > MMUtils.MindManager.Left + MMUtils.MindManager.Width) // wand is totally to the right
+            if (StickLocation.X + StickSize.Width < MMUtils.MindManager.Left || // stick is totally to the left
+                StickLocation.X > MMUtils.MindManager.Left + MMUtils.MindManager.Width) // stick is totally to the right
                 return false;
-            if (WandLocation.Y + WandSize.Height < MMUtils.MindManager.Top || // wand is totally above
-                WandLocation.Y > MMUtils.MindManager.Top + MMUtils.MindManager.Height) // wand is totally below
+            if (StickLocation.Y + StickSize.Height < MMUtils.MindManager.Top || // stick is totally above
+                StickLocation.Y > MMUtils.MindManager.Top + MMUtils.MindManager.Height) // stick is totally below
+                return false;
+            return true;
+        }
+
+        public static bool IsOnMMWindow(Rectangle rec)
+        {
+            if (rec.X + rec.Width < MMUtils.MindManager.Left || // stick is totally to the left
+                rec.X > MMUtils.MindManager.Left + MMUtils.MindManager.Width) // stick is totally to the right
+                return false;
+            if (rec.Y + rec.Height < MMUtils.MindManager.Top || // stick is totally above
+                rec.Y > MMUtils.MindManager.Top + MMUtils.MindManager.Height) // stick is totally below
                 return false;
             return true;
         }
@@ -246,6 +257,15 @@ namespace Bubbles
             LOGPIXELSY = 90
 
             // Other constants may be founded on pinvoke.net
+        }
+
+        public static float GetScalingFactor()
+        {
+            Graphics g = Graphics.FromHwnd(IntPtr.Zero);
+            IntPtr desktop = g.GetHdc();
+
+            //int Xdpi = GetDeviceCaps(desktop, (int)DeviceCap.LOGPIXELSX);
+            return GetDeviceCaps(desktop, (int)DeviceCap.LOGPIXELSY) / 96;
         }
     }
 }
