@@ -26,11 +26,6 @@ namespace Bubbles
             m_cmdBubbles.Click += new ICommandEvents_ClickEventHandler(m_cmdBubbles_Click);
             m_ctrlBubbles = MMUtils.MindManager.StatusBarControls.AddButton(m_cmdBubbles);
 
-            m_bubblePaste = new BubblePaste();
-            m_bubbleBookmarks = new BubbleBookmarks();
-            m_bubbleFormat = new BubbleFormat();
-            m_bubbleNotepad = new BubbleNotepad();
-
             m_bubbleSnippets = new BubbleSnippets();
             m_bubblesMenu = new MainMenuDlg();
 
@@ -71,7 +66,7 @@ namespace Bubbles
                 m_bubblesMenu.Formatting_Click(null, null);
 
             if (Utils.getRegistry("StartNotepad", "0") == "1")
-                m_bubblesMenu.Notepad_Click(null, null);
+                m_bubblesMenu.Organizer_Click(null, null);
         }
 
         private void m_cmdBubbles_Click()
@@ -105,7 +100,10 @@ namespace Bubbles
 
         public override void onDocumentActivated(MMEventArgs aArgs)
         {
-            m_bubbleBookmarks.Init();
+            if (m_Bookmarks != null)
+            {
+                m_Bookmarks.Init();
+            }
         }
 
         public void Destroy()
@@ -116,43 +114,27 @@ namespace Bubbles
             m_ctrlBubbles.Delete(); Marshal.ReleaseComObject(m_ctrlBubbles); m_ctrlBubbles = null;
             Marshal.ReleaseComObject(m_cmdBubbles); m_cmdBubbles = null;
 
-            if (m_bubblePaste.Visible)
-                m_bubblePaste.Hide();
-            m_bubblePaste.Dispose();
-            m_bubblePaste = null;
-
-            //if (m_bubbleIcons.Visible)
-            //    m_bubbleIcons.Hide();
-            //m_bubbleIcons.Dispose();
-            //m_bubbleIcons = null;
-
             if (m_bubbleSnippets.Visible)
                 m_bubbleSnippets.Hide();
             m_bubbleSnippets.Dispose();
             m_bubbleSnippets = null;
 
-            m_bubbleBookmarks.BookmarkedDocuments.Clear();
-            m_bubbleBookmarks.BookmarkedDocuments = null;
-
-            if (m_bubbleBookmarks.Visible)
-                m_bubbleBookmarks.Hide();
-            m_bubbleBookmarks.Dispose();
-            m_bubbleBookmarks = null;
-
-            if (m_bubbleFormat.Visible)
-                m_bubbleFormat.Hide();
-            m_bubbleFormat.Dispose();
-            m_bubbleFormat = null;
-
-            if (m_bubbleNotepad.Visible)
-                m_bubbleNotepad.Hide();
-            m_bubbleNotepad.Dispose();
-            m_bubbleNotepad = null;
+            if (m_Bookmarks != null)
+            {
+                m_Bookmarks.BookmarkedDocuments.Clear();
+                m_Bookmarks.BookmarkedDocuments = null;
+            }
 
             if (m_bubblesMenu.Visible)
                 m_bubblesMenu.Hide();
             m_bubblesMenu.Dispose();
             m_bubblesMenu = null;
+
+            if (m_Notes != null)
+            {
+                m_Notes.Dispose();
+                m_Notes = null;
+            }
 
             foreach (var stick in STICKS)
             {
@@ -167,11 +149,11 @@ namespace Bubbles
         }
 
         private bool m_bCreated;
-        public static BubblePaste m_bubblePaste = null;
+
         public static BubbleSnippets m_bubbleSnippets = null;
-        public static BubbleBookmarks m_bubbleBookmarks = null;
-        public static BubbleFormat m_bubbleFormat = null;
-        public static BubbleNotepad m_bubbleNotepad = null;
+
+        public static BubbleBookmarks m_Bookmarks;
+        public static NotesDlg m_Notes;
 
         public static MainMenuDlg m_bubblesMenu = null;
 

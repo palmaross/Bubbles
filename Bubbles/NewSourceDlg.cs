@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
 namespace Bubbles
 {
-    public partial class AddSourceDlg : Form
+    public partial class NewSourceDlg : Form
     {
-        public AddSourceDlg()
+        public NewSourceDlg(List<MySourcesItem> sources, bool manage)
         {
             InitializeComponent();
+
+            Sources = sources;
 
             Text = Utils.getString("mysources.contextmenu.new");
             lblSpecifyPath.Text = Utils.getString("SelectIconDlg.lblSpecifyPath");
@@ -20,6 +23,8 @@ namespace Bubbles
             rbtnEnd.Text = Utils.getString("SelectIconDlg.rbtnEnd");
             rbtnBegin.Text = Utils.getString("SelectIconDlg.rbtnBegin");
             btnCancel.Text = Utils.getString("button.cancel");
+
+            rbtnLeft.Enabled = !manage; rbtnRight.Enabled = !manage;
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)
@@ -53,5 +58,7 @@ namespace Bubbles
             } 
             catch { }
         }
+
+        private List<MySourcesItem> Sources = new List<MySourcesItem>();
     }
 }

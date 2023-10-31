@@ -34,15 +34,9 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.BI_color = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.BI_rotate = new System.Windows.Forms.ToolStripMenuItem();
-            this.BI_close = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.BI_help = new System.Windows.Forms.ToolStripMenuItem();
-            this.BI_store = new System.Windows.Forms.ToolStripMenuItem();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
-            this.label1 = new System.Windows.Forms.Label();
             this.p1 = new System.Windows.Forms.PictureBox();
-            this.icondist = new System.Windows.Forms.PictureBox();
             this.Manage = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pStrike = new System.Windows.Forms.PictureBox();
@@ -63,9 +57,11 @@
             this.pFontDecrease = new System.Windows.Forms.PictureBox();
             this.pictureHandle = new System.Windows.Forms.PictureBox();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.p3 = new System.Windows.Forms.PictureBox();
+            this.p2 = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.icondist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pStrike)).BeginInit();
@@ -83,6 +79,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pItalic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pFontDecrease)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.p3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -94,64 +92,25 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.BI_color,
             this.toolStripSeparator2,
-            this.BI_rotate,
-            this.BI_close,
-            this.toolStripSeparator1,
-            this.BI_help,
-            this.BI_store});
+            this.toolStripSeparator1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(136, 126);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(110, 38);
             // 
             // BI_color
             // 
             this.BI_color.Name = "BI_color";
-            this.BI_color.Size = new System.Drawing.Size(135, 22);
+            this.BI_color.Size = new System.Drawing.Size(109, 22);
             this.BI_color.Text = "Цвет...";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(132, 6);
-            // 
-            // BI_rotate
-            // 
-            this.BI_rotate.Name = "BI_rotate";
-            this.BI_rotate.Size = new System.Drawing.Size(135, 22);
-            this.BI_rotate.Text = "Повернуть";
-            // 
-            // BI_close
-            // 
-            this.BI_close.Name = "BI_close";
-            this.BI_close.Size = new System.Drawing.Size(135, 22);
-            this.BI_close.Text = "Закрыть";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(106, 6);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(132, 6);
-            // 
-            // BI_help
-            // 
-            this.BI_help.Name = "BI_help";
-            this.BI_help.Size = new System.Drawing.Size(135, 22);
-            this.BI_help.Text = "Справка";
-            // 
-            // BI_store
-            // 
-            this.BI_store.Name = "BI_store";
-            this.BI_store.Size = new System.Drawing.Size(135, 22);
-            this.BI_store.Text = "Запомнить";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 29);
-            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(56, 13);
-            this.label1.TabIndex = 74;
-            this.label1.Text = "высота22";
-            this.label1.Visible = false;
+            this.toolStripSeparator1.Size = new System.Drawing.Size(106, 6);
             // 
             // p1
             // 
@@ -163,15 +122,6 @@
             this.p1.TabIndex = 75;
             this.p1.TabStop = false;
             this.p1.Click += new System.EventHandler(this.p1_Click);
-            // 
-            // icondist
-            // 
-            this.icondist.Location = new System.Drawing.Point(69, 26);
-            this.icondist.Name = "icondist";
-            this.icondist.Size = new System.Drawing.Size(22, 16);
-            this.icondist.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.icondist.TabIndex = 76;
-            this.icondist.TabStop = false;
             // 
             // Manage
             // 
@@ -248,21 +198,21 @@
             // 
             // lblFillColor
             // 
-            this.lblFillColor.AutoSize = true;
-            this.lblFillColor.Location = new System.Drawing.Point(242, -1);
+            this.lblFillColor.Location = new System.Drawing.Point(231, -1);
             this.lblFillColor.Name = "lblFillColor";
-            this.lblFillColor.Size = new System.Drawing.Size(62, 13);
+            this.lblFillColor.Size = new System.Drawing.Size(82, 13);
             this.lblFillColor.TabIndex = 90;
             this.lblFillColor.Text = "Цвет темы";
+            this.lblFillColor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblTextColor
             // 
-            this.lblTextColor.AutoSize = true;
-            this.lblTextColor.Location = new System.Drawing.Point(144, -1);
+            this.lblTextColor.Location = new System.Drawing.Point(135, -1);
             this.lblTextColor.Name = "lblTextColor";
-            this.lblTextColor.Size = new System.Drawing.Size(69, 13);
+            this.lblTextColor.Size = new System.Drawing.Size(85, 13);
             this.lblTextColor.TabIndex = 89;
             this.lblTextColor.Text = "Цвет текста";
+            this.lblTextColor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // fillcolor3
             // 
@@ -384,6 +334,34 @@
             this.pictureHandle.TabIndex = 77;
             this.pictureHandle.TabStop = false;
             // 
+            // panel2
+            // 
+            this.panel2.Location = new System.Drawing.Point(0, 28);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(140, 23);
+            this.panel2.TabIndex = 79;
+            this.panel2.Visible = false;
+            // 
+            // p3
+            // 
+            this.p3.Location = new System.Drawing.Point(0, 14);
+            this.p3.Name = "p3";
+            this.p3.Size = new System.Drawing.Size(16, 12);
+            this.p3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.p3.TabIndex = 94;
+            this.p3.TabStop = false;
+            this.p3.Visible = false;
+            // 
+            // p2
+            // 
+            this.p2.Location = new System.Drawing.Point(386, 18);
+            this.p2.Name = "p2";
+            this.p2.Size = new System.Drawing.Size(12, 12);
+            this.p2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.p2.TabIndex = 95;
+            this.p2.TabStop = false;
+            this.p2.Visible = false;
+            // 
             // BubbleFormat
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -391,9 +369,10 @@
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(407, 30);
             this.ControlBox = false;
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.p2);
+            this.Controls.Add(this.p3);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.pictureHandle);
-            this.Controls.Add(this.icondist);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.Manage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -402,10 +381,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.icondist)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pStrike)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pClearFillColor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pClearTextColor)).EndInit();
@@ -421,8 +398,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pItalic)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pFontDecrease)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.p3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -430,19 +408,13 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.HelpProvider helpProvider1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox p1;
-        private System.Windows.Forms.PictureBox icondist;
         private System.Windows.Forms.PictureBox Manage;
         private System.Windows.Forms.ToolStripMenuItem BI_color;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureHandle;
-        private System.Windows.Forms.ToolStripMenuItem BI_close;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem BI_rotate;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem BI_help;
-        private System.Windows.Forms.ToolStripMenuItem BI_store;
         private System.Windows.Forms.PictureBox pFontDecrease;
         private System.Windows.Forms.PictureBox pFontIncrease;
         private System.Windows.Forms.PictureBox pUnder;
@@ -460,5 +432,8 @@
         private System.Windows.Forms.PictureBox pClearTextColor;
         private System.Windows.Forms.PictureBox pClearFillColor;
         private System.Windows.Forms.PictureBox pStrike;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.PictureBox p3;
+        private System.Windows.Forms.PictureBox p2;
     }
 }

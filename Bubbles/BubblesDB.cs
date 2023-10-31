@@ -92,17 +92,42 @@ namespace Bubbles
                 );
         }
 
+        public void AddNoteGroup(string name)
+        {
+            m_db.ExecuteNonQuery("insert into NOTEGROUPS values(NULL, `"
+                + name + "`, "
+                + "'', 0"
+                + ");"
+                );
+        }
+
+        public void AddNote(string name, string content, string link, int groupID = 0)
+        {
+            m_db.ExecuteNonQuery("insert into NOTES values(NULL, `"
+                + name + "`, `"
+                + content + "`, `"
+                + link + "`, "
+                + groupID + ", "
+                + "'', '', 0, 0"
+                + ");"
+                );
+        }
+
         public override void CreateDatabase()
         {
             base.CreateDatabase();
             m_db.ExecuteNonQuery("BEGIN EXCLUSIVE");
-            m_db.ExecuteNonQuery("CREATE TABLE STICKS(id INTEGER PRIMARY KEY, name text, type text, " +
-                "start integer, position text, " +
+            m_db.ExecuteNonQuery("CREATE TABLE STICKS(id INTEGER PRIMARY KEY, " +
+                "name text, type text, start integer, position text, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
             // name = stick name (by user)
             // type - icons, bookmarks, etc.
             // start - run sticker when MM started
             // position - H#5120,0:5126,363;0,0:2,358 (Horizontal;screen1Location;screen2Location)
+            m_db.ExecuteNonQuery("CREATE TABLE NOTEGROUPS(id INTEGER PRIMARY KEY, name text, " +
+                "reserved1 text, reserved2 integer);");
+
+            //// Sticks ////
             m_db.ExecuteNonQuery("CREATE TABLE ICONS(name text, filename text, _order integer, stickID int, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
             m_db.ExecuteNonQuery("CREATE TABLE PRIPRO(type text, value text, stickID int, " +
@@ -111,12 +136,19 @@ namespace Bubbles
             // value - priority or progress value
             m_db.ExecuteNonQuery("CREATE TABLE SOURCES(title text, path text, type text, _order integer, stickID int, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
-            m_db.ExecuteNonQuery("CREATE TABLE NOTEPADS(content text, reserved1 text, reserved2 integer);");
-            m_db.ExecuteNonQuery("CREATE TABLE IDEAS(content text, stickID int, reserved1 text, reserved2 integer);");
-            m_db.ExecuteNonQuery("CREATE TABLE NOTES(info text, link text, stickID int, reserved1 text, reserved2 integer);");
-            m_db.ExecuteNonQuery("CREATE TABLE LINKS(title text, link text, stickID int, reserved1 text, reserved2 integer);");
-            m_db.ExecuteNonQuery("CREATE TABLE SNIPPETS(content text, reserved1 text, stickID int, reserved2 integer);");
-            m_db.ExecuteNonQuery("CREATE TABLE TODOS(content text, reserved1 text, stickID int, reserved2 integer);");
+            
+            // Organizer
+            m_db.ExecuteNonQuery("CREATE TABLE IDEAS(content text, rating text, groupID int, " +
+                "reserved1 text, reserved2 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE NOTES(id INTEGER PRIMARY KEY, name text, content text, " +
+                "link text, groupID int, reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE LINKS(id INTEGER PRIMARY KEY, title text, link text, groupID int, " +
+                "reserved1 text, reserved2 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE SNIPPETS(snippet text, reserved1 text, reserved2 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE TODOS(id INTEGER PRIMARY KEY, todo text, datetime text, groupID int, " +
+                "reserved1 text, reserved2 integer);");
+            
+            // Stickers
             m_db.ExecuteNonQuery("CREATE TABLE STICKERS(id INTEGER PRIMARY KEY, content text, textcolor text, fillcolor text, " +
                 "fontfamily text, textsize integer, textbold integer, sticksize text, image text, alignment text, type text, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
@@ -145,6 +177,7 @@ namespace Bubbles
 
             AddSource(Utils.getString("mysources.first1.text"), "https://palmaross.com/", "http", 1, id);
             AddSource(Utils.getString("mysources.first2.text"), Utils.dllPath + "Sticks.chm", "file", 2, id);
+            AddSource(Utils.getString("mysources.first3.text"), "c:\\Windows\\System32\\notepad.exe", "exe", 3, id);
 
             // Add a couple of sticker templates
             AddSticker(Utils.getString("stickertemplate1.text"), "#ff0000ff", "#ff00ffff", "Segoe Print", 

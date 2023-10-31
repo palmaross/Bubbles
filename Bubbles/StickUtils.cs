@@ -1,40 +1,52 @@
 ﻿using PRAManager;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Media.TextFormatting;
 
 namespace Bubbles
 {
     internal class StickUtils
     {
-        public static string RenameStick(Form form, string orientation, string oldname)
+        public static string GetName(Form form, string orientation, string type, string oldname)
         {
-            using (NewStickDlg dlg = new NewStickDlg(form.Bounds, orientation, oldname))
+            using (GetNameDlg dlg = new GetNameDlg(form.Bounds, orientation, type, oldname))
             {
-                if (dlg.ShowDialog() == DialogResult.Cancel)
+                if (dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
                     return "";
 
-                string stickname = dlg.textBox1.Text.Trim();
+                string name = dlg.textBox1.Text.Trim();
 
                 if (oldname != "")
+                {
                     using (BubblesDB db = new BubblesDB())
-                        db.ExecuteNonQuery("update STICKS set name=`" + stickname + "` where id=" + (int)form.Tag + "");
+                    {
+                        int stickID = (int)form.Tag;
+                        if (type == typestick)
+                            db.ExecuteNonQuery("update STICKS set name=`" + name + "` where id=" + stickID + "");
+                        else if (type == typeicons)
+                            db.ExecuteNonQuery("update ICONS set name=`" + name + 
+                                "` where stickID=" + stickID + " and name =`" + oldname + "`");
+                        else if (type == typesources)
+                            db.ExecuteNonQuery("update SOURCES set title=`" + name +
+                                "` where stickID=" + stickID + " and title =`" + oldname + "`");
 
-                return stickname;
+                    }
+                }
+                return name;
             }
         }
 
-        public static void CreateStick(Form newForm, string stickname)
+        public static void CreateStick(Form newForm, string stickname, string sticktype)
         {
             int id = 0;
             using (BubblesDB db = new BubblesDB())
             {
-                db.AddStick(stickname, StickUtils.typeicons, 0, "");
+                db.AddStick(stickname, sticktype, 0, "");
 
                 DataTable dt = db.ExecuteQuery("SELECT last_insert_rowid()");
                 if (dt.Rows.Count > 0)
@@ -51,19 +63,21 @@ namespace Bubbles
         }
 
         public static string RotateStick(Form form, PictureBox p1, Panel panel1, 
-            PictureBox Manage, string orientation, bool start = false)
+            PictureBox Manage, string orientation, bool start = false, PictureBox pb = null)
         {
             if (orientation == "H")
             {
                 orientation = "V";
                 panel1.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
                 Manage.Anchor = AnchorStyles.Left | AnchorStyles.Bottom;
+                if (pb != null) pb.Anchor = AnchorStyles.Left | AnchorStyles.Bottom;
             }
             else
             {
                 orientation = "H";
                 panel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
                 Manage.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+                if (pb != null) pb.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             }
 
             int thisWidth = form.Width;
@@ -72,12 +86,15 @@ namespace Bubbles
             Size panel1Size = new Size(panel1.Height, panel1.Width);
             Point panel1Location = new Point(panel1.Location.Y, panel1.Location.X);
             Point ManageLocation = new Point(Manage.Location.Y, Manage.Location.X);
+            Point SourceListLocation = new Point();
+            if (pb != null) SourceListLocation = new Point(pb.Location.Y, pb.Location.X);
 
             form.Size = new Size(thisHeight, thisWidth);
 
             panel1.Size = panel1Size;
             panel1.Location = panel1Location;
             Manage.Location = ManageLocation;
+            if (pb != null) pb.Location = SourceListLocation;
 
             if (start)
                 p1.Location = new Point(p1.Location.Y, p1.Location.X);
@@ -150,8 +167,9 @@ namespace Bubbles
             // Remove all icons
             foreach (PictureBox p in panel1.Controls.OfType<PictureBox>().Reverse())
             {
-                if (p.Name != "p1")
-                    p.Dispose();
+                if (p.Name == "p1" || p.Name == "p2" || p.Name == "pictureHandle")
+                    continue;
+                p.Dispose();
             }
 
             // Reset bubble size to minimum
@@ -220,7 +238,9 @@ namespace Bubbles
             Panel panel1, string orientation, int icondist, int k)
         {
             PictureBox pBox = AddPitureBox(form, p1, panel1, orientation, icondist, path, k, typeicons);
-            new ToolTip().SetToolTip(pBox, item.IconName);
+            ToolTip tt = new ToolTip();
+            tt.ShowAlways = true;
+            tt.SetToolTip(pBox, item.IconName);
             pBox.Tag = item;
             return pBox;
         }
@@ -231,7 +251,11 @@ namespace Bubbles
             PictureBox pBox = AddPitureBox(form, p1, panel1, orientation, icondist, "", k, typepripro,
                 item.Type, item.Value);
             if (item.Type == "pro")
-                new ToolTip().SetToolTip(pBox, item.Type);
+            {
+                ToolTip tt = new ToolTip();
+                tt.ShowAlways = true;
+                tt.SetToolTip(pBox, item.Value.ToString() + "%");
+            }
             pBox.Tag = item;
             return pBox;
         }
@@ -240,7 +264,9 @@ namespace Bubbles
             Panel panel1, string orientation, int icondist, int k)
         {
             PictureBox pBox = AddPitureBox(form, p1, panel1, orientation, icondist, path, k, typesources, item.Type);
-            new ToolTip().SetToolTip(pBox, item.Title);
+            ToolTip tt = new ToolTip();
+            tt.ShowAlways = true;
+            tt.SetToolTip(pBox, item.Title);
             pBox.Tag = item;
             return pBox;
         }
@@ -276,7 +302,7 @@ namespace Bubbles
 
             if (orientation == "H")
             {
-                pBox.Location = new Point(icondist * k++, p1.Location.Y);
+                pBox.Location = new Point(p1.Location.X + (icondist * k++), p1.Location.Y);
                 if (k > 4)
                     form.Width += icondist;
             }
@@ -357,6 +383,79 @@ namespace Bubbles
             return true;
         }
 
+        public static bool Collapse(Form form, int MinLength, string orientation)
+        {
+            if (form.Width > MinLength || form.Height > MinLength)
+            {
+                if (orientation == "H")
+                    form.Width = MinLength;
+                else
+                    form.Height = MinLength;
+
+                form.BackColor = Color.Gainsboro;
+                return true;
+            }
+            return false;
+        }
+
+        public static bool Expand(Form form, int RealLength, string orientation)
+        {
+            if (orientation == "H" && form.Width < RealLength)
+                form.Width = RealLength;
+            else if (orientation == "V" && form.Height < RealLength)
+                form.Height = RealLength;
+
+            form.BackColor = Color.Lavender;
+            return true;
+        }
+
+        public static string Handle_DragDrop(ref string path, string[] draggedFiles, 
+            List<IconItem> aIcons, List<MySourcesItem> aSources)
+        {
+            string title = "";
+            if (!String.IsNullOrEmpty(path)) // possible url
+            {
+                if (path.Contains("http"))
+                {
+                    Uri myUri = new Uri(path);
+                    if (myUri != null)
+                    {
+                        if (aSources != null)
+                        {
+                            foreach (var item in aSources) // проверим, есть ли в стике значок с этим путем
+                            if (item.Path == path) // yes, exists
+                            { MessageBox.Show(Utils.getString("float_icons.iconexists")); return ""; }
+                        }
+                        else if (aIcons != null)
+                        {
+                            foreach (var item in aIcons) // проверим, есть ли в стике значок с этим путем
+                                if (item.Path == path) // yes, exists
+                                { MessageBox.Show(Utils.getString("float_icons.iconexists")); return ""; }
+                        }
+                        title = myUri.Host;
+                    }
+                }
+            }
+            else if (draggedFiles != null)
+            {
+                if (aSources != null)
+                {
+                    foreach (var item in aSources) // проверим, есть ли в стике значок с этим путем
+                    if (item.Path == draggedFiles[0]) // yes, exists
+                    { MessageBox.Show(Utils.getString("float_icons.iconexists")); return ""; }
+                }
+                if (aIcons != null)
+                {
+                    foreach (var item in aIcons) // проверим, есть ли в стике значок с этим путем
+                        if (item.Path == draggedFiles[0]) // yes, exists
+                        { MessageBox.Show(Utils.getString("float_icons.iconexists")); return ""; }
+                }
+                title = Path.GetFileName(draggedFiles[0]);
+                path = draggedFiles[0];
+            }
+            return title;
+        }
+
         public static Image GetImage(string type, int value)
         {
             if (type == "pri")
@@ -409,19 +508,36 @@ namespace Bubbles
             return BubbleMySources.file;
         }
 
-        public static void SetCommonContextMenu(ContextMenuStrip cms, PictureBox p2)
+        public static void SetCommonContextMenu(ContextMenuStrip cms, PictureBox p2, string stickType = "")
         {
-            cms.Items.Add(new ToolStripSeparator());
+            string deleteall = Utils.getString("float_icons.contextmenu.deleteall");
+            if (stickType == typesources) deleteall = Utils.getString("mysources.contextmenu.deleteall");
+            if (stickType == typebookmarks) deleteall = Utils.getString("bookmarks.contextmenu.deleteall");
 
-            ToolStripItem tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.collapse"));
-            tsi.Name = "BI_collapse";
-            tsi.ImageScaling = ToolStripItemImageScaling.None;
-            tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "collapse.png"), p2.Size);
+            ToolStripItem tsi = null;
 
-            tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.expand"));
-            tsi.Name = "BI_expand";
-            tsi.ImageScaling = ToolStripItemImageScaling.None;
-            tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "expand.png"), p2.Size);
+            if (stickType != typeformat && stickType != typepaste && stickType != typeorganizer)
+            {
+                tsi = cms.Items.Add(deleteall);
+                tsi.Name = "BI_deleteall";
+                tsi.ImageScaling = ToolStripItemImageScaling.None;
+                tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "deleteall.png"), p2.Size);
+
+                cms.Items.Add(new ToolStripSeparator());
+            }
+
+            if (stickType != typeorganizer)
+            {
+                tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.collapse"));
+                tsi.Name = "BI_collapse";
+                tsi.ImageScaling = ToolStripItemImageScaling.None;
+                tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "collapse.png"), p2.Size);
+
+                tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.expand"));
+                tsi.Name = "BI_expand";
+                tsi.ImageScaling = ToolStripItemImageScaling.None;
+                tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "expand.png"), p2.Size);
+            }
 
             tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.rotate"));
             tsi.Name = "BI_rotate";
@@ -433,22 +549,25 @@ namespace Bubbles
             tsi.ImageScaling = ToolStripItemImageScaling.None;
             tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "remember.png"), p2.Size);
 
-            tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.deletestick"));
-            tsi.Name = "BI_delete_stick";
-            tsi.ImageScaling = ToolStripItemImageScaling.None;
-            tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "deleteStick.png"), p2.Size);
+            if (stickType != typebookmarks && stickType != typeformat && stickType != typepaste && stickType != typeorganizer)
+            {
+                tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.deletestick"));
+                tsi.Name = "BI_delete_stick";
+                tsi.ImageScaling = ToolStripItemImageScaling.None;
+                tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "deleteStick.png"), p2.Size);
 
-            cms.Items.Add(new ToolStripSeparator());
+                cms.Items.Add(new ToolStripSeparator());
 
-            tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.newstick"));
-            tsi.Name = "BI_newstick";
-            tsi.ImageScaling = ToolStripItemImageScaling.None;
-            tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "newStick.png"), p2.Size);
+                tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.newstick"));
+                tsi.Name = "BI_newstick";
+                tsi.ImageScaling = ToolStripItemImageScaling.None;
+                tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "newStick.png"), p2.Size);
 
-            tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.renamestick"));
-            tsi.Name = "BI_renamestick";
-            tsi.ImageScaling = ToolStripItemImageScaling.None;
-            tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "edit.png"), p2.Size);
+                tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.renamestick"));
+                tsi.Name = "BI_renamestick";
+                tsi.ImageScaling = ToolStripItemImageScaling.None;
+                tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "edit.png"), p2.Size);
+            }
 
             cms.Items.Add(new ToolStripSeparator());
 
@@ -466,7 +585,8 @@ namespace Bubbles
         public static void SetContextMenuImage(ToolStripItem tsi, PictureBox p2, string imgName)
         {
             tsi.ImageScaling = ToolStripItemImageScaling.None;
-            tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + imgName), p2.Size);
+            if (imgName != "")
+                tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + imgName), p2.Size);
         }
 
         public static List<IconItem> Icons = new List<IconItem>();
@@ -474,8 +594,8 @@ namespace Bubbles
         public static List<BookmarkItem> Bookmarks = new List<BookmarkItem>();
         public static List<MySourcesItem> Sources = new List<MySourcesItem>();
 
-        public const string typeicons = "icons", typepripro = "pripro", typesources = "mysources", 
-            typebookmarks = "bookmarks";
+        public const string typestick = "stick", typeicons = "icons", typepripro = "pripro", typeformat = "format",
+            typesources = "mysources", typebookmarks = "bookmarks", typepaste = "copypaste", typeorganizer = "organizer";
     }
 
     class ResizeStick : Form

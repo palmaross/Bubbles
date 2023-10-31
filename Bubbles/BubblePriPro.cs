@@ -51,9 +51,6 @@ namespace Bubbles
 
             contextMenuStrip1.Items["BI_delete"].Text = MMUtils.getString("float_icons.contextmenu.delete");
             StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_delete"], p2, "deleteall.png");
-
-            contextMenuStrip1.Items["BI_deleteall"].Text = MMUtils.getString("float_icons.contextmenu.deleteall");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_deleteall"], p2, "deleteall.png");
             
             StickUtils.SetCommonContextMenu(contextMenuStrip1, p2);
 
@@ -224,33 +221,27 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_newstick") // correct
             {
-                string name = StickUtils.RenameStick(this, orientation, "");
+                string name = StickUtils.GetName(this, orientation, StickUtils.typepripro, "");
                 if (name != "")
                 {
                     BubblePriPro form = new BubblePriPro(0, orientation, name);
-                    StickUtils.CreateStick(form, name);
+                    StickUtils.CreateStick(form, name, StickUtils.typepripro);
                 }
             }
             else if (e.ClickedItem.Name == "BI_renamestick")
             {
-                string newName = StickUtils.RenameStick(this, orientation, toolTip1.GetToolTip(pictureHandle));
+                string newName = StickUtils.GetName(this, orientation, StickUtils.typepripro, toolTip1.GetToolTip(pictureHandle));
                 if (newName != "") toolTip1.SetToolTip(pictureHandle, newName);
             }
             else if (e.ClickedItem.Name == "BI_expand")
             {
-                if (this.Width < RealLength)
-                    this.Width = RealLength;
-                this.BackColor = System.Drawing.Color.Lavender;
-                collapsed = false;
+                if (StickUtils.Expand(this, RealLength, orientation))
+                    collapsed = false;
             }
             else if (e.ClickedItem.Name == "BI_collapse")
             {
-                if (this.Width > MinLength)
-                {
-                    this.Width = MinLength;
-                    this.BackColor = System.Drawing.Color.Gainsboro;
+                if (StickUtils.Collapse(this, MinLength, orientation))
                     collapsed = true;
-                }
             }
             else if (e.ClickedItem.Name == "BI_delete_stick") // correct
             {

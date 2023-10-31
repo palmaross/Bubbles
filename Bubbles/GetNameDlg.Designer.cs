@@ -1,6 +1,6 @@
 ﻿namespace Bubbles
 {
-    partial class NewStickDlg
+    partial class GetNameDlg
     {
         /// <summary>
         /// Required designer variable.

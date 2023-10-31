@@ -1,4 +1,5 @@
-﻿using Mindjet.MindManager.Interop;
+﻿using Bubbles.Properties;
+using Mindjet.MindManager.Interop;
 using PRAManager;
 using System;
 using System.Collections;
@@ -7,6 +8,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Clipboard = System.Windows.Forms.Clipboard;
 
 namespace Bubbles
 {
@@ -43,23 +45,22 @@ namespace Bubbles
 
             contextMenuStrip1.Items["BI_new"].Text = MMUtils.getString("float_icons.contextmenu.new");
             StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_new"], p2, "newsticker.png");
-            
-            contextMenuStrip1.Items["BI_delete"].Text = MMUtils.getString("float_icons.contextmenu.delete");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_delete"], p2, "deleteall.png");
-
-            contextMenuStrip1.Items["BI_deleteall"].Text = MMUtils.getString("float_icons.contextmenu.deleteall");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_deleteall"], p2, "deleteall.png");
 
             contextMenuStrip1.Items["BI_rename"].Text = MMUtils.getString("float_icons.contextmenu.edit");
             StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_rename"], p2, "edit.png");
 
-            StickUtils.SetCommonContextMenu(contextMenuStrip1, p2);
+            contextMenuStrip1.Items["BI_paste"].Text = MMUtils.getString("float_icons.contextmenu.paste");
+            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_paste"], p2, "paste.png");
+
+            contextMenuStrip1.Items["BI_delete"].Text = MMUtils.getString("float_icons.contextmenu.delete");
+            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_delete"], p2, "deleteall.png");
+
+            StickUtils.SetCommonContextMenu(contextMenuStrip1, p2, StickUtils.typeicons);
 
             panel1.MouseDown += Panel1_MouseDown;
             pictureHandle.MouseDown += PictureHandle_MouseDown;
-            txtName.KeyUp += TxtName_KeyUp;
-            this.Deactivate += BubblesIcons_Deactivate;
             Manage.Click += Manage_Click;
+            pictureHandle.Click += PictureHandle_Click;
 
             using (BubblesDB db = new BubblesDB())
             {
@@ -87,18 +88,21 @@ namespace Bubbles
                             panel1, orientation, icondist.Width, k++);
                         pBox.MouseClick += Icon_Click;
                         pBox.MouseMove += PBox_MouseMove;
-                        pBox.DragEnter += PBox_DragEnter;
-                        pBox.DragDrop += PBox_DragDrop;
+                        pBox.DragEnter += Handle_DragEnter;
+                        pBox.DragDrop += Handle_DragEnter;
                     }
                 }
                 RealLength = this.Width;
             }
 
-            panel1.DragEnter += panel1_DragEnter;
-            panel1.DragDrop += panel1_DragDrop;
-            Manage.AllowDrop = true;
-            Manage.DragEnter += panel1_DragEnter;
-            Manage.DragDrop += panel1_DragDrop;
+            // Handle drag drop to place icon to the end
+            this.DragEnter += Handle_DragEnter;
+            this.DragDrop += Handle_DragDrop;
+
+            // Handle drag drop to place icon to the begin
+            pictureHandle.AllowDrop = true;
+            pictureHandle.DragEnter += Handle_DragEnter;
+            pictureHandle.DragDrop += Handle_DragDrop;
         }
 
         private void Manage_Click(object sender, EventArgs e)
@@ -108,62 +112,34 @@ namespace Bubbles
 
             contextMenuStrip1.Items["BI_delete"].Visible = false;
             contextMenuStrip1.Items["BI_rename"].Visible = false;
+            toolStripSeparator1.Visible = false;
 
+            selectedIcon = pictureHandle;
             manage = true;
             contextMenuStrip1.Show(Cursor.Position);
         }
-        bool manage = false;
+
+        private void PictureHandle_Click(object sender, EventArgs e)
+        {
+            foreach (ToolStripItem item in contextMenuStrip1.Items)
+                item.Visible = false;
+
+            contextMenuStrip1.Items["BI_paste"].Visible = true;
+
+            manage = false;
+            contextMenuStrip1.Show(Cursor.Position);
+        }
 
         private void PictureHandle_MouseDown(object sender, MouseEventArgs e)
         {
-            txtName.Visible = false;
             ReleaseCapture();
             SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
-        }
-
-        private void BubblesIcons_Deactivate(object sender, EventArgs e)
-        {
-            txtName.Visible = false;
-            if (dragging)
-                AfterDragging();
         }
 
         private void Panel1_MouseDown(object sender, MouseEventArgs e)
         {
-            txtName.Visible = false;
             ReleaseCapture();
             SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
-        }
-
-        private void TxtName_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                if (dragging)
-                {
-                    txtName.Visible = false;
-                    AfterDragging();
-                    return;
-                }
-
-                IconItem item = (IconItem)selectedIcon.Tag;
-                if (item == null)
-                    return;
-                ((IconItem)selectedIcon.Tag).IconName = txtName.Text.Trim();
-                Icons.Find(p => p.FileName == item.FileName).IconName = txtName.Text.Trim();
-                txtName.Visible = false;
-                toolTip1.SetToolTip(selectedIcon, txtName.Text.Trim());
-
-                // Change name in the database
-                using (BubblesDB db = new BubblesDB())
-                    db.ExecuteNonQuery("update ICONS set name=`" + txtName.Text.Trim() + "` where filename=`" + item.FileName + "`");
-            }
-            else if (e.KeyCode == Keys.Escape)
-            {
-                txtName.Visible = false;
-                if (dragging)
-                    AfterDragging();
-            }
         }
 
         private void ContextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -202,11 +178,50 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_rename")
             {
-                txtName.Visible = true;
-                txtName.BringToFront();
-                txtName.Location = p1.Location;
-                txtName.Focus();
-                txtName.Text = ((IconItem)selectedIcon.Tag).IconName;
+                IconItem item = (IconItem)selectedIcon.Tag;
+                if (item == null) return;
+
+                // Get new source's name
+                string name = StickUtils.GetName(this, orientation, StickUtils.typeicons, item.IconName);
+                if (name != "")
+                {
+                    // Change title in the picture box tag
+                    ((IconItem)selectedIcon.Tag).IconName = name;
+                    // Change title in the Source list item
+                    Icons.Find(p => p.Path == item.Path).IconName = name;
+                    toolTip1.SetToolTip(selectedIcon, name);
+
+                    // Change title in the database
+                    using (BubblesDB db = new BubblesDB())
+                        db.ExecuteNonQuery("update ICONS set name=`" + name + "` where filename=`" +
+                            item.Path + "` and stickID=" + (int)this.Tag + "");
+                }
+            }
+            else if (e.ClickedItem.Name == "BI_paste")
+            {
+                string path = null;
+                string[] copiedFiles = (string[])Clipboard.GetData(DataFormats.FileDrop);
+                if (path == null && copiedFiles == null)
+                    return;
+
+                string title = StickUtils.Handle_DragDrop(ref path, copiedFiles, Icons, null);
+
+                if (path == "" || title == "")
+                    return;
+
+                    position = "end";
+                    if (!manage) // if manage - paste at the end
+                    {
+                        if (selectedIcon.Name == "pictureHandle")
+                            position = "begin";
+                        else
+                            position = "right";
+                    }
+
+                    // Get source name
+                    string name = StickUtils.GetName(this, orientation, StickUtils.typeicons, title);
+                    if (name != "")
+                        NewIcon(path, name, position);
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
@@ -227,33 +242,27 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_newstick")
             {
-                string name = StickUtils.RenameStick(this, orientation, "");
+                string name = StickUtils.GetName(this, orientation, StickUtils.typeicons, "");
                 if (name != "")
                 {
                     BubbleIcons form = new BubbleIcons(0, orientation, name);
-                    StickUtils.CreateStick(form, name);
+                    StickUtils.CreateStick(form, name, StickUtils.typeicons);
                 }
             }
             else if (e.ClickedItem.Name == "BI_renamestick")
             {
-                string newName = StickUtils.RenameStick(this, orientation, toolTip1.GetToolTip(pictureHandle));
+                string newName = StickUtils.GetName(this, orientation, StickUtils.typeicons, toolTip1.GetToolTip(pictureHandle));
                 if (newName != "") toolTip1.SetToolTip(pictureHandle, newName);
             }
             else if (e.ClickedItem.Name == "BI_expand")
             {
-                if (this.Width < RealLength)
-                    this.Width = RealLength;
-                this.BackColor = System.Drawing.Color.Lavender;
-                collapsed = false;
+                if (StickUtils.Expand(this, RealLength, orientation))
+                    collapsed = false;
             }
             else if (e.ClickedItem.Name == "BI_collapse")
             {
-                if (this.Width > MinLength)
-                {
-                    this.Width = MinLength;
-                    this.BackColor = System.Drawing.Color.Gainsboro;
+                if (StickUtils.Collapse(this, MinLength, orientation))
                     collapsed = true;
-                }
             }
             else if (e.ClickedItem.Name == "BI_delete_stick")
             {
@@ -307,54 +316,13 @@ namespace Bubbles
             {
                 pBox.MouseClick += Icon_Click;
                 pBox.MouseMove += PBox_MouseMove;
-                pBox.DragEnter += PBox_DragEnter;
-                pBox.DragDrop += PBox_DragDrop;
+                pBox.DragEnter += Handle_DragEnter;
+                pBox.DragDrop += Handle_DragDrop;
             }
 
             if (collapsed)
                 this.Width = MinLength;
         }
-
-        #region Icon DragDrop
-        private void PBox_DragDrop(object sender, DragEventArgs e)
-        {
-            var target = (PictureBox)sender;
-            if (e.Data.GetDataPresent(typeof(PictureBox)))
-            {
-                var source = (PictureBox)e.Data.GetData(typeof(PictureBox));
-                if (source != target)
-                {
-                    try
-                    {
-                        int sourceIndex = (source.Tag as IconItem).Order;
-                        int targetIndex = (target.Tag as IconItem).Order;
-                        Icons.RemoveAt(sourceIndex - 1);
-                        if (sourceIndex < targetIndex) { targetIndex--; }
-                        Icons.Insert(targetIndex, source.Tag as IconItem);
-                        for (int i = 0; i < Icons.Count; i++)
-                            Icons[i].Order = i + 1;
-
-                        RefreshStick();
-                    }
-                    catch { }
-                }
-            }
-        }
-
-        private void PBox_DragEnter(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.Move;
-        }
-
-        private void PBox_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                var pb = (PictureBox)sender;
-                pb.DoDragDrop(pb, DragDropEffects.Move);
-            }
-        }
-        #endregion
 
         private void Icon_Click(object sender, MouseEventArgs e)
         {
@@ -398,56 +366,106 @@ namespace Bubbles
                     item.Visible = false;
 
                 contextMenuStrip1.Items["BI_new"].Visible = true;
-                contextMenuStrip1.Items["BI_delete"].Visible = true;
                 contextMenuStrip1.Items["BI_rename"].Visible = true;
+                toolStripSeparator1.Visible = true;
+                contextMenuStrip1.Items["BI_paste"].Visible = true;
+                contextMenuStrip1.Items["BI_delete"].Visible = true;
+
                 manage = false;
                 contextMenuStrip1.Show(Cursor.Position);
             }
         }
 
         #region DragDrop
-        private void panel1_DragDrop(object sender, DragEventArgs e)
+        private void Handle_DragDrop(object sender, DragEventArgs e)
         {
-            foreach (string pic in (string[])e.Data.GetData(DataFormats.FileDrop))
+            if (e.Data.GetDataPresent(typeof(PictureBox))) // Move the picture box
             {
-                string filename = Path.GetFileNameWithoutExtension(pic);
+                var source = (PictureBox)e.Data.GetData(typeof(PictureBox)); // moving PB
+                int sourceIndex = (source.Tag as IconItem).Order; // moving PB order
+                int targetIndex = 0;
 
-                foreach (var item in Icons) // проверим, есть ли в стике этот значок
+                if (sender is PictureBox) // also, can be this form
                 {
-                    if (item.FileName == filename + ".ico" || // custom icon
-                        item.FileName == "stock" + filename) // stock icon
+                    var target = (PictureBox)sender;
+
+                    if (target.Name == "pictureHandle")
+                        targetIndex = 0; // move PB to the begin
+                    else
                     {
-                        MessageBox.Show(Utils.getString("float_icons.iconexists"));
-                        return;
+                        // or after the target PB
+                        try { targetIndex = (target.Tag as IconItem).Order; }
+                        catch { }
                     }
                 }
+                else // sender is this form or something else (moving PB to the end)
+                    targetIndex = panel1.Controls.OfType<PictureBox>().Count() - 2; // minus pictureHandle and p1
 
-                dragging = true;
-                txtName.Visible = true;
-                txtName.Text = filename;
-                txtName.BringToFront();
-                txtName.Location = p1.Location;
-                txtName.Focus();
+                if (sourceIndex != targetIndex)
+                {
+                    // Reorder Sources list
+                    Icons.RemoveAt(sourceIndex - 1);
+                    if (sourceIndex < targetIndex) { targetIndex--; }
+                    Icons.Insert(targetIndex, source.Tag as IconItem);
+                    for (int i = 0; i < Icons.Count; i++)
+                        Icons[i].Order = i + 1;
 
-                new_icon = pic;
+                    RefreshStick();
+                }
+            }
+            else // Drop *dragged* data
+            {
+                string path = null;
+                string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+                string title = StickUtils.Handle_DragDrop(ref path, draggedFiles, Icons, null);
+
+                if (path != "")
+                {
+                    position = "end";
+                    if (sender is PictureBox)
+                    {
+                        var target = (PictureBox)sender;
+                        if (target.Name == "pictureHandle")
+                            position = "begin";
+                        else
+                        {
+                            // or after the target PB
+                            selectedIcon = (PictureBox)sender;
+                            position = "right";
+                        }
+                    }
+
+                    // Get icon name
+                    string name = StickUtils.GetName(this, orientation, StickUtils.typesources, title);
+                    if (name != "")
+                        NewIcon(path, name, position);
+                }
             }
         }
 
-        /// <summary>
-        /// Add new icon after dragging (wait for user entering icon name in the textbox)
-        /// </summary>
-        private void AfterDragging()
+        private void Handle_DragEnter(object sender, DragEventArgs e)
         {
-            NewIcon(new_icon, txtName.Text.Trim(), "end");
-            txtName.Text = "";
-            dragging = false;
+            if (e.Data.GetDataPresent(typeof(PictureBox))) // Moving picture box
+                e.Effect = DragDropEffects.Move;
+            else // Dragging data
+            {
+                if (e.Data.GetDataPresent(DataFormats.FileDrop) ||
+                    e.Data.GetDataPresent(DataFormats.UnicodeText))
+                    e.Effect = DragDropEffects.Copy; // Okay
+                else
+                    e.Effect = DragDropEffects.None; // Unknown data, ignore it
+            }
         }
 
-        private void panel1_DragEnter(object sender, DragEventArgs e)
+        private void PBox_MouseMove(object sender, MouseEventArgs e)
         {
-            e.Effect = DragDropEffects.Copy;
+            if (e.Button == MouseButtons.Left)
+            {
+                var pb = (PictureBox)sender;
+                pb.DoDragDrop(pb, DragDropEffects.Move);
+            }
         }
-        string new_icon;
+
         #endregion
 
         #region stock icon enumaration
@@ -739,7 +757,9 @@ namespace Bubbles
         private List<IconItem> Icons = new List<IconItem>();
         PictureBox selectedIcon = null;
         string orientation = "H";
-        bool dragging = false, collapsed = false;
+        bool collapsed = false;
+        string new_icon, position;
+        bool manage = false;
 
         int MinLength, RealLength, Thickness, panel1MinLength;
 

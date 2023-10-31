@@ -9,21 +9,19 @@ namespace Bubbles
 {
     internal partial class BubblePaste : Form
     {
-        public BubblePaste()
+        public BubblePaste(int ID, string _orientation, string stickname)
         {
             InitializeComponent();
 
-            //helpProvider1.HelpNamespace = MMMapNavigator.dllPath + "MapNavigator.chm";
-            //helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            //helpProvider1.SetHelpKeyword(this, "bookmarks_express.htm");
+            this.Tag = ID;
+            orientation = _orientation;
 
-            orientation = Utils.getRegistry("OrientationPaste", "H");
+            helpProvider1.HelpNamespace = Utils.dllPath + "Sticks.chm";
+            helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
+            helpProvider1.SetHelpKeyword(this, "PasteStick.htm");
 
-            ThisLength = this.Width;
-            Thickness = this.Height;
-
-            this.MinimumSize = this.Size;
-            this.MaximumSize = this.Size;
+            MinLength = panel2.Width;
+            RealLength = this.Width;
 
             if (orientation == "V")
             {
@@ -31,7 +29,9 @@ namespace Bubbles
                 RotateBubble();
 
                 foreach (PictureBox p in this.Controls.OfType<PictureBox>())
-                    p.Location = new Point(p.Location.Y, p.Location.X);
+                {
+                    p.Location = new Point(copyTopicText.Location.Y, p.Location.X);
+                }
             }
 
             toolTip1.SetToolTip(PasteLink, getString("BubblesPaste.PasteLink.tooltip"));
@@ -48,10 +48,8 @@ namespace Bubbles
             toolTip1.SetToolTip(pictureHandle, Utils.getString("copypaste.bubble.tooltip"));
 
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
-            contextMenuStrip1.Items["BI_rotate"].Text = MMUtils.getString("float_icons.contextmenu.rotate");
-            contextMenuStrip1.Items["BI_close"].Text = MMUtils.getString("float_icons.contextmenu.close");
-            contextMenuStrip1.Items["BI_help"].Text = MMUtils.getString("float_icons.contextmenu.help");
-            contextMenuStrip1.Items["BI_store"].Text = MMUtils.getString("float_icons.contextmenu.settings");
+
+            StickUtils.SetCommonContextMenu(contextMenuStrip1, p2, StickUtils.typepaste);
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
@@ -78,107 +76,61 @@ namespace Bubbles
                 RotateBubble();
 
                 foreach (PictureBox p in this.Controls.OfType<PictureBox>())
+                {
+                    if (p.Name == "Manage") continue;
                     p.Location = new Point(p.Location.Y, p.Location.X);
+                }
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
-                this.Hide();
-                BubblesButton.m_bubblesMenu.Paste.Image = BubblesButton.m_bubblesMenu.mwCopyPaste;
+                BubblesButton.STICKS.Remove((int)this.Tag);
+                this.Close();
             }
             else if (e.ClickedItem.Name == "BI_help")
             {
-
+                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "PasteStick.htm");
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
-                int x = this.Location.X;
-                int y = this.Location.Y;
-
-                Utils.setRegistry("OrientationPaste", orientation);
-                Utils.setRegistry("PositionPaste", x.ToString() + "," + y.ToString());
+                StickUtils.SaveStick(this.Bounds, (int)this.Tag, orientation);
+            }
+            else if (e.ClickedItem.Name == "BI_expand")
+            {
+                if (StickUtils.Expand(this, RealLength, orientation))
+                {
+                    addtopic.Visible = true;
+                    collapsed = false;
+                }
+            }
+            else if (e.ClickedItem.Name == "BI_collapse")
+            {
+                if (StickUtils.Collapse(this, MinLength, orientation))
+                {
+                    addtopic.Visible = false;
+                    collapsed = true;
+                }
             }
         }
         void RotateBubble()
         {
             if (orientation == "H")
+            {
                 orientation = "V";
+                Manage.Anchor = AnchorStyles.Left | AnchorStyles.Bottom;
+            }
             else
+            {
                 orientation = "H";
+                Manage.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            }
 
             int thisWidth = this.Width;
             int thisHeight = this.Height;
 
-            if (orientation == "H")
-            {
-                this.MinimumSize = new Size(ThisLength, Thickness);
-                this.MaximumSize = new Size(ThisLength, Thickness);
-            }
-            else
-            {
-                this.MinimumSize = new Size(Thickness, ThisLength);
-                this.MaximumSize = new Size(Thickness, ThisLength);
-            }
-
+            Point ManageLocation = new Point(Manage.Location.Y, Manage.Location.X);
             this.Size = new Size(thisHeight, thisWidth);
+            Manage.Location = ManageLocation;
         }
-
-        #region resize dialog
-        protected override void WndProc(ref Message m)
-        {
-            const int RESIZE_HANDLE_SIZE = 10;
-
-            switch (m.Msg)
-            {
-                case 0x0084/*NCHITTEST*/ :
-                    base.WndProc(ref m);
-
-                    if ((int)m.Result == 0x01/*HTCLIENT*/)
-                    {
-                        Point screenPoint = new Point(m.LParam.ToInt32());
-                        Point clientPoint = this.PointToClient(screenPoint);
-                        if (clientPoint.Y <= RESIZE_HANDLE_SIZE)
-                        {
-                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
-                                m.Result = (IntPtr)13/*HTTOPLEFT*/ ;
-                            else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
-                                m.Result = (IntPtr)12/*HTTOP*/ ;
-                            else
-                                m.Result = (IntPtr)14/*HTTOPRIGHT*/ ;
-                        }
-                        else if (clientPoint.Y <= (Size.Height - RESIZE_HANDLE_SIZE))
-                        {
-                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
-                                m.Result = (IntPtr)10/*HTLEFT*/ ;
-                            else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
-                                m.Result = (IntPtr)2/*HTCAPTION*/ ;
-                            else
-                                m.Result = (IntPtr)11/*HTRIGHT*/ ;
-                        }
-                        else
-                        {
-                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
-                                m.Result = (IntPtr)16/*HTBOTTOMLEFT*/ ;
-                            else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
-                                m.Result = (IntPtr)15/*HTBOTTOM*/ ;
-                            else
-                                m.Result = (IntPtr)17/*HTBOTTOMRIGHT*/ ;
-                        }
-                    }
-                    return;
-            }
-            base.WndProc(ref m);
-        }
-
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams cp = base.CreateParams;
-                cp.Style |= 0x20000; // <--- use 0x20000
-                return cp;
-            }
-        }
-        #endregion
 
         private void PasteLink_Click(object sender, EventArgs e)
         {
@@ -320,7 +272,8 @@ namespace Bubbles
         }
 
         string orientation = "H";
-        int ThisLength, Thickness;
+        int MinLength, RealLength;
+        bool collapsed = false;
 
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;

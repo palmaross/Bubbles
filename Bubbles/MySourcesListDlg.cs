@@ -13,31 +13,6 @@ namespace Bubbles
 
             btnClose.Text = Utils.getString("button.close");
 
-            //this.Location = new Point(X, Y);
-            //var pos = this.Location;
-
-            //// If the form is close to the right or bottom screen side..
-            //Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
-
-            //if (orientation == "H")
-            //{
-            //    if (this.Location.X + this.Width > area.Right)
-            //        pos.X = area.Right - this.Width;
-
-            //    if (pos.Y + this.Height > area.Bottom)
-            //        pos.Y = pos.Y - p1.Height - this.Height;
-            //}
-            //else
-            //{
-            //    if (this.Location.X + this.Width > area.Right)
-            //        pos.X = pos.X - p1.Height - this.Width;
-
-            //    if (pos.Y + this.Height > area.Bottom)
-            //        pos.Y = area.Bottom - this.Height;
-            //}
-
-            //this.Location = new Point(pos.X, pos.Y);
-
             imageList1.ImageSize = p2.Size;
             listView1.SmallImageList = imageList1;
 

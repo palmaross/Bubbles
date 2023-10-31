@@ -1,4 +1,4 @@
-﻿namespace Bubbles23
+﻿namespace Bubbles
 {
     using System;
     using System.Runtime.InteropServices;

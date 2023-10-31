@@ -63,11 +63,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddSourceDlg.cs">
+    <Compile Include="BubbleOrganizer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddSourceDlg.Designer.cs">
-      <DependentUpon>AddSourceDlg.cs</DependentUpon>
+    <Compile Include="BubbleOrganizer.Designer.cs">
+      <DependentUpon>BubbleOrganizer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DragDropTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DragDropTest.Designer.cs">
+      <DependentUpon>DragDropTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewSourceDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewSourceDlg.Designer.cs">
+      <DependentUpon>NewSourceDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="AphorismDB.cs" />
     <Compile Include="AppManager\DatabaseWrapper.cs" />
@@ -77,11 +89,11 @@
     <Compile Include="BubbleFormat.Designer.cs">
       <DependentUpon>BubbleFormat.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewStickDlg.cs">
+    <Compile Include="GetNameDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewStickDlg.Designer.cs">
-      <DependentUpon>NewStickDlg.cs</DependentUpon>
+    <Compile Include="GetNameDlg.Designer.cs">
+      <DependentUpon>GetNameDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="BubbleNotepad.cs">
       <SubType>Form</SubType>
@@ -180,6 +192,12 @@
       <DependentUpon>StickerDummy.cs</DependentUpon>
     </Compile>
     <Compile Include="StickUtils.cs" />
+    <Compile Include="NotesDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NotesDlg.Designer.cs">
+      <DependentUpon>NotesDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -206,6 +224,9 @@
     <Content Include="images\addTextToTopic.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\addtotopic.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\bookmarkCentral.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -230,6 +251,9 @@
     <Content Include="images\deleteall.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\deleteMain.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\deleteStick.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -248,7 +272,13 @@
     <Content Include="images\f_boldActive.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\groups.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\helpSticker.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\manageGroups.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\ms_audio.png">
@@ -317,10 +347,10 @@
     <Content Include="images\mwIconsActive.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\mwNotepad.png">
+    <Content Include="images\mwNotepadActive.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\mwNotepadActive.png">
+    <Content Include="images\mwOrganizer.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\mwPriPro.png">
@@ -342,6 +372,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\newsticker.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\noteLink.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\paste.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\pasteTextToTopic.png">
@@ -416,6 +452,9 @@
     <Content Include="images\snippets.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\sort.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\STICKS.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -441,14 +480,20 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AddSourceDlg.resx">
-      <DependentUpon>AddSourceDlg.cs</DependentUpon>
+    <EmbeddedResource Include="BubbleOrganizer.resx">
+      <DependentUpon>BubbleOrganizer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DragDropTest.resx">
+      <DependentUpon>DragDropTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewSourceDlg.resx">
+      <DependentUpon>NewSourceDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BubbleFormat.resx">
       <DependentUpon>BubbleFormat.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewStickDlg.resx">
-      <DependentUpon>NewStickDlg.cs</DependentUpon>
+    <EmbeddedResource Include="GetNameDlg.resx">
+      <DependentUpon>GetNameDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BubbleNotepad.resx">
       <DependentUpon>BubbleNotepad.cs</DependentUpon>
@@ -495,6 +540,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StickerDummy.resx">
       <DependentUpon>StickerDummy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NotesDlg.resx">
+      <DependentUpon>NotesDlg.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

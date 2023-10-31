@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Bubbles23.Properties {
+namespace Bubbles.Properties {
     using System;
     
     

@@ -31,10 +31,11 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenuDlg));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.lblSticker = new System.Windows.Forms.Label();
+            this.lblSelectStickLocation = new System.Windows.Forms.Label();
+            this.lblStickers = new System.Windows.Forms.Label();
             this.pSticker = new System.Windows.Forms.PictureBox();
-            this.lblNotepad = new System.Windows.Forms.Label();
-            this.Notepad = new System.Windows.Forms.PictureBox();
+            this.lblOrganizer = new System.Windows.Forms.Label();
+            this.Organizer = new System.Windows.Forms.PictureBox();
             this.lblFormat = new System.Windows.Forms.Label();
             this.Format = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -51,10 +52,9 @@
             this.PriPro = new System.Windows.Forms.PictureBox();
             this.Settings = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.lblSelectStickLocation = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pSticker)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Notepad)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Organizer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Format)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Help)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MySources)).BeginInit();
@@ -69,10 +69,10 @@
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.Controls.Add(this.lblSelectStickLocation);
-            this.panel1.Controls.Add(this.lblSticker);
+            this.panel1.Controls.Add(this.lblStickers);
             this.panel1.Controls.Add(this.pSticker);
-            this.panel1.Controls.Add(this.lblNotepad);
-            this.panel1.Controls.Add(this.Notepad);
+            this.panel1.Controls.Add(this.lblOrganizer);
+            this.panel1.Controls.Add(this.Organizer);
             this.panel1.Controls.Add(this.lblFormat);
             this.panel1.Controls.Add(this.Format);
             this.panel1.Controls.Add(this.label1);
@@ -93,14 +93,24 @@
             this.panel1.Size = new System.Drawing.Size(436, 143);
             this.panel1.TabIndex = 21;
             // 
-            // lblSticker
+            // lblSelectStickLocation
             // 
-            this.lblSticker.Location = new System.Drawing.Point(188, 104);
-            this.lblSticker.Name = "lblSticker";
-            this.lblSticker.Size = new System.Drawing.Size(59, 13);
-            this.lblSticker.TabIndex = 35;
-            this.lblSticker.Text = "Sticker";
-            this.lblSticker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblSelectStickLocation.AutoSize = true;
+            this.lblSelectStickLocation.Location = new System.Drawing.Point(111, 0);
+            this.lblSelectStickLocation.Name = "lblSelectStickLocation";
+            this.lblSelectStickLocation.Size = new System.Drawing.Size(35, 13);
+            this.lblSelectStickLocation.TabIndex = 36;
+            this.lblSelectStickLocation.Text = "label2";
+            this.lblSelectStickLocation.Visible = false;
+            // 
+            // lblStickers
+            // 
+            this.lblStickers.Location = new System.Drawing.Point(188, 104);
+            this.lblStickers.Name = "lblStickers";
+            this.lblStickers.Size = new System.Drawing.Size(59, 13);
+            this.lblStickers.TabIndex = 35;
+            this.lblStickers.Text = "Stickers";
+            this.lblStickers.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pSticker
             // 
@@ -113,25 +123,25 @@
             this.pSticker.TabStop = false;
             this.pSticker.Click += new System.EventHandler(this.pSticker_Click);
             // 
-            // lblNotepad
+            // lblOrganizer
             // 
-            this.lblNotepad.Location = new System.Drawing.Point(111, 55);
-            this.lblNotepad.Name = "lblNotepad";
-            this.lblNotepad.Size = new System.Drawing.Size(70, 13);
-            this.lblNotepad.TabIndex = 33;
-            this.lblNotepad.Text = "Блокнот";
-            this.lblNotepad.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblOrganizer.Location = new System.Drawing.Point(111, 55);
+            this.lblOrganizer.Name = "lblOrganizer";
+            this.lblOrganizer.Size = new System.Drawing.Size(70, 13);
+            this.lblOrganizer.TabIndex = 33;
+            this.lblOrganizer.Text = "Блокнот";
+            this.lblOrganizer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // Notepad
+            // Organizer
             // 
-            this.Notepad.Image = ((System.Drawing.Image)(resources.GetObject("Notepad.Image")));
-            this.Notepad.Location = new System.Drawing.Point(130, 21);
-            this.Notepad.Name = "Notepad";
-            this.Notepad.Size = new System.Drawing.Size(32, 32);
-            this.Notepad.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.Notepad.TabIndex = 32;
-            this.Notepad.TabStop = false;
-            this.Notepad.Click += new System.EventHandler(this.Notepad_Click);
+            this.Organizer.Image = ((System.Drawing.Image)(resources.GetObject("Organizer.Image")));
+            this.Organizer.Location = new System.Drawing.Point(130, 21);
+            this.Organizer.Name = "Organizer";
+            this.Organizer.Size = new System.Drawing.Size(32, 32);
+            this.Organizer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Organizer.TabIndex = 32;
+            this.Organizer.TabStop = false;
+            this.Organizer.Click += new System.EventHandler(this.Organizer_Click);
             // 
             // lblFormat
             // 
@@ -172,6 +182,7 @@
             this.Help.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Help.TabIndex = 28;
             this.Help.TabStop = false;
+            this.Help.Click += new System.EventHandler(this.Help_Click);
             // 
             // lblIcons
             // 
@@ -284,17 +295,7 @@
             this.Settings.TabStop = false;
             this.Settings.Click += new System.EventHandler(this.Settings_Click);
             // 
-            // lblSelectStickLocation
-            // 
-            this.lblSelectStickLocation.AutoSize = true;
-            this.lblSelectStickLocation.Location = new System.Drawing.Point(111, 0);
-            this.lblSelectStickLocation.Name = "lblSelectStickLocation";
-            this.lblSelectStickLocation.Size = new System.Drawing.Size(35, 13);
-            this.lblSelectStickLocation.TabIndex = 36;
-            this.lblSelectStickLocation.Text = "label2";
-            this.lblSelectStickLocation.Visible = false;
-            // 
-            // BubblesMenuDlg
+            // MainMenuDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -302,13 +303,13 @@
             this.ClientSize = new System.Drawing.Size(438, 145);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "BubblesMenuDlg";
+            this.Name = "MainMenuDlg";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Dublicate";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pSticker)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Notepad)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Organizer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Format)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Help)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MySources)).EndInit();
@@ -334,16 +335,16 @@
         public System.Windows.Forms.PictureBox Settings;
         public System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblFormat;
-        private System.Windows.Forms.Label lblNotepad;
+        private System.Windows.Forms.Label lblOrganizer;
         public System.Windows.Forms.PictureBox Bookmarks;
         public System.Windows.Forms.PictureBox Paste;
         public System.Windows.Forms.PictureBox Icons;
         public System.Windows.Forms.PictureBox PriPro;
         public System.Windows.Forms.PictureBox MySources;
         public System.Windows.Forms.PictureBox Format;
-        public System.Windows.Forms.PictureBox Notepad;
+        public System.Windows.Forms.PictureBox Organizer;
         public System.Windows.Forms.PictureBox pSticker;
-        private System.Windows.Forms.Label lblSticker;
+        private System.Windows.Forms.Label lblStickers;
         private System.Windows.Forms.Label lblSelectStickLocation;
     }
 }

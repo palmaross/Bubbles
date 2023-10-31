@@ -1,18 +1,25 @@
 ﻿using System;
 using System.Drawing;
-using System.Reflection.Emit;
 using System.Windows.Forms;
 
 namespace Bubbles
 {
-    public partial class NewStickDlg : Form
+    public partial class GetNameDlg : Form
     {
-        public NewStickDlg(Rectangle rec, string orientation, string name = "") // Parent sticker rectangle
+        /// <summary>New stick name or new source/icon name or rename stick/source/icon</summary>
+        /// <param name="rec">Parent stick rectangle</param>
+        /// <param name="orientation">stick orientation (Horizontal or Vertical)</param>
+        /// <param name="type">Stick, source or icon</param>
+        /// <param name="name">Name of stick/source/icon in case of rename</param>
+        public GetNameDlg(Rectangle rec, string orientation, string type, string name = "")
         {
             InitializeComponent();
 
-            Text = Utils.getString("NewStickDlg.title");
-            label1.Text = Utils.getString("NewStickDlg.label.title");
+            label1.Text = Utils.getString("NewStickDlg.label.title") + ":";
+            if (type == StickUtils.typeicons)
+                label1.Text = Utils.getString("NewStickDlg.icon.title") + ":";
+            if (type == StickUtils.typesources)
+                label1.Text = Utils.getString("NewStickDlg.source.title") + ":";
             btnCancel.Text = Utils.getString("button.cancel");
 
             Point location = new Point(rec.X, rec.Y + rec.Height);
@@ -46,7 +53,7 @@ namespace Bubbles
             if (String.IsNullOrEmpty(textBox1.Text))
             {
                 MessageBox.Show(Utils.getString("NewStickDlg.error.text"), 
-                    Utils.getString("NewStickDlg.error.title"), 
+                    Utils.getString(label1.Text.Replace(':', '!')), 
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }

@@ -15,12 +15,16 @@ namespace Bubbles
 {
     internal partial class BubbleFormat : Form
     {
-        public BubbleFormat()
+        public BubbleFormat(int ID, string _orientation, string stickname)
         {
             InitializeComponent();
 
-            //helpProvider1.HelpNamespace = MMMapNavigator.dllPath + "MapNavigator.chm";
-            //helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
+            this.Tag = ID;
+            orientation = _orientation;
+
+            helpProvider1.HelpNamespace = Utils.dllPath + "Sticks.chm";
+            helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
+            helpProvider1.SetHelpKeyword(this, "StickFormat.htm");
 
             lblTextColor.Text = Utils.getString("BubbleFormat.lblTextColor");
             lblFillColor.Text = Utils.getString("BubbleFormat.lblFillColor");
@@ -29,20 +33,18 @@ namespace Bubbles
             toolTip1.SetToolTip(pictureHandle, Utils.getString("format.bubble.tooltip"));
             toolTip1.SetToolTip(pClearFormat, Utils.getString("bubbleformat.clearformat"));
 
-            orientation = Utils.getRegistry("OrientationFormat", "H");
-
-            MinLength = this.Width;
-            MaxLength = this.Width * 4;
-            Thickness = this.Height;
-
-            this.MinimumSize = this.Size;
-            this.MaximumSize = new Size(MaxLength, Thickness);
+            MinLength = panel2.Width;
+            RealLength = this.Width;
 
             if (orientation == "V")
             {
                 orientation = "H";
                 RotateBubble();
-                p1.Location = new Point(p1.Location.Y, p1.Location.X);
+
+                foreach (PictureBox p in panel1.Controls.OfType<PictureBox>())
+                {
+                    p.Location = new Point(p1.Location.Y, p.Location.X);
+                }
             }
 
             // Resizing window causes black strips...
@@ -52,11 +54,7 @@ namespace Bubbles
             // Context menu
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
             contextMenuStrip1.Items["BI_color"].Text = MMUtils.getString("bubbleformat.contextmenu.color");
-
-            contextMenuStrip1.Items["BI_rotate"].Text = MMUtils.getString("float_icons.contextmenu.rotate");
-            contextMenuStrip1.Items["BI_close"].Text = MMUtils.getString("float_icons.contextmenu.close");
-            contextMenuStrip1.Items["BI_help"].Text = MMUtils.getString("float_icons.contextmenu.help");
-            contextMenuStrip1.Items["BI_store"].Text = MMUtils.getString("float_icons.contextmenu.settings");
+            StickUtils.SetCommonContextMenu(contextMenuStrip1, p2, StickUtils.typeformat);
 
             panel1.MouseClick += Panel1_MouseClick;
             panel1.MouseDown += Panel1_MouseDown;
@@ -104,11 +102,8 @@ namespace Bubbles
                 item.Visible = true;
 
             contextMenuStrip1.Items["BI_color"].Visible = false;
-
-            manage = true;
             contextMenuStrip1.Show(Cursor.Position);
         }
-        bool manage = false;
 
         private void PictureHandle_MouseDown(object sender, MouseEventArgs e)
         {
@@ -139,57 +134,42 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
-                this.Hide();
-                BubblesButton.m_bubblesMenu.Format.Image = BubblesButton.m_bubblesMenu.mwFormat;
+                BubblesButton.STICKS.Remove((int)this.Tag);
+                this.Close();
             }
             else if (e.ClickedItem.Name == "BI_rotate")
             {
                 RotateBubble();
 
-                foreach (PictureBox p in panel1.Controls.OfType<PictureBox>())
-                {
-                    p.Location = new Point(p.Location.Y, p.Location.X);
-                }
+                if (orientation == "H")
+                    foreach (PictureBox p in panel1.Controls.OfType<PictureBox>())
+                    {
+                        if (p.Name.StartsWith("fontcolor") || p.Name.StartsWith("fillcolor"))
+                            p.Location = new Point(p.Location.Y, p3.Location.Y);
+                        else
+                            p.Location = new Point(p.Location.Y, p.Location.X);
+                    }
+                else
+                    foreach (PictureBox p in panel1.Controls.OfType<PictureBox>())
+                        p.Location = new Point(p1.Location.Y, p.Location.X);
             }
             else if (e.ClickedItem.Name == "BI_help")
             {
-
+                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "StickFormat.htm");
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
-                if (!Utils.IsOnMMWindow(this.Bounds))
-                {
-                    if (MessageBox.Show("Стик находится вне окна MindManager! Уверены, что хотите запомнить эту позицитю?",
-                        "Подтвердите позицию",
-                        MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.Cancel)
-                        return;
-                }
-
-                Utils.setRegistry("OrientationFormat", orientation);
-
-                Point rec = Utils.MMScreen(MMUtils.MindManager.Left + MMUtils.MindManager.Width / 2,
-                    MMUtils.MindManager.Top + MMUtils.MindManager.Height / 2);
-
-                string location = Utils.getRegistry("PositionFormat", "");
-
-                if (!String.IsNullOrEmpty(location))
-                {
-                    string[] xy = location.Split(';');
-
-                    foreach (string part in xy)
-                    {
-                        if (part.StartsWith(rec.X + "," + rec.Y))
-                        {
-                            location = location.Replace(part, rec.X + "," + rec.Y +
-                                ":" + this.Location.X + "," + this.Location.Y);
-                            Utils.setRegistry("PositionFormat", location);
-                            return;
-                        }
-                    }
-                }
-                // screen not found, so new screen
-                location += ";" + rec.X + "," + rec.Y + ":" + this.Location.X + "," + this.Location.Y;
-                Utils.setRegistry("PositionFormat", location.TrimStart(';'));
+                StickUtils.SaveStick(this.Bounds, (int)this.Tag, orientation);
+            }
+            else if (e.ClickedItem.Name == "BI_expand")
+            {
+                if (StickUtils.Expand(this, RealLength, orientation))
+                    collapsed = false;
+            }
+            else if (e.ClickedItem.Name == "BI_collapse")
+            {
+                if (StickUtils.Collapse(this, MinLength, orientation))
+                    collapsed = true;
             }
         }
  
@@ -214,17 +194,6 @@ namespace Bubbles
             Size panel1Size = new Size(panel1.Height, panel1.Width);
             Point panel1Location = new Point(panel1.Location.Y, panel1.Location.X);
             Point ManageLocation = new Point(Manage.Location.Y, Manage.Location.X);
-
-            if (orientation == "H")
-            {
-                this.MinimumSize = new Size(MinLength, Thickness);
-                this.MaximumSize = new Size(MaxLength, Thickness);
-            }
-            else
-            {
-                this.MinimumSize = new Size(Thickness, MinLength);
-                this.MaximumSize = new Size(Thickness, MaxLength);
-            }
 
             this.Size = new Size(thisHeight, thisWidth);
 
@@ -322,8 +291,6 @@ namespace Bubbles
                     item.Visible = false;
 
                 contextMenuStrip1.Items["BI_color"].Visible = true;
-
-                manage = false;
                 contextMenuStrip1.Show(Cursor.Position);
             }
         }
@@ -430,8 +397,9 @@ namespace Bubbles
 
         PictureBox selectedIcon = null;
         string orientation = "H";
+        bool collapsed = false;
 
-        int MinLength, MaxLength, Thickness;
+        int MinLength, RealLength;
 
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;

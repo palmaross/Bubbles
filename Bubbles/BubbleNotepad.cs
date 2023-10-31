@@ -125,7 +125,7 @@ namespace Bubbles
             else if (e.ClickedItem.Name == "BI_close")
             {
                 this.Hide();
-                BubblesButton.m_bubblesMenu.Notepad.Image = BubblesButton.m_bubblesMenu.mwNotepad;
+                BubblesButton.m_bubblesMenu.Organizer.Image = BubblesButton.m_bubblesMenu.mwOrganizer;
             }
             else if (e.ClickedItem.Name == "BI_rotate")
             {

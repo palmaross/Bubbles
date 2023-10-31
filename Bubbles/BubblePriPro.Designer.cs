@@ -49,9 +49,6 @@
             this.pro90 = new System.Windows.Forms.ToolStripMenuItem();
             this.pro100 = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
-            this.BI_deleteall = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.label1 = new System.Windows.Forms.Label();
             this.p1 = new System.Windows.Forms.PictureBox();
@@ -78,12 +75,9 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.BI_addpriority,
             this.BI_addprogress,
-            this.BI_delete,
-            this.BI_deleteall,
-            this.toolStripSeparator2,
-            this.toolStripSeparator1});
+            this.BI_delete});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(188, 104);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(188, 92);
             // 
             // BI_addpriority
             // 
@@ -101,35 +95,35 @@
             // 
             this.pri1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.pri1.Name = "pri1";
-            this.pri1.Size = new System.Drawing.Size(121, 22);
+            this.pri1.Size = new System.Drawing.Size(180, 22);
             this.pri1.Text = "Priority 1";
             // 
             // pri2
             // 
             this.pri2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.pri2.Name = "pri2";
-            this.pri2.Size = new System.Drawing.Size(121, 22);
+            this.pri2.Size = new System.Drawing.Size(180, 22);
             this.pri2.Text = "Priority 2";
             // 
             // pri3
             // 
             this.pri3.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.pri3.Name = "pri3";
-            this.pri3.Size = new System.Drawing.Size(121, 22);
+            this.pri3.Size = new System.Drawing.Size(180, 22);
             this.pri3.Text = "Priority 3";
             // 
             // pri4
             // 
             this.pri4.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.pri4.Name = "pri4";
-            this.pri4.Size = new System.Drawing.Size(121, 22);
+            this.pri4.Size = new System.Drawing.Size(180, 22);
             this.pri4.Text = "Priority 4";
             // 
             // pri5
             // 
             this.pri5.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.pri5.Name = "pri5";
-            this.pri5.Size = new System.Drawing.Size(121, 22);
+            this.pri5.Size = new System.Drawing.Size(180, 22);
             this.pri5.Text = "Priority 5";
             // 
             // BI_addprogress
@@ -217,22 +211,6 @@
             this.BI_delete.Name = "BI_delete";
             this.BI_delete.Size = new System.Drawing.Size(187, 22);
             this.BI_delete.Text = "Удалить";
-            // 
-            // BI_deleteall
-            // 
-            this.BI_deleteall.Name = "BI_deleteall";
-            this.BI_deleteall.Size = new System.Drawing.Size(187, 22);
-            this.BI_deleteall.Text = "Удалить все";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(184, 6);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(184, 6);
             // 
             // label1
             // 
@@ -350,8 +328,6 @@
         private System.Windows.Forms.ToolStripMenuItem BI_delete;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureHandle;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem BI_addprogress;
         private System.Windows.Forms.ToolStripMenuItem pro0;
         private System.Windows.Forms.ToolStripMenuItem pri1;
@@ -367,7 +343,6 @@
         private System.Windows.Forms.ToolStripMenuItem pro75;
         private System.Windows.Forms.ToolStripMenuItem pro90;
         private System.Windows.Forms.ToolStripMenuItem pro100;
-        private System.Windows.Forms.ToolStripMenuItem BI_deleteall;
         private System.Windows.Forms.PictureBox p2;
     }
 }

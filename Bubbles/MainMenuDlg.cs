@@ -16,35 +16,24 @@ namespace Bubbles
 
             lblIcons.Text = Utils.getString("BubblesMenuDlg.lblIcons.text");
             lblPriPro.Text = Utils.getString("BubblesMenuDlg.lblPriPro.text");
-            lblNotepad.Text = Utils.getString("BubblesMenuDlg.lblNotepad.text");
+            lblOrganizer.Text = Utils.getString("BubblesMenuDlg.lblOrganizer.text");
             lblBookmarks.Text = Utils.getString("BubblesMenuDlg.lblBookmarks.text");
             lblMySources.Text = Utils.getString("BubblesMenuDlg.lblMySources.text");
             lblCopyPaste.Text = Utils.getString("BubblesMenuDlg.lblCopyPaste.text");
             lblFormat.Text = Utils.getString("BubblesMenuDlg.lblFormat.text");
+            lblStickers.Text = Utils.getString("BubblesMenuDlg.lblStickers.text");
 
             Location = new Point(Cursor.Position.X, MMUtils.MindManager.Top + MMUtils.MindManager.Height - this.Height - Settings.Height);
             this.Deactivate += This_Deactivate;
 
             mwIcons = new Bitmap(Utils.ImagesPath + "mwIcons.png");
-            mwIconsActive = new Bitmap(Utils.ImagesPath + "mwIconsActive.png");
-
             mwPriPro = new Bitmap(Utils.ImagesPath + "mwPriPro.png");
-            mwPriProActive = new Bitmap(Utils.ImagesPath + "mwPriProActive.png");
-
             mwBookmarks = new Bitmap(Utils.ImagesPath + "mwBookmarks.png");
-            mwBookmarksActive = new Bitmap(Utils.ImagesPath + "mwBookmarksActive.png");
-
             mwCopyPaste = new Bitmap(Utils.ImagesPath + "mwCopyPaste.png");
-            mwCopyPasteActive = new Bitmap(Utils.ImagesPath + "mwCopyPasteActive.png");
-
             mwSources = new Bitmap(Utils.ImagesPath + "mwSources.png");
-            mwSourcesActive = new Bitmap(Utils.ImagesPath + "mwSourcesActive.png");
-
             mwFormat = new Bitmap(Utils.ImagesPath + "mwFormat.png");
             mwFormatActive = new Bitmap(Utils.ImagesPath + "mwFormatActive.png");
-
-            mwNotepad = new Bitmap(Utils.ImagesPath + "mwNotepad.png");
-            mwNotepadActive = new Bitmap(Utils.ImagesPath + "mwNotepadActive.png");
+            mwOrganizer = new Bitmap(Utils.ImagesPath + "mwOrganizer.png");
         }
 
         private void This_Deactivate(object sender, EventArgs e)
@@ -148,6 +137,66 @@ namespace Bubbles
             form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
+        public void Bookmarks_Click(object sender, EventArgs e)
+        {
+            string orientation = "H", location = "", name = ""; int id = 0;
+
+            if (StickClicked(StickUtils.typebookmarks, ref orientation, ref location, ref name, ref id) == false)
+                return; // user don't want select a stick, or stick already running, or stick troubles
+
+            if (name == "")
+                name = Utils.getString("bookmarks.bubble.tooltip");
+            BubblesButton.m_Bookmarks = new BubbleBookmarks(id, orientation, name);
+            BubblesButton.m_Bookmarks.Location = GetStickLocation(location);
+            BubblesButton.STICKS.Add(id, BubblesButton.m_Bookmarks);
+            BubblesButton.m_Bookmarks.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+        }
+
+        public void Formatting_Click(object sender, EventArgs e)
+        {
+            string orientation = "H", location = "", name = ""; int id = 0;
+
+            if (StickClicked(StickUtils.typeformat, ref orientation, ref location, ref name, ref id) == false)
+                return; // user don't want select a stick, or stick already running, or stick troubles
+
+            if (name == "")
+                name = Utils.getString("format.bubble.tooltip");
+            BubbleFormat form = new BubbleFormat(id, orientation, name);
+            form.Location = GetStickLocation(location);
+            BubblesButton.STICKS.Add(id, form);
+            form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+        }
+
+        public void PasteBubble_Click(object sender, EventArgs e)
+        {
+            string orientation = "H", location = "", name = ""; int id = 0;
+
+            if (StickClicked(StickUtils.typepaste, ref orientation, ref location, ref name, ref id) == false)
+                return; // user don't want select a stick, or stick already running, or stick troubles
+
+            if (name == "")
+                name = Utils.getString("copypaste.bubble.tooltip");
+            BubblePaste form = new BubblePaste(id, orientation, name);
+            form.Location = GetStickLocation(location);
+            BubblesButton.STICKS.Add(id, form);
+            form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+        }
+
+        public void Organizer_Click(object sender, EventArgs e)
+        {
+            string orientation = "H", location = "", name = ""; int id = 0;
+
+            if (StickClicked(StickUtils.typeorganizer, ref orientation, ref location, ref name, ref id) == false)
+                return; // user don't want select a stick, or stick already running, or stick troubles
+
+            if (name == "")
+                name = Utils.getString("organizer.bubble.tooltip");
+            BubbleOrganizer form = new BubbleOrganizer(id, orientation, name);
+            form.Location = GetStickLocation(location);
+            BubblesButton.STICKS.Add(id, form);
+            form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+        }
+
         bool StickClicked(string type, ref string orientation, ref string location, ref string name, ref int id)
         {
             string position = "";
@@ -189,86 +238,15 @@ namespace Bubbles
             return true;
         }
 
-        public void Bookmarks_Click(object sender, EventArgs e)
-        {
-            if (BubblesButton.m_bubbleBookmarks.Visible)
-            {
-                BubblesButton.m_bubbleBookmarks.Hide();
-                Bookmarks.Image = mwBookmarks;
-            }
-            else
-            {
-                if (firstBookmarks)
-                {
-                    firstBookmarks = false;
-                    BubblesButton.m_bubbleBookmarks.Location = GetStickLocation("PositionBookmarks");
-                }
-                BubblesButton.m_bubbleBookmarks.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-                Bookmarks.Image = mwBookmarksActive;
-            }
-        }
-
-        public void PasteBubble_Click(object sender, EventArgs e)
-        {
-            if (BubblesButton.m_bubblePaste.Visible)
-            {
-                BubblesButton.m_bubblePaste.Hide();
-                Paste.Image = mwCopyPaste;
-            }
-            else
-            {
-                if (firstPaste)
-                {
-                    firstPaste = false;
-                    BubblesButton.m_bubblePaste.Location = GetStickLocation("PositionPaste");
-                }
-                BubblesButton.m_bubblePaste.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-                Paste.Image = mwCopyPasteActive;
-            }
-        }
-
         private void Settings_Click(object sender, EventArgs e)
         {
             using (SettingsDlg dlg = new SettingsDlg())
                 dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
-        public void Notepad_Click(object sender, EventArgs e)
+        private void Help_Click(object sender, EventArgs e)
         {
-            if (BubblesButton.m_bubbleNotepad.Visible)
-            {
-                BubblesButton.m_bubbleNotepad.Hide();
-                Notepad.Image = mwNotepad;
-            }
-            else
-            {
-                if (firstNotepad)
-                {
-                    firstNotepad = false;
-                    BubblesButton.m_bubbleNotepad.Location = GetStickLocation("PositionNotepad");
-                }
-                BubblesButton.m_bubbleNotepad.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-                Notepad.Image = mwNotepadActive;
-            }
-        }
 
-        public void Formatting_Click(object sender, EventArgs e)
-        {
-            if (BubblesButton.m_bubbleFormat.Visible)
-            {
-                BubblesButton.m_bubbleFormat.Hide();
-                Format.Image = mwFormat;
-            }
-            else
-            {
-                if (firstFormat)
-                {
-                    firstFormat = false;
-                    BubblesButton.m_bubbleFormat.Location = GetStickLocation("PositionMySources");
-                }
-                BubblesButton.m_bubbleFormat.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-                Format.Image = mwFormatActive;
-            }
         }
 
         private void pSticker_Click(object sender, EventArgs e)
@@ -316,10 +294,7 @@ namespace Bubbles
             return thisLocation;
         }
 
-        public Image mwIcons, mwIconsActive, mwPriPro, mwPriProActive, mwBookmarks, mwBookmarksActive, mwCopyPaste,
-            mwCopyPasteActive, mwSources, mwSourcesActive, mwFormat, mwFormatActive, mwNotepad, mwNotepadActive;
-
-        private bool firstIcons = true, firstBookmarks = true, firstPaste = true, 
-            firstPriPro = true, firstMySources = true, firstFormat = true, firstNotepad = true;
+        public Image mwIcons, mwPriPro, mwBookmarks, mwCopyPaste, 
+            mwSources, mwFormat, mwFormatActive, mwOrganizer;
     }
 }
