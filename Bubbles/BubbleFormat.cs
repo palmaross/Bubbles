@@ -20,7 +20,8 @@ namespace Bubbles
             InitializeComponent();
 
             this.Tag = ID;
-            orientation = _orientation;
+            orientation = _orientation.Substring(0, 1); // "H" or "V"
+            collapsed = _orientation.Substring(1, 1) == "1";
 
             helpProvider1.HelpNamespace = Utils.dllPath + "Sticks.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
@@ -53,7 +54,7 @@ namespace Bubbles
 
             // Context menu
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
-            contextMenuStrip1.Items["BI_color"].Text = MMUtils.getString("bubbleformat.contextmenu.color");
+            contextMenuStrip1.Items["BI_color"].Text = Utils.getString("bubbleformat.contextmenu.color");
             StickUtils.SetCommonContextMenu(contextMenuStrip1, p2, StickUtils.typeformat);
 
             panel1.MouseClick += Panel1_MouseClick;
@@ -81,6 +82,16 @@ namespace Bubbles
             fillcolor1.Paint += pVisualStatus_Paint;
             fillcolor2.Paint += pVisualStatus_Paint;
             fillcolor3.Paint += pVisualStatus_Paint;
+
+            pictureHandle.MouseDoubleClick += PictureHandle_MouseDoubleClick;
+
+            if (collapsed) {
+                collapsed = false; Collapse(); }
+        }
+
+        private void PictureHandle_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            Collapse();
         }
 
         private void pVisualStatus_Paint(object sender, PaintEventArgs e)
@@ -107,8 +118,12 @@ namespace Bubbles
 
         private void PictureHandle_MouseDown(object sender, MouseEventArgs e)
         {
-            ReleaseCapture();
-            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            if (e.Clicks == 1)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+            base.OnMouseDown(e);
         }
 
         private void Panel1_MouseDown(object sender, MouseEventArgs e)
@@ -159,20 +174,45 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
-                StickUtils.SaveStick(this.Bounds, (int)this.Tag, orientation);
+                StickUtils.SaveStick(this.Bounds, (int)this.Tag, orientation, collapsed);
             }
-            else if (e.ClickedItem.Name == "BI_expand")
-            {
-                if (StickUtils.Expand(this, RealLength, orientation))
-                    collapsed = false;
-            }
+
             else if (e.ClickedItem.Name == "BI_collapse")
             {
-                if (StickUtils.Collapse(this, MinLength, orientation))
-                    collapsed = true;
+                Collapse();
             }
         }
- 
+
+        public void Rotate()
+        {
+            orientation = StickUtils.RotateStick(this, p1, panel1, Manage, orientation);
+        }
+
+        /// <summary>
+        /// Collapse/Expand stick
+        /// </summary>
+        /// <param name="CollapseAll">"Collapse All" command from Main Menu</param>
+        /// <param name="ExpandAll">"Expand All" command from Main Menu</param>
+        public void Collapse(bool CollapseAll = false, bool ExpandAll = false)
+        {
+            if (collapsed) // Expand stick
+            {
+                if (CollapseAll) return;
+
+                StickUtils.Expand(this, RealLength, orientation);
+                contextMenuStrip1.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.collapse");
+                collapsed = false;
+            }
+            else // Collapse stick
+            {
+                if (ExpandAll) return;
+
+                StickUtils.Collapse(this, orientation);
+                collapsed = true;
+                contextMenuStrip1.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.expand");
+            }
+        }
+
         void RotateBubble()
         {
             if (orientation == "H")

@@ -807,7 +807,6 @@ namespace Bubbles
         [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
 
-        /////
         // The enum flag for DwmSetWindowAttribute's second parameter, which tells the function what attribute to set.
         // Copied from dwmapi.h
         public enum DWMWINDOWATTRIBUTE
@@ -828,10 +827,8 @@ namespace Bubbles
 
         // Import dwmapi.dll and define DwmSetWindowAttribute in C# corresponding to the native function.
         [DllImport("dwmapi.dll", CharSet = CharSet.Unicode, PreserveSig = false)]
-        internal static extern void DwmSetWindowAttribute(IntPtr hwnd,
-                                                         DWMWINDOWATTRIBUTE attribute,
-                                                         ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute,
-                                                         uint cbAttribute);
+        internal static extern void DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE attribute,
+            ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute, uint cbAttribute);
     }
 
     public class StickerItem

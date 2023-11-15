@@ -73,7 +73,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(139, -1);
+            this.label1.Location = new System.Drawing.Point(135, -1);
             this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(56, 13);
@@ -85,7 +85,7 @@
             // 
             this.PasteLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.PasteLink.Image = ((System.Drawing.Image)(resources.GetObject("PasteLink.Image")));
-            this.PasteLink.Location = new System.Drawing.Point(64, 3);
+            this.PasteLink.Location = new System.Drawing.Point(60, 3);
             this.PasteLink.Name = "PasteLink";
             this.PasteLink.Size = new System.Drawing.Size(24, 24);
             this.PasteLink.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -97,7 +97,7 @@
             // 
             this.PasteNotes.Cursor = System.Windows.Forms.Cursors.Hand;
             this.PasteNotes.Image = ((System.Drawing.Image)(resources.GetObject("PasteNotes.Image")));
-            this.PasteNotes.Location = new System.Drawing.Point(94, 3);
+            this.PasteNotes.Location = new System.Drawing.Point(90, 3);
             this.PasteNotes.Name = "PasteNotes";
             this.PasteNotes.Size = new System.Drawing.Size(24, 24);
             this.PasteNotes.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -109,7 +109,7 @@
             // 
             this.addsubtopic.Cursor = System.Windows.Forms.Cursors.Hand;
             this.addsubtopic.Image = ((System.Drawing.Image)(resources.GetObject("addsubtopic.Image")));
-            this.addsubtopic.Location = new System.Drawing.Point(192, 3);
+            this.addsubtopic.Location = new System.Drawing.Point(188, 3);
             this.addsubtopic.Name = "addsubtopic";
             this.addsubtopic.Size = new System.Drawing.Size(24, 24);
             this.addsubtopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -121,7 +121,7 @@
             // 
             this.addToTopic.Cursor = System.Windows.Forms.Cursors.Hand;
             this.addToTopic.Image = ((System.Drawing.Image)(resources.GetObject("addToTopic.Image")));
-            this.addToTopic.Location = new System.Drawing.Point(259, 3);
+            this.addToTopic.Location = new System.Drawing.Point(255, 3);
             this.addToTopic.Name = "addToTopic";
             this.addToTopic.Size = new System.Drawing.Size(24, 24);
             this.addToTopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -133,7 +133,7 @@
             // 
             this.PasteCallout.Cursor = System.Windows.Forms.Cursors.Hand;
             this.PasteCallout.Image = ((System.Drawing.Image)(resources.GetObject("PasteCallout.Image")));
-            this.PasteCallout.Location = new System.Drawing.Point(124, 3);
+            this.PasteCallout.Location = new System.Drawing.Point(120, 3);
             this.PasteCallout.Name = "PasteCallout";
             this.PasteCallout.Size = new System.Drawing.Size(24, 24);
             this.PasteCallout.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -145,7 +145,7 @@
             // 
             this.copyTopicText.Cursor = System.Windows.Forms.Cursors.Hand;
             this.copyTopicText.Image = ((System.Drawing.Image)(resources.GetObject("copyTopicText.Image")));
-            this.copyTopicText.Location = new System.Drawing.Point(27, 3);
+            this.copyTopicText.Location = new System.Drawing.Point(24, 3);
             this.copyTopicText.Name = "copyTopicText";
             this.copyTopicText.Size = new System.Drawing.Size(24, 24);
             this.copyTopicText.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -157,7 +157,7 @@
             // 
             this.addtopic.Cursor = System.Windows.Forms.Cursors.Hand;
             this.addtopic.Image = ((System.Drawing.Image)(resources.GetObject("addtopic.Image")));
-            this.addtopic.Location = new System.Drawing.Point(161, 3);
+            this.addtopic.Location = new System.Drawing.Point(157, 3);
             this.addtopic.Name = "addtopic";
             this.addtopic.Size = new System.Drawing.Size(24, 24);
             this.addtopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -169,7 +169,7 @@
             // 
             this.pasteToTopic.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pasteToTopic.Image = ((System.Drawing.Image)(resources.GetObject("pasteToTopic.Image")));
-            this.pasteToTopic.Location = new System.Drawing.Point(228, 3);
+            this.pasteToTopic.Location = new System.Drawing.Point(224, 3);
             this.pasteToTopic.Name = "pasteToTopic";
             this.pasteToTopic.Size = new System.Drawing.Size(24, 24);
             this.pasteToTopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -181,7 +181,7 @@
             // 
             this.UnformatText.Cursor = System.Windows.Forms.Cursors.Hand;
             this.UnformatText.Image = ((System.Drawing.Image)(resources.GetObject("UnformatText.Image")));
-            this.UnformatText.Location = new System.Drawing.Point(295, 3);
+            this.UnformatText.Location = new System.Drawing.Point(286, 3);
             this.UnformatText.Name = "UnformatText";
             this.UnformatText.Size = new System.Drawing.Size(24, 24);
             this.UnformatText.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -205,7 +205,7 @@
             this.Manage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Manage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Manage.Image = ((System.Drawing.Image)(resources.GetObject("Manage.Image")));
-            this.Manage.Location = new System.Drawing.Point(326, 5);
+            this.Manage.Location = new System.Drawing.Point(318, 5);
             this.Manage.Name = "Manage";
             this.Manage.Size = new System.Drawing.Size(20, 20);
             this.Manage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -236,7 +236,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(350, 30);
+            this.ClientSize = new System.Drawing.Size(342, 30);
             this.ControlBox = false;
             this.Controls.Add(this.p2);
             this.Controls.Add(this.panel2);

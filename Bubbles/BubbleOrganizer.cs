@@ -15,11 +15,15 @@ namespace Bubbles
             InitializeComponent();
 
             this.Tag = ID;
-            orientation = _orientation;
+            orientation = _orientation.Substring(0, 1); // "H" or "V"
+            collapsed = _orientation.Substring(1, 1) == "1";
 
             helpProvider1.HelpNamespace = Utils.dllPath + "Sticks.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "OrganizerStick.htm");
+
+            MinLength = this.Width;
+            RealLength = this.Width;
 
             if (orientation == "V")
             {
@@ -50,12 +54,25 @@ namespace Bubbles
             this.ResizeRedraw = true;
 
             pictureHandle.MouseDown += PictureHandle_MouseDown;
+            pictureHandle.MouseDoubleClick += PictureHandle_MouseDoubleClick;
+
+            if (collapsed) {
+                collapsed = false; Collapse(); }
+        }
+
+        private void PictureHandle_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            Collapse();
         }
 
         private void PictureHandle_MouseDown(object sender, MouseEventArgs e)
         {
-            ReleaseCapture();
-            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            if (e.Clicks == 1)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+            base.OnMouseDown(e);
         }
 
         private void ContextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -81,9 +98,46 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
-                StickUtils.SaveStick(this.Bounds, (int)this.Tag, orientation);
+                StickUtils.SaveStick(this.Bounds, (int)this.Tag, orientation, collapsed);
+            }
+            else if (e.ClickedItem.Name == "BI_collapse")
+            {
+                Collapse();
             }
         }
+        
+        /// <summary>
+        /// Collapse/Expand stick
+        /// </summary>
+        /// <param name="CollapseAll">"Collapse All" command from Main Menu</param>
+        /// <param name="ExpandAll">"Expand All" command from Main Menu</param>
+        public void Collapse(bool CollapseAll = false, bool ExpandAll = false)
+        {
+            if (collapsed) // Expand stick
+            {
+                if (CollapseAll) return;
+
+                StickUtils.Expand(this, RealLength, orientation);
+                contextMenuStrip1.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.collapse");
+                pIdeas.Visible = true;
+                collapsed = false;
+            }
+            else // Collapse stick
+            {
+                if (ExpandAll) return;
+
+                StickUtils.Collapse(this, orientation);
+                pIdeas.Visible = false;
+                collapsed = true;
+                contextMenuStrip1.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.expand");
+            }
+        }
+
+        public void Rotate()
+        {
+            //orientation = StickUtils.RotateStick(this, p1, panel1, Manage, orientation);
+        }
+
         void RotateBubble()
         {
             if (orientation == "H")
@@ -165,37 +219,19 @@ namespace Bubbles
 
         private void PasteLink_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument != null &&
-                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0 &&
-                System.Windows.Forms.Clipboard.ContainsText())
-            {
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                {
-                    t.Hyperlinks.AddHyperlink(System.Windows.Forms.Clipboard.GetText());
-                }
-            }
+            
         }
 
         private void PasteNotes_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument != null &&
-                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0 &&
-                System.Windows.Forms.Clipboard.ContainsText())
-            {
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                {
-                    t.Notes.CursorPosition = -1;
-                    t.Notes.Insert(System.Windows.Forms.Clipboard.GetText());
-                    t.Notes.Commit();
-                }
-            }
+            
         }
 
         private void Notes_Click(object sender, EventArgs e)
         {
             if (BubblesButton.m_Notes == null)
             {
-                BubblesButton.m_Notes = new NotesDlg();
+                BubblesButton.m_Notes = new Organizer.NotesDlg();
                 BubblesButton.m_Notes.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
             else
@@ -207,28 +243,12 @@ namespace Bubbles
 
         private void addsubtopic_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument != null &&
-                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0 &&
-                System.Windows.Forms.Clipboard.ContainsText())
-            {
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                {
-                    t.AddSubTopic(System.Windows.Forms.Clipboard.GetText());
-                }
-            }
+            
         }
 
         private void callout_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument != null &&
-                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0 &&
-                System.Windows.Forms.Clipboard.ContainsText())
-            {
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                {
-                    t.AllCalloutTopics.Add().Text = System.Windows.Forms.Clipboard.GetText();
-                }
-            }
+            
         }
 
         private void Manage_Click(object sender, EventArgs e)
@@ -240,6 +260,8 @@ namespace Bubbles
         }
 
         string orientation = "H";
+        bool collapsed = false;
+        int MinLength, RealLength;
 
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;

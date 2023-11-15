@@ -10,7 +10,7 @@ namespace Bubbles
 {
     public partial class SelectIconDlg : Form
     {
-        public SelectIconDlg(List<IconItem> icons, bool manage)
+        public SelectIconDlg(List<string> filenames, bool leftright, bool disableall = false)
         {
             InitializeComponent();
 
@@ -20,7 +20,7 @@ namespace Bubbles
             rbtnEnd.Text = Utils.getString("SelectIconDlg.rbtnEnd");
             rbtnBegin.Text = Utils.getString("SelectIconDlg.rbtnBegin");
 
-            Icons = icons;
+            FileNames = filenames;
 
             imageList1.Images.Add(Image.FromFile(Utils.ImagesPath + "folder.png"));
             space = pSpace.Width;
@@ -28,7 +28,8 @@ namespace Bubbles
             string path = MMUtils.MindManager.GetPath(MmDirectory.mmDirectoryIcons);
             ListDirectory(treeView1, path);
 
-            rbtnLeft.Enabled = !manage; rbtnRight.Enabled = !manage;
+            rbtnLeft.Enabled = rbtnRight.Enabled = !leftright;
+            rbtnBegin.Enabled = rbtnEnd.Enabled = !disableall;
 
             txtIconName.KeyUp += TxtIconName_KeyUp;
         }
@@ -113,10 +114,10 @@ namespace Bubbles
             iconPath = icon.Name;
             string filename = Path.GetFileNameWithoutExtension(iconPath);
 
-            foreach (var item in Icons) // проверим, есть ли в пузыре этот значок
+            foreach (var _filename in FileNames) // проверим, есть ли в пузыре этот значок
             {
-                if (item.FileName == filename + ".ico" || // custom icon
-                    item.FileName == "stock" + filename) // stock icon
+                if (_filename == filename + ".ico" || // custom icon
+                    _filename == "stock" + filename) // stock icon
                 {
                     MessageBox.Show(Utils.getString("float_icons.iconexists"));
                     return;
@@ -151,6 +152,6 @@ namespace Bubbles
         public string iconPath = "";
         public string iconName = "";
 
-        private List<IconItem> Icons = new List<IconItem>();
+        private List<string> FileNames = new List<string>();
     }
 }

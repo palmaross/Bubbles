@@ -33,9 +33,10 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.BI_new = new System.Windows.Forms.ToolStripMenuItem();
-            this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_rename = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.BI_paste = new System.Windows.Forms.ToolStripMenuItem();
+            this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.label1 = new System.Windows.Forms.Label();
             this.p1 = new System.Windows.Forms.PictureBox();
@@ -44,7 +45,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.p2 = new System.Windows.Forms.PictureBox();
             this.pictureHandle = new System.Windows.Forms.PictureBox();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.icondist)).BeginInit();
@@ -68,31 +68,36 @@
             this.BI_paste,
             this.BI_delete});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 120);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(162, 98);
             // 
             // BI_new
             // 
             this.BI_new.Name = "BI_new";
-            this.BI_new.Size = new System.Drawing.Size(180, 22);
+            this.BI_new.Size = new System.Drawing.Size(161, 22);
             this.BI_new.Text = "Новый";
-            // 
-            // BI_delete
-            // 
-            this.BI_delete.Name = "BI_delete";
-            this.BI_delete.Size = new System.Drawing.Size(180, 22);
-            this.BI_delete.Text = "Удалить";
             // 
             // BI_rename
             // 
             this.BI_rename.Name = "BI_rename";
-            this.BI_rename.Size = new System.Drawing.Size(180, 22);
+            this.BI_rename.Size = new System.Drawing.Size(161, 22);
             this.BI_rename.Text = "Переименовать";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
             // 
             // BI_paste
             // 
             this.BI_paste.Name = "BI_paste";
-            this.BI_paste.Size = new System.Drawing.Size(180, 22);
+            this.BI_paste.Size = new System.Drawing.Size(161, 22);
             this.BI_paste.Text = "Вставить";
+            // 
+            // BI_delete
+            // 
+            this.BI_delete.Name = "BI_delete";
+            this.BI_delete.Size = new System.Drawing.Size(161, 22);
+            this.BI_delete.Text = "Удалить";
             // 
             // label1
             // 
@@ -142,7 +147,7 @@
             this.panel1.AllowDrop = true;
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.BackColor = System.Drawing.Color.Silver;
             this.panel1.Controls.Add(this.p1);
             this.panel1.Location = new System.Drawing.Point(26, 0);
             this.panel1.Name = "panel1";
@@ -169,11 +174,6 @@
             this.pictureHandle.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureHandle.TabIndex = 77;
             this.pictureHandle.TabStop = false;
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // BubbleIcons
             // 

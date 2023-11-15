@@ -7,6 +7,7 @@ using PRMapCompanion;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Bubbles
 {
@@ -47,26 +48,47 @@ namespace Bubbles
             }
             catch { };
 
-            if (Utils.getRegistry("StartIcons", "0") == "1")
-                m_bubblesMenu.Icons_Click(null, null);
+            DataTable dt;
+            using (BubblesDB db = new BubblesDB())
+                dt = db.ExecuteQuery("select * from STICKS  order by type");
 
-            if (Utils.getRegistry("StartPaste", "0") == "1")
-                m_bubblesMenu.PasteBubble_Click(null, null);
+            foreach (DataRow dr in dt.Rows)
+            {
+                if (Convert.ToInt32(dr["start"]) == 0)
+                    continue;
 
-            if (Utils.getRegistry("StartBookmarks", "0") == "1")
-                m_bubblesMenu.Bookmarks_Click(null, null);
-
-            if (Utils.getRegistry("StartPriPro", "0") == "1")
-                m_bubblesMenu.PriPro_Click(null, null);
-
-            if (Utils.getRegistry("StartMySources", "0") == "1")
-                m_bubblesMenu.MySources_Click(null, null);
-
-            if (Utils.getRegistry("StartFormat", "0") == "1")
-                m_bubblesMenu.Formatting_Click(null, null);
-
-            if (Utils.getRegistry("StartNotepad", "0") == "1")
-                m_bubblesMenu.Organizer_Click(null, null);
+                switch (dr["type"].ToString()) 
+                {
+                    case StickUtils.typeicons:
+                        m_bubblesMenu.startId = Convert.ToInt32(dr["id"]);
+                        m_bubblesMenu.Icons_Click(null, null);
+                        break;
+                    case StickUtils.typepripro:
+                        m_bubblesMenu.startId = Convert.ToInt32(dr["id"]);
+                        m_bubblesMenu.PriPro_Click(null, null);
+                        break;
+                    case StickUtils.typeformat:
+                        m_bubblesMenu.startId = Convert.ToInt32(dr["id"]);
+                        m_bubblesMenu.Formatting_Click(null, null);
+                        break;
+                    case StickUtils.typesources:
+                        m_bubblesMenu.startId = Convert.ToInt32(dr["id"]);
+                        m_bubblesMenu.MySources_Click(null, null);
+                        break;
+                    case StickUtils.typebookmarks:
+                        m_bubblesMenu.startId = Convert.ToInt32(dr["id"]);
+                        m_bubblesMenu.Bookmarks_Click(null, null);
+                        break;
+                    case StickUtils.typepaste:
+                        m_bubblesMenu.startId = Convert.ToInt32(dr["id"]);
+                        m_bubblesMenu.PasteBubble_Click(null, null);
+                        break;
+                    case StickUtils.typeorganizer:
+                        m_bubblesMenu.startId = Convert.ToInt32(dr["id"]);
+                        m_bubblesMenu.Organizer_Click(null, null);
+                        break;
+                }
+            }
         }
 
         private void m_cmdBubbles_Click()
@@ -101,9 +123,13 @@ namespace Bubbles
         public override void onDocumentActivated(MMEventArgs aArgs)
         {
             if (m_Bookmarks != null)
-            {
                 m_Bookmarks.Init();
-            }
+        }
+
+        public override void onDocumentDeactivated(MMEventArgs aArgs)
+        {
+            if (MMUtils.ActiveDocument == null && m_Bookmarks != null)
+                m_Bookmarks.Init();
         }
 
         public void Destroy()
@@ -142,6 +168,15 @@ namespace Bubbles
                     stick.Value.Hide();
                 stick.Value.Dispose();
             }
+            STICKS.Clear();
+
+            foreach (var note in pNOTES)
+            {
+                if (note.Value.Visible)
+                    note.Value.Hide();
+                note.Value.Dispose();
+            }
+            pNOTES.Clear();
 
             DocumentStorage.Unsubscribe(this);
 
@@ -153,7 +188,8 @@ namespace Bubbles
         public static BubbleSnippets m_bubbleSnippets = null;
 
         public static BubbleBookmarks m_Bookmarks;
-        public static NotesDlg m_Notes;
+
+        public static Organizer.NotesDlg m_Notes;
 
         public static MainMenuDlg m_bubblesMenu = null;
 
@@ -161,5 +197,6 @@ namespace Bubbles
         private Mindjet.MindManager.Interop.Control m_ctrlBubbles;
 
         public static Dictionary<int, Form> STICKS = new Dictionary<int, Form>();
+        public static Dictionary<int, Form> pNOTES = new Dictionary<int, Form>();
     }
 }

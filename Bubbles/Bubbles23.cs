@@ -4,7 +4,6 @@
     using System.Runtime.InteropServices;
     using Mindjet.MindManager.Interop;
     using PRAManager;
-    using Bubbles;
 
     /// <summary>
     ///   The object for implementing an Add-in.
@@ -78,7 +77,7 @@
             }
             catch (Exception e)
             {
-                MMBase.TRACE("Error while starting Map Navigator...\r\n\r\n" + e.Message + "\r\n\r\n" + e.StackTrace);
+                MMBase.TRACE("Error while starting Sticks&Stickers...\r\n\r\n" + e.Message + "\r\n\r\n" + e.StackTrace);
                 MMUtils.ErrorToSupport();
             }
         }

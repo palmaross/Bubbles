@@ -64,7 +64,7 @@
             // 
             this.pClipboard.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pClipboard.Image = ((System.Drawing.Image)(resources.GetObject("pClipboard.Image")));
-            this.pClipboard.Location = new System.Drawing.Point(131, 3);
+            this.pClipboard.Location = new System.Drawing.Point(123, 3);
             this.pClipboard.Name = "pClipboard";
             this.pClipboard.Size = new System.Drawing.Size(24, 24);
             this.pClipboard.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -76,7 +76,7 @@
             // 
             this.pIdeas.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pIdeas.Image = ((System.Drawing.Image)(resources.GetObject("pIdeas.Image")));
-            this.pIdeas.Location = new System.Drawing.Point(65, 3);
+            this.pIdeas.Location = new System.Drawing.Point(57, 3);
             this.pIdeas.Name = "pIdeas";
             this.pIdeas.Size = new System.Drawing.Size(24, 24);
             this.pIdeas.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -88,7 +88,7 @@
             // 
             this.pLinks.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pLinks.Image = ((System.Drawing.Image)(resources.GetObject("pLinks.Image")));
-            this.pLinks.Location = new System.Drawing.Point(98, 3);
+            this.pLinks.Location = new System.Drawing.Point(90, 3);
             this.pLinks.Name = "pLinks";
             this.pLinks.Size = new System.Drawing.Size(24, 24);
             this.pLinks.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -100,7 +100,7 @@
             // 
             this.pNotes.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pNotes.Image = ((System.Drawing.Image)(resources.GetObject("pNotes.Image")));
-            this.pNotes.Location = new System.Drawing.Point(32, 3);
+            this.pNotes.Location = new System.Drawing.Point(24, 3);
             this.pNotes.Name = "pNotes";
             this.pNotes.Size = new System.Drawing.Size(24, 24);
             this.pNotes.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -124,7 +124,7 @@
             this.Manage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Manage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Manage.Image = ((System.Drawing.Image)(resources.GetObject("Manage.Image")));
-            this.Manage.Location = new System.Drawing.Point(198, 5);
+            this.Manage.Location = new System.Drawing.Point(189, 5);
             this.Manage.Name = "Manage";
             this.Manage.Size = new System.Drawing.Size(20, 20);
             this.Manage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -146,7 +146,7 @@
             // 
             this.pTodos.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pTodos.Image = ((System.Drawing.Image)(resources.GetObject("pTodos.Image")));
-            this.pTodos.Location = new System.Drawing.Point(164, 3);
+            this.pTodos.Location = new System.Drawing.Point(156, 3);
             this.pTodos.Name = "pTodos";
             this.pTodos.Size = new System.Drawing.Size(24, 24);
             this.pTodos.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -159,7 +159,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(222, 30);
+            this.ClientSize = new System.Drawing.Size(213, 30);
             this.ControlBox = false;
             this.Controls.Add(this.p2);
             this.Controls.Add(this.Manage);

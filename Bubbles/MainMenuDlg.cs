@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -14,17 +15,23 @@ namespace Bubbles
         {
             InitializeComponent();
 
-            lblIcons.Text = Utils.getString("BubblesMenuDlg.lblIcons.text");
-            lblPriPro.Text = Utils.getString("BubblesMenuDlg.lblPriPro.text");
-            lblOrganizer.Text = Utils.getString("BubblesMenuDlg.lblOrganizer.text");
-            lblBookmarks.Text = Utils.getString("BubblesMenuDlg.lblBookmarks.text");
-            lblMySources.Text = Utils.getString("BubblesMenuDlg.lblMySources.text");
-            lblCopyPaste.Text = Utils.getString("BubblesMenuDlg.lblCopyPaste.text");
-            lblFormat.Text = Utils.getString("BubblesMenuDlg.lblFormat.text");
+            lblIcons.Text = Utils.getString("stickIcons.name");
+            lblPriPro.Text = Utils.getString("stickPriPro.name");
+            lblOrganizer.Text = Utils.getString("stickOrganizer.name");
+            lblBookmarks.Text = Utils.getString("stickBookmarks.name");
+            lblMySources.Text = Utils.getString("stickSources.name");
+            lblCopyPaste.Text = Utils.getString("stickPaste.name");
+            lblFormat.Text = Utils.getString("stickFormat.name");
+            toolTip1.SetToolTip(pBulkOperations, Utils.getString("sticks.bulkoperations"));
+
             lblStickers.Text = Utils.getString("BubblesMenuDlg.lblStickers.text");
 
             Location = new Point(Cursor.Position.X, MMUtils.MindManager.Top + MMUtils.MindManager.Height - this.Height - Settings.Height);
+            
             this.Deactivate += This_Deactivate;
+            BulkOperations.ItemClicked += BulkOperations_ItemClicked;
+            foreach (ToolStripItem item in BulkOperations.Items.OfType<ToolStripMenuItem>())
+                StickUtils.SetContextMenuImage(item, p2, item.Name.Substring(3) + ".png");
 
             mwIcons = new Bitmap(Utils.ImagesPath + "mwIcons.png");
             mwPriPro = new Bitmap(Utils.ImagesPath + "mwPriPro.png");
@@ -34,6 +41,10 @@ namespace Bubbles
             mwFormat = new Bitmap(Utils.ImagesPath + "mwFormat.png");
             mwFormatActive = new Bitmap(Utils.ImagesPath + "mwFormatActive.png");
             mwOrganizer = new Bitmap(Utils.ImagesPath + "mwOrganizer.png");
+
+            StickUtils.minSize = pMinSize.Width;
+            StickUtils.stickThickness = pMinSize.Height;
+            StickUtils.icondist = pIconDist.Width;
         }
 
         private void This_Deactivate(object sender, EventArgs e)
@@ -50,12 +61,17 @@ namespace Bubbles
         /// <param name="name"></param>
         /// <returns>0 - Very new stick, -1 - User don't want select a stick, N - stick ID
         /// </returns>
-        private int GetStick(string type, ref string position, ref string name)
+        private int GetStick(string type, int id, ref string position, ref string name)
         {
             using (BubblesDB db = new BubblesDB())
             {
-                DataTable dt = db.ExecuteQuery("select * from STICKS where type=`" + type + "`");
-                if (dt.Rows.Count == 0) // there are not sticks of this type
+                DataTable dt;
+                if (id != 0)
+                    dt = db.ExecuteQuery("select * from STICKS where id=" + id + "");
+                else
+                    dt = db.ExecuteQuery("select * from STICKS where type=`" + type + "`");
+
+                if (dt.Rows.Count == 0) // there are not sticks with this type or id
                     return 0;
                 else if (dt.Rows.Count == 1) // only one stick, do not show SelectStickDlg
                 {
@@ -94,7 +110,7 @@ namespace Bubbles
 
         public void Icons_Click(object sender, EventArgs e)
         {
-            string orientation = "H", location = "", name = ""; int id = 0;
+            string orientation = "H0", location = "", name = ""; int id = startId; // "H0" - Horizontal&Not collapsed
 
             if (StickClicked(StickUtils.typeicons, ref orientation, ref location, ref name, ref id) == false)
                 return; // user don't want select a stick, or stick already running, or stick troubles
@@ -109,7 +125,7 @@ namespace Bubbles
 
         public void PriPro_Click(object sender, EventArgs e)
         {
-            string orientation = "H", location = "", name = ""; int id = 0;
+            string orientation = "H0", location = "", name = ""; int id = startId;
 
             if (StickClicked(StickUtils.typepripro, ref orientation, ref location, ref name, ref id) == false)
                 return; // user don't want select a stick, or stick already running, or stick troubles
@@ -124,7 +140,7 @@ namespace Bubbles
 
         public void MySources_Click(object sender, EventArgs e)
         {
-            string orientation = "H", location = "", name = ""; int id = 0;
+            string orientation = "H0", location = "", name = ""; int id = startId;
 
             if (StickClicked(StickUtils.typesources, ref orientation, ref location, ref name, ref id) == false)
                 return; // user don't want select a stick, or stick already running, or stick troubles
@@ -139,7 +155,7 @@ namespace Bubbles
 
         public void Bookmarks_Click(object sender, EventArgs e)
         {
-            string orientation = "H", location = "", name = ""; int id = 0;
+            string orientation = "H0", location = "", name = ""; int id = startId;
 
             if (StickClicked(StickUtils.typebookmarks, ref orientation, ref location, ref name, ref id) == false)
                 return; // user don't want select a stick, or stick already running, or stick troubles
@@ -154,7 +170,7 @@ namespace Bubbles
 
         public void Formatting_Click(object sender, EventArgs e)
         {
-            string orientation = "H", location = "", name = ""; int id = 0;
+            string orientation = "H0", location = "", name = ""; int id = startId;
 
             if (StickClicked(StickUtils.typeformat, ref orientation, ref location, ref name, ref id) == false)
                 return; // user don't want select a stick, or stick already running, or stick troubles
@@ -169,7 +185,7 @@ namespace Bubbles
 
         public void PasteBubble_Click(object sender, EventArgs e)
         {
-            string orientation = "H", location = "", name = ""; int id = 0;
+            string orientation = "H0", location = "", name = ""; int id = startId;
 
             if (StickClicked(StickUtils.typepaste, ref orientation, ref location, ref name, ref id) == false)
                 return; // user don't want select a stick, or stick already running, or stick troubles
@@ -184,7 +200,7 @@ namespace Bubbles
 
         public void Organizer_Click(object sender, EventArgs e)
         {
-            string orientation = "H", location = "", name = ""; int id = 0;
+            string orientation = "H0", location = "", name = ""; int id = startId;
 
             if (StickClicked(StickUtils.typeorganizer, ref orientation, ref location, ref name, ref id) == false)
                 return; // user don't want select a stick, or stick already running, or stick troubles
@@ -197,11 +213,12 @@ namespace Bubbles
             form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
+        bool show_stickrunning_message = true;
         bool StickClicked(string type, ref string orientation, ref string location, ref string name, ref int id)
         {
             string position = "";
-            id = GetStick(type, ref position, ref name);
-            keepmenu = false;
+            id = GetStick(type, id, ref position, ref name);
+            keepmenu = false; startId = 0;
 
             if (id == -1) // Cancel button
                 return false;
@@ -224,11 +241,12 @@ namespace Bubbles
 
             if (BubblesButton.STICKS.Keys.Contains(id))
             {
-                MessageBox.Show(Utils.getString("sticks.stickalreadyrunning"));
+                if (show_stickrunning_message)
+                    MessageBox.Show(Utils.getString("sticks.stickalreadyrunning"));
                 return false;
             }
 
-            orientation = "H"; location = "";
+            orientation = "H0"; location = ""; // "H0" - Horizontal&Not collapsed
             if (position != "")
             {
                 string[] parts = position.Split('#');
@@ -260,7 +278,7 @@ namespace Bubbles
             form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
-        public Point GetStickLocation(string location, bool start = false)
+        public Point GetStickLocation(string location)
         {
             Point thisLocation = new Point();
 
@@ -294,7 +312,120 @@ namespace Bubbles
             return thisLocation;
         }
 
+        private void pBulkOperations_Click(object sender, EventArgs e)
+        {
+            foreach (ToolStripItem item in BulkOperations.Items)
+                item.Visible = true;
+            BulkOperations.Show(Cursor.Position);
+        }
+
+        private void BulkOperations_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            switch (e.ClickedItem.Name)
+            {
+                case "BO_show":
+                    show_stickrunning_message = false;
+                    using (BubblesDB db = new BubblesDB())
+                    {
+                        DataTable dt = db.ExecuteQuery("select * from STICKS order by type");
+
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            if (Convert.ToInt32(dr["start"]) == 0)
+                                continue;
+
+                            switch (dr["type"].ToString())
+                            {
+                                case StickUtils.typeicons:
+                                    BubblesButton.m_bubblesMenu.Icons_Click(null, null);
+                                    break;
+                                case StickUtils.typepripro:
+                                    BubblesButton.m_bubblesMenu.PriPro_Click(null, null);
+                                    break;
+                                case StickUtils.typeformat:
+                                    BubblesButton.m_bubblesMenu.Formatting_Click(null, null);
+                                    break;
+                                case StickUtils.typesources:
+                                    BubblesButton.m_bubblesMenu.MySources_Click(null, null);
+                                    break;
+                                case StickUtils.typebookmarks:
+                                    BubblesButton.m_bubblesMenu.Bookmarks_Click(null, null);
+                                    break;
+                                case StickUtils.typepaste:
+                                    BubblesButton.m_bubblesMenu.PasteBubble_Click(null, null);
+                                    break;
+                                case StickUtils.typeorganizer:
+                                    BubblesButton.m_bubblesMenu.Organizer_Click(null, null);
+                                    break;
+                            }
+                        }
+                    }
+                    show_stickrunning_message = true;
+                    break;
+                case "BO_hide":
+                    foreach (var stick in BubblesButton.STICKS.Values)
+                        stick.Close();
+                    BubblesButton.STICKS.Clear();
+                    break;
+                case "BO_collapse":
+                case "BO_expand":
+                    bool collapse = true; bool expand = false;
+                    if (e.ClickedItem.Name == "BO_expand") { collapse = false; expand = true; };
+
+                    foreach (var stick in BubblesButton.STICKS.Values)
+                    {
+                        switch (stick.Name)
+                        {
+                            case StickUtils.typeicons:
+                                (stick as BubbleIcons).Collapse(collapse, expand);
+                                break;
+                            case StickUtils.typepripro:
+                                (stick as BubblePriPro).Collapse(collapse, expand);
+                                break;
+                            case StickUtils.typeformat:
+                                (stick as BubbleFormat).Collapse(collapse, expand);
+                                break;
+                            case StickUtils.typesources:
+                                (stick as BubbleMySources).Collapse(collapse, expand);
+                                break;
+                            case StickUtils.typebookmarks:
+                                (stick as BubbleBookmarks).Collapse(collapse, expand);
+                                break;
+                            case StickUtils.typepaste:
+                                (stick as BubblePaste).Collapse(collapse, expand);
+                                break;
+                            case StickUtils.typeorganizer:
+                                (stick as BubbleOrganizer).Collapse(collapse, expand);
+                                break;
+                        }
+                    }
+                    break;
+                case "BO_remember":
+                    foreach (var stick in BubblesButton.STICKS)
+                    {
+                        string orientation = "H";
+                        if (stick.Value.Width < stick.Value.Height) orientation = "V";
+
+                        bool collapsed = stick.Value.Width == StickUtils.minSize;
+
+                        StickUtils.SaveStick(stick.Value.Bounds, stick.Key, orientation, collapsed);
+                    }
+                    break;
+                case "BO_align":
+                    using (AlignSticksDlg dlg = new AlignSticksDlg())
+                    {
+                        dlg.ShowDialog();
+                    }
+                    break;
+                case "BO_help":
+                    try { Process.Start(Utils.dllPath + "Sticks.chm"); } catch { }
+                    break;
+            }
+        }
+
         public Image mwIcons, mwPriPro, mwBookmarks, mwCopyPaste, 
             mwSources, mwFormat, mwFormatActive, mwOrganizer;
+
+        public int startId = 0;
     }
 }

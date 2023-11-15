@@ -63,6 +63,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlignSticksDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AlignSticksDlg.Designer.cs">
+      <DependentUpon>AlignSticksDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="BubbleOrganizer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,12 +100,6 @@
     </Compile>
     <Compile Include="GetNameDlg.Designer.cs">
       <DependentUpon>GetNameDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="BubbleNotepad.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BubbleNotepad.Designer.cs">
-      <DependentUpon>BubbleNotepad.cs</DependentUpon>
     </Compile>
     <Compile Include="Bubbles.cs" />
     <Compile Include="Bubbles23.cs" />
@@ -146,6 +146,30 @@
     <Compile Include="MainMenuDlg.Designer.cs">
       <DependentUpon>MainMenuDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Organizer\ManageNoteGroups.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Organizer\ManageNoteGroups.Designer.cs">
+      <DependentUpon>ManageNoteGroups.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Organizer\ManageNoteMarkers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Organizer\ManageNoteMarkers.Designer.cs">
+      <DependentUpon>ManageNoteMarkers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Organizer\ManageNoteTags.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Organizer\ManageNoteTags.Designer.cs">
+      <DependentUpon>ManageNoteTags.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Organizer\NoteDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Organizer\NoteDlg.Designer.cs">
+      <DependentUpon>NoteDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -175,7 +199,7 @@
     <Compile Include="SettingsDlg.Designer.cs">
       <DependentUpon>SettingsDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="BubblesDB.cs" />
+    <Compile Include="AppManager\BubblesDB.cs" />
     <Compile Include="SizeablePictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -192,10 +216,10 @@
       <DependentUpon>StickerDummy.cs</DependentUpon>
     </Compile>
     <Compile Include="StickUtils.cs" />
-    <Compile Include="NotesDlg.cs">
+    <Compile Include="Organizer\NotesDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NotesDlg.Designer.cs">
+    <Compile Include="Organizer\NotesDlg.Designer.cs">
       <DependentUpon>NotesDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils.cs" />
@@ -227,6 +251,9 @@
     <Content Include="images\addtotopic.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\align.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\bookmarkCentral.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -237,6 +264,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\bookmarkRest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\book_add.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\chm.png">
@@ -260,6 +290,9 @@
     <Content Include="images\edit.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\emptyIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\expand.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -275,10 +308,16 @@
     <Content Include="images\groups.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\helpSticker.png">
+    <Content Include="images\help.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\hide.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\manageGroups.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\managetags.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\ms_audio.png">
@@ -449,6 +488,9 @@
     <Content Include="images\rotate.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\show.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\snippets.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -480,6 +522,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AlignSticksDlg.resx">
+      <DependentUpon>AlignSticksDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BubbleOrganizer.resx">
       <DependentUpon>BubbleOrganizer.cs</DependentUpon>
     </EmbeddedResource>
@@ -494,9 +539,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GetNameDlg.resx">
       <DependentUpon>GetNameDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="BubbleNotepad.resx">
-      <DependentUpon>BubbleNotepad.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BubbleBookmarks.resx">
       <DependentUpon>BubbleBookmarks.cs</DependentUpon>
@@ -518,6 +560,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainMenuDlg.resx">
       <DependentUpon>MainMenuDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Organizer\ManageNoteGroups.resx">
+      <DependentUpon>ManageNoteGroups.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Organizer\ManageNoteMarkers.resx">
+      <DependentUpon>ManageNoteMarkers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Organizer\ManageNoteTags.resx">
+      <DependentUpon>ManageNoteTags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Organizer\NoteDlg.resx">
+      <DependentUpon>NoteDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -541,7 +595,7 @@
     <EmbeddedResource Include="StickerDummy.resx">
       <DependentUpon>StickerDummy.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NotesDlg.resx">
+    <EmbeddedResource Include="Organizer\NotesDlg.resx">
       <DependentUpon>NotesDlg.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

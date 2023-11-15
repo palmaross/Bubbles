@@ -101,14 +101,29 @@ namespace Bubbles
                 );
         }
 
-        public void AddNote(string name, string content, string link, int groupID = 0)
+        public void AddNote(string name, string content, string link, int groupID = 0, 
+            string icon1 = "", string icon2 = "", string tags = "")
         {
             m_db.ExecuteNonQuery("insert into NOTES values(NULL, `"
                 + name + "`, `"
                 + content + "`, `"
                 + link + "`, "
-                + groupID + ", "
+                + groupID + ", `"
+                + icon1 + "`, `"
+                + icon2 + "`, `"
+                + tags + "`, "
                 + "'', '', 0, 0"
+                + ");"
+                );
+        }
+
+        public void AddNoteIcon(string name, string filename, int order)
+        {
+            m_db.ExecuteNonQuery("insert into NOTEICONS values(NULL, `"
+                + name + "`, `"
+                + filename + "`, "
+                + order + ", "
+                + "'', 0"
                 + ");"
                 );
         }
@@ -138,10 +153,14 @@ namespace Bubbles
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
             
             // Organizer
+            m_db.ExecuteNonQuery("CREATE TABLE NOTES(id INTEGER PRIMARY KEY, name text, content text, " +
+                "link text, groupID int, icon1 text, icon2 text, tags text, " +
+                "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE NOTEICONS(id INTEGER PRIMARY KEY, name text, fileName text, _order int, " +
+                "reserved1 text, reserved2 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE NOTETAGS(tag text, reserved1 text, reserved2 integer);");
             m_db.ExecuteNonQuery("CREATE TABLE IDEAS(content text, rating text, groupID int, " +
                 "reserved1 text, reserved2 integer);");
-            m_db.ExecuteNonQuery("CREATE TABLE NOTES(id INTEGER PRIMARY KEY, name text, content text, " +
-                "link text, groupID int, reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
             m_db.ExecuteNonQuery("CREATE TABLE LINKS(id INTEGER PRIMARY KEY, title text, link text, groupID int, " +
                 "reserved1 text, reserved2 integer);");
             m_db.ExecuteNonQuery("CREATE TABLE SNIPPETS(snippet text, reserved1 text, reserved2 integer);");
@@ -159,7 +178,7 @@ namespace Bubbles
             m_db.ExecuteNonQuery("END");
 
             // Add first PriPro stick
-            AddStick(Utils.getString("BubblesMenuDlg.lblPriPro.text"), StickUtils.typepripro, 0, "");
+            AddStick(Utils.getString("stickPriPro.name"), StickUtils.typepripro, 0, "");
             int id = 1;
             DataTable dt = m_db.ExecuteQuery("SELECT last_insert_rowid()");
             if (dt.Rows.Count > 0) id = Convert.ToInt32(dt.Rows[0][0]);
@@ -186,6 +205,18 @@ namespace Bubbles
                 14, 1, StickerDummy.DummyStickerWidth + ":" + StickerDummy.DummyStickerHeight, "", "center", "template");
             AddSticker(Utils.getString("stickertemplate3.text"), "#ff0000ff", "#ff00ff00", "Segoe Print", 
                 14, 1, StickerDummy.DummyStickerWidth + ":" + StickerDummy.DummyStickerHeight, "", "center", "template");
+
+            // Add Note Icons
+            AddNoteIcon(Utils.getString("noteicons.icon1"), "stockmarker2", 1);
+            AddNoteIcon(Utils.getString("noteicons.icon2"), "stockmarker3", 2);
+            AddNoteIcon(Utils.getString("noteicons.icon3"), "stockmarker4", 3);
+            AddNoteIcon("", "", 4); AddNoteIcon("", "", 5); AddNoteIcon("", "", 6); 
+            AddNoteIcon("", "", 7); AddNoteIcon("", "", 8);
+            AddNoteIcon(Utils.getString("noteicons.icon9"), "stockexclamation-mark", 1);
+            AddNoteIcon(Utils.getString("noteicons.icon10"), "stockquestion-mark", 2);
+            AddNoteIcon(Utils.getString("noteicons.icon11"), "stocklightbulb", 3);
+            AddNoteIcon("", "", 4); AddNoteIcon("", "", 5); AddNoteIcon("", "", 6); 
+            AddNoteIcon("", "", 7); AddNoteIcon("", "", 8);
         }
     }
 }
