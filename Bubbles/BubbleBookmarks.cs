@@ -1,4 +1,5 @@
-﻿using Mindjet.MindManager.Interop;
+﻿using Bubbles.Properties;
+using Mindjet.MindManager.Interop;
 using PRAManager;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace Bubbles
             helpProvider1.SetHelpKeyword(this, "BookmarksStick.htm.htm");
 
             toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
-            toolTip1.SetToolTip(AddBookmark, Utils.getString("bookmarks.addbookmark.tooltip"));
+            //toolTip1.SetToolTip(BookmarkList, Utils.getString("bookmarks.addbookmark.tooltip"));
             toolTip1.SetToolTip(pictureHandle, Utils.getString("bookmarks.bubble.tooltip"));
 
             MinLength = this.Width; RealLength = this.Width;
@@ -31,32 +32,31 @@ namespace Bubbles
             if (orientation == "V") {
                 orientation = "H"; Rotate(); }
 
-
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
             this.ResizeRedraw = true;
 
             // Context menu
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
+            cmsDelete.ItemClicked += ContextMenuStrip1_ItemClicked;
 
             contextMenuStrip1.Items["BI_addbookmark"].Text = Utils.getString("bookmarks.contextmenu.add");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_addbookmark"], p2, "book_add.png");
+            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_addbookmark"], "book_add.png");
 
-            contextMenuStrip1.Items["BI_delete"].Text = Utils.getString("bookmarks.contextmenu.delete");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_delete"], p2, "deleteall.png");
+            cmsDelete.Items["BI_delete"].Text = Utils.getString("bookmarks.contextmenu.delete");
 
             contextMenuStrip1.Items["BI_main"].Text = Utils.getString("bookmarks.contextmenu.maintopics");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_main"], p2, "bookmarkMain.png");
+            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_main"], "bookmarkMain.png");
 
             contextMenuStrip1.Items["BI_deletemain"].Text = Utils.getString("bookmarks.contextmenu.deletemaintopics");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_deletemain"], p2, "deletemain.png");
+            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_deletemain"], "deletemain.png");
 
-            StickUtils.SetCommonContextMenu(contextMenuStrip1, p2, StickUtils.typebookmarks);
+            StickUtils.SetCommonContextMenu(contextMenuStrip1, StickUtils.typebookmarks);
 
-            panel1.MouseDown += Panel1_MouseDown;
-            pictureHandle.MouseDown += PictureHandle_MouseDown;
+            this.MouseDown += Move_Stick;
+            pictureHandle.MouseDown += Move_Stick;
             Manage.Click += Manage_Click;
-            pictureHandle.MouseDoubleClick += PictureHandle_MouseDoubleClick;
+            pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
 
             Init();
 
@@ -64,9 +64,9 @@ namespace Bubbles
                 collapsed = false; Collapse();  }
         }
 
-        public void Init(bool deleteall = false)
+        public void Init(bool fromList = false, bool deleteall = false)
         {
-            prev = null; Bookmarks.Clear(); RealLength = MinLength;
+            prev = null; RealLength = MinLength; Bookmarks.Clear();
 
             if (!collapsed)
             {
@@ -76,9 +76,9 @@ namespace Bubbles
                     this.Height = MinLength;
             }
 
-            foreach (PictureBox p in panel1.Controls.OfType<PictureBox>().Reverse())
+            foreach (PictureBox p in this.Controls.OfType<PictureBox>().Reverse())
             {
-                if (p.Name != "p1")
+                if (p.Tag != null && p.Name != "pCentral")
                     p.Dispose();
             }
 
@@ -96,7 +96,11 @@ namespace Bubbles
                 cTopic = null;
 
                 if (deleteall)
+                {
+                    if (BubblesButton.m_BookmarkList != null && !fromList)
+                        BubblesButton.m_BookmarkList.Init(true, true);
                     return;
+                }
             }
 
             if (BookmarkedDocuments.Keys.Contains(MMUtils.ActiveDocument))
@@ -113,9 +117,12 @@ namespace Bubbles
                 foreach (Topic _t in MMUtils.ActiveDocument.AllFloatingTopics)
                     LoadFromMapRecursive(_t);
 
-                List<BookmarkItem> list = new List<BookmarkItem>();
-                list.AddRange(Bookmarks);
-                BookmarkedDocuments.Add(MMUtils.ActiveDocument, list);
+                if (Bookmarks.Count > 0)
+                {
+                    List<BookmarkItem> list = new List<BookmarkItem>();
+                    list.AddRange(Bookmarks);
+                    BookmarkedDocuments.Add(MMUtils.ActiveDocument, list);
+                }
             }
 
             // If stick is collapsed, do not set the resulting width
@@ -126,6 +133,10 @@ namespace Bubbles
                 else
                     this.Height = RealLength;
             }
+
+            // Refresh Bookmarks list
+            if (BubblesButton.m_BookmarkList != null && !fromList)
+                BubblesButton.m_BookmarkList.Init(true);
         }
 
         void LoadFromMapRecursive(Topic _t)
@@ -142,25 +153,16 @@ namespace Bubbles
         {
             foreach (ToolStripItem item in contextMenuStrip1.Items)
                 item.Visible = true;
-
-            contextMenuStrip1.Items["BI_delete"].Visible = false;
             contextMenuStrip1.Show(Cursor.Position);
         }
 
-        private void PictureHandle_MouseDown(object sender, MouseEventArgs e)
+        private void Move_Stick(object sender, MouseEventArgs e)
         {
             if (e.Clicks == 1)
             {
                 ReleaseCapture();
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
-            base.OnMouseDown(e);
-        }
-
-        private void Panel1_MouseDown(object sender, MouseEventArgs e)
-        {
-            ReleaseCapture();
-            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
         }
 
         private void ContextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -168,7 +170,7 @@ namespace Bubbles
             if (e.ClickedItem.Name == "BI_addbookmark")
             {
                 if (MMUtils.ActiveDocument == null) return;
-                AddBookmark_Click(null, null);
+                AddBookmark();
             }
             else if (e.ClickedItem.Name == "BI_delete")
             {
@@ -179,9 +181,14 @@ namespace Bubbles
                     if (t != null)
                         t.GetAttributes(ATTR_NAMESPACE).DeleteAll();
 
-                    Bookmarks.Remove(_item);
-                    selectedIcon.Dispose();
-                    Init();
+                    var item = Bookmarks.Find(x => x.TopicGuid == _item.TopicGuid);
+                    if (item != null)
+                    {
+                        Bookmarks.Remove(item);
+                        BookmarkedDocuments[MMUtils.ActiveDocument].Clear();
+                        BookmarkedDocuments[MMUtils.ActiveDocument].AddRange(Bookmarks);
+                        Init(false);
+                    }
                 }
             }
             else if (e.ClickedItem.Name == "BI_main")
@@ -194,7 +201,7 @@ namespace Bubbles
                 if (BookmarkedDocuments.ContainsKey(MMUtils.ActiveDocument))
                     BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
 
-                Init();
+                Init(false);
             }
             else if (e.ClickedItem.Name == "BI_deletemain")
             {
@@ -204,11 +211,12 @@ namespace Bubbles
                     t.GetAttributes(ATTR_NAMESPACE).DeleteAll();
                 BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
 
-                Init();
+                Init(false);
             }
             else if (e.ClickedItem.Name == "BI_deleteall")
             {
                 if (MMUtils.ActiveDocument == null) return;
+
                 if (BookmarkedDocuments.Keys.Contains(MMUtils.ActiveDocument))
                 {
                     Topic t;
@@ -221,8 +229,15 @@ namespace Bubbles
                     t = null;
                     BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
                 }
-
-                Init(true);
+                else
+                {
+                    foreach (Topic t in MMUtils.ActiveDocument.Range(MmRange.mmRangeAllTopics))
+                    {
+                        if (t.ContainsAttributesNamespace(ATTR_NAMESPACE))
+                            t.GetAttributes(ATTR_NAMESPACE).DeleteAll();
+                    }
+                }
+                Init(false, true);
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
@@ -250,14 +265,9 @@ namespace Bubbles
 
         public void Rotate()
         {
-            orientation = StickUtils.RotateStick(this, p1, panel1, Manage, orientation, false, AddBookmark);
-            pCentral.Location = new Point(pCentral.Location.Y, pCentral.Location.X);
+            orientation = StickUtils.RotateStick(this, Manage, orientation, BookmarkList);
         }
 
-        private void PictureHandle_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            Collapse();
-        }
 
         /// <summary>
         /// Collapse/Expand stick
@@ -270,17 +280,15 @@ namespace Bubbles
             {
                 if (CollapseAll) return;
 
-                StickUtils.Expand(this, RealLength, orientation);
-                contextMenuStrip1.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.collapse");
+                StickUtils.Expand(this, RealLength, orientation, contextMenuStrip1);
                 collapsed = false;
             }
             else // Collapse stick
             {
                 if (ExpandAll) return;
 
-                StickUtils.Collapse(this, orientation);
+                StickUtils.Collapse(this, orientation, contextMenuStrip1);
                 collapsed = true;
-                contextMenuStrip1.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.expand");
             }
         }
 
@@ -297,11 +305,11 @@ namespace Bubbles
                 pBox.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "bookmarkFloat.png");
             else
             {
-                pBox.Size = p4.Size;
+                pBox.Size = p2.Size;
                 pBox.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "bookmarkRest.png");
             }
 
-            panel1.Controls.Add(pBox);
+            this.Controls.Add(pBox);
             pBox.Visible = true;
             toolTip1.SetToolTip(pBox, tooltip);
             pBox.BringToFront();
@@ -309,18 +317,18 @@ namespace Bubbles
             pBox.Tag = new BookmarkItem(tooltip, guid, maintopic, floattopic);
             Bookmarks.Add((BookmarkItem)pBox.Tag);
 
-            int locX;
-            if (prev == null)
-                locX = 0;
-            else
-                locX = prev.Location.X + prev.Width + p3.Height;
-
             if (orientation == "H")
             {
+                int locX;
+                if (prev == null)
+                    locX = p1.Location.X;
+                else
+                    locX = prev.Location.X + prev.Width + p3.Height;
+
                 if (maintopic || floattopic)
                     pBox.Location = new Point(locX, p1.Location.Y);
                 else
-                    pBox.Location = new Point(locX, p4.Location.Y);
+                    pBox.Location = new Point(locX, p2.Location.Y);
 
                 if (Bookmarks.Count > 2)
                     RealLength += pBox.Width + p3.Height;
@@ -329,14 +337,14 @@ namespace Bubbles
             {
                 int locY;
                 if (prev == null)
-                    locY = 0;
+                    locY = p1.Location.Y;
                 else
                     locY = prev.Location.Y + prev.Width + p3.Height;
 
                 if (maintopic || floattopic)
-                    pBox.Location = new Point(p1.Location.Y, locY);
+                    pBox.Location = new Point(p1.Location.X, locY);
                 else
-                    pBox.Location = new Point(p4.Location.Y, locY);
+                    pBox.Location = new Point(p2.Location.X, locY);
 
                 if (Bookmarks.Count > 2)
                     RealLength += pBox.Width + p3.Height;
@@ -363,23 +371,19 @@ namespace Bubbles
             }
             else if (e.Button == MouseButtons.Right)
             {
-                foreach (ToolStripItem item in contextMenuStrip1.Items)
-                    item.Visible = false;
-
                 if (selectedIcon == pCentral) return;
 
-                contextMenuStrip1.Items["BI_delete"].Visible = true;
-                contextMenuStrip1.Show(Cursor.Position);
+                cmsDelete.Items["BI_delete"].Visible = true;
+                cmsDelete.Show(Cursor.Position);
             }
         }
 
-        private void AddBookmark_Click(object sender, EventArgs e)
+        private void AddBookmark()
         {
             if (MMUtils.ActiveDocument == null) return;
 
             Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
-            if (t == null)
-                return;
+            if (t == null) return;
 
             if (t.GetAttributes(ATTR_NAMESPACE).HasAttribute(ATTR_BOOKMARKED))
             {
@@ -397,17 +401,69 @@ namespace Bubbles
             Init();
         }
 
-        public Dictionary<Document, List<BookmarkItem>> BookmarkedDocuments = new Dictionary<Document, List<BookmarkItem>>();
+        private void BookmarkList_Click(object sender, EventArgs e)
+        {
+            if (BubblesButton.m_BookmarkList == null)
+            {
+                BubblesButton.m_BookmarkList = new BookmarkListDlg();
 
+                //foreach (var item in Bookmarks)
+                //{
+                //    var book = BubblesButton.m_BookmarkList.listBookmarks.Items.Add(item.TopicName);
+                //    BubblesButton.m_BookmarkList.listBookmarks.Items[book] = item;
+                //}
+
+                int X, Y;
+                if (orientation == "H")
+                {
+                    X = this.Location.X;
+                    Y = this.Location.Y + this.Height;
+                }
+                else
+                {
+                    X = this.Location.X + this.Width;
+                    Y = this.Location.Y;
+                }
+
+                var pos = new Point(X, Y);
+                BubblesButton.m_BookmarkList.Location = new Point(pos.X, pos.Y);
+
+                // If the form is close to the right or bottom screen side..
+                Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
+
+                if (orientation == "H")
+                {
+                    if (BubblesButton.m_BookmarkList.Location.X + BubblesButton.m_BookmarkList.Width > area.Right)
+                        pos.X = X + this.Width - BubblesButton.m_BookmarkList.Width;
+
+                    if (pos.Y + BubblesButton.m_BookmarkList.Height > area.Bottom)
+                        pos.Y = this.Location.Y - BubblesButton.m_BookmarkList.Height;
+                }
+                else
+                {
+                    if (BubblesButton.m_BookmarkList.Location.X + BubblesButton.m_BookmarkList.Width > area.Right)
+                        pos.X = this.Location.X - BubblesButton.m_BookmarkList.Width;
+
+                    if (pos.Y + BubblesButton.m_BookmarkList.Height > area.Bottom)
+                        pos.Y = area.Bottom - BubblesButton.m_BookmarkList.Height;
+                }
+
+                BubblesButton.m_BookmarkList.Location = new Point(pos.X, pos.Y);
+                BubblesButton.m_BookmarkList.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            }
+            BubblesButton.m_BookmarkList.Init(true);
+        }
+
+        public static Dictionary<Document, List<BookmarkItem>> BookmarkedDocuments = new Dictionary<Document, List<BookmarkItem>>();
         public static List<BookmarkItem> Bookmarks = new List<BookmarkItem>();
+        
         PictureBox selectedIcon = null;
         string orientation = "H";
-        bool manage = false;
         bool collapsed = false;
 
         int MinLength, RealLength;
 
-        // For this_MouseDown
+        // For MouseDown event
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
 

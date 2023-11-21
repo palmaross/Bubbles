@@ -59,28 +59,28 @@ namespace Organizer
             cmsSort.ItemClicked += ContextMenu_ItemClicked;
 
             cmsMoreButton.Items["N_delete"].Text = Utils.getString("notes.contextmenu.delete");
-            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_delete"], p2, "deleteall.png");
+            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_delete"], "deleteall.png");
 
             cmsMoreButton.Items["N_deleteall"].Text = Utils.getString("notes.contextmenu.deleteall");
-            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_deleteall"], p2, "deleteall.png");
+            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_deleteall"], "deleteall.png");
 
             cmsMoreButton.Items["N_edit"].Text = Utils.getString("notes.contextmenu.edit");
-            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_edit"], p2, "edit.png");
+            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_edit"], "edit.png");
 
             cmsMoreButton.Items["N_addtopic"].Text = Utils.getString("notes.contextmenu.addtopic");
-            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_addtopic"], p2, "addtotopic.png");
+            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_addtopic"], "addtotopic.png");
 
             cmsMoreButton.Items["N_managegroups"].Text = Utils.getString("notes.contextmenu.managegroups");
-            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_managegroups"], p2, "groups.png");
+            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_managegroups"], "groups.png");
 
             cmsMoreButton.Items["N_managetags"].Text = Utils.getString("notes.contextmenu.managetags");
-            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_managetags"], p2, "managetags.png");
+            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_managetags"], "managetags.png");
 
             cmsMoreButton.Items["N_managemarkers"].Text = Utils.getString("notes.contextmenu.managemarkers");
-            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_managemarkers"], p2, "emptyIcon.png");
+            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_managemarkers"], "emptyIcon.png");
 
             cmsMoreButton.Items["N_help"].Text = Utils.getString("button.help");
-            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_help"], p2, "help.png");
+            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_help"], "help.png");
 
             cmsSort.Items["N_sortAZ"].Text = Utils.getString("notes.contextmenu.sortAZ");
             cmsSort.Items["N_sortZA"].Text = Utils.getString("notes.contextmenu.sortZA");

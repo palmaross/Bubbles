@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -9,17 +10,18 @@ namespace Bubbles
         /// <summary>New stick name or new source/icon name or rename stick/source/icon</summary>
         /// <param name="rec">Parent stick rectangle</param>
         /// <param name="orientation">stick orientation (Horizontal or Vertical)</param>
-        /// <param name="type">Stick, source or icon</param>
+        /// <param name="stickType">Stick, source or icon</param>
         /// <param name="name">Name of stick/source/icon in case of rename</param>
-        public GetNameDlg(Rectangle rec, string orientation, string type, string name = "")
+        public GetNameDlg(Rectangle rec, string orientation, string name)
         {
             InitializeComponent();
 
-            label1.Text = Utils.getString("NewStickDlg.label.title") + ":";
-            if (type == StickUtils.typeicons)
-                label1.Text = Utils.getString("NewStickDlg.icon.title") + ":";
-            if (type == StickUtils.typesources)
-                label1.Text = Utils.getString("NewStickDlg.source.title") + ":";
+            if (stick)
+                label1.Text = Utils.getString("NewStickDlg.label.title") + ":"; // stick name
+            else if (stickType == StickUtils.typeicons)
+                label1.Text = Utils.getString("NewStickDlg.icon.title") + ":"; // icon name
+            else if (stickType == StickUtils.typesources)
+                label1.Text = Utils.getString("NewStickDlg.source.title") + ":"; // source name
             btnCancel.Text = Utils.getString("button.cancel");
 
             Point location = new Point(rec.X, rec.Y + rec.Height);
@@ -50,7 +52,9 @@ namespace Bubbles
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            if (String.IsNullOrEmpty(textBox1.Text))
+            string newName = textBox1.Text.Trim();
+
+            if (String.IsNullOrEmpty(newName))
             {
                 MessageBox.Show(Utils.getString("NewStickDlg.error.text"), 
                     Utils.getString(label1.Text.Replace(':', '!')), 
@@ -58,7 +62,44 @@ namespace Bubbles
                 return;
             }
 
+            // Check if name exists
+            using (BubblesDB db = new BubblesDB())
+            {
+                if (stick)
+                {
+                    DataTable dt = db.ExecuteQuery("SELECT from STICKS where name=`" + newName + "` and id=" + stickID + "");
+                    if (dt.Rows.Count > 0)
+                    {
+                        MessageBox.Show(Utils.getString("sticks.nameexists"), "",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                }
+                else if (stickType == StickUtils.typeicons)
+                {
+                    DataTable dt = db.ExecuteQuery("SELECT from ICONS where name=`" + newName + "` and id=" + stickID + "");
+                    if (dt.Rows.Count > 0)
+                    {
+                        MessageBox.Show(Utils.getString("sticks.nameexists.icon"), "",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                }
+                else if (stickType == StickUtils.typesources)
+                {
+                    DataTable dt = db.ExecuteQuery("SELECT from SOURCES where title=`" + newName + "` and id=" + stickID + "");
+                    if (dt.Rows.Count > 0)
+                    {
+                        MessageBox.Show(Utils.getString("sticks.nameexists.source"), "",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                }
+            }
+
             DialogResult = DialogResult.OK;
         }
+
+        public string stickType; public int stickID; public bool stick;
     }
 }

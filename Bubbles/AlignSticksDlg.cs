@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Bubbles
 {
@@ -17,7 +13,20 @@ namespace Bubbles
         {
             InitializeComponent();
 
+            Text = Utils.getString("AlignSticksDlg.Title");
+            rbtnHH.Text = Utils.getString("AlignSticksDlg.rbtnHH");
+            rbtnVV.Text = Utils.getString("AlignSticksDlg.rbtnVV");
+            rbtnHV.Text = Utils.getString("AlignSticksDlg.rbtnHV");
+            rbtnVH.Text = Utils.getString("AlignSticksDlg.rbtnVH");
+            lblAlign.Text = Utils.getString("AlignSticksDlg.lblAlign");
             cbSelectAll.Text = Utils.getString("SettingsDlg.cbSelectAll");
+            btnRemember.Text = Utils.getString("AlignSticksDlg.btnRemember");
+            btnCreateConfig.Text = Utils.getString("AlignSticksDlg.btnCreateConfig");
+            btnAlign.Text = Utils.getString("AlignSticksDlg.btnAlign");
+            btnClose.Text = Utils.getString("button.close");
+
+            rbtnNewConfig.Text = Utils.getString("AlignSticksDlg.rbtnNewConfig");
+            rbtnSaveToConfig.Text = Utils.getString("AlignSticksDlg.rbtnSaveToConfig");
 
             //add single column; -2 => autosize
             listSticks.Columns.Add("MyColumn", -2, HorizontalAlignment.Left);
@@ -32,6 +41,22 @@ namespace Bubbles
                 {
                     if (BubblesButton.STICKS.ContainsKey(Convert.ToInt32(dr["id"])))
                         listSticks.Items.Add(dr["name"].ToString()).Tag = dr["id"].ToString();
+                }
+            }
+
+            // Fill configuration combobox
+            using (BubblesDB db = new BubblesDB())
+            {
+                DataTable dt = db.ExecuteQuery("select * from CONFIGS order by name");
+                if (dt.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        var item = new ConfigItem(dr["name"].ToString(), Convert.ToInt32(dr["id"]));
+                        cbConfigurations.Items.Add(item);
+                    }
+                    if (cbConfigurations.Items.Count > 0)
+                        cbConfigurations.SelectedIndex = 0;
                 }
             }
         }
@@ -216,6 +241,16 @@ namespace Bubbles
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnRemember_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCreateConfig_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

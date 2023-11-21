@@ -46,7 +46,6 @@
             this.pictureHandle = new System.Windows.Forms.PictureBox();
             this.Manage = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.p2 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.PasteLink)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PasteNotes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.addsubtopic)).BeginInit();
@@ -58,7 +57,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.UnformatText)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -91,6 +89,7 @@
             this.PasteLink.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PasteLink.TabIndex = 75;
             this.PasteLink.TabStop = false;
+            this.PasteLink.Tag = "1";
             this.PasteLink.Click += new System.EventHandler(this.PasteLink_Click);
             // 
             // PasteNotes
@@ -103,6 +102,7 @@
             this.PasteNotes.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PasteNotes.TabIndex = 76;
             this.PasteNotes.TabStop = false;
+            this.PasteNotes.Tag = "1";
             this.PasteNotes.Click += new System.EventHandler(this.PasteNotes_Click);
             // 
             // addsubtopic
@@ -115,6 +115,7 @@
             this.addsubtopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.addsubtopic.TabIndex = 78;
             this.addsubtopic.TabStop = false;
+            this.addsubtopic.Tag = "1";
             this.addsubtopic.Click += new System.EventHandler(this.addsubtopic_Click);
             // 
             // addToTopic
@@ -127,6 +128,7 @@
             this.addToTopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.addToTopic.TabIndex = 79;
             this.addToTopic.TabStop = false;
+            this.addToTopic.Tag = "1";
             this.addToTopic.Click += new System.EventHandler(this.addtotopic_Click);
             // 
             // PasteCallout
@@ -139,6 +141,7 @@
             this.PasteCallout.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PasteCallout.TabIndex = 80;
             this.PasteCallout.TabStop = false;
+            this.PasteCallout.Tag = "1";
             this.PasteCallout.Click += new System.EventHandler(this.callout_Click);
             // 
             // copyTopicText
@@ -151,6 +154,7 @@
             this.copyTopicText.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.copyTopicText.TabIndex = 81;
             this.copyTopicText.TabStop = false;
+            this.copyTopicText.Tag = "1";
             this.copyTopicText.Click += new System.EventHandler(this.copyTopicText_Click);
             // 
             // addtopic
@@ -163,6 +167,7 @@
             this.addtopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.addtopic.TabIndex = 83;
             this.addtopic.TabStop = false;
+            this.addtopic.Tag = "1";
             this.addtopic.Click += new System.EventHandler(this.addtopic_Click);
             // 
             // pasteToTopic
@@ -175,6 +180,7 @@
             this.pasteToTopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pasteToTopic.TabIndex = 84;
             this.pasteToTopic.TabStop = false;
+            this.pasteToTopic.Tag = "1";
             this.pasteToTopic.Click += new System.EventHandler(this.pasteToTopic_Click);
             // 
             // UnformatText
@@ -187,6 +193,7 @@
             this.UnformatText.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.UnformatText.TabIndex = 85;
             this.UnformatText.TabStop = false;
+            this.UnformatText.Tag = "1";
             this.UnformatText.Click += new System.EventHandler(this.UnformatText_Click);
             // 
             // pictureHandle
@@ -221,16 +228,6 @@
             this.panel2.TabIndex = 89;
             this.panel2.Visible = false;
             // 
-            // p2
-            // 
-            this.p2.Location = new System.Drawing.Point(333, 15);
-            this.p2.Name = "p2";
-            this.p2.Size = new System.Drawing.Size(12, 12);
-            this.p2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.p2.TabIndex = 96;
-            this.p2.TabStop = false;
-            this.p2.Visible = false;
-            // 
             // BubblePaste
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -238,7 +235,6 @@
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(342, 30);
             this.ControlBox = false;
-            this.Controls.Add(this.p2);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.Manage);
             this.Controls.Add(this.pictureHandle);
@@ -267,7 +263,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.UnformatText)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -290,6 +285,5 @@
         private System.Windows.Forms.PictureBox pictureHandle;
         private System.Windows.Forms.PictureBox Manage;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.PictureBox p2;
     }
 }

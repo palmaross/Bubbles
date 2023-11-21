@@ -24,16 +24,8 @@ namespace Bubbles
             MinLength = panel2.Width;
             RealLength = this.Width;
 
-            if (orientation == "V")
-            {
-                orientation = "H";
-                RotateBubble();
-
-                foreach (PictureBox p in this.Controls.OfType<PictureBox>())
-                {
-                    p.Location = new Point(copyTopicText.Location.Y, p.Location.X);
-                }
-            }
+            if (orientation == "V") {
+                orientation = "H"; Rotate(); }
 
             toolTip1.SetToolTip(PasteLink, getString("BubblesPaste.PasteLink.tooltip"));
             toolTip1.SetToolTip(PasteNotes, getString("BubblesPaste.AddNotes.tooltip"));
@@ -50,7 +42,7 @@ namespace Bubbles
 
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
 
-            StickUtils.SetCommonContextMenu(contextMenuStrip1, p2, StickUtils.typepaste);
+            StickUtils.SetCommonContextMenu(contextMenuStrip1, StickUtils.typepaste);
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
@@ -87,13 +79,7 @@ namespace Bubbles
         {
             if (e.ClickedItem.Name == "BI_rotate")
             {
-                RotateBubble();
-
-                foreach (PictureBox p in this.Controls.OfType<PictureBox>())
-                {
-                    if (p.Name == "Manage") continue;
-                    p.Location = new Point(p.Location.Y, p.Location.X);
-                }
+                Rotate();
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
@@ -116,7 +102,7 @@ namespace Bubbles
 
         public void Rotate()
         {
-            //orientation = StickUtils.RotateStick(this, p1, panel1, Manage, orientation);
+            orientation = StickUtils.RotateStick(this, Manage, orientation);
         }
 
         /// <summary>
@@ -129,42 +115,15 @@ namespace Bubbles
             if (collapsed) // Expand stick
             {
                 if (CollapseAll) return;
-
-                StickUtils.Expand(this, RealLength, orientation);
-                contextMenuStrip1.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.collapse");
-                PasteLink.Visible = true;
+                StickUtils.Expand(this, RealLength, orientation, contextMenuStrip1);
                 collapsed = false;
             }
             else // Collapse stick
             {
                 if (ExpandAll) return;
-
-                StickUtils.Collapse(this, orientation);
-                PasteLink.Visible = false;
+                StickUtils.Collapse(this, orientation, contextMenuStrip1);
                 collapsed = true;
-                contextMenuStrip1.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.expand");
             }
-        }
-
-        void RotateBubble()
-        {
-            if (orientation == "H")
-            {
-                orientation = "V";
-                Manage.Anchor = AnchorStyles.Left | AnchorStyles.Bottom;
-            }
-            else
-            {
-                orientation = "H";
-                Manage.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            }
-
-            int thisWidth = this.Width;
-            int thisHeight = this.Height;
-
-            Point ManageLocation = new Point(Manage.Location.Y, Manage.Location.X);
-            this.Size = new Size(thisHeight, thisWidth);
-            Manage.Location = ManageLocation;
         }
 
         private void PasteLink_Click(object sender, EventArgs e)

@@ -35,15 +35,18 @@
             this.listRunAtStart = new System.Windows.Forms.ListView();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.cbSelectAll = new System.Windows.Forms.CheckBox();
-            this.groupBoxRunAtStart = new System.Windows.Forms.GroupBox();
-            this.groupBoxRunAtStart.SuspendLayout();
+            this.gbRunAtStart = new System.Windows.Forms.GroupBox();
+            this.cbConfiguration = new System.Windows.Forms.ComboBox();
+            this.rbtnConfiguration = new System.Windows.Forms.RadioButton();
+            this.rbtnSticks = new System.Windows.Forms.RadioButton();
+            this.gbRunAtStart.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(236, 164);
+            this.btnClose.Location = new System.Drawing.Point(236, 212);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 1;
@@ -54,7 +57,7 @@
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSave.Location = new System.Drawing.Point(155, 164);
+            this.btnSave.Location = new System.Drawing.Point(155, 212);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 3;
@@ -66,35 +69,67 @@
             // 
             this.listRunAtStart.CheckBoxes = true;
             this.listRunAtStart.HideSelection = false;
-            this.listRunAtStart.Location = new System.Drawing.Point(12, 39);
+            this.listRunAtStart.Location = new System.Drawing.Point(12, 60);
             this.listRunAtStart.Name = "listRunAtStart";
             this.listRunAtStart.Size = new System.Drawing.Size(276, 70);
             this.listRunAtStart.TabIndex = 14;
             this.listRunAtStart.UseCompatibleStateImageBehavior = false;
             this.listRunAtStart.View = System.Windows.Forms.View.SmallIcon;
-            this.listRunAtStart.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listRunAtStart_ItemChecked);
             // 
             // cbSelectAll
             // 
             this.cbSelectAll.AutoSize = true;
-            this.cbSelectAll.Location = new System.Drawing.Point(13, 19);
+            this.cbSelectAll.Location = new System.Drawing.Point(13, 40);
             this.cbSelectAll.Name = "cbSelectAll";
             this.cbSelectAll.Size = new System.Drawing.Size(139, 17);
             this.cbSelectAll.TabIndex = 15;
             this.cbSelectAll.Text = "Выбрать/снять выбор";
             this.cbSelectAll.UseVisualStyleBackColor = true;
-            this.cbSelectAll.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.cbSelectAll.CheckedChanged += new System.EventHandler(this.cbSelectAll_CheckedChanged);
             // 
-            // groupBoxRunAtStart
+            // gbRunAtStart
             // 
-            this.groupBoxRunAtStart.Controls.Add(this.cbSelectAll);
-            this.groupBoxRunAtStart.Controls.Add(this.listRunAtStart);
-            this.groupBoxRunAtStart.Location = new System.Drawing.Point(12, 10);
-            this.groupBoxRunAtStart.Name = "groupBoxRunAtStart";
-            this.groupBoxRunAtStart.Size = new System.Drawing.Size(299, 120);
-            this.groupBoxRunAtStart.TabIndex = 16;
-            this.groupBoxRunAtStart.TabStop = false;
-            this.groupBoxRunAtStart.Text = "Запускать при старте MindManager:";
+            this.gbRunAtStart.Controls.Add(this.cbConfiguration);
+            this.gbRunAtStart.Controls.Add(this.rbtnConfiguration);
+            this.gbRunAtStart.Controls.Add(this.rbtnSticks);
+            this.gbRunAtStart.Controls.Add(this.cbSelectAll);
+            this.gbRunAtStart.Controls.Add(this.listRunAtStart);
+            this.gbRunAtStart.Location = new System.Drawing.Point(12, 10);
+            this.gbRunAtStart.Name = "gbRunAtStart";
+            this.gbRunAtStart.Size = new System.Drawing.Size(299, 194);
+            this.gbRunAtStart.TabIndex = 16;
+            this.gbRunAtStart.TabStop = false;
+            this.gbRunAtStart.Text = "Запускать при старте MindManager:";
+            // 
+            // cbConfiguration
+            // 
+            this.cbConfiguration.FormattingEnabled = true;
+            this.cbConfiguration.Location = new System.Drawing.Point(13, 160);
+            this.cbConfiguration.Name = "cbConfiguration";
+            this.cbConfiguration.Size = new System.Drawing.Size(275, 21);
+            this.cbConfiguration.TabIndex = 18;
+            // 
+            // rbtnConfiguration
+            // 
+            this.rbtnConfiguration.AutoSize = true;
+            this.rbtnConfiguration.Location = new System.Drawing.Point(85, 137);
+            this.rbtnConfiguration.Name = "rbtnConfiguration";
+            this.rbtnConfiguration.Size = new System.Drawing.Size(103, 17);
+            this.rbtnConfiguration.TabIndex = 17;
+            this.rbtnConfiguration.Text = "Конфигурацию:";
+            this.rbtnConfiguration.UseVisualStyleBackColor = true;
+            // 
+            // rbtnSticks
+            // 
+            this.rbtnSticks.AutoSize = true;
+            this.rbtnSticks.Checked = true;
+            this.rbtnSticks.Location = new System.Drawing.Point(85, 19);
+            this.rbtnSticks.Name = "rbtnSticks";
+            this.rbtnSticks.Size = new System.Drawing.Size(119, 17);
+            this.rbtnSticks.TabIndex = 16;
+            this.rbtnSticks.TabStop = true;
+            this.rbtnSticks.Text = "Выбранные стики:";
+            this.rbtnSticks.UseVisualStyleBackColor = true;
             // 
             // SettingsDlg
             // 
@@ -102,8 +137,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(322, 196);
-            this.Controls.Add(this.groupBoxRunAtStart);
+            this.ClientSize = new System.Drawing.Size(322, 244);
+            this.Controls.Add(this.gbRunAtStart);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnClose);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -114,8 +149,8 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
-            this.groupBoxRunAtStart.ResumeLayout(false);
-            this.groupBoxRunAtStart.PerformLayout();
+            this.gbRunAtStart.ResumeLayout(false);
+            this.gbRunAtStart.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -127,6 +162,9 @@
         private System.Windows.Forms.ListView listRunAtStart;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.CheckBox cbSelectAll;
-        private System.Windows.Forms.GroupBox groupBoxRunAtStart;
+        private System.Windows.Forms.GroupBox gbRunAtStart;
+        private System.Windows.Forms.ComboBox cbConfiguration;
+        private System.Windows.Forms.RadioButton rbtnConfiguration;
+        private System.Windows.Forms.RadioButton rbtnSticks;
     }
 }

@@ -37,14 +37,22 @@
             this.rbtnVV = new System.Windows.Forms.RadioButton();
             this.rbtnVH = new System.Windows.Forms.RadioButton();
             this.rbtnHV = new System.Windows.Forms.RadioButton();
-            this.label1 = new System.Windows.Forms.Label();
-            this.btnCancel = new System.Windows.Forms.Button();
+            this.lblAlign = new System.Windows.Forms.Label();
+            this.btnClose = new System.Windows.Forms.Button();
             this.btnAlign = new System.Windows.Forms.Button();
             this.btnDown = new System.Windows.Forms.PictureBox();
             this.btnUp = new System.Windows.Forms.PictureBox();
             this.cbSelectAll = new System.Windows.Forms.CheckBox();
             this.listSticks = new System.Windows.Forms.ListView();
             this.p1 = new System.Windows.Forms.PictureBox();
+            this.btnRemember = new System.Windows.Forms.Button();
+            this.btnCreateConfig = new System.Windows.Forms.Button();
+            this.panelConfig = new System.Windows.Forms.Panel();
+            this.txtConfigName = new System.Windows.Forms.TextBox();
+            this.btnConfigOK = new System.Windows.Forms.Button();
+            this.cbConfigurations = new System.Windows.Forms.ComboBox();
+            this.rbtnSaveToConfig = new System.Windows.Forms.RadioButton();
+            this.rbtnNewConfig = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -52,6 +60,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.btnDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnUp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
+            this.panelConfig.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -136,35 +145,39 @@
             this.rbtnHV.Text = "Книги стопкой";
             this.rbtnHV.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // lblAlign
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(310, 7);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(208, 13);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "Равнение по первому (верхнему) стику:";
+            this.lblAlign.AutoSize = true;
+            this.lblAlign.Location = new System.Drawing.Point(310, 7);
+            this.lblAlign.Name = "lblAlign";
+            this.lblAlign.Size = new System.Drawing.Size(208, 13);
+            this.lblAlign.TabIndex = 9;
+            this.lblAlign.Text = "Равнение по первому (верхнему) стику:";
             // 
-            // btnCancel
+            // btnClose
             // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(443, 386);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 10;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClose.Location = new System.Drawing.Point(443, 386);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(75, 23);
+            this.btnClose.TabIndex = 10;
+            this.btnClose.Text = "Close";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnAlign
             // 
-            this.btnAlign.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAlign.Location = new System.Drawing.Point(313, 386);
+            this.btnAlign.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnAlign.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.btnAlign.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnAlign.Image = ((System.Drawing.Image)(resources.GetObject("btnAlign.Image")));
+            this.btnAlign.Location = new System.Drawing.Point(219, 384);
             this.btnAlign.Name = "btnAlign";
-            this.btnAlign.Size = new System.Drawing.Size(75, 23);
+            this.btnAlign.Size = new System.Drawing.Size(99, 27);
             this.btnAlign.TabIndex = 11;
             this.btnAlign.Text = "Отравнять";
-            this.btnAlign.UseVisualStyleBackColor = true;
+            this.btnAlign.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnAlign.UseVisualStyleBackColor = false;
             this.btnAlign.Click += new System.EventHandler(this.btnAlign_Click);
             // 
             // btnDown
@@ -172,7 +185,7 @@
             this.btnDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnDown.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnDown.Image = ((System.Drawing.Image)(resources.GetObject("btnDown.Image")));
-            this.btnDown.Location = new System.Drawing.Point(491, 221);
+            this.btnDown.Location = new System.Drawing.Point(491, 217);
             this.btnDown.Margin = new System.Windows.Forms.Padding(6);
             this.btnDown.Name = "btnDown";
             this.btnDown.Size = new System.Drawing.Size(20, 20);
@@ -186,7 +199,7 @@
             this.btnUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnUp.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnUp.Image = ((System.Drawing.Image)(resources.GetObject("btnUp.Image")));
-            this.btnUp.Location = new System.Drawing.Point(491, 189);
+            this.btnUp.Location = new System.Drawing.Point(491, 185);
             this.btnUp.Margin = new System.Windows.Forms.Padding(6);
             this.btnUp.Name = "btnUp";
             this.btnUp.Size = new System.Drawing.Size(20, 20);
@@ -200,9 +213,9 @@
             this.cbSelectAll.AutoSize = true;
             this.cbSelectAll.Location = new System.Drawing.Point(316, 24);
             this.cbSelectAll.Name = "cbSelectAll";
-            this.cbSelectAll.Size = new System.Drawing.Size(80, 17);
+            this.cbSelectAll.Size = new System.Drawing.Size(91, 17);
             this.cbSelectAll.TabIndex = 37;
-            this.cbSelectAll.Text = "checkBox1";
+            this.cbSelectAll.Text = "Выбрать все";
             this.cbSelectAll.UseVisualStyleBackColor = true;
             this.cbSelectAll.CheckedChanged += new System.EventHandler(this.cbSelectAll_CheckedChanged);
             // 
@@ -221,22 +234,109 @@
             // 
             this.p1.Location = new System.Drawing.Point(61, 242);
             this.p1.Name = "p1";
-            this.p1.Size = new System.Drawing.Size(100, 4);
+            this.p1.Size = new System.Drawing.Size(50, 4);
             this.p1.TabIndex = 39;
             this.p1.TabStop = false;
+            this.p1.Visible = false;
+            // 
+            // btnRemember
+            // 
+            this.btnRemember.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnRemember.Location = new System.Drawing.Point(12, 386);
+            this.btnRemember.Name = "btnRemember";
+            this.btnRemember.Size = new System.Drawing.Size(90, 23);
+            this.btnRemember.TabIndex = 40;
+            this.btnRemember.Text = "Запомнить";
+            this.btnRemember.UseVisualStyleBackColor = true;
+            this.btnRemember.Click += new System.EventHandler(this.btnRemember_Click);
+            // 
+            // btnCreateConfig
+            // 
+            this.btnCreateConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnCreateConfig.Location = new System.Drawing.Point(108, 386);
+            this.btnCreateConfig.Name = "btnCreateConfig";
+            this.btnCreateConfig.Size = new System.Drawing.Size(90, 23);
+            this.btnCreateConfig.TabIndex = 41;
+            this.btnCreateConfig.Text = "Конфигурация";
+            this.btnCreateConfig.UseVisualStyleBackColor = true;
+            this.btnCreateConfig.Click += new System.EventHandler(this.btnCreateConfig_Click);
+            // 
+            // panelConfig
+            // 
+            this.panelConfig.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelConfig.Controls.Add(this.rbtnNewConfig);
+            this.panelConfig.Controls.Add(this.rbtnSaveToConfig);
+            this.panelConfig.Controls.Add(this.cbConfigurations);
+            this.panelConfig.Controls.Add(this.btnConfigOK);
+            this.panelConfig.Controls.Add(this.txtConfigName);
+            this.panelConfig.Location = new System.Drawing.Point(93, 239);
+            this.panelConfig.Name = "panelConfig";
+            this.panelConfig.Size = new System.Drawing.Size(259, 141);
+            this.panelConfig.TabIndex = 42;
+            this.panelConfig.Visible = false;
+            // 
+            // txtConfigName
+            // 
+            this.txtConfigName.Location = new System.Drawing.Point(17, 33);
+            this.txtConfigName.Name = "txtConfigName";
+            this.txtConfigName.Size = new System.Drawing.Size(226, 20);
+            this.txtConfigName.TabIndex = 0;
+            // 
+            // btnConfigOK
+            // 
+            this.btnConfigOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnConfigOK.Location = new System.Drawing.Point(110, 113);
+            this.btnConfigOK.Name = "btnConfigOK";
+            this.btnConfigOK.Size = new System.Drawing.Size(38, 23);
+            this.btnConfigOK.TabIndex = 43;
+            this.btnConfigOK.Text = "ОК";
+            this.btnConfigOK.UseVisualStyleBackColor = true;
+            // 
+            // cbConfigurations
+            // 
+            this.cbConfigurations.FormattingEnabled = true;
+            this.cbConfigurations.Location = new System.Drawing.Point(15, 83);
+            this.cbConfigurations.Name = "cbConfigurations";
+            this.cbConfigurations.Size = new System.Drawing.Size(227, 21);
+            this.cbConfigurations.TabIndex = 45;
+            // 
+            // rbtnSaveToConfig
+            // 
+            this.rbtnSaveToConfig.AutoSize = true;
+            this.rbtnSaveToConfig.Location = new System.Drawing.Point(15, 64);
+            this.rbtnSaveToConfig.Name = "rbtnSaveToConfig";
+            this.rbtnSaveToConfig.Size = new System.Drawing.Size(167, 17);
+            this.rbtnSaveToConfig.TabIndex = 46;
+            this.rbtnSaveToConfig.Text = "Сохранить в конфигурацию:";
+            this.rbtnSaveToConfig.UseVisualStyleBackColor = true;
+            // 
+            // rbtnNewConfig
+            // 
+            this.rbtnNewConfig.AutoSize = true;
+            this.rbtnNewConfig.Checked = true;
+            this.rbtnNewConfig.Location = new System.Drawing.Point(17, 12);
+            this.rbtnNewConfig.Name = "rbtnNewConfig";
+            this.rbtnNewConfig.Size = new System.Drawing.Size(135, 17);
+            this.rbtnNewConfig.TabIndex = 47;
+            this.rbtnNewConfig.TabStop = true;
+            this.rbtnNewConfig.Text = "Новая конфигурация:";
+            this.rbtnNewConfig.UseVisualStyleBackColor = true;
             // 
             // AlignSticksDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(530, 420);
+            this.Controls.Add(this.panelConfig);
+            this.Controls.Add(this.btnCreateConfig);
+            this.Controls.Add(this.btnRemember);
             this.Controls.Add(this.p1);
             this.Controls.Add(this.cbSelectAll);
             this.Controls.Add(this.btnDown);
             this.Controls.Add(this.btnUp);
             this.Controls.Add(this.btnAlign);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.btnClose);
+            this.Controls.Add(this.lblAlign);
             this.Controls.Add(this.rbtnHV);
             this.Controls.Add(this.rbtnVH);
             this.Controls.Add(this.rbtnVV);
@@ -261,6 +361,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.btnDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnUp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
+            this.panelConfig.ResumeLayout(false);
+            this.panelConfig.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -276,13 +378,21 @@
         private System.Windows.Forms.RadioButton rbtnVV;
         private System.Windows.Forms.RadioButton rbtnVH;
         private System.Windows.Forms.RadioButton rbtnHV;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Label lblAlign;
+        private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Button btnAlign;
         private System.Windows.Forms.PictureBox btnDown;
         private System.Windows.Forms.PictureBox btnUp;
         private System.Windows.Forms.CheckBox cbSelectAll;
         private System.Windows.Forms.ListView listSticks;
         private System.Windows.Forms.PictureBox p1;
+        private System.Windows.Forms.Button btnRemember;
+        private System.Windows.Forms.Button btnCreateConfig;
+        private System.Windows.Forms.Panel panelConfig;
+        private System.Windows.Forms.Button btnConfigOK;
+        private System.Windows.Forms.TextBox txtConfigName;
+        private System.Windows.Forms.ComboBox cbConfigurations;
+        private System.Windows.Forms.RadioButton rbtnNewConfig;
+        private System.Windows.Forms.RadioButton rbtnSaveToConfig;
     }
 }

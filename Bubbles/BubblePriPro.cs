@@ -7,6 +7,8 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Image = System.Drawing.Image;
+using PopupControl;
+using Cursor = System.Windows.Forms.Cursor;
 
 namespace Bubbles
 {
@@ -27,39 +29,36 @@ namespace Bubbles
             toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
             toolTip1.SetToolTip(pictureHandle, stickname);
 
-            MinLength = this.Width;
-            RealLength = this.Width;
-            panel1MinLength = panel1.Width;
+            MinLength = this.Width; RealLength = this.Width;
 
-            if (orientation == "V")
-            {
-                orientation = StickUtils.RotateStick(this, p1, panel1, Manage, "H", true);
-            }
+            if (orientation == "V") {
+                orientation = "H"; Rotate(); }
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
             this.ResizeRedraw = true;
 
-            // Context menu
+            // Context menus
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
+            cmsIcon.ItemClicked += ContextMenuStrip1_ItemClicked;
 
             contextMenuStrip1.Items["BI_addpriority"].Text = Utils.getString("pripro.contextmenu.priority");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_addpriority"], p2, "pr1.png");
+            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_addpriority"], "pr1.png");
 
             contextMenuStrip1.Items["BI_addprogress"].Text = Utils.getString("pripro.contextmenu.progress");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_addprogress"], p2, "pro25.png");
+            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_addprogress"], "pro25.png");
 
-            contextMenuStrip1.Items["BI_delete"].Text = Utils.getString("float_icons.contextmenu.delete");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_delete"], p2, "deleteall.png");
-            
-            StickUtils.SetCommonContextMenu(contextMenuStrip1, p2);
+            cmsIcon.Items["BI_delete"].Text = Utils.getString("float_icons.contextmenu.delete");
 
+            StickUtils.SetCommonContextMenu(contextMenuStrip1);
+
+            string priority = Utils.getString("pripro.priority.caption");
             ToolStripMenuItem addPriority = contextMenuStrip1.Items["BI_addpriority"] as ToolStripMenuItem;
-            addPriority.DropDown.Items[0].Text = Utils.getString("pripro.priority.caption") + " 1";
-            addPriority.DropDown.Items[1].Text = Utils.getString("pripro.priority.caption") + " 2";
-            addPriority.DropDown.Items[2].Text = Utils.getString("pripro.priority.caption") + " 3";
-            addPriority.DropDown.Items[3].Text = Utils.getString("pripro.priority.caption") + " 4";
-            addPriority.DropDown.Items[4].Text = Utils.getString("pripro.priority.caption") + " 5";
+            addPriority.DropDown.Items[0].Text = priority + " 1";
+            addPriority.DropDown.Items[1].Text = priority + " 2";
+            addPriority.DropDown.Items[2].Text = priority + " 3";
+            addPriority.DropDown.Items[3].Text = priority + " 4";
+            addPriority.DropDown.Items[4].Text = priority + " 5";
 
             addPriority.DropDown.ItemClicked += ContextMenuStrip1_ItemClicked;
             PriorityCollection = addPriority.DropDown.Items;
@@ -98,9 +97,6 @@ namespace Bubbles
             PRG100 = Image.FromFile(Utils.ImagesPath + "pro100.png");
             addProgress.DropDownItems["pro100"].Image = new Bitmap(PRG100, new Size(p1.Width, p1.Height));
 
-            pictureHandle.MouseDown += PictureHandle_MouseDown;
-            Manage.Click += Manage_Click;
-
             using (BubblesDB db = new BubblesDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from PRIPRO where stickID=" + ID + "");
@@ -118,43 +114,70 @@ namespace Bubbles
 
                 pri.Sort(); pro.Sort();
 
-                int k = 0;
                 foreach (var value in pri)
                 {
                     PriProItem item = new PriProItem("pri", value);
                     PriPros.Add(item);
-                    PictureBox pBox = StickUtils.AddPriPro(p1, item, panel1, orientation, k++);
-                    try { pBox.Image = StickUtils.GetImage(item.Type, item.Value); } catch { continue; }
-                    pBox.MouseClick += Icon_Click;
                 }
                 foreach (var value in pro)
                 {
                     PriProItem item = new PriProItem("pro", value);
                     PriPros.Add(item);
-                    PictureBox pBox = StickUtils.AddPriPro(p1, item, panel1, orientation, k++);
-                    try { pBox.Image = StickUtils.GetImage(item.Type, item.Value); } catch { continue; }
-                    pBox.MouseClick += Icon_Click;
                 }
             }
-            RealLength = this.Width;
 
-            pictureHandle.MouseDoubleClick += PictureHandle_MouseDoubleClick;
+            RefreshStick();
+
+            pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
+            pictureHandle.MouseDown += Move_Stick;
+            this.MouseDown += Move_Stick;
+            Manage.Click += Manage_Click;
 
             if (collapsed) {
                 collapsed = false; Collapse(); }
+
+            this.MouseEnter += BubblePriPro_MouseEnter;
+            this.MouseLeave += BubblePriPro_MouseLeave;
         }
 
-        private void PictureHandle_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void BubblePriPro_MouseLeave(object sender, EventArgs e)
         {
-            Collapse();
+            if (auxPanel != null)
+            {
+                if (Cursor.Position.X < this.Left || Cursor.Position.X > this.Right ||
+                    Cursor.Position.Y < this.Top || Cursor.Position.Y > this.Bottom + this.Height)
+                    auxPanel.Hide();
+            }
+        }
+
+        private void BubblePriPro_MouseEnter(object sender, EventArgs e)
+        {
+            if (auxPanel == null || !auxPanel.Visible)
+            {
+                // Kill previous popup
+                if (BubblesButton.popup != null)
+                {
+                    BubblesButton.popup.Hide(); BubblesButton.popup.Dispose();
+                }
+
+                System.Windows.Forms.Control ff = new StickPopup().panelH;
+                ff.Tag = new PopupItem(this, orientation, collapsed);
+                auxPanel = new Popup(ff);
+                auxPanel.ShowingAnimation = PopupAnimations.Center;
+                auxPanel.AnimationDuration = 300;
+                BubblesButton.popup = auxPanel;
+
+                if (orientation == "H")
+                    auxPanel.Show(this.Left, this.Bottom);
+                else
+                    auxPanel.Show(this.Left, this.Top);
+            }
         }
 
         private void Manage_Click(object sender, EventArgs e)
         {
             foreach (ToolStripItem item in contextMenuStrip1.Items)
                 item.Visible = true;
-
-            contextMenuStrip1.Items["BI_delete"].Visible = false;
 
             PriorityCollection["pri1"].Visible = !PriPros.Any(x => x.Value == 1);
             PriorityCollection["pri2"].Visible = !PriPros.Any(x => x.Value == 2);
@@ -175,14 +198,13 @@ namespace Bubbles
             contextMenuStrip1.Show(Cursor.Position);
         }
 
-        private void PictureHandle_MouseDown(object sender, MouseEventArgs e)
+        private void Move_Stick(object sender, MouseEventArgs e)
         {
             if (e.Clicks == 1)
             {
                 ReleaseCapture();
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
-            base.OnMouseDown(e);
         }
 
         private void ContextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -210,11 +232,6 @@ namespace Bubbles
             {
                 PriPros.Clear();
                 RefreshStick(true);
-                if (collapsed)
-                {
-                    collapsed = false;
-                    this.BackColor = System.Drawing.Color.Lavender;
-                }
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
@@ -223,7 +240,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_rotate")
             {
-                orientation = StickUtils.RotateStick(this, p1, panel1, Manage, orientation);
+                Rotate();
             }
             else if (e.ClickedItem.Name == "BI_help")
             {
@@ -233,34 +250,36 @@ namespace Bubbles
             {
                 StickUtils.SaveStick(this.Bounds, (int)this.Tag, orientation, collapsed);
             }
-            else if (e.ClickedItem.Name == "BI_newstick") // correct
+            else if (e.ClickedItem.Name == "BI_newstick")
             {
                 string name = StickUtils.GetName(this, orientation, StickUtils.typestick, "");
                 if (name != "")
                 {
-                    BubblePriPro form = new BubblePriPro(0, orientation, name);
+                    string _collapsed = collapsed ? "1" : "0";
+                    BubblePriPro form = new BubblePriPro(0, orientation + _collapsed, name);
                     StickUtils.CreateStick(form, name, StickUtils.typestick);
                 }
             }
             else if (e.ClickedItem.Name == "BI_renamestick")
             {
-                string newName = StickUtils.GetName(this, orientation, StickUtils.typestick, toolTip1.GetToolTip(pictureHandle));
+                string newName = StickUtils.GetName(this, orientation, StickUtils.typepripro, 
+                    toolTip1.GetToolTip(pictureHandle), true);
                 if (newName != "") toolTip1.SetToolTip(pictureHandle, newName);
             }
             else if (e.ClickedItem.Name == "BI_collapse")
             {
-                if (StickUtils.Collapse(this, orientation))
-                    collapsed = true;
+                Collapse();
             }
             else if (e.ClickedItem.Name == "BI_delete_stick") // correct
             {
-                Collapse();
+                if (StickUtils.DeleteStick((int)this.Tag, StickUtils.typepripro))
+                    this.Close();
             }
         }
 
         public void Rotate()
         {
-            orientation = StickUtils.RotateStick(this, p1, panel1, Manage, orientation);
+            orientation = StickUtils.RotateStick(this, Manage, orientation);
         }
 
         /// <summary>
@@ -274,33 +293,36 @@ namespace Bubbles
             {
                 if (CollapseAll) return;
 
-                StickUtils.Expand(this, RealLength, orientation);
-                contextMenuStrip1.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.collapse");
+                StickUtils.Expand(this, RealLength, orientation, contextMenuStrip1);
+                //contextMenuStrip1.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.collapse");
                 collapsed = false;
             }
             else // Collapse stick
             {
                 if (ExpandAll) return;
 
-                StickUtils.Collapse(this, orientation);
+                StickUtils.Collapse(this, orientation, contextMenuStrip1);
                 collapsed = true;
-                contextMenuStrip1.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.expand");
+                //contextMenuStrip1.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.expand");
             }
         }
 
         void RefreshStick(bool deleteall = false)
         {
             StickUtils.PriPros.Clear(); StickUtils.PriPros.AddRange(PriPros);
-            List<PictureBox> pBoxs = StickUtils.RefreshStick(this, p1, panel1, orientation, 
-                MinLength, panel1MinLength, collapsed, StickUtils.typepripro, deleteall);
+            List<PictureBox> pBoxs = StickUtils.RefreshStick(this, p1, orientation, MinLength, 
+                collapsed, StickUtils.typepripro, deleteall);
 
             RealLength = StickUtils.stickLength;
 
+            int i = 0;
             foreach (PictureBox pBox in pBoxs)
+            {
                 pBox.MouseClick += Icon_Click;
 
-            if (collapsed)
-                this.Width = MinLength;
+                if (collapsed && i++ > 0) // if collapsed hide all icons except the first
+                    pBox.Visible = false;
+            }
         }
 
         private void Icon_Click(object sender, MouseEventArgs e)
@@ -332,11 +354,8 @@ namespace Bubbles
             }
             else if (e.Button == MouseButtons.Right)
             {
-                foreach (ToolStripItem item in contextMenuStrip1.Items)
-                    item.Visible = false;
-
-                contextMenuStrip1.Items["BI_delete"].Visible = true;
-                contextMenuStrip1.Show(Cursor.Position);
+                cmsIcon.Items["BI_delete"].Visible = true;
+                cmsIcon.Show(Cursor.Position);
             }
         }
 
@@ -353,16 +372,18 @@ namespace Bubbles
             return 0;
         }
 
-        public static List<PriProItem> PriPros = new List<PriProItem>();
+        public List<PriProItem> PriPros = new List<PriProItem>();
         PictureBox selectedIcon = null;
         string orientation = "H";
         bool collapsed = false;
 
-        int MinLength, RealLength, panel1MinLength;
+        int MinLength, RealLength;
 
         public static Image PR1, PR2, PR3, PR4, PR5, PRG0, PRG10, PRG25, PRG35, PRG50, PRG65, PRG75, PRG90, PRG100;
         ToolStripItemCollection PriorityCollection;
         ToolStripItemCollection ProgressCollection;
+
+        Popup auxPanel;
 
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;

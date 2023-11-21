@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenuDlg));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pIconDist = new System.Windows.Forms.PictureBox();
             this.p2 = new System.Windows.Forms.PictureBox();
             this.pBulkOperations = new System.Windows.Forms.PictureBox();
             this.pMinSize = new System.Windows.Forms.PictureBox();
@@ -50,13 +51,14 @@
             this.MySources = new System.Windows.Forms.PictureBox();
             this.Bookmarks = new System.Windows.Forms.PictureBox();
             this.Paste = new System.Windows.Forms.PictureBox();
-            this.Icons = new System.Windows.Forms.PictureBox();
+            this.pIcons = new System.Windows.Forms.PictureBox();
             this.PriPro = new System.Windows.Forms.PictureBox();
             this.Settings = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BulkOperations = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.BO_show = new System.Windows.Forms.ToolStripMenuItem();
             this.BO_hide = new System.Windows.Forms.ToolStripMenuItem();
+            this.BO_show = new System.Windows.Forms.ToolStripMenuItem();
+            this.BO_close = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.BO_collapse = new System.Windows.Forms.ToolStripMenuItem();
             this.BO_expand = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,8 +67,10 @@
             this.BO_align = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.BO_help = new System.Windows.Forms.ToolStripMenuItem();
-            this.pIconDist = new System.Windows.Forms.PictureBox();
+            this.BO_configuration = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBulkOperations)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pMinSize)).BeginInit();
@@ -76,11 +80,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.MySources)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bookmarks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Paste)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Icons)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pIcons)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PriPro)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Settings)).BeginInit();
             this.BulkOperations.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -106,7 +109,7 @@
             this.panel1.Controls.Add(this.MySources);
             this.panel1.Controls.Add(this.Bookmarks);
             this.panel1.Controls.Add(this.Paste);
-            this.panel1.Controls.Add(this.Icons);
+            this.panel1.Controls.Add(this.pIcons);
             this.panel1.Controls.Add(this.PriPro);
             this.panel1.Controls.Add(this.Settings);
             this.panel1.Location = new System.Drawing.Point(1, 1);
@@ -114,9 +117,19 @@
             this.panel1.Size = new System.Drawing.Size(436, 143);
             this.panel1.TabIndex = 21;
             // 
+            // pIconDist
+            // 
+            this.pIconDist.Location = new System.Drawing.Point(11, 25);
+            this.pIconDist.Name = "pIconDist";
+            this.pIconDist.Size = new System.Drawing.Size(22, 16);
+            this.pIconDist.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pIconDist.TabIndex = 79;
+            this.pIconDist.TabStop = false;
+            this.pIconDist.Visible = false;
+            // 
             // p2
             // 
-            this.p2.Location = new System.Drawing.Point(15, 46);
+            this.p2.Location = new System.Drawing.Point(26, 7);
             this.p2.Name = "p2";
             this.p2.Size = new System.Drawing.Size(12, 12);
             this.p2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -137,7 +150,7 @@
             // 
             // pMinSize
             // 
-            this.pMinSize.Location = new System.Drawing.Point(11, 11);
+            this.pMinSize.Location = new System.Drawing.Point(350, 9);
             this.pMinSize.Name = "pMinSize";
             this.pMinSize.Size = new System.Drawing.Size(75, 32);
             this.pMinSize.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -193,7 +206,7 @@
             this.Organizer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Organizer.TabIndex = 32;
             this.Organizer.TabStop = false;
-            this.Organizer.Click += new System.EventHandler(this.Organizer_Click);
+            this.Organizer.Click += new System.EventHandler(this.MenuIcon_Click);
             // 
             // lblFormat
             // 
@@ -213,7 +226,7 @@
             this.Format.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Format.TabIndex = 30;
             this.Format.TabStop = false;
-            this.Format.Click += new System.EventHandler(this.Formatting_Click);
+            this.Format.Click += new System.EventHandler(this.MenuIcon_Click);
             // 
             // label1
             // 
@@ -279,7 +292,7 @@
             this.MySources.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.MySources.TabIndex = 20;
             this.MySources.TabStop = false;
-            this.MySources.Click += new System.EventHandler(this.MySources_Click);
+            this.MySources.Click += new System.EventHandler(this.MenuIcon_Click);
             // 
             // Bookmarks
             // 
@@ -290,7 +303,7 @@
             this.Bookmarks.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Bookmarks.TabIndex = 11;
             this.Bookmarks.TabStop = false;
-            this.Bookmarks.Click += new System.EventHandler(this.Bookmarks_Click);
+            this.Bookmarks.Click += new System.EventHandler(this.MenuIcon_Click);
             // 
             // Paste
             // 
@@ -301,18 +314,18 @@
             this.Paste.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Paste.TabIndex = 10;
             this.Paste.TabStop = false;
-            this.Paste.Click += new System.EventHandler(this.PasteBubble_Click);
+            this.Paste.Click += new System.EventHandler(this.MenuIcon_Click);
             // 
-            // Icons
+            // pIcons
             // 
-            this.Icons.Image = ((System.Drawing.Image)(resources.GetObject("Icons.Image")));
-            this.Icons.Location = new System.Drawing.Point(15, 95);
-            this.Icons.Name = "Icons";
-            this.Icons.Size = new System.Drawing.Size(32, 32);
-            this.Icons.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.Icons.TabIndex = 12;
-            this.Icons.TabStop = false;
-            this.Icons.Click += new System.EventHandler(this.Icons_Click);
+            this.pIcons.Image = ((System.Drawing.Image)(resources.GetObject("pIcons.Image")));
+            this.pIcons.Location = new System.Drawing.Point(15, 95);
+            this.pIcons.Name = "pIcons";
+            this.pIcons.Size = new System.Drawing.Size(32, 32);
+            this.pIcons.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pIcons.TabIndex = 12;
+            this.pIcons.TabStop = false;
+            this.pIcons.Click += new System.EventHandler(this.MenuIcon_Click);
             // 
             // PriPro
             // 
@@ -323,7 +336,7 @@
             this.PriPro.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PriPro.TabIndex = 13;
             this.PriPro.TabStop = false;
-            this.PriPro.Click += new System.EventHandler(this.PriPro_Click);
+            this.PriPro.Click += new System.EventHandler(this.MenuIcon_Click);
             // 
             // Settings
             // 
@@ -339,8 +352,9 @@
             // BulkOperations
             // 
             this.BulkOperations.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.BO_show,
             this.BO_hide,
+            this.BO_show,
+            this.BO_close,
             this.toolStripSeparator2,
             this.BO_collapse,
             this.BO_expand,
@@ -348,9 +362,18 @@
             this.BO_remember,
             this.BO_align,
             this.toolStripSeparator1,
+            this.BO_configuration,
+            this.toolStripSeparator4,
             this.BO_help});
             this.BulkOperations.Name = "BulkOperations";
-            this.BulkOperations.Size = new System.Drawing.Size(191, 176);
+            this.BulkOperations.Size = new System.Drawing.Size(191, 248);
+            // 
+            // BO_hide
+            // 
+            this.BO_hide.Image = ((System.Drawing.Image)(resources.GetObject("BO_hide.Image")));
+            this.BO_hide.Name = "BO_hide";
+            this.BO_hide.Size = new System.Drawing.Size(190, 22);
+            this.BO_hide.Text = "Скрыть все стики";
             // 
             // BO_show
             // 
@@ -360,12 +383,11 @@
             this.BO_show.Size = new System.Drawing.Size(190, 22);
             this.BO_show.Text = "Показать все стики";
             // 
-            // BO_hide
+            // BO_close
             // 
-            this.BO_hide.Image = ((System.Drawing.Image)(resources.GetObject("BO_hide.Image")));
-            this.BO_hide.Name = "BO_hide";
-            this.BO_hide.Size = new System.Drawing.Size(190, 22);
-            this.BO_hide.Text = "Скрыть все стики";
+            this.BO_close.Name = "BO_close";
+            this.BO_close.Size = new System.Drawing.Size(190, 22);
+            this.BO_close.Text = "Закрыть все стики";
             // 
             // toolStripSeparator2
             // 
@@ -417,15 +439,16 @@
             this.BO_help.Size = new System.Drawing.Size(190, 22);
             this.BO_help.Text = "Справка";
             // 
-            // pIconDist
+            // BO_configuration
             // 
-            this.pIconDist.Location = new System.Drawing.Point(15, 64);
-            this.pIconDist.Name = "pIconDist";
-            this.pIconDist.Size = new System.Drawing.Size(22, 16);
-            this.pIconDist.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pIconDist.TabIndex = 79;
-            this.pIconDist.TabStop = false;
-            this.pIconDist.Visible = false;
+            this.BO_configuration.Name = "BO_configuration";
+            this.BO_configuration.Size = new System.Drawing.Size(190, 22);
+            this.BO_configuration.Text = "Конфигурация";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(187, 6);
             // 
             // MainMenuDlg
             // 
@@ -440,6 +463,7 @@
             this.Text = "Dublicate";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBulkOperations)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pMinSize)).EndInit();
@@ -449,11 +473,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.MySources)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bookmarks)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Paste)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Icons)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pIcons)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PriPro)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Settings)).EndInit();
             this.BulkOperations.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -473,7 +496,7 @@
         private System.Windows.Forms.Label lblOrganizer;
         public System.Windows.Forms.PictureBox Bookmarks;
         public System.Windows.Forms.PictureBox Paste;
-        public System.Windows.Forms.PictureBox Icons;
+        public System.Windows.Forms.PictureBox pIcons;
         public System.Windows.Forms.PictureBox PriPro;
         public System.Windows.Forms.PictureBox MySources;
         public System.Windows.Forms.PictureBox Format;
@@ -496,5 +519,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.PictureBox p2;
         private System.Windows.Forms.PictureBox pIconDist;
+        private System.Windows.Forms.ToolStripMenuItem BO_close;
+        private System.Windows.Forms.ToolStripMenuItem BO_configuration;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
     }
 }

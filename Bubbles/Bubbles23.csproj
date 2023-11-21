@@ -47,6 +47,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Common\PalmaRossCommon23.dll</HintPath>
     </Reference>
+    <Reference Include="PopupControl">
+      <HintPath>..\..\DLLs\PopupControl.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -75,11 +78,29 @@
     <Compile Include="BubbleOrganizer.Designer.cs">
       <DependentUpon>BubbleOrganizer.cs</DependentUpon>
     </Compile>
+    <Compile Include="BulkOperationsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BulkOperationsDlg.Designer.cs">
+      <DependentUpon>BulkOperationsDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="DragDropTest.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DragDropTest.Designer.cs">
       <DependentUpon>DragDropTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BookmarkListDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BookmarkListDlg.Designer.cs">
+      <DependentUpon>BookmarkListDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ManageConfigsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManageConfigsDlg.Designer.cs">
+      <DependentUpon>ManageConfigsDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="NewSourceDlg.cs">
       <SubType>Form</SubType>
@@ -169,6 +190,12 @@
     </Compile>
     <Compile Include="Organizer\NoteDlg.Designer.cs">
       <DependentUpon>NoteDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StickPopup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StickPopup.Designer.cs">
+      <DependentUpon>StickPopup.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -272,10 +299,16 @@
     <Content Include="images\chm.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\close.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\close_sticker.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\collapse.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\configuration.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\deleteall.png">
@@ -528,8 +561,17 @@
     <EmbeddedResource Include="BubbleOrganizer.resx">
       <DependentUpon>BubbleOrganizer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="BulkOperationsDlg.resx">
+      <DependentUpon>BulkOperationsDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DragDropTest.resx">
       <DependentUpon>DragDropTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BookmarkListDlg.resx">
+      <DependentUpon>BookmarkListDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManageConfigsDlg.resx">
+      <DependentUpon>ManageConfigsDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NewSourceDlg.resx">
       <DependentUpon>NewSourceDlg.cs</DependentUpon>
@@ -572,6 +614,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Organizer\NoteDlg.resx">
       <DependentUpon>NoteDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StickPopup.resx">
+      <DependentUpon>StickPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

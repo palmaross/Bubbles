@@ -32,33 +32,27 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BubbleBookmarks));
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
+            this.BI_addbookmark = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_main = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_deletemain = new System.Windows.Forms.ToolStripMenuItem();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
-            this.label1 = new System.Windows.Forms.Label();
             this.pCentral = new System.Windows.Forms.PictureBox();
-            this.icondist = new System.Windows.Forms.PictureBox();
             this.Manage = new System.Windows.Forms.PictureBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.p3 = new System.Windows.Forms.PictureBox();
             this.p1 = new System.Windows.Forms.PictureBox();
-            this.p4 = new System.Windows.Forms.PictureBox();
-            this.pictureHandle = new System.Windows.Forms.PictureBox();
-            this.AddBookmark = new System.Windows.Forms.PictureBox();
             this.p2 = new System.Windows.Forms.PictureBox();
-            this.BI_addbookmark = new System.Windows.Forms.ToolStripMenuItem();
+            this.pictureHandle = new System.Windows.Forms.PictureBox();
+            this.BookmarkList = new System.Windows.Forms.PictureBox();
+            this.p3 = new System.Windows.Forms.Panel();
+            this.cmsDelete = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pCentral)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.icondist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
-            this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.p3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.p4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.AddBookmark)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BookmarkList)).BeginInit();
+            this.cmsDelete.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -68,18 +62,17 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.BI_delete,
             this.BI_addbookmark,
             this.BI_main,
             this.BI_deletemain});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(200, 114);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(200, 70);
             // 
-            // BI_delete
+            // BI_addbookmark
             // 
-            this.BI_delete.Name = "BI_delete";
-            this.BI_delete.Size = new System.Drawing.Size(199, 22);
-            this.BI_delete.Text = "Удалить";
+            this.BI_addbookmark.Name = "BI_addbookmark";
+            this.BI_addbookmark.Size = new System.Drawing.Size(199, 22);
+            this.BI_addbookmark.Text = "Добавить закладку";
             // 
             // BI_main
             // 
@@ -93,17 +86,6 @@
             this.BI_deletemain.Size = new System.Drawing.Size(199, 22);
             this.BI_deletemain.Text = "Удалить главные темы";
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 29);
-            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(56, 13);
-            this.label1.TabIndex = 74;
-            this.label1.Text = "высота22";
-            this.label1.Visible = false;
-            // 
             // pCentral
             // 
             this.pCentral.Image = ((System.Drawing.Image)(resources.GetObject("pCentral.Image")));
@@ -114,21 +96,12 @@
             this.pCentral.TabIndex = 75;
             this.pCentral.TabStop = false;
             // 
-            // icondist
-            // 
-            this.icondist.Location = new System.Drawing.Point(69, 26);
-            this.icondist.Name = "icondist";
-            this.icondist.Size = new System.Drawing.Size(22, 16);
-            this.icondist.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.icondist.TabIndex = 76;
-            this.icondist.TabStop = false;
-            // 
             // Manage
             // 
             this.Manage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Manage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Manage.Image = ((System.Drawing.Image)(resources.GetObject("Manage.Image")));
-            this.Manage.Location = new System.Drawing.Point(120, 5);
+            this.Manage.Location = new System.Drawing.Point(117, 5);
             this.Manage.Name = "Manage";
             this.Manage.Size = new System.Drawing.Size(20, 20);
             this.Manage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -136,31 +109,9 @@
             this.Manage.TabStop = false;
             this.Manage.Click += new System.EventHandler(this.Manage_Click);
             // 
-            // panel1
-            // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.BackColor = System.Drawing.Color.Transparent;
-            this.panel1.Controls.Add(this.p3);
-            this.panel1.Controls.Add(this.p1);
-            this.panel1.Location = new System.Drawing.Point(50, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(43, 30);
-            this.panel1.TabIndex = 78;
-            // 
-            // p3
-            // 
-            this.p3.Location = new System.Drawing.Point(28, 7);
-            this.p3.Name = "p3";
-            this.p3.Size = new System.Drawing.Size(16, 4);
-            this.p3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.p3.TabIndex = 83;
-            this.p3.TabStop = false;
-            this.p3.Visible = false;
-            // 
             // p1
             // 
-            this.p1.Location = new System.Drawing.Point(0, 5);
+            this.p1.Location = new System.Drawing.Point(50, 5);
             this.p1.Name = "p1";
             this.p1.Size = new System.Drawing.Size(20, 20);
             this.p1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -168,15 +119,15 @@
             this.p1.TabStop = false;
             this.p1.Visible = false;
             // 
-            // p4
+            // p2
             // 
-            this.p4.Location = new System.Drawing.Point(52, 7);
-            this.p4.Name = "p4";
-            this.p4.Size = new System.Drawing.Size(16, 16);
-            this.p4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.p4.TabIndex = 82;
-            this.p4.TabStop = false;
-            this.p4.Visible = false;
+            this.p2.Location = new System.Drawing.Point(52, 7);
+            this.p2.Name = "p2";
+            this.p2.Size = new System.Drawing.Size(16, 16);
+            this.p2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.p2.TabIndex = 82;
+            this.p2.TabStop = false;
+            this.p2.Visible = false;
             // 
             // pictureHandle
             // 
@@ -189,68 +140,68 @@
             this.pictureHandle.TabIndex = 77;
             this.pictureHandle.TabStop = false;
             // 
-            // AddBookmark
+            // BookmarkList
             // 
-            this.AddBookmark.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.AddBookmark.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.AddBookmark.Image = ((System.Drawing.Image)(resources.GetObject("AddBookmark.Image")));
-            this.AddBookmark.Location = new System.Drawing.Point(96, 6);
-            this.AddBookmark.Name = "AddBookmark";
-            this.AddBookmark.Size = new System.Drawing.Size(18, 18);
-            this.AddBookmark.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.AddBookmark.TabIndex = 80;
-            this.AddBookmark.TabStop = false;
-            this.AddBookmark.Click += new System.EventHandler(this.AddBookmark_Click);
+            this.BookmarkList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BookmarkList.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BookmarkList.Image = ((System.Drawing.Image)(resources.GetObject("BookmarkList.Image")));
+            this.BookmarkList.Location = new System.Drawing.Point(93, 5);
+            this.BookmarkList.Name = "BookmarkList";
+            this.BookmarkList.Size = new System.Drawing.Size(20, 20);
+            this.BookmarkList.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.BookmarkList.TabIndex = 80;
+            this.BookmarkList.TabStop = false;
+            this.BookmarkList.Click += new System.EventHandler(this.BookmarkList_Click);
             // 
-            // p2
+            // p3
             // 
-            this.p2.Location = new System.Drawing.Point(118, 14);
-            this.p2.Name = "p2";
-            this.p2.Size = new System.Drawing.Size(12, 12);
-            this.p2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.p2.TabIndex = 84;
-            this.p2.TabStop = false;
-            this.p2.Visible = false;
+            this.p3.Location = new System.Drawing.Point(4, 26);
+            this.p3.Name = "p3";
+            this.p3.Size = new System.Drawing.Size(16, 4);
+            this.p3.TabIndex = 84;
+            this.p3.Visible = false;
             // 
-            // BI_addbookmark
+            // cmsDelete
             // 
-            this.BI_addbookmark.Name = "BI_addbookmark";
-            this.BI_addbookmark.Size = new System.Drawing.Size(199, 22);
-            this.BI_addbookmark.Text = "Добавить закладку";
+            this.cmsDelete.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.BI_delete});
+            this.cmsDelete.Name = "cmsDelete";
+            this.cmsDelete.ShowImageMargin = false;
+            this.cmsDelete.Size = new System.Drawing.Size(156, 48);
+            // 
+            // BI_delete
+            // 
+            this.BI_delete.Name = "BI_delete";
+            this.BI_delete.Size = new System.Drawing.Size(180, 22);
+            this.BI_delete.Text = "Удалить закладку";
             // 
             // BubbleBookmarks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(145, 30);
+            this.ClientSize = new System.Drawing.Size(142, 30);
             this.ControlBox = false;
-            this.Controls.Add(this.p4);
+            this.Controls.Add(this.p3);
             this.Controls.Add(this.p2);
             this.Controls.Add(this.pCentral);
-            this.Controls.Add(this.AddBookmark);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.BookmarkList);
             this.Controls.Add(this.pictureHandle);
-            this.Controls.Add(this.icondist);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.Manage);
+            this.Controls.Add(this.p1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "BubbleBookmarks";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pCentral)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.icondist)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
-            this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.p3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.p4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.AddBookmark)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BookmarkList)).EndInit();
+            this.cmsDelete.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -258,20 +209,17 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.HelpProvider helpProvider1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox pCentral;
-        private System.Windows.Forms.PictureBox icondist;
         private System.Windows.Forms.PictureBox Manage;
-        private System.Windows.Forms.ToolStripMenuItem BI_delete;
         private System.Windows.Forms.ToolStripMenuItem BI_main;
         private System.Windows.Forms.ToolStripMenuItem BI_deletemain;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureHandle;
-        private System.Windows.Forms.PictureBox AddBookmark;
+        private System.Windows.Forms.PictureBox BookmarkList;
         private System.Windows.Forms.PictureBox p1;
-        private System.Windows.Forms.PictureBox p4;
-        private System.Windows.Forms.PictureBox p3;
         private System.Windows.Forms.PictureBox p2;
         private System.Windows.Forms.ToolStripMenuItem BI_addbookmark;
+        private System.Windows.Forms.Panel p3;
+        private System.Windows.Forms.ContextMenuStrip cmsDelete;
+        private System.Windows.Forms.ToolStripMenuItem BI_delete;
     }
 }

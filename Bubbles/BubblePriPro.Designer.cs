@@ -48,22 +48,18 @@
             this.pro75 = new System.Windows.Forms.ToolStripMenuItem();
             this.pro90 = new System.Windows.Forms.ToolStripMenuItem();
             this.pro100 = new System.Windows.Forms.ToolStripMenuItem();
-            this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.label1 = new System.Windows.Forms.Label();
             this.p1 = new System.Windows.Forms.PictureBox();
-            this.icondist = new System.Windows.Forms.PictureBox();
             this.Manage = new System.Windows.Forms.PictureBox();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.pictureHandle = new System.Windows.Forms.PictureBox();
-            this.p2 = new System.Windows.Forms.PictureBox();
+            this.cmsIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.icondist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
-            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
+            this.cmsIcon.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -74,10 +70,9 @@
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.BI_addpriority,
-            this.BI_addprogress,
-            this.BI_delete});
+            this.BI_addprogress});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(188, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(188, 48);
             // 
             // BI_addpriority
             // 
@@ -95,35 +90,35 @@
             // 
             this.pri1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.pri1.Name = "pri1";
-            this.pri1.Size = new System.Drawing.Size(180, 22);
+            this.pri1.Size = new System.Drawing.Size(121, 22);
             this.pri1.Text = "Priority 1";
             // 
             // pri2
             // 
             this.pri2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.pri2.Name = "pri2";
-            this.pri2.Size = new System.Drawing.Size(180, 22);
+            this.pri2.Size = new System.Drawing.Size(121, 22);
             this.pri2.Text = "Priority 2";
             // 
             // pri3
             // 
             this.pri3.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.pri3.Name = "pri3";
-            this.pri3.Size = new System.Drawing.Size(180, 22);
+            this.pri3.Size = new System.Drawing.Size(121, 22);
             this.pri3.Text = "Priority 3";
             // 
             // pri4
             // 
             this.pri4.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.pri4.Name = "pri4";
-            this.pri4.Size = new System.Drawing.Size(180, 22);
+            this.pri4.Size = new System.Drawing.Size(121, 22);
             this.pri4.Text = "Priority 4";
             // 
             // pri5
             // 
             this.pri5.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.pri5.Name = "pri5";
-            this.pri5.Size = new System.Drawing.Size(180, 22);
+            this.pri5.Size = new System.Drawing.Size(121, 22);
             this.pri5.Text = "Priority 5";
             // 
             // BI_addprogress
@@ -206,12 +201,6 @@
             this.pro100.Size = new System.Drawing.Size(102, 22);
             this.pro100.Text = "100%";
             // 
-            // BI_delete
-            // 
-            this.BI_delete.Name = "BI_delete";
-            this.BI_delete.Size = new System.Drawing.Size(187, 22);
-            this.BI_delete.Text = "Удалить";
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -225,22 +214,13 @@
             // 
             // p1
             // 
-            this.p1.Location = new System.Drawing.Point(0, 7);
+            this.p1.Location = new System.Drawing.Point(26, 7);
             this.p1.Name = "p1";
             this.p1.Size = new System.Drawing.Size(16, 16);
             this.p1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.p1.TabIndex = 75;
             this.p1.TabStop = false;
             this.p1.Visible = false;
-            // 
-            // icondist
-            // 
-            this.icondist.Location = new System.Drawing.Point(69, 26);
-            this.icondist.Name = "icondist";
-            this.icondist.Size = new System.Drawing.Size(22, 16);
-            this.icondist.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.icondist.TabIndex = 76;
-            this.icondist.TabStop = false;
             // 
             // Manage
             // 
@@ -255,17 +235,6 @@
             this.Manage.TabStop = false;
             this.Manage.Click += new System.EventHandler(this.Manage_Click);
             // 
-            // panel1
-            // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.BackColor = System.Drawing.Color.Transparent;
-            this.panel1.Controls.Add(this.p1);
-            this.panel1.Location = new System.Drawing.Point(26, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(84, 30);
-            this.panel1.TabIndex = 78;
-            // 
             // pictureHandle
             // 
             this.pictureHandle.BackColor = System.Drawing.Color.Transparent;
@@ -277,15 +246,19 @@
             this.pictureHandle.TabIndex = 77;
             this.pictureHandle.TabStop = false;
             // 
-            // p2
+            // cmsIcon
             // 
-            this.p2.Location = new System.Drawing.Point(63, 9);
-            this.p2.Name = "p2";
-            this.p2.Size = new System.Drawing.Size(12, 12);
-            this.p2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.p2.TabIndex = 79;
-            this.p2.TabStop = false;
-            this.p2.Visible = false;
+            this.cmsIcon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.BI_delete});
+            this.cmsIcon.Name = "cmsIcon";
+            this.cmsIcon.ShowImageMargin = false;
+            this.cmsIcon.Size = new System.Drawing.Size(94, 26);
+            // 
+            // BI_delete
+            // 
+            this.BI_delete.Name = "BI_delete";
+            this.BI_delete.Size = new System.Drawing.Size(93, 22);
+            this.BI_delete.Text = "Удалить";
             // 
             // BubblePriPro
             // 
@@ -294,11 +267,9 @@
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(138, 30);
             this.ControlBox = false;
-            this.Controls.Add(this.p2);
+            this.Controls.Add(this.p1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureHandle);
-            this.Controls.Add(this.icondist);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.Manage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "BubblePriPro";
@@ -306,11 +277,9 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.icondist)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
-            this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
+            this.cmsIcon.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -322,11 +291,8 @@
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox p1;
-        private System.Windows.Forms.PictureBox icondist;
         private System.Windows.Forms.PictureBox Manage;
         private System.Windows.Forms.ToolStripMenuItem BI_addpriority;
-        private System.Windows.Forms.ToolStripMenuItem BI_delete;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureHandle;
         private System.Windows.Forms.ToolStripMenuItem BI_addprogress;
         private System.Windows.Forms.ToolStripMenuItem pro0;
@@ -343,6 +309,7 @@
         private System.Windows.Forms.ToolStripMenuItem pro75;
         private System.Windows.Forms.ToolStripMenuItem pro90;
         private System.Windows.Forms.ToolStripMenuItem pro100;
-        private System.Windows.Forms.PictureBox p2;
+        private System.Windows.Forms.ContextMenuStrip cmsIcon;
+        private System.Windows.Forms.ToolStripMenuItem BI_delete;
     }
 }

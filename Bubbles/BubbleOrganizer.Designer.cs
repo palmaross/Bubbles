@@ -39,7 +39,6 @@
             this.pNotes = new System.Windows.Forms.PictureBox();
             this.pictureHandle = new System.Windows.Forms.PictureBox();
             this.Manage = new System.Windows.Forms.PictureBox();
-            this.p2 = new System.Windows.Forms.PictureBox();
             this.pTodos = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pClipboard)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIdeas)).BeginInit();
@@ -47,7 +46,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pNotes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pTodos)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,6 +68,7 @@
             this.pClipboard.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pClipboard.TabIndex = 75;
             this.pClipboard.TabStop = false;
+            this.pClipboard.Tag = "1";
             this.pClipboard.Click += new System.EventHandler(this.PasteLink_Click);
             // 
             // pIdeas
@@ -82,6 +81,7 @@
             this.pIdeas.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pIdeas.TabIndex = 76;
             this.pIdeas.TabStop = false;
+            this.pIdeas.Tag = "1";
             this.pIdeas.Click += new System.EventHandler(this.PasteNotes_Click);
             // 
             // pLinks
@@ -94,6 +94,7 @@
             this.pLinks.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pLinks.TabIndex = 80;
             this.pLinks.TabStop = false;
+            this.pLinks.Tag = "1";
             this.pLinks.Click += new System.EventHandler(this.callout_Click);
             // 
             // pNotes
@@ -106,6 +107,7 @@
             this.pNotes.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pNotes.TabIndex = 83;
             this.pNotes.TabStop = false;
+            this.pNotes.Tag = "1";
             this.pNotes.Click += new System.EventHandler(this.Notes_Click);
             // 
             // pictureHandle
@@ -132,16 +134,6 @@
             this.Manage.TabStop = false;
             this.Manage.Click += new System.EventHandler(this.Manage_Click);
             // 
-            // p2
-            // 
-            this.p2.Location = new System.Drawing.Point(202, 17);
-            this.p2.Name = "p2";
-            this.p2.Size = new System.Drawing.Size(12, 12);
-            this.p2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.p2.TabIndex = 96;
-            this.p2.TabStop = false;
-            this.p2.Visible = false;
-            // 
             // pTodos
             // 
             this.pTodos.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -152,6 +144,7 @@
             this.pTodos.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pTodos.TabIndex = 78;
             this.pTodos.TabStop = false;
+            this.pTodos.Tag = "1";
             this.pTodos.Click += new System.EventHandler(this.addsubtopic_Click);
             // 
             // BubbleOrganizer
@@ -161,7 +154,6 @@
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(213, 30);
             this.ControlBox = false;
-            this.Controls.Add(this.p2);
             this.Controls.Add(this.Manage);
             this.Controls.Add(this.pictureHandle);
             this.Controls.Add(this.pNotes);
@@ -179,7 +171,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pNotes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pTodos)).EndInit();
             this.ResumeLayout(false);
 
@@ -195,7 +186,6 @@
         private System.Windows.Forms.PictureBox pNotes;
         private System.Windows.Forms.PictureBox pictureHandle;
         private System.Windows.Forms.PictureBox Manage;
-        private System.Windows.Forms.PictureBox p2;
         private System.Windows.Forms.PictureBox pTodos;
     }
 }

@@ -40,17 +40,11 @@
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.label1 = new System.Windows.Forms.Label();
             this.p1 = new System.Windows.Forms.PictureBox();
-            this.icondist = new System.Windows.Forms.PictureBox();
             this.Manage = new System.Windows.Forms.PictureBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.p2 = new System.Windows.Forms.PictureBox();
             this.pictureHandle = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.icondist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
-            this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
             this.SuspendLayout();
             // 
@@ -112,22 +106,13 @@
             // 
             // p1
             // 
-            this.p1.Location = new System.Drawing.Point(0, 7);
+            this.p1.Location = new System.Drawing.Point(26, 7);
             this.p1.Name = "p1";
             this.p1.Size = new System.Drawing.Size(16, 16);
             this.p1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.p1.TabIndex = 75;
             this.p1.TabStop = false;
             this.p1.Visible = false;
-            // 
-            // icondist
-            // 
-            this.icondist.Location = new System.Drawing.Point(69, 26);
-            this.icondist.Name = "icondist";
-            this.icondist.Size = new System.Drawing.Size(22, 16);
-            this.icondist.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.icondist.TabIndex = 76;
-            this.icondist.TabStop = false;
             // 
             // Manage
             // 
@@ -141,28 +126,6 @@
             this.Manage.TabIndex = 77;
             this.Manage.TabStop = false;
             this.Manage.Click += new System.EventHandler(this.Manage_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.AllowDrop = true;
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.BackColor = System.Drawing.Color.Silver;
-            this.panel1.Controls.Add(this.p1);
-            this.panel1.Location = new System.Drawing.Point(26, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(84, 30);
-            this.panel1.TabIndex = 78;
-            // 
-            // p2
-            // 
-            this.p2.Location = new System.Drawing.Point(125, 18);
-            this.p2.Name = "p2";
-            this.p2.Size = new System.Drawing.Size(12, 12);
-            this.p2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.p2.TabIndex = 76;
-            this.p2.TabStop = false;
-            this.p2.Visible = false;
             // 
             // pictureHandle
             // 
@@ -182,11 +145,9 @@
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(138, 30);
             this.ControlBox = false;
-            this.Controls.Add(this.p2);
+            this.Controls.Add(this.p1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureHandle);
-            this.Controls.Add(this.icondist);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.Manage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "BubbleIcons";
@@ -194,10 +155,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.icondist)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
-            this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -210,14 +168,11 @@
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox p1;
-        private System.Windows.Forms.PictureBox icondist;
         private System.Windows.Forms.PictureBox Manage;
         private System.Windows.Forms.ToolStripMenuItem BI_new;
         private System.Windows.Forms.ToolStripMenuItem BI_delete;
         private System.Windows.Forms.ToolStripMenuItem BI_rename;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureHandle;
-        private System.Windows.Forms.PictureBox p2;
         private System.Windows.Forms.ToolStripMenuItem BI_paste;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }

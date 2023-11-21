@@ -220,10 +220,8 @@ namespace Organizer
         {
             if (rtb.ContextMenuStrip == null)
             {
-                ContextMenuStrip cms = new ContextMenuStrip()
-                {
-                    ShowImageMargin = false
-                };
+                ContextMenuStrip cms = new ContextMenuStrip() {
+                    ShowImageMargin = false };
 
                 ToolStripMenuItem tsmiCut = new ToolStripMenuItem(Utils.getString("button.cut"));
                 tsmiCut.Click += (sender, e) => rtb.Cut();

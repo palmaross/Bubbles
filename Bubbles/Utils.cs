@@ -14,7 +14,12 @@ namespace Bubbles
             System.Windows.Forms.MessageBox.Show(error + "\r\n\r\n" +
                 getString("calendar.fatalerror.text"),
                 getString("calendar.fatalerror.caption"),
-                System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        public static int StickID()
+        {
+            return new Random().Next();
         }
 
         public static void Init()

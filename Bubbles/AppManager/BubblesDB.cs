@@ -1,6 +1,7 @@
 ﻿using BubblesAppManager;
 using System.Data;
 using System;
+using PRAManager;
 
 namespace Bubbles
 {
@@ -69,13 +70,15 @@ namespace Bubbles
                 );
         }
 
-        public void AddStick(string name, string type, int start, string position)
+        public void AddStick(int id, string name, string type, int start, string position, int configID)
         {
-            m_db.ExecuteNonQuery("insert into STICKS values(NULL, `"
+            m_db.ExecuteNonQuery("insert into STICKS values("
+                + id + ", `"
                 + name + "`, `"
                 + type + "`, "
                 + start + ", `"
                 + position + "`, "
+                + configID + ", "
                 + "'', '', 0, 0"
                 + ");"
                 );
@@ -128,17 +131,32 @@ namespace Bubbles
                 );
         }
 
+        public void AddConfig(string name, int start)
+        {
+            m_db.ExecuteNonQuery("insert into CONFIGS values(NULL, `"
+                + name + "`, "
+                + start + ", "
+                + "'', 0"
+                + ");"
+                );
+        }
+
         public override void CreateDatabase()
         {
             base.CreateDatabase();
             m_db.ExecuteNonQuery("BEGIN EXCLUSIVE");
-            m_db.ExecuteNonQuery("CREATE TABLE STICKS(id INTEGER PRIMARY KEY, " +
-                "name text, type text, start integer, position text, " +
+
+            m_db.ExecuteNonQuery("CREATE TABLE CONFIGS(id INTEGER PRIMARY KEY, name text, start int, " +
+               "reserved1 text, reserved2 integer);");
+
+            m_db.ExecuteNonQuery("CREATE TABLE STICKS(id integer, name text, " +
+                "type text, start integer, position text, configID integer, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
             // name = stick name (by user)
             // type - icons, bookmarks, etc.
             // start - run sticker when MM started
             // position - H#5120,0:5126,363;0,0:2,358 (Horizontal;screen1Location;screen2Location)
+
             m_db.ExecuteNonQuery("CREATE TABLE NOTEGROUPS(id INTEGER PRIMARY KEY, name text, " +
                 "reserved1 text, reserved2 integer);");
 
@@ -177,22 +195,23 @@ namespace Bubbles
             // "reminder:12:05" (12:05) or "reminder:20" (in 20 minutes)
             m_db.ExecuteNonQuery("END");
 
-            // Add first PriPro stick
-            AddStick(Utils.getString("stickPriPro.name"), StickUtils.typepripro, 0, "");
-            int id = 1;
-            DataTable dt = m_db.ExecuteQuery("SELECT last_insert_rowid()");
-            if (dt.Rows.Count > 0) id = Convert.ToInt32(dt.Rows[0][0]);
+            // Add first Icons stick
+            int id = Utils.StickID();
+            AddStick(id, Utils.getString("BubbleIcons.bubble.tooltip"), StickUtils.typeicons, 0, "", 0);
 
-            AddPriPro("pri", 1, id);
-            AddPriPro("pri", 2, id);
-            AddPriPro("pro", 0, id);
-            AddPriPro("pro", 100, id);
+            AddIcon(Utils.getString("icons.firststick.icon1"), "stockexclamation-mark", 1, id); 
+            AddIcon(Utils.getString("icons.firststick.icon2"), "stockquestion-mark", 2, id);
+
+            // Add first PriPro stick
+            id = Utils.StickID();
+            AddStick(id, Utils.getString("BubblePriPro.bubble.tooltip"), StickUtils.typepripro, 0, "", 0);
+
+            AddPriPro("pri", 1, id); AddPriPro("pri", 2, id);
+            AddPriPro("pro", 0, id); AddPriPro("pro", 100, id);
 
             // Add first sources
-            AddStick(Utils.getString("mysources.bubble.tooltip"), StickUtils.typesources, 0, "");
-            id = 1;
-            dt = m_db.ExecuteQuery("SELECT last_insert_rowid()");
-            if (dt.Rows.Count > 0) id = Convert.ToInt32(dt.Rows[0][0]);
+            id = Utils.StickID();
+            AddStick(id, Utils.getString("BubbleMySources.bubble.tooltip"), StickUtils.typesources, 0, "", 0);
 
             AddSource(Utils.getString("mysources.first1.text"), "https://palmaross.com/", "http", 1, id);
             AddSource(Utils.getString("mysources.first2.text"), Utils.dllPath + "Sticks.chm", "file", 2, id);

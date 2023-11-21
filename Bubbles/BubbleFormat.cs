@@ -37,16 +37,8 @@ namespace Bubbles
             MinLength = panel2.Width;
             RealLength = this.Width;
 
-            if (orientation == "V")
-            {
-                orientation = "H";
-                RotateBubble();
-
-                foreach (PictureBox p in panel1.Controls.OfType<PictureBox>())
-                {
-                    p.Location = new Point(p1.Location.Y, p.Location.X);
-                }
-            }
+            if (orientation == "V") {
+                orientation = "H"; Rotate(); }
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
@@ -55,10 +47,8 @@ namespace Bubbles
             // Context menu
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
             contextMenuStrip1.Items["BI_color"].Text = Utils.getString("bubbleformat.contextmenu.color");
-            StickUtils.SetCommonContextMenu(contextMenuStrip1, p2, StickUtils.typeformat);
+            StickUtils.SetCommonContextMenu(contextMenuStrip1, StickUtils.typeformat);
 
-            panel1.MouseClick += Panel1_MouseClick;
-            panel1.MouseDown += Panel1_MouseDown;
             pictureHandle.MouseDown += PictureHandle_MouseDown;
             Manage.Click += Manage_Click;
 
@@ -126,12 +116,6 @@ namespace Bubbles
             base.OnMouseDown(e);
         }
 
-        private void Panel1_MouseDown(object sender, MouseEventArgs e)
-        {
-            ReleaseCapture();
-            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
-        }
-
         private void ContextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             if (e.ClickedItem.Name == "BI_color")
@@ -154,19 +138,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_rotate")
             {
-                RotateBubble();
-
-                if (orientation == "H")
-                    foreach (PictureBox p in panel1.Controls.OfType<PictureBox>())
-                    {
-                        if (p.Name.StartsWith("fontcolor") || p.Name.StartsWith("fillcolor"))
-                            p.Location = new Point(p.Location.Y, p3.Location.Y);
-                        else
-                            p.Location = new Point(p.Location.Y, p.Location.X);
-                    }
-                else
-                    foreach (PictureBox p in panel1.Controls.OfType<PictureBox>())
-                        p.Location = new Point(p1.Location.Y, p.Location.X);
+                Rotate();
             }
             else if (e.ClickedItem.Name == "BI_help")
             {
@@ -185,7 +157,7 @@ namespace Bubbles
 
         public void Rotate()
         {
-            orientation = StickUtils.RotateStick(this, p1, panel1, Manage, orientation);
+            orientation = StickUtils.RotateStick(this, Manage, orientation);
         }
 
         /// <summary>
@@ -199,47 +171,16 @@ namespace Bubbles
             {
                 if (CollapseAll) return;
 
-                StickUtils.Expand(this, RealLength, orientation);
-                contextMenuStrip1.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.collapse");
+                StickUtils.Expand(this, RealLength, orientation, contextMenuStrip1);
                 collapsed = false;
             }
             else // Collapse stick
             {
                 if (ExpandAll) return;
 
-                StickUtils.Collapse(this, orientation);
+                StickUtils.Collapse(this, orientation, contextMenuStrip1);
                 collapsed = true;
-                contextMenuStrip1.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.expand");
             }
-        }
-
-        void RotateBubble()
-        {
-            if (orientation == "H")
-            {
-                orientation = "V";
-                panel1.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
-                Manage.Anchor = AnchorStyles.Left | AnchorStyles.Bottom;
-            }
-            else
-            {
-                orientation = "H";
-                panel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-                Manage.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            }
-
-            int thisWidth = this.Width;
-            int thisHeight = this.Height;
-
-            Size panel1Size = new Size(panel1.Height, panel1.Width);
-            Point panel1Location = new Point(panel1.Location.Y, panel1.Location.X);
-            Point ManageLocation = new Point(Manage.Location.Y, Manage.Location.X);
-
-            this.Size = new Size(thisHeight, thisWidth);
-
-            panel1.Size = panel1Size;
-            panel1.Location = panel1Location;
-            Manage.Location = ManageLocation;
         }
 
         #region resize dialog
@@ -331,19 +272,6 @@ namespace Bubbles
                     item.Visible = false;
 
                 contextMenuStrip1.Items["BI_color"].Visible = true;
-                contextMenuStrip1.Show(Cursor.Position);
-            }
-        }
-
-        private void Panel1_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                foreach (ToolStripItem item in contextMenuStrip1.Items)
-                    item.Visible = true;
-
-                contextMenuStrip1.Items["BI_delete"].Visible = false;
-
                 contextMenuStrip1.Show(Cursor.Position);
             }
         }

@@ -7,7 +7,7 @@ namespace Bubbles
 {
     public partial class MySourcesListDlg : Form
     {
-        public MySourcesListDlg() //(int X, int Y, string orientation)
+        public MySourcesListDlg()
         {
             InitializeComponent();
 
@@ -31,15 +31,10 @@ namespace Bubbles
             imageList1.Images.Add("video", Image.FromFile(Utils.ImagesPath + "ms_video.png"));
             imageList1.Images.Add("chm", Image.FromFile(Utils.ImagesPath + "chm.png"));
 
-            // Add a dummy column        
-            ColumnHeader header = new ColumnHeader();
-            header.Text = "";
-            header.Name = "col1";
-            listView1.Columns.Add(header);
-            listView1.Columns[0].Width = listView1.Width - p1.Width;
-            // Then
-            listView1.Scrollable = true;
-            listView1.View = View.Details;
+            // Add a dummy column
+            listView1.Columns.Add("MyColumn", -2, HorizontalAlignment.Left);
+            listView1.FullRowSelect = true;
+            listView1.GridLines = true;
 
             this.Paint += MySourcesListDlg_Paint; // paint the border
             listView1.SelectedIndexChanged += ListView1_SelectedIndexChanged;

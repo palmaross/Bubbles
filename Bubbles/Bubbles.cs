@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Data;
+using PopupControl;
 
 namespace Bubbles
 {
@@ -57,35 +58,30 @@ namespace Bubbles
                 if (Convert.ToInt32(dr["start"]) == 0)
                     continue;
 
+                m_bubblesMenu.startId = Convert.ToInt32(dr["id"]);
+
                 switch (dr["type"].ToString()) 
                 {
                     case StickUtils.typeicons:
-                        m_bubblesMenu.startId = Convert.ToInt32(dr["id"]);
-                        m_bubblesMenu.Icons_Click(null, null);
+                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.pIcons, null);
                         break;
                     case StickUtils.typepripro:
-                        m_bubblesMenu.startId = Convert.ToInt32(dr["id"]);
-                        m_bubblesMenu.PriPro_Click(null, null);
+                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.PriPro, null);
                         break;
                     case StickUtils.typeformat:
-                        m_bubblesMenu.startId = Convert.ToInt32(dr["id"]);
-                        m_bubblesMenu.Formatting_Click(null, null);
+                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.Format, null);
                         break;
                     case StickUtils.typesources:
-                        m_bubblesMenu.startId = Convert.ToInt32(dr["id"]);
-                        m_bubblesMenu.MySources_Click(null, null);
+                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.MySources, null);
                         break;
                     case StickUtils.typebookmarks:
-                        m_bubblesMenu.startId = Convert.ToInt32(dr["id"]);
-                        m_bubblesMenu.Bookmarks_Click(null, null);
+                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.Bookmarks, null);
                         break;
                     case StickUtils.typepaste:
-                        m_bubblesMenu.startId = Convert.ToInt32(dr["id"]);
-                        m_bubblesMenu.PasteBubble_Click(null, null);
+                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.Paste, null);
                         break;
                     case StickUtils.typeorganizer:
-                        m_bubblesMenu.startId = Convert.ToInt32(dr["id"]);
-                        m_bubblesMenu.Organizer_Click(null, null);
+                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.Organizer, null);
                         break;
                 }
             }
@@ -147,8 +143,15 @@ namespace Bubbles
 
             if (m_Bookmarks != null)
             {
-                m_Bookmarks.BookmarkedDocuments.Clear();
-                m_Bookmarks.BookmarkedDocuments = null;
+                BubbleBookmarks.BookmarkedDocuments.Clear();
+                BubbleBookmarks.BookmarkedDocuments = null;
+            }
+
+            if (m_BookmarkList != null)
+            {
+                m_BookmarkList.Hide();
+                m_BookmarkList.Dispose();
+                m_BookmarkList = null;
             }
 
             if (m_bubblesMenu.Visible)
@@ -188,6 +191,7 @@ namespace Bubbles
         public static BubbleSnippets m_bubbleSnippets = null;
 
         public static BubbleBookmarks m_Bookmarks;
+        public static BookmarkListDlg m_BookmarkList;
 
         public static Organizer.NotesDlg m_Notes;
 
@@ -198,5 +202,6 @@ namespace Bubbles
 
         public static Dictionary<int, Form> STICKS = new Dictionary<int, Form>();
         public static Dictionary<int, Form> pNOTES = new Dictionary<int, Form>();
+        public static Popup popup;
     }
 }
