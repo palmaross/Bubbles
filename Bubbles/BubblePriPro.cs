@@ -128,50 +128,25 @@ namespace Bubbles
 
             RefreshStick();
 
+            if (collapsed) {
+                collapsed = false; Collapse(); }
+
             pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
             pictureHandle.MouseDown += Move_Stick;
             this.MouseDown += Move_Stick;
             Manage.Click += Manage_Click;
-
-            if (collapsed) {
-                collapsed = false; Collapse(); }
-
-            this.MouseEnter += BubblePriPro_MouseEnter;
-            this.MouseLeave += BubblePriPro_MouseLeave;
+            this.MouseEnter += this_MouseEnter;
+            this.MouseLeave += this_MouseLeave;
         }
 
-        private void BubblePriPro_MouseLeave(object sender, EventArgs e)
+        private void this_MouseLeave(object sender, EventArgs e)
         {
-            if (auxPanel != null)
-            {
-                if (Cursor.Position.X < this.Left || Cursor.Position.X > this.Right ||
-                    Cursor.Position.Y < this.Top || Cursor.Position.Y > this.Bottom + this.Height)
-                    auxPanel.Hide();
-            }
+            StickUtils.HideCommandPopup(this, orientation);
         }
 
-        private void BubblePriPro_MouseEnter(object sender, EventArgs e)
+        private void this_MouseEnter(object sender, EventArgs e)
         {
-            if (auxPanel == null || !auxPanel.Visible)
-            {
-                // Kill previous popup
-                if (BubblesButton.popup != null)
-                {
-                    BubblesButton.popup.Hide(); BubblesButton.popup.Dispose();
-                }
-
-                System.Windows.Forms.Control ff = new StickPopup().panelH;
-                ff.Tag = new PopupItem(this, orientation, collapsed);
-                auxPanel = new Popup(ff);
-                auxPanel.ShowingAnimation = PopupAnimations.Center;
-                auxPanel.AnimationDuration = 300;
-                BubblesButton.popup = auxPanel;
-
-                if (orientation == "H")
-                    auxPanel.Show(this.Left, this.Bottom);
-                else
-                    auxPanel.Show(this.Left, this.Top);
-            }
+            StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepripro);
         }
 
         private void Manage_Click(object sender, EventArgs e)

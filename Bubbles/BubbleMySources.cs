@@ -22,7 +22,7 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "MySourcesStick.htm");
 
-            toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
+            //toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
             toolTip1.SetToolTip(SourceList, Utils.getString("mysources.sourceview.list"));
             toolTip1.SetToolTip(pictureHandle, stickname);
 
@@ -100,6 +100,9 @@ namespace Bubbles
 
             if (collapsed) {
                 collapsed = false; Collapse(); }
+
+            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste);
+            this.MouseLeave += (sender, e) => StickUtils.HideCommandPopup(this, orientation);
         }
 
         private void Manage_Click(object sender, EventArgs e)
@@ -371,42 +374,11 @@ namespace Bubbles
                 if (Sources.Count < 8) // If not a big amount, change height to adjust items count 
                     dlg.Height = Sources.Count * (int)(dlg.itemHeight.Height * 1.3);
 
-                int X, Y;
-                if (orientation == "H")
-                {
-                    X = this.Location.X;
-                    Y = this.Location.Y + this.Height;
-                }
-                else
-                {
-                    X = this.Location.X + this.Width;
-                    Y = this.Location.Y;
-                }
-
-                var pos = new Point(X, Y);
-                dlg.Location = new Point(pos.X, pos.Y);
-
-                // If the form is close to the right or bottom screen side..
-                Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
-
-                if (orientation == "H")
-                {
-                    if (dlg.Location.X + dlg.Width > area.Right)
-                        pos.X = X + this.Width - dlg.Width;
-
-                    if (pos.Y + dlg.Height > area.Bottom)
-                        pos.Y = this.Location.Y - dlg.Height;
-                }
-                else
-                {
-                    if (dlg.Location.X + dlg.Width > area.Right)
-                        pos.X = this.Location.X - dlg.Width;
-
-                    if (pos.Y + dlg.Height > area.Bottom)
-                        pos.Y = area.Bottom - dlg.Height;
-                }
-
-                dlg.Location = new Point(pos.X, pos.Y);
+                // Get source list location
+                Rectangle parent = this.RectangleToScreen(this.ClientRectangle);
+                Rectangle child = dlg.RectangleToScreen(dlg.ClientRectangle);
+                dlg.Location = StickUtils.GetChildLocation(parent, child, orientation);
+                
                 dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
         }

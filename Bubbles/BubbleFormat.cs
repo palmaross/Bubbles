@@ -30,27 +30,23 @@ namespace Bubbles
             lblTextColor.Text = Utils.getString("BubbleFormat.lblTextColor");
             lblFillColor.Text = Utils.getString("BubbleFormat.lblFillColor");
 
-            toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
-            toolTip1.SetToolTip(pictureHandle, Utils.getString("format.bubble.tooltip"));
+            //toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
+            toolTip1.SetToolTip(pictureHandle, stickname);
             toolTip1.SetToolTip(pClearFormat, Utils.getString("bubbleformat.clearformat"));
 
-            MinLength = panel2.Width;
             RealLength = this.Width;
 
             if (orientation == "V") {
                 orientation = "H"; Rotate(); }
 
             // Resizing window causes black strips...
-            this.DoubleBuffered = true;
-            this.ResizeRedraw = true;
+            //this.DoubleBuffered = true;
+            //this.ResizeRedraw = true;
 
             // Context menu
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
             contextMenuStrip1.Items["BI_color"].Text = Utils.getString("bubbleformat.contextmenu.color");
             StickUtils.SetCommonContextMenu(contextMenuStrip1, StickUtils.typeformat);
-
-            pictureHandle.MouseDown += PictureHandle_MouseDown;
-            Manage.Click += Manage_Click;
 
             fontcolor1.MouseClick += Icon_Click;
             fontcolor2.MouseClick += Icon_Click;
@@ -59,9 +55,9 @@ namespace Bubbles
             fillcolor2.MouseClick += Icon_Click;
             fillcolor3.MouseClick += Icon_Click;
 
-            fontcolor1.Tag = Utils.getRegistry("fontcolor1", "#ffff0080");
+            fontcolor1.Tag = Utils.getRegistry("fontcolor1", "#ffff0000");
             fontcolor2.Tag = Utils.getRegistry("fontcolor2", "#ff0000ff");
-            fontcolor3.Tag = Utils.getRegistry("fontcolor3", "#ff00dd6f");
+            fontcolor3.Tag = Utils.getRegistry("fontcolor3", "#ff00aa55");
             fillcolor1.Tag = Utils.getRegistry("fillcolor1", "#ffffffa8");
             fillcolor2.Tag = Utils.getRegistry("fillcolor2", "#ffaeffae");
             fillcolor3.Tag = Utils.getRegistry("fillcolor3", "#ffb0ffff");
@@ -73,15 +69,16 @@ namespace Bubbles
             fillcolor2.Paint += pVisualStatus_Paint;
             fillcolor3.Paint += pVisualStatus_Paint;
 
-            pictureHandle.MouseDoubleClick += PictureHandle_MouseDoubleClick;
-
             if (collapsed) {
                 collapsed = false; Collapse(); }
-        }
 
-        private void PictureHandle_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            Collapse();
+            pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
+            pictureHandle.MouseDown += PictureHandle_MouseDown;
+            Manage.Click += Manage_Click;
+
+            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typeformat);
+            this.MouseLeave += (sender, e) => StickUtils.HideCommandPopup(this, orientation);
+
         }
 
         private void pVisualStatus_Paint(object sender, PaintEventArgs e)
@@ -183,64 +180,6 @@ namespace Bubbles
             }
         }
 
-        #region resize dialog
-        protected override void WndProc(ref Message m)
-        {
-            const int RESIZE_HANDLE_SIZE = 10;
-
-            switch (m.Msg)
-            {
-                case 0x0084/*NCHITTEST*/ :
-                    base.WndProc(ref m);
-
-                    if ((int)m.Result == 0x01/*HTCLIENT*/)
-                    {
-                        Point screenPoint = new Point(m.LParam.ToInt32());
-                        Point clientPoint = this.PointToClient(screenPoint);
-                        if (clientPoint.Y <= RESIZE_HANDLE_SIZE)
-                        {
-                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
-                                m.Result = (IntPtr)13/*HTTOPLEFT*/ ;
-                            else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
-                                m.Result = (IntPtr)12/*HTTOP*/ ;
-                            else
-                                m.Result = (IntPtr)14/*HTTOPRIGHT*/ ;
-                        }
-                        else if (clientPoint.Y <= (Size.Height - RESIZE_HANDLE_SIZE))
-                        {
-                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
-                                m.Result = (IntPtr)10/*HTLEFT*/ ;
-                            else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
-                                m.Result = (IntPtr)2/*HTCAPTION*/ ;
-                            else
-                                m.Result = (IntPtr)11/*HTRIGHT*/ ;
-                        }
-                        else
-                        {
-                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
-                                m.Result = (IntPtr)16/*HTBOTTOMLEFT*/ ;
-                            else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
-                                m.Result = (IntPtr)15/*HTBOTTOM*/ ;
-                            else
-                                m.Result = (IntPtr)17/*HTBOTTOMRIGHT*/ ;
-                        }
-                    }
-                    return;
-            }
-            base.WndProc(ref m);
-        }
-
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams cp = base.CreateParams;
-                cp.Style |= 0x20000; // <--- use 0x20000
-                return cp;
-            }
-        }
-        #endregion
-
         /// <summary>
         /// Click on the text and fill color pictures
         /// </summary>
@@ -284,7 +223,7 @@ namespace Bubbles
             sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_B);
         }
 
-        private void pItalic_Click(object sender, EventArgs e)
+        public void pItalic_Click(object sender, EventArgs e)
         {
             if (MMUtils.ActiveDocument == null || !ActivateMindManager())
                 return;
@@ -342,7 +281,7 @@ namespace Bubbles
             }
         }
 
-        private void pClearFormat_Click(object sender, EventArgs e)
+        public void pClearFormat_Click(object sender, EventArgs e)
         {
             if (MMUtils.ActiveDocument == null || !ActivateMindManager())
                 return;
@@ -367,7 +306,7 @@ namespace Bubbles
         string orientation = "H";
         bool collapsed = false;
 
-        int MinLength, RealLength;
+        int RealLength;
 
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;

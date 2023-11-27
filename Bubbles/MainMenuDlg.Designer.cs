@@ -66,9 +66,9 @@
             this.BO_remember = new System.Windows.Forms.ToolStripMenuItem();
             this.BO_align = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.BO_help = new System.Windows.Forms.ToolStripMenuItem();
             this.BO_configuration = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.BO_help = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
@@ -432,13 +432,6 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(187, 6);
             // 
-            // BO_help
-            // 
-            this.BO_help.Image = ((System.Drawing.Image)(resources.GetObject("BO_help.Image")));
-            this.BO_help.Name = "BO_help";
-            this.BO_help.Size = new System.Drawing.Size(190, 22);
-            this.BO_help.Text = "Справка";
-            // 
             // BO_configuration
             // 
             this.BO_configuration.Name = "BO_configuration";
@@ -449,6 +442,13 @@
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(187, 6);
+            // 
+            // BO_help
+            // 
+            this.BO_help.Image = ((System.Drawing.Image)(resources.GetObject("BO_help.Image")));
+            this.BO_help.Name = "BO_help";
+            this.BO_help.Size = new System.Drawing.Size(190, 22);
+            this.BO_help.Text = "Справка";
             // 
             // MainMenuDlg
             // 

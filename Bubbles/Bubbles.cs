@@ -30,6 +30,7 @@ namespace Bubbles
 
             m_bubbleSnippets = new BubbleSnippets();
             m_bubblesMenu = new MainMenuDlg();
+            commandPopup.Tag = 0; // Tag is a stick ID
 
             DocumentStorage.Subscribe(this);
 
@@ -141,7 +142,7 @@ namespace Bubbles
             m_bubbleSnippets.Dispose();
             m_bubbleSnippets = null;
 
-            if (m_Bookmarks != null)
+            if (BubbleBookmarks.BookmarkedDocuments != null && BubbleBookmarks.BookmarkedDocuments.Count > 0)
             {
                 BubbleBookmarks.BookmarkedDocuments.Clear();
                 BubbleBookmarks.BookmarkedDocuments = null;
@@ -181,6 +182,11 @@ namespace Bubbles
             }
             pNOTES.Clear();
 
+            if (commandPopup != null)
+            {
+                commandPopup.Dispose(); commandPopup = null;
+            }
+
             DocumentStorage.Unsubscribe(this);
 
             m_bCreated = false;
@@ -202,6 +208,7 @@ namespace Bubbles
 
         public static Dictionary<int, Form> STICKS = new Dictionary<int, Form>();
         public static Dictionary<int, Form> pNOTES = new Dictionary<int, Form>();
-        public static Popup popup;
+
+        public static Popup commandPopup = new Popup(new StickPopup().panelH);
     }
 }

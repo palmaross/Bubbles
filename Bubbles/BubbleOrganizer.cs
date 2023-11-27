@@ -46,15 +46,14 @@ namespace Bubbles
             this.ResizeRedraw = true;
 
             pictureHandle.MouseDown += PictureHandle_MouseDown;
-            pictureHandle.MouseDoubleClick += PictureHandle_MouseDoubleClick;
+            pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
+
+            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste);
+            this.MouseLeave += (sender, e) => StickUtils.HideCommandPopup(this, orientation);
+
 
             if (collapsed) {
                 collapsed = false; Collapse(); }
-        }
-
-        private void PictureHandle_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            Collapse();
         }
 
         private void PictureHandle_MouseDown(object sender, MouseEventArgs e)

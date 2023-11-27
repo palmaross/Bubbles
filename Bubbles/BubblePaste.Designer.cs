@@ -31,61 +31,113 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BubblePaste));
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsAddTopic = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.CP_pasteas = new System.Windows.Forms.ToolStripMenuItem();
+            this.CP_addsubtopic = new System.Windows.Forms.ToolStripMenuItem();
+            this.CP_addnext = new System.Windows.Forms.ToolStripMenuItem();
+            this.CP_addbefore = new System.Windows.Forms.ToolStripMenuItem();
+            this.CP_addparent = new System.Windows.Forms.ToolStripMenuItem();
+            this.CP_addfloating = new System.Windows.Forms.ToolStripMenuItem();
+            this.CP_addcallout = new System.Windows.Forms.ToolStripMenuItem();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
-            this.label1 = new System.Windows.Forms.Label();
             this.PasteLink = new System.Windows.Forms.PictureBox();
             this.PasteNotes = new System.Windows.Forms.PictureBox();
-            this.addsubtopic = new System.Windows.Forms.PictureBox();
-            this.addToTopic = new System.Windows.Forms.PictureBox();
-            this.PasteCallout = new System.Windows.Forms.PictureBox();
-            this.copyTopicText = new System.Windows.Forms.PictureBox();
-            this.addtopic = new System.Windows.Forms.PictureBox();
-            this.pasteToTopic = new System.Windows.Forms.PictureBox();
+            this.pPasteAsSubtopic = new System.Windows.Forms.PictureBox();
+            this.pPaste = new System.Windows.Forms.PictureBox();
+            this.pCopy = new System.Windows.Forms.PictureBox();
             this.UnformatText = new System.Windows.Forms.PictureBox();
             this.pictureHandle = new System.Windows.Forms.PictureBox();
             this.Manage = new System.Windows.Forms.PictureBox();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.cmsPasteText = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.CP_paste = new System.Windows.Forms.ToolStripMenuItem();
+            this.CP_unformatted = new System.Windows.Forms.ToolStripMenuItem();
+            this.CP_inside = new System.Windows.Forms.ToolStripMenuItem();
+            this.CP_atend = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyUnformattedTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsCommon = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmiSize = new System.Windows.Forms.PictureBox();
+            this.ToggleTextFormat = new System.Windows.Forms.PictureBox();
+            this.cmsAddTopic.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PasteLink)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PasteNotes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.addsubtopic)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.addToTopic)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PasteCallout)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.copyTopicText)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.addtopic)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pasteToTopic)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pPasteAsSubtopic)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pPaste)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pCopy)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.UnformatText)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
+            this.cmsPasteText.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cmiSize)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ToggleTextFormat)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
             // 
             this.toolTip1.ShowAlways = true;
             // 
-            // contextMenuStrip1
+            // cmsAddTopic
             // 
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            this.cmsAddTopic.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.CP_pasteas,
+            this.CP_addsubtopic,
+            this.CP_addnext,
+            this.CP_addbefore,
+            this.CP_addparent,
+            this.CP_addfloating,
+            this.CP_addcallout});
+            this.cmsAddTopic.Name = "contextMenuStrip1";
+            this.cmsAddTopic.Size = new System.Drawing.Size(149, 158);
             // 
-            // label1
+            // CP_pasteas
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(135, -1);
-            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(56, 13);
-            this.label1.TabIndex = 74;
-            this.label1.Text = "высота22";
-            this.label1.Visible = false;
+            this.CP_pasteas.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.CP_pasteas.Name = "CP_pasteas";
+            this.CP_pasteas.Size = new System.Drawing.Size(148, 22);
+            this.CP_pasteas.Text = "Paste As:";
+            // 
+            // CP_addsubtopic
+            // 
+            this.CP_addsubtopic.Name = "CP_addsubtopic";
+            this.CP_addsubtopic.Size = new System.Drawing.Size(148, 22);
+            this.CP_addsubtopic.Text = "Subtopic";
+            // 
+            // CP_addnext
+            // 
+            this.CP_addnext.Name = "CP_addnext";
+            this.CP_addnext.Size = new System.Drawing.Size(148, 22);
+            this.CP_addnext.Text = "Next Topic";
+            // 
+            // CP_addbefore
+            // 
+            this.CP_addbefore.Name = "CP_addbefore";
+            this.CP_addbefore.Size = new System.Drawing.Size(148, 22);
+            this.CP_addbefore.Text = "Topic Before";
+            // 
+            // CP_addparent
+            // 
+            this.CP_addparent.Name = "CP_addparent";
+            this.CP_addparent.Size = new System.Drawing.Size(148, 22);
+            this.CP_addparent.Text = "Parent Topic";
+            // 
+            // CP_addfloating
+            // 
+            this.CP_addfloating.Name = "CP_addfloating";
+            this.CP_addfloating.Size = new System.Drawing.Size(148, 22);
+            this.CP_addfloating.Text = "Floating Topic";
+            // 
+            // CP_addcallout
+            // 
+            this.CP_addcallout.Name = "CP_addcallout";
+            this.CP_addcallout.Size = new System.Drawing.Size(148, 22);
+            this.CP_addcallout.Text = "Callout";
             // 
             // PasteLink
             // 
             this.PasteLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.PasteLink.Image = ((System.Drawing.Image)(resources.GetObject("PasteLink.Image")));
-            this.PasteLink.Location = new System.Drawing.Point(60, 3);
+            this.PasteLink.Location = new System.Drawing.Point(113, 5);
             this.PasteLink.Name = "PasteLink";
-            this.PasteLink.Size = new System.Drawing.Size(24, 24);
+            this.PasteLink.Size = new System.Drawing.Size(20, 20);
             this.PasteLink.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PasteLink.TabIndex = 75;
             this.PasteLink.TabStop = false;
@@ -96,100 +148,62 @@
             // 
             this.PasteNotes.Cursor = System.Windows.Forms.Cursors.Hand;
             this.PasteNotes.Image = ((System.Drawing.Image)(resources.GetObject("PasteNotes.Image")));
-            this.PasteNotes.Location = new System.Drawing.Point(90, 3);
+            this.PasteNotes.Location = new System.Drawing.Point(139, 5);
             this.PasteNotes.Name = "PasteNotes";
-            this.PasteNotes.Size = new System.Drawing.Size(24, 24);
+            this.PasteNotes.Size = new System.Drawing.Size(20, 20);
             this.PasteNotes.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PasteNotes.TabIndex = 76;
             this.PasteNotes.TabStop = false;
             this.PasteNotes.Tag = "1";
             this.PasteNotes.Click += new System.EventHandler(this.PasteNotes_Click);
             // 
-            // addsubtopic
+            // pPasteAsSubtopic
             // 
-            this.addsubtopic.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.addsubtopic.Image = ((System.Drawing.Image)(resources.GetObject("addsubtopic.Image")));
-            this.addsubtopic.Location = new System.Drawing.Point(188, 3);
-            this.addsubtopic.Name = "addsubtopic";
-            this.addsubtopic.Size = new System.Drawing.Size(24, 24);
-            this.addsubtopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.addsubtopic.TabIndex = 78;
-            this.addsubtopic.TabStop = false;
-            this.addsubtopic.Tag = "1";
-            this.addsubtopic.Click += new System.EventHandler(this.addsubtopic_Click);
+            this.pPasteAsSubtopic.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pPasteAsSubtopic.Image = ((System.Drawing.Image)(resources.GetObject("pPasteAsSubtopic.Image")));
+            this.pPasteAsSubtopic.Location = new System.Drawing.Point(87, 5);
+            this.pPasteAsSubtopic.Name = "pPasteAsSubtopic";
+            this.pPasteAsSubtopic.Size = new System.Drawing.Size(20, 20);
+            this.pPasteAsSubtopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pPasteAsSubtopic.TabIndex = 78;
+            this.pPasteAsSubtopic.TabStop = false;
+            this.pPasteAsSubtopic.Tag = "1";
+            this.pPasteAsSubtopic.Click += new System.EventHandler(this.addsubtopic_Click);
+            this.pPasteAsSubtopic.MouseHover += new System.EventHandler(this.addsubtopic_MouseHover);
             // 
-            // addToTopic
+            // pPaste
             // 
-            this.addToTopic.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.addToTopic.Image = ((System.Drawing.Image)(resources.GetObject("addToTopic.Image")));
-            this.addToTopic.Location = new System.Drawing.Point(255, 3);
-            this.addToTopic.Name = "addToTopic";
-            this.addToTopic.Size = new System.Drawing.Size(24, 24);
-            this.addToTopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.addToTopic.TabIndex = 79;
-            this.addToTopic.TabStop = false;
-            this.addToTopic.Tag = "1";
-            this.addToTopic.Click += new System.EventHandler(this.addtotopic_Click);
+            this.pPaste.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pPaste.Image = ((System.Drawing.Image)(resources.GetObject("pPaste.Image")));
+            this.pPaste.Location = new System.Drawing.Point(24, 3);
+            this.pPaste.Name = "pPaste";
+            this.pPaste.Size = new System.Drawing.Size(24, 24);
+            this.pPaste.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pPaste.TabIndex = 79;
+            this.pPaste.TabStop = false;
+            this.pPaste.Tag = "1";
+            this.pPaste.Click += new System.EventHandler(this.pPaste_Click);
             // 
-            // PasteCallout
+            // pCopy
             // 
-            this.PasteCallout.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.PasteCallout.Image = ((System.Drawing.Image)(resources.GetObject("PasteCallout.Image")));
-            this.PasteCallout.Location = new System.Drawing.Point(120, 3);
-            this.PasteCallout.Name = "PasteCallout";
-            this.PasteCallout.Size = new System.Drawing.Size(24, 24);
-            this.PasteCallout.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.PasteCallout.TabIndex = 80;
-            this.PasteCallout.TabStop = false;
-            this.PasteCallout.Tag = "1";
-            this.PasteCallout.Click += new System.EventHandler(this.callout_Click);
-            // 
-            // copyTopicText
-            // 
-            this.copyTopicText.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.copyTopicText.Image = ((System.Drawing.Image)(resources.GetObject("copyTopicText.Image")));
-            this.copyTopicText.Location = new System.Drawing.Point(24, 3);
-            this.copyTopicText.Name = "copyTopicText";
-            this.copyTopicText.Size = new System.Drawing.Size(24, 24);
-            this.copyTopicText.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.copyTopicText.TabIndex = 81;
-            this.copyTopicText.TabStop = false;
-            this.copyTopicText.Tag = "1";
-            this.copyTopicText.Click += new System.EventHandler(this.copyTopicText_Click);
-            // 
-            // addtopic
-            // 
-            this.addtopic.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.addtopic.Image = ((System.Drawing.Image)(resources.GetObject("addtopic.Image")));
-            this.addtopic.Location = new System.Drawing.Point(157, 3);
-            this.addtopic.Name = "addtopic";
-            this.addtopic.Size = new System.Drawing.Size(24, 24);
-            this.addtopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.addtopic.TabIndex = 83;
-            this.addtopic.TabStop = false;
-            this.addtopic.Tag = "1";
-            this.addtopic.Click += new System.EventHandler(this.addtopic_Click);
-            // 
-            // pasteToTopic
-            // 
-            this.pasteToTopic.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pasteToTopic.Image = ((System.Drawing.Image)(resources.GetObject("pasteToTopic.Image")));
-            this.pasteToTopic.Location = new System.Drawing.Point(224, 3);
-            this.pasteToTopic.Name = "pasteToTopic";
-            this.pasteToTopic.Size = new System.Drawing.Size(24, 24);
-            this.pasteToTopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pasteToTopic.TabIndex = 84;
-            this.pasteToTopic.TabStop = false;
-            this.pasteToTopic.Tag = "1";
-            this.pasteToTopic.Click += new System.EventHandler(this.pasteToTopic_Click);
+            this.pCopy.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pCopy.Image = ((System.Drawing.Image)(resources.GetObject("pCopy.Image")));
+            this.pCopy.Location = new System.Drawing.Point(54, 3);
+            this.pCopy.Name = "pCopy";
+            this.pCopy.Size = new System.Drawing.Size(24, 24);
+            this.pCopy.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pCopy.TabIndex = 81;
+            this.pCopy.TabStop = false;
+            this.pCopy.Tag = "1";
+            this.pCopy.Click += new System.EventHandler(this.copyTopicText_Click);
             // 
             // UnformatText
             // 
             this.UnformatText.Cursor = System.Windows.Forms.Cursors.Hand;
             this.UnformatText.Image = ((System.Drawing.Image)(resources.GetObject("UnformatText.Image")));
-            this.UnformatText.Location = new System.Drawing.Point(286, 3);
+            this.UnformatText.Location = new System.Drawing.Point(195, 5);
             this.UnformatText.Name = "UnformatText";
-            this.UnformatText.Size = new System.Drawing.Size(24, 24);
+            this.UnformatText.Size = new System.Drawing.Size(20, 20);
             this.UnformatText.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.UnformatText.TabIndex = 85;
             this.UnformatText.TabStop = false;
@@ -212,7 +226,7 @@
             this.Manage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Manage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Manage.Image = ((System.Drawing.Image)(resources.GetObject("Manage.Image")));
-            this.Manage.Location = new System.Drawing.Point(318, 5);
+            this.Manage.Location = new System.Drawing.Point(221, 5);
             this.Manage.Name = "Manage";
             this.Manage.Size = new System.Drawing.Size(20, 20);
             this.Manage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -220,70 +234,140 @@
             this.Manage.TabStop = false;
             this.Manage.Click += new System.EventHandler(this.Manage_Click);
             // 
-            // panel2
+            // cmsPasteText
             // 
-            this.panel2.Location = new System.Drawing.Point(0, 26);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(180, 23);
-            this.panel2.TabIndex = 89;
-            this.panel2.Visible = false;
+            this.cmsPasteText.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.CP_paste,
+            this.CP_unformatted,
+            this.CP_inside,
+            this.CP_atend,
+            this.copyUnformattedTextToolStripMenuItem});
+            this.cmsPasteText.Name = "cmsPasteText";
+            this.cmsPasteText.Size = new System.Drawing.Size(158, 114);
+            // 
+            // CP_paste
+            // 
+            this.CP_paste.Name = "CP_paste";
+            this.CP_paste.Size = new System.Drawing.Size(157, 22);
+            this.CP_paste.Text = "Paste (Ctrl+V)";
+            // 
+            // CP_unformatted
+            // 
+            this.CP_unformatted.Name = "CP_unformatted";
+            this.CP_unformatted.Size = new System.Drawing.Size(157, 22);
+            this.CP_unformatted.Text = "Paste To Topic";
+            // 
+            // CP_inside
+            // 
+            this.CP_inside.Name = "CP_inside";
+            this.CP_inside.Size = new System.Drawing.Size(157, 22);
+            this.CP_inside.Text = "Paste Inside";
+            // 
+            // CP_atend
+            // 
+            this.CP_atend.Name = "CP_atend";
+            this.CP_atend.Size = new System.Drawing.Size(157, 22);
+            this.CP_atend.Text = "Add at End";
+            // 
+            // copyUnformattedTextToolStripMenuItem
+            // 
+            this.copyUnformattedTextToolStripMenuItem.Name = "copyUnformattedTextToolStripMenuItem";
+            this.copyUnformattedTextToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.copyUnformattedTextToolStripMenuItem.Text = "Copy Topic Text";
+            // 
+            // cmsCommon
+            // 
+            this.cmsCommon.Name = "cmsCommon";
+            this.cmsCommon.Size = new System.Drawing.Size(61, 4);
+            // 
+            // cmiSize
+            // 
+            this.cmiSize.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.cmiSize.Location = new System.Drawing.Point(0, 14);
+            this.cmiSize.Name = "cmiSize";
+            this.cmiSize.Size = new System.Drawing.Size(16, 16);
+            this.cmiSize.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.cmiSize.TabIndex = 89;
+            this.cmiSize.TabStop = false;
+            this.cmiSize.Visible = false;
+            // 
+            // ToggleTextFormat
+            // 
+            this.ToggleTextFormat.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ToggleTextFormat.Image = ((System.Drawing.Image)(resources.GetObject("ToggleTextFormat.Image")));
+            this.ToggleTextFormat.Location = new System.Drawing.Point(169, 5);
+            this.ToggleTextFormat.Name = "ToggleTextFormat";
+            this.ToggleTextFormat.Size = new System.Drawing.Size(20, 20);
+            this.ToggleTextFormat.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ToggleTextFormat.TabIndex = 90;
+            this.ToggleTextFormat.TabStop = false;
+            this.ToggleTextFormat.Tag = "unformatted";
+            this.ToggleTextFormat.Click += new System.EventHandler(this.ToggleTextFormat_Click);
             // 
             // BubblePaste
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(342, 30);
+            this.ClientSize = new System.Drawing.Size(245, 30);
             this.ControlBox = false;
-            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.ToggleTextFormat);
+            this.Controls.Add(this.cmiSize);
             this.Controls.Add(this.Manage);
             this.Controls.Add(this.pictureHandle);
             this.Controls.Add(this.UnformatText);
-            this.Controls.Add(this.pasteToTopic);
-            this.Controls.Add(this.addtopic);
-            this.Controls.Add(this.copyTopicText);
-            this.Controls.Add(this.PasteCallout);
-            this.Controls.Add(this.addToTopic);
-            this.Controls.Add(this.addsubtopic);
+            this.Controls.Add(this.pCopy);
+            this.Controls.Add(this.pPaste);
+            this.Controls.Add(this.pPasteAsSubtopic);
             this.Controls.Add(this.PasteNotes);
             this.Controls.Add(this.PasteLink);
-            this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "BubblePaste";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+            this.cmsAddTopic.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.PasteLink)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PasteNotes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.addsubtopic)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.addToTopic)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PasteCallout)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.copyTopicText)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.addtopic)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pasteToTopic)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pPasteAsSubtopic)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pPaste)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pCopy)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.UnformatText)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
+            this.cmsPasteText.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.cmiSize)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ToggleTextFormat)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip cmsAddTopic;
         private System.Windows.Forms.HelpProvider helpProvider1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox PasteLink;
         private System.Windows.Forms.PictureBox PasteNotes;
-        private System.Windows.Forms.PictureBox addsubtopic;
-        private System.Windows.Forms.PictureBox addToTopic;
-        private System.Windows.Forms.PictureBox PasteCallout;
-        private System.Windows.Forms.PictureBox copyTopicText;
-        private System.Windows.Forms.PictureBox addtopic;
-        private System.Windows.Forms.PictureBox pasteToTopic;
+        private System.Windows.Forms.PictureBox pPasteAsSubtopic;
+        private System.Windows.Forms.PictureBox pPaste;
+        private System.Windows.Forms.PictureBox pCopy;
         private System.Windows.Forms.PictureBox UnformatText;
         private System.Windows.Forms.PictureBox pictureHandle;
         private System.Windows.Forms.PictureBox Manage;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.ToolStripMenuItem CP_addsubtopic;
+        private System.Windows.Forms.ToolStripMenuItem CP_addnext;
+        private System.Windows.Forms.ToolStripMenuItem CP_addbefore;
+        private System.Windows.Forms.ToolStripMenuItem CP_addparent;
+        private System.Windows.Forms.ToolStripMenuItem CP_addfloating;
+        private System.Windows.Forms.ToolStripMenuItem CP_addcallout;
+        private System.Windows.Forms.ContextMenuStrip cmsPasteText;
+        private System.Windows.Forms.ToolStripMenuItem CP_unformatted;
+        private System.Windows.Forms.ToolStripMenuItem CP_inside;
+        private System.Windows.Forms.ToolStripMenuItem CP_atend;
+        private System.Windows.Forms.ToolStripMenuItem CP_paste;
+        private System.Windows.Forms.ContextMenuStrip cmsCommon;
+        private System.Windows.Forms.ToolStripMenuItem CP_pasteas;
+        private System.Windows.Forms.PictureBox cmiSize;
+        private System.Windows.Forms.ToolStripMenuItem copyUnformattedTextToolStripMenuItem;
+        public System.Windows.Forms.PictureBox ToggleTextFormat;
     }
 }

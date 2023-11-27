@@ -1,12 +1,13 @@
-﻿using PRAManager;
+﻿using PopupControl;
+using PRAManager;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.Expando;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace Bubbles
 {
@@ -62,7 +63,7 @@ namespace Bubbles
                 id = Utils.StickID();
                 db.AddStick(id, stickname, sticktype, 0, "", 0);
 
-                newForm.Location = BubblesButton.m_bubblesMenu.GetStickLocation("");
+                newForm.Location = BubblesButton.m_bubblesMenu.GetStickLocation("", newForm.Size);
                 newForm.Tag = id;
                 BubblesButton.STICKS.Add(id, newForm);
                 newForm.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
@@ -129,7 +130,7 @@ namespace Bubbles
             return orientation;
         }
 
-        public static void SaveStick(Rectangle rec, int id, string orientation, bool collapsed)
+        public static string SaveStick(Rectangle rec, int id, string orientation, bool collapsed, int configID = 0)
         {
             string position = "";
 
@@ -138,7 +139,7 @@ namespace Bubbles
                 if (MessageBox.Show(Utils.getString("sticks.stickisoutMMwindow.text"),
                     Utils.getString("sticks.stickisoutMMwindow.title"),
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.Cancel)
-                    return;
+                    return "";
             }
 
             Point screenXY = Utils.MMScreen(MMUtils.MindManager.Left + MMUtils.MindManager.Width / 2,
@@ -179,8 +180,12 @@ namespace Bubbles
 
                 string _collapsed = collapsed ? "1" : "0";
                 position = orientation + _collapsed + "#" + location.TrimStart(';');
-                db.ExecuteNonQuery("update STICKS set position=`" + position + "` where id=" + id + "");
+
+                if (configID != 0)
+                    db.ExecuteNonQuery("update STICKS set position=`" + position + 
+                        "` where id=" + id + " and configID=" + configID + "");
             }
+            return position; // for CreateConfiguration() method
         }
 
         public static List<PictureBox> RefreshStick(Form form, PictureBox p1, string orientation, 
@@ -441,10 +446,11 @@ namespace Bubbles
                 foreach (PictureBox pb in form.Controls.OfType<PictureBox>())
                 {
                     // hide all icons except the first
-                    if (pb.Name != "pBold" && pb.Name != "copyTopicText" && pb.Tag != null && i++ > 0) // only dynamic icons
+                    if (pb.Name != "pBold" && pb.Name != "pPaste" && pb.Tag != null && i++ > 0) // only dynamic icons
                         pb.Visible = false;
                 }
 
+                cms.Items["BI_collapse"].Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "expand.png"), cmiSize);
                 cms.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.expand");
             }
         }
@@ -462,42 +468,144 @@ namespace Bubbles
             foreach (PictureBox pb in form.Controls.OfType<PictureBox>())
                 if (pb.Tag != null) pb.Visible = true;
 
+            cms.Items["BI_collapse"].Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "collapse.png"), cmiSize);
             cms.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.collapse");
         }
 
-        public static void CreateConfiguration(int configID)
+        public static void ShowCommandPopup(Form form, string orientation, string type, string popup = "")
         {
-            string name, type, position;
+            if (BubblesButton.commandPopup.Tag != form.Tag || BubblesButton.commandPopup.Name != popup || !BubblesButton.commandPopup.Visible)
+            {
+                // Kill previous popup
+                BubblesButton.commandPopup.Hide();
+
+                var sp = new StickPopup();
+                Control ff = null;
+
+                if (popup == "") ff = sp.panelH;
+                else if (popup == "paste")  ff = sp.panelPasteTopic;
+                
+                if (type != typeicons && type != typebookmarks && type != typeformat && popup == "")
+                {
+                    ff.Size = new Size(sp.panelMin.Width, ff.Height);
+                }
+                else
+                {
+                    if (type == typeicons)
+                    {
+                        sp.pNewIcon.Location = sp.p1.Location;
+                        sp.pPasteIcon.Location = sp.p2.Location;
+                        ff.Controls.Add(sp.pNewIcon); ff.Controls.Add(sp.pPasteIcon);
+                    }
+                    else if (type == typebookmarks)
+                    {
+                        sp.pNewBookmark.Location = sp.p1.Location;
+                        sp.pBookmarkList.Location = sp.p2.Location;
+                        ff.Controls.Add(sp.pNewBookmark); ff.Controls.Add(sp.pBookmarkList);
+                    }
+                    else if (type == typeformat)
+                    {
+                        sp.pFontItalic.Location = sp.p1.Location;
+                        sp.pCleanFormat.Location = sp.p2.Location;
+                        ff.Controls.Add(sp.pFontItalic); ff.Controls.Add(sp.pCleanFormat);
+                    }
+                }
+
+                if (orientation == "V") // Rotate control and its elements
+                {
+                    int ffLength = ff.Width;
+                    Point close = sp.pClose.Location;
+                    ff.Width = ff.Height;
+                    ff.Height = ffLength;
+                    foreach (PictureBox pb in ff.Controls.OfType<PictureBox>())
+                        pb.Location = new Point(pb.Location.Y, pb.Location.X);
+                    sp.pClose.Location = new Point(close.Y, close.X);
+                }
+
+                ff.Tag = form;
+                BubblesButton.commandPopup = new Popup(ff);
+                BubblesButton.commandPopup.Tag = form.Tag; // stick id
+                BubblesButton.commandPopup.Name = popup;
+                BubblesButton.commandPopup.ShowingAnimation = PopupAnimations.Center;
+                BubblesButton.commandPopup.AnimationDuration = 300;
+
+                Rectangle parent = form.RectangleToScreen(form.ClientRectangle);
+                Rectangle child = ff.RectangleToScreen(ff.ClientRectangle);
+                Point loc = GetChildLocation(parent, child, orientation, popup == "");
+                BubblesButton.commandPopup.Show(loc);
+            }
+        }
+
+        public static void HideCommandPopup(Form form, string orientation)
+        {
+            // If cursor is outside the stick and the command popup panel, hide the popup panel 
+            if (BubblesButton.commandPopup.Visible)
+            {
+                bool hide = false;
+
+                if (orientation == "H")
+                {
+                    if (Cursor.Position.X < form.Left || Cursor.Position.X > form.Right ||
+                        Cursor.Position.Y < form.Top || Cursor.Position.Y > form.Bottom + form.Height)
+                        hide = true;
+                }
+                else
+                {
+                    if (Cursor.Position.X < form.Left || Cursor.Position.X > form.Right + form.Width ||
+                        Cursor.Position.Y < form.Top || Cursor.Position.Y > form.Bottom)
+                        hide = true;
+                }
+
+                if (hide)
+                {
+                    BubblesButton.commandPopup.Hide();
+                    BubblesButton.commandPopup.Tag = 0;
+                }
+            }
+        }
+
+        public static void CreateConfiguration(Dictionary<int, Form> sticks, int configID, int start)
+        {
+            string name, type, position, orientation = "H"; bool collapsed;
+            List<int> ids = new List<int>();
+
             using (BubblesDB db = new BubblesDB())
             {
-                foreach (var stick in ToConfig)
+                foreach (var stick in sticks)
                 {
-                    switch (stick.Name)
-                    {
-                    //    case StickUtils.typeicons:
-                    //        (stick as BubbleIcons).;
-                    //        break;
-                    //    case StickUtils.typepripro:
-                    //        (stick as BubblePriPro).Collapse(collapse, expand);
-                    //        break;
-                    //    case StickUtils.typeformat:
-                    //        (stick as BubbleFormat).Collapse(collapse, expand);
-                    //        break;
-                    //    case StickUtils.typesources:
-                    //        (stick as BubbleMySources).Collapse(collapse, expand);
-                    //        break;
-                    //    case StickUtils.typebookmarks:
-                    //        (stick as BubbleBookmarks).Collapse(collapse, expand);
-                    //        break;
-                    //    case StickUtils.typepaste:
-                    //        (stick as BubblePaste).Collapse(collapse, expand);
-                    //        break;
-                    //    case StickUtils.typeorganizer:
-                    //        (stick as BubbleOrganizer).Collapse(collapse, expand);
-                    //        break;
-                    }
-                    //toolTip1.GetToolTip(pictureHandle)
-                    //db.AddStickToConfig()
+                    // Update _start_ configuration
+                    // First, set all configurations to unstart
+
+                    DataTable dt = db.ExecuteQuery("select * from CONFIGS");
+                    foreach (DataRow dr in dt.Rows)
+                        db.ExecuteNonQuery("update CONFIGS set start=" + 0 + " where id=" + Convert.ToInt32(dr["id"]) + "");
+
+                    // And, if the configuration has to be started, set start state to it
+                    if (start == 1)
+                        db.ExecuteNonQuery("update CONFIGS set start=1 where id=" + configID + "");
+
+                    int stickid = stick.Key;
+                    ids.Add(stickid);
+
+                    dt = db.ExecuteQuery("select * from STICKS where id=" + stickid + "");
+                    if (dt.Rows.Count == 0) continue; // impossible, but...
+
+                    name = dt.Rows[0]["name"].ToString();
+                    type = stick.Value.Name;
+
+                    if (stick.Value.Width < stick.Value.Height) orientation = "V";
+                    if (orientation == "H")
+                        collapsed = stick.Value.Width == minSize;
+                    else
+                        collapsed = stick.Value.Height == minSize;
+
+                    dt = db.ExecuteQuery("select * from STICKS where id=" + stickid + " and configID=" + configID + "");
+                    // If stick is not in the configuration already, add it there
+                    if (dt.Rows.Count == 0) db.AddStick(stickid, name, type, 0, "", configID);
+
+                    // Update stick position
+                    position = SaveStick(stick.Value.Bounds, stickid, orientation, collapsed, configID);
+                    db.ExecuteNonQuery("update STICKS set position=`" + position + "` where id=" + stickid + " and configID=" + configID + "");
                 }
             }
         }
@@ -676,6 +784,57 @@ namespace Bubbles
                 tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + imgName), cmiSize);
         }
 
+        /// <summary>
+        /// Get location for the command popup and other child forms
+        /// </summary>
+        /// <param name="parent">Parent form rectangle</param>
+        /// <param name="child">Child form rectangle</param>
+        /// <param name="orientation">Parent form orientation</param>
+        public static Point GetChildLocation(Rectangle parent, Rectangle child, string orientation, bool popup = false)
+        {
+            int X, Y;
+            if (orientation == "H")
+            {
+                X = parent.Left; // child left = parent left
+                Y = parent.Bottom; // child top = parent bottom
+
+                if (popup) X = parent.Right - child.Width;
+            }
+            else // top right corner
+            {
+                X = parent.Right; // child left = parent right
+                Y = parent.Top; // child top = parent top
+
+                if (popup) Y = parent.Bottom - child.Height;
+            }
+
+            Point pos = new Point(X, Y); // Standard child location
+            child.Location = pos;
+            Point _pos = pos;
+
+            // If the child is close to the right or bottom screen side...
+            Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
+
+            if (orientation == "H")  // horizontal stick orientation
+            {
+                if (child.Right > area.Right) // close to the right
+                    pos.X = parent.Right - child.Width; // set child right to the parent right
+
+                if (child.Bottom > area.Bottom) // close to the bottom
+                    pos.Y = parent.Y - child.Height; // set child bottom to the parent top
+            }
+            else // vertical stick orientation
+            {
+                if (_pos.X + child.Width > area.Right) // close to the right
+                    pos.X = parent.X - child.Width; // set child right to the parent left
+
+                if (pos.Y + child.Height > area.Bottom) // close to the bottom
+                    pos.Y = area.Bottom - child.Height; // set child bottom to the area bottom
+            }
+
+            return pos;
+        }
+
         public static List<IconItem> Icons = new List<IconItem>();
         public static List<PriProItem> PriPros = new List<PriProItem>();
         public static List<BookmarkItem> Bookmarks = new List<BookmarkItem>();
@@ -689,19 +848,6 @@ namespace Bubbles
         public static int stickLength;
         public static int icondist;
         public static Size cmiSize;
-    }
-
-    public class FormItem
-    {
-        public FormItem(int id, string orientation, bool collapsed)
-        {
-            Orientation = orientation;
-            ID = id;
-            Collapsed = collapsed;
-        }
-        public string Orientation = "H";
-        public int ID = 0;
-        public bool Collapsed;
     }
 
     class ResizeStick : Form

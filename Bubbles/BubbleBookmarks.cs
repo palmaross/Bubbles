@@ -23,9 +23,9 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "BookmarksStick.htm.htm");
 
-            toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
-            //toolTip1.SetToolTip(BookmarkList, Utils.getString("bookmarks.addbookmark.tooltip"));
-            toolTip1.SetToolTip(pictureHandle, Utils.getString("bookmarks.bubble.tooltip"));
+            //toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
+            toolTip1.SetToolTip(BookmarkList, Utils.getString("bookmarks.contextmenu.list"));
+            toolTip1.SetToolTip(pictureHandle, stickname);
 
             MinLength = this.Width; RealLength = this.Width;
 
@@ -51,12 +51,19 @@ namespace Bubbles
             contextMenuStrip1.Items["BI_deletemain"].Text = Utils.getString("bookmarks.contextmenu.deletemaintopics");
             StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_deletemain"], "deletemain.png");
 
+            contextMenuStrip1.Items["BI_bookmarklist"].Text = Utils.getString("bookmarks.contextmenu.list");
+            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_bookmarklist"], "list.png");
+
             StickUtils.SetCommonContextMenu(contextMenuStrip1, StickUtils.typebookmarks);
 
             this.MouseDown += Move_Stick;
             pictureHandle.MouseDown += Move_Stick;
             Manage.Click += Manage_Click;
+
             pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
+
+            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typebookmarks);            
+            this.MouseLeave += (sender, e) => StickUtils.HideCommandPopup(this, orientation);
 
             Init();
 
@@ -212,6 +219,10 @@ namespace Bubbles
                 BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
 
                 Init(false);
+            }
+            else if (e.ClickedItem.Name == "BI_bookmarklist")
+            {
+                BookmarkList_Click(null, null);
             }
             else if (e.ClickedItem.Name == "BI_deleteall")
             {
@@ -378,7 +389,7 @@ namespace Bubbles
             }
         }
 
-        private void AddBookmark()
+        public void AddBookmark()
         {
             if (MMUtils.ActiveDocument == null) return;
 
@@ -401,54 +412,17 @@ namespace Bubbles
             Init();
         }
 
-        private void BookmarkList_Click(object sender, EventArgs e)
+        public void BookmarkList_Click(object sender, EventArgs e)
         {
             if (BubblesButton.m_BookmarkList == null)
             {
                 BubblesButton.m_BookmarkList = new BookmarkListDlg();
 
-                //foreach (var item in Bookmarks)
-                //{
-                //    var book = BubblesButton.m_BookmarkList.listBookmarks.Items.Add(item.TopicName);
-                //    BubblesButton.m_BookmarkList.listBookmarks.Items[book] = item;
-                //}
-
-                int X, Y;
-                if (orientation == "H")
-                {
-                    X = this.Location.X;
-                    Y = this.Location.Y + this.Height;
-                }
-                else
-                {
-                    X = this.Location.X + this.Width;
-                    Y = this.Location.Y;
-                }
-
-                var pos = new Point(X, Y);
-                BubblesButton.m_BookmarkList.Location = new Point(pos.X, pos.Y);
-
-                // If the form is close to the right or bottom screen side..
-                Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
-
-                if (orientation == "H")
-                {
-                    if (BubblesButton.m_BookmarkList.Location.X + BubblesButton.m_BookmarkList.Width > area.Right)
-                        pos.X = X + this.Width - BubblesButton.m_BookmarkList.Width;
-
-                    if (pos.Y + BubblesButton.m_BookmarkList.Height > area.Bottom)
-                        pos.Y = this.Location.Y - BubblesButton.m_BookmarkList.Height;
-                }
-                else
-                {
-                    if (BubblesButton.m_BookmarkList.Location.X + BubblesButton.m_BookmarkList.Width > area.Right)
-                        pos.X = this.Location.X - BubblesButton.m_BookmarkList.Width;
-
-                    if (pos.Y + BubblesButton.m_BookmarkList.Height > area.Bottom)
-                        pos.Y = area.Bottom - BubblesButton.m_BookmarkList.Height;
-                }
-
-                BubblesButton.m_BookmarkList.Location = new Point(pos.X, pos.Y);
+                // Get bookmark list location
+                Rectangle parent = this.RectangleToScreen(this.ClientRectangle);
+                Rectangle child = BubblesButton.m_BookmarkList.RectangleToScreen(BubblesButton.m_BookmarkList.ClientRectangle);
+                BubblesButton.m_BookmarkList.Location = StickUtils.GetChildLocation(parent, child, orientation);
+                
                 BubblesButton.m_BookmarkList.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
             BubblesButton.m_BookmarkList.Init(true);

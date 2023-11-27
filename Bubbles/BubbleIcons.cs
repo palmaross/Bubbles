@@ -24,7 +24,7 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "IconStick.htm");
 
-            toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
+            //toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
             toolTip1.SetToolTip(pictureHandle, stickname);
 
             MinLength = this.Width; RealLength = this.Width;
@@ -94,8 +94,10 @@ namespace Bubbles
             pictureHandle.MouseDown += Move_Stick; // move the stick
             pictureHandle.MouseDoubleClick += (sender, e) => Collapse(); // collapse/expand stick
 
-            this.MouseDown += Move_Stick; // move the stick
+            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste);
+            this.MouseLeave += (sender, e) => StickUtils.HideCommandPopup(this, orientation);
 
+            this.MouseDown += Move_Stick; // move the stick
             Manage.Click += Manage_Click; // "Manage" icon's context menu
 
             if (collapsed) {
@@ -138,21 +140,9 @@ namespace Bubbles
 
         private void ContextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            string iconPath, iconName, position = "";
-            List<string> filenames = Icons.Select(x => x.FileName).ToList();
             if (e.ClickedItem.Name == "BI_new")
             {
-                using (SelectIconDlg _dlg = new SelectIconDlg(filenames, manage)) // correct
-                {
-                    if (_dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
-                        return;
-                    iconPath = _dlg.iconPath;
-                    iconName = _dlg.iconName;
-                    position = _dlg.rbtnEnd.Checked ? "end" :
-                        _dlg.rbtnBegin.Checked ? "begin" :
-                        _dlg.rbtnLeft.Checked ? "left" : "right";
-                }
-                NewIcon(iconPath, iconName, position);
+                NewIcon();
             }
             else if (e.ClickedItem.Name == "BI_delete")
             {
@@ -189,29 +179,30 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_paste") // paste copied icon
             {
-                string path = null;
-                string[] copiedFiles = (string[])Clipboard.GetData(DataFormats.FileDrop);
-                if (path == null && copiedFiles == null)
-                    return;
+                PasteIcon();
+                //string path = null;
+                //string[] copiedFiles = (string[])Clipboard.GetData(DataFormats.FileDrop);
+                //if (path == null && copiedFiles == null)
+                //    return;
 
-                string title = StickUtils.Handle_DragDrop(ref path, copiedFiles, Icons, null);
+                //string title = StickUtils.Handle_DragDrop(ref path, copiedFiles, Icons, null);
 
-                if (path == "" || title == "")
-                    return;
+                //if (path == "" || title == "")
+                //    return;
 
-                    position = "end";
-                    if (!manage) // if manage - paste at the end
-                    {
-                        if (selectedIcon.Name == "pictureHandle")
-                            position = "begin";
-                        else
-                            position = "right";
-                    }
+                //    position = "end";
+                //    if (!manage && selectedIcon != null) // if manage - paste at the end
+                //    {
+                //        if (selectedIcon.Name == "pictureHandle")
+                //            position = "begin";
+                //        else
+                //            position = "right";
+                //    }
 
-                    // Get source name
-                    string name = StickUtils.GetName(this, orientation, StickUtils.typeicons, title);
-                    if (name != "")
-                        NewIcon(path, name, position);
+                //    // Get source name
+                //    string name = StickUtils.GetName(this, orientation, StickUtils.typeicons, title);
+                //    if (name != "")
+                //        NewIcon(path, name, position);
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
@@ -255,6 +246,50 @@ namespace Bubbles
                 if (StickUtils.DeleteStick((int)this.Tag, StickUtils.typeicons))
                     this.Close();
             }
+        }
+
+        public void NewIcon()
+        {
+            string iconPath, iconName, position = "";
+            List<string> filenames = Icons.Select(x => x.FileName).ToList();
+
+            using (SelectIconDlg _dlg = new SelectIconDlg(filenames, manage)) // correct
+            {
+                if (_dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
+                    return;
+                iconPath = _dlg.iconPath;
+                iconName = _dlg.iconName;
+                position = _dlg.rbtnEnd.Checked ? "end" :
+                    _dlg.rbtnBegin.Checked ? "begin" :
+                    _dlg.rbtnLeft.Checked ? "left" : "right";
+            }
+            NewIcon(iconPath, iconName, position);
+        }
+
+        public void PasteIcon()
+        {
+            string path = null;
+            string[] copiedFiles = (string[])Clipboard.GetData(DataFormats.FileDrop);
+            if (path == null && copiedFiles == null)
+                return;
+
+            string title = StickUtils.Handle_DragDrop(ref path, copiedFiles, Icons, null);
+
+            if (path == "" || title == "")
+                return;
+
+            position = "end";
+            if (!manage && selectedIcon != null) // if manage - paste at the end
+            {
+                if (selectedIcon.Name == "pictureHandle")
+                    position = "begin";
+                else
+                    position = "right";
+            }
+
+            // Get source name
+            string name = StickUtils.GetName(this, orientation, StickUtils.typeicons, title);
+            if (name != "") NewIcon(path, name, position);
         }
 
         public void Rotate()

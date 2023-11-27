@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageConfigsDlg));
             this.cbConfigs = new System.Windows.Forms.ComboBox();
-            this.lblSticks = new System.Windows.Forms.Label();
             this.configEdit = new System.Windows.Forms.PictureBox();
             this.configNew = new System.Windows.Forms.PictureBox();
             this.configDelete = new System.Windows.Forms.PictureBox();
@@ -39,11 +38,11 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.txtConfigName = new System.Windows.Forms.TextBox();
             this.gbNewConfig = new System.Windows.Forms.GroupBox();
-            this.btnOK = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.listSticks = new System.Windows.Forms.CheckedListBox();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.chboxRunAtStart = new System.Windows.Forms.CheckBox();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnOK = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.chBoxVisibleSticks = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.configEdit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.configNew)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.configDelete)).BeginInit();
@@ -59,16 +58,6 @@
             this.cbConfigs.Size = new System.Drawing.Size(205, 21);
             this.cbConfigs.Sorted = true;
             this.cbConfigs.TabIndex = 0;
-            this.cbConfigs.SelectedIndexChanged += new System.EventHandler(this.cbConfigs_SelectedIndexChanged);
-            // 
-            // lblSticks
-            // 
-            this.lblSticks.AutoSize = true;
-            this.lblSticks.Location = new System.Drawing.Point(10, 65);
-            this.lblSticks.Name = "lblSticks";
-            this.lblSticks.Size = new System.Drawing.Size(124, 13);
-            this.lblSticks.TabIndex = 1;
-            this.lblSticks.Text = "Стики в конфигурации:";
             // 
             // configEdit
             // 
@@ -113,7 +102,7 @@
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(222, 277);
+            this.btnClose.Location = new System.Drawing.Point(222, 162);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 37;
@@ -124,7 +113,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSave.Location = new System.Drawing.Point(12, 277);
+            this.btnSave.Location = new System.Drawing.Point(12, 162);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 38;
@@ -145,7 +134,7 @@
             this.gbNewConfig.Controls.Add(this.btnCancel);
             this.gbNewConfig.Controls.Add(this.btnOK);
             this.gbNewConfig.Controls.Add(this.txtConfigName);
-            this.gbNewConfig.Location = new System.Drawing.Point(12, 64);
+            this.gbNewConfig.Location = new System.Drawing.Point(12, 44);
             this.gbNewConfig.Name = "gbNewConfig";
             this.gbNewConfig.Size = new System.Drawing.Size(284, 87);
             this.gbNewConfig.TabIndex = 40;
@@ -153,16 +142,15 @@
             this.gbNewConfig.Text = "Имя новой конфигурации";
             this.gbNewConfig.Visible = false;
             // 
-            // btnOK
+            // chboxRunAtStart
             // 
-            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnOK.Location = new System.Drawing.Point(111, 54);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 41;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            this.chboxRunAtStart.AutoSize = true;
+            this.chboxRunAtStart.Location = new System.Drawing.Point(12, 46);
+            this.chboxRunAtStart.Name = "chboxRunAtStart";
+            this.chboxRunAtStart.Size = new System.Drawing.Size(205, 17);
+            this.chboxRunAtStart.TabIndex = 42;
+            this.chboxRunAtStart.Text = "Запускать при старте MindManager";
+            this.chboxRunAtStart.UseVisualStyleBackColor = true;
             // 
             // btnCancel
             // 
@@ -175,39 +163,39 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // listSticks
+            // btnOK
             // 
-            this.listSticks.CheckOnClick = true;
-            this.listSticks.FormattingEnabled = true;
-            this.listSticks.Location = new System.Drawing.Point(12, 84);
-            this.listSticks.Name = "listSticks";
-            this.listSticks.Size = new System.Drawing.Size(285, 184);
-            this.listSticks.TabIndex = 41;
+            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnOK.Location = new System.Drawing.Point(111, 54);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.TabIndex = 41;
+            this.btnOK.Text = "OK";
+            this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
-            // chboxRunAtStart
+            // chBoxVisibleSticks
             // 
-            this.chboxRunAtStart.AutoSize = true;
-            this.chboxRunAtStart.Location = new System.Drawing.Point(12, 40);
-            this.chboxRunAtStart.Name = "chboxRunAtStart";
-            this.chboxRunAtStart.Size = new System.Drawing.Size(205, 17);
-            this.chboxRunAtStart.TabIndex = 42;
-            this.chboxRunAtStart.Text = "Запускать при старте MindManager";
-            this.chboxRunAtStart.UseVisualStyleBackColor = true;
+            this.chBoxVisibleSticks.Location = new System.Drawing.Point(12, 64);
+            this.chBoxVisibleSticks.Name = "chBoxVisibleSticks";
+            this.chBoxVisibleSticks.Size = new System.Drawing.Size(285, 36);
+            this.chBoxVisibleSticks.TabIndex = 43;
+            this.chBoxVisibleSticks.Text = "Стики в конфигурации заменить видимыми на экране стиками.";
+            this.chBoxVisibleSticks.UseVisualStyleBackColor = true;
             // 
             // ManageConfigsDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(309, 310);
+            this.ClientSize = new System.Drawing.Size(309, 195);
             this.Controls.Add(this.chboxRunAtStart);
-            this.Controls.Add(this.listSticks);
             this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.chBoxVisibleSticks);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.configEdit);
             this.Controls.Add(this.configNew);
             this.Controls.Add(this.configDelete);
-            this.Controls.Add(this.lblSticks);
             this.Controls.Add(this.cbConfigs);
             this.Controls.Add(this.gbNewConfig);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -231,7 +219,6 @@
         #endregion
 
         private System.Windows.Forms.ComboBox cbConfigs;
-        private System.Windows.Forms.Label lblSticks;
         private System.Windows.Forms.PictureBox configEdit;
         private System.Windows.Forms.PictureBox configNew;
         private System.Windows.Forms.PictureBox configDelete;
@@ -241,8 +228,8 @@
         private System.Windows.Forms.GroupBox gbNewConfig;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.CheckedListBox listSticks;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.CheckBox chboxRunAtStart;
+        private System.Windows.Forms.CheckBox chBoxVisibleSticks;
     }
 }

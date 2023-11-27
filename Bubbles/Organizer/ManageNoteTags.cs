@@ -148,6 +148,8 @@ namespace Organizer
 
         private void btnDeleteTag_Click(object sender, EventArgs e)
         {
+            if (cbTags.Items.Count == 0) return;
+
             string tag = cbTags.SelectedItem.ToString();
 
             using (BubblesDB db = new BubblesDB())

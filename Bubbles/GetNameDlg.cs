@@ -24,23 +24,11 @@ namespace Bubbles
                 label1.Text = Utils.getString("NewStickDlg.source.title") + ":"; // source name
             btnCancel.Text = Utils.getString("button.cancel");
 
-            Point location = new Point(rec.X, rec.Y + rec.Height);
-            if (orientation == "V")
-                location = new Point(rec.X + rec.Width, rec.Y);
+            // Get location
+            Rectangle parent = rec;
+            Rectangle child = this.RectangleToScreen(this.ClientRectangle);
+            this.Location = StickUtils.GetChildLocation(parent, child, orientation);
 
-            Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
-
-            if (orientation == "H")
-            {
-                if (location.Y + this.Height > area.Bottom)
-                    location = new Point(rec.X, rec.Y - this.Height);
-            }
-            else if (location.X + this.Width > area.Right)
-            {
-                location = new Point(rec.X - this.Width, rec.Y);
-            }
-
-            this.Location = location;
             textBox1.Text = name;
             this.Paint += This_Paint; // paint the border
         }

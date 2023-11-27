@@ -12,9 +12,6 @@ using Color = System.Drawing.Color;
 using System.IO;
 using Bubbles;
 using System.Runtime.InteropServices;
-using System.Xml.Linq;
-using static System.Windows.Forms.LinkLabel;
-using System.Runtime.CompilerServices;
 
 namespace Organizer
 
@@ -855,6 +852,26 @@ namespace Organizer
             {
                 ct.Width = flowLayoutPanel1.Width - scroll - margin - 1;
             }
+        }
+
+        private void cbGroups_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            var combo = sender as ComboBox;
+
+            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+            {
+                e.Graphics.FillRectangle(new SolidBrush(Color.LightSeaGreen), e.Bounds);
+                e.Graphics.DrawString(combo.Items[e.Index].ToString(), e.Font,
+                    new SolidBrush(Color.White), new Point(e.Bounds.X, e.Bounds.Y));
+            }
+            else
+            {
+                e.Graphics.FillRectangle(new SolidBrush(SystemColors.Window), e.Bounds);
+                e.Graphics.DrawString(combo.Items[e.Index].ToString(), e.Font,
+                    new SolidBrush(Color.Black), new Point(e.Bounds.X, e.Bounds.Y));
+            }
+
+            
         }
     }
 

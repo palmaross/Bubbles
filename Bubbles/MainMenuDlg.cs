@@ -291,7 +291,7 @@ namespace Bubbles
                     form = new BubbleOrganizer(id, orientation, name); break;
             }
 
-            form.Location = GetStickLocation(location);
+            form.Location = GetStickLocation(location, form.Size);
             BubblesButton.STICKS.Add(id, form);
             form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
@@ -363,7 +363,7 @@ namespace Bubbles
             form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
-        public Point GetStickLocation(string location)
+        public Point GetStickLocation(string location, Size size)
         {
             Point thisLocation = new Point();
 
@@ -392,7 +392,7 @@ namespace Bubbles
                 }
 
                 if (thisLocation.X + thisLocation.Y == 0 ||
-                    !Utils.StickIsOnScreen(thisLocation, this.Size))
+                    !Utils.StickIsOnScreen(thisLocation, size))
                     thisLocation = new Point(MMUtils.MindManager.Left + MMUtils.MindManager.Width - this.Width - label1.Width * 2, MMUtils.MindManager.Top + label1.Width);
             }
             return thisLocation;
@@ -419,7 +419,6 @@ namespace Bubbles
 
                 BulkOperations.Items["BO_help"].Enabled = true;
                 BulkOperations.Items["BO_configuration"].Enabled = true;
-                configuration.DropDown.Items["Config_create"].Enabled = false;
                 BulkOperations.Show(Cursor.Position);
                 return;
             }
@@ -429,6 +428,9 @@ namespace Bubbles
             {
                 if (stick.Visible) visibles++; else invisibles++;
             }
+
+            if (visibles < 2)
+                BulkOperations.Items["BO_align"].Enabled = false;
 
             string cVisibles = " (" + visibles + ")", 
                    cInvisibles = " (" + invisibles + ")",
@@ -515,10 +517,9 @@ namespace Bubbles
                 case "BO_remember":
                     foreach (var stick in BubblesButton.STICKS)
                     {
+                        bool collapsed = stick.Value.Width == StickUtils.minSize;
                         string orientation = "H";
                         if (stick.Value.Width < stick.Value.Height) orientation = "V";
-
-                        bool collapsed = stick.Value.Width == StickUtils.minSize;
 
                         StickUtils.SaveStick(stick.Value.Bounds, stick.Key, orientation, collapsed);
                     }
@@ -530,6 +531,7 @@ namespace Bubbles
                     }
                     break;
                 case "Config_manage":
+                case "Config_create":
                     using (ManageConfigsDlg dlg = new ManageConfigsDlg())
                         dlg.ShowDialog();
 ;                    break;

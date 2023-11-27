@@ -460,6 +460,7 @@
             this.cbGroups.AllowDrop = true;
             this.cbGroups.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cbGroups.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.cbGroups.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cbGroups.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbGroups.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cbGroups.ForeColor = System.Drawing.SystemColors.Window;
@@ -468,6 +469,7 @@
             this.cbGroups.Name = "cbGroups";
             this.cbGroups.Size = new System.Drawing.Size(196, 21);
             this.cbGroups.TabIndex = 98;
+            this.cbGroups.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cbGroups_DrawItem);
             this.cbGroups.SelectedIndexChanged += new System.EventHandler(this.cbGroupsBottom_SelectedIndexChanged);
             // 
             // cmsSort

@@ -66,6 +66,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddTopicTemplateDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddTopicTemplateDlg.Designer.cs">
+      <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="AlignSticksDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -249,6 +255,12 @@
     <Compile Include="Organizer\NotesDlg.Designer.cs">
       <DependentUpon>NotesDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="TopicTemplatePreview.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TopicTemplatePreview.Designer.cs">
+      <DependentUpon>TopicTemplatePreview.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -308,7 +320,49 @@
     <Content Include="images\collapse.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\collapse_expand.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\configuration.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddBefore20.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddCallout.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddCallout20.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddFloating.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddFloating20.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddParent.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddParent20.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddSubtopic.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddSubtopic20.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddTopic.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddTopic20.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpTopicTemplate.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpTopicTemplateActive.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\deleteall.png">
@@ -332,6 +386,9 @@
     <Content Include="images\folder.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\formattedText.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\f_bold.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -345,6 +402,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\hide.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\list.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\manageGroups.png">
@@ -539,6 +599,9 @@
     <Content Include="images\tag_s.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\unformattedText.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\unformatText.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -555,6 +618,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AddTopicTemplateDlg.resx">
+      <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AlignSticksDlg.resx">
       <DependentUpon>AlignSticksDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -642,6 +708,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Organizer\NotesDlg.resx">
       <DependentUpon>NotesDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TopicTemplatePreview.resx">
+      <DependentUpon>TopicTemplatePreview.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

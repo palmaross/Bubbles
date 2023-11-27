@@ -45,6 +45,7 @@
             this.p3 = new System.Windows.Forms.Panel();
             this.cmsDelete = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
+            this.BI_bookmarklist = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pCentral)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
@@ -64,9 +65,10 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.BI_addbookmark,
             this.BI_main,
-            this.BI_deletemain});
+            this.BI_deletemain,
+            this.BI_bookmarklist});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(200, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(200, 114);
             // 
             // BI_addbookmark
             // 
@@ -167,13 +169,19 @@
             this.BI_delete});
             this.cmsDelete.Name = "cmsDelete";
             this.cmsDelete.ShowImageMargin = false;
-            this.cmsDelete.Size = new System.Drawing.Size(156, 48);
+            this.cmsDelete.Size = new System.Drawing.Size(145, 26);
             // 
             // BI_delete
             // 
             this.BI_delete.Name = "BI_delete";
-            this.BI_delete.Size = new System.Drawing.Size(180, 22);
+            this.BI_delete.Size = new System.Drawing.Size(144, 22);
             this.BI_delete.Text = "Удалить закладку";
+            // 
+            // BI_bookmarklist
+            // 
+            this.BI_bookmarklist.Name = "BI_bookmarklist";
+            this.BI_bookmarklist.Size = new System.Drawing.Size(199, 22);
+            this.BI_bookmarklist.Text = "Закладки списком";
             // 
             // BubbleBookmarks
             // 
@@ -221,5 +229,6 @@
         private System.Windows.Forms.Panel p3;
         private System.Windows.Forms.ContextMenuStrip cmsDelete;
         private System.Windows.Forms.ToolStripMenuItem BI_delete;
+        private System.Windows.Forms.ToolStripMenuItem BI_bookmarklist;
     }
 }
