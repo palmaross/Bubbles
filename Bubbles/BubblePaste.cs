@@ -3,12 +3,11 @@ using System.Linq;
 using System.Windows.Forms;
 using PRAManager;
 using Mindjet.MindManager.Interop;
-using System.Drawing;
-using Image = System.Drawing.Image;
-using WindowsInput;
-using WindowsInput.Native;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
+using WindowsInput.Native;
+using WindowsInput;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Bubbles
 {
@@ -31,19 +30,23 @@ namespace Bubbles
             if (orientation == "V") {
                 orientation = "H"; Rotate(); }
 
-            toolTip1.SetToolTip(pPaste, getString("BubblesPaste.pPaste.tooltip"));
-            toolTip1.SetToolTip(pCopy, getString("BubblesPaste.pCopy.tooltip"));
-            toolTip1.SetToolTip(pPasteAsSubtopic, getString("BubblesPaste.addsubtopic.tooltip"));
-            toolTip1.SetToolTip(PasteLink, getString("BubblesPaste.PasteLink.tooltip"));
-            toolTip1.SetToolTip(PasteNotes, getString("BubblesPaste.AddNotes.tooltip"));
-            toolTip1.SetToolTip(ToggleTextFormat, getString("BubblesPaste.workwith.unformatted"));
-            toolTip1.SetToolTip(UnformatText, getString("BubblesPaste.unformate.tooltip"));
+            toolTip1.SetToolTip(pCut, Utils.getString("BubblesPaste.pCut.tooltip"));
+            toolTip1.SetToolTip(pPaste, Utils.getString("BubblesPaste.pPaste.tooltip"));
+            toolTip1.SetToolTip(pCopy, Utils.getString("BubblesPaste.pCopy.tooltip"));
+            toolTip1.SetToolTip(PasteLink, Utils.getString("BubblesPaste.PasteLink.tooltip"));
+            toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.AddNotes.tooltip"));
+            toolTip1.SetToolTip(pAddCallout, Utils.getString("BubblesPaste.addcallout"));
+            toolTip1.SetToolTip(pAddMultiple, Utils.getString("BubblesPaste.pAddMultiple"));
+            toolTip1.SetToolTip(UnformatText, Utils.getString("BubblesPaste.unformate.tooltip"));
 
-            //toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
             toolTip1.SetToolTip(pictureHandle, stickname);
 
-            cmsAddTopic.ItemClicked += ContextMenu_ItemClicked;
             cmsPasteText.ItemClicked += ContextMenu_ItemClicked;
+
+            cmsPasteText.Items["CP_copy_unformatted"].Text = Utils.getString("paste.contextmenu.copy_unformatted");
+            cmsPasteText.Items["CP_copy_formatted"].Text = Utils.getString("paste.contextmenu.copy_formatted");
+            cmsPasteText.Items["CP_paste_unformatted"].Text = Utils.getString("paste.contextmenu.paste_unformatted");
+            cmsPasteText.Items["CP_paste_formatted"].Text = Utils.getString("paste.contextmenu.paste_formatted");
 
             StickUtils.SetCommonContextMenu(cmsCommon, StickUtils.typepaste);
 
@@ -61,11 +64,6 @@ namespace Bubbles
                 collapsed = false; Collapse(); }
         }
 
-        private string getString(string name)
-        {
-            return Utils.getString(name);
-        }
-
         private void PictureHandle_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Clicks == 1)
@@ -78,58 +76,45 @@ namespace Bubbles
 
         private void ContextMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Name == "CP_addnext")
+            if (e.ClickedItem.Name == "CP_copy_unformatted")
             {
-                if (MMUtils.ActiveDocument != null &&
-                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0 &&
-                System.Windows.Forms.Clipboard.ContainsText())
+                if (MMUtils.ActiveDocument != null)
                 {
+                    string text = "";
                     foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                    {
-                        int i = 2;
-                        foreach (Topic _t in t.ParentTopic.AllSubTopics)
-                        {
-                            if (_t == t)
-                                break;
-                            i++;
-                        }
+                        text += t.Text;
 
-                        Topic newTopic = t.ParentTopic.AddSubTopic(System.Windows.Forms.Clipboard.GetText());
-                        t.ParentTopic.AllSubTopics.Insert(newTopic, i);
-                    }
+                    if (text != "")
+                        System.Windows.Forms.Clipboard.SetText(text);
                 }
             }
-            else if(e.ClickedItem.Name == "CP_addcallout")
+            else if(e.ClickedItem.Name == "CP_copy_formatted")
             {
-                if (MMUtils.ActiveDocument != null &&
-                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0 &&
-                System.Windows.Forms.Clipboard.ContainsText())
+                string text = "";
+                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                    text += t.Title.TextRTF + "\r\n";
+
+                if (text != "")
                 {
-                    foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                    {
-                        t.AllCalloutTopics.Add().Text = System.Windows.Forms.Clipboard.GetText();
-                    }
+                    DataObject dto = new DataObject();
+                    dto.SetText(text, TextDataFormat.Rtf);
+                    dto.SetText(text, TextDataFormat.UnicodeText);
+                    System.Windows.Forms.Clipboard.Clear();
+                    System.Windows.Forms.Clipboard.SetDataObject(dto);
                 }
             }
-            else if (e.ClickedItem.Name == "CP_unformatted")
+            if (e.ClickedItem.Name == "CP_paste_unformatted")
             {
+                var text = System.Windows.Forms.Clipboard.GetData(DataFormats.Rtf);
                 if (MMUtils.ActiveDocument != null)
                 {
                     foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                         t.Text = System.Windows.Forms.Clipboard.GetText();
                 }
             }
-            else if(e.ClickedItem.Name == "CP_atend")
+            else if (e.ClickedItem.Name == "CP_paste_formatted")
             {
-                if (MMUtils.ActiveDocument != null &&
-                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0 &&
-                System.Windows.Forms.Clipboard.ContainsText())
-                {
-                    foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                    {
-                        t.Text = t.Text + " " + (System.Windows.Forms.Clipboard.GetText());
-                    }
-                }
+
             }
             else if (e.ClickedItem.Name == "BI_rotate")
             {
@@ -208,89 +193,15 @@ namespace Bubbles
             }
         }
 
-        private void addtopic_Click(object sender, EventArgs e)
+        private void AddPasteTopic_MouseHover(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument != null &&
-                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0 &&
-                System.Windows.Forms.Clipboard.ContainsText())
-            {
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                {
-                    int i = 2;
-                    foreach (Topic _t in t.ParentTopic.AllSubTopics)
-                    {
-                        if (_t == t)
-                            break;
-                        i++;
-                    }
+            PictureBox pb = sender as PictureBox;
 
-                    Topic newTopic = t.ParentTopic.AddSubTopic(System.Windows.Forms.Clipboard.GetText());
-                    t.ParentTopic.AllSubTopics.Insert(newTopic, i);
-                }
-            }
-        }
-
-        private void addsubtopic_Click(object sender, EventArgs e)
-        {
-            string text = "";
-
-            if (System.Windows.Forms.Clipboard.ContainsText())
-                text = System.Windows.Forms.Clipboard.GetText();
-
-            if (MMUtils.ActiveDocument != null && MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0)
-            {
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                {
-                    if (text != "")
-                    {
-                        if (FormattedText())
-                        {
-                            ActivateMindManager();
-                            Topic _t = t.AddSubTopic("");
-                            _t.SelectOnly();
-                            // select topic text
-                            sim.Keyboard.KeyDown(VirtualKeyCode.F2);
-                            // and replace it with the clipboard formatted text
-                            sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
-                        }
-                        else
-                            t.AddSubTopic(text);
-                    }
-                }
-            }
-        }
-
-        bool ActivateMindManager()
-        {
-            Process p = Process.GetProcessesByName("MindManager").FirstOrDefault();
-            if (p == null)
-                return false;
+            if (pb.Name == "pPasteTopic")
+                StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste, "paste");
             else
-            {
-                IntPtr h = p.MainWindowHandle;
-                SetForegroundWindow(h);
-                return true;
-            }
+                StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste, "add");
         }
-
-        bool FormattedText()
-        {
-            return this.ToggleTextFormat.Tag.ToString() == "formatted";
-        }
-
-        private void addsubtopic_MouseHover(object sender, EventArgs e)
-        {
-            //foreach (ToolStripItem item in cmsAddTopic.Items)
-            //    item.Visible = true;
-
-            //Point loc = new Point(
-            //    addsubtopic.RectangleToScreen(addsubtopic.ClientRectangle).Left,
-            //    addsubtopic.RectangleToScreen(addsubtopic.ClientRectangle).Bottom);
-            //cmsAddTopic.Show(loc);
-
-            StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste, "paste");
-        }
-
 
         /// <summary>
         /// Paste general (Ctrl+V)
@@ -302,54 +213,53 @@ namespace Bubbles
 
         private void callout_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument != null &&
-                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0 &&
-                System.Windows.Forms.Clipboard.ContainsText())
+
+        }
+
+        private void pCopy_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
             {
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                {
-                    t.AllCalloutTopics.Add().Text = System.Windows.Forms.Clipboard.GetText();
-                }
+                ActivateMindManager();
+                sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_C);
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                foreach (ToolStripItem item in cmsPasteText.Items)
+                    item.Visible = false;
+
+                cmsPasteText.Items["CP_copy_unformatted"].Visible = true;
+                cmsPasteText.Items["CP_copy_formatted"].Visible = true;
+
+                cmsPasteText.Show(Cursor.Position);
             }
         }
 
-        private void copyTopicText_Click(object sender, EventArgs e)
+        private void pCut_MouseClick(object sender, MouseEventArgs e)
         {
-            if (MMUtils.ActiveDocument != null)
+            if (e.Button == MouseButtons.Left)
             {
-                string text = "";
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                {
-                    text += t.Text;
-                }
-
-                if (text != "")
-                    System.Windows.Forms.Clipboard.SetText(text);
+                ActivateMindManager();
+                sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_X);
             }
         }
 
-        private void pasteToTopic_Click(object sender, EventArgs e)
+        private void pPaste_MouseClick(object sender, MouseEventArgs e)
         {
-            if (MMUtils.ActiveDocument != null)
+            if (e.Button == MouseButtons.Left)
             {
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                    t.Text = System.Windows.Forms.Clipboard.GetText();
+                ActivateMindManager();
+                sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
             }
-        }
+            else if (e.Button == MouseButtons.Right)
+            {
+                foreach (ToolStripItem item in cmsPasteText.Items)
+                    item.Visible = false;
 
-        private void ToggleTextFormat_Click(object sender, EventArgs e)
-        {
-            if (ToggleTextFormat.Tag.ToString() == "unformatted")
-            {
-                toolTip1.SetToolTip(ToggleTextFormat, getString("BubblesPaste.workwith.formatted"));
-                ToggleTextFormat.Tag = "formatted";
-                ToggleTextFormat.Image = Image.FromFile(Utils.ImagesPath + "formattedText.png");
-            }
-            else if (ToggleTextFormat.Tag.ToString() == "formatted")
-            {
-                toolTip1.SetToolTip(ToggleTextFormat, getString("BubblesPaste.workwith.unformatted"));
-                ToggleTextFormat.Tag = "unformatted";
-                ToggleTextFormat.Image = Image.FromFile(Utils.ImagesPath + "unformattedText.png");
+                cmsPasteText.Items["CP_paste_unformatted"].Visible = true;
+                cmsPasteText.Items["CP_paste_formatted"].Visible = true;
+
+                cmsPasteText.Show(Cursor.Position);
             }
         }
 
@@ -372,23 +282,49 @@ namespace Bubbles
 
             cmsCommon.Show(Cursor.Position);
         }
+        
+        private void pAddMultiple_Click(object sender, EventArgs e)
+        {
+            if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
+            {
+                MessageBox.Show(Utils.getString("BubblesPaste.pAddMultiple.error"), "",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            using (AddTopicTemplateDlg dlg = new AddTopicTemplateDlg())
+                dlg.ShowDialog();
+        }
+
+        bool ActivateMindManager()
+        {
+            Process p = Process.GetProcessesByName("MindManager").FirstOrDefault();
+            if (p == null)
+                return false;
+            else
+            {
+                IntPtr h = p.MainWindowHandle;
+                SetForegroundWindow(h);
+                return true;
+            }
+        }
 
         string orientation = "H";
         int RealLength;
         bool collapsed = false;
 
-        InputSimulator sim = new InputSimulator();
-
-        [DllImport("user32.dll")]
-        static extern int SetForegroundWindow(IntPtr point);
-
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
 
-        [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
+        [DllImportAttribute("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-        [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
+        [DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
+
+        InputSimulator sim = new InputSimulator();
+
+        [DllImport("user32.dll")]
+        static extern int SetForegroundWindow(IntPtr point);
     }
 }

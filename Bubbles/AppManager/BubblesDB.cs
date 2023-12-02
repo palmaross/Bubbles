@@ -1,7 +1,4 @@
 ﻿using BubblesAppManager;
-using System.Data;
-using System;
-using PRAManager;
 
 namespace Bubbles
 {
@@ -140,6 +137,16 @@ namespace Bubbles
                 + ");"
                 );
         }
+        public void AddPattern(string templateName, string topicName, string pattern)
+        {
+            m_db.ExecuteNonQuery("insert into MT_TEMPLATES values(NULL, `"
+                + templateName + "`, `"
+                + topicName + "`, `"
+                + pattern + "`, "
+                + "'', 0"
+                + ");"
+                );
+        }
 
         public override void CreateDatabase()
         {
@@ -148,6 +155,14 @@ namespace Bubbles
 
             m_db.ExecuteNonQuery("CREATE TABLE CONFIGS(id INTEGER PRIMARY KEY, name text, start int, " +
                "reserved1 text, reserved2 integer);");
+
+            m_db.ExecuteNonQuery("CREATE TABLE MT_TEMPLATES(id INTEGER PRIMARY KEY, " +
+                "templateName text, topicName text, pattern text, " +
+                "reserved1 text, reserved2 integer);");
+            // pattern_data:
+            // "topics###5" - 5 topcs with topic text _topicName_
+            // "custom###topic1###topic2###topic3###etc..."
+            // "increment###start,step,end,topics,position"
 
             m_db.ExecuteNonQuery("CREATE TABLE STICKS(id integer, name text, " +
                 "type text, start integer, position text, configID integer, " +
@@ -193,6 +208,7 @@ namespace Bubbles
             // "sticker"
             // "template"
             // "reminder:12:05" (12:05) or "reminder:20" (in 20 minutes)
+
             m_db.ExecuteNonQuery("END");
 
             // Add first Icons stick
@@ -236,6 +252,12 @@ namespace Bubbles
             AddNoteIcon(Utils.getString("noteicons.icon11"), "stocklightbulb", 3);
             AddNoteIcon("", "", 4); AddNoteIcon("", "", 5); AddNoteIcon("", "", 6); 
             AddNoteIcon("", "", 7); AddNoteIcon("", "", 8);
+
+            // Add MT_Templates
+            AddPattern(Utils.getString("Template.Day"), Utils.getString("Template.Day"), "increment###1,1,10,2,end");
+            AddPattern(Utils.getString("Template.Month"), Utils.getString("Template.January"), "increment###1,1,31,2,end");
+            AddPattern(Utils.getString("Template.Task"), Utils.getString("Template.Task"), "increment###1,1,5,2,end");
+            AddPattern(Utils.getString("Template.WeekDays"), "", Utils.getString("Template.WeekDays.lang"));
         }
     }
 }

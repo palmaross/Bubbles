@@ -38,9 +38,9 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.txtConfigName = new System.Windows.Forms.TextBox();
             this.gbNewConfig = new System.Windows.Forms.GroupBox();
-            this.chboxRunAtStart = new System.Windows.Forms.CheckBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
+            this.chboxRunAtStart = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.chBoxVisibleSticks = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.configEdit)).BeginInit();
@@ -142,16 +142,6 @@
             this.gbNewConfig.Text = "Имя новой конфигурации";
             this.gbNewConfig.Visible = false;
             // 
-            // chboxRunAtStart
-            // 
-            this.chboxRunAtStart.AutoSize = true;
-            this.chboxRunAtStart.Location = new System.Drawing.Point(12, 46);
-            this.chboxRunAtStart.Name = "chboxRunAtStart";
-            this.chboxRunAtStart.Size = new System.Drawing.Size(205, 17);
-            this.chboxRunAtStart.TabIndex = 42;
-            this.chboxRunAtStart.Text = "Запускать при старте MindManager";
-            this.chboxRunAtStart.UseVisualStyleBackColor = true;
-            // 
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -174,6 +164,16 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
+            // chboxRunAtStart
+            // 
+            this.chboxRunAtStart.AutoSize = true;
+            this.chboxRunAtStart.Location = new System.Drawing.Point(12, 46);
+            this.chboxRunAtStart.Name = "chboxRunAtStart";
+            this.chboxRunAtStart.Size = new System.Drawing.Size(205, 17);
+            this.chboxRunAtStart.TabIndex = 42;
+            this.chboxRunAtStart.Text = "Запускать при старте MindManager";
+            this.chboxRunAtStart.UseVisualStyleBackColor = true;
+            // 
             // chBoxVisibleSticks
             // 
             this.chBoxVisibleSticks.Location = new System.Drawing.Point(12, 64);
@@ -189,6 +189,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
             this.ClientSize = new System.Drawing.Size(309, 195);
+            this.Controls.Add(this.gbNewConfig);
             this.Controls.Add(this.chboxRunAtStart);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.chBoxVisibleSticks);
@@ -197,7 +198,6 @@
             this.Controls.Add(this.configNew);
             this.Controls.Add(this.configDelete);
             this.Controls.Add(this.cbConfigs);
-            this.Controls.Add(this.gbNewConfig);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;

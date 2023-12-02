@@ -419,9 +419,8 @@ namespace Bubbles
                 BubblesButton.m_BookmarkList = new BookmarkListDlg();
 
                 // Get bookmark list location
-                Rectangle parent = this.RectangleToScreen(this.ClientRectangle);
                 Rectangle child = BubblesButton.m_BookmarkList.RectangleToScreen(BubblesButton.m_BookmarkList.ClientRectangle);
-                BubblesButton.m_BookmarkList.Location = StickUtils.GetChildLocation(parent, child, orientation);
+                BubblesButton.m_BookmarkList.Location = StickUtils.GetChildLocation(this, child, orientation);
                 
                 BubblesButton.m_BookmarkList.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }

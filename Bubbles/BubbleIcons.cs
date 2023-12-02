@@ -180,29 +180,6 @@ namespace Bubbles
             else if (e.ClickedItem.Name == "BI_paste") // paste copied icon
             {
                 PasteIcon();
-                //string path = null;
-                //string[] copiedFiles = (string[])Clipboard.GetData(DataFormats.FileDrop);
-                //if (path == null && copiedFiles == null)
-                //    return;
-
-                //string title = StickUtils.Handle_DragDrop(ref path, copiedFiles, Icons, null);
-
-                //if (path == "" || title == "")
-                //    return;
-
-                //    position = "end";
-                //    if (!manage && selectedIcon != null) // if manage - paste at the end
-                //    {
-                //        if (selectedIcon.Name == "pictureHandle")
-                //            position = "begin";
-                //        else
-                //            position = "right";
-                //    }
-
-                //    // Get source name
-                //    string name = StickUtils.GetName(this, orientation, StickUtils.typeicons, title);
-                //    if (name != "")
-                //        NewIcon(path, name, position);
             }
             else if (e.ClickedItem.Name == "BI_close")
             {

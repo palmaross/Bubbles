@@ -1,4 +1,5 @@
-﻿using PopupControl;
+﻿using Mindjet.MindManager.Interop;
+using PopupControl;
 using PRAManager;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,14 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
+using Image = System.Drawing.Image;
+using Icon = System.Drawing.Icon;
+using Color = System.Drawing.Color;
+using Control = System.Windows.Forms.Control;
+using WindowsInput.Native;
+using WindowsInput;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace Bubbles
 {
@@ -24,7 +32,7 @@ namespace Bubbles
         /// <returns></returns>
         public static string GetName(Form form, string orientation, string type, string oldname, bool stick = false)
         {
-            using (GetNameDlg dlg = new GetNameDlg(form.Bounds, orientation, oldname))
+            using (GetNameDlg dlg = new GetNameDlg(form, orientation, oldname))
             {
                 dlg.stickType = type; dlg.stickID = (int)form.Tag; dlg.stick = stick;
 
@@ -483,8 +491,10 @@ namespace Bubbles
                 Control ff = null;
 
                 if (popup == "") ff = sp.panelH;
-                else if (popup == "paste")  ff = sp.panelPasteTopic;
-                
+                else if (type == typepaste) ff = sp.panelPasteTopic;
+
+                if (type == typepaste && popup == "add") ff.Width = sp.panelAddTopic.Width;
+
                 if (type != typeicons && type != typebookmarks && type != typeformat && popup == "")
                 {
                     ff.Size = new Size(sp.panelMin.Width, ff.Height);
@@ -522,16 +532,15 @@ namespace Bubbles
                     sp.pClose.Location = new Point(close.Y, close.X);
                 }
 
-                ff.Tag = form;
+                ff.Tag = form; ff.AccessibleName = popup;
                 BubblesButton.commandPopup = new Popup(ff);
                 BubblesButton.commandPopup.Tag = form.Tag; // stick id
                 BubblesButton.commandPopup.Name = popup;
                 BubblesButton.commandPopup.ShowingAnimation = PopupAnimations.Center;
                 BubblesButton.commandPopup.AnimationDuration = 300;
 
-                Rectangle parent = form.RectangleToScreen(form.ClientRectangle);
                 Rectangle child = ff.RectangleToScreen(ff.ClientRectangle);
-                Point loc = GetChildLocation(parent, child, orientation, popup == "");
+                Point loc = GetChildLocation(form, child, orientation, popup);
                 BubblesButton.commandPopup.Show(loc);
             }
         }
@@ -561,6 +570,79 @@ namespace Bubbles
                     BubblesButton.commandPopup.Hide();
                     BubblesButton.commandPopup.Tag = 0;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Add new topic to a certain position (next topic, topic before, etc.) relative to given topic
+        /// </summary>
+        /// <param name="t">Given topic</param>
+        /// <param name="topicType">"subtopic", "next", "before", "parent", "callout"</param>
+        /// <param name="text">New topic text. #default#" is a new topic default text</param>
+        /// <returns></returns>
+        public static Topic AddTopic(Topic t, string topicType, string text = "#default#", bool addparent = true)
+        {
+            Topic newTopic;
+
+            if (topicType == "Subtopic")
+            {
+                if (text == "#default#")
+                    newTopic = t.AllSubTopics.Add();
+                else
+                    newTopic = t.AddSubTopic(text);
+            }
+            else if (topicType == "Callout")
+            {
+                newTopic = t.AllCalloutTopics.Add();
+                if (text != "#default#")
+                    newTopic.Text = text;
+            }
+            else
+            {
+                if (text == "#default#")
+                    newTopic = t.ParentTopic.AllSubTopics.Add();
+                else
+                    newTopic = t.ParentTopic.AddSubTopic(text);
+
+                // Get given topic index in the branch
+                int i = 1;
+                foreach (Topic _t in t.ParentTopic.AllSubTopics)
+                {
+                    if (_t == t) break; i++;
+                }
+                if (topicType == "NextTopic") i++; // Otherwise, add topic before
+
+                t.ParentTopic.AllSubTopics.Insert(newTopic, i);
+
+                if (topicType == "ParentTopic")
+                {
+                    ActivateMindManager();
+
+                    //t.SelectOnly();
+                    MMUtils.ActiveDocument.Selection.Cut();
+                    newTopic.SelectOnly();
+
+                    // Paste copied topics. In MM23 Selection.Paste() doesn't work!
+                    InputSimulator sim = new InputSimulator();
+                    sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
+
+                    // Text will be pasted after this (and previous) method is finished!!
+                }
+            }
+
+            return newTopic;
+        }
+
+        static bool ActivateMindManager()
+        {
+            Process p = Process.GetProcessesByName("MindManager").FirstOrDefault();
+            if (p == null)
+                return false;
+            else
+            {
+                IntPtr h = p.MainWindowHandle;
+                SetForegroundWindow(h);
+                return true;
             }
         }
 
@@ -790,22 +872,42 @@ namespace Bubbles
         /// <param name="parent">Parent form rectangle</param>
         /// <param name="child">Child form rectangle</param>
         /// <param name="orientation">Parent form orientation</param>
-        public static Point GetChildLocation(Rectangle parent, Rectangle child, string orientation, bool popup = false)
+        public static Point GetChildLocation(Form parent, Rectangle child, string orientation, string popup = "")
         {
             int X, Y;
             if (orientation == "H")
             {
-                X = parent.Left; // child left = parent left
+                // common comands popup
+                X = parent.Right - child.Width; // child right = parent right
                 Y = parent.Bottom; // child top = parent bottom
 
-                if (popup) X = parent.Right - child.Width;
+                if (popup == "add")
+                {
+                    X = parent.Left + (parent as BubblePaste).pAddTopic.Left;
+                    Y = parent.Top + ((parent as BubblePaste).pAddTopic.Top / 2);
+                }
+                else if (popup == "paste")
+                {
+                    X = parent.Left + (parent as BubblePaste).pPasteTopic.Left;
+                    Y = parent.Top + ((parent as BubblePaste).pPasteTopic.Top / 2);
+                }
             }
             else // top right corner
             {
+                // common comands popup
                 X = parent.Right; // child left = parent right
-                Y = parent.Top; // child top = parent top
+                Y = parent.Bottom - child.Height; // child bottom = parent bottom
 
-                if (popup) Y = parent.Bottom - child.Height;
+                if (popup == "add")
+                {
+                    X = parent.Left + ((parent as BubblePaste).pAddTopic.Left / 2);
+                    Y = parent.Top + (parent as BubblePaste).pAddTopic.Top;
+                }
+                else if (popup == "paste")
+                {
+                    X = parent.Left + ((parent as BubblePaste).pPasteTopic.Left / 2);
+                    Y = parent.Top + (parent as BubblePaste).pPasteTopic.Top;
+                }
             }
 
             Point pos = new Point(X, Y); // Standard child location
@@ -821,12 +923,12 @@ namespace Bubbles
                     pos.X = parent.Right - child.Width; // set child right to the parent right
 
                 if (child.Bottom > area.Bottom) // close to the bottom
-                    pos.Y = parent.Y - child.Height; // set child bottom to the parent top
+                    pos.Y = parent.Bottom - child.Height; // set child bottom to the parent top
             }
             else // vertical stick orientation
             {
                 if (_pos.X + child.Width > area.Right) // close to the right
-                    pos.X = parent.X - child.Width; // set child right to the parent left
+                    pos.X = parent.Left - child.Width; // set child right to the parent left
 
                 if (pos.Y + child.Height > area.Bottom) // close to the bottom
                     pos.Y = area.Bottom - child.Height; // set child bottom to the area bottom
@@ -848,6 +950,9 @@ namespace Bubbles
         public static int stickLength;
         public static int icondist;
         public static Size cmiSize;
+
+        [DllImport("user32.dll")]
+        static extern int SetForegroundWindow(IntPtr point);
     }
 
     class ResizeStick : Form

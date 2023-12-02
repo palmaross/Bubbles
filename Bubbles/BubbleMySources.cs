@@ -375,9 +375,8 @@ namespace Bubbles
                     dlg.Height = Sources.Count * (int)(dlg.itemHeight.Height * 1.3);
 
                 // Get source list location
-                Rectangle parent = this.RectangleToScreen(this.ClientRectangle);
                 Rectangle child = dlg.RectangleToScreen(dlg.ClientRectangle);
-                dlg.Location = StickUtils.GetChildLocation(parent, child, orientation);
+                dlg.Location = StickUtils.GetChildLocation(this, child, orientation);
                 
                 dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }

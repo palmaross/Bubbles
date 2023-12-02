@@ -78,6 +78,7 @@
     <Compile Include="AlignSticksDlg.Designer.cs">
       <DependentUpon>AlignSticksDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppManager\TransactionWrapper.cs" />
     <Compile Include="BubbleOrganizer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -260,6 +261,12 @@
     </Compile>
     <Compile Include="TopicTemplatePreview.Designer.cs">
       <DependentUpon>TopicTemplatePreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TopicTemplatePreviewCustom.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TopicTemplatePreviewCustom.Designer.cs">
+      <DependentUpon>TopicTemplatePreviewCustom.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils.cs" />
   </ItemGroup>
@@ -683,6 +690,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StickPopup.resx">
       <DependentUpon>StickPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -711,6 +719,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TopicTemplatePreview.resx">
       <DependentUpon>TopicTemplatePreview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TopicTemplatePreviewCustom.resx">
+      <DependentUpon>TopicTemplatePreviewCustom.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

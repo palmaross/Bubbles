@@ -10,7 +10,6 @@ using Control = System.Windows.Forms.Control;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
-using Image = System.Drawing.Image;
 
 namespace Bubbles
 {
@@ -19,8 +18,6 @@ namespace Bubbles
         public StickPopup()
         {
             InitializeComponent();
-
-            TogglePasteAdd.Text = Utils.getString("StickPopup.TogglePasteAdd.paste");
 
             pCollapse.Tag = Utils.getString("float_icons.contextmenu.collapse_expand");
             pRotate.Tag = Utils.getString("float_icons.contextmenu.rotate");
@@ -40,34 +37,70 @@ namespace Bubbles
             foreach (PictureBox pb in panelOther.Controls) {
                 pb.MouseHover += pb_MouseHover; pb.MouseLeave += pb_MouseLeave; }
 
-            pAddsubtopic.Tag = Utils.getString("BubblesPaste.addsubtopic");
-            pAddNext.Tag = Utils.getString("BubblesPaste.addtopic");
-            pAddBefore.Tag = Utils.getString("BubblesPaste.addbefore");
-            pAddParent.Tag = Utils.getString("BubblesPaste.addparent");
-            pAddCallout.Tag = Utils.getString("BubblesPaste.addcallout");
-            TogglePasteAdd.Tag = Utils.getString("StickPopup.TogglePasteAdd.tooltip");
-            TogglePasteAdd.AccessibleName = "paste";
+            Subtopic.Tag = Utils.getString("BubblesPaste.addsubtopic");
+            NextTopic.Tag = Utils.getString("BubblesPaste.addtopic");
+            TopicBefore.Tag = Utils.getString("BubblesPaste.addbefore");
+            ParentTopic.Tag = Utils.getString("BubblesPaste.addparent");
+            Callout.Tag = Utils.getString("BubblesPaste.addcallout");
+            ToggleTextFormat.Tag = Utils.getString("BubblesPaste.workwith.unformatted");
+            ToggleTextFormat.AccessibleName = "unformatted";
 
             foreach (Control pb in panelPasteTopic.Controls) {
                 pb.MouseHover += pb_MouseHover; pb.MouseLeave += pb_MouseLeave; }
-        }
-
-        private void pb_MouseLeave(object sender, EventArgs e)
-        {
-            Control pb = sender as Control;
-            toolTip1.Hide(pb);
         }
 
         private void pb_MouseHover(object sender, EventArgs e)
         {
             Control pb = sender as Control;
             int offset = pb.Height / 2;
+            bool add = panelPasteTopic.AccessibleName == "add";
+
+            string tooltip = (string)pb.Tag;
+            switch (pb.Name)
+            {
+                case "Subtopic":
+                    if (add)
+                        tooltip = Utils.getString("BubblesPaste.addsubtopic");
+                    else
+                        tooltip = Utils.getString("BubblesPaste.pastesubtopic");
+                    break;
+                case "NextTopic":
+                    if (add)
+                        tooltip = Utils.getString("BubblesPaste.addtopic");
+                    else
+                        tooltip = Utils.getString("BubblesPaste.pastetopic");
+                    break;
+                case "TopicBefore":
+                    if (add)
+                        tooltip = Utils.getString("BubblesPaste.addbefore");
+                    else
+                        tooltip = Utils.getString("BubblesPaste.pastebefore");
+                    break;
+                case "ParentTopic":
+                    if (add)
+                        tooltip = Utils.getString("BubblesPaste.addparent");
+                    else
+                        tooltip = Utils.getString("BubblesPaste.pasteparent");
+                    break;
+                case "Callout":
+                    if (add)
+                        tooltip = Utils.getString("BubblesPaste.addcallout");
+                    else
+                        tooltip = Utils.getString("BubblesPaste.pastecallout");
+                    break;
+            }
 
             Point pnt = pb.PointToClient(Cursor.Position);
             pnt = new Point(pnt.X += offset, pnt.Y += offset);  // Give a little offset
-            toolTip1.Show((string)pb.Tag, pb, pnt);
+            toolTip1.Show(tooltip, pb, pnt);
+        }
+        private void pb_MouseLeave(object sender, EventArgs e)
+        {
+            Control pb = sender as Control;
+            toolTip1.Hide(pb);
         }
 
+        #region CommonComandsPopup
         private void pCollapse_Click(object sender, EventArgs e)
         {
             var stick = panelH.Tag as Form;
@@ -152,7 +185,9 @@ namespace Bubbles
 
             StickUtils.SaveStick(stick.Bounds, (int)stick.Tag, orientation, collapsed);
         }
+        #endregion
 
+        #region DifferentStickCommands
         private void pNewIcon_Click(object sender, EventArgs e)
         {
             var stick = panelH.Tag as Form;
@@ -190,89 +225,54 @@ namespace Bubbles
             var stick = panelH.Tag as Form;
             (stick as BubbleFormat).pClearFormat_Click(null, null);
         }
+        #endregion
 
-        private void TogglePasteAdd_Click(object sender, EventArgs e)
+        #region BubblePaste
+
+        private void pAddTopic_MouseClick(object sender, MouseEventArgs e)
         {
-            if (TogglePasteAdd.AccessibleName.ToString() == "paste")
+            if (e.Button == MouseButtons.Left)
             {
-                TogglePasteAdd.Text = Utils.getString("StickPopup.TogglePasteAdd.add");
-                TogglePasteAdd.AccessibleName = "add";
-                pTopicTemplate.Visible = true;
-            }
-            else if (TogglePasteAdd.AccessibleName.ToString() == "add")
-            {
-                TogglePasteAdd.Text = Utils.getString("StickPopup.TogglePasteAdd.paste");
-                TogglePasteAdd.AccessibleName = "paste";
-                pTopicTemplate.Visible = false;
-            }
-        }
-
-        private void pAddsubtopic_Click(object sender, EventArgs e)
-        {
-            int count = MMUtils.ActiveDocument.Selection.OfType<Topic>().Count();
-            if (MMUtils.ActiveDocument == null || count == 0) return;
-
-            bool paste = TogglePasteAdd.AccessibleName == "paste";
-            if (paste && !System.Windows.Forms.Clipboard.ContainsText()) return;
-
-            // Get all selected topics
-            foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-            {
-                Topic _t = t.AddSubTopic("");
-                topicstoPaste.Add(_t);
-            }
-
-            if (paste) // add subtopic(s) and paste clipboard conent to them
-            {
-                string text = System.Windows.Forms.Clipboard.GetText(); // unformatted text
-
-                ActivateMindManager(); // we need the selected topic to be active!
-
-                if (!FormattedText())
-                    System.Windows.Forms.Clipboard.SetText(text); // set unformatted text to clipboard
-
-                // We can make the Ctrl-V only with one topic!
-                topicstoPaste[0].SelectOnly();
-
-                // Select topic text (in order to enter inside the topic!)
-                sim.Keyboard.KeyDown(VirtualKeyCode.F2);
-
-                // And replace it with the clipboard formatted text (pressing Ctrl-V).
-                // Copied text may have several lines but we don't want several topics,
-                // we want paste this text inside the topic
-                sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
-
-                if (count == 1)
-                    topicstoPaste.Clear(); // we have already pasted the only subtopic (topicstoPaste[0])
-                else
-                    timer1.Start(); // We can't make Ctrl-V with multiple topics.
-                                    // So, we did this with one topic and we get its text in a timer time
-                                    // to populate the rest topics with this text.
-            }
-            else // add subtopic(s)
-            {
-                foreach (Topic t in topicstoPaste)
-                    t.AllSubTopics.Add();
-
-                topicstoPaste.Clear(); // important!
+                PasteAddTopic((sender as PictureBox).Name);
             }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            // to do надо бы в транзакцию оформить??
             timer1.Stop();
 
-            topicstoPaste[1].SelectOnly(); // we have to release the topic with pasted text (topics[0]) to achieve its text
+            if (topicsToPaste.Count == 1)
+            {
+                // Release the topic with pasted text
+                topicsToPaste[0].ParentTopic.SelectOnly();
+                topicsToPaste[0].SelectOnly();
+                return;
+            }
 
+            topicsToPaste[1].SelectOnly(); // we have to release the topic with pasted text (topics[0]) to achieve its text
+
+            PasteTopicTransaction(Utils.getString("addtopics.transactionname.paste"));
+        }
+        List<Topic> topicsToPaste = new List<Topic>();
+
+        void PasteTopicTransaction(string trname)
+        {
+            Transaction _tr = MMUtils.ActiveDocument.NewTransaction(trname);
+            _tr.IsUndoable = true;
+            _tr.Execute += new ITransactionEvents_ExecuteEventHandler(PasteTopics);
+            _tr.Start();
+        }
+
+        public void PasteTopics(Document pDocument)
+        {
             // Get the needed text
-            string text = topicstoPaste[0].Text;
+            string text = topicsToPaste[0].Text;
             if (FormattedText())
-                text = topicstoPaste[0].Title.TextRTF;
+                text = topicsToPaste[0].Title.TextRTF;
 
-            topicstoPaste.RemoveAt(0); // topic is already handled 
+            topicsToPaste.RemoveAt(0); // topic is already handled 
 
-            foreach (Topic t in topicstoPaste)
+            foreach (Topic t in topicsToPaste)
             {
                 if (FormattedText())
                     t.Title.TextRTF = text;
@@ -280,77 +280,99 @@ namespace Bubbles
                     t.Text = text;
             }
 
-            topicstoPaste.Clear();
-        }
-        List<Topic> topicstoPaste = new List<Topic>();
-
-        private void pAddNext_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pAddBefore_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pAddParent_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pAddCallout_Click(object sender, EventArgs e)
-        {
-
+            topicsToPaste.Clear();
         }
 
         /// <summary>
         /// Add topic or paste to topic
         /// </summary>
-        /// <param name="t">Topic to paste text to or topic to which add another topic</param>
-        void PasteToTopic(string topic)
+        /// <param name="topictype">With which topic perform the operation</param>
+        void PasteAddTopic(string topictype)
         {
-            bool paste = TogglePasteAdd.AccessibleName == "paste";
-            string text = "";
+            int count = MMUtils.ActiveDocument.Selection.OfType<Topic>().Count();
+            if (MMUtils.ActiveDocument == null || count == 0) return;
 
-            if (paste && System.Windows.Forms.Clipboard.ContainsText())
-                text = System.Windows.Forms.Clipboard.GetText();
+            bool paste = panelPasteTopic.AccessibleName == "paste";
+            if (paste && !System.Windows.Forms.Clipboard.ContainsText()) return;
 
-            if (MMUtils.ActiveDocument != null && MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0)
+            if (paste) // add subtopic(s) and paste clipboard conent to them
+            {
+                // Create subtopics for all selected topics
+                Topic _t = null; bool addparent = true;
+
+                string text = System.Windows.Forms.Clipboard.GetText(); // unformatted text
+
+                if (!FormattedText())
+                    System.Windows.Forms.Clipboard.SetText(text); // set unformatted text to clipboard
+
+                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                {
+                    if (addparent || topictype != "ParentTopic")
+                    {
+                        if (topictype != "ParentTopic") text = "";
+
+                        _t = StickUtils.AddTopic(t, topictype, text); // For "pAddParent" - adds empty parent topic
+                        addparent = false;                      // There should be only one topic!
+                        topicsToPaste.Add(_t);
+                    }
+                }
+
+                if (topictype != "ParentTopic")
+                {
+                    ActivateMindManager(); // we need the selected topic to be active!
+
+                    // We can make the Ctrl-V with one topic only!
+                    topicsToPaste[0].SelectOnly();
+
+                    // Select topic text (in order to enter inside the topic)
+                    sim.Keyboard.KeyDown(VirtualKeyCode.F2);
+
+                    // And replace it with the clipboard formatted text (pressing Ctrl-V).
+                    // Copied text may have several lines but we don't want several topics,
+                    // we want paste all text inside the topic
+                    sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
+
+                    // Text will be pasted after this method is finished!!
+                }
+
+                if (count == 1 || topictype == "ParentTopic")
+                    topicsToPaste.Clear(); // we have already pasted the only subtopic (topicstoPaste[0])
+                else
+                    timer1.Start(); // We can't make Ctrl-V with multiple topics.
+                                    // So, we did this with one topic and we get its text in a timer time
+                                    // to populate the rest topics with this text.
+            }
+            else // add subtopic
             {
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                 {
-                    if (paste && text != "")
-                    {
-                        if (FormattedText())
-                        {
-                            ActivateMindManager();
-                            Topic _t = null;
+                    if (TopicList.Count == 0) TopicList.Add("#default#");
 
-                            switch (topic)
-                            {
-                                case "subtopic":
-                                    _t = t.AddSubTopic("");
-
-                                    break;
-                            }
-
-                            _t.SelectOnly();
-                            // select topic text
-                            sim.Keyboard.KeyDown(VirtualKeyCode.F2);
-                            // and replace it with the clipboard formatted text
-                            sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
-                        }
-                        else // unformatted text
-                        {
-                            t.AddSubTopic(text);
-                        }
-                    }
-                    else
-                        t.AllSubTopics.Add();
+                    transTopic = t; transTopicType = topictype;
+                    AddTopicTransaction(Utils.getString("addtopics.transactionname.insert"));
                 }
             }
         }
+        Topic transTopic;
+        string transTopicType;
+
+        void AddTopicTransaction(string trname)
+        {
+            Transaction _tr = MMUtils.ActiveDocument.NewTransaction(trname);
+            _tr.IsUndoable = true;
+            _tr.Execute += new ITransactionEvents_ExecuteEventHandler(AddTopics);
+            _tr.Start();
+        }
+
+        public void AddTopics(Document pDocument)
+        {
+            if (TopicList.Count > 1 && transTopicType == "NextTopic")
+                TopicList = TopicList.Reverse<string>().ToList();
+
+            foreach (var name in TopicList)
+                StickUtils.AddTopic(transTopic, transTopicType, name);
+        }
+        #endregion
 
         bool ActivateMindManager()
         {
@@ -365,32 +387,29 @@ namespace Bubbles
             }
         }
 
-        bool FormattedText()
+        private void ToggleTextFormat_Click(object sender, EventArgs e)
         {
-            var stick = panelPasteTopic.Tag as Form;
-            return (stick as BubblePaste).ToggleTextFormat.Tag.ToString() == "formatted";
-        }
-
-
-        private void pTopicTemplate_Click(object sender, EventArgs e)
-        {
-            using (AddTopicTemplateDlg dlg = new AddTopicTemplateDlg())
+            if (ToggleTextFormat.AccessibleName.ToString() == "unformatted")
             {
-                dlg.ShowDialog();
-                if (dlg.TopicList.Count > 0)
-                {
-                    pTopicTemplate.Image = Image.FromFile(Utils.ImagesPath + "cpTopicTemplateActive.png");
-                    pTopicTemplate.Tag = 1;
-                }
-                else
-                {
-                    pTopicTemplate.Image = Image.FromFile(Utils.ImagesPath + "cpTopicTemplate.png");
-                    pTopicTemplate.Tag = 0;
-                }
+                ToggleTextFormat.Tag = Utils.getString("BubblesPaste.workwith.formatted");
+                ToggleTextFormat.AccessibleName = "formatted";
+                ToggleTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "formattedText.png");
+            }
+            else if (ToggleTextFormat.AccessibleName.ToString() == "formatted")
+            {
+                ToggleTextFormat.Tag = Utils.getString("BubblesPaste.workwith.unformatted");
+                ToggleTextFormat.AccessibleName = "unformatted";
+                ToggleTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "unformattedText.png");
             }
         }
 
+        bool FormattedText()
+        {
+            return ToggleTextFormat.Tag.ToString() == "formatted";
+        }
+
         InputSimulator sim = new InputSimulator();
+        public List<string> TopicList = new List<string>();
 
         [DllImport("user32.dll")]
         static extern int SetForegroundWindow(IntPtr point);
