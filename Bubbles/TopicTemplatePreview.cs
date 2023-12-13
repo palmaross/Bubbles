@@ -1,25 +1,51 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Bubbles23
+namespace Bubbles
 {
     public partial class TopicTemplatePreview : UserControl
     {
+        public AddTopicTemplateDlg ParentForm { get; set; }
+
         public TopicTemplatePreview()
         {
             InitializeComponent();
+
+            lblStart.Text = Utils.getString("TopicTemplateDlg.lblStart");
+            lblStep.Text = Utils.getString("TopicTemplateDlg.lblStep");
+            lblFinish.Text = Utils.getString("TopicTemplateDlg.lblFinish");
+            chBoxNumPosition.Text = Utils.getString("TopicTemplateDlg.chBoxNumPosition");
+            linkMore.Text = Utils.getString("TopicTemplateDlg.linkMore");
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        private void linkMore_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            this.Hide();
+            if (panelMore.Visible)
+                panelMore.Visible = false;
+            else
+                panelMore.Visible = true;
+
+            panelMore.BringToFront();
+        }
+
+        private void numStart_ValueChanged(object sender, EventArgs e)
+        {
+            ParentForm.TemplateType_CheckedChanged(null, null);
+        }
+
+        private void numEnd_ValueChanged(object sender, EventArgs e)
+        {
+            ParentForm.TemplateType_CheckedChanged(null, null);
+        }
+
+        private void numStep_ValueChanged(object sender, EventArgs e)
+        {
+            ParentForm.TemplateType_CheckedChanged(null, null);
+        }
+
+        private void chBoxNumPosition_CheckedChanged(object sender, EventArgs e)
+        {
+            ParentForm.TemplateType_CheckedChanged(null, null);
         }
     }
 }

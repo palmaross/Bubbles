@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Bubbles
 {
-    public partial class TopicTemplatePreviewCustom : UserControl
+    public partial class TaskTemplateDlg : Form
     {
-        public TopicTemplatePreviewCustom()
+        public TaskTemplateDlg()
         {
             InitializeComponent();
         }

@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Data;
 using PopupControl;
+using System.Linq;
 
 namespace Bubbles
 {
@@ -66,8 +67,8 @@ namespace Bubbles
                     case StickUtils.typeicons:
                         m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.pIcons, null);
                         break;
-                    case StickUtils.typepripro:
-                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.PriPro, null);
+                    case StickUtils.typetaskinfo:
+                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.TaskInfo, null);
                         break;
                     case StickUtils.typeformat:
                         m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.Format, null);
@@ -85,6 +86,29 @@ namespace Bubbles
                         m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.Organizer, null);
                         break;
                 }
+            }
+
+            HidePopup = new Timer() { Interval = 2000 };
+            HidePopup.Tick += HidePopup_Tick;
+            HidePopup.Start();
+        }
+
+        /// <summary>
+        /// Hide command popup if cursor position is out of stick or popup bounds
+        /// </summary>
+        private void HidePopup_Tick(object sender, EventArgs e)
+        {
+            if (commandPopup.Visible)
+            {
+                int stickid = Convert.ToInt32(commandPopup.Tag);
+                Form form = STICKS[stickid];
+
+                if (form.RectangleToScreen(form.ClientRectangle).Contains(Cursor.Position) ||
+                    commandPopup.RectangleToScreen(commandPopup.ClientRectangle).Contains(Cursor.Position) ||
+                    commandPopup.Name.StartsWith("calendar"))
+                return;
+
+                StickUtils.ActivateMindManager(); // = Hide popup
             }
         }
 
@@ -121,12 +145,168 @@ namespace Bubbles
         {
             if (m_Bookmarks != null)
                 m_Bookmarks.Init();
+
+            if (m_TaskInfo != null && m_TaskInfo.Visible)
+                DocumentStorage.Sync(MMUtils.ActiveDocument); // subscribe document to events
+            else
+                DocumentStorage.Sync(MMUtils.ActiveDocument, false); // unsubscribe document
         }
 
         public override void onDocumentDeactivated(MMEventArgs aArgs)
         {
             if (MMUtils.ActiveDocument == null && m_Bookmarks != null)
                 m_Bookmarks.Init();
+        }
+
+        // For Task Info stick only.
+        public override void onObjectChanged(MMEventArgs aArgs)
+        {
+            if (m_TaskInfo == null || !m_TaskInfo.Visible) return;
+
+            if (aArgs.what.Contains("selection"))
+            {
+                // If map selection changed, change the dates in the TaskInfo stick with selected topic dates
+                SetDates();
+            }
+            else if (aArgs.what.Contains("task")) // it's possible that user changed task dates
+            {
+                SetDates2();
+            }
+        }
+
+        public static void SetDates()
+        {
+            // No topics selected. Disable Task Info stick controls
+            if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.PrimaryTopic == null)
+            {
+                if (m_TaskInfo.pPriority.Enabled)  // if controls are enabled
+                    EnableTaskInfoControls(false); // disable them
+                return;
+            }
+
+            // There are topics seleted
+
+            // Enable Task Info stick controls if they are disabled
+            if (!m_TaskInfo.pPriority.Enabled) EnableTaskInfoControls();
+
+            // Set dates in the TaskInfo stick (from topic)
+            SetDates2();
+        }
+
+        public static void SetDates2()
+        {
+            Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
+            DateTime startdate = t.Task.StartDate, duedate = t.Task.DueDate;
+            bool startequal = true, dueequal = true;
+
+            foreach (Topic _t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+            {
+                if (!_t.Task.HasStartDate || _t.Task.StartDate != startdate)
+                    startequal = false;
+                if (!_t.Task.HasDueDate || _t.Task.DueDate != duedate)
+                    dueequal = false; 
+            }
+
+            // Start Date
+            DateTime dt = t.Task.StartDate;
+            if (dt == MMUtils.NULLDATE || !startequal)
+            {
+                m_TaskInfo.pStartDate.BackColor = SystemColors.ControlLight;
+                m_TaskInfo.pTopicStartDate.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
+                m_TaskInfo.pTopicStartDate.Tag = false;
+                tt.SetToolTip(m_TaskInfo.pTopicStartDate, Utils.getString("taskinfo.pTopicStartDate.set.tooltip"));
+            }
+            else
+            {
+                m_TaskInfo.pStartDate.BackColor = SystemColors.Window;
+                string topicdate = dt.ToString("dd, MM").Replace(", ", "/");
+
+                if (m_TaskInfo.pStartDate.Text != topicdate)
+                {
+                    m_TaskInfo.MMStartDate = true;
+                    m_TaskInfo.pStartDate.Text = topicdate;
+                    m_TaskInfo.pStartDate.Tag = dt.Date.AddHours(8);
+                    tt.SetToolTip(m_TaskInfo.pStartDate, dt.ToLongDateString());
+                }
+                m_TaskInfo.pStartDate.Select(0, 0); // set carret to the beginning
+                m_TaskInfo.pTopicStartDate.Tag = true;
+                m_TaskInfo.pTopicStartDate.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_active.png");
+                tt.SetToolTip(m_TaskInfo.pTopicStartDate, Utils.getString("taskinfo.pTopicStartDate.remove.tooltip"));
+            }
+
+            // Due Date
+            dt = t.Task.DueDate;
+            if (dt == MMUtils.NULLDATE || !dueequal)
+            {
+                m_TaskInfo.pDueDate.BackColor = SystemColors.ControlLight;
+                m_TaskInfo.pTopicDueDate.Tag = false;
+                m_TaskInfo.pTopicDueDate.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
+                tt.SetToolTip(m_TaskInfo.pTopicDueDate, Utils.getString("taskinfo.pTopicDueDate.set.tooltip"));
+            }
+            else
+            {
+                m_TaskInfo.pDueDate.BackColor = SystemColors.Window;
+                string topicdate = dt.ToString("dd, MM").Replace(", ", "/");
+
+                if (m_TaskInfo.pDueDate.Text != topicdate)
+                {
+                    m_TaskInfo.MMDueDate = true;
+                    m_TaskInfo.pDueDate.Text = topicdate;
+                    m_TaskInfo.pDueDate.Tag = dt.Date.AddHours(8);
+                    tt.SetToolTip(m_TaskInfo.pDueDate, dt.ToLongDateString());
+                }
+                m_TaskInfo.pDueDate.Select(0, 0);
+                m_TaskInfo.pTopicDueDate.Tag = true;
+                m_TaskInfo.pTopicDueDate.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_active.png");
+                tt.SetToolTip(m_TaskInfo.pTopicDueDate, Utils.getString("taskinfo.pTopicDueDate.remove.tooltip"));
+            }
+
+            if (!m_TaskInfo.stickDuration)
+            {
+                m_TaskInfo.MMDuration = true;
+
+                GetDurationUnit(t);
+                m_TaskInfo.numDuration.Value = t.Task.GetDuration(t.Task.DurationUnit);
+            }
+        }
+
+        public static void GetDurationUnit(Topic t)
+        {
+            MmDurationUnit unit = t.Task.DurationUnit;
+
+            switch (unit)
+            {
+                case MmDurationUnit.mmDurationUnitMinute:
+                    m_TaskInfo.ST_DurationUnits.SelectedIndex = 0; break;
+                case MmDurationUnit.mmDurationUnitHour:
+                    m_TaskInfo.ST_DurationUnits.SelectedIndex = 1; break;
+                case MmDurationUnit.mmDurationUnitDay:
+                    m_TaskInfo.ST_DurationUnits.SelectedIndex = 2; break;
+                case MmDurationUnit.mmDurationUnitWeek:
+                    m_TaskInfo.ST_DurationUnits.SelectedIndex = 3; break;
+                case MmDurationUnit.mmDurationUnitMonth:
+                    m_TaskInfo.ST_DurationUnits.SelectedIndex = 4; break;
+            }
+        }
+
+        static void EnableTaskInfoControls(bool enable = true)
+        {
+            foreach (System.Windows.Forms.Control c in m_TaskInfo.Controls)
+            {
+                if (c.Name != "pictureHandle" && c.Name != "Manage" && c.Name != "pResources")
+                {
+                    c.Enabled = enable;
+                }
+            }
+
+            // Disable set date checkbox if controls are disabled
+            if (!enable)
+            {
+                m_TaskInfo.pTopicStartDate.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
+                m_TaskInfo.pTopicDueDate.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
+                m_TaskInfo.pStartDate.BackColor = SystemColors.ControlLight;
+                m_TaskInfo.pDueDate.BackColor = SystemColors.ControlLight;
+            }
         }
 
         public void Destroy()
@@ -153,6 +333,13 @@ namespace Bubbles
                 m_BookmarkList.Hide();
                 m_BookmarkList.Dispose();
                 m_BookmarkList = null;
+            }
+
+            if (m_Resources != null)
+            {
+                m_Resources.Hide();
+                m_Resources.Dispose();
+                m_Resources = null;
             }
 
             if (m_bubblesMenu.Visible)
@@ -187,6 +374,10 @@ namespace Bubbles
                 commandPopup.Dispose(); commandPopup = null;
             }
 
+            HidePopup.Stop();
+            HidePopup.Tick -= HidePopup_Tick;
+            HidePopup.Dispose(); HidePopup = null;
+
             DocumentStorage.Unsubscribe(this);
 
             m_bCreated = false;
@@ -199,6 +390,10 @@ namespace Bubbles
         public static BubbleBookmarks m_Bookmarks;
         public static BookmarkListDlg m_BookmarkList;
 
+        public static ResourcesDlg m_Resources;
+
+        public static BubbleTaskInfo m_TaskInfo;
+
         public static Organizer.NotesDlg m_Notes;
 
         public static MainMenuDlg m_bubblesMenu = null;
@@ -210,5 +405,8 @@ namespace Bubbles
         public static Dictionary<int, Form> pNOTES = new Dictionary<int, Form>();
 
         public static Popup commandPopup = new Popup(new StickPopup().panelH);
+
+        Timer HidePopup = new Timer();
+        static ToolTip tt = new ToolTip() { ShowAlways = true, AutoPopDelay = 3000 };
     }
 }

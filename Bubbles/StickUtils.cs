@@ -32,7 +32,7 @@ namespace Bubbles
         /// <returns></returns>
         public static string GetName(Form form, string orientation, string type, string oldname, bool stick = false)
         {
-            using (GetNameDlg dlg = new GetNameDlg(form, orientation, oldname))
+            using (GetNameDlg dlg = new GetNameDlg(form, orientation, oldname, type, stick))
             {
                 dlg.stickType = type; dlg.stickID = (int)form.Tag; dlg.stick = stick;
 
@@ -185,13 +185,13 @@ namespace Bubbles
 
                 if (!found) // screen not found, so new screen
                     location += ";" + screenXY.X + "," + screenXY.Y + ":" + rec.X + "," + rec.Y;
+                location = location.TrimStart(';');
 
                 string _collapsed = collapsed ? "1" : "0";
                 position = orientation + _collapsed + "#" + location.TrimStart(';');
 
-                if (configID != 0)
-                    db.ExecuteNonQuery("update STICKS set position=`" + position + 
-                        "` where id=" + id + " and configID=" + configID + "");
+                db.ExecuteNonQuery("update STICKS set position=`" + position + 
+                    "` where id=" + id + " and configID=" + configID + "");
             }
             return position; // for CreateConfiguration() method
         }
@@ -221,8 +221,6 @@ namespace Bubbles
                 {
                     if (sticktype == typeicons)
                         db.ExecuteNonQuery("delete from ICONS where stickID =" + (int)form.Tag + "");
-                    else if (sticktype == typepripro)
-                        db.ExecuteNonQuery("delete from PRIPRO where stickID =" + (int)form.Tag + "");
                     else if (sticktype == typesources)
                         db.ExecuteNonQuery("delete from SOURCES where stickID =" + (int)form.Tag + "");
                 }
@@ -236,14 +234,6 @@ namespace Bubbles
                             PictureBox pb = AddIcon(p1, item, item.Path, orientation, k++);
                             lpb.Add(pb); form.Controls.Add(pb);
                             db.ExecuteNonQuery("update ICONS set _order=" + item.Order + " where stickID=" + (int)form.Tag + " and filename =`" + item.FileName + "`");
-                        }
-                    }
-                    else if (sticktype == typepripro)
-                    {
-                        foreach (var item in PriPros)
-                        {
-                            PictureBox pb = AddPriPro(p1, item, orientation, k++);
-                            lpb.Add(pb); form.Controls.Add(pb);
                         }
                     }
                     else if (sticktype == typesources)
@@ -277,21 +267,6 @@ namespace Bubbles
             return pBox;
         }
 
-        public static PictureBox AddPriPro(PictureBox p1, PriProItem item,
-            string orientation, int k)
-        {
-            PictureBox pBox = AddPitureBox(p1, orientation, "", k, typepripro,
-                item.Type, item.Value);
-            if (item.Type == "pro")
-            {
-                ToolTip tt = new ToolTip();
-                tt.ShowAlways = true;
-                tt.SetToolTip(pBox, item.Value.ToString() + "%");
-            }
-            pBox.Tag = item;
-            return pBox;
-        }
-
         public static PictureBox AddSource(PictureBox p1, MySourcesItem item, string path, 
             string orientation, int k)
         {
@@ -312,8 +287,6 @@ namespace Bubbles
             pBox.AllowDrop = true;
             if (stickType == typeicons)
                 pBox.Image = Image.FromFile(path);
-            else if (stickType == typepripro)
-                pBox.Image = GetImage(imageType, prirproValue);
             else if (stickType == typesources)
             {
                 if (imageType == "exe")
@@ -364,18 +337,6 @@ namespace Bubbles
                 using (BubblesDB db = new BubblesDB())
                     db.ExecuteNonQuery("delete from ICONS where stickID=" + id + " and filename=`" + filename + "`");
             }
-            else if (type == typepripro)
-            {
-                PriProItem _item = (PriProItem)selectedIcon.Tag;
-
-                PriProItem __item = PriPros.Find(x => x.Type == _item.Type && x.Value == _item.Value);
-                if (__item != null)
-                    PriPros.Remove(__item);
-
-                using (BubblesDB db = new BubblesDB())
-                    db.ExecuteNonQuery("delete from PRIPRO where stickID=" + id + 
-                        " and type=`" + _item.Type + "` and value=" + _item.Value + "");
-            }
             else if (type == typesources)
             {
                 MySourcesItem _item = (MySourcesItem)selectedIcon.Tag;
@@ -410,12 +371,6 @@ namespace Bubbles
                     db.ExecuteNonQuery("delete from ICONS where stickID=" + id + "");
                     if (BubblesButton.m_bubblesMenu.cmsIcons.Items.Count > 0)
                         BubblesButton.m_bubblesMenu.cmsIcons.Items.Clear();
-                }
-                else if (type == typepripro)
-                {
-                    db.ExecuteNonQuery("delete from PRIPRO where stickID=" + id + "");
-                    if (BubblesButton.m_bubblesMenu.cmsPriPro.Items.Count > 0)
-                        BubblesButton.m_bubblesMenu.cmsPriPro.Items.Clear();
                 }
                 else if (type == typesources)
                 {
@@ -484,28 +439,32 @@ namespace Bubbles
         {
             if (BubblesButton.commandPopup.Tag != form.Tag || BubblesButton.commandPopup.Name != popup || !BubblesButton.commandPopup.Visible)
             {
-                // Kill previous popup
-                BubblesButton.commandPopup.Hide();
+                // Hide previous popup
+                ActivateMindManager(); // In order to hide previous Popup
 
                 var sp = new StickPopup();
                 Control ff = null;
 
+                // Control ff is a panel with icons from the StickPopup() User Control
                 if (popup == "") ff = sp.panelH;
                 else if (type == typepaste) ff = sp.panelPasteTopic;
+                else if (popup == "progress") ff = sp.panelProgress;
+                else if (popup == "priority") ff = sp.panelPriority;
 
+                // Correct widths for specific popup
                 if (type == typepaste && popup == "add") ff.Width = sp.panelAddTopic.Width;
 
                 if (type != typeicons && type != typebookmarks && type != typeformat && popup == "")
                 {
-                    ff.Size = new Size(sp.panelMin.Width, ff.Height);
+                    ff.Size = new Size(sp.panelCommonMin.Width, ff.Height);
                 }
-                else
+                else // add specific icons for specific popup
                 {
                     if (type == typeicons)
                     {
                         sp.pNewIcon.Location = sp.p1.Location;
-                        sp.pPasteIcon.Location = sp.p2.Location;
-                        ff.Controls.Add(sp.pNewIcon); ff.Controls.Add(sp.pPasteIcon);
+                        sp.pDeleteAllIcons.Location = sp.p2.Location;
+                        ff.Controls.Add(sp.pNewIcon); ff.Controls.Add(sp.pDeleteAllIcons);
                     }
                     else if (type == typebookmarks)
                     {
@@ -521,7 +480,7 @@ namespace Bubbles
                     }
                 }
 
-                if (orientation == "V") // Rotate control and its elements
+                if (orientation == "V" && !popup.StartsWith("calendar")) // Rotate control and its elements
                 {
                     int ffLength = ff.Width;
                     Point close = sp.pClose.Location;
@@ -542,34 +501,6 @@ namespace Bubbles
                 Rectangle child = ff.RectangleToScreen(ff.ClientRectangle);
                 Point loc = GetChildLocation(form, child, orientation, popup);
                 BubblesButton.commandPopup.Show(loc);
-            }
-        }
-
-        public static void HideCommandPopup(Form form, string orientation)
-        {
-            // If cursor is outside the stick and the command popup panel, hide the popup panel 
-            if (BubblesButton.commandPopup.Visible)
-            {
-                bool hide = false;
-
-                if (orientation == "H")
-                {
-                    if (Cursor.Position.X < form.Left || Cursor.Position.X > form.Right ||
-                        Cursor.Position.Y < form.Top || Cursor.Position.Y > form.Bottom + form.Height)
-                        hide = true;
-                }
-                else
-                {
-                    if (Cursor.Position.X < form.Left || Cursor.Position.X > form.Right + form.Width ||
-                        Cursor.Position.Y < form.Top || Cursor.Position.Y > form.Bottom)
-                        hide = true;
-                }
-
-                if (hide)
-                {
-                    BubblesButton.commandPopup.Hide();
-                    BubblesButton.commandPopup.Tag = 0;
-                }
             }
         }
 
@@ -633,7 +564,7 @@ namespace Bubbles
             return newTopic;
         }
 
-        static bool ActivateMindManager()
+        public static bool ActivateMindManager()
         {
             Process p = Process.GetProcessesByName("MindManager").FirstOrDefault();
             if (p == null)
@@ -741,37 +672,6 @@ namespace Bubbles
             return title;
         }
 
-        public static Image GetImage(string type, int value)
-        {
-            if (type == "pri")
-            {
-                switch (value)
-                {
-                    case 1: return BubblePriPro.PR1;
-                    case 2: return BubblePriPro.PR2;
-                    case 3: return BubblePriPro.PR3;
-                    case 4: return BubblePriPro.PR4;
-                    case 5: return BubblePriPro.PR5;
-                }
-            }
-            else
-            {
-                switch (value)
-                {
-                    case 0: return BubblePriPro.PRG0;
-                    case 10: return BubblePriPro.PRG10;
-                    case 25: return BubblePriPro.PRG25;
-                    case 35: return BubblePriPro.PRG35;
-                    case 50: return BubblePriPro.PRG50;
-                    case 65: return BubblePriPro.PRG65;
-                    case 75: return BubblePriPro.PRG75;
-                    case 90: return BubblePriPro.PRG90;
-                    case 100: return BubblePriPro.PRG100;
-                }
-            }
-            return null;
-        }
-
         public static Image GetImage(string type)
         {
             switch (type)
@@ -795,18 +695,20 @@ namespace Bubbles
 
         public static void SetCommonContextMenu(ContextMenuStrip cms, string stickType = "")
         {
-            string deleteall = Utils.getString("float_icons.contextmenu.deleteall");
+            string deleteall = Utils.getString("contextmenu.clearstick");
             if (stickType == typesources) deleteall = Utils.getString("mysources.contextmenu.deleteall");
             if (stickType == typebookmarks) deleteall = Utils.getString("bookmarks.contextmenu.deleteall");
 
             ToolStripItem tsi = null;
 
-            if (stickType != typeformat && stickType != typepaste && stickType != typeorganizer)
+            if (stickType == typeicons || stickType == typesources || stickType == typebookmarks)
             {
                 tsi = cms.Items.Add(deleteall);
                 tsi.Name = "BI_deleteall";
                 tsi.ImageScaling = ToolStripItemImageScaling.None;
                 tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "deleteall.png"), cmiSize);
+                if (stickType == typeicons || stickType == typetaskinfo)
+                    tsi.ToolTipText = Utils.getString("contextmenu.clearstick.tooltip");
             }
 
             tsi = cms.Items.Add(Utils.getString("contextmenu.stickoperations"));
@@ -828,9 +730,9 @@ namespace Bubbles
             tsi.ImageScaling = ToolStripItemImageScaling.None;
             tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "remember.png"), cmiSize);
 
-            if (stickType != typebookmarks && stickType != typeformat && stickType != typepaste && stickType != typeorganizer)
+            if (stickType == typeicons || stickType == typesources)
             {
-                tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.renamestick"));
+                tsi = cms.Items.Add(Utils.getString("button.rename"));
                 tsi.Name = "BI_renamestick";
                 tsi.ImageScaling = ToolStripItemImageScaling.None;
                 tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "edit.png"), cmiSize);
@@ -872,6 +774,7 @@ namespace Bubbles
         /// <param name="parent">Parent form rectangle</param>
         /// <param name="child">Child form rectangle</param>
         /// <param name="orientation">Parent form orientation</param>
+        /// <param name="popup"></param>
         public static Point GetChildLocation(Form parent, Rectangle child, string orientation, string popup = "")
         {
             int X, Y;
@@ -879,6 +782,8 @@ namespace Bubbles
             {
                 // common comands popup
                 X = parent.Right - child.Width; // child right = parent right
+                if (popup == "getname" || popup == "resources") // GetNameDlg
+                    X = parent.Left; // child right = parent right
                 Y = parent.Bottom; // child top = parent bottom
 
                 if (popup == "add")
@@ -891,12 +796,34 @@ namespace Bubbles
                     X = parent.Left + (parent as BubblePaste).pPasteTopic.Left;
                     Y = parent.Top + ((parent as BubblePaste).pPasteTopic.Top / 2);
                 }
+                else if (popup == "progress")
+                {
+                    X = parent.Left + (parent as BubbleTaskInfo).pPriority.Left;
+                    Y = parent.Top + ((parent as BubbleTaskInfo).pPriority.Width / 4);
+                }
+                else if (popup == "priority")
+                {
+                    X = parent.Left + (parent as BubbleTaskInfo).pResources.Left;
+                    Y = parent.Top + ((parent as BubbleTaskInfo).pPriority.Width / 4);
+                }
+                else if (popup == "calendar_startdate")
+                {
+                    X = parent.Left + (parent as BubbleTaskInfo).panelStartDate.Left;
+                    Y = parent.Top;
+                }
+                else if (popup == "calendar_duedate")
+                {
+                    X = parent.Left + (parent as BubbleTaskInfo).panelDueDate.Left;
+                    Y = parent.Top;
+                }
             }
-            else // top right corner
+            else // vertical
             {
                 // common comands popup
                 X = parent.Right; // child left = parent right
                 Y = parent.Bottom - child.Height; // child bottom = parent bottom
+                if (popup == "getname" || popup == "resources") // GetNameDlg
+                    Y = parent.Top; // child top = parent top
 
                 if (popup == "add")
                 {
@@ -907,6 +834,26 @@ namespace Bubbles
                 {
                     X = parent.Left + ((parent as BubblePaste).pPasteTopic.Left / 2);
                     Y = parent.Top + (parent as BubblePaste).pPasteTopic.Top;
+                }
+                else if (popup == "progress")
+                {
+                    X = parent.Left + (parent as BubbleTaskInfo).pPriority.Width / 4;
+                    Y = parent.Top + (parent as BubbleTaskInfo).pPriority.Top;
+                }
+                else if (popup == "priority")
+                {
+                    X = parent.Left + (parent as BubbleTaskInfo).pPriority.Width / 4;
+                    Y = parent.Top + (parent as BubbleTaskInfo).panelStartDate.Top;
+                }
+                else if (popup == "calendar_startdate")
+                {
+                    X = parent.Left;
+                    Y = parent.Top + (parent as BubbleTaskInfo).panelStartDate.Top;
+                }
+                else if (popup == "calendar_duedate")
+                {
+                    X = parent.Left;
+                    Y = parent.Top + (parent as BubbleTaskInfo).panelDueDate.Top;
                 }
             }
 
@@ -920,15 +867,20 @@ namespace Bubbles
             if (orientation == "H")  // horizontal stick orientation
             {
                 if (child.Right > area.Right) // close to the right
-                    pos.X = parent.Right - child.Width; // set child right to the parent right
+                    pos.X = area.Right - child.Width; // set child right to the parent right
 
                 if (child.Bottom > area.Bottom) // close to the bottom
-                    pos.Y = parent.Bottom - child.Height; // set child bottom to the parent top
+                    pos.Y = parent.Top - child.Height; // set child bottom to the parent top
             }
             else // vertical stick orientation
             {
                 if (_pos.X + child.Width > area.Right) // close to the right
-                    pos.X = parent.Left - child.Width; // set child right to the parent left
+                {
+                    if (popup.StartsWith("calendar"))
+                        pos.X = parent.Right - child.Width;
+                    else
+                        pos.X = parent.Left - child.Width; // set child right to the parent left
+                }
 
                 if (pos.Y + child.Height > area.Bottom) // close to the bottom
                     pos.Y = area.Bottom - child.Height; // set child bottom to the area bottom
@@ -938,11 +890,10 @@ namespace Bubbles
         }
 
         public static List<IconItem> Icons = new List<IconItem>();
-        public static List<PriProItem> PriPros = new List<PriProItem>();
         public static List<BookmarkItem> Bookmarks = new List<BookmarkItem>();
         public static List<MySourcesItem> Sources = new List<MySourcesItem>();
 
-        public const string typestick = "stick", typeicons = "BubbleIcons", typepripro = "BubblePriPro", typeformat = "BubbleFormat",
+        public const string typestick = "stick", typeicons = "BubbleIcons", typetaskinfo = "BubbleTaskInfo", typeformat = "BubbleFormat",
             typesources = "BubbleMySources", typebookmarks = "BubbleBookmarks", typepaste = "BubblePaste", typeorganizer = "BubbleOrganizer";
 
         public static int minSize;

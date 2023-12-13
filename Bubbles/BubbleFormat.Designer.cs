@@ -385,7 +385,6 @@
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.PictureBox Manage;
         private System.Windows.Forms.ToolStripMenuItem BI_color;
-        private System.Windows.Forms.PictureBox pictureHandle;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ColorDialog colorDialog1;
@@ -407,5 +406,6 @@
         private System.Windows.Forms.PictureBox pClearFillColor;
         private System.Windows.Forms.PictureBox pStrike;
         private System.Windows.Forms.Panel panelFontStyle;
+        public System.Windows.Forms.PictureBox pictureHandle;
     }
 }

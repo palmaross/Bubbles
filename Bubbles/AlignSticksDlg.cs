@@ -159,8 +159,8 @@ namespace Bubbles
                 case StickUtils.typeicons:
                     (stick as BubbleIcons).Rotate();
                     break;
-                case StickUtils.typepripro:
-                    (stick as BubblePriPro).Rotate();
+                case StickUtils.typetaskinfo:
+                    (stick as BubbleTaskInfo).Rotate();
                     break;
                 case StickUtils.typeformat:
                     (stick as BubbleFormat).Rotate();
@@ -187,8 +187,8 @@ namespace Bubbles
                 case StickUtils.typeicons:
                     (stick as BubbleIcons).Collapse(false, true);
                     break;
-                case StickUtils.typepripro:
-                    (stick as BubblePriPro).Collapse(false, true);
+                case StickUtils.typetaskinfo:
+                    (stick as BubbleTaskInfo).Collapse(false, true);
                     break;
                 case StickUtils.typeformat:
                     (stick as BubbleFormat).Collapse(false, true);

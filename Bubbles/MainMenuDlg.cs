@@ -15,7 +15,7 @@ namespace Bubbles
             InitializeComponent();
 
             lblIcons.Text = Utils.getString("stickIcons.name");
-            lblPriPro.Text = Utils.getString("stickPriPro.name");
+            lblTaskInfo.Text = Utils.getString("stickTaskInfo.name");
             lblOrganizer.Text = Utils.getString("stickOrganizer.name");
             lblBookmarks.Text = Utils.getString("stickBookmarks.name");
             lblMySources.Text = Utils.getString("stickSources.name");
@@ -28,7 +28,7 @@ namespace Bubbles
             Location = new Point(Cursor.Position.X, MMUtils.MindManager.Top + MMUtils.MindManager.Height - this.Height - Settings.Height);
 
             mwIcons = new Bitmap(Utils.ImagesPath + "mwIcons.png");
-            mwPriPro = new Bitmap(Utils.ImagesPath + "mwPriPro.png");
+            mwTaskInfo = new Bitmap(Utils.ImagesPath + "mwTaskInfo.png");
             mwBookmarks = new Bitmap(Utils.ImagesPath + "mwBookmarks.png");
             mwCopyPaste = new Bitmap(Utils.ImagesPath + "mwCopyPaste.png");
             mwSources = new Bitmap(Utils.ImagesPath + "mwSources.png");
@@ -87,7 +87,7 @@ namespace Bubbles
         /// <summary>
         /// Create Context Menu for multiple sticks per button
         /// </summary>
-        /// <param name="type">Icons, PriPro or MySources. If "", then all</param>
+        /// <param name="type">Icons, TaskInfo or MySources. If "", then all</param>
         public void AddSelectMenu(string type = "")
         {
             if (type == "" || type == StickUtils.typeicons)
@@ -98,16 +98,6 @@ namespace Bubbles
                 {
                     pIcons.ContextMenuStrip = cmsIcons;
                     cmsIcons.ItemClicked += cms_ItemClicked;
-                }
-            }
-            if (type == "" || type == StickUtils.typepripro)
-            {
-                if (cmsPriPro.Items.Count > 0) cmsPriPro.Items.Clear();
-                cmsPriPro = GetSticks(StickUtils.typepripro, cmsPriPro);
-                if (cmsPriPro.Items.Count > 0)
-                {
-                    PriPro.ContextMenuStrip = cmsPriPro;
-                    cmsPriPro.ItemClicked += cms_ItemClicked;
                 }
             }
             if (type == "" || type == StickUtils.typesources)
@@ -151,8 +141,8 @@ namespace Bubbles
             {
                 case StickUtils.typeicons:
                     MenuIcon_Click(pIcons, null); break;
-                case StickUtils.typepripro:
-                    MenuIcon_Click(PriPro, null); break;
+                case StickUtils.typetaskinfo:
+                    MenuIcon_Click(TaskInfo, null); break;
                 case StickUtils.typesources:
                     MenuIcon_Click(MySources, null); break;
             }
@@ -220,25 +210,21 @@ namespace Bubbles
             if (pb.Name == "pIcons")
             {
                 stickType = StickUtils.typeicons;
-                defaultName = Utils.getString("icons.bubble.tooltip");
+                defaultName = Utils.getString("BubbleIcons.bubble.tooltip");
                 if (cmsIcons.Items.Count > 0 && startId == 0)
                 {
                     cmsIcons.Show(Cursor.Position); return;
                 }
             }
-            else if (pb.Name == "PriPro")
+            else if (pb.Name == "TaskInfo")
             {
-                stickType = StickUtils.typepripro;
-                defaultName = Utils.getString("pripro.bubble.tooltip");
-                if (cmsPriPro.Items.Count > 0 && startId == 0)
-                {
-                    cmsPriPro.Show(Cursor.Position); return;
-                }
+                stickType = StickUtils.typetaskinfo;
+                defaultName = Utils.getString("BubbleTaskInfo.bubble.tooltip");
             }
             else if (pb.Name == "MySources")
             {
                 stickType = StickUtils.typesources;
-                defaultName = Utils.getString("mysources.bubble.tooltip");
+                defaultName = Utils.getString("BubbleMySources.bubble.tooltip");
                 if (cmsMySources.Items.Count > 0 && startId == 0)
                 {
                     cmsMySources.Show(Cursor.Position); return;
@@ -247,28 +233,30 @@ namespace Bubbles
             else if (pb.Name == "Bookmarks")
             {
                 stickType = StickUtils.typebookmarks;
-                defaultName = Utils.getString("bookmarks.bubble.tooltip");
+                defaultName = Utils.getString("BubbleBookmarks.bubble.tooltip");
             }
             else if (pb.Name == "Format")
             {
                 stickType = StickUtils.typeformat;
-                defaultName = Utils.getString("format.bubble.tooltip");
+                defaultName = Utils.getString("BubbleFormat.bubble.tooltip");
             }
             else if (pb.Name == "Paste")
             {
                 stickType = StickUtils.typepaste;
-                defaultName = Utils.getString("copypaste.bubble.tooltip");
+                defaultName = Utils.getString("BubblePaste.bubble.tooltip");
             }
             else if (pb.Name == "Organizer")
             {
                 stickType = StickUtils.typeorganizer;
-                defaultName = Utils.getString("organizer.bubble.tooltip");
+                defaultName = Utils.getString("BubbleOrganizer.bubble.tooltip");
             }
 
             string orientation = "H0", location = "", name = ""; int id = startId; // "H0" - Horizontal&Not collapsed
 
             if (StickClicked(stickType, ref orientation, ref location, ref name, ref id) == 2)
-                return; // stick already running, or stick troubles
+            {
+                startId = 0; return; // stick already running, or stick troubles
+            }
 
             if (name == "") name = defaultName;
 
@@ -277,8 +265,8 @@ namespace Bubbles
             {
                 case StickUtils.typeicons:
                     form = new BubbleIcons(id, orientation, name); break;
-                case StickUtils.typepripro:
-                    form = new BubblePriPro(id, orientation, name); break;
+                case StickUtils.typetaskinfo:
+                    form = new BubbleTaskInfo(id, orientation, name); break;
                 case StickUtils.typesources:
                     form = new BubbleMySources(id, orientation, name); break;
                 case StickUtils.typebookmarks:
@@ -493,8 +481,8 @@ namespace Bubbles
                             case StickUtils.typeicons:
                                 (stick as BubbleIcons).Collapse(collapse, expand);
                                 break;
-                            case StickUtils.typepripro:
-                                (stick as BubblePriPro).Collapse(collapse, expand);
+                            case StickUtils.typetaskinfo:
+                                (stick as BubbleTaskInfo).Collapse(collapse, expand);
                                 break;
                             case StickUtils.typeformat:
                                 (stick as BubbleFormat).Collapse(collapse, expand);
@@ -541,13 +529,12 @@ namespace Bubbles
             }
         }
 
-        public Image mwIcons, mwPriPro, mwBookmarks, mwCopyPaste, 
+        public Image mwIcons, mwTaskInfo, mwBookmarks, mwCopyPaste, 
             mwSources, mwFormat, mwFormatActive, mwOrganizer;
 
         public int startId = 0;
 
         public ContextMenuStrip cmsIcons = new ContextMenuStrip() { ShowImageMargin = false };
-        public ContextMenuStrip cmsPriPro = new ContextMenuStrip() { ShowImageMargin = false };
         public ContextMenuStrip cmsMySources = new ContextMenuStrip() { ShowImageMargin = false };
         public ToolStripMenuItem configuration;
     }

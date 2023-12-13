@@ -1,5 +1,4 @@
-﻿using Bubbles.Properties;
-using Mindjet.MindManager.Interop;
+﻿using Mindjet.MindManager.Interop;
 using PRAManager;
 using System;
 using System.Collections.Generic;
@@ -14,6 +13,8 @@ namespace Bubbles
         public BubbleBookmarks(int ID, string _orientation, string stickname)
         {
             InitializeComponent();
+
+            BubblesButton.m_Bookmarks = this;
 
             this.Tag = ID;
             orientation = _orientation.Substring(0, 1); // "H" or "V"
@@ -59,11 +60,10 @@ namespace Bubbles
             this.MouseDown += Move_Stick;
             pictureHandle.MouseDown += Move_Stick;
             Manage.Click += Manage_Click;
-
             pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
 
+            // Show command popup
             Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typebookmarks);            
-            this.MouseLeave += (sender, e) => StickUtils.HideCommandPopup(this, orientation);
 
             Init();
 

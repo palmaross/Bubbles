@@ -1,4 +1,6 @@
 ﻿using BubblesAppManager;
+using System;
+using System.Xml.Linq;
 
 namespace Bubbles
 {
@@ -23,14 +25,15 @@ namespace Bubbles
                 );
         }
 
-        public void AddIcon(string name, string filename, int order, int stickID)
+        public void AddIcon(string name, string filename, int order, int stickID, int groupID)
         {
             m_db.ExecuteNonQuery("insert into ICONS values(`"
                 + name + "`, `"
                 + filename + "`, "
                 + order + ", "
                 + stickID + ", "
-                + "'', '', 0, 0"
+                + groupID + ", "
+                + "'', 0"
                 + ");"
                 );
         }
@@ -81,13 +84,25 @@ namespace Bubbles
                 );
         }
 
-        public void AddPriPro(string type, int value, int stickID)
+        public void AddResource(string name, int icon, string color, int groupID)
         {
-            m_db.ExecuteNonQuery("insert into PRIPRO values(`"
-                + type + "`, "
-                + value + ", "
-                + stickID + ", "
-                + "'', '', 0, 0"
+            m_db.ExecuteNonQuery("insert into RESOURCES values(`"
+                + name + "`, "
+                + icon + ", `"
+                + color + "`, "
+                + groupID + ", "
+                + "'', 0"
+                + ");"
+                );
+        }
+
+        public void AddResourceGroup(string name, int mutexclusive, int icon)
+        {
+            m_db.ExecuteNonQuery("insert into RESOURCEGROUPS values(NULL, `"
+                + name + "`, "
+                + mutexclusive + ", "
+                + icon + ", "
+                + "'', 0"
                 + ");"
                 );
         }
@@ -145,6 +160,23 @@ namespace Bubbles
                 + pattern + "`, "
                 + "'', 0"
                 + ");"
+            );
+        }
+
+        public void AddTaskTemplate(string name, int progress, int priority, string dates, 
+            string icon, string resources, string tags, string properties)
+        {
+            m_db.ExecuteNonQuery("insert into TASKTEMPLATES values(NULL, `"
+                + name + "`, "
+                + progress + ", "
+                + priority + ", `"
+                + dates + "`, `"
+                + icon + "`, `"
+                + resources + "`, `"
+                + tags + "`, `"
+                + properties + "`, "
+                + "'', '', 0, 0"
+                + ");"
                 );
         }
 
@@ -162,9 +194,9 @@ namespace Bubbles
             // pattern_data:
             // "topics###5" - 5 topcs with topic text _topicName_
             // "custom###topic1###topic2###topic3###etc..."
-            // "increment###start,step,end,topics,position"
+            // "increment###start,end,step,position"
 
-            m_db.ExecuteNonQuery("CREATE TABLE STICKS(id integer, name text, " +
+            m_db.ExecuteNonQuery("CREATE TABLE STICKS(id integer unique, name text, " +
                 "type text, start integer, position text, configID integer, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
             // name = stick name (by user)
@@ -176,15 +208,30 @@ namespace Bubbles
                 "reserved1 text, reserved2 integer);");
 
             //// Sticks ////
-            m_db.ExecuteNonQuery("CREATE TABLE ICONS(name text, filename text, _order integer, stickID int, " +
-                "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
-            m_db.ExecuteNonQuery("CREATE TABLE PRIPRO(type text, value text, stickID int, " +
-                "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
-            // type - "priority" or "progress"
-            // value - priority or progress value
+            m_db.ExecuteNonQuery("CREATE TABLE ICONS(name text, filename text, _order integer, " +
+                "stickID int, groupID int, reserved1 text, reserved2 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE ICONGROUPS(id INTEGER PRIMARY KEY, name text, " +
+                "mutexclusive int, reserved1 text, reserved2 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE RESOURCES(name text, icon int, color string, " +
+                "groupID int, reserved1 text, reserved2 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE RESOURCEGROUPS(id INTEGER PRIMARY KEY, name text, " +
+                "mutexclusive int, icon int, reserved1 text, reserved2 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE TAGS(name text, color string, groupID int, " +
+                "reserved1 text, reserved2 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE TAGGROUPS(id INTEGER PRIMARY KEY, name text, mutexclusive int, " +
+                "reserved1 text, reserved2 integer);");
+
             m_db.ExecuteNonQuery("CREATE TABLE SOURCES(title text, path text, type text, _order integer, stickID int, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
-            
+
+            m_db.ExecuteNonQuery("CREATE TABLE TASKTEMPLATES(id INTEGER PRIMARY KEY, name text, " +
+                "progress int, priority int, dates text, icon text, resources text, tags text, properties text, " +
+                "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
+            // dates - "startdate:12/12/2024:duedate:12/12/2024", "pStartDate:_period_", "pDueDate:_period_", "pDates:_period_"
+            // icon - same as in ICONS
+            // tags - group:tag;group:tag;group:tag
+            // properties - name:value:type;name:value:type;name:value:type
+
             // Organizer
             m_db.ExecuteNonQuery("CREATE TABLE NOTES(id INTEGER PRIMARY KEY, name text, content text, " +
                 "link text, groupID int, icon1 text, icon2 text, tags text, " +
@@ -211,22 +258,21 @@ namespace Bubbles
 
             m_db.ExecuteNonQuery("END");
 
-            // Add first Icons stick
-            int id = Utils.StickID();
+            // Add first Icons sticks
+            Random r = new Random();
+
+            int id = r.Next();
             AddStick(id, Utils.getString("BubbleIcons.bubble.tooltip"), StickUtils.typeicons, 0, "", 0);
 
-            AddIcon(Utils.getString("icons.firststick.icon1"), "stockexclamation-mark", 1, id); 
-            AddIcon(Utils.getString("icons.firststick.icon2"), "stockquestion-mark", 2, id);
+            AddIcon(Utils.getString("icons.firststick.icon1"), "stockexclamation-mark", 1, id, 0); 
+            AddIcon(Utils.getString("icons.firststick.icon2"), "stockquestion-mark", 2, id, 0);
 
-            // Add first PriPro stick
-            id = Utils.StickID();
-            AddStick(id, Utils.getString("BubblePriPro.bubble.tooltip"), StickUtils.typepripro, 0, "", 0);
-
-            AddPriPro("pri", 1, id); AddPriPro("pri", 2, id);
-            AddPriPro("pro", 0, id); AddPriPro("pro", 100, id);
+            // Add first TaskInfo stick
+            id = r.Next();
+            AddStick(id, Utils.getString("BubbleTaskInfo.bubble.tooltip"), StickUtils.typetaskinfo, 0, "", 0);
 
             // Add first sources
-            id = Utils.StickID();
+            id = r.Next();
             AddStick(id, Utils.getString("BubbleMySources.bubble.tooltip"), StickUtils.typesources, 0, "", 0);
 
             AddSource(Utils.getString("mysources.first1.text"), "https://palmaross.com/", "http", 1, id);
@@ -254,10 +300,22 @@ namespace Bubbles
             AddNoteIcon("", "", 7); AddNoteIcon("", "", 8);
 
             // Add MT_Templates
-            AddPattern(Utils.getString("Template.Day"), Utils.getString("Template.Day"), "increment###1,1,10,2,end");
-            AddPattern(Utils.getString("Template.Month"), Utils.getString("Template.January"), "increment###1,1,31,2,end");
-            AddPattern(Utils.getString("Template.Task"), Utils.getString("Template.Task"), "increment###1,1,5,2,end");
+            AddPattern(Utils.getString("Template.Day"), Utils.getString("Template.Day"), "increment###1,10,1,end");
+            AddPattern(Utils.getString("Template.Month"), Utils.getString("Template.January"), "increment###1,31,1,end");
+            AddPattern(Utils.getString("Template.Task"), Utils.getString("Template.Task"), "increment###1,5,1,end");
             AddPattern(Utils.getString("Template.WeekDays"), "", Utils.getString("Template.WeekDays.lang"));
+
+            // Add Resource Groups (resources icons for now)
+            AddResourceGroup(Utils.getString("taskinfo.database.resources.icon1"), 0, 0);
+            AddResourceGroup(Utils.getString("taskinfo.database.resources.icon2"), 0, 1);
+            AddResourceGroup("", 0, 2); AddResourceGroup("", 0, 3); AddResourceGroup("", 0, 4);
+            AddResourceGroup("", 0, 5); AddResourceGroup("", 0, 6); AddResourceGroup("", 0, 7);
+            // Add Resources
+            AddResource(Utils.getString("taskinfo.database.resources.res1"), 0, "", 0);
+            AddResource(Utils.getString("taskinfo.database.resources.res2"), 1, "", 0);
+
+            // Add Task Template
+            AddTaskTemplate(Utils.getString("taskinfo.database.resources.icon1"), 0, 0, "pDates:today", "", "", "", "");
         }
     }
 }

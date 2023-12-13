@@ -1,5 +1,4 @@
-﻿using Bubbles23;
-using Mindjet.MindManager.Interop;
+﻿using Mindjet.MindManager.Interop;
 using PRAManager;
 using System;
 using System.Collections.Generic;
@@ -8,8 +7,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Bubbles
 {
@@ -27,17 +24,8 @@ namespace Bubbles
             lblTopics.Text = Utils.getString("TopicTemplateDlg.lblTopics");
             rbtnCustom.Text = Utils.getString("TopicTemplateDlg.rbtnFreeTemplate");
             rbtnUseIncrement.Text = Utils.getString("TopicTemplateDlg.rbtnUseIncrement");
-            grIncrement.Text = Utils.getString("TopicTemplateDlg.grIncrement");
-            lblStart.Text = Utils.getString("TopicTemplateDlg.lblStart");
-            lblStep.Text = Utils.getString("TopicTemplateDlg.lblStep");
-            rbtnFinish.Text = Utils.getString("TopicTemplateDlg.rbtnFinish");
-            rbtnSteps.Text = Utils.getString("TopicTemplateDlg.rbtnSteps");
-            grPosition.Text = Utils.getString("TopicTemplateDlg.grPosition");
-            rbtnBegin.Text = Utils.getString("TopicTemplateDlg.rbtnBegin");
-            rbtnEnd.Text = Utils.getString("TopicTemplateDlg.rbtnEnd");
             linkSaveTemplate.Text = Utils.getString("button.save");
             linkNewTemplate.Text = Utils.getString("TopicTemplateDlg.linkNewTemplate");
-            linkPreview.Text = Utils.getString("TopicTemplateDlg.btnPreview");
             grAdd.Text = Utils.getString("button.add");
             Subtopic.Text = Utils.getString("TopicTemplateDlg.rbtnSubtopic");
             NextTopic.Text = Utils.getString("TopicTemplateDlg.rbtnNextTopic");
@@ -48,19 +36,21 @@ namespace Bubbles
             lblRename.Text = Utils.getString("TopicTemplateDlg.lblRename");
             btnDeleteTemplate.Text = Utils.getString("TopicTemplateDlg.btnDeleteTemplate");
             btnClose.Text = Utils.getString("button.close");
-            toolTip1.SetToolTip(btnRename, Utils.getString("notes.group.rename"));
+            toolTip1.SetToolTip(btnRename, Utils.getString("button.rename"));
             lblTemplateName.Text = Utils.getString("TopicTemplateDlg.lblTemplateName");
             btnCreate.Text = Utils.getString("TopicTemplateDlg.btnCreate");
             btnCancelCreate.Text = Utils.getString("button.cancel");
 
-            ttp.Location = grIncrement.Location; ttpc.Location = grIncrement.Location;
-            this.Controls.Add(ttp); this.Controls.Add(ttpc);
-            ttp.Visible = false; ttpc.Visible = false;
+            ttp.Location = txtCustom.Location;
+            this.Controls.Add(ttp);
+            ttp.Visible = false;
+            ttp.ParentForm = this;
+            ttp_panelMore_Width = ttp.panelMore.Width;
 
             imageList1.ImageSize = new Size(p1.Width, p1.Height);
             imageList1.Images.Add(System.Drawing.Image.FromFile(Utils.ImagesPath + "cpAddSubtopic.png"));
             imageList1.Images.Add(System.Drawing.Image.FromFile(Utils.ImagesPath + "cpAddTopic.png"));
-            imageList1.Images.Add(System.Drawing.Image.FromFile(Utils.ImagesPath + "cpAddBefore20.png"));
+            imageList1.Images.Add(System.Drawing.Image.FromFile(Utils.ImagesPath + "cpAddBefore.png"));
 
             using (BubblesDB db = new BubblesDB())
             {
@@ -79,18 +69,6 @@ namespace Bubbles
                 cbTemplates.SelectedIndex = 0;
         }
 
-        private void linkPreview_Click(object sender, EventArgs e)
-        {
-            if (GetTopicList() == null)
-                return;
-
-            ttp.listBox1.Items.Clear();
-            ttp.listBox1.Items.AddRange(TopicList.ToArray());
-            ttp.btnClose.Visible = true;
-            ttp.Visible = true;
-            ttp.BringToFront();
-        }
-
         List<string> GetTopicList()
         {
             TopicList.Clear();
@@ -100,38 +78,21 @@ namespace Bubbles
             string name = txtTopicText.Text.Trim();
             if (name == "") return null;
 
-            int start = (int)numStart.Value;
-            int finish = (int)numEnd.Value;
-            int step = (int)numStep.Value;
-            int steps = (int)numSteps.Value;
+            int start = (int)ttp.numStart.Value;
+            int finish = (int)ttp.numFinish.Value;
+            int step = (int)ttp.numStep.Value;
 
-            bool begin = rbtnBegin.Checked;
+            bool begin = ttp.chBoxNumPosition.Checked;
 
-            if (rbtnFinish.Checked)
+            if (step > 0)
             {
-                if (step > 0)
-                {
-                    for (int i = start; i <= finish; i += step)
-                        TopicList.Add(GetPreview(name, i, begin));
-                }
-                else
-                {
-                    for (int i = start; i >= finish; i += step)
-                        TopicList.Add(GetPreview(name, i, begin));
-                }
+                for (int i = start; i <= finish; i += step)
+                    TopicList.Add(GetPreview(name, i, begin));
             }
             else
             {
-                if (step > 0)
-                {
-                    for (int i = start; i <= steps; i += step)
-                        TopicList.Add(GetPreview(name, i, begin));
-                }
-                else
-                {
-                    for (int i = start; i >= steps; i -= step)
-                        TopicList.Add(GetPreview(name, i, begin));
-                }
+                for (int i = start; i >= finish; i += step)
+                    TopicList.Add(GetPreview(name, i, begin));
             }
 
             return TopicList;
@@ -143,43 +104,6 @@ namespace Bubbles
             else topictext += " " + number;
 
             return topictext;
-        }
-
-        private void Template_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rbtnTopics.Checked)
-            {
-                linkPreview.Enabled = false;
-                ttpc.Visible = false;
-                ttp.listBox1.Items.Clear();
-                ttp.btnClose.Visible = false;
-                ttp.Visible = true;
-                ttp.BringToFront();
-
-                if (txtTopicText.Text.Trim() == "")
-                    txtTopicText.Text = Utils.getString("Template.Preview.Topic");
-
-                for (int i = 0; i < numTopics.Value; i++)
-                    ttp.listBox1.Items.Add(txtTopicText.Text);
-            }
-            else if (rbtnCustom.Checked)
-            {
-                linkPreview.Enabled = false;
-                ttp.Visible = false;
-                ttpc.Visible = true;
-                ttpc.BringToFront();
-                if (ttpc.textBox1.Text.Trim() == "")
-                    ttpc.textBox1.Text = Utils.getString("Template.Preview.Custom");
-            }
-            else if (rbtnUseIncrement.Checked)
-            {
-                linkPreview.Enabled = true;
-                ttp.Visible = false;
-                ttpc.Visible = false;
-
-                if (txtTopicText.Text.Trim() == "")
-                    txtTopicText.Text = Utils.getString("Template.Preview.Topic");
-            }
         }
 
         private void btnAddTopics_Click(object sender, EventArgs e)
@@ -195,7 +119,7 @@ namespace Bubbles
             }
             else if (rbtnCustom.Checked)
             {
-                string[] lines = ttpc.textBox1.Text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                string[] lines = txtCustom.Text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string line in lines) TopicList.Add(line);
             }
             else if (rbtnUseIncrement.Checked)
@@ -330,7 +254,7 @@ namespace Bubbles
             {
                 pattern_data = "custom###";
 
-                string[] lines = ttpc.textBox1.Text.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+                string[] lines = txtCustom.Text.Split(new string[] { "\r\n" }, StringSplitOptions.None);
                 foreach (string line in lines)
                     pattern_data += line + "###";
 
@@ -338,10 +262,10 @@ namespace Bubbles
             }
             else if (rbtnUseIncrement.Checked)
             {
-                string position = rbtnBegin.Checked ? "begin" : "end";
+                string position = ttp.chBoxNumPosition.Checked ? "begin" : "end";
 
-                pattern_data = "increment###" + numStart.Value + "," + numStep.Value +"," + 
-                    numEnd.Value + "," + numTopics.Value + "," + position;
+                pattern_data = "increment###" + ttp.numStart.Value + "," + ttp.numFinish.Value + "," + 
+                    ttp.numStep.Value +"," + position;
             }
 
             using (BubblesDB db = new BubblesDB())
@@ -402,12 +326,12 @@ namespace Bubbles
             switch (pattern[0])
             {
                 case "topics":
-                    linkPreview.Enabled = false;
-                    ttpc.Visible = false;
+                    txtCustom.Visible = false;
                     ttp.listBox1.Items.Clear();
-                    ttp.btnClose.Visible = false;
                     ttp.Visible = true;
                     ttp.BringToFront();
+                    ttp.panelIncrement.Visible = false;
+                    ttp.panelMore.Visible = false;
 
                     rbtnTopics.Checked = true;
                     numTopics.Value = Convert.ToInt32(pattern[1]);
@@ -417,10 +341,9 @@ namespace Bubbles
 
                     break;
                 case "custom":
-                    linkPreview.Enabled = false;
                     ttp.Visible = false;
-                    ttpc.Visible = true;
-                    ttpc.BringToFront();
+                    txtCustom.Visible = true;
+                    txtCustom.BringToFront();
 
                     rbtnCustom.Checked = true;
                     pattern.RemoveAt(0);
@@ -429,24 +352,119 @@ namespace Bubbles
                     foreach (string line in pattern)
                         lines += line + "\r\n";
 
-                    ttpc.textBox1.Text = lines.TrimEnd('\n', '\r');
+                    txtCustom.Text = lines.TrimEnd('\n', '\r');
                     break;
                 case "increment":
-                    linkPreview.Enabled = true;
-                    ttp.Visible = false;
-                    ttpc.Visible = false;
+                    ttp.Visible = true;
+                    txtCustom.Visible = false;
+                    ttp.panelIncrement.Visible = true;
+                    ttp.panelIncrement.Location = ttp.p1.Location;
+                    ttp.panelMore.Width = ttp_panelMore_Width;
 
                     rbtnUseIncrement.Checked = true;
                     string[] incs = pattern[1].Split(',');
-                    numStart.Value = Convert.ToInt32(incs[0]);
-                    numStep.Value = Convert.ToInt32(incs[1]);
-                    numEnd.Value = Convert.ToInt32(incs[2]);
-                    numTopics.Value = Convert.ToInt32(incs[3]);
-                    rbtnBegin.Checked = incs[4] == "begin";
+                    ttp.numStart.Value = Convert.ToInt32(incs[0]);
+                    ttp.numFinish.Value = Convert.ToInt32(incs[1]);
+                    ttp.numStep.Value = Convert.ToInt32(incs[2]);
+                    ttp.chBoxNumPosition.Checked = incs[3] == "begin";
+
+                    if (GetTopicList() == null)
+                        return;
+
+                    if (TopicList.Count > 11)
+                    {
+                        ttp.panelIncrement.Location = new Point(ttp.p1.Location.X - p1.Width, ttp.p1.Location.Y);
+                        ttp.panelMore.Width -= p1.Width;
+                    }
+
+                    ttp.listBox1.Items.Clear();
+                    ttp.listBox1.Items.AddRange(TopicList.ToArray());
+                    ttp.Visible = true;
+                    ttp.BringToFront();
                     break;
             }
 
             txtRename.Text = item.TemplateName;
+        }
+
+        public void TemplateType_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbtnTopics.Checked)
+            {
+                txtCustom.Visible = false;
+                ttp.listBox1.Items.Clear();
+                ttp.Visible = true;
+                ttp.BringToFront();
+                ttp.panelIncrement.Visible = false;
+                ttp.panelMore.Visible = false;
+
+                if (txtTopicText.Text.Trim() == "")
+                    txtTopicText.Text = Utils.getString("Template.Preview.Topic");
+
+                for (int i = 0; i < numTopics.Value; i++)
+                    ttp.listBox1.Items.Add(txtTopicText.Text);
+            }
+            else if (rbtnCustom.Checked)
+            {
+                ttp.Visible = false;
+                txtCustom.Visible = true;
+                txtCustom.BringToFront();
+
+                if (txtCustom.Text.Trim() == "")
+                    txtCustom.Text = Utils.getString("Template.Preview.Custom");
+            }
+            else if (rbtnUseIncrement.Checked)
+            {
+                ttp.Visible = true;
+                txtCustom.Visible = false;
+                ttp.panelIncrement.Visible = true;
+                ttp.panelIncrement.Location = ttp.p1.Location;
+
+                if (txtTopicText.Text.Trim() == "")
+                    txtTopicText.Text = Utils.getString("Template.Preview.Topic");
+
+                if (GetTopicList() == null)
+                    return;
+
+                if (TopicList.Count > 11)
+                    ttp.panelIncrement.Location = new Point(ttp.p1.Location.X - p1.Width, ttp.p1.Location.Y);
+
+                ttp.listBox1.Items.Clear();
+                ttp.listBox1.Items.AddRange(TopicList.ToArray());
+                ttp.Visible = true;
+                ttp.BringToFront();
+            }
+        }
+
+
+        private void lblTopics_Click(object sender, EventArgs e)
+        {
+            if (!rbtnTopics.Checked) rbtnTopics.Checked = true;
+        }
+
+        private void txtTopicText_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                TemplateType_CheckedChanged(null, null);
+        }
+
+        private void txtTopicText_Leave(object sender, EventArgs e)
+        {
+            if (txtTopicTextTextChanged)
+            {
+                txtTopicTextTextChanged = false;
+                TemplateType_CheckedChanged(null, null);
+            }
+        }
+
+        private void txtTopicText_TextChanged(object sender, EventArgs e)
+        {
+            txtTopicTextTextChanged = true;
+        }
+
+        private void numTopics_ValueChanged(object sender, EventArgs e)
+        {
+            TemplateType_CheckedChanged(null, null);
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -458,12 +476,9 @@ namespace Bubbles
 
         public List<string> TopicList = new List<string>();
         TopicTemplatePreview ttp = new TopicTemplatePreview();
-        TopicTemplatePreviewCustom ttpc = new TopicTemplatePreviewCustom();
+        bool txtTopicTextTextChanged = false;
 
-        private void lblTopics_Click(object sender, EventArgs e)
-        {
-            if (!rbtnTopics.Checked) rbtnTopics.Checked = true;
-        }
+        int ttp_panelMore_Width;
     }
 
     public class TemplateItem

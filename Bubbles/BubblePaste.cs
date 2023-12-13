@@ -58,7 +58,6 @@ namespace Bubbles
             pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
 
             Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste);
-            this.MouseLeave += (sender, e) => StickUtils.HideCommandPopup(this, orientation);
 
             if (collapsed) {
                 collapsed = false; Collapse(); }
@@ -220,7 +219,7 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
-                ActivateMindManager();
+                StickUtils.ActivateMindManager();
                 sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_C);
             }
             else if (e.Button == MouseButtons.Right)
@@ -239,7 +238,7 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
-                ActivateMindManager();
+                StickUtils.ActivateMindManager();
                 sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_X);
             }
         }
@@ -248,7 +247,7 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
-                ActivateMindManager();
+                StickUtils.ActivateMindManager();
                 sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
             }
             else if (e.Button == MouseButtons.Right)
@@ -296,19 +295,6 @@ namespace Bubbles
                 dlg.ShowDialog();
         }
 
-        bool ActivateMindManager()
-        {
-            Process p = Process.GetProcessesByName("MindManager").FirstOrDefault();
-            if (p == null)
-                return false;
-            else
-            {
-                IntPtr h = p.MainWindowHandle;
-                SetForegroundWindow(h);
-                return true;
-            }
-        }
-
         string orientation = "H";
         int RealLength;
         bool collapsed = false;
@@ -323,8 +309,5 @@ namespace Bubbles
         public static extern bool ReleaseCapture();
 
         InputSimulator sim = new InputSimulator();
-
-        [DllImport("user32.dll")]
-        static extern int SetForegroundWindow(IntPtr point);
     }
 }

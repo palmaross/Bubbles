@@ -32,22 +32,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddTopicTemplateDlg));
             this.lblTopicText = new System.Windows.Forms.Label();
             this.txtTopicText = new System.Windows.Forms.TextBox();
-            this.lblStart = new System.Windows.Forms.Label();
-            this.numStart = new System.Windows.Forms.NumericUpDown();
-            this.numEnd = new System.Windows.Forms.NumericUpDown();
-            this.rbtnBegin = new System.Windows.Forms.RadioButton();
-            this.rbtnEnd = new System.Windows.Forms.RadioButton();
-            this.lblStep = new System.Windows.Forms.Label();
-            this.numStep = new System.Windows.Forms.NumericUpDown();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnAddTopics = new System.Windows.Forms.Button();
-            this.grPosition = new System.Windows.Forms.GroupBox();
-            this.grIncrement = new System.Windows.Forms.GroupBox();
-            this.numSteps = new System.Windows.Forms.NumericUpDown();
-            this.rbtnSteps = new System.Windows.Forms.RadioButton();
-            this.rbtnFinish = new System.Windows.Forms.RadioButton();
             this.linkSaveTemplate = new System.Windows.Forms.LinkLabel();
-            this.linkPreview = new System.Windows.Forms.LinkLabel();
             this.linkNewTemplate = new System.Windows.Forms.LinkLabel();
             this.panelNewTemplate = new System.Windows.Forms.Panel();
             this.btnCreate = new System.Windows.Forms.Button();
@@ -76,12 +63,7 @@
             this.rbtnCustom = new System.Windows.Forms.RadioButton();
             this.grTemplate = new System.Windows.Forms.GroupBox();
             this.lblTopics = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.numStart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numEnd)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numStep)).BeginInit();
-            this.grPosition.SuspendLayout();
-            this.grIncrement.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numSteps)).BeginInit();
+            this.txtCustom = new System.Windows.Forms.TextBox();
             this.panelNewTemplate.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTopics)).BeginInit();
             this.panelManageTemplates.SuspendLayout();
@@ -105,97 +87,9 @@
             this.txtTopicText.Name = "txtTopicText";
             this.txtTopicText.Size = new System.Drawing.Size(237, 20);
             this.txtTopicText.TabIndex = 1;
-            // 
-            // lblStart
-            // 
-            this.lblStart.AutoSize = true;
-            this.lblStart.Location = new System.Drawing.Point(55, 28);
-            this.lblStart.Name = "lblStart";
-            this.lblStart.Size = new System.Drawing.Size(32, 13);
-            this.lblStart.TabIndex = 2;
-            this.lblStart.Text = "Start:";
-            // 
-            // numStart
-            // 
-            this.numStart.Location = new System.Drawing.Point(96, 26);
-            this.numStart.Minimum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            -2147483648});
-            this.numStart.Name = "numStart";
-            this.numStart.Size = new System.Drawing.Size(38, 20);
-            this.numStart.TabIndex = 3;
-            this.numStart.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // numEnd
-            // 
-            this.numEnd.Location = new System.Drawing.Point(97, 57);
-            this.numEnd.Minimum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            -2147483648});
-            this.numEnd.Name = "numEnd";
-            this.numEnd.Size = new System.Drawing.Size(38, 20);
-            this.numEnd.TabIndex = 5;
-            this.numEnd.Value = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
-            // 
-            // rbtnBegin
-            // 
-            this.rbtnBegin.AutoSize = true;
-            this.rbtnBegin.Location = new System.Drawing.Point(10, 19);
-            this.rbtnBegin.Name = "rbtnBegin";
-            this.rbtnBegin.Size = new System.Drawing.Size(132, 17);
-            this.rbtnBegin.TabIndex = 9;
-            this.rbtnBegin.Text = "Перед текстом темы";
-            this.rbtnBegin.UseVisualStyleBackColor = true;
-            // 
-            // rbtnEnd
-            // 
-            this.rbtnEnd.AutoSize = true;
-            this.rbtnEnd.Checked = true;
-            this.rbtnEnd.Location = new System.Drawing.Point(148, 19);
-            this.rbtnEnd.Name = "rbtnEnd";
-            this.rbtnEnd.Size = new System.Drawing.Size(124, 17);
-            this.rbtnEnd.TabIndex = 10;
-            this.rbtnEnd.TabStop = true;
-            this.rbtnEnd.Text = "После текста темы";
-            this.rbtnEnd.UseVisualStyleBackColor = true;
-            // 
-            // lblStep
-            // 
-            this.lblStep.AutoSize = true;
-            this.lblStep.Location = new System.Drawing.Point(183, 28);
-            this.lblStep.Name = "lblStep";
-            this.lblStep.Size = new System.Drawing.Size(32, 13);
-            this.lblStep.TabIndex = 13;
-            this.lblStep.Text = "Step:";
-            // 
-            // numStep
-            // 
-            this.numStep.Location = new System.Drawing.Point(227, 25);
-            this.numStep.Minimum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            -2147483648});
-            this.numStep.Name = "numStep";
-            this.numStep.Size = new System.Drawing.Size(38, 20);
-            this.numStep.TabIndex = 14;
-            this.numStep.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            this.txtTopicText.TextChanged += new System.EventHandler(this.txtTopicText_TextChanged);
+            this.txtTopicText.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtTopicText_KeyUp);
+            this.txtTopicText.Leave += new System.EventHandler(this.txtTopicText_Leave);
             // 
             // btnCancel
             // 
@@ -220,74 +114,6 @@
             this.btnAddTopics.UseVisualStyleBackColor = true;
             this.btnAddTopics.Click += new System.EventHandler(this.btnAddTopics_Click);
             // 
-            // grPosition
-            // 
-            this.grPosition.Controls.Add(this.rbtnBegin);
-            this.grPosition.Controls.Add(this.rbtnEnd);
-            this.grPosition.Location = new System.Drawing.Point(15, 89);
-            this.grPosition.Name = "grPosition";
-            this.grPosition.Size = new System.Drawing.Size(276, 46);
-            this.grPosition.TabIndex = 22;
-            this.grPosition.TabStop = false;
-            this.grPosition.Text = "Number Position:";
-            // 
-            // grIncrement
-            // 
-            this.grIncrement.Controls.Add(this.numSteps);
-            this.grIncrement.Controls.Add(this.rbtnSteps);
-            this.grIncrement.Controls.Add(this.grPosition);
-            this.grIncrement.Controls.Add(this.rbtnFinish);
-            this.grIncrement.Controls.Add(this.lblStep);
-            this.grIncrement.Controls.Add(this.numStart);
-            this.grIncrement.Controls.Add(this.lblStart);
-            this.grIncrement.Controls.Add(this.numEnd);
-            this.grIncrement.Controls.Add(this.numStep);
-            this.grIncrement.Location = new System.Drawing.Point(12, 148);
-            this.grIncrement.Name = "grIncrement";
-            this.grIncrement.Size = new System.Drawing.Size(304, 147);
-            this.grIncrement.TabIndex = 25;
-            this.grIncrement.TabStop = false;
-            this.grIncrement.Text = "Increment";
-            // 
-            // numSteps
-            // 
-            this.numSteps.Location = new System.Drawing.Point(227, 57);
-            this.numSteps.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.numSteps.Name = "numSteps";
-            this.numSteps.Size = new System.Drawing.Size(38, 20);
-            this.numSteps.TabIndex = 16;
-            this.numSteps.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            // 
-            // rbtnSteps
-            // 
-            this.rbtnSteps.AutoSize = true;
-            this.rbtnSteps.Location = new System.Drawing.Point(166, 58);
-            this.rbtnSteps.Name = "rbtnSteps";
-            this.rbtnSteps.Size = new System.Drawing.Size(60, 17);
-            this.rbtnSteps.TabIndex = 15;
-            this.rbtnSteps.Text = "Topics:";
-            this.rbtnSteps.UseVisualStyleBackColor = true;
-            // 
-            // rbtnFinish
-            // 
-            this.rbtnFinish.AutoSize = true;
-            this.rbtnFinish.Checked = true;
-            this.rbtnFinish.Location = new System.Drawing.Point(39, 58);
-            this.rbtnFinish.Name = "rbtnFinish";
-            this.rbtnFinish.Size = new System.Drawing.Size(47, 17);
-            this.rbtnFinish.TabIndex = 11;
-            this.rbtnFinish.TabStop = true;
-            this.rbtnFinish.Text = "End:";
-            this.rbtnFinish.UseVisualStyleBackColor = true;
-            // 
             // linkSaveTemplate
             // 
             this.linkSaveTemplate.AutoSize = true;
@@ -299,26 +125,15 @@
             this.linkSaveTemplate.Text = "Save";
             this.linkSaveTemplate.Click += new System.EventHandler(this.linkSaveTemplate_Click);
             // 
-            // linkPreview
-            // 
-            this.linkPreview.Location = new System.Drawing.Point(211, 298);
-            this.linkPreview.Name = "linkPreview";
-            this.linkPreview.Size = new System.Drawing.Size(102, 13);
-            this.linkPreview.TabIndex = 32;
-            this.linkPreview.TabStop = true;
-            this.linkPreview.Text = "Предпросмотр";
-            this.linkPreview.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.linkPreview.Click += new System.EventHandler(this.linkPreview_Click);
-            // 
             // linkNewTemplate
             // 
-            this.linkNewTemplate.AutoSize = true;
-            this.linkNewTemplate.Location = new System.Drawing.Point(88, 298);
+            this.linkNewTemplate.Location = new System.Drawing.Point(164, 298);
             this.linkNewTemplate.Name = "linkNewTemplate";
-            this.linkNewTemplate.Size = new System.Drawing.Size(110, 13);
+            this.linkNewTemplate.Size = new System.Drawing.Size(148, 13);
             this.linkNewTemplate.TabIndex = 29;
             this.linkNewTemplate.TabStop = true;
             this.linkNewTemplate.Text = "Create New Template";
+            this.linkNewTemplate.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.linkNewTemplate.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkNewTemplate_LinkClicked);
             // 
             // panelNewTemplate
@@ -378,20 +193,20 @@
             this.rbtnTopics.Size = new System.Drawing.Size(14, 13);
             this.rbtnTopics.TabIndex = 17;
             this.rbtnTopics.UseVisualStyleBackColor = true;
-            this.rbtnTopics.CheckedChanged += new System.EventHandler(this.Template_CheckedChanged);
+            this.rbtnTopics.CheckedChanged += new System.EventHandler(this.TemplateType_CheckedChanged);
             // 
             // rbtnUseIncrement
             // 
             this.rbtnUseIncrement.AutoSize = true;
             this.rbtnUseIncrement.Checked = true;
-            this.rbtnUseIncrement.Location = new System.Drawing.Point(201, 22);
+            this.rbtnUseIncrement.Location = new System.Drawing.Point(218, 22);
             this.rbtnUseIncrement.Name = "rbtnUseIncrement";
-            this.rbtnUseIncrement.Size = new System.Drawing.Size(97, 17);
+            this.rbtnUseIncrement.Size = new System.Drawing.Size(72, 17);
             this.rbtnUseIncrement.TabIndex = 26;
             this.rbtnUseIncrement.TabStop = true;
-            this.rbtnUseIncrement.Text = "With Increment";
+            this.rbtnUseIncrement.Text = "Increment";
             this.rbtnUseIncrement.UseVisualStyleBackColor = true;
-            this.rbtnUseIncrement.CheckedChanged += new System.EventHandler(this.Template_CheckedChanged);
+            this.rbtnUseIncrement.CheckedChanged += new System.EventHandler(this.TemplateType_CheckedChanged);
             // 
             // numTopics
             // 
@@ -409,6 +224,7 @@
             0,
             0,
             0});
+            this.numTopics.ValueChanged += new System.EventHandler(this.numTopics_ValueChanged);
             this.numTopics.Click += new System.EventHandler(this.lblTopics_Click);
             // 
             // lblTemplates
@@ -535,11 +351,11 @@
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "cpAddSubtopic.png");
             this.imageList1.Images.SetKeyName(1, "cpAddTopic.png");
-            this.imageList1.Images.SetKeyName(2, "cpAddBefore20.png");
+            this.imageList1.Images.SetKeyName(2, "cpAddBefore.png");
             // 
             // TopicBefore
             // 
-            this.TopicBefore.ImageKey = "cpAddBefore20.png";
+            this.TopicBefore.ImageKey = "cpAddBefore.png";
             this.TopicBefore.ImageList = this.imageList1;
             this.TopicBefore.Location = new System.Drawing.Point(200, 18);
             this.TopicBefore.Name = "TopicBefore";
@@ -565,7 +381,7 @@
             // 
             // p1
             // 
-            this.p1.Location = new System.Drawing.Point(17, 30);
+            this.p1.Location = new System.Drawing.Point(11, 30);
             this.p1.Name = "p1";
             this.p1.Size = new System.Drawing.Size(16, 16);
             this.p1.TabIndex = 36;
@@ -581,7 +397,7 @@
             this.rbtnCustom.TabIndex = 37;
             this.rbtnCustom.Text = "Custom";
             this.rbtnCustom.UseVisualStyleBackColor = true;
-            this.rbtnCustom.CheckedChanged += new System.EventHandler(this.Template_CheckedChanged);
+            this.rbtnCustom.CheckedChanged += new System.EventHandler(this.TemplateType_CheckedChanged);
             // 
             // grTemplate
             // 
@@ -592,7 +408,7 @@
             this.grTemplate.Controls.Add(this.rbtnUseIncrement);
             this.grTemplate.Location = new System.Drawing.Point(11, 89);
             this.grTemplate.Name = "grTemplate";
-            this.grTemplate.Size = new System.Drawing.Size(305, 54);
+            this.grTemplate.Size = new System.Drawing.Size(304, 54);
             this.grTemplate.TabIndex = 38;
             this.grTemplate.TabStop = false;
             this.grTemplate.Text = "Шаблон:";
@@ -607,16 +423,25 @@
             this.lblTopics.Text = "topics";
             this.lblTopics.Click += new System.EventHandler(this.lblTopics_Click);
             // 
+            // txtCustom
+            // 
+            this.txtCustom.Location = new System.Drawing.Point(11, 148);
+            this.txtCustom.Multiline = true;
+            this.txtCustom.Name = "txtCustom";
+            this.txtCustom.Size = new System.Drawing.Size(304, 147);
+            this.txtCustom.TabIndex = 39;
+            this.txtCustom.Visible = false;
+            // 
             // AddTopicTemplateDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(328, 427);
+            this.Controls.Add(this.txtCustom);
             this.Controls.Add(this.linkSaveTemplate);
             this.Controls.Add(this.p1);
             this.Controls.Add(this.linkManageTemplates);
-            this.Controls.Add(this.linkPreview);
             this.Controls.Add(this.cbTemplates);
             this.Controls.Add(this.linkNewTemplate);
             this.Controls.Add(this.lblTemplates);
@@ -624,7 +449,6 @@
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.txtTopicText);
             this.Controls.Add(this.lblTopicText);
-            this.Controls.Add(this.grIncrement);
             this.Controls.Add(this.grAdd);
             this.Controls.Add(this.grTemplate);
             this.Controls.Add(this.panelManageTemplates);
@@ -638,14 +462,6 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Topic Template";
-            ((System.ComponentModel.ISupportInitialize)(this.numStart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numEnd)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numStep)).EndInit();
-            this.grPosition.ResumeLayout(false);
-            this.grPosition.PerformLayout();
-            this.grIncrement.ResumeLayout(false);
-            this.grIncrement.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numSteps)).EndInit();
             this.panelNewTemplate.ResumeLayout(false);
             this.panelNewTemplate.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTopics)).EndInit();
@@ -664,20 +480,8 @@
 
         private System.Windows.Forms.Label lblTopicText;
         private System.Windows.Forms.TextBox txtTopicText;
-        private System.Windows.Forms.Label lblStart;
-        private System.Windows.Forms.NumericUpDown numStart;
-        private System.Windows.Forms.NumericUpDown numEnd;
-        private System.Windows.Forms.RadioButton rbtnBegin;
-        private System.Windows.Forms.RadioButton rbtnEnd;
-        private System.Windows.Forms.NumericUpDown numStep;
-        private System.Windows.Forms.Label lblStep;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnAddTopics;
-        private System.Windows.Forms.GroupBox grPosition;
-        private System.Windows.Forms.GroupBox grIncrement;
-        private System.Windows.Forms.NumericUpDown numSteps;
-        private System.Windows.Forms.RadioButton rbtnSteps;
-        private System.Windows.Forms.RadioButton rbtnFinish;
         private System.Windows.Forms.RadioButton rbtnTopics;
         private System.Windows.Forms.RadioButton rbtnUseIncrement;
         private System.Windows.Forms.NumericUpDown numTopics;
@@ -706,7 +510,7 @@
         private System.Windows.Forms.RadioButton rbtnCustom;
         private System.Windows.Forms.GroupBox grTemplate;
         private System.Windows.Forms.Label lblTopics;
-        private System.Windows.Forms.LinkLabel linkPreview;
         private System.Windows.Forms.LinkLabel linkSaveTemplate;
+        private System.Windows.Forms.TextBox txtCustom;
     }
 }

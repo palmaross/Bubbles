@@ -44,7 +44,7 @@ namespace Bubbles
             contextMenuStrip1.Items["BI_new"].Text =Utils.getString("mysources.contextmenu.new");
             StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_new"], "newsticker.png");
 
-            contextMenuStrip1.Items["BI_rename"].Text = Utils.getString("float_icons.contextmenu.edit");
+            contextMenuStrip1.Items["BI_rename"].Text = Utils.getString("button.rename");
             StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_rename"], "edit.png");
 
             contextMenuStrip1.Items["BI_paste"].Text = Utils.getString("float_icons.contextmenu.paste");
@@ -102,7 +102,6 @@ namespace Bubbles
                 collapsed = false; Collapse(); }
 
             Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste);
-            this.MouseLeave += (sender, e) => StickUtils.HideCommandPopup(this, orientation);
         }
 
         private void Manage_Click(object sender, EventArgs e)
@@ -197,6 +196,7 @@ namespace Bubbles
                     return;
 
                 string title = StickUtils.Handle_DragDrop(ref path, copiedFiles, null, Sources);
+                if (title == "") return;
 
                 if (path == "" || title == "")
                     return;
@@ -473,6 +473,7 @@ namespace Bubbles
                 string path = (string)e.Data.GetData(DataFormats.UnicodeText, false);
                 string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop, false);
                 string title = StickUtils.Handle_DragDrop(ref path, draggedFiles, null, Sources);
+                if (title == "") return;
 
                 if (path != "")
                 {

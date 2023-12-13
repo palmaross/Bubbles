@@ -34,7 +34,7 @@ namespace Bubbles
             toolTip1.SetToolTip(pNotes, Utils.getString("BubbleOrganizer.notes.tooltip"));
             toolTip1.SetToolTip(pTodos, Utils.getString("BubbleOrganizer.todos.tooltip"));
 
-            toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
+            //toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
             toolTip1.SetToolTip(pictureHandle, stickname);
 
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
@@ -49,8 +49,6 @@ namespace Bubbles
             pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
 
             Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste);
-            this.MouseLeave += (sender, e) => StickUtils.HideCommandPopup(this, orientation);
-
 
             if (collapsed) {
                 collapsed = false; Collapse(); }

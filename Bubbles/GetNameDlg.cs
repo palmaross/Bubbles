@@ -12,9 +12,11 @@ namespace Bubbles
         /// <param name="orientation">stick orientation (Horizontal or Vertical)</param>
         /// <param name="stickType">Stick, source or icon</param>
         /// <param name="name">Name of stick/source/icon in case of rename</param>
-        public GetNameDlg(Form form, string orientation, string name)
+        public GetNameDlg(Form form, string orientation, string name, string type, bool aStick)
         {
             InitializeComponent();
+
+            stick = aStick; stickType = type;
 
             if (stick)
                 label1.Text = Utils.getString("NewStickDlg.label.title") + ":"; // stick name
@@ -26,7 +28,7 @@ namespace Bubbles
 
             // Get location
             Rectangle child = this.RectangleToScreen(this.ClientRectangle);
-            this.Location = StickUtils.GetChildLocation(form, child, orientation);
+            this.Location = StickUtils.GetChildLocation(form, child, orientation, "getname");
 
             textBox1.Text = name;
             this.Paint += This_Paint; // paint the border

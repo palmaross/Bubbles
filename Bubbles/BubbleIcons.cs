@@ -3,8 +3,10 @@ using PRAManager;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Clipboard = System.Windows.Forms.Clipboard;
 
@@ -24,7 +26,6 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "IconStick.htm");
 
-            //toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
             toolTip1.SetToolTip(pictureHandle, stickname);
 
             MinLength = this.Width; RealLength = this.Width;
@@ -38,19 +39,22 @@ namespace Bubbles
 
             // Context menu
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
+            cmsIcon.ItemClicked += ContextMenuStrip1_ItemClicked;
+
+            cmsIcon.Items["BI_newicon"].Text = Utils.getString("float_icons.contextmenu.new");
+            StickUtils.SetContextMenuImage(cmsIcon.Items["BI_newicon"], "newsticker.png");
+
+            cmsIcon.Items["BI_rename"].Text = Utils.getString("button.rename");
+            StickUtils.SetContextMenuImage(cmsIcon.Items["BI_rename"], "edit.png");
+
+            cmsIcon.Items["BI_delete"].Text = Utils.getString("float_icons.contextmenu.delete");
+            StickUtils.SetContextMenuImage(cmsIcon.Items["BI_delete"], "deleteall.png");
 
             contextMenuStrip1.Items["BI_new"].Text = Utils.getString("float_icons.contextmenu.new");
             StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_new"], "newsticker.png");
 
-            contextMenuStrip1.Items["BI_rename"].Text = Utils.getString("float_icons.contextmenu.edit");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_rename"], "edit.png");
-
-            contextMenuStrip1.Items["BI_paste"].Text = Utils.getString("float_icons.contextmenu.paste");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_paste"], "paste.png");
-            contextMenuStrip1.Items["BI_paste"].ToolTipText = Utils.getString("contextmenu.paste.icon.tooltip");
-
-            contextMenuStrip1.Items["BI_delete"].Text = Utils.getString("float_icons.contextmenu.delete");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_delete"], "deleteall.png");
+            contextMenuStrip1.Items["BI_removeallfromtopic"].Text = Utils.getString("float_icons.contextmenu.deletealltopic");
+            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_removeallfromtopic"], "removeallicons.png");
 
             StickUtils.SetCommonContextMenu(contextMenuStrip1, StickUtils.typeicons);
 
@@ -94,8 +98,7 @@ namespace Bubbles
             pictureHandle.MouseDown += Move_Stick; // move the stick
             pictureHandle.MouseDoubleClick += (sender, e) => Collapse(); // collapse/expand stick
 
-            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste);
-            this.MouseLeave += (sender, e) => StickUtils.HideCommandPopup(this, orientation);
+            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typeicons);
 
             this.MouseDown += Move_Stick; // move the stick
             Manage.Click += Manage_Click; // "Manage" icon's context menu
@@ -109,21 +112,15 @@ namespace Bubbles
             foreach (ToolStripItem item in contextMenuStrip1.Items)
                 item.Visible = true;
 
-            contextMenuStrip1.Items["BI_delete"].Visible = false;
-            contextMenuStrip1.Items["BI_rename"].Visible = false;
-            toolStripSeparator1.Visible = false;
-
             selectedIcon = pictureHandle;
             manage = true;
             contextMenuStrip1.Show(Cursor.Position);
         }
 
-        private void PictureHandle_Click(object sender, EventArgs e)
+        public void PictureHandle_Click(object sender, EventArgs e)
         {
             foreach (ToolStripItem item in contextMenuStrip1.Items)
                 item.Visible = false;
-
-            contextMenuStrip1.Items["BI_paste"].Visible = true;
 
             manage = false;
             contextMenuStrip1.Show(Cursor.Position);
@@ -151,6 +148,15 @@ namespace Bubbles
                 Icons.Clear(); Icons.AddRange(StickUtils.Icons);
                 RefreshStick();
             }
+            else if (e.ClickedItem.Name == "BI_removeallfromtopic")
+            {
+                if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
+                    return;
+
+                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                    if (t.UserIcons.Count > 0)
+                        t.UserIcons.RemoveAll();
+            }
             else if (e.ClickedItem.Name == "BI_deleteall")
             {
                 Icons.Clear();
@@ -176,10 +182,6 @@ namespace Bubbles
                         db.ExecuteNonQuery("update ICONS set name=`" + name + "` where filename=`" +
                             item.Path + "` and stickID=" + (int)this.Tag + "");
                 }
-            }
-            else if (e.ClickedItem.Name == "BI_paste") // paste copied icon
-            {
-                PasteIcon();
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
@@ -251,6 +253,7 @@ namespace Bubbles
                 return;
 
             string title = StickUtils.Handle_DragDrop(ref path, copiedFiles, Icons, null);
+            if (title == "") return;
 
             if (path == "" || title == "")
                 return;
@@ -321,7 +324,7 @@ namespace Bubbles
 
             IconItem item = new IconItem(iconName, fileName, order, iconPath);
             using (BubblesDB db = new BubblesDB())
-                db.AddIcon(iconName, fileName, order, (int)this.Tag);
+                db.AddIcon(iconName, fileName, order, (int)this.Tag, 0);
 
             Icons.Insert(order - 1, item);
             for (int i = 0; i < Icons.Count; i++)
@@ -345,11 +348,18 @@ namespace Bubbles
                 pBox.MouseMove += PBox_MouseMove;
                 pBox.DragEnter += Handle_DragEnter;
                 pBox.DragDrop += Handle_DragDrop;
+                pBox.MouseDown += PBox_MouseDown;
 
                 if (collapsed && i++ > 0) // if collapsed hide all icons except the first
                     pBox.Visible = false;
             }
         }
+
+        private void PBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            cursor = Cursor.Position;
+        }
+        Point cursor;
 
         private void Icon_Click(object sender, MouseEventArgs e)
         {
@@ -357,10 +367,13 @@ namespace Bubbles
 
             if (e.Button == MouseButtons.Left)
             {
-                if (MMUtils.ActiveDocument == null) return;
+                if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0) 
+                    return;
 
                 IconItem item = selectedIcon.Tag as IconItem;
                 string fileName = item.FileName;
+                bool alltopicshaveicon = true;
+
                 if (fileName.StartsWith("stock"))
                 {
                     MmStockIcon icon = StockIconFromString(fileName);
@@ -368,40 +381,61 @@ namespace Bubbles
                     {
                         foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                         {
+                            if (!t.AllIcons.ContainsStockIcon(icon))
+                            { alltopicshaveicon = false; break; }
+                        }
+                        foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                        {
                             GetIcon(icon, "", item.IconName, "");
-                            try { t.AllIcons.AddStockIcon(icon); }
-                            catch { }
+                            
+                            if (alltopicshaveicon) // remove icon from topic
+                            {
+                                if (t.AllIcons.ContainsStockIcon(icon))
+                                    t.AllIcons.RemoveStockIcon(icon);
+                            }
+                            else // set icon on topic
+                            {
+                                if (!t.AllIcons.ContainsStockIcon(icon))
+                                    t.AllIcons.AddStockIcon(icon);
+                            }
                         }
                     }
                 }
                 else
                 {
+                    string path = Utils.m_dataPath + "IconDB\\" + item.FileName;
+                    if (!File.Exists(path)) return;
+
+                    string signature = MMUtils.MindManager.Utilities.GetCustomIconSignature(path);
+
                     foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                     {
-                        string path = Utils.m_dataPath + "IconDB\\" + item.FileName;
-                        if (File.Exists(path))
+                        if (!t.AllIcons.ContainsCustomIcon(signature))
+                        { alltopicshaveicon = false; break; }
+                    }
+                    foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                    {
+                        GetIcon(0, signature, item.IconName, path);
+                        if (alltopicshaveicon) // remove icon from topic
                         {
-                            string signature = MMUtils.MindManager.Utilities.GetCustomIconSignature(path);
-                            GetIcon(0, signature, item.IconName, path);
-                            try { t.AllIcons.AddCustomIconFromMap(signature); }
-                            catch { }
+                            if (t.AllIcons.ContainsCustomIcon(signature))
+                                t.AllIcons.RemoveCustomIcon(signature);
+                        }
+                        else // set icon on topic
+                        {
+                            if (!t.AllIcons.ContainsCustomIcon(signature))
+                                t.AllIcons.AddCustomIconFromMap(signature);
                         }
                     }
                 }
             }
             else if (e.Button == MouseButtons.Right)
             {
-                foreach (ToolStripItem item in contextMenuStrip1.Items)
-                    item.Visible = false;
-
-                contextMenuStrip1.Items["BI_new"].Visible = true;
-                contextMenuStrip1.Items["BI_rename"].Visible = true;
-                toolStripSeparator1.Visible = true;
-                contextMenuStrip1.Items["BI_paste"].Visible = true;
-                contextMenuStrip1.Items["BI_delete"].Visible = true;
+                foreach (ToolStripItem item in cmsIcon.Items)
+                    item.Visible = true;
 
                 manage = false;
-                contextMenuStrip1.Show(Cursor.Position);
+                cmsIcon.Show(Cursor.Position);
             }
         }
 
@@ -448,6 +482,8 @@ namespace Bubbles
                 string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop, false);
                 string title = StickUtils.Handle_DragDrop(ref path, draggedFiles, Icons, null);
 
+                if (title == "") return;
+
                 if (path != "")
                 {
                     position = "end";
@@ -491,7 +527,9 @@ namespace Bubbles
             if (e.Button == MouseButtons.Left)
             {
                 var pb = (PictureBox)sender;
-                pb.DoDragDrop(pb, DragDropEffects.Move);
+                if (Math.Abs(Cursor.Position.X - cursor.X) > Manage.Width / 2 ||
+                    Math.Abs(Cursor.Position.Y - cursor.Y) > Manage.Width / 2)
+                    pb.DoDragDrop(pb, DragDropEffects.Move);
             }
         }
 
@@ -797,9 +835,10 @@ namespace Bubbles
         public const int HT_CAPTION = 0x2;
 
         // For release capture
-        [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
+        [DllImportAttribute("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-        [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
+
+        [DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
     }
 

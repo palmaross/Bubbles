@@ -20,7 +20,7 @@ namespace Organizer
             groupBoxAddNewTag.Text = Utils.getString("notes.tags.groupBoxAddNewTag");
             btnAddTag.Text = Utils.getString("button.add");
             groupBoxRenameTag.Text = Utils.getString("notes.tags.groupBoxRenameTag");
-            btnRenameTag.Text = Utils.getString("notes.group.rename");
+            btnRenameTag.Text = Utils.getString("button.rename");
 
             using (BubblesDB db = new BubblesDB())
             {

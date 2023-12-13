@@ -77,8 +77,6 @@ namespace Bubbles
             Manage.Click += Manage_Click;
 
             Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typeformat);
-            this.MouseLeave += (sender, e) => StickUtils.HideCommandPopup(this, orientation);
-
         }
 
         private void pVisualStatus_Paint(object sender, PaintEventArgs e)

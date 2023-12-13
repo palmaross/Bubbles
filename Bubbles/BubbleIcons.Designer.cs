@@ -33,19 +33,21 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.BI_new = new System.Windows.Forms.ToolStripMenuItem();
-            this.BI_rename = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.BI_paste = new System.Windows.Forms.ToolStripMenuItem();
-            this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
+            this.BI_removeallfromtopic = new System.Windows.Forms.ToolStripMenuItem();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.label1 = new System.Windows.Forms.Label();
-            this.p1 = new System.Windows.Forms.PictureBox();
             this.Manage = new System.Windows.Forms.PictureBox();
             this.pictureHandle = new System.Windows.Forms.PictureBox();
+            this.cmsIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.BI_newicon = new System.Windows.Forms.ToolStripMenuItem();
+            this.BI_rename = new System.Windows.Forms.ToolStripMenuItem();
+            this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
+            this.p1 = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
+            this.cmsIcon.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -57,41 +59,21 @@
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.BI_new,
-            this.BI_rename,
-            this.toolStripSeparator1,
-            this.BI_paste,
-            this.BI_delete});
+            this.BI_removeallfromtopic});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(162, 98);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(226, 48);
             // 
             // BI_new
             // 
             this.BI_new.Name = "BI_new";
-            this.BI_new.Size = new System.Drawing.Size(161, 22);
-            this.BI_new.Text = "Новый";
+            this.BI_new.Size = new System.Drawing.Size(225, 22);
+            this.BI_new.Text = "Новый значок";
             // 
-            // BI_rename
+            // BI_removeallfromtopic
             // 
-            this.BI_rename.Name = "BI_rename";
-            this.BI_rename.Size = new System.Drawing.Size(161, 22);
-            this.BI_rename.Text = "Переименовать";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
-            // 
-            // BI_paste
-            // 
-            this.BI_paste.Name = "BI_paste";
-            this.BI_paste.Size = new System.Drawing.Size(161, 22);
-            this.BI_paste.Text = "Вставить";
-            // 
-            // BI_delete
-            // 
-            this.BI_delete.Name = "BI_delete";
-            this.BI_delete.Size = new System.Drawing.Size(161, 22);
-            this.BI_delete.Text = "Удалить";
+            this.BI_removeallfromtopic.Name = "BI_removeallfromtopic";
+            this.BI_removeallfromtopic.Size = new System.Drawing.Size(225, 22);
+            this.BI_removeallfromtopic.Text = "Удалить все значки на теме";
             // 
             // label1
             // 
@@ -103,16 +85,6 @@
             this.label1.TabIndex = 74;
             this.label1.Text = "высота22";
             this.label1.Visible = false;
-            // 
-            // p1
-            // 
-            this.p1.Location = new System.Drawing.Point(26, 7);
-            this.p1.Name = "p1";
-            this.p1.Size = new System.Drawing.Size(16, 16);
-            this.p1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.p1.TabIndex = 75;
-            this.p1.TabStop = false;
-            this.p1.Visible = false;
             // 
             // Manage
             // 
@@ -138,6 +110,43 @@
             this.pictureHandle.TabIndex = 77;
             this.pictureHandle.TabStop = false;
             // 
+            // cmsIcon
+            // 
+            this.cmsIcon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.BI_newicon,
+            this.BI_rename,
+            this.BI_delete});
+            this.cmsIcon.Name = "cmsIcon";
+            this.cmsIcon.Size = new System.Drawing.Size(125, 70);
+            // 
+            // BI_newicon
+            // 
+            this.BI_newicon.Name = "BI_newicon";
+            this.BI_newicon.Size = new System.Drawing.Size(124, 22);
+            this.BI_newicon.Text = "New Icon";
+            // 
+            // BI_rename
+            // 
+            this.BI_rename.Name = "BI_rename";
+            this.BI_rename.Size = new System.Drawing.Size(124, 22);
+            this.BI_rename.Text = "Rename";
+            // 
+            // BI_delete
+            // 
+            this.BI_delete.Name = "BI_delete";
+            this.BI_delete.Size = new System.Drawing.Size(124, 22);
+            this.BI_delete.Text = "Delete";
+            // 
+            // p1
+            // 
+            this.p1.Location = new System.Drawing.Point(26, 7);
+            this.p1.Name = "p1";
+            this.p1.Size = new System.Drawing.Size(16, 16);
+            this.p1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.p1.TabIndex = 75;
+            this.p1.TabStop = false;
+            this.p1.Visible = false;
+            // 
             // BubbleIcons
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -154,9 +163,10 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.contextMenuStrip1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
+            this.cmsIcon.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -167,13 +177,14 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox p1;
-        private System.Windows.Forms.PictureBox Manage;
         private System.Windows.Forms.ToolStripMenuItem BI_new;
-        private System.Windows.Forms.ToolStripMenuItem BI_delete;
+        private System.Windows.Forms.ToolStripMenuItem BI_removeallfromtopic;
+        private System.Windows.Forms.ContextMenuStrip cmsIcon;
+        private System.Windows.Forms.ToolStripMenuItem BI_newicon;
         private System.Windows.Forms.ToolStripMenuItem BI_rename;
-        private System.Windows.Forms.PictureBox pictureHandle;
-        private System.Windows.Forms.ToolStripMenuItem BI_paste;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem BI_delete;
+        public System.Windows.Forms.PictureBox pictureHandle;
+        public System.Windows.Forms.PictureBox Manage;
+        private System.Windows.Forms.PictureBox p1;
     }
 }

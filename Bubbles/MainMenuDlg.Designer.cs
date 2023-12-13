@@ -45,14 +45,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.lblIcons = new System.Windows.Forms.Label();
             this.lblBookmarks = new System.Windows.Forms.Label();
-            this.lblPriPro = new System.Windows.Forms.Label();
+            this.lblTaskInfo = new System.Windows.Forms.Label();
             this.lblCopyPaste = new System.Windows.Forms.Label();
             this.lblMySources = new System.Windows.Forms.Label();
             this.MySources = new System.Windows.Forms.PictureBox();
             this.Bookmarks = new System.Windows.Forms.PictureBox();
             this.Paste = new System.Windows.Forms.PictureBox();
             this.pIcons = new System.Windows.Forms.PictureBox();
-            this.PriPro = new System.Windows.Forms.PictureBox();
+            this.TaskInfo = new System.Windows.Forms.PictureBox();
             this.Settings = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BulkOperations = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -81,7 +81,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Bookmarks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Paste)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIcons)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PriPro)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TaskInfo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Settings)).BeginInit();
             this.BulkOperations.SuspendLayout();
             this.SuspendLayout();
@@ -103,14 +103,14 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.lblIcons);
             this.panel1.Controls.Add(this.lblBookmarks);
-            this.panel1.Controls.Add(this.lblPriPro);
+            this.panel1.Controls.Add(this.lblTaskInfo);
             this.panel1.Controls.Add(this.lblCopyPaste);
             this.panel1.Controls.Add(this.lblMySources);
             this.panel1.Controls.Add(this.MySources);
             this.panel1.Controls.Add(this.Bookmarks);
             this.panel1.Controls.Add(this.Paste);
             this.panel1.Controls.Add(this.pIcons);
-            this.panel1.Controls.Add(this.PriPro);
+            this.panel1.Controls.Add(this.TaskInfo);
             this.panel1.Controls.Add(this.Settings);
             this.panel1.Location = new System.Drawing.Point(1, 1);
             this.panel1.Name = "panel1";
@@ -256,14 +256,14 @@
             this.lblBookmarks.Text = "Закладки";
             this.lblBookmarks.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lblPriPro
+            // lblTaskInfo
             // 
-            this.lblPriPro.Location = new System.Drawing.Point(43, 80);
-            this.lblPriPro.Name = "lblPriPro";
-            this.lblPriPro.Size = new System.Drawing.Size(70, 13);
-            this.lblPriPro.TabIndex = 23;
-            this.lblPriPro.Text = "ПриПро";
-            this.lblPriPro.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblTaskInfo.Location = new System.Drawing.Point(43, 80);
+            this.lblTaskInfo.Name = "lblTaskInfo";
+            this.lblTaskInfo.Size = new System.Drawing.Size(70, 13);
+            this.lblTaskInfo.TabIndex = 23;
+            this.lblTaskInfo.Text = "ПриПро";
+            this.lblTaskInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblCopyPaste
             // 
@@ -327,16 +327,16 @@
             this.pIcons.TabStop = false;
             this.pIcons.Click += new System.EventHandler(this.MenuIcon_Click);
             // 
-            // PriPro
+            // TaskInfo
             // 
-            this.PriPro.Image = ((System.Drawing.Image)(resources.GetObject("PriPro.Image")));
-            this.PriPro.Location = new System.Drawing.Point(63, 47);
-            this.PriPro.Name = "PriPro";
-            this.PriPro.Size = new System.Drawing.Size(32, 32);
-            this.PriPro.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.PriPro.TabIndex = 13;
-            this.PriPro.TabStop = false;
-            this.PriPro.Click += new System.EventHandler(this.MenuIcon_Click);
+            this.TaskInfo.Image = ((System.Drawing.Image)(resources.GetObject("TaskInfo.Image")));
+            this.TaskInfo.Location = new System.Drawing.Point(63, 47);
+            this.TaskInfo.Name = "TaskInfo";
+            this.TaskInfo.Size = new System.Drawing.Size(32, 32);
+            this.TaskInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.TaskInfo.TabIndex = 13;
+            this.TaskInfo.TabStop = false;
+            this.TaskInfo.Click += new System.EventHandler(this.MenuIcon_Click);
             // 
             // Settings
             // 
@@ -366,7 +366,7 @@
             this.toolStripSeparator4,
             this.BO_help});
             this.BulkOperations.Name = "BulkOperations";
-            this.BulkOperations.Size = new System.Drawing.Size(191, 248);
+            this.BulkOperations.Size = new System.Drawing.Size(191, 226);
             // 
             // BO_hide
             // 
@@ -474,7 +474,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Bookmarks)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Paste)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIcons)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PriPro)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TaskInfo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Settings)).EndInit();
             this.BulkOperations.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -485,7 +485,7 @@
 
         public System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblBookmarks;
-        private System.Windows.Forms.Label lblPriPro;
+        private System.Windows.Forms.Label lblTaskInfo;
         private System.Windows.Forms.Label lblCopyPaste;
         private System.Windows.Forms.Label lblMySources;
         private System.Windows.Forms.Label lblIcons;
@@ -497,7 +497,7 @@
         public System.Windows.Forms.PictureBox Bookmarks;
         public System.Windows.Forms.PictureBox Paste;
         public System.Windows.Forms.PictureBox pIcons;
-        public System.Windows.Forms.PictureBox PriPro;
+        public System.Windows.Forms.PictureBox TaskInfo;
         public System.Windows.Forms.PictureBox MySources;
         public System.Windows.Forms.PictureBox Format;
         public System.Windows.Forms.PictureBox Organizer;

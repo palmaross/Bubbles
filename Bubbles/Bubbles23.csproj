@@ -109,6 +109,18 @@
     <Compile Include="ManageConfigsDlg.Designer.cs">
       <DependentUpon>ManageConfigsDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="ManageResourceIcons.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ManageResourceIcons.Designer.cs">
+      <DependentUpon>ManageResourceIcons.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MyDateTimePicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MyDateTimePicker.Designer.cs">
+      <DependentUpon>MyDateTimePicker.cs</DependentUpon>
+    </Compile>
     <Compile Include="NewSourceDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -138,11 +150,11 @@
     <Compile Include="BubbleBookmarks.Designer.cs">
       <DependentUpon>BubbleBookmarks.cs</DependentUpon>
     </Compile>
-    <Compile Include="BubblePriPro.cs">
+    <Compile Include="BubbleTaskInfo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BubblePriPro.Designer.cs">
-      <DependentUpon>BubblePriPro.cs</DependentUpon>
+    <Compile Include="BubbleTaskInfo.Designer.cs">
+      <DependentUpon>BubbleTaskInfo.cs</DependentUpon>
     </Compile>
     <Compile Include="BubbleMySources.cs">
       <SubType>Form</SubType>
@@ -197,6 +209,12 @@
     </Compile>
     <Compile Include="Organizer\NoteDlg.Designer.cs">
       <DependentUpon>NoteDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ResourcesDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ResourcesDlg.Designer.cs">
+      <DependentUpon>ResourcesDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="StickPopup.cs">
       <SubType>UserControl</SubType>
@@ -256,17 +274,17 @@
     <Compile Include="Organizer\NotesDlg.Designer.cs">
       <DependentUpon>NotesDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="TaskTemplateDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TaskTemplateDlg.Designer.cs">
+      <DependentUpon>TaskTemplateDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="TopicTemplatePreview.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="TopicTemplatePreview.Designer.cs">
       <DependentUpon>TopicTemplatePreview.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TopicTemplatePreviewCustom.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="TopicTemplatePreviewCustom.Designer.cs">
-      <DependentUpon>TopicTemplatePreviewCustom.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils.cs" />
   </ItemGroup>
@@ -285,6 +303,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="images\0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\addsubtopic.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -333,6 +354,9 @@
     <Content Include="images\configuration.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\cpAddBefore.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\cpAddBefore20.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -343,9 +367,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\cpAddFloating.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\cpAddFloating20.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\cpAddParent.png">
@@ -367,9 +388,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\cpTopicTemplate.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\cpTopicTemplateActive.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\deleteall.png">
@@ -492,10 +510,7 @@
     <Content Include="images\mwOrganizer.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\mwPriPro.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\mwPriProActive.png">
+    <Content Include="images\mwTaskInfo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\mwSettings.png">
@@ -505,6 +520,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\mwSourcesActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwTskInfoActive.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\newStick.png">
@@ -585,6 +603,36 @@
     <Content Include="images\remember.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\removeallicons.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\removetaskinfo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ResourceLabels\0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ResourceLabels\1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ResourceLabels\2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ResourceLabels\3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ResourceLabels\4.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ResourceLabels\5.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ResourceLabels\6.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ResourceLabels\7.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\rotate.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -597,6 +645,12 @@
     <Content Include="images\sort.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\sortAZ.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\sortZA.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\STICKS.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -604,6 +658,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\tag_s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\topic_setdate_active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\topic_setdate_noactive.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\unformattedText.png">
@@ -646,6 +706,12 @@
     <EmbeddedResource Include="ManageConfigsDlg.resx">
       <DependentUpon>ManageConfigsDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ManageResourceIcons.resx">
+      <DependentUpon>ManageResourceIcons.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MyDateTimePicker.resx">
+      <DependentUpon>MyDateTimePicker.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="NewSourceDlg.resx">
       <DependentUpon>NewSourceDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -658,8 +724,8 @@
     <EmbeddedResource Include="BubbleBookmarks.resx">
       <DependentUpon>BubbleBookmarks.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BubblePriPro.resx">
-      <DependentUpon>BubblePriPro.cs</DependentUpon>
+    <EmbeddedResource Include="BubbleTaskInfo.resx">
+      <DependentUpon>BubbleTaskInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BubbleMySources.resx">
       <DependentUpon>BubbleMySources.cs</DependentUpon>
@@ -687,6 +753,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Organizer\NoteDlg.resx">
       <DependentUpon>NoteDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResourcesDlg.resx">
+      <DependentUpon>ResourcesDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StickPopup.resx">
       <DependentUpon>StickPopup.cs</DependentUpon>
@@ -717,11 +786,11 @@
     <EmbeddedResource Include="Organizer\NotesDlg.resx">
       <DependentUpon>NotesDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TaskTemplateDlg.resx">
+      <DependentUpon>TaskTemplateDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TopicTemplatePreview.resx">
       <DependentUpon>TopicTemplatePreview.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TopicTemplatePreviewCustom.resx">
-      <DependentUpon>TopicTemplatePreviewCustom.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

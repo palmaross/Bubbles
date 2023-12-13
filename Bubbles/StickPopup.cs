@@ -10,6 +10,7 @@ using Control = System.Windows.Forms.Control;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using PRMapCompanion;
 
 namespace Bubbles
 {
@@ -18,6 +19,10 @@ namespace Bubbles
         public StickPopup()
         {
             InitializeComponent();
+
+            helpProvider1.HelpNamespace = Utils.dllPath + "Sticks.chm";
+            helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
+            helpProvider1.SetHelpKeyword(this, "IconStick.htm");
 
             pCollapse.Tag = Utils.getString("float_icons.contextmenu.collapse_expand");
             pRotate.Tag = Utils.getString("float_icons.contextmenu.rotate");
@@ -28,7 +33,7 @@ namespace Bubbles
                 pb.MouseHover += pb_MouseHover; pb.MouseLeave += pb_MouseLeave; }
 
             pNewIcon.Tag = Utils.getString("float_icons.contextmenu.new");
-            pPasteIcon.Tag = Utils.getString("contextmenu.paste.icon.tooltip");
+            pDeleteAllIcons.Tag = Utils.getString("float_icons.contextmenu.deletealltopic");
             pNewBookmark.Tag = Utils.getString("bookmarks.contextmenu.add.tooltip");
             pBookmarkList.Tag = Utils.getString("mysources.sourceview.list");
             pFontItalic.Tag = "Italic";
@@ -104,13 +109,15 @@ namespace Bubbles
         private void pCollapse_Click(object sender, EventArgs e)
         {
             var stick = panelH.Tag as Form;
+            StickUtils.ActivateMindManager(); // In order to hide Popup
+
             switch (stick.Name)
             {
                 case StickUtils.typeicons:
                     (stick as BubbleIcons).Collapse();
                     break;
-                case StickUtils.typepripro:
-                    (stick as BubblePriPro).Collapse();
+                case StickUtils.typetaskinfo:
+                    (stick as BubbleTaskInfo).Collapse();
                     break;
                 case StickUtils.typeformat:
                     (stick as BubbleFormat).Collapse();
@@ -128,19 +135,20 @@ namespace Bubbles
                     (stick as BubbleOrganizer).Collapse();
                     break;
             }
-            Destroy();
         }
 
         private void pRotate_Click(object sender, EventArgs e)
         {
             var stick = panelH.Tag as Form;
+            StickUtils.ActivateMindManager(); // In order to hide Popup
+
             switch (stick.Name)
             {
                 case StickUtils.typeicons:
                     (stick as BubbleIcons).Rotate();
                     break;
-                case StickUtils.typepripro:
-                    (stick as BubblePriPro).Rotate();
+                case StickUtils.typetaskinfo:
+                    (stick as BubbleTaskInfo).Rotate();
                     break;
                 case StickUtils.typeformat:
                     (stick as BubbleFormat).Rotate();
@@ -158,25 +166,27 @@ namespace Bubbles
                     (stick as BubbleOrganizer).Rotate();
                     break;
             }
-            Destroy();
-        }
-
-        void Destroy()
-        {
-            BubblesButton.commandPopup.Hide();
         }
 
         private void pClose_Click(object sender, EventArgs e)
         {
             var stick = panelH.Tag as Form;
+            StickUtils.ActivateMindManager(); // In order to hide Popup
+
             BubblesButton.STICKS.Remove((int)stick.Tag);
             stick.Close();
-            Destroy();
+
+            if (stick.Name == "BubbleTaskInfo")
+            {
+                BubblesButton.m_TaskInfo = null;
+                DocumentStorage.Sync(MMUtils.ActiveDocument, false);
+            }
         }
 
         private void pRemember_Click(object sender, EventArgs e)
         {
             var stick = panelH.Tag as Form;
+            StickUtils.ActivateMindManager(); // In order to hide Popup
 
             string orientation = "H";
             if (stick.Width < stick.Height) orientation = "V";
@@ -194,10 +204,14 @@ namespace Bubbles
             (stick as BubbleIcons).NewIcon();
         }
 
-        private void pPasteIcon_Click(object sender, EventArgs e)
+        private void pDeleteAllIcons_Click(object sender, EventArgs e)
         {
-            var stick = panelH.Tag as Form;
-            (stick as BubbleIcons).PasteIcon();
+            if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
+                return;
+
+            foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                if (t.UserIcons.Count > 0)
+                    t.UserIcons.RemoveAll();
         }
 
         private void pBookmarkList_Click(object sender, EventArgs e)
@@ -319,7 +333,7 @@ namespace Bubbles
 
                 if (topictype != "ParentTopic")
                 {
-                    ActivateMindManager(); // we need the selected topic to be active!
+                    StickUtils.ActivateMindManager(); // we need the selected topic to be active!
 
                     // We can make the Ctrl-V with one topic only!
                     topicsToPaste[0].SelectOnly();
@@ -374,19 +388,6 @@ namespace Bubbles
         }
         #endregion
 
-        bool ActivateMindManager()
-        {
-            Process p = Process.GetProcessesByName("MindManager").FirstOrDefault();
-            if (p == null)
-                return false;
-            else
-            {
-                IntPtr h = p.MainWindowHandle;
-                SetForegroundWindow(h);
-                return true;
-            }
-        }
-
         private void ToggleTextFormat_Click(object sender, EventArgs e)
         {
             if (ToggleTextFormat.AccessibleName.ToString() == "unformatted")
@@ -408,24 +409,43 @@ namespace Bubbles
             return ToggleTextFormat.Tag.ToString() == "formatted";
         }
 
-        InputSimulator sim = new InputSimulator();
-        public List<string> TopicList = new List<string>();
-
-        [DllImport("user32.dll")]
-        static extern int SetForegroundWindow(IntPtr point);
-    }
-
-    public class PopupItem
-    {
-        public PopupItem(Form form, string orientation, bool collapsed)
+        private void pProgress_Click(object sender, EventArgs e)
         {
-            aForm = form;
-            aOrientation = orientation;
-            Collapsed = collapsed;
+            if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
+                return;
+
+            PictureBox pb = sender as PictureBox;
+            int value = Convert.ToInt32(pb.Name.Substring(1));
+
+            foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                t.Task.Complete = value;
         }
 
-        public Form aForm;
-        public string aOrientation;
-        public bool Collapsed;
+        private void pPriority_Click(object sender, EventArgs e)
+        {
+            if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
+                return;
+
+            PictureBox pb = sender as PictureBox;
+            int value = Convert.ToInt32(pb.Name.Substring(3));
+
+            foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                t.Task.Priority = TaskPriority(value);
+        }
+
+        MmTaskPriority TaskPriority(int value)
+        {
+            switch (value)
+            {
+                case 2: return MmTaskPriority.mmTaskPriority2;
+                case 3: return MmTaskPriority.mmTaskPriority3;
+                case 4: return MmTaskPriority.mmTaskPriority4;
+                case 5: return MmTaskPriority.mmTaskPriority5;
+            }
+            return 0;
+        }
+
+        InputSimulator sim = new InputSimulator();
+        public List<string> TopicList = new List<string>();
     }
 }

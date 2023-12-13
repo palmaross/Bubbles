@@ -17,7 +17,7 @@ namespace Organizer
             groupBoxAddNewGroup.Text = Utils.getString("notes.group.groupBoxNewGroup");
             btnAddGroup.Text = Utils.getString("button.add");
             groupBoxRenameGroup.Text = Utils.getString("notes.group.groupBoxRenameGroup");
-            btnRenameGroup.Text = Utils.getString("notes.group.rename");
+            btnRenameGroup.Text = Utils.getString("button.rename");
 
             // Delete Group panel
             rbtnDeleteGroupAndNotes.Text = Utils.getString("notes.group.rbtnDeleteGroupAndNotes");
