@@ -44,7 +44,7 @@ namespace Bubbles
             ttp.Location = txtCustom.Location;
             this.Controls.Add(ttp);
             ttp.Visible = false;
-            ttp.ParentForm = this;
+            ttp.aParentForm = this;
             ttp_panelMore_Width = ttp.panelMore.Width;
 
             imageList1.ImageSize = new Size(p1.Width, p1.Height);

@@ -29,6 +29,13 @@ namespace Bubbles
             m_cmdBubbles.Click += new ICommandEvents_ClickEventHandler(m_cmdBubbles_Click);
             m_ctrlBubbles = MMUtils.MindManager.StatusBarControls.AddButton(m_cmdBubbles);
 
+            m_cmdDetachNotes = MMUtils.MindManager.Commands.Add(Utils.Registered_AddinName, "bubbles.detach_notes");
+            m_cmdDetachNotes.Caption = Utils.getString("bubbles.notes.detach");
+            m_cmdDetachNotes.UpdateState += new ICommandEvents_UpdateStateEventHandler(m_cmdDetachNotes_UpdateState);
+            m_cmdDetachNotes.ImagePath = Utils.ImagesPath + "detach.png";
+            m_cmdDetachNotes.Click += new ICommandEvents_ClickEventHandler(m_cmdDetachNotes_Click);
+            m_cmdDetachNotes.SetDynamicMenu(MmDynamicMenu.mmDynamicMenuContextTopic);
+
             m_bubbleSnippets = new BubbleSnippets();
             m_bubblesMenu = new MainMenuDlg();
             commandPopup.Tag = 0; // Tag is a stick ID
@@ -53,7 +60,7 @@ namespace Bubbles
 
             DataTable dt;
             using (BubblesDB db = new BubblesDB())
-                dt = db.ExecuteQuery("select * from STICKS  order by type");
+                dt = db.ExecuteQuery("select * from STICKS order by type");
 
             foreach (DataRow dr in dt.Rows)
             {
@@ -141,6 +148,41 @@ namespace Bubbles
             pChecked = false;
         }
 
+        private void m_cmdDetachNotes_UpdateState(ref bool pEnabled, ref bool pChecked)
+        {
+            pEnabled = true;
+            pChecked = false;
+        }
+
+        private void m_cmdDetachNotes_Click()
+        {
+            if (m_topicNotes == null || m_topicNotes.IsDisposed)
+                m_topicNotes = new TopicNotesDlg();
+
+            if (!m_topicNotes.Visible)
+                m_topicNotes.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+
+            int selectedtopic_index = -1, addedtopics = 0;
+            foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+            {
+                if (String.IsNullOrEmpty(t.Notes.Text))
+                    continue;
+
+                addedtopics++;
+                string notes = t.Notes.Text;
+
+                string rtf = "";
+                rtf = t.Notes.TextRTF;
+                //if (!t.Notes.IsPlainTextOnly) { rtf = t.Notes.TextRTF; }
+                TopicNotesItem item = new TopicNotesItem(t, notes, rtf, t.Text, t.Guid,
+                    t.Document.FullName, t.Document.CentralTopic.Text);
+                selectedtopic_index = m_topicNotes.listTopics.Items.Add(item);
+            }
+            // If we have added one topic only, select this topic
+            if (addedtopics == 1)
+                m_topicNotes.listTopics.SelectedIndex = selectedtopic_index;
+        }
+
         public override void onDocumentActivated(MMEventArgs aArgs)
         {
             if (m_Bookmarks != null)
@@ -223,7 +265,6 @@ namespace Bubbles
 
                 if (m_TaskInfo.pStartDate.Text != topicdate)
                 {
-                    m_TaskInfo.MMStartDate = true;
                     m_TaskInfo.pStartDate.Text = topicdate;
                     m_TaskInfo.pStartDate.Tag = dt.Date.AddHours(8);
                     tt.SetToolTip(m_TaskInfo.pStartDate, dt.ToLongDateString());
@@ -250,7 +291,6 @@ namespace Bubbles
 
                 if (m_TaskInfo.pDueDate.Text != topicdate)
                 {
-                    m_TaskInfo.MMDueDate = true;
                     m_TaskInfo.pDueDate.Text = topicdate;
                     m_TaskInfo.pDueDate.Tag = dt.Date.AddHours(8);
                     tt.SetToolTip(m_TaskInfo.pDueDate, dt.ToLongDateString());
@@ -263,14 +303,19 @@ namespace Bubbles
 
             if (!m_TaskInfo.stickDuration)
             {
-                m_TaskInfo.MMDuration = true;
+                SetTaskInfoDurationUnit(t);
 
-                GetDurationUnit(t);
-                m_TaskInfo.numDuration.Value = t.Task.GetDuration(t.Task.DurationUnit);
+                int duration = t.Task.GetDuration(t.Task.DurationUnit);
+
+                if (m_TaskInfo.numDuration.Value != duration)
+                {
+                    m_TaskInfo.MMDuration = true;
+                    m_TaskInfo.numDuration.Value = duration;
+                }
             }
         }
 
-        public static void GetDurationUnit(Topic t)
+        public static void SetTaskInfoDurationUnit(Topic t)
         {
             MmDurationUnit unit = t.Task.DurationUnit;
 
@@ -293,7 +338,8 @@ namespace Bubbles
         {
             foreach (System.Windows.Forms.Control c in m_TaskInfo.Controls)
             {
-                if (c.Name != "pictureHandle" && c.Name != "Manage" && c.Name != "pResources")
+                if (c.Name != "pictureHandle" && c.Name != "Manage" && 
+                    c.Name != "pResources" && c.Name != "pQuickTask")
                 {
                     c.Enabled = enable;
                 }
@@ -316,6 +362,8 @@ namespace Bubbles
 
             m_ctrlBubbles.Delete(); Marshal.ReleaseComObject(m_ctrlBubbles); m_ctrlBubbles = null;
             Marshal.ReleaseComObject(m_cmdBubbles); m_cmdBubbles = null;
+
+            Marshal.ReleaseComObject(m_cmdDetachNotes); m_cmdDetachNotes = null;
 
             if (m_bubbleSnippets.Visible)
                 m_bubbleSnippets.Hide();
@@ -340,6 +388,14 @@ namespace Bubbles
                 m_Resources.Hide();
                 m_Resources.Dispose();
                 m_Resources = null;
+            }
+            
+            if (m_topicNotes != null)
+            {
+                m_topicNotes.listTopics.Items.Clear();
+                m_topicNotes.Close();
+                m_topicNotes.Dispose();
+                m_topicNotes = null;
             }
 
             if (m_bubblesMenu.Visible)
@@ -400,6 +456,9 @@ namespace Bubbles
 
         private Command m_cmdBubbles;
         private Mindjet.MindManager.Interop.Control m_ctrlBubbles;
+
+        private Command m_cmdDetachNotes;
+        public static TopicNotesDlg m_topicNotes;
 
         public static Dictionary<int, Form> STICKS = new Dictionary<int, Form>();
         public static Dictionary<int, Form> pNOTES = new Dictionary<int, Form>();

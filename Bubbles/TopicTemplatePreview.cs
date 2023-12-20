@@ -5,7 +5,7 @@ namespace Bubbles
 {
     public partial class TopicTemplatePreview : UserControl
     {
-        public AddTopicTemplateDlg ParentForm { get; set; }
+        public AddTopicTemplateDlg aParentForm { get; set; }
 
         public TopicTemplatePreview()
         {
@@ -30,22 +30,22 @@ namespace Bubbles
 
         private void numStart_ValueChanged(object sender, EventArgs e)
         {
-            ParentForm.TemplateType_CheckedChanged(null, null);
+            aParentForm.TemplateType_CheckedChanged(null, null);
         }
 
         private void numEnd_ValueChanged(object sender, EventArgs e)
         {
-            ParentForm.TemplateType_CheckedChanged(null, null);
+            aParentForm.TemplateType_CheckedChanged(null, null);
         }
 
         private void numStep_ValueChanged(object sender, EventArgs e)
         {
-            ParentForm.TemplateType_CheckedChanged(null, null);
+            aParentForm.TemplateType_CheckedChanged(null, null);
         }
 
         private void chBoxNumPosition_CheckedChanged(object sender, EventArgs e)
         {
-            ParentForm.TemplateType_CheckedChanged(null, null);
+            aParentForm.TemplateType_CheckedChanged(null, null);
         }
     }
 }

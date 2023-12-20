@@ -144,7 +144,7 @@ namespace Organizer
 
             string iconPath, iconName;
 
-            using (SelectIconDlg _dlg = new SelectIconDlg(filenames, true, true)) // correct
+            using (SelectIconDlg _dlg = new SelectIconDlg(filenames))
             {
                 if (_dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
                     return;

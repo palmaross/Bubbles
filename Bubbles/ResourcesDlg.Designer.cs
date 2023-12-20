@@ -35,8 +35,8 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.pManageIcons = new System.Windows.Forms.PictureBox();
             this.Sort = new System.Windows.Forms.PictureBox();
-            this.Help = new System.Windows.Forms.PictureBox();
-            this.Close = new System.Windows.Forms.PictureBox();
+            this.pHelp = new System.Windows.Forms.PictureBox();
+            this.pClose = new System.Windows.Forms.PictureBox();
             this.Edit = new System.Windows.Forms.PictureBox();
             this.Delete = new System.Windows.Forms.PictureBox();
             this.New = new System.Windows.Forms.PictureBox();
@@ -50,7 +50,7 @@
             this.lblResourceName = new System.Windows.Forms.Label();
             this.btnAddToMap = new System.Windows.Forms.Button();
             this.txtResources = new System.Windows.Forms.TextBox();
-            this.pAddToMap = new System.Windows.Forms.PictureBox();
+            this.pAddResources = new System.Windows.Forms.PictureBox();
             this.pHandle = new System.Windows.Forms.PictureBox();
             this.cmsSort = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.sortAZ = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,13 +75,13 @@
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pManageIcons)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Sort)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Help)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Close)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pHelp)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pClose)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Edit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Delete)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.New)).BeginInit();
             this.panelResourceName.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pAddToMap)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pAddResources)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHandle)).BeginInit();
             this.cmsSort.SuspendLayout();
             this.panelIcons.SuspendLayout();
@@ -133,8 +133,8 @@
             // 
             this.panel1.Controls.Add(this.pManageIcons);
             this.panel1.Controls.Add(this.Sort);
-            this.panel1.Controls.Add(this.Help);
-            this.panel1.Controls.Add(this.Close);
+            this.panel1.Controls.Add(this.pHelp);
+            this.panel1.Controls.Add(this.pClose);
             this.panel1.Controls.Add(this.Edit);
             this.panel1.Controls.Add(this.Delete);
             this.panel1.Controls.Add(this.New);
@@ -146,8 +146,9 @@
             // 
             // pManageIcons
             // 
+            this.pManageIcons.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pManageIcons.Image = ((System.Drawing.Image)(resources.GetObject("pManageIcons.Image")));
-            this.pManageIcons.Location = new System.Drawing.Point(75, 1);
+            this.pManageIcons.Location = new System.Drawing.Point(76, 1);
             this.pManageIcons.Name = "pManageIcons";
             this.pManageIcons.Size = new System.Drawing.Size(20, 20);
             this.pManageIcons.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -157,6 +158,7 @@
             // 
             // Sort
             // 
+            this.Sort.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Sort.Image = ((System.Drawing.Image)(resources.GetObject("Sort.Image")));
             this.Sort.Location = new System.Drawing.Point(112, 3);
             this.Sort.Name = "Sort";
@@ -166,34 +168,37 @@
             this.Sort.TabStop = false;
             this.Sort.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Sort_MouseClick);
             // 
-            // Help
+            // pHelp
             // 
-            this.Help.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Help.Image = ((System.Drawing.Image)(resources.GetObject("Help.Image")));
-            this.Help.Location = new System.Drawing.Point(142, 3);
-            this.Help.Name = "Help";
-            this.Help.Size = new System.Drawing.Size(16, 16);
-            this.Help.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.Help.TabIndex = 4;
-            this.Help.TabStop = false;
-            this.Help.Click += new System.EventHandler(this.Help_Click);
+            this.pHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pHelp.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pHelp.Image = ((System.Drawing.Image)(resources.GetObject("pHelp.Image")));
+            this.pHelp.Location = new System.Drawing.Point(142, 3);
+            this.pHelp.Name = "pHelp";
+            this.pHelp.Size = new System.Drawing.Size(16, 16);
+            this.pHelp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pHelp.TabIndex = 4;
+            this.pHelp.TabStop = false;
+            this.pHelp.Click += new System.EventHandler(this.pHelp_Click);
             // 
-            // Close
+            // pClose
             // 
-            this.Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Close.Image = ((System.Drawing.Image)(resources.GetObject("Close.Image")));
-            this.Close.Location = new System.Drawing.Point(162, 3);
-            this.Close.Name = "Close";
-            this.Close.Size = new System.Drawing.Size(16, 16);
-            this.Close.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.Close.TabIndex = 3;
-            this.Close.TabStop = false;
-            this.Close.Click += new System.EventHandler(this.Close_Click);
+            this.pClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pClose.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pClose.Image = ((System.Drawing.Image)(resources.GetObject("pClose.Image")));
+            this.pClose.Location = new System.Drawing.Point(162, 3);
+            this.pClose.Name = "pClose";
+            this.pClose.Size = new System.Drawing.Size(16, 16);
+            this.pClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pClose.TabIndex = 3;
+            this.pClose.TabStop = false;
+            this.pClose.Click += new System.EventHandler(this.Close_Click);
             // 
             // Edit
             // 
+            this.Edit.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Edit.Image = ((System.Drawing.Image)(resources.GetObject("Edit.Image")));
-            this.Edit.Location = new System.Drawing.Point(25, 1);
+            this.Edit.Location = new System.Drawing.Point(26, 1);
             this.Edit.Name = "Edit";
             this.Edit.Size = new System.Drawing.Size(20, 20);
             this.Edit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -203,8 +208,9 @@
             // 
             // Delete
             // 
+            this.Delete.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Delete.Image = ((System.Drawing.Image)(resources.GetObject("Delete.Image")));
-            this.Delete.Location = new System.Drawing.Point(50, 1);
+            this.Delete.Location = new System.Drawing.Point(51, 1);
             this.Delete.Name = "Delete";
             this.Delete.Size = new System.Drawing.Size(20, 20);
             this.Delete.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -214,6 +220,7 @@
             // 
             // New
             // 
+            this.New.Cursor = System.Windows.Forms.Cursors.Hand;
             this.New.Image = ((System.Drawing.Image)(resources.GetObject("New.Image")));
             this.New.Location = new System.Drawing.Point(1, 1);
             this.New.Name = "New";
@@ -233,15 +240,16 @@
             this.btnAddToTopic.TabIndex = 2;
             this.btnAddToTopic.Text = "Add To Topic";
             this.btnAddToTopic.UseVisualStyleBackColor = true;
-            this.btnAddToTopic.Click += new System.EventHandler(this.btnAddToTopic_Click);
+            this.btnAddToTopic.MouseClick += new System.Windows.Forms.MouseEventHandler(this.btnAddToTopic_MouseClick);
             // 
             // panelResourceName
             // 
+            this.panelResourceName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelResourceName.Controls.Add(this.btnCancel);
             this.panelResourceName.Controls.Add(this.btnOk);
             this.panelResourceName.Controls.Add(this.txtRenameResource);
             this.panelResourceName.Controls.Add(this.lblResourceName);
-            this.panelResourceName.Location = new System.Drawing.Point(0, 68);
+            this.panelResourceName.Location = new System.Drawing.Point(0, 59);
             this.panelResourceName.Name = "panelResourceName";
             this.panelResourceName.Size = new System.Drawing.Size(184, 80);
             this.panelResourceName.TabIndex = 3;
@@ -255,6 +263,7 @@
             this.btnCancel.TabIndex = 3;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnOk
             // 
@@ -264,6 +273,7 @@
             this.btnOk.TabIndex = 2;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
+            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
             // txtRenameResource
             // 
@@ -271,6 +281,7 @@
             this.txtRenameResource.Name = "txtRenameResource";
             this.txtRenameResource.Size = new System.Drawing.Size(172, 20);
             this.txtRenameResource.TabIndex = 1;
+            this.txtRenameResource.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtRenameResource_KeyDown);
             // 
             // lblResourceName
             // 
@@ -306,17 +317,17 @@
             this.txtResources.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtResources_KeyDown);
             this.txtResources.Leave += new System.EventHandler(this.txtResources_Leave);
             // 
-            // pAddToMap
+            // pAddResources
             // 
-            this.pAddToMap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pAddToMap.Image = ((System.Drawing.Image)(resources.GetObject("pAddToMap.Image")));
-            this.pAddToMap.Location = new System.Drawing.Point(167, 23);
-            this.pAddToMap.Name = "pAddToMap";
-            this.pAddToMap.Size = new System.Drawing.Size(16, 16);
-            this.pAddToMap.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pAddToMap.TabIndex = 6;
-            this.pAddToMap.TabStop = false;
-            this.pAddToMap.Click += new System.EventHandler(this.pAddToMap_Click);
+            this.pAddResources.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pAddResources.Image = ((System.Drawing.Image)(resources.GetObject("pAddResources.Image")));
+            this.pAddResources.Location = new System.Drawing.Point(167, 23);
+            this.pAddResources.Name = "pAddResources";
+            this.pAddResources.Size = new System.Drawing.Size(16, 16);
+            this.pAddResources.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pAddResources.TabIndex = 6;
+            this.pAddResources.TabStop = false;
+            this.pAddResources.Click += new System.EventHandler(this.pAddResources_Click);
             // 
             // pHandle
             // 
@@ -530,7 +541,7 @@
             this.ClientSize = new System.Drawing.Size(184, 230);
             this.Controls.Add(this.pCorrect);
             this.Controls.Add(this.pHandle);
-            this.Controls.Add(this.pAddToMap);
+            this.Controls.Add(this.pAddResources);
             this.Controls.Add(this.txtResources);
             this.Controls.Add(this.btnAddToMap);
             this.Controls.Add(this.panelResourceName);
@@ -547,14 +558,14 @@
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pManageIcons)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Sort)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Help)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Close)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pHelp)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pClose)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Edit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Delete)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.New)).EndInit();
             this.panelResourceName.ResumeLayout(false);
             this.panelResourceName.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pAddToMap)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pAddResources)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHandle)).EndInit();
             this.cmsSort.ResumeLayout(false);
             this.panelIcons.ResumeLayout(false);
@@ -580,9 +591,9 @@
         private System.Windows.Forms.PictureBox Edit;
         private System.Windows.Forms.PictureBox Delete;
         private System.Windows.Forms.PictureBox New;
-        private System.Windows.Forms.PictureBox Close;
+        private System.Windows.Forms.PictureBox pClose;
         private System.Windows.Forms.Button btnAddToTopic;
-        private System.Windows.Forms.PictureBox Help;
+        private System.Windows.Forms.PictureBox pHelp;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.HelpProvider helpProvider1;
@@ -594,7 +605,7 @@
         private System.Windows.Forms.Button btnAddToMap;
         private System.Windows.Forms.PictureBox Sort;
         private System.Windows.Forms.TextBox txtResources;
-        private System.Windows.Forms.PictureBox pAddToMap;
+        private System.Windows.Forms.PictureBox pAddResources;
         private System.Windows.Forms.PictureBox pHandle;
         private System.Windows.Forms.ContextMenuStrip cmsSort;
         private System.Windows.Forms.ToolStripMenuItem sortAZ;

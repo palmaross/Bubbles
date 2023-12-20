@@ -417,8 +417,17 @@ namespace Bubbles
             PictureBox pb = sender as PictureBox;
             int value = Convert.ToInt32(pb.Name.Substring(1));
 
+            bool alltopicshaveicon = true;
             foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                t.Task.Complete = value;
+            {
+                if (t.Task.Complete != value) { alltopicshaveicon = false; break; }
+            }
+
+            foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+            {
+                if (alltopicshaveicon) t.Task.Complete = -1;
+                else t.Task.Complete = value;
+            }
         }
 
         private void pPriority_Click(object sender, EventArgs e)
@@ -429,8 +438,17 @@ namespace Bubbles
             PictureBox pb = sender as PictureBox;
             int value = Convert.ToInt32(pb.Name.Substring(3));
 
+            bool alltopicshaveicon = true;
             foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                t.Task.Priority = TaskPriority(value);
+            {
+                if (t.Task.Priority != TaskPriority(value)) { alltopicshaveicon = false; break; }
+            }
+
+            foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+            {
+                if (alltopicshaveicon) t.Task.Priority = 0;
+                else t.Task.Priority = TaskPriority(value);
+            }
         }
 
         MmTaskPriority TaskPriority(int value)

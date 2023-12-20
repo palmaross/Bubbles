@@ -85,7 +85,6 @@ namespace Organizer
             cmsSort.Items["N_sortlinks"].Text = Utils.getString("notes.contextmenu.sortlinks");
             cmsSort.Items["N_sortfirst"].Text = Utils.getString("notes.contextmenu.sortbydate");
 
-            thisWidth = this.Width;
             this.MouseDown += NotesDlg_MouseDown; // to move the window
             pBack.Location = pMore.Location;
 
@@ -743,9 +742,6 @@ namespace Organizer
         }
 
         List<Panel> selectedNotes = new List<Panel>();
-
-        int thisWidth = 0;
-        bool edit = false;
 
         /// <summary>NOTES list (all groups or specific group)</summary>
         List<NoteItem> NOTES = new List<NoteItem>();

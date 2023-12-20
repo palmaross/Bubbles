@@ -163,19 +163,19 @@ namespace Bubbles
             );
         }
 
-        public void AddTaskTemplate(string name, int progress, int priority, string dates, 
-            string icon, string resources, string tags, string properties)
+        public void AddTaskTemplate(int primary, string name, int progress, int priority, string dates, 
+            string icon, string resources, string tags)
         {
-            m_db.ExecuteNonQuery("insert into TASKTEMPLATES values(NULL, `"
+            m_db.ExecuteNonQuery("insert into TASKTEMPLATES values("
+                + primary + ", `"
                 + name + "`, "
                 + progress + ", "
                 + priority + ", `"
                 + dates + "`, `"
                 + icon + "`, `"
                 + resources + "`, `"
-                + tags + "`, `"
-                + properties + "`, "
-                + "'', '', 0, 0"
+                + tags + "`, "
+                + "'', '', '', 0, 0"
                 + ");"
                 );
         }
@@ -224,12 +224,13 @@ namespace Bubbles
             m_db.ExecuteNonQuery("CREATE TABLE SOURCES(title text, path text, type text, _order integer, stickID int, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
 
-            m_db.ExecuteNonQuery("CREATE TABLE TASKTEMPLATES(id INTEGER PRIMARY KEY, name text, " +
-                "progress int, priority int, dates text, icon text, resources text, tags text, properties text, " +
+            m_db.ExecuteNonQuery("CREATE TABLE TASKTEMPLATES(prime int, name text, progress int, " +
+                "priority int, dates text, icon text, resources text, tags text, properties text, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
-            // dates - "startdate:12/12/2024:duedate:12/12/2024", "pStartDate:_period_", "pDueDate:_period_", "pDates:_period_"
+            // dates - "abs:16/12/2024;rel:today:N"
+            // abs - calendar date; rel - period, N - day of week or month
             // icon - same as in ICONS
-            // tags - group:tag;group:tag;group:tag
+            // tags - group:tag;group:tag
             // properties - name:value:type;name:value:type;name:value:type
 
             // Organizer
@@ -315,7 +316,7 @@ namespace Bubbles
             AddResource(Utils.getString("taskinfo.database.resources.res2"), 1, "", 0);
 
             // Add Task Template
-            AddTaskTemplate(Utils.getString("taskinfo.database.resources.icon1"), 0, 0, "pDates:today", "", "", "", "");
+            AddTaskTemplate(1, Utils.getString("quicktask.template.default"), 0, 0, "rel:today:1;rel:today:1", "", "", "");
         }
     }
 }

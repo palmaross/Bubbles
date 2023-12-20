@@ -6,7 +6,7 @@ namespace Bubbles
 {
     public partial class ManageResourceIcons : UserControl
     {
-        public ResourcesDlg ParentForm { get; set; }
+        public ResourcesDlg aParentForm { get; set; }
 
         public ManageResourceIcons()
         {
@@ -38,7 +38,7 @@ namespace Bubbles
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            ParentForm.ResourceIcons.Clear();
+            aParentForm.ResourceIcons.Clear();
 
             // Update RESOURCEGROUPS database and ResourceIcons dictionary
             using (BubblesDB db = new BubblesDB())
@@ -53,12 +53,14 @@ namespace Bubbles
                 db.ExecuteNonQuery("update RESOURCEGROUPS set name=`" + txt7.Text.Trim() + "` where icon=" + 7 + "");
             }
 
-            ParentForm.Init();
+            aParentForm.Init();
+            aParentForm.Height = aParentForm.thisHeight;
             this.Hide();
         }
 
         private void btnClose_Click(object sender, EventArgs e)
         {
+            aParentForm.Height = aParentForm.thisHeight;
             this.Hide();
         }
     }

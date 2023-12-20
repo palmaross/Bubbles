@@ -61,7 +61,7 @@
             this.BI_new,
             this.BI_removeallfromtopic});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(226, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(226, 70);
             // 
             // BI_new
             // 

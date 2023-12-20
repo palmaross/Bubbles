@@ -796,8 +796,6 @@ namespace Bubbles
         public static int DummyStickerImageX;
         public static int DummyStickerImageY;
 
-        ToolStripItemCollection TemplateCollection;
-
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;

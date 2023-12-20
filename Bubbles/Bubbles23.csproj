@@ -280,6 +280,12 @@
     <Compile Include="TaskTemplateDlg.Designer.cs">
       <DependentUpon>TaskTemplateDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="TopicNotesDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TopicNotesDlg.Designer.cs">
+      <DependentUpon>TopicNotesDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="TopicTemplatePreview.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -336,6 +342,9 @@
     <Content Include="images\book_add.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\calendar.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\chm.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -390,6 +399,9 @@
     <Content Include="images\cpTopicTemplate.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\Cursor1.cur">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\deleteall.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -397,6 +409,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\deleteStick.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\detach.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\edit.png">
@@ -420,6 +435,24 @@
     <Content Include="images\f_boldActive.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\f_italic.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\f_italicActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\f_strike.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\f_strikeActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\f_under.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\f_underActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\groups.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -432,10 +465,16 @@
     <Content Include="images\list.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\manage.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\manageGroups.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\managetags.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mm_project.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\ms_audio.png">
@@ -558,6 +597,9 @@
     <Content Include="images\pasteText.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\period.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\pr1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -633,6 +675,9 @@
     <Content Include="images\ResourceLabels\7.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\resources.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\rotate.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -664,6 +709,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\topic_setdate_noactive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\typeTemplate.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\unformattedText.png">
@@ -788,6 +836,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TaskTemplateDlg.resx">
       <DependentUpon>TaskTemplateDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TopicNotesDlg.resx">
+      <DependentUpon>TopicNotesDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TopicTemplatePreview.resx">
       <DependentUpon>TopicTemplatePreview.cs</DependentUpon>

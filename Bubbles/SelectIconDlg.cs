@@ -10,15 +10,11 @@ namespace Bubbles
 {
     public partial class SelectIconDlg : Form
     {
-        public SelectIconDlg(List<string> filenames, bool leftright, bool disableall = false)
+        public SelectIconDlg(List<string> filenames)
         {
             InitializeComponent();
 
             Text = Utils.getString("SelectIconDlg.caption");
-            rbtnLeft.Text = Utils.getString("SelectIconDlg.rbtnLeft");
-            rbtnRight.Text = Utils.getString("SelectIconDlg.rbtnRight");
-            rbtnEnd.Text = Utils.getString("SelectIconDlg.rbtnEnd");
-            rbtnBegin.Text = Utils.getString("SelectIconDlg.rbtnBegin");
 
             FileNames = filenames;
 
@@ -27,9 +23,6 @@ namespace Bubbles
 
             string path = MMUtils.MindManager.GetPath(MmDirectory.mmDirectoryIcons);
             ListDirectory(treeView1, path);
-
-            rbtnLeft.Enabled = rbtnRight.Enabled = !leftright;
-            rbtnBegin.Enabled = rbtnEnd.Enabled = !disableall;
 
             txtIconName.KeyUp += TxtIconName_KeyUp;
         }
@@ -124,18 +117,23 @@ namespace Bubbles
                 }
             }
 
-            txtIconName.Visible = true;
-            txtIconName.BringToFront();
+            if (aIconName)
+            {
+                txtIconName.Visible = true;
+                txtIconName.BringToFront();
 
-            int locx = panel1.Location.X + icon.Location.X;
-            int locy = panel1.Location.Y + icon.Location.Y + icon.Height;
-            if (locx > panel1.Location.X + panel1.Width - txtIconName.Width)
-                locx = panel1.Location.X + panel1.Width - txtIconName.Width;
+                int locx = panel1.Location.X + icon.Location.X;
+                int locy = panel1.Location.Y + icon.Location.Y + icon.Height;
+                if (locx > panel1.Location.X + panel1.Width - txtIconName.Width)
+                    locx = panel1.Location.X + panel1.Width - txtIconName.Width;
 
-            txtIconName.Text = Path.GetFileNameWithoutExtension(icon.Name);
-            txtIconName.Location = new Point(locx, locy);
-            txtIconName.Focus();
-            txtIconName.SelectAll();
+                txtIconName.Text = Path.GetFileNameWithoutExtension(icon.Name);
+                txtIconName.Location = new Point(locx, locy);
+                txtIconName.Focus();
+                txtIconName.SelectAll();
+            }
+            else
+                DialogResult = DialogResult.OK;
         }
 
         private void btnOK_Click(object sender, System.EventArgs e)
@@ -151,6 +149,8 @@ namespace Bubbles
         /// <summary>Full path to icon file</summary>
         public string iconPath = "";
         public string iconName = "";
+
+        public bool aIconName = true;
 
         private List<string> FileNames = new List<string>();
     }

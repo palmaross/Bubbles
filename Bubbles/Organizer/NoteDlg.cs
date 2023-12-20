@@ -5,11 +5,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using static Community.CsharpSqlite.Sqlite3;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Organizer
 {
@@ -252,7 +249,6 @@ namespace Organizer
                 rtb.ContextMenuStrip = cms;
             }
         }
-
 
         private void txtNote_Enter(object sender, EventArgs e)
         {

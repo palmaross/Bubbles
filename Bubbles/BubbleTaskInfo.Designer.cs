@@ -38,7 +38,6 @@
             this.Manage = new System.Windows.Forms.PictureBox();
             this.pictureHandle = new System.Windows.Forms.PictureBox();
             this.cmsCommon = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.ST_deletetaskinfo = new System.Windows.Forms.ToolStripMenuItem();
             this.pPriority = new System.Windows.Forms.PictureBox();
             this.pProgress = new System.Windows.Forms.PictureBox();
             this.pResources = new System.Windows.Forms.PictureBox();
@@ -52,14 +51,23 @@
             this.pTopicDueDate = new System.Windows.Forms.PictureBox();
             this.panelStartDate = new System.Windows.Forms.Panel();
             this.pStartDate = new System.Windows.Forms.MaskedTextBox();
+            this.cmsDates = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.Dates_today = new System.Windows.Forms.ToolStripMenuItem();
+            this.Dates_tomorrow = new System.Windows.Forms.ToolStripMenuItem();
+            this.Dates_nextweek = new System.Windows.Forms.ToolStripMenuItem();
             this.panelDueDate = new System.Windows.Forms.Panel();
             this.pDueDate = new System.Windows.Forms.MaskedTextBox();
             this.panelDuration = new System.Windows.Forms.Panel();
+            this.cmsTaskTemplates = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsResources = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.Dates_today_today = new System.Windows.Forms.ToolStripMenuItem();
+            this.Dates_today_tomorrow = new System.Windows.Forms.ToolStripMenuItem();
+            this.Dates_tomorrow_tomorrow = new System.Windows.Forms.ToolStripMenuItem();
+            this.Dates_thisweek = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsDuration.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
-            this.cmsCommon.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pPriority)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pProgress)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pResources)).BeginInit();
@@ -71,6 +79,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pTopicStartDate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pTopicDueDate)).BeginInit();
             this.panelStartDate.SuspendLayout();
+            this.cmsDates.SuspendLayout();
             this.panelDueDate.SuspendLayout();
             this.panelDuration.SuspendLayout();
             this.SuspendLayout();
@@ -133,16 +142,8 @@
             // 
             // cmsCommon
             // 
-            this.cmsCommon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ST_deletetaskinfo});
             this.cmsCommon.Name = "cmsIcon";
-            this.cmsCommon.Size = new System.Drawing.Size(221, 26);
-            // 
-            // ST_deletetaskinfo
-            // 
-            this.ST_deletetaskinfo.Name = "ST_deletetaskinfo";
-            this.ST_deletetaskinfo.Size = new System.Drawing.Size(220, 22);
-            this.ST_deletetaskinfo.Text = "Удалить сведения о задаче";
+            this.cmsCommon.Size = new System.Drawing.Size(61, 4);
             // 
             // pPriority
             // 
@@ -294,6 +295,7 @@
             // 
             this.pStartDate.BeepOnError = true;
             this.pStartDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pStartDate.ContextMenuStrip = this.cmsDates;
             this.pStartDate.Culture = new System.Globalization.CultureInfo("");
             this.pStartDate.Location = new System.Drawing.Point(1, 0);
             this.pStartDate.Mask = "00/00";
@@ -303,6 +305,39 @@
             this.pStartDate.TabStop = false;
             this.pStartDate.ValidatingType = typeof(System.DateTime);
             this.pStartDate.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DateBox_MouseClick);
+            this.pStartDate.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pStartDate_MouseDown);
+            // 
+            // cmsDates
+            // 
+            this.cmsDates.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Dates_today,
+            this.Dates_today_today,
+            this.Dates_today_tomorrow,
+            this.Dates_tomorrow,
+            this.Dates_tomorrow_tomorrow,
+            this.Dates_thisweek,
+            this.Dates_nextweek});
+            this.cmsDates.Name = "cmsDates";
+            this.cmsDates.ShowImageMargin = false;
+            this.cmsDates.Size = new System.Drawing.Size(169, 180);
+            // 
+            // Dates_today
+            // 
+            this.Dates_today.Name = "Dates_today";
+            this.Dates_today.Size = new System.Drawing.Size(168, 22);
+            this.Dates_today.Text = "Today";
+            // 
+            // Dates_tomorrow
+            // 
+            this.Dates_tomorrow.Name = "Dates_tomorrow";
+            this.Dates_tomorrow.Size = new System.Drawing.Size(168, 22);
+            this.Dates_tomorrow.Text = "Tomorrow";
+            // 
+            // Dates_nextweek
+            // 
+            this.Dates_nextweek.Name = "Dates_nextweek";
+            this.Dates_nextweek.Size = new System.Drawing.Size(168, 22);
+            this.Dates_nextweek.Text = "Next Week";
             // 
             // panelDueDate
             // 
@@ -316,6 +351,7 @@
             // pDueDate
             // 
             this.pDueDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pDueDate.ContextMenuStrip = this.cmsDates;
             this.pDueDate.Location = new System.Drawing.Point(1, 0);
             this.pDueDate.Mask = "00/00";
             this.pDueDate.Name = "pDueDate";
@@ -324,6 +360,7 @@
             this.pDueDate.TabStop = false;
             this.pDueDate.ValidatingType = typeof(System.DateTime);
             this.pDueDate.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DateBox_MouseClick);
+            this.pDueDate.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pDueDate_MouseDown);
             // 
             // panelDuration
             // 
@@ -335,6 +372,41 @@
             this.panelDuration.Name = "panelDuration";
             this.panelDuration.Size = new System.Drawing.Size(32, 32);
             this.panelDuration.TabIndex = 100;
+            // 
+            // cmsTaskTemplates
+            // 
+            this.cmsTaskTemplates.Name = "cmsTaskTemplates";
+            this.cmsTaskTemplates.ShowImageMargin = false;
+            this.cmsTaskTemplates.Size = new System.Drawing.Size(36, 4);
+            // 
+            // cmsResources
+            // 
+            this.cmsResources.Name = "cmsResources";
+            this.cmsResources.Size = new System.Drawing.Size(61, 4);
+            // 
+            // Dates_today_today
+            // 
+            this.Dates_today_today.Name = "Dates_today_today";
+            this.Dates_today_today.Size = new System.Drawing.Size(168, 22);
+            this.Dates_today_today.Text = "Today - Today";
+            // 
+            // Dates_today_tomorrow
+            // 
+            this.Dates_today_tomorrow.Name = "Dates_today_tomorrow";
+            this.Dates_today_tomorrow.Size = new System.Drawing.Size(168, 22);
+            this.Dates_today_tomorrow.Text = "Today - Tomorrow";
+            // 
+            // Dates_tomorrow_tomorrow
+            // 
+            this.Dates_tomorrow_tomorrow.Name = "Dates_tomorrow_tomorrow";
+            this.Dates_tomorrow_tomorrow.Size = new System.Drawing.Size(168, 22);
+            this.Dates_tomorrow_tomorrow.Text = "Tomorrow - Tomorrow";
+            // 
+            // Dates_thisweek
+            // 
+            this.Dates_thisweek.Name = "Dates_thisweek";
+            this.Dates_thisweek.Size = new System.Drawing.Size(168, 22);
+            this.Dates_thisweek.Text = "This Week";
             // 
             // BubbleTaskInfo
             // 
@@ -364,7 +436,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
-            this.cmsCommon.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pPriority)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pProgress)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pResources)).EndInit();
@@ -377,6 +448,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pTopicDueDate)).EndInit();
             this.panelStartDate.ResumeLayout(false);
             this.panelStartDate.PerformLayout();
+            this.cmsDates.ResumeLayout(false);
             this.panelDueDate.ResumeLayout(false);
             this.panelDueDate.PerformLayout();
             this.panelDuration.ResumeLayout(false);
@@ -392,7 +464,6 @@
         private System.Windows.Forms.PictureBox Manage;
         private System.Windows.Forms.PictureBox pictureHandle;
         private System.Windows.Forms.ContextMenuStrip cmsCommon;
-        private System.Windows.Forms.ToolStripMenuItem ST_deletetaskinfo;
         private System.Windows.Forms.PictureBox p100;
         private System.Windows.Forms.PictureBox pQuickTask;
         private System.Windows.Forms.PictureBox pRemoveTaskInfo;
@@ -410,5 +481,15 @@
         public System.Windows.Forms.MaskedTextBox pStartDate;
         public System.Windows.Forms.MaskedTextBox pDueDate;
         public System.Windows.Forms.Panel panelDueDate;
+        private System.Windows.Forms.ContextMenuStrip cmsTaskTemplates;
+        private System.Windows.Forms.ContextMenuStrip cmsResources;
+        private System.Windows.Forms.ContextMenuStrip cmsDates;
+        private System.Windows.Forms.ToolStripMenuItem Dates_today;
+        private System.Windows.Forms.ToolStripMenuItem Dates_tomorrow;
+        private System.Windows.Forms.ToolStripMenuItem Dates_nextweek;
+        private System.Windows.Forms.ToolStripMenuItem Dates_today_today;
+        private System.Windows.Forms.ToolStripMenuItem Dates_today_tomorrow;
+        private System.Windows.Forms.ToolStripMenuItem Dates_tomorrow_tomorrow;
+        private System.Windows.Forms.ToolStripMenuItem Dates_thisweek;
     }
 }

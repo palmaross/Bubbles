@@ -6,7 +6,6 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Image = System.Drawing.Image;
 
 namespace Bubbles
@@ -19,7 +18,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "Sticks.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "Resources.htm");
+            helpProvider1.SetHelpKeyword(this, "TaskInfoResources.htm");
 
             btnAddToTopic.Text = Utils.getString("ResourcesDlg.btnAddToTopic");
             txtResources.Text = Utils.getString("ResourcesDlg.dummytext");
@@ -32,14 +31,17 @@ namespace Bubbles
             toolTip1.SetToolTip(Delete, Utils.getString("ResourcesDlg.DeleteResorce"));
             toolTip1.SetToolTip(pManageIcons, Utils.getString("ResourcesDlg.pManageIcons"));
             toolTip1.SetToolTip(Sort, Utils.getString("notes.contextmenu.sort"));
+            toolTip1.SetToolTip(btnAddToTopic, Utils.getString("ResourcesDlg.btnAddToTopic.tooltip"));
             toolTip1.SetToolTip(btnAddToMap, Utils.getString("ResourcesDlg.btnAddToMap.tooltip"));
-            toolTip1.SetToolTip(Help, Utils.getString("button.help"));
-            toolTip1.SetToolTip(Close, Utils.getString("button.close"));
-            toolTip1.SetToolTip(pAddToMap, Utils.getString("ResourcesDlg.pAddToMap.tooltip"));
+            toolTip1.SetToolTip(pHelp, Utils.getString("button.help"));
+            toolTip1.SetToolTip(pClose, Utils.getString("button.close"));
+            toolTip1.SetToolTip(pAddResources, Utils.getString("ResourcesDlg.pAddToMap.tooltip"));
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
             this.ResizeRedraw = true;
+
+            thisHeight = this.Height;
 
             // Context menu
             cmsSort.ItemClicked += ContextMenuStrip_ItemClicked;
@@ -72,16 +74,16 @@ namespace Bubbles
             ListResources.GridLines = true;
 
             // Set icons
-            imageList1.ImageSize = Help.Size;
+            imageList1.ImageSize = pHelp.Size;
             string path = Utils.ImagesPath + "\\ResourceLabels\\";
             for (int i = 0; i < 8; i++)
             imageList1.Images.Add(i.ToString(), Image.FromFile(path + i.ToString() + ".png"));
 
             // Manage resource icons User Control
-            mri.Location = panel1.Location;
+            mri.Location = txtResources.Location;
             this.Controls.Add(mri);
             mri.Visible = false;
-            mri.ParentForm = this;
+            mri.aParentForm = this;
 
             Init();
         }
@@ -130,11 +132,11 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "AddToTopic")
             {
-
+                listResources_MouseClick(null, null);
             }
             else if (e.ClickedItem.Name == "AddToMap")
             {
-
+                btnAddToMap_Click(null, null);
             }
             else if (e.ClickedItem.Name == "ChangeIcon")
             {
@@ -146,7 +148,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "r_rename")
             {
-
+                Edit_Click(null, null);
             }
             else if (e.ClickedItem.Name == "r_delete")
             {
@@ -183,6 +185,10 @@ namespace Bubbles
 
         private void pManageIcons_Click(object sender, EventArgs e)
         {
+            thisHeight = this.Height;
+            if (this.Height < mri.Height + panel1.Height)
+                this.Height = mri.Height + panel1.Height;
+
             if (!mri.Visible)
             {
                 mri.Show();
@@ -197,12 +203,82 @@ namespace Bubbles
 
         private void New_Click(object sender, EventArgs e)
         {
-
+            panelResourceName.Location = txtResources.Location;
+            panelResourceName.Visible = true;
+            panelResourceName.BringToFront();
+            panelResourceName.Tag = "new";
+            txtRenameResource.Text = "";
         }
 
         private void Edit_Click(object sender, EventArgs e)
         {
+            panelResourceName.Location = txtResources.Location;
+            panelResourceName.Visible = true;
+            panelResourceName.BringToFront();
+            panelResourceName.Tag = "edit";
+            txtRenameResource.Text = ListResources.SelectedItems[0].Text;
+        }
 
+        private void txtRenameResource_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnOk_Click(null, null);
+
+                e.Handled = true; // to avoid the "ding" sound
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void btnOk_Click(object sender, EventArgs e)
+        {
+            string name = txtRenameResource.Text.Trim();
+            if (String.IsNullOrEmpty(name)) return;
+
+            ListViewItem lvi; ResourceItem item;
+
+            using (BubblesDB db = new BubblesDB())
+            {
+                DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
+                    "where name=`" + name + "` and groupID=0");
+
+                if (dt.Rows.Count > 0)
+                {
+                    MessageBox.Show(Utils.getString("ResourcesDlg.resourceexists"), "",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if ((string)panelResourceName.Tag == "new") // add new resource
+                {
+                    db.AddResource(name, 0, "", 0);
+
+                    item = new ResourceItem(name, 0, "", 0);
+                    lvi = ListResources.Items.Add(item.Name, 0);
+                    lvi.ToolTipText = ResourceIcons[item.aIcon];
+                }
+                else // edit selected resource
+                {
+                    lvi = ListResources.SelectedItems[0];
+                    item = lvi.Tag as ResourceItem;
+
+                    // Update resource in the database
+                    db.ExecuteNonQuery("update RESOURCES set name=`" + name +
+                        "` where name=`" + item.Name + "` and groupID=" + item.GroupID + "");
+
+                    item.Name = name;
+                }
+            }
+
+            lvi.Tag = item; 
+            Sort_MouseClick(null, null);
+            lvi.Selected = true;
+            panelResourceName.Visible = false;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            panelResourceName.Visible = false;
         }
 
         private void Delete_Click(object sender, EventArgs e)
@@ -224,15 +300,12 @@ namespace Bubbles
             }
         }
 
-        private void btnAddToTopic_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void Sort_MouseClick(object sender, MouseEventArgs e)
         {
             if (e == null || e.Button == MouseButtons.Left)
             {
+                if (e != null) sortype = "sortAZ"; // sort button clicked, sort by default
+
                 List<ResourceItem> items = new List<ResourceItem>();
                 foreach (ListViewItem item in ListResources.Items)
                     items.Add(item.Tag as ResourceItem);
@@ -242,7 +315,7 @@ namespace Bubbles
                 else if (sortype == "sortZA")
                     items = items.OrderByDescending(x => x.Name).ToList();
                 else if (sortype == "sortByIcon")
-                    items = items.OrderBy(x => x.aIcon).ToList();
+                    items = items.OrderBy(x => x.aIcon).ThenBy(x => x.Name).ToList();
 
                 ListResources.Items.Clear();
                 foreach (var item in items)
@@ -257,9 +330,9 @@ namespace Bubbles
             }
         }
 
-        private void Help_Click(object sender, EventArgs e)
+        private void pHelp_Click(object sender, EventArgs e)
         {
-
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "TaskInfoResources.htm");
         }
 
         private void Close_Click(object sender, EventArgs e)
@@ -267,64 +340,30 @@ namespace Bubbles
             this.Hide();
         }
 
+        private void btnAddToTopic_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                listResources_MouseClick(sender, e);
+        }
+
         private void listResources_MouseClick(object sender, MouseEventArgs e)
         {
             if (ListResources.SelectedItems.Count == 0) return;
 
-            if (e.Button == MouseButtons.Left)
+            if (e == null || // from context menu
+                e.Button == MouseButtons.Left)
             {
                 if ((ModifierKeys & Keys.Control) == Keys.Control ||
                     (ModifierKeys & Keys.Shift) == Keys.Shift)
-                    return;
-
-                if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
                     return;
 
                 string[] listResources = new string[ListResources.SelectedItems.Count];
                 for (int i = 0; i < ListResources.SelectedItems.Count; i++)
                     listResources[i] = ListResources.SelectedItems[i].Text;
 
-                string listResource = ListResources.SelectedItems[0].Text;
-
-                bool alltopicshaveresource = false;
-
-                // If more than one items selected, do not calculate resoource presence on topics
-                if (ListResources.SelectedItems.Count == 1)
-                {
-                    alltopicshaveresource = true;
-                    foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                    {
-                        if (String.IsNullOrEmpty(t.Task.Resources))
-                            alltopicshaveresource = false;
-
-                        string[] taskResources = t.Task.Resources.Split(',').Select(x => x.Trim()).ToArray();
-                        if (!taskResources.Contains(listResource))
-                            alltopicshaveresource = false;
-                    }
-                }
-
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                {
-                    string[] taskResources = t.Task.Resources.Split(',').Select(x => x.Trim()).ToArray();
-
-                    if (alltopicshaveresource) // remove resource from topics
-                    {
-                        if (taskResources.Contains(listResource))
-                            t.Task.Resources = t.Task.Resources.Replace(listResource, "").TrimEnd(new Char[] { ',', ' ' });
-                    }
-                    else // assign resource to topics
-                    {
-                        var newResources = taskResources.Union(listResources).ToArray();
-                        string newresources = "";
-
-                        foreach (string resource in newResources)
-                            newresources += ", " + resource;
-
-                        t.Task.Resources = newresources;
-                    }
-                }
+                SetResources(listResources);
             }
-            if (e.Button == MouseButtons.Right) // ContextMenu
+            else if (e.Button == MouseButtons.Right) // ContextMenu
             {
                 // Get selected item
                 for (int i = 0; i < ListResources.Items.Count; i++)
@@ -345,33 +384,125 @@ namespace Bubbles
             }
         }
 
+        public static void SetResources(string[] listResources)
+        {
+            if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
+                return;
+
+            string listResource = listResources[0];
+
+            bool alltopicshaveresource = false;
+
+            // If more than one items selected, do not calculate resoource presence on topics
+            if (listResources.Length == 1)
+            {
+                alltopicshaveresource = true;
+                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                {
+                    if (String.IsNullOrEmpty(t.Task.Resources))
+                        alltopicshaveresource = false;
+
+                    string[] taskResources = t.Task.Resources.Split(',').Select(x => x.Trim()).ToArray();
+                    if (!taskResources.Contains(listResource))
+                        alltopicshaveresource = false;
+                }
+            }
+
+            foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+            {
+                string[] taskResources = t.Task.Resources.Split(',').Select(x => x.Trim()).ToArray();
+
+                if (alltopicshaveresource) // remove resource from topics
+                {
+                    if (taskResources.Contains(listResource))
+                        t.Task.Resources = t.Task.Resources.Replace(listResource, "").TrimEnd(new Char[] { ',', ' ' });
+                }
+                else // assign resource to topics
+                {
+                    var newResources = taskResources.Union(listResources).ToArray();
+                    string newresources = "";
+
+                    foreach (string resource in newResources)
+                        newresources += ", " + resource;
+
+                    t.Task.Resources = newresources;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add selected resources to the Map Index
+        /// </summary>
         private void btnAddToMap_Click(object sender, EventArgs e)
         {
+            MapMarkerGroup mmg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
 
+            foreach (ListViewItem item in ListResources.SelectedItems)
+                mmg.AddResourceMarker(item.Text);
         }
 
-        private void pAddToMap_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        /// <summary>
+        /// Enter key assigns resource(s) to selected topic(s)
+        /// </summary>
         private void txtResources_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Enter)
+            {
+                pAddResources_Click(null, null);
 
+                e.Handled = true; // to avoid the "ding" sound
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        /// <summary>
+        /// Add to 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void pAddResources_Click(object sender, EventArgs e)
+        {
+            string _resources = txtResources.Text.Trim();
+            if (_resources == "" || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
+                return;
+
+            string[] resources = _resources.Split(',').Select(x => x.Trim()).ToArray();
+
+            foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+            {
+                string[] topicResources = t.Task.Resources.Split(',').Select(x => x.Trim()).ToArray();
+                string[] newResources = topicResources.Union(resources).ToArray();
+
+                string result = "";
+                foreach (string res in newResources)
+                    result += res + ",";
+                result = result.TrimEnd(',');
+
+                t.Task.Resources = result;
+            }
         }
 
         private void txtResources_Enter(object sender, EventArgs e)
         {
-
+            if (txtResources.Text.Trim() == Utils.getString("ResourcesDlg.dummytext"))
+            {
+                txtResources.Text = string.Empty;
+                txtResources.ForeColor = SystemColors.WindowText;
+            }
         }
 
         private void txtResources_Leave(object sender, EventArgs e)
         {
-
+            if (txtResources.Text.Trim() == "")
+            {
+                txtResources.Text = Utils.getString("ResourcesDlg.dummytext");
+                txtResources.ForeColor = SystemColors.GrayText;
+            }
         }
 
         ListViewItem selectedItem = null;
         string sortype = "";
+        public int thisHeight;
         public Dictionary<int, string> ResourceIcons = new Dictionary<int, string>();
 
         ManageResourceIcons mri = new ManageResourceIcons();

@@ -101,10 +101,24 @@ namespace Bubbles
             Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typeicons);
 
             this.MouseDown += Move_Stick; // move the stick
+            this.MouseClick += BubbleIcons_MouseClick;
             Manage.Click += Manage_Click; // "Manage" icon's context menu
 
             if (collapsed) {
                 collapsed = false; Collapse(); }
+        }
+
+        private void BubbleIcons_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                foreach (ToolStripItem item in cmsIcon.Items)
+                    item.Visible = false;
+
+                cmsIcon.Items["BI_newicon"].Visible = true;
+
+                cmsIcon.Show(Cursor.Position);
+            }
         }
 
         private void Manage_Click(object sender, EventArgs e)
@@ -113,7 +127,6 @@ namespace Bubbles
                 item.Visible = true;
 
             selectedIcon = pictureHandle;
-            manage = true;
             contextMenuStrip1.Show(Cursor.Position);
         }
 
@@ -122,13 +135,12 @@ namespace Bubbles
             foreach (ToolStripItem item in contextMenuStrip1.Items)
                 item.Visible = false;
 
-            manage = false;
             contextMenuStrip1.Show(Cursor.Position);
         }
 
         private void Move_Stick(object sender, MouseEventArgs e)
         {
-            if (e.Clicks == 1)
+            if (e.Clicks == 1 && e.Button == MouseButtons.Left)
             {
                 ReleaseCapture();
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
@@ -137,7 +149,7 @@ namespace Bubbles
 
         private void ContextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Name == "BI_new")
+            if (e.ClickedItem.Name == "BI_new" || e.ClickedItem.Name == "BI_newicon")
             {
                 NewIcon();
             }
@@ -229,20 +241,17 @@ namespace Bubbles
 
         public void NewIcon()
         {
-            string iconPath, iconName, position = "";
+            string iconPath, iconName;
             List<string> filenames = Icons.Select(x => x.FileName).ToList();
 
-            using (SelectIconDlg _dlg = new SelectIconDlg(filenames, manage)) // correct
+            using (SelectIconDlg _dlg = new SelectIconDlg(filenames))
             {
                 if (_dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
                     return;
                 iconPath = _dlg.iconPath;
                 iconName = _dlg.iconName;
-                position = _dlg.rbtnEnd.Checked ? "end" :
-                    _dlg.rbtnBegin.Checked ? "begin" :
-                    _dlg.rbtnLeft.Checked ? "left" : "right";
             }
-            NewIcon(iconPath, iconName, position);
+            NewIcon(iconPath, iconName, "end");
         }
 
         public void PasteIcon()
@@ -259,12 +268,10 @@ namespace Bubbles
                 return;
 
             position = "end";
-            if (!manage && selectedIcon != null) // if manage - paste at the end
+            if (selectedIcon != null)
             {
                 if (selectedIcon.Name == "pictureHandle")
                     position = "begin";
-                else
-                    position = "right";
             }
 
             // Get source name
@@ -298,6 +305,12 @@ namespace Bubbles
             }
         }
 
+        /// <summary>
+        /// Add new icon at stick
+        /// </summary>
+        /// <param name="iconPath"></param>
+        /// <param name="iconName"></param>
+        /// <param name="position">"begin" or "end"</param>
         private void NewIcon(string iconPath, string iconName, string position)
         {
             string fileName = "stock" + Path.GetFileNameWithoutExtension(iconPath);
@@ -311,15 +324,12 @@ namespace Bubbles
 
             // Add icon to Icons list
             int order = Icons.Count + 1; // at the end
-            if (position == "begin")
+            if (position == "begin") 
                 order = 1;
-            if (position == "left" || position == "right")
+            else if (position == "right")
             {
                 IconItem _item = (IconItem)selectedIcon.Tag;
-                if (position == "left")
-                    order = _item.Order == 1 ? 1 : _item.Order;
-                else
-                    order = _item.Order == Icons.Count ? Icons.Count + 1 : _item.Order + 1;
+                order = _item.Order == Icons.Count ? Icons.Count + 1 : _item.Order + 1;
             }
 
             IconItem item = new IconItem(iconName, fileName, order, iconPath);
@@ -349,6 +359,7 @@ namespace Bubbles
                 pBox.DragEnter += Handle_DragEnter;
                 pBox.DragDrop += Handle_DragDrop;
                 pBox.MouseDown += PBox_MouseDown;
+                pBox.GiveFeedback += PBox_GiveFeedback;
 
                 if (collapsed && i++ > 0) // if collapsed hide all icons except the first
                     pBox.Visible = false;
@@ -377,7 +388,7 @@ namespace Bubbles
                 if (fileName.StartsWith("stock"))
                 {
                     MmStockIcon icon = StockIconFromString(fileName);
-                    if (StockIconFromString(fileName) != 0)
+                    if (icon != 0)
                     {
                         foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                         {
@@ -403,7 +414,7 @@ namespace Bubbles
                 }
                 else
                 {
-                    string path = Utils.m_dataPath + "IconDB\\" + item.FileName;
+                    string path = Utils.m_dataPath + "IconDB\\" + fileName;
                     if (!File.Exists(path)) return;
 
                     string signature = MMUtils.MindManager.Utilities.GetCustomIconSignature(path);
@@ -434,7 +445,8 @@ namespace Bubbles
                 foreach (ToolStripItem item in cmsIcon.Items)
                     item.Visible = true;
 
-                manage = false;
+                cmsIcon.Items["BI_newicon"].Visible = false;
+
                 cmsIcon.Show(Cursor.Position);
             }
         }
@@ -519,6 +531,54 @@ namespace Bubbles
                     e.Effect = DragDropEffects.Copy; // Okay
                 else
                     e.Effect = DragDropEffects.None; // Unknown data, ignore it
+            }
+        }
+
+        private void PBox_GiveFeedback(object sender, GiveFeedbackEventArgs e)
+        {
+            if (e.Effect == DragDropEffects.Move)
+            {
+                e.UseDefaultCursors = false;
+
+                //Cursor.Current = new Cursor(Utils.ImagesPath + "mm_project.ico");
+                Cursor.Current = new Cursor(Utils.ImagesPath + "Cursor1.cur");
+                //Graphics graphics = this.CreateGraphics();
+                //Rectangle rectangle = new Rectangle(
+                //  new Point(0, 0), new Size(pictureHandle.Width,
+                //  pictureHandle.Height)); // <<<<<<<<< you will need to define size based on SystemParameters.CursorHeight here
+                //Cursor.Current.Draw(graphics, rectangle);
+                //Cursor.Current.Dispose();
+
+                //DrawCursorsOnForm(Cursor.Current);
+            }
+            else
+                e.UseDefaultCursors = true;
+        }
+
+        private void DrawCursorsOnForm(Cursor cursor)
+        {
+            // If the form's cursor is not the Hand cursor and the 
+            // Current cursor is the Default, Draw the specified 
+            // cursor on the form in normal size and twice normal size.
+            //if (this.Cursor != Cursors.Hand &
+            //  Cursor.Current == Cursors.Default)
+            {
+                // Draw the cursor stretched.
+                Graphics graphics = this.CreateGraphics();
+                Rectangle rectangle = new Rectangle(
+                  new Point(10, 10), new Size(pictureHandle.Width * 2,
+                  pictureHandle.Height * 2));
+                //cursor.DrawStretched(graphics, rectangle);
+
+                // Draw the cursor in normal size.
+                rectangle.Location = new Point(
+                rectangle.Width + rectangle.Location.X,
+                  rectangle.Height + rectangle.Location.Y);
+                //rectangle.Size = cursor.Size;
+                cursor.Draw(graphics, rectangle);
+
+                // Dispose of the cursor.
+                cursor.Dispose();
             }
         }
 
@@ -791,7 +851,7 @@ namespace Bubbles
         /// <param name="signature">Custom Icon signature</param>
         /// <param name="iconName">Icon name</param>
         /// <param name="path">Path to custom icon</param>
-        public void GetIcon(MmStockIcon aIcon, string signature, string iconName, string path)
+        public static void GetIcon(MmStockIcon aIcon, string signature, string iconName, string path)
         {
             foreach (MapMarkerGroup mg in MMUtils.ActiveDocument.MapMarkerGroups)
             {
@@ -826,7 +886,6 @@ namespace Bubbles
         public string orientation = "H";
         public bool collapsed = false;
         string position;
-        bool manage = false;
 
         int MinLength, RealLength;
 
