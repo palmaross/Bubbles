@@ -69,7 +69,7 @@ namespace Bubbles
             using (BubblesDB db = new BubblesDB())
             {
                 id = Utils.StickID();
-                db.AddStick(id, stickname, sticktype, 0, "", 0);
+                db.AddStick(id, stickname, sticktype, 0, "", 0, 0);
 
                 newForm.Location = BubblesButton.m_bubblesMenu.GetStickLocation("", newForm.Size);
                 newForm.Tag = id;
@@ -614,7 +614,7 @@ namespace Bubbles
 
                     dt = db.ExecuteQuery("select * from STICKS where id=" + stickid + " and configID=" + configID + "");
                     // If stick is not in the configuration already, add it there
-                    if (dt.Rows.Count == 0) db.AddStick(stickid, name, type, 0, "", configID);
+                    if (dt.Rows.Count == 0) db.AddStick(stickid, name, type, 0, "", configID, 0);
 
                     // Update stick position
                     position = SaveStick(stick.Value.Bounds, stickid, orientation, collapsed, configID);
@@ -782,7 +782,7 @@ namespace Bubbles
             {
                 // common comands popup
                 X = parent.Right - child.Width; // child right = parent right
-                if (popup == "getname" || popup == "resources") // GetNameDlg
+                if (popup == "getname" || popup == "resources" || popup == "bookmarks")
                     X = parent.Left; // child right = parent right
                 Y = parent.Bottom; // child top = parent bottom
 
@@ -822,7 +822,7 @@ namespace Bubbles
                 // common comands popup
                 X = parent.Right; // child left = parent right
                 Y = parent.Bottom - child.Height; // child bottom = parent bottom
-                if (popup == "getname" || popup == "resources") // GetNameDlg
+                if (popup == "getname" || popup == "resources" || popup == "bookmarks")
                     Y = parent.Top; // child top = parent top
 
                 if (popup == "add")

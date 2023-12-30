@@ -6,6 +6,9 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Globalization;
 using Mindjet.MindManager.Interop;
+using System.Threading;
+using System.IO;
+using System.Linq;
 
 namespace Bubbles
 {
@@ -45,6 +48,55 @@ namespace Bubbles
             else
             {
 
+            }
+
+            string path = MMUtils.MindManager.GetPath(MmDirectory.mmDirectoryIcons);
+            DirectoryInfo di = new DirectoryInfo(path);
+
+            foreach (FileInfo fi in di.GetFiles())
+            {
+                string _path = fi.FullName;
+                string signature = MMUtils.MindManager.Utilities.GetCustomIconSignature(_path);
+
+                if (!StockIconsDupes.Keys.Contains(signature))
+                    StockIconsDupes.Add(signature, _path);
+
+                string stockicon = "stock" + Path.GetFileNameWithoutExtension(_path);
+                MmStockIcon MMstockicon = BubbleIcons.StockIconFromString(stockicon);
+                StockIcons.Add(stockicon, MMstockicon);
+            }
+
+            GetCustomIcons(di);
+            di = new DirectoryInfo(m_dataPath + "IconDB");
+            foreach (FileInfo fi in di.GetFiles())
+            {
+                string signature = Path.GetFileNameWithoutExtension(fi.FullName);
+                if (!CustomIcons.Keys.Contains(signature))
+                    CustomIcons.Add(signature, fi.FullName);
+            }
+            StockIconsDupes.Clear();
+        }
+
+        static void GetCustomIcons(DirectoryInfo directoryInfo)
+        {
+            foreach (var directory in directoryInfo.GetDirectories())
+            {
+                foreach (FileInfo fi in directory.GetFiles())
+                {
+                    string path = fi.FullName;
+                    string signature = MMUtils.MindManager.Utilities.GetCustomIconSignature(path);
+
+                    if (StockIconsDupes.Keys.Contains(signature))
+                    {
+                        string stockicon = "stock" + Path.GetFileNameWithoutExtension(path);
+                        MmStockIcon MMstockicon = BubbleIcons.StockIconFromString(stockicon);
+                        if (!StockIcons.Keys.Contains(stockicon))
+                            StockIcons.Add(stockicon, MMstockicon);
+                    }
+                    else if (!CustomIcons.Keys.Contains(signature))
+                        CustomIcons.Add(signature, path);
+                }
+                GetCustomIcons(directory);
             }
         }
 
@@ -150,6 +202,21 @@ namespace Bubbles
             return true;
         }
 
+        /// <summary>
+        /// Check if file exists, unknowing its extension
+        /// </summary>
+        /// <param name="fileName">Basically, icon signature)</param>
+        public static string GetIconFile(string fileName)
+        {
+            DirectoryInfo dir = new DirectoryInfo(m_dataPath + "IconDB");
+            FileInfo[] files = dir.GetFiles(fileName + ".*");
+
+            if (files.Length > 0)
+                return files[0].FullName;
+            else
+                return "";
+        }
+
         #region DateTime
 
         public static DateTime NULLDATE = new DateTime(1899, 12, 30, 0, 0, 0);
@@ -223,7 +290,7 @@ namespace Bubbles
             if (aTopic == null)
                 return false;
 
-            MapMarkerGroup _mmg = GetMapMarkerGroup(aTopic.Document, groupName, groupID, true, mutex);
+            MapMarkerGroup _mmg = GetMapMarkerGroup(groupName, groupID, true, mutex);
             if (_mmg == null)
                 return false;
 
@@ -251,25 +318,14 @@ namespace Bubbles
         /// <param name="aCreateNew">if to create marker group if not found</param>
         /// <param name="mutex">If group must be MutuallyExclusive</param>
         /// <returns>MapMarkerGroup</returns>
-		public static MapMarkerGroup GetMapMarkerGroup(Document aDocument, string aName, string groupID = "", bool aCreateNew = true, bool mutex = false)
+		public static MapMarkerGroup GetMapMarkerGroup(string aName, string groupID = "", bool aCreateNew = true, bool mutex = false)
         {
-            foreach (MapMarkerGroup _mmg1 in aDocument.MapMarkerGroups)
+            foreach (MapMarkerGroup _mmg1 in MMUtils.ActiveDocument.MapMarkerGroups)
             {
-                string group_ID = "";
+                //string group_ID = "";
 
                 if (_mmg1.Type == MmMapMarkerGroupType.mmMapMarkerGroupTypeTextLabel)
                 {
-                    if (_mmg1.ContainsAttributesNamespace(ATTR_MARKERS))
-                        group_ID = _mmg1.GetAttributes(ATTR_MARKERS).GetAttributeValue(URI_MARKERS);
-
-                    // search group by CommonLists ID first
-                    if (!String.IsNullOrEmpty(group_ID) && group_ID == groupID) // group found by CommonLists ID
-                    {
-                        if (aName != "" && _mmg1.Name != aName) // group name doesn't match?
-                            _mmg1.Name = aName; // make it correct
-                        return _mmg1;
-                    }
-
                     if (groupID == _mmg1.GroupId) // group found by given ID
                     {
                         if (aName != "" && _mmg1.Name != aName)
@@ -279,9 +335,8 @@ namespace Bubbles
 
                     // not found by ID, search by name
                     if (_mmg1.Name == aName)
-                    {
                         return _mmg1;
-                    }
+
                 }
             }
             if (aCreateNew)
@@ -289,9 +344,7 @@ namespace Bubbles
                 // Not found - create new
                 try
                 {
-                    MapMarkerGroup MarkerGroup = aDocument.MapMarkerGroups.AddTextLabelMarkerGroup(aName);
-                    if (groupID != "") // from Common Lists
-                        MarkerGroup.GetAttributes(ATTR_MARKERS).SetAttributeValue(URI_MARKERS, groupID);
+                    MapMarkerGroup MarkerGroup = MMUtils.ActiveDocument.MapMarkerGroups.AddTextLabelMarkerGroup(aName);
                     MarkerGroup.MutuallyExclusive = mutex;
                     return MarkerGroup;
                 }
@@ -311,8 +364,7 @@ namespace Bubbles
         public static bool AddTextLabelMarkerToGroup(MapMarkerGroup mg, string tagName, string tagID, string color = "", bool changeColor = false, bool resourceMarker = false)
         {
             string groupId = mg.GroupId;
-            //InitMarkersList();
-            //GetNode(groupId, tagName);
+
             MapMarker tag = GetTagFromGroup(mg, tagName);
 
             if (tag == null) // There is no marker in the group
@@ -330,15 +382,12 @@ namespace Bubbles
                     }
                     if (color != "")
                     {
-#if !MINDJET20 // tag and resource colors can be set only in MM21 and above
-                        int c = int.Parse(color.Substring(1), System.Globalization.NumberStyles.HexNumber);
+                        int c = int.Parse(color.Substring(1), NumberStyles.HexNumber);
                         tag.Color.SetValue(c);
-#endif
                     }
                 }
                 catch { MessageBox.Show("Problem with adding tag"); return false; }
             }
-#if !MINDJET20 // tag and resource colors can be set only in MM21 and above
             else if (changeColor) // tag exists. Check for tag color
             {
                 int tagColor = tag.Color.Value;
@@ -355,7 +404,6 @@ namespace Bubbles
                         tag.Color.SetValue(c);
                 }
             }
-#endif
             return true;
         }
 
@@ -371,6 +419,137 @@ namespace Bubbles
             {
                 if (mm.Label == tagName)
                     return mm;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Check if icon exists in the Map Index. If not, add icon to Map Index
+        /// </summary>
+        /// <param name="aIcon">Stock Icon to check</param>
+        /// <param name="signature">Custom Icon signature</param>
+        /// <param name="iconName">Icon name</param>
+        /// <param name="path">Path to custom icon</param>
+        public static void GetIcon(MmStockIcon aIcon, string signature, string iconName, string path, 
+            string groupName = "", bool mutex = false)
+        {
+            foreach (MapMarkerGroup mg in MMUtils.ActiveDocument.MapMarkerGroups)
+            {
+                if (mg.Type == MmMapMarkerGroupType.mmMapMarkerGroupTypeIcon || mg.Type == MmMapMarkerGroupType.mmMapMarkerGroupTypeSingleIcon)
+                {
+                    if (groupName != "" && mg.Name != groupName)
+                        continue; // we need a certain group
+
+                    foreach (MapMarker icon in mg)
+                    {
+                        if (icon.Icon.Type == MmIconType.mmIconTypeStock)
+                        {
+                            if (icon.Icon.StockIcon == aIcon)
+                            {
+                                if (groupName == "" || mg.Name == groupName)
+                                    return; // icon exists already
+
+                                // Ups. Icon is located in another group.
+                                if (!RelocateIcon(mg, groupName, icon)) 
+                                    return;
+                                break;
+                            }
+                        }
+                        else // custom icon
+                        {
+                            if (icon.Icon.CustomIconSignature == signature)
+                            {
+                                if (groupName == "" || mg.Name == groupName)
+                                    return; // icon exists already
+
+                                // Ups. Icon is located in another group.
+                                if (!RelocateIcon(mg, groupName, icon))
+                                    return;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Icon not found. Add icon to the group
+            MapMarkerGroup _mg;
+            if (groupName == "")
+                _mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeSingleIcon);
+            else
+                _mg = GetIconGroup(groupName, mutex);
+
+            if (_mg != null)
+            {
+                if (signature == "")
+                    _mg.AddStockIconMarker(iconName, aIcon);
+                else
+                    _mg.AddCustomIconMarker(iconName, path);
+            }
+        }
+
+        /// <summary>
+        /// Get icon group or create one.
+        /// </summary>
+        /// <param name="groupName">Group name</param>
+        /// <param name="mutex"></param>
+        /// <returns></returns>
+        static MapMarkerGroup GetIconGroup(string groupName, bool mutex, bool createNew = false)
+        {
+            foreach (MapMarkerGroup mg in MMUtils.ActiveDocument.MapMarkerGroups)
+            {
+                if (mg.Type == MmMapMarkerGroupType.mmMapMarkerGroupTypeIcon)
+                    if (mg.Name == groupName) return mg;
+            }
+
+            // Group doesn't exist. Create group.
+            if (createNew)
+            {
+                MapMarkerGroup _mg = MMUtils.ActiveDocument.MapMarkerGroups.AddIconMarkerGroup(groupName);
+                if (_mg != null)
+                    _mg.MutuallyExclusive = mutex;
+                return _mg;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Delete or leave icon in the icon group
+        /// </summary>
+        /// <param name="mg">Marker group where icon is located.</param>
+        /// <param name="groupName">User marker group name.</param>
+        /// <param name="icon">Icon to operate with.</param>
+        /// <returns>False - icon remains in the group. True - icon will be deleted.</returns>
+        static bool RelocateIcon(MapMarkerGroup mg, string groupName, MapMarker icon)
+        {
+            if (mg.Type == MmMapMarkerGroupType.mmMapMarkerGroupTypeSingleIcon)
+            {
+                // Icon found in the Single Icons group.
+                // Delete it (will be added to our group below).
+                icon.Delete();
+            }
+            else // // Icon found in another group. Ask user what to do...
+            {
+                if (MessageBox.Show(String.Format(Utils.getString("askuser_whattodo_withicon"), mg.Name, groupName), "",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    icon.Delete(); // User wants to move icon to his group.
+                                   // Delete icon (will be added to the group below).
+                else
+                    return false; // Icon remains in another group.
+            }
+            return true;
+        }
+
+        public static List<MapMarker> GetIconsFromGroup(string groupName)
+        {
+            MapMarkerGroup mg = GetIconGroup(groupName, false);
+
+            if (mg != null)
+            {
+                List<MapMarker> icons = new List<MapMarker>();
+                foreach (MapMarker icon in mg)
+                    icons.Add(icon);
+                return icons;
             }
             return null;
         }
@@ -401,6 +580,10 @@ namespace Bubbles
 
         public const string ATTR_MARKERS = "PALMAROSS$$$MARKERS";
         public const string URI_MARKERS = "UriUniqueID";
+
+        public static Dictionary<string, string> StockIconsDupes = new Dictionary<string, string>();
+        public static Dictionary<string, MmStockIcon> StockIcons = new Dictionary<string, MmStockIcon>();
+        public static Dictionary<string, string> CustomIcons = new Dictionary<string, string>();
     }
 
     class ScalingFactor

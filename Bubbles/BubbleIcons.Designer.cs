@@ -31,9 +31,15 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BubbleIcons));
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsManage = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.BI_new = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_removeallfromtopic = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.BI_group = new System.Windows.Forms.ToolStripMenuItem();
+            this.BI_mutex = new System.Windows.Forms.ToolStripMenuItem();
+            this.BI_addtomap = new System.Windows.Forms.ToolStripMenuItem();
+            this.BI_getfrommap = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.label1 = new System.Windows.Forms.Label();
             this.Manage = new System.Windows.Forms.PictureBox();
@@ -43,7 +49,7 @@
             this.BI_rename = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.p1 = new System.Windows.Forms.PictureBox();
-            this.contextMenuStrip1.SuspendLayout();
+            this.cmsManage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
             this.cmsIcon.SuspendLayout();
@@ -54,14 +60,20 @@
             // 
             this.toolTip1.ShowAlways = true;
             // 
-            // contextMenuStrip1
+            // cmsManage
             // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsManage.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.cmsManage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.BI_new,
-            this.BI_removeallfromtopic});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(226, 70);
+            this.BI_removeallfromtopic,
+            this.toolStripSeparator1,
+            this.BI_group,
+            this.BI_mutex,
+            this.BI_addtomap,
+            this.BI_getfrommap,
+            this.toolStripSeparator2});
+            this.cmsManage.Name = "contextMenuStrip1";
+            this.cmsManage.Size = new System.Drawing.Size(226, 170);
             // 
             // BI_new
             // 
@@ -74,6 +86,40 @@
             this.BI_removeallfromtopic.Name = "BI_removeallfromtopic";
             this.BI_removeallfromtopic.Size = new System.Drawing.Size(225, 22);
             this.BI_removeallfromtopic.Text = "Удалить все значки на теме";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(222, 6);
+            // 
+            // BI_group
+            // 
+            this.BI_group.Name = "BI_group";
+            this.BI_group.Size = new System.Drawing.Size(225, 22);
+            this.BI_group.Text = "Group";
+            // 
+            // BI_mutex
+            // 
+            this.BI_mutex.Name = "BI_mutex";
+            this.BI_mutex.Size = new System.Drawing.Size(225, 22);
+            this.BI_mutex.Text = "Mutually Exclusive";
+            // 
+            // BI_addtomap
+            // 
+            this.BI_addtomap.Name = "BI_addtomap";
+            this.BI_addtomap.Size = new System.Drawing.Size(225, 22);
+            this.BI_addtomap.Text = "Add to Map";
+            // 
+            // BI_getfrommap
+            // 
+            this.BI_getfrommap.Name = "BI_getfrommap";
+            this.BI_getfrommap.Size = new System.Drawing.Size(225, 22);
+            this.BI_getfrommap.Text = "Get from Map";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(222, 6);
             // 
             // label1
             // 
@@ -162,7 +208,7 @@
             this.Name = "BubbleIcons";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.contextMenuStrip1.ResumeLayout(false);
+            this.cmsManage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
             this.cmsIcon.ResumeLayout(false);
@@ -174,7 +220,7 @@
 
         #endregion
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip cmsManage;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripMenuItem BI_new;
@@ -186,5 +232,11 @@
         public System.Windows.Forms.PictureBox pictureHandle;
         public System.Windows.Forms.PictureBox Manage;
         private System.Windows.Forms.PictureBox p1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem BI_group;
+        private System.Windows.Forms.ToolStripMenuItem BI_mutex;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem BI_addtomap;
+        private System.Windows.Forms.ToolStripMenuItem BI_getfrommap;
     }
 }

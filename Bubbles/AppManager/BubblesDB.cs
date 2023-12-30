@@ -25,14 +25,13 @@ namespace Bubbles
                 );
         }
 
-        public void AddIcon(string name, string filename, int order, int stickID, int groupID)
+        public void AddIcon(string name, string filename, int order, int stickID)
         {
             m_db.ExecuteNonQuery("insert into ICONS values(`"
                 + name + "`, `"
                 + filename + "`, "
                 + order + ", "
                 + stickID + ", "
-                + groupID + ", "
                 + "'', 0"
                 + ");"
                 );
@@ -70,7 +69,7 @@ namespace Bubbles
                 );
         }
 
-        public void AddStick(int id, string name, string type, int start, string position, int configID)
+        public void AddStick(int id, string name, string type, int start, string position, int configID, int group)
         {
             m_db.ExecuteNonQuery("insert into STICKS values("
                 + id + ", `"
@@ -79,6 +78,7 @@ namespace Bubbles
                 + start + ", `"
                 + position + "`, "
                 + configID + ", "
+                + group + ", "
                 + "'', '', 0, 0"
                 + ");"
                 );
@@ -197,11 +197,12 @@ namespace Bubbles
             // "increment###start,end,step,position"
 
             m_db.ExecuteNonQuery("CREATE TABLE STICKS(id integer unique, name text, " +
-                "type text, start integer, position text, configID integer, " +
+                "type text, start integer, position text, configID integer, _group integer, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
             // name = stick name (by user)
             // type - icons, bookmarks, etc.
             // start - run sticker when MM started
+            // group: 0 - no group, 1 - no mutually exclusive group, 2 - mutually exclusive group
             // position - H#5120,0:5126,363;0,0:2,358 (Horizontal;screen1Location;screen2Location)
 
             m_db.ExecuteNonQuery("CREATE TABLE NOTEGROUPS(id INTEGER PRIMARY KEY, name text, " +
@@ -209,9 +210,11 @@ namespace Bubbles
 
             //// Sticks ////
             m_db.ExecuteNonQuery("CREATE TABLE ICONS(name text, filename text, _order integer, " +
-                "stickID int, groupID int, reserved1 text, reserved2 integer);");
-            m_db.ExecuteNonQuery("CREATE TABLE ICONGROUPS(id INTEGER PRIMARY KEY, name text, " +
-                "mutexclusive int, reserved1 text, reserved2 integer);");
+                "stickID int, reserved1 text, reserved2 integer);");
+            // group: 0 - no group, 1 - no mutually exclusive group, 2 - mutually exclusive group
+            // filename: file name for stock icons, signature for custom icons
+            //m_db.ExecuteNonQuery("CREATE TABLE ICONGROUPS(id INTEGER PRIMARY KEY, name text, " +
+            //    "mutexclusive int, reserved1 text, reserved2 integer);");
             m_db.ExecuteNonQuery("CREATE TABLE RESOURCES(name text, icon int, color string, " +
                 "groupID int, reserved1 text, reserved2 integer);");
             m_db.ExecuteNonQuery("CREATE TABLE RESOURCEGROUPS(id INTEGER PRIMARY KEY, name text, " +
@@ -263,18 +266,18 @@ namespace Bubbles
             Random r = new Random();
 
             int id = r.Next();
-            AddStick(id, Utils.getString("BubbleIcons.bubble.tooltip"), StickUtils.typeicons, 0, "", 0);
+            AddStick(id, Utils.getString("BubbleIcons.bubble.tooltip"), StickUtils.typeicons, 0, "", 0, 0);
 
-            AddIcon(Utils.getString("icons.firststick.icon1"), "stockexclamation-mark", 1, id, 0); 
-            AddIcon(Utils.getString("icons.firststick.icon2"), "stockquestion-mark", 2, id, 0);
+            AddIcon(Utils.getString("icons.firststick.icon1"), "stockexclamation-mark", 1, id); 
+            AddIcon(Utils.getString("icons.firststick.icon2"), "stockquestion-mark", 2, id);
 
             // Add first TaskInfo stick
             id = r.Next();
-            AddStick(id, Utils.getString("BubbleTaskInfo.bubble.tooltip"), StickUtils.typetaskinfo, 0, "", 0);
+            AddStick(id, Utils.getString("BubbleTaskInfo.bubble.tooltip"), StickUtils.typetaskinfo, 0, "", 0, 0);
 
             // Add first sources
             id = r.Next();
-            AddStick(id, Utils.getString("BubbleMySources.bubble.tooltip"), StickUtils.typesources, 0, "", 0);
+            AddStick(id, Utils.getString("BubbleMySources.bubble.tooltip"), StickUtils.typesources, 0, "", 0, 0);
 
             AddSource(Utils.getString("mysources.first1.text"), "https://palmaross.com/", "http", 1, id);
             AddSource(Utils.getString("mysources.first2.text"), Utils.dllPath + "Sticks.chm", "file", 2, id);

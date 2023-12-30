@@ -658,7 +658,7 @@ namespace Bubbles
                 MmStockIcon icon = BubbleIcons.StockIconFromString(fileName);
                 if (icon != 0)
                 {
-                    BubbleIcons.GetIcon(icon, "", "", "");
+                    Utils.GetIcon(icon, "", "", "");
 
                     if (!t.AllIcons.ContainsStockIcon(icon))
                         t.AllIcons.AddStockIcon(icon);
@@ -670,7 +670,7 @@ namespace Bubbles
                 if (System.IO.File.Exists(path))
                 {
                     string signature = MMUtils.MindManager.Utilities.GetCustomIconSignature(path);
-                    BubbleIcons.GetIcon(0, signature, "", path);
+                    Utils.GetIcon(0, signature, "", path);
 
                     if (!t.AllIcons.ContainsCustomIcon(signature))
                         t.AllIcons.AddCustomIconFromMap(signature);

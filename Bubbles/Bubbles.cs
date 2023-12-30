@@ -436,6 +436,8 @@ namespace Bubbles
 
             DocumentStorage.Unsubscribe(this);
 
+            Utils.StockIcons.Clear();
+
             m_bCreated = false;
         }
 

@@ -23,7 +23,6 @@ namespace Bubbles
                     int i = Convert.ToInt32(dr["icon"]);
                     switch (i)
                     {
-                        case 0: txt0.Text = dr["name"].ToString(); break;
                         case 1: txt1.Text = dr["name"].ToString(); break;
                         case 2: txt2.Text = dr["name"].ToString(); break;
                         case 3: txt3.Text = dr["name"].ToString(); break;
@@ -43,7 +42,6 @@ namespace Bubbles
             // Update RESOURCEGROUPS database and ResourceIcons dictionary
             using (BubblesDB db = new BubblesDB())
             {
-                db.ExecuteNonQuery("update RESOURCEGROUPS set name=`" + txt0.Text.Trim() +  "` where icon=" + 0 + "");
                 db.ExecuteNonQuery("update RESOURCEGROUPS set name=`" + txt1.Text.Trim() + "` where icon=" + 1 + "");
                 db.ExecuteNonQuery("update RESOURCEGROUPS set name=`" + txt2.Text.Trim() + "` where icon=" + 2 + "");
                 db.ExecuteNonQuery("update RESOURCEGROUPS set name=`" + txt3.Text.Trim() + "` where icon=" + 3 + "");

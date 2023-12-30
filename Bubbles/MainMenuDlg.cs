@@ -251,7 +251,7 @@ namespace Bubbles
                 defaultName = Utils.getString("BubbleOrganizer.bubble.tooltip");
             }
 
-            string orientation = "H0", location = "", name = ""; int id = startId; // "H0" - Horizontal&Not collapsed
+            string orientation = "H0", location = "", name = ""; int id = startId, group = 0; // "H0" - Horizontal&Not collapsed
 
             if (StickClicked(stickType, ref orientation, ref location, ref name, ref id) == 2)
             {
@@ -315,7 +315,7 @@ namespace Bubbles
                     // create "My Icons" stick
                     name = Utils.getString(type + ".bubble.tooltip");
                     id = Utils.StickID();
-                    db.AddStick(id, name, type, 0, "", 0);
+                    db.AddStick(id, name, type, 0, "", 0, 0);
                 }
             }
 

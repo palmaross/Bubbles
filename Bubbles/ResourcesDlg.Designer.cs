@@ -33,29 +33,15 @@
             this.ListResources = new System.Windows.Forms.ListView();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
-            this.pManageIcons = new System.Windows.Forms.PictureBox();
-            this.Sort = new System.Windows.Forms.PictureBox();
+            this.pRemoveFilter = new System.Windows.Forms.PictureBox();
+            this.pMore = new System.Windows.Forms.PictureBox();
             this.pHelp = new System.Windows.Forms.PictureBox();
             this.pClose = new System.Windows.Forms.PictureBox();
-            this.Edit = new System.Windows.Forms.PictureBox();
-            this.Delete = new System.Windows.Forms.PictureBox();
-            this.New = new System.Windows.Forms.PictureBox();
-            this.btnAddToTopic = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
-            this.panelResourceName = new System.Windows.Forms.Panel();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.btnOk = new System.Windows.Forms.Button();
-            this.txtRenameResource = new System.Windows.Forms.TextBox();
-            this.lblResourceName = new System.Windows.Forms.Label();
-            this.btnAddToMap = new System.Windows.Forms.Button();
             this.txtResources = new System.Windows.Forms.TextBox();
-            this.pAddResources = new System.Windows.Forms.PictureBox();
+            this.ResourceEnter = new System.Windows.Forms.PictureBox();
             this.pHandle = new System.Windows.Forms.PictureBox();
-            this.cmsSort = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.sortAZ = new System.Windows.Forms.ToolStripMenuItem();
-            this.sortZA = new System.Windows.Forms.ToolStripMenuItem();
-            this.sortByIcon = new System.Windows.Forms.ToolStripMenuItem();
             this.panelIcons = new System.Windows.Forms.Panel();
             this.p7 = new System.Windows.Forms.PictureBox();
             this.p6 = new System.Windows.Forms.PictureBox();
@@ -64,26 +50,39 @@
             this.p3 = new System.Windows.Forms.PictureBox();
             this.p2 = new System.Windows.Forms.PictureBox();
             this.p1 = new System.Windows.Forms.PictureBox();
-            this.p0 = new System.Windows.Forms.PictureBox();
-            this.cmsResource = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.AddToTopic = new System.Windows.Forms.ToolStripMenuItem();
             this.AddToMap = new System.Windows.Forms.ToolStripMenuItem();
-            this.ChangeIcon = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.r_rename = new System.Windows.Forms.ToolStripMenuItem();
+            this.ChangeIcon = new System.Windows.Forms.ToolStripMenuItem();
+            this.RemoveIcon = new System.Windows.Forms.ToolStripMenuItem();
             this.r_delete = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.r_filter = new System.Windows.Forms.ToolStripMenuItem();
+            this.filter_selected = new System.Windows.Forms.ToolStripMenuItem();
+            this.filter_icon = new System.Windows.Forms.ToolStripMenuItem();
+            this.filter_remove = new System.Windows.Forms.ToolStripMenuItem();
+            this.r_newresource = new System.Windows.Forms.ToolStripMenuItem();
+            this.ManageIcons = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.r_sort = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortAZ = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortZA = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortByIcon = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.pCorrect = new System.Windows.Forms.PictureBox();
+            this.txtRename = new System.Windows.Forms.TextBox();
+            this.pResourceMode = new System.Windows.Forms.PictureBox();
+            this.pNewResource = new System.Windows.Forms.PictureBox();
+            this.pAssignResource = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pManageIcons)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Sort)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pRemoveFilter)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pMore)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHelp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pClose)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Edit)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Delete)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.New)).BeginInit();
-            this.panelResourceName.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pAddResources)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ResourceEnter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHandle)).BeginInit();
-            this.cmsSort.SuspendLayout();
             this.panelIcons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p6)).BeginInit();
@@ -92,9 +91,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.p3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.p0)).BeginInit();
-            this.cmsResource.SuspendLayout();
+            this.cmsMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pCorrect)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pResourceMode)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pNewResource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pAssignResource)).BeginInit();
             this.SuspendLayout();
             // 
             // ListResources
@@ -103,14 +104,14 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.ListResources.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.ListResources.HideSelection = false;
-            this.ListResources.Location = new System.Drawing.Point(1, 40);
+            this.ListResources.Location = new System.Drawing.Point(2, 36);
             this.ListResources.Name = "ListResources";
             this.ListResources.ShowItemToolTips = true;
-            this.ListResources.Size = new System.Drawing.Size(182, 155);
+            this.ListResources.Size = new System.Drawing.Size(140, 125);
             this.ListResources.SmallImageList = this.imageList1;
             this.ListResources.TabIndex = 0;
             this.ListResources.UseCompatibleStateImageBehavior = false;
-            this.ListResources.View = System.Windows.Forms.View.List;
+            this.ListResources.View = System.Windows.Forms.View.SmallIcon;
             this.ListResources.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listResources_MouseClick);
             // 
             // imageList1
@@ -131,49 +132,47 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.pManageIcons);
-            this.panel1.Controls.Add(this.Sort);
+            this.panel1.Controls.Add(this.pRemoveFilter);
+            this.panel1.Controls.Add(this.pMore);
             this.panel1.Controls.Add(this.pHelp);
             this.panel1.Controls.Add(this.pClose);
-            this.panel1.Controls.Add(this.Edit);
-            this.panel1.Controls.Add(this.Delete);
-            this.panel1.Controls.Add(this.New);
             this.panel1.Location = new System.Drawing.Point(1, 1);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(182, 22);
+            this.panel1.Size = new System.Drawing.Size(142, 18);
             this.panel1.TabIndex = 1;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             // 
-            // pManageIcons
+            // pRemoveFilter
             // 
-            this.pManageIcons.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pManageIcons.Image = ((System.Drawing.Image)(resources.GetObject("pManageIcons.Image")));
-            this.pManageIcons.Location = new System.Drawing.Point(76, 1);
-            this.pManageIcons.Name = "pManageIcons";
-            this.pManageIcons.Size = new System.Drawing.Size(20, 20);
-            this.pManageIcons.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pManageIcons.TabIndex = 6;
-            this.pManageIcons.TabStop = false;
-            this.pManageIcons.Click += new System.EventHandler(this.pManageIcons_Click);
+            this.pRemoveFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pRemoveFilter.Image = ((System.Drawing.Image)(resources.GetObject("pRemoveFilter.Image")));
+            this.pRemoveFilter.Location = new System.Drawing.Point(55, 1);
+            this.pRemoveFilter.Name = "pRemoveFilter";
+            this.pRemoveFilter.Size = new System.Drawing.Size(16, 16);
+            this.pRemoveFilter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pRemoveFilter.TabIndex = 46;
+            this.pRemoveFilter.TabStop = false;
+            this.pRemoveFilter.Visible = false;
+            this.pRemoveFilter.Click += new System.EventHandler(this.pRemoveFilter_Click);
             // 
-            // Sort
+            // pMore
             // 
-            this.Sort.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Sort.Image = ((System.Drawing.Image)(resources.GetObject("Sort.Image")));
-            this.Sort.Location = new System.Drawing.Point(112, 3);
-            this.Sort.Name = "Sort";
-            this.Sort.Size = new System.Drawing.Size(16, 16);
-            this.Sort.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.Sort.TabIndex = 5;
-            this.Sort.TabStop = false;
-            this.Sort.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Sort_MouseClick);
+            this.pMore.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pMore.Image = ((System.Drawing.Image)(resources.GetObject("pMore.Image")));
+            this.pMore.Location = new System.Drawing.Point(3, 1);
+            this.pMore.Name = "pMore";
+            this.pMore.Size = new System.Drawing.Size(16, 16);
+            this.pMore.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pMore.TabIndex = 6;
+            this.pMore.TabStop = false;
+            this.pMore.Click += new System.EventHandler(this.pManageIcons_Click);
             // 
             // pHelp
             // 
             this.pHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pHelp.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pHelp.Image = ((System.Drawing.Image)(resources.GetObject("pHelp.Image")));
-            this.pHelp.Location = new System.Drawing.Point(142, 3);
+            this.pHelp.Location = new System.Drawing.Point(102, 1);
             this.pHelp.Name = "pHelp";
             this.pHelp.Size = new System.Drawing.Size(16, 16);
             this.pHelp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -186,7 +185,7 @@
             this.pClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pClose.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pClose.Image = ((System.Drawing.Image)(resources.GetObject("pClose.Image")));
-            this.pClose.Location = new System.Drawing.Point(162, 3);
+            this.pClose.Location = new System.Drawing.Point(122, 1);
             this.pClose.Name = "pClose";
             this.pClose.Size = new System.Drawing.Size(16, 16);
             this.pClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -194,178 +193,46 @@
             this.pClose.TabStop = false;
             this.pClose.Click += new System.EventHandler(this.Close_Click);
             // 
-            // Edit
+            // toolTip1
             // 
-            this.Edit.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Edit.Image = ((System.Drawing.Image)(resources.GetObject("Edit.Image")));
-            this.Edit.Location = new System.Drawing.Point(26, 1);
-            this.Edit.Name = "Edit";
-            this.Edit.Size = new System.Drawing.Size(20, 20);
-            this.Edit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.Edit.TabIndex = 2;
-            this.Edit.TabStop = false;
-            this.Edit.Click += new System.EventHandler(this.Edit_Click);
-            // 
-            // Delete
-            // 
-            this.Delete.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Delete.Image = ((System.Drawing.Image)(resources.GetObject("Delete.Image")));
-            this.Delete.Location = new System.Drawing.Point(51, 1);
-            this.Delete.Name = "Delete";
-            this.Delete.Size = new System.Drawing.Size(20, 20);
-            this.Delete.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.Delete.TabIndex = 1;
-            this.Delete.TabStop = false;
-            this.Delete.Click += new System.EventHandler(this.Delete_Click);
-            // 
-            // New
-            // 
-            this.New.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.New.Image = ((System.Drawing.Image)(resources.GetObject("New.Image")));
-            this.New.Location = new System.Drawing.Point(1, 1);
-            this.New.Name = "New";
-            this.New.Size = new System.Drawing.Size(20, 20);
-            this.New.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.New.TabIndex = 0;
-            this.New.TabStop = false;
-            this.New.Click += new System.EventHandler(this.New_Click);
-            // 
-            // btnAddToTopic
-            // 
-            this.btnAddToTopic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAddToTopic.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnAddToTopic.Location = new System.Drawing.Point(0, 196);
-            this.btnAddToTopic.Name = "btnAddToTopic";
-            this.btnAddToTopic.Size = new System.Drawing.Size(93, 23);
-            this.btnAddToTopic.TabIndex = 2;
-            this.btnAddToTopic.Text = "Add To Topic";
-            this.btnAddToTopic.UseVisualStyleBackColor = true;
-            this.btnAddToTopic.MouseClick += new System.Windows.Forms.MouseEventHandler(this.btnAddToTopic_MouseClick);
-            // 
-            // panelResourceName
-            // 
-            this.panelResourceName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelResourceName.Controls.Add(this.btnCancel);
-            this.panelResourceName.Controls.Add(this.btnOk);
-            this.panelResourceName.Controls.Add(this.txtRenameResource);
-            this.panelResourceName.Controls.Add(this.lblResourceName);
-            this.panelResourceName.Location = new System.Drawing.Point(0, 59);
-            this.panelResourceName.Name = "panelResourceName";
-            this.panelResourceName.Size = new System.Drawing.Size(184, 80);
-            this.panelResourceName.TabIndex = 3;
-            this.panelResourceName.Visible = false;
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.Location = new System.Drawing.Point(106, 50);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(72, 23);
-            this.btnCancel.TabIndex = 3;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
-            // btnOk
-            // 
-            this.btnOk.Location = new System.Drawing.Point(6, 50);
-            this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(72, 23);
-            this.btnOk.TabIndex = 2;
-            this.btnOk.Text = "OK";
-            this.btnOk.UseVisualStyleBackColor = true;
-            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
-            // 
-            // txtRenameResource
-            // 
-            this.txtRenameResource.Location = new System.Drawing.Point(6, 24);
-            this.txtRenameResource.Name = "txtRenameResource";
-            this.txtRenameResource.Size = new System.Drawing.Size(172, 20);
-            this.txtRenameResource.TabIndex = 1;
-            this.txtRenameResource.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtRenameResource_KeyDown);
-            // 
-            // lblResourceName
-            // 
-            this.lblResourceName.AutoSize = true;
-            this.lblResourceName.Location = new System.Drawing.Point(4, 7);
-            this.lblResourceName.Name = "lblResourceName";
-            this.lblResourceName.Size = new System.Drawing.Size(76, 13);
-            this.lblResourceName.TabIndex = 0;
-            this.lblResourceName.Text = "Имя ресурса:";
-            // 
-            // btnAddToMap
-            // 
-            this.btnAddToMap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAddToMap.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnAddToMap.Location = new System.Drawing.Point(92, 196);
-            this.btnAddToMap.Name = "btnAddToMap";
-            this.btnAddToMap.Size = new System.Drawing.Size(91, 23);
-            this.btnAddToMap.TabIndex = 39;
-            this.btnAddToMap.Text = "Add To Map";
-            this.btnAddToMap.UseVisualStyleBackColor = true;
-            this.btnAddToMap.Click += new System.EventHandler(this.btnAddToMap_Click);
+            this.toolTip1.ShowAlways = true;
             // 
             // txtResources
             // 
+            this.txtResources.BackColor = System.Drawing.Color.AliceBlue;
             this.txtResources.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtResources.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.txtResources.Location = new System.Drawing.Point(0, 23);
+            this.txtResources.Location = new System.Drawing.Point(16, 19);
             this.txtResources.Name = "txtResources";
-            this.txtResources.Size = new System.Drawing.Size(183, 20);
+            this.txtResources.Size = new System.Drawing.Size(112, 20);
             this.txtResources.TabIndex = 4;
-            this.txtResources.Text = "Resources (separated by commas)";
+            this.txtResources.Text = "Resources";
             this.txtResources.Enter += new System.EventHandler(this.txtResources_Enter);
             this.txtResources.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtResources_KeyDown);
             this.txtResources.Leave += new System.EventHandler(this.txtResources_Leave);
             // 
-            // pAddResources
+            // ResourceEnter
             // 
-            this.pAddResources.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pAddResources.Image = ((System.Drawing.Image)(resources.GetObject("pAddResources.Image")));
-            this.pAddResources.Location = new System.Drawing.Point(167, 23);
-            this.pAddResources.Name = "pAddResources";
-            this.pAddResources.Size = new System.Drawing.Size(16, 16);
-            this.pAddResources.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pAddResources.TabIndex = 6;
-            this.pAddResources.TabStop = false;
-            this.pAddResources.Click += new System.EventHandler(this.pAddResources_Click);
+            this.ResourceEnter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ResourceEnter.Image = ((System.Drawing.Image)(resources.GetObject("ResourceEnter.Image")));
+            this.ResourceEnter.Location = new System.Drawing.Point(127, 19);
+            this.ResourceEnter.Name = "ResourceEnter";
+            this.ResourceEnter.Size = new System.Drawing.Size(16, 16);
+            this.ResourceEnter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ResourceEnter.TabIndex = 6;
+            this.ResourceEnter.TabStop = false;
+            this.ResourceEnter.Click += new System.EventHandler(this.ResourceEnter_Click);
             // 
             // pHandle
             // 
             this.pHandle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pHandle.Image = ((System.Drawing.Image)(resources.GetObject("pHandle.Image")));
-            this.pHandle.Location = new System.Drawing.Point(80, 221);
+            this.pHandle.Location = new System.Drawing.Point(61, 165);
             this.pHandle.Name = "pHandle";
             this.pHandle.Size = new System.Drawing.Size(24, 6);
             this.pHandle.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pHandle.TabIndex = 6;
             this.pHandle.TabStop = false;
-            // 
-            // cmsSort
-            // 
-            this.cmsSort.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sortAZ,
-            this.sortZA,
-            this.sortByIcon});
-            this.cmsSort.Name = "cmsSort";
-            this.cmsSort.Size = new System.Drawing.Size(198, 70);
-            // 
-            // sortAZ
-            // 
-            this.sortAZ.Name = "sortAZ";
-            this.sortAZ.Size = new System.Drawing.Size(197, 22);
-            this.sortAZ.Text = "Сортировать A-Z";
-            // 
-            // sortZA
-            // 
-            this.sortZA.Name = "sortZA";
-            this.sortZA.Size = new System.Drawing.Size(197, 22);
-            this.sortZA.Text = "Сортировать Z-A";
-            // 
-            // sortByIcon
-            // 
-            this.sortByIcon.Name = "sortByIcon";
-            this.sortByIcon.Size = new System.Drawing.Size(197, 22);
-            this.sortByIcon.Text = "Сортировать по метке";
             // 
             // panelIcons
             // 
@@ -377,19 +244,17 @@
             this.panelIcons.Controls.Add(this.p3);
             this.panelIcons.Controls.Add(this.p2);
             this.panelIcons.Controls.Add(this.p1);
-            this.panelIcons.Controls.Add(this.p0);
-            this.panelIcons.Location = new System.Drawing.Point(17, 154);
+            this.panelIcons.Location = new System.Drawing.Point(19, 101);
             this.panelIcons.Name = "panelIcons";
-            this.panelIcons.Size = new System.Drawing.Size(162, 20);
+            this.panelIcons.Size = new System.Drawing.Size(125, 20);
             this.panelIcons.TabIndex = 40;
             this.panelIcons.Visible = false;
             this.panelIcons.Leave += new System.EventHandler(this.panelIcons_Leave);
             // 
             // p7
             // 
-            this.p7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.p7.Image = ((System.Drawing.Image)(resources.GetObject("p7.Image")));
-            this.p7.Location = new System.Drawing.Point(142, 1);
+            this.p7.Location = new System.Drawing.Point(108, 1);
             this.p7.Name = "p7";
             this.p7.Size = new System.Drawing.Size(16, 16);
             this.p7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -399,9 +264,9 @@
             // 
             // p6
             // 
-            this.p6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.p6.BackColor = System.Drawing.SystemColors.Control;
             this.p6.Image = ((System.Drawing.Image)(resources.GetObject("p6.Image")));
-            this.p6.Location = new System.Drawing.Point(122, 1);
+            this.p6.Location = new System.Drawing.Point(90, 1);
             this.p6.Name = "p6";
             this.p6.Size = new System.Drawing.Size(16, 16);
             this.p6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -411,9 +276,8 @@
             // 
             // p5
             // 
-            this.p5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.p5.Image = ((System.Drawing.Image)(resources.GetObject("p5.Image")));
-            this.p5.Location = new System.Drawing.Point(102, 1);
+            this.p5.Location = new System.Drawing.Point(72, 1);
             this.p5.Name = "p5";
             this.p5.Size = new System.Drawing.Size(16, 16);
             this.p5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -423,110 +287,197 @@
             // 
             // p4
             // 
-            this.p4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.p4.Image = ((System.Drawing.Image)(resources.GetObject("p4.Image")));
-            this.p4.Location = new System.Drawing.Point(82, 1);
+            this.p4.Location = new System.Drawing.Point(54, 1);
             this.p4.Name = "p4";
             this.p4.Size = new System.Drawing.Size(16, 16);
             this.p4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.p4.TabIndex = 10;
+            this.p4.TabIndex = 9;
             this.p4.TabStop = false;
             this.p4.Click += new System.EventHandler(this.Icon_Click);
             // 
             // p3
             // 
-            this.p3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.p3.Image = ((System.Drawing.Image)(resources.GetObject("p3.Image")));
-            this.p3.Location = new System.Drawing.Point(62, 1);
+            this.p3.Location = new System.Drawing.Point(36, 1);
             this.p3.Name = "p3";
             this.p3.Size = new System.Drawing.Size(16, 16);
             this.p3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.p3.TabIndex = 9;
+            this.p3.TabIndex = 8;
             this.p3.TabStop = false;
             this.p3.Click += new System.EventHandler(this.Icon_Click);
             // 
             // p2
             // 
-            this.p2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.p2.Image = ((System.Drawing.Image)(resources.GetObject("p2.Image")));
-            this.p2.Location = new System.Drawing.Point(42, 1);
+            this.p2.Location = new System.Drawing.Point(18, 1);
             this.p2.Name = "p2";
             this.p2.Size = new System.Drawing.Size(16, 16);
             this.p2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.p2.TabIndex = 8;
+            this.p2.TabIndex = 7;
             this.p2.TabStop = false;
             this.p2.Click += new System.EventHandler(this.Icon_Click);
             // 
             // p1
             // 
-            this.p1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.p1.Image = ((System.Drawing.Image)(resources.GetObject("p1.Image")));
-            this.p1.Location = new System.Drawing.Point(22, 1);
+            this.p1.Location = new System.Drawing.Point(0, 1);
             this.p1.Name = "p1";
             this.p1.Size = new System.Drawing.Size(16, 16);
             this.p1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.p1.TabIndex = 7;
+            this.p1.TabIndex = 6;
             this.p1.TabStop = false;
             this.p1.Click += new System.EventHandler(this.Icon_Click);
             // 
-            // p0
+            // cmsMenu
             // 
-            this.p0.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.p0.Image = ((System.Drawing.Image)(resources.GetObject("p0.Image")));
-            this.p0.Location = new System.Drawing.Point(2, 1);
-            this.p0.Name = "p0";
-            this.p0.Size = new System.Drawing.Size(16, 16);
-            this.p0.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.p0.TabIndex = 6;
-            this.p0.TabStop = false;
-            this.p0.Click += new System.EventHandler(this.Icon_Click);
-            // 
-            // cmsResource
-            // 
-            this.cmsResource.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.AddToTopic,
             this.AddToMap,
-            this.ChangeIcon,
+            this.toolStripSeparator1,
             this.r_rename,
-            this.r_delete});
-            this.cmsResource.Name = "cmsResource";
-            this.cmsResource.Size = new System.Drawing.Size(143, 114);
+            this.ChangeIcon,
+            this.RemoveIcon,
+            this.r_delete,
+            this.toolStripSeparator2,
+            this.r_filter,
+            this.filter_selected,
+            this.filter_icon,
+            this.filter_remove,
+            this.r_newresource,
+            this.ManageIcons,
+            this.toolStripSeparator3,
+            this.r_sort,
+            this.sortAZ,
+            this.sortZA,
+            this.sortByIcon,
+            this.toolStripSeparator4});
+            this.cmsMenu.Name = "cmsResource";
+            this.cmsMenu.Size = new System.Drawing.Size(158, 380);
             // 
             // AddToTopic
             // 
             this.AddToTopic.Name = "AddToTopic";
-            this.AddToTopic.Size = new System.Drawing.Size(142, 22);
+            this.AddToTopic.Size = new System.Drawing.Size(157, 22);
             this.AddToTopic.Text = "Add To Topic";
             // 
             // AddToMap
             // 
             this.AddToMap.Name = "AddToMap";
-            this.AddToMap.Size = new System.Drawing.Size(142, 22);
+            this.AddToMap.Size = new System.Drawing.Size(157, 22);
             this.AddToMap.Text = "Add To Map";
             // 
-            // ChangeIcon
+            // toolStripSeparator1
             // 
-            this.ChangeIcon.Name = "ChangeIcon";
-            this.ChangeIcon.Size = new System.Drawing.Size(142, 22);
-            this.ChangeIcon.Text = "Change Icon";
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(154, 6);
             // 
             // r_rename
             // 
             this.r_rename.Name = "r_rename";
-            this.r_rename.Size = new System.Drawing.Size(142, 22);
+            this.r_rename.Size = new System.Drawing.Size(157, 22);
             this.r_rename.Text = "Rename";
+            // 
+            // ChangeIcon
+            // 
+            this.ChangeIcon.Name = "ChangeIcon";
+            this.ChangeIcon.Size = new System.Drawing.Size(157, 22);
+            this.ChangeIcon.Text = "Change Icon";
+            // 
+            // RemoveIcon
+            // 
+            this.RemoveIcon.Name = "RemoveIcon";
+            this.RemoveIcon.Size = new System.Drawing.Size(157, 22);
+            this.RemoveIcon.Text = "Remove Icon";
             // 
             // r_delete
             // 
             this.r_delete.Name = "r_delete";
-            this.r_delete.Size = new System.Drawing.Size(142, 22);
+            this.r_delete.Size = new System.Drawing.Size(157, 22);
             this.r_delete.Text = "Delete";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(154, 6);
+            // 
+            // r_filter
+            // 
+            this.r_filter.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.r_filter.Name = "r_filter";
+            this.r_filter.Size = new System.Drawing.Size(157, 22);
+            this.r_filter.Text = "Filter";
+            // 
+            // filter_selected
+            // 
+            this.filter_selected.Name = "filter_selected";
+            this.filter_selected.Size = new System.Drawing.Size(157, 22);
+            this.filter_selected.Text = "Show Selected";
+            // 
+            // filter_icon
+            // 
+            this.filter_icon.Name = "filter_icon";
+            this.filter_icon.Size = new System.Drawing.Size(157, 22);
+            this.filter_icon.Text = "Show With Icon";
+            // 
+            // filter_remove
+            // 
+            this.filter_remove.Name = "filter_remove";
+            this.filter_remove.Size = new System.Drawing.Size(157, 22);
+            this.filter_remove.Text = "Remove Filter";
+            // 
+            // r_newresource
+            // 
+            this.r_newresource.Name = "r_newresource";
+            this.r_newresource.Size = new System.Drawing.Size(157, 22);
+            this.r_newresource.Text = "New Resource";
+            // 
+            // ManageIcons
+            // 
+            this.ManageIcons.Name = "ManageIcons";
+            this.ManageIcons.Size = new System.Drawing.Size(157, 22);
+            this.ManageIcons.Text = "Manage Icons";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(154, 6);
+            // 
+            // r_sort
+            // 
+            this.r_sort.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.r_sort.Name = "r_sort";
+            this.r_sort.Size = new System.Drawing.Size(157, 22);
+            this.r_sort.Text = "Sort";
+            // 
+            // sortAZ
+            // 
+            this.sortAZ.Name = "sortAZ";
+            this.sortAZ.Size = new System.Drawing.Size(157, 22);
+            this.sortAZ.Text = "A - Z";
+            // 
+            // sortZA
+            // 
+            this.sortZA.Name = "sortZA";
+            this.sortZA.Size = new System.Drawing.Size(157, 22);
+            this.sortZA.Text = "Z - A";
+            // 
+            // sortByIcon
+            // 
+            this.sortByIcon.Name = "sortByIcon";
+            this.sortByIcon.Size = new System.Drawing.Size(157, 22);
+            this.sortByIcon.Text = "By Icon";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(154, 6);
             // 
             // pCorrect
             // 
             this.pCorrect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pCorrect.Image = ((System.Drawing.Image)(resources.GetObject("pCorrect.Image")));
-            this.pCorrect.Location = new System.Drawing.Point(156, 46);
+            this.pCorrect.Location = new System.Drawing.Point(84, 9);
             this.pCorrect.Name = "pCorrect";
             this.pCorrect.Size = new System.Drawing.Size(16, 2);
             this.pCorrect.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -534,18 +485,66 @@
             this.pCorrect.TabStop = false;
             this.pCorrect.Visible = false;
             // 
+            // txtRename
+            // 
+            this.txtRename.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.txtRename.Location = new System.Drawing.Point(19, 126);
+            this.txtRename.Name = "txtRename";
+            this.txtRename.Size = new System.Drawing.Size(125, 20);
+            this.txtRename.TabIndex = 41;
+            this.txtRename.Visible = false;
+            this.txtRename.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtRename_KeyDown);
+            this.txtRename.Leave += new System.EventHandler(this.txtRename_Leave);
+            // 
+            // pResourceMode
+            // 
+            this.pResourceMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pResourceMode.Image = ((System.Drawing.Image)(resources.GetObject("pResourceMode.Image")));
+            this.pResourceMode.Location = new System.Drawing.Point(1, 19);
+            this.pResourceMode.Name = "pResourceMode";
+            this.pResourceMode.Size = new System.Drawing.Size(16, 16);
+            this.pResourceMode.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pResourceMode.TabIndex = 42;
+            this.pResourceMode.TabStop = false;
+            this.pResourceMode.Click += new System.EventHandler(this.pNewResource_Click);
+            // 
+            // pNewResource
+            // 
+            this.pNewResource.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pNewResource.Image = ((System.Drawing.Image)(resources.GetObject("pNewResource.Image")));
+            this.pNewResource.Location = new System.Drawing.Point(2, 41);
+            this.pNewResource.Name = "pNewResource";
+            this.pNewResource.Size = new System.Drawing.Size(16, 16);
+            this.pNewResource.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pNewResource.TabIndex = 44;
+            this.pNewResource.TabStop = false;
+            this.pNewResource.Visible = false;
+            // 
+            // pAssignResource
+            // 
+            this.pAssignResource.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pAssignResource.Image = ((System.Drawing.Image)(resources.GetObject("pAssignResource.Image")));
+            this.pAssignResource.Location = new System.Drawing.Point(21, 41);
+            this.pAssignResource.Name = "pAssignResource";
+            this.pAssignResource.Size = new System.Drawing.Size(16, 16);
+            this.pAssignResource.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pAssignResource.TabIndex = 45;
+            this.pAssignResource.TabStop = false;
+            this.pAssignResource.Visible = false;
+            // 
             // ResourcesDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(184, 230);
+            this.ClientSize = new System.Drawing.Size(144, 174);
+            this.Controls.Add(this.pAssignResource);
+            this.Controls.Add(this.pNewResource);
+            this.Controls.Add(this.ResourceEnter);
+            this.Controls.Add(this.pResourceMode);
+            this.Controls.Add(this.txtRename);
             this.Controls.Add(this.pCorrect);
             this.Controls.Add(this.pHandle);
-            this.Controls.Add(this.pAddResources);
             this.Controls.Add(this.txtResources);
-            this.Controls.Add(this.btnAddToMap);
-            this.Controls.Add(this.panelResourceName);
-            this.Controls.Add(this.btnAddToTopic);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panelIcons);
             this.Controls.Add(this.ListResources);
@@ -556,18 +555,12 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "ResourcesDlg";
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pManageIcons)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Sort)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pRemoveFilter)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pMore)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHelp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pClose)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Edit)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Delete)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.New)).EndInit();
-            this.panelResourceName.ResumeLayout(false);
-            this.panelResourceName.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pAddResources)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ResourceEnter)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHandle)).EndInit();
-            this.cmsSort.ResumeLayout(false);
             this.panelIcons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.p7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p6)).EndInit();
@@ -576,9 +569,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.p3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.p0)).EndInit();
-            this.cmsResource.ResumeLayout(false);
+            this.cmsMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pCorrect)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pResourceMode)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pNewResource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pAssignResource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -588,45 +583,49 @@
 
         private System.Windows.Forms.ListView ListResources;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.PictureBox Edit;
-        private System.Windows.Forms.PictureBox Delete;
-        private System.Windows.Forms.PictureBox New;
         private System.Windows.Forms.PictureBox pClose;
-        private System.Windows.Forms.Button btnAddToTopic;
         private System.Windows.Forms.PictureBox pHelp;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.HelpProvider helpProvider1;
-        private System.Windows.Forms.Panel panelResourceName;
-        private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Button btnOk;
-        private System.Windows.Forms.TextBox txtRenameResource;
-        private System.Windows.Forms.Label lblResourceName;
-        private System.Windows.Forms.Button btnAddToMap;
-        private System.Windows.Forms.PictureBox Sort;
         private System.Windows.Forms.TextBox txtResources;
-        private System.Windows.Forms.PictureBox pAddResources;
+        private System.Windows.Forms.PictureBox ResourceEnter;
         private System.Windows.Forms.PictureBox pHandle;
-        private System.Windows.Forms.ContextMenuStrip cmsSort;
-        private System.Windows.Forms.ToolStripMenuItem sortAZ;
-        private System.Windows.Forms.ToolStripMenuItem sortZA;
-        private System.Windows.Forms.ToolStripMenuItem sortByIcon;
         private System.Windows.Forms.Panel panelIcons;
-        private System.Windows.Forms.PictureBox p0;
+        private System.Windows.Forms.PictureBox p1;
         private System.Windows.Forms.PictureBox p7;
         private System.Windows.Forms.PictureBox p6;
         private System.Windows.Forms.PictureBox p5;
         private System.Windows.Forms.PictureBox p4;
         private System.Windows.Forms.PictureBox p3;
         private System.Windows.Forms.PictureBox p2;
-        private System.Windows.Forms.PictureBox p1;
-        private System.Windows.Forms.ContextMenuStrip cmsResource;
+        private System.Windows.Forms.ContextMenuStrip cmsMenu;
         private System.Windows.Forms.ToolStripMenuItem AddToTopic;
         private System.Windows.Forms.ToolStripMenuItem AddToMap;
         private System.Windows.Forms.ToolStripMenuItem ChangeIcon;
         private System.Windows.Forms.ToolStripMenuItem r_delete;
         private System.Windows.Forms.ToolStripMenuItem r_rename;
         private System.Windows.Forms.PictureBox pCorrect;
-        private System.Windows.Forms.PictureBox pManageIcons;
+        private System.Windows.Forms.PictureBox pMore;
+        private System.Windows.Forms.ToolStripMenuItem r_newresource;
+        private System.Windows.Forms.ToolStripMenuItem r_sort;
+        private System.Windows.Forms.ToolStripMenuItem sortAZ;
+        private System.Windows.Forms.ToolStripMenuItem sortZA;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem sortByIcon;
+        private System.Windows.Forms.TextBox txtRename;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem ManageIcons;
+        private System.Windows.Forms.ToolStripMenuItem filter_selected;
+        private System.Windows.Forms.ToolStripMenuItem filter_remove;
+        private System.Windows.Forms.ToolStripMenuItem r_filter;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem filter_icon;
+        private System.Windows.Forms.PictureBox pResourceMode;
+        private System.Windows.Forms.PictureBox pNewResource;
+        private System.Windows.Forms.ToolStripMenuItem RemoveIcon;
+        private System.Windows.Forms.PictureBox pAssignResource;
+        private System.Windows.Forms.PictureBox pRemoveFilter;
     }
 }

@@ -61,7 +61,7 @@
             this.listBookmarks.IntegralHeight = false;
             this.listBookmarks.Location = new System.Drawing.Point(3, 20);
             this.listBookmarks.Name = "listBookmarks";
-            this.listBookmarks.Size = new System.Drawing.Size(234, 84);
+            this.listBookmarks.Size = new System.Drawing.Size(178, 84);
             this.listBookmarks.TabIndex = 0;
             this.listBookmarks.SelectedIndexChanged += new System.EventHandler(this.listBookmarks_SelectedIndexChanged);
             this.listBookmarks.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listBookmarks_MouseDown);
@@ -71,13 +71,17 @@
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClose.Image = ((System.Drawing.Image)(resources.GetObject("btnClose.Image")));
-            this.btnClose.Location = new System.Drawing.Point(224, 0);
+            this.btnClose.Location = new System.Drawing.Point(168, 0);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(16, 16);
             this.btnClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.btnClose.TabIndex = 4;
             this.btnClose.TabStop = false;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
             // 
             // contextMenuStrip1
             // 
@@ -161,7 +165,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(240, 107);
+            this.ClientSize = new System.Drawing.Size(184, 107);
             this.Controls.Add(this.pDeleteMain);
             this.Controls.Add(this.pAddMain);
             this.Controls.Add(this.btnDeleteAll);
