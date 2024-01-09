@@ -133,7 +133,7 @@ namespace Bubbles
             tsi.Name = "ManageResources";
             StickUtils.SetContextMenuImage(tsi, "resources.png");
 
-            ToolStripTextBox tst = new ToolStripTextBox(Name = "ManualResource");
+            ToolStripTextBox tst = new ToolStripTextBox { Name = "ManualResource" };
             cmsResources.Items.Add(tst);
             tst.AutoSize = false; tst.BorderStyle = BorderStyle.FixedSingle;
             tst.Size = new Size(panelStartDate.Width * 4, p100.Height);

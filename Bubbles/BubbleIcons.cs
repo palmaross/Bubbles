@@ -7,9 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using Clipboard = System.Windows.Forms.Clipboard;
 
 namespace Bubbles
@@ -66,7 +64,7 @@ namespace Bubbles
             BI_addtomap.Text = Utils.getString("icons.contextmenu.addtomap");
             BI_addtomap.ToolTipText = Utils.getString("icons.contextmenu.addtomap.tooltip");
             BI_getfrommap.Text = Utils.getString("icons.contextmenu.getfrommap");
-            BI_addtomap.ToolTipText = Utils.getString("icons.contextmenu.getfrommap.tooltip");
+            BI_getfrommap.ToolTipText = Utils.getString("icons.contextmenu.getfrommap.tooltip");
 
             BI_group.Tag = 0; BI_mutex.Tag = 0;
 
@@ -74,61 +72,64 @@ namespace Bubbles
 
             cmsManage.Closing += ContextMenuStrip1_Closing;
 
-            using (BubblesDB db = new BubblesDB())
+            if (ID != 0) // if id = 0 - new stick is creating, ignore this step
             {
-                // Check if there is a group or no
-                DataTable dt = db.ExecuteQuery("select * from STICKS where id=" + ID + "");
-                int _group = Convert.ToInt32(dt.Rows[0]["_group"]);
-
-                if (_group > 0) // there is a group
+                using (BubblesDB db = new BubblesDB())
                 {
-                    StickUtils.SetContextMenuImage(BI_group, "check.png");
-                    BI_group.Tag = 1;
+                    // Check if there is a group or no
+                    DataTable dt = db.ExecuteQuery("select * from STICKS where id=" + ID + "");
+                    int _group = Convert.ToInt32(dt.Rows[0]["_group"]);
 
-                    if (_group == 2)
+                    if (_group > 0) // there is a group
                     {
-                        StickUtils.SetContextMenuImage(BI_mutex, "check.png");
-                        BI_mutex.Tag = 1;
-                    }
-                }
+                        StickUtils.SetContextMenuImage(BI_group, "check.png");
+                        BI_group.Tag = 1;
 
-                dt = db.ExecuteQuery("select * from ICONS where stickID=" + ID + " order by _order");
-
-                foreach (DataRow row in dt.Rows)
-                {
-                    string name = row["name"].ToString();
-                    string filename = row["filename"].ToString();
-                    string _filename = filename;
-                    string iconPath = "";
-                    string rootPath = Utils.m_dataPath + "IconDB\\";
-
-                    if (filename.StartsWith("stock"))
-                    {
-                        rootPath = MMUtils.MindManager.GetPath(MmDirectory.mmDirectoryIcons);
-                        _filename = filename.Substring(5) + ".ico"; // stockemail -> email.ico
-                        iconPath = rootPath + _filename;
-                    }
-                    else // custom icon
-                    {
-                        if (Utils.CustomIcons.ContainsKey(filename))
-                            iconPath = Utils.CustomIcons[filename];
-                        else
+                        if (_group == 2)
                         {
-                            string path = Utils.GetIconFile(filename);
-                            if (path == "") continue;
-                            iconPath = path;
+                            StickUtils.SetContextMenuImage(BI_mutex, "check.png");
+                            BI_mutex.Tag = 1;
                         }
                     }
 
-                    if (File.Exists(iconPath))
+                    dt = db.ExecuteQuery("select * from ICONS where stickID=" + ID + " order by _order");
+
+                    foreach (DataRow row in dt.Rows)
                     {
-                        IconItem item = new IconItem(name, filename, Convert.ToInt32(row["_order"]), iconPath);
-                        Icons.Add(item);
+                        string name = row["name"].ToString();
+                        string filename = row["filename"].ToString();
+                        string _filename = filename;
+                        string iconPath = "";
+                        string rootPath = Utils.m_dataPath + "IconDB\\";
+
+                        if (filename.StartsWith("stock"))
+                        {
+                            rootPath = MMUtils.MindManager.GetPath(MmDirectory.mmDirectoryIcons);
+                            _filename = filename.Substring(5) + ".ico"; // stockemail -> email.ico
+                            iconPath = rootPath + _filename;
+                        }
+                        else // custom icon
+                        {
+                            if (Utils.CustomIcons.ContainsKey(filename))
+                                iconPath = Utils.CustomIcons[filename];
+                            else
+                            {
+                                string path = Utils.GetIconFile(filename);
+                                if (path == "") continue;
+                                iconPath = path;
+                            }
+                        }
+
+                        if (File.Exists(iconPath))
+                        {
+                            IconItem item = new IconItem(name, filename, Convert.ToInt32(row["_order"]), iconPath);
+                            Icons.Add(item);
+                        }
                     }
                 }
-            }
 
-            RefreshStick();
+                RefreshStick();
+            }
 
             // Handle drag drop to place icon to the end
             this.DragEnter += Handle_DragEnter;
@@ -286,9 +287,10 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_addtomap")
             {
+                MmStockIcon stockicon = 0; string signature = "";
+
                 foreach (var item in Icons)
                 {
-                    MmStockIcon stockicon = 0; string signature = "";
                     string groupName = (int)BI_group.Tag == 1 ? StickName : "";
                     bool mutex = (int)BI_mutex.Tag == 1 ? true : false;
 
@@ -297,7 +299,7 @@ namespace Bubbles
                     else
                         signature = item.FileName;
 
-                    Utils.GetIcon(stockicon, signature, item.IconName, item.Path, groupName, mutex);
+                    Utils.GetIcon(stockicon, signature, item.IconName, item.Path, groupName, mutex, true);
                 }
             }
             else if (e.ClickedItem.Name == "BI_getfrommap")
@@ -587,9 +589,11 @@ namespace Bubbles
                 string fileName = item.FileName;
                 bool alltopicshaveicon = true;
 
+                string groupName = (int)BI_group.Tag == 1 ? StickName : "";
+                bool isMutexGroup = (int)BI_mutex.Tag == 1;
+
                 if (fileName.StartsWith("stock"))
                 {
-                    //MmStockIcon icon = StockIconFromString(fileName);
                     MmStockIcon icon = Utils.StockIcons[fileName];
 
                     if (icon != 0)
@@ -601,7 +605,7 @@ namespace Bubbles
                         }
                         foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                         {
-                            Utils.GetIcon(icon, "", item.IconName, "");
+                            bool inGroup = Utils.GetIcon(icon, "", item.IconName, "", groupName, isMutexGroup);
                             
                             if (alltopicshaveicon) // remove icon from topic
                             {
@@ -611,20 +615,23 @@ namespace Bubbles
                             else // set icon on topic
                             {
                                 if (!t.AllIcons.ContainsStockIcon(icon))
+                                {
+                                    // If icon is in mutex group and is located in the another group
+                                    // we have manually delete "rival" icons on the topic
+                                    if (!inGroup && isMutexGroup)
+                                        Utils.CheckMutuallyExclusive(t, Icons);
+
                                     t.AllIcons.AddStockIcon(icon);
+                                }
                             }
                         }
                     }
                 }
                 else // custom icon
                 {
-                    //string path = Utils.m_dataPath + "IconDB\\" + fileName;
                     string signature = fileName;
                     string path = Utils.CustomIcons[signature];
                     if (path == null || path == "") return;
-
-                    //string signature = MMUtils.MindManager.Utilities.GetCustomIconSignature(path);
-                    //string signature = Path.GetFileNameWithoutExtension(path);
 
                     foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                     {
@@ -633,7 +640,8 @@ namespace Bubbles
                     }
                     foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                     {
-                        Utils.GetIcon(0, signature, item.IconName, path);
+                        bool inGroup = Utils.GetIcon(0, signature, item.IconName, path, groupName, isMutexGroup);
+                        
                         if (alltopicshaveicon) // remove icon from topic
                         {
                             if (t.AllIcons.ContainsCustomIcon(signature))
@@ -642,7 +650,14 @@ namespace Bubbles
                         else // set icon on topic
                         {
                             if (!t.AllIcons.ContainsCustomIcon(signature))
+                            {
+                                // If icon is in mutex group and is located in the another group
+                                // we have manually delete "rival" icons on the topic
+                                if (!inGroup && isMutexGroup)
+                                    Utils.CheckMutuallyExclusive(t, Icons);
+
                                 t.AllIcons.AddCustomIconFromMap(signature);
+                            }
                         }
                     }
                 }

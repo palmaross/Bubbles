@@ -159,8 +159,8 @@ namespace Bubbles
 
             if ((string)panelTemplateName.Tag == "new") // add new template
             {
-                db.AddTaskTemplate(0, newName, 0, 0, "rel:today:0;rel:today:0", "", "", "");
-                TaskTemplateItem item = new TaskTemplateItem(0, newName, 0, 0, "rel:today:0;rel:today:0", "", "", "");
+                db.AddTaskTemplate(0, newName, 0, 0, "rel:today:1;rel:today:1", "", "", "");
+                TaskTemplateItem item = new TaskTemplateItem(0, newName, 0, 0, "rel:today:1;rel:today:1", "", "", "");
                 int i = cbTaskTemplates.Items.Add(item);
                 cbTaskTemplates.SelectedIndex = i;
             }

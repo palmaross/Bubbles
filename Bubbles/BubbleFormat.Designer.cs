@@ -56,7 +56,6 @@
             this.pClearTextColor = new System.Windows.Forms.PictureBox();
             this.pClearFillColor = new System.Windows.Forms.PictureBox();
             this.pStrike = new System.Windows.Forms.PictureBox();
-            this.panelFontStyle = new System.Windows.Forms.Panel();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
@@ -75,7 +74,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pClearTextColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pClearFillColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pStrike)).BeginInit();
-            this.panelFontStyle.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -158,7 +156,7 @@
             // pItalic
             // 
             this.pItalic.Image = ((System.Drawing.Image)(resources.GetObject("pItalic.Image")));
-            this.pItalic.Location = new System.Drawing.Point(23, 4);
+            this.pItalic.Location = new System.Drawing.Point(50, 7);
             this.pItalic.Name = "pItalic";
             this.pItalic.Size = new System.Drawing.Size(16, 16);
             this.pItalic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -170,7 +168,7 @@
             // pUnder
             // 
             this.pUnder.Image = ((System.Drawing.Image)(resources.GetObject("pUnder.Image")));
-            this.pUnder.Location = new System.Drawing.Point(45, 4);
+            this.pUnder.Location = new System.Drawing.Point(72, 7);
             this.pUnder.Name = "pUnder";
             this.pUnder.Size = new System.Drawing.Size(16, 16);
             this.pUnder.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -308,7 +306,7 @@
             // pStrike
             // 
             this.pStrike.Image = ((System.Drawing.Image)(resources.GetObject("pStrike.Image")));
-            this.pStrike.Location = new System.Drawing.Point(67, 4);
+            this.pStrike.Location = new System.Drawing.Point(94, 7);
             this.pStrike.Name = "pStrike";
             this.pStrike.Size = new System.Drawing.Size(16, 16);
             this.pStrike.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -316,16 +314,6 @@
             this.pStrike.TabStop = false;
             this.pStrike.Tag = "1";
             this.pStrike.Click += new System.EventHandler(this.pStrike_Click);
-            // 
-            // panelFontStyle
-            // 
-            this.panelFontStyle.Controls.Add(this.pStrike);
-            this.panelFontStyle.Controls.Add(this.pUnder);
-            this.panelFontStyle.Controls.Add(this.pItalic);
-            this.panelFontStyle.Location = new System.Drawing.Point(27, 3);
-            this.panelFontStyle.Name = "panelFontStyle";
-            this.panelFontStyle.Size = new System.Drawing.Size(86, 23);
-            this.panelFontStyle.TabIndex = 94;
             // 
             // BubbleFormat
             // 
@@ -335,10 +323,14 @@
             this.ClientSize = new System.Drawing.Size(405, 30);
             this.ControlBox = false;
             this.Controls.Add(this.pictureHandle);
+            this.Controls.Add(this.pBold);
+            this.Controls.Add(this.Manage);
+            this.Controls.Add(this.pItalic);
+            this.Controls.Add(this.pUnder);
+            this.Controls.Add(this.pStrike);
             this.Controls.Add(this.pClearFillColor);
             this.Controls.Add(this.pClearTextColor);
             this.Controls.Add(this.lblFillColor);
-            this.Controls.Add(this.Manage);
             this.Controls.Add(this.lblTextColor);
             this.Controls.Add(this.fillcolor3);
             this.Controls.Add(this.fillcolor1);
@@ -349,8 +341,6 @@
             this.Controls.Add(this.pClearFormat);
             this.Controls.Add(this.pFontIncrease);
             this.Controls.Add(this.pFontDecrease);
-            this.Controls.Add(this.pBold);
-            this.Controls.Add(this.panelFontStyle);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.KeyPreview = true;
             this.Name = "BubbleFormat";
@@ -374,7 +364,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pClearTextColor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pClearFillColor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pStrike)).EndInit();
-            this.panelFontStyle.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -405,7 +394,6 @@
         private System.Windows.Forms.PictureBox pClearTextColor;
         private System.Windows.Forms.PictureBox pClearFillColor;
         private System.Windows.Forms.PictureBox pStrike;
-        private System.Windows.Forms.Panel panelFontStyle;
         public System.Windows.Forms.PictureBox pictureHandle;
     }
 }

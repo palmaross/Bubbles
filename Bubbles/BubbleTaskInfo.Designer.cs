@@ -53,17 +53,17 @@
             this.pStartDate = new System.Windows.Forms.MaskedTextBox();
             this.cmsDates = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.Dates_today = new System.Windows.Forms.ToolStripMenuItem();
+            this.Dates_today_today = new System.Windows.Forms.ToolStripMenuItem();
+            this.Dates_today_tomorrow = new System.Windows.Forms.ToolStripMenuItem();
             this.Dates_tomorrow = new System.Windows.Forms.ToolStripMenuItem();
+            this.Dates_tomorrow_tomorrow = new System.Windows.Forms.ToolStripMenuItem();
+            this.Dates_thisweek = new System.Windows.Forms.ToolStripMenuItem();
             this.Dates_nextweek = new System.Windows.Forms.ToolStripMenuItem();
             this.panelDueDate = new System.Windows.Forms.Panel();
             this.pDueDate = new System.Windows.Forms.MaskedTextBox();
             this.panelDuration = new System.Windows.Forms.Panel();
             this.cmsTaskTemplates = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsResources = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.Dates_today_today = new System.Windows.Forms.ToolStripMenuItem();
-            this.Dates_today_tomorrow = new System.Windows.Forms.ToolStripMenuItem();
-            this.Dates_tomorrow_tomorrow = new System.Windows.Forms.ToolStripMenuItem();
-            this.Dates_thisweek = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsDuration.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
@@ -248,8 +248,8 @@
             // 
             this.linkDurationUnit.BackColor = System.Drawing.Color.Moccasin;
             this.linkDurationUnit.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.linkDurationUnit.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.linkDurationUnit.Location = new System.Drawing.Point(-3, 17);
+            this.linkDurationUnit.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.linkDurationUnit.Location = new System.Drawing.Point(-4, 16);
             this.linkDurationUnit.Name = "linkDurationUnit";
             this.linkDurationUnit.Size = new System.Drawing.Size(36, 13);
             this.linkDurationUnit.TabIndex = 90;
@@ -262,7 +262,7 @@
             // 
             this.pTopicStartDate.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pTopicStartDate.Image = ((System.Drawing.Image)(resources.GetObject("pTopicStartDate.Image")));
-            this.pTopicStartDate.Location = new System.Drawing.Point(0, 16);
+            this.pTopicStartDate.Location = new System.Drawing.Point(-1, 16);
             this.pTopicStartDate.Name = "pTopicStartDate";
             this.pTopicStartDate.Size = new System.Drawing.Size(32, 14);
             this.pTopicStartDate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -274,7 +274,7 @@
             // 
             this.pTopicDueDate.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pTopicDueDate.Image = ((System.Drawing.Image)(resources.GetObject("pTopicDueDate.Image")));
-            this.pTopicDueDate.Location = new System.Drawing.Point(0, 16);
+            this.pTopicDueDate.Location = new System.Drawing.Point(-1, 16);
             this.pTopicDueDate.Name = "pTopicDueDate";
             this.pTopicDueDate.Size = new System.Drawing.Size(32, 14);
             this.pTopicDueDate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -297,10 +297,10 @@
             this.pStartDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pStartDate.ContextMenuStrip = this.cmsDates;
             this.pStartDate.Culture = new System.Globalization.CultureInfo("");
-            this.pStartDate.Location = new System.Drawing.Point(1, 0);
+            this.pStartDate.Location = new System.Drawing.Point(0, 0);
             this.pStartDate.Mask = "00/00";
             this.pStartDate.Name = "pStartDate";
-            this.pStartDate.Size = new System.Drawing.Size(30, 20);
+            this.pStartDate.Size = new System.Drawing.Size(31, 20);
             this.pStartDate.TabIndex = 0;
             this.pStartDate.TabStop = false;
             this.pStartDate.ValidatingType = typeof(System.DateTime);
@@ -319,7 +319,7 @@
             this.Dates_nextweek});
             this.cmsDates.Name = "cmsDates";
             this.cmsDates.ShowImageMargin = false;
-            this.cmsDates.Size = new System.Drawing.Size(169, 180);
+            this.cmsDates.Size = new System.Drawing.Size(169, 158);
             // 
             // Dates_today
             // 
@@ -327,11 +327,35 @@
             this.Dates_today.Size = new System.Drawing.Size(168, 22);
             this.Dates_today.Text = "Today";
             // 
+            // Dates_today_today
+            // 
+            this.Dates_today_today.Name = "Dates_today_today";
+            this.Dates_today_today.Size = new System.Drawing.Size(168, 22);
+            this.Dates_today_today.Text = "Today - Today";
+            // 
+            // Dates_today_tomorrow
+            // 
+            this.Dates_today_tomorrow.Name = "Dates_today_tomorrow";
+            this.Dates_today_tomorrow.Size = new System.Drawing.Size(168, 22);
+            this.Dates_today_tomorrow.Text = "Today - Tomorrow";
+            // 
             // Dates_tomorrow
             // 
             this.Dates_tomorrow.Name = "Dates_tomorrow";
             this.Dates_tomorrow.Size = new System.Drawing.Size(168, 22);
             this.Dates_tomorrow.Text = "Tomorrow";
+            // 
+            // Dates_tomorrow_tomorrow
+            // 
+            this.Dates_tomorrow_tomorrow.Name = "Dates_tomorrow_tomorrow";
+            this.Dates_tomorrow_tomorrow.Size = new System.Drawing.Size(168, 22);
+            this.Dates_tomorrow_tomorrow.Text = "Tomorrow - Tomorrow";
+            // 
+            // Dates_thisweek
+            // 
+            this.Dates_thisweek.Name = "Dates_thisweek";
+            this.Dates_thisweek.Size = new System.Drawing.Size(168, 22);
+            this.Dates_thisweek.Text = "This Week";
             // 
             // Dates_nextweek
             // 
@@ -352,10 +376,10 @@
             // 
             this.pDueDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pDueDate.ContextMenuStrip = this.cmsDates;
-            this.pDueDate.Location = new System.Drawing.Point(1, 0);
+            this.pDueDate.Location = new System.Drawing.Point(0, 0);
             this.pDueDate.Mask = "00/00";
             this.pDueDate.Name = "pDueDate";
-            this.pDueDate.Size = new System.Drawing.Size(30, 20);
+            this.pDueDate.Size = new System.Drawing.Size(31, 20);
             this.pDueDate.TabIndex = 0;
             this.pDueDate.TabStop = false;
             this.pDueDate.ValidatingType = typeof(System.DateTime);
@@ -383,30 +407,6 @@
             // 
             this.cmsResources.Name = "cmsResources";
             this.cmsResources.Size = new System.Drawing.Size(61, 4);
-            // 
-            // Dates_today_today
-            // 
-            this.Dates_today_today.Name = "Dates_today_today";
-            this.Dates_today_today.Size = new System.Drawing.Size(168, 22);
-            this.Dates_today_today.Text = "Today - Today";
-            // 
-            // Dates_today_tomorrow
-            // 
-            this.Dates_today_tomorrow.Name = "Dates_today_tomorrow";
-            this.Dates_today_tomorrow.Size = new System.Drawing.Size(168, 22);
-            this.Dates_today_tomorrow.Text = "Today - Tomorrow";
-            // 
-            // Dates_tomorrow_tomorrow
-            // 
-            this.Dates_tomorrow_tomorrow.Name = "Dates_tomorrow_tomorrow";
-            this.Dates_tomorrow_tomorrow.Size = new System.Drawing.Size(168, 22);
-            this.Dates_tomorrow_tomorrow.Text = "Tomorrow - Tomorrow";
-            // 
-            // Dates_thisweek
-            // 
-            this.Dates_thisweek.Name = "Dates_thisweek";
-            this.Dates_thisweek.Size = new System.Drawing.Size(168, 22);
-            this.Dates_thisweek.Text = "This Week";
             // 
             // BubbleTaskInfo
             // 

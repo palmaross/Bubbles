@@ -1,0 +1,3236 @@
+﻿<project version = 9 civer = 8.10.1 winver = "2.12/6.2.9200" >
+   <autorun >0</>
+   <autoclose >1</>
+   <compname >PalmaRoss</>
+   <produrl >http://www.palmaross.com</>
+   <ver >$version$</>
+   <supurl ></>
+   <updurl >http://update.palmaross.com</>
+   <dlgfont >verdana</>
+   <headlogo >default - 1</>
+   <dlgfontsize >s8</>
+   <output >C:\test</>
+   <exename >$exename$-$version$.exe</>
+   <beffile ></>
+   <aftfile ></>
+   <uninclude >1</>
+   <lang >english</>
+   <addlang >russian</>
+   <selfextr >1</>
+   <instpath >#progfiles#\PalmaRoss\Calendar Manager</>
+   <voltype >nolimit</>
+   <volsize ></>
+   <volpattern >disk%i.pak</>
+   <password ></>
+   <progname >$appname$</>
+   <appname ></>
+   <bl ></>
+   <blurl ></>
+   <unpath >inst</>
+   <unexe >uninstall-cm.exe</>
+   <unlog >uninstall-cm.ini</>
+   <installroot sorttype = 0 >
+      <children >
+         <install id = install expanded = 2 >
+            <children >
+               <_ id = background disabled = 1 >
+                  <desc ></>
+                  <head >#lcaption#</>
+                  <foot ></>
+                  <font >Times</>
+                  <height >36</>
+                  <bold >0</>
+                  <italic >0</>
+                  <backcol >0x0000FF</>
+                  <textcol >0xFFFFFF</>
+                  <shadecol >0x888888</>
+                  <uniform >0</>
+                  <backbmp ></>
+                  <stretchback >0</>
+               </>
+               <_ tag = 0 id = getuser disabled = 1 >
+                  <desc ></>
+                  <var >username</>
+                  <vars >appdata,apppath,userpath,desktop,progpath,startup</>
+                  <if ></>
+               </>
+               <_ id = dlglang disabled = 0 >
+                  <desc >ChooseLang</>
+                  <buttons >nc</>
+                  <design >left</>
+                  <headlogo ></>
+                  <varlist >
+                     <rows ></>
+                  </>
+                  <head ></>
+                  <headtext ></>
+                  <dlgtext ></>
+                  <if ></>
+               </>
+               <_ tag = 0 id = langres >
+                  <desc ></>
+                  <name >English</>
+                  <varlist >
+                     <rows >
+                        <_ >
+                           <varname >mm_not_found</>
+                           <value >Do you have MindManager installed? 
+We can't detect it on your system. 
+Sticks setup is not possible. Sorry.</>
+                           <comm ></>
+                        </>
+                        <_ >
+                           <varname >mm_not_supported</>
+                           <value >Your version of MindManager is not supported!
+
+This Sticks version works with MindManager 23 and above.</>
+                           <comm ></>
+                        </>
+                        <_ >
+                           <varname >needclosemm</>
+                           <value >You need to close MindManager to continue.
+Please save all unsaved work and click OK.
+To abort installation, click Cancel.</>
+                           <comm ></>
+                        </>
+                        <_ >
+                           <varname >clang</>
+                           <value >english</>
+                           <comm ></>
+                        </>
+                        <_ >
+                           <varname >needrerun</>
+                           <value >Sticks was not installed.
+Please re-run Setup further.</>
+                           <comm ></>
+                        </>
+                        <_ >
+                           <varname >runMM</>
+                           <value >Run MindManager</>
+                           <comm ></>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ tag = 0 id = langres >
+                  <desc ></>
+                  <name >russian</>
+                  <varlist >
+                     <rows >
+                        <_ >
+                           <varname >mm_not_found</>
+                           <value >У вас установлен MindManager? 
+Мы его не обнаружили. 
+Установке Sticks невозможна. Извините.</>
+                           <comm ></>
+                        </>
+                        <_ >
+                           <varname >mm_not_supported</>
+                           <value >Ваша версия MindManager не поддерживается!
+
+Данная версия Sticks работает с MindManager 23 и выше.</>
+                           <comm ></>
+                        </>
+                        <_ >
+                           <varname >needclosemm</>
+                           <value >Для продолжения нужно закрыть все окна MindManager.
+Сохраните все несохранённые документы и нажмите ОК.
+Для выхода из программы установки нажмите Отмена.</>
+                           <comm ></>
+                        </>
+                        <_ >
+                           <varname >clang</>
+                           <value >russian</>
+                           <comm ></>
+                        </>
+                        <_ >
+                           <varname >needrerun</>
+                           <value >Надстройка Sticks не установлена.
+Вам потребуется произвести установку снова.</>
+                           <comm ></>
+                        </>
+                        <_ >
+                           <varname >runMM</>
+                           <value >Запустить MindManager</>
+                           <comm ></>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ tag = 0 id = langres disabled = 1 >
+                  <desc ></>
+                  <name >german</>
+                  <varlist >
+                     <rows >
+                        <_ >
+                           <varname >mm_not_found</>
+                           <value >Do you have MindManager installed? 
+We can't detect it on your system. 
+Calendar Manager setup is not possible. Sorry.</>
+                        </>
+                        <_ >
+                           <varname >mm_not_supported</>
+                           <value >Ihre Version MindManager wird nicht unterstützt!
+
+Diese Calendar Manager Version funktioniert nur mit MindManager 19 oder mehr.</>
+                        </>
+                        <_ >
+                           <varname >needclosemm</>
+                           <value >Bitte schließen sie alle MindManager Fenster um die Installation fortzusetzen.
+Speichern Sie alle nicht gespeicherte Daten und klicken  auf «Ok». 
+Klicken Sie auf Beenden (Exit), um die Installation abzuschließen.</>
+                        </>
+                        <_ >
+                           <varname >clang</>
+                           <value >german</>
+                        </>
+                        <_ >
+                           <varname >whatsnew</>
+                           <value >Lies mich!!</>
+                        </>
+                        <_ >
+                           <varname >mymaps1</>
+                           <value >Calendar Manager</>
+                        </>
+                        <_ >
+                           <varname >needrerun</>
+                           <value >Die Anwendung “Calendar Manager” ist nicht installiert. 
+Sie müssen Setup nochmal starten.</>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ tag = 0 id = langres disabled = 1 >
+                  <desc ></>
+                  <name >spanish</>
+                  <varlist >
+                     <rows >
+                        <_ >
+                           <varname >mm_not_found</>
+                           <value >Tiene MindManager instalado? 
+No podemos encontrarle en su systema. 
+No se puede instalar Calendar Manager. Disculpe...</>
+                        </>
+                        <_ >
+                           <varname >mm_not_supported</>
+                           <value >¡Esta versión de Calendar Manager no está compatible 
+con su versión de MindManager! MindManager version tiene que ser 2019 or 2020</>
+                        </>
+                        <_ >
+                           <varname >needclosemm</>
+                           <value >Debe de cerrar MindManager para continuar. 
+Por favor, guarde todo el trabajo no guardado y haga clic en OK. 
+Para salir de la instalación, haga clic en Cancel.</>
+                        </>
+                        <_ >
+                           <varname >clang</>
+                           <value >spanish</>
+                        </>
+                        <_ >
+                           <varname >whatsnew</>
+                           <value >Leer!!</>
+                        </>
+                        <_ >
+                           <varname >mymaps1</>
+                           <value >Calendar Manager</>
+                        </>
+                        <_ >
+                           <varname >needrerun</>
+                           <value >Calendar Manager no se instaló. 
+Por favor, vuelva a ejecutar  la instalación de nuevo.</>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ id = dlgwel >
+                  <desc ></>
+                  <buttons >auto</>
+                  <design >left</>
+                  <headlogo ></>
+                  <varlist >
+                     <rows ></>
+                  </>
+                  <head ></>
+                  <headtext ></>
+                  <dlgtext ></>
+                  <if ></>
+               </>
+               <_ tag = 0 id = regget >
+                  <desc ></>
+                  <root >locmach</>
+                  <subkey >Software\Mindjet\MindManager\22\Settings</>
+                  <wow64 >0</>
+                  <reglist >
+                     <rows >
+                        <_ >
+                           <valname >ProductVersionMajor</>
+                           <varname >mm22x32major</>
+                           <defval >4</>
+                           <if ></>
+                           <comm ></>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ tag = 0 id = regget >
+                  <desc ></>
+                  <root >locmach</>
+                  <subkey >Software\Mindjet\MindManager\23\Settings</>
+                  <wow64 >0</>
+                  <reglist >
+                     <rows >
+                        <_ >
+                           <valname >ProductVersionMajor</>
+                           <varname >mm23x32major</>
+                           <defval >4</>
+                           <if ></>
+                           <comm ></>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ tag = 0 id = regget >
+                  <desc ></>
+                  <root >locmach</>
+                  <subkey >Software\Mindjet\MindManager\22\Settings</>
+                  <wow64 >1</>
+                  <reglist >
+                     <rows >
+                        <_ >
+                           <valname >ProductVersionMajor</>
+                           <varname >mm22x64major</>
+                           <defval >4</>
+                           <if ></>
+                           <comm ></>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ tag = 0 id = regget >
+                  <desc ></>
+                  <root >locmach</>
+                  <subkey >Software\Mindjet\MindManager\23\Settings</>
+                  <wow64 >1</>
+                  <reglist >
+                     <rows >
+                        <_ >
+                           <valname >ProductVersionMajor</>
+                           <varname >mm23x64major</>
+                           <defval >4</>
+                           <if ></>
+                           <comm ></>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ tag = 0 id = if expanded = 0 >
+                  <children >
+                     <_ tag = 0 id = message expanded = 2 >
+                        <children >
+                           <_ tag = 0 id = exit >
+                              <desc ></>
+                              <extype >exit</>
+                              <code >1</>
+                              <msg ></>
+                           </>
+                        </>
+                        <desc ></>
+                        <type >warning</>
+                        <caption ></>
+                        <text >#mm_not_supported#</>
+                        <btns >ok</>
+                        <resvar ></>
+                        <msgif >def</>
+                        <if ></>
+                        <help >0</>
+                        <hcmd ></>
+                        <defbtn >def</>
+                        <msgmode >def</>
+                        <length ></>
+                     </>
+                  </>
+                  <desc >Найден только MindManager версии ниже 22</>
+                  <else ></>
+                  <condlist >
+                     <rows >
+                        <_ >
+                           <varname >mm22x32major</>
+                           <iftype >noteq</>
+                           <not >0</>
+                           <value >22</>
+                           <orand >and</>
+                           <comm ></>
+                        </>
+                        <_ >
+                           <varname >mm23x32major</>
+                           <iftype >noteq</>
+                           <not >0</>
+                           <value >23</>
+                           <orand >and</>
+                           <comm ></>
+                        </>
+                        <_ >
+                           <varname >mm22x64major</>
+                           <iftype >noteq</>
+                           <not >0</>
+                           <value >22</>
+                           <orand >and</>
+                           <comm ></>
+                        </>
+                        <_ >
+                           <varname >mm23x64major</>
+                           <iftype >noteq</>
+                           <not >0</>
+                           <value >23</>
+                           <orand >and</>
+                           <comm ></>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ id = dlglic disabled = 0 >
+                  <desc ></>
+                  <file >d:\repos\Bubbles\setup\License_en.txt</>
+                  <print >1</>
+                  <iagree >radio</>
+                  <buttons >pnc</>
+                  <design >left</>
+                  <headlogo ></>
+                  <varlist >
+                     <rows >
+                        <_ >
+                           <varname >Liccolor</>
+                           <value >1</>
+                           <if ></>
+                           <comm ></>
+                        </>
+                        <_ >
+                           <varname >_Lic_russian</>
+                           <value >d:\repos\Bubbles\setup\License_rus.rtf</>
+                           <if ></>
+                           <comm ></>
+                        </>
+                     </>
+                  </>
+                  <head ></>
+                  <headtext ></>
+                  <if ></>
+               </>
+               <_ tag = 0 id = dlgread disabled = 1 >
+                  <desc >What's new</>
+                  <file >d:\repos\GoogleCalendar\setup\whatsnew_en.rtf</>
+                  <print >1</>
+                  <head >#whatsnew#</>
+                  <headtext ></>
+                  <headlogo ></>
+                  <buttons >pnc</>
+                  <if ></>
+                  <varlist >
+                     <rows >
+                        <_ >
+                           <varname >_Dhead</>
+                           <value >#whatsnew#</>
+                           <if ></>
+                        </>
+                        <_ >
+                           <varname >_Read_russian</>
+                           <value >d:\repos\GoogleCalendar\setup\whatsnew_rus.rtf</>
+                           <if ></>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ tag = 0 id = unlogmode >
+                  <desc ></>
+                  <state >on</>
+                  <unfile >unfdel</>
+                  <undir >undleave</>
+               </>
+               <_ id = dlgpath >
+                  <desc ></>
+                  <buttons >auto</>
+                  <design >left</>
+                  <headlogo ></>
+                  <chlist >
+                     <rows ></>
+                  </>
+                  <varlist >
+                     <rows >
+                        <_ >
+                           <varname >Pathregkey</>
+                           <value >Software\PalmaRoss\CalendarManager</>
+                           <if ></>
+                           <comm ></>
+                        </>
+                     </>
+                  </>
+                  <head ></>
+                  <headtext ></>
+                  <dlgtext ></>
+                  <pathadd ></>
+                  <enforce >0</>
+                  <if ></>
+                  <savepath >1</>
+               </>
+               <_ tag = 0 id = redir64 >
+                  <desc ></>
+                  <redir >on</>
+                  <var >progfiles64</>
+                  <if ></>
+               </>
+               <_ tag = 0 id = regget >
+                  <desc ></>
+                  <root >curuser</>
+                  <subkey >SOFTWARE\PalmaRoss\Bubbles</>
+                  <wow64 >0</>
+                  <reglist >
+                     <rows >
+                        <_ >
+                           <valname >InstPath</>
+                           <varname >InstPathBB</>
+                           <defval >0</>
+                           <if ></>
+                           <comm ></>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ id = dlgprog expanded = 2 >
+                  <children >
+                     <_ tag = 0 id = check expanded = 0 disabled = 0 >
+                        <children >
+                           <_ tag = 0 id = message expanded = 2 >
+                              <children >
+                                 <_ tag = 0 id = message expanded = 2 >
+                                    <children >
+                                       <_ tag = 0 id = empty ></>
+                                    </>
+                                    <desc ></>
+                                    <type >info</>
+                                    <caption >Setup is not complete</>
+                                    <text >#needrerun#</>
+                                    <btns >ok</>
+                                    <resvar >msgret</>
+                                    <msgif >ok</>
+                                    <if ></>
+                                    <help >0</>
+                                    <hcmd ></>
+                                    <defbtn >def</>
+                                    <msgmode >def</>
+                                 </>
+                              </>
+                              <desc ></>
+                              <type >quest</>
+                              <caption >Need to close app</>
+                              <text >#needclosemm#</>
+                              <btns >okcancel</>
+                              <resvar >msgret</>
+                              <msgif >cancel</>
+                              <if ></>
+                              <help >0</>
+                              <hcmd ></>
+                              <defbtn >def</>
+                              <msgmode >def</>
+                           </>
+                        </>
+                        <desc >mm</>
+                        <checktype >process</>
+                        <name >MindManager.exe</>
+                        <not >0</>
+                        <resvar >mm_running</>
+                        <msg ></>
+                        <if ></>
+                     </>
+                     <_ tag = 0 id = close >
+                        <desc >MindManager</>
+                        <closetype >process</>
+                        <name >MindManager.exe</>
+                        <closelist >
+                           <rows ></>
+                        </>
+                     </>
+                     <_ tag = 0 id = unpack disabled = 0 >
+                        <desc >Установка Community.CsharpSqlite4.dll</>
+                        <comptype >default</>
+                        <ratio >r5</>
+                        <solid >1</>
+                        <path >custom</>
+                        <custpath >$progfiles$\Palmaross\Common</>
+                        <ifexist >overnewer</>
+                        <if ></>
+                        <srclist >
+                           <rows rel = unpack >
+                              <_ >
+                                 <filename >d:\repos\Common\*.*</>
+                                 <recurse >0</>
+                                 <justfile >0</>
+                                 <emptydir >0</>
+                                 <exclude ></>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                        <varlist >
+                           <rows ></>
+                        </>
+                     </>
+                     <_ tag = 0 id = run disabled = 0 >
+                        <desc >Community.CsharpSqlite4.dll - в GAC</>
+                        <path >custom</>
+                        <name >$progfiles$\PalmaRoss\Common\gacutil.exe</>
+                        <cmdline >/nologo /silent /i "$progfiles$\PalmaRoss\Common\Community.CsharpSqlite4.dll"</>
+                        <work >default</>
+                        <defwork ></>
+                        <wait >1</>
+                        <runas >norm</>
+                        <if ></>
+                     </>
+                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                        <children >
+                           <_ tag = 0 id = run >
+                              <desc >PalmaRossCommon22.dlll - в GAC</>
+                              <path >custom</>
+                              <name >$progfiles$\PalmaRoss\Common\gacutil.exe</>
+                              <cmdline >/nologo /silent /i "$progfiles$\PalmaRoss\Common\PalmaRossCommon22.dll"</>
+                              <work >default</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >norm</>
+                              <if ></>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >mm22x32major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >22</>
+                                 <orand >or</>
+                                 <comm ></>
+                              </>
+                              <_ >
+                                 <varname >mm22x64major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >22</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                        <children >
+                           <_ tag = 0 id = run >
+                              <desc >PalmaRossCommon22.dlll - в GAC</>
+                              <path >custom</>
+                              <name >$progfiles$\PalmaRoss\Common\gacutil.exe</>
+                              <cmdline >/nologo /silent /i "$progfiles$\PalmaRoss\Common\PalmaRossCommon23.dll"</>
+                              <work >default</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >norm</>
+                              <if ></>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >mm23x32major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >23</>
+                                 <orand >or</>
+                                 <comm ></>
+                              </>
+                              <_ >
+                                 <varname >mm23x64major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >23</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = unpack >
+                        <desc >BubblesCommonUnpack</>
+                        <comptype >default</>
+                        <ratio >r5</>
+                        <solid >1</>
+                        <path >inst</>
+                        <custpath ></>
+                        <ifexist >over</>
+                        <if ></>
+                        <srclist >
+                           <rows rel = unpack >
+                              <_ >
+                                 <filename >d:\repos\Bubbles\setup\images</>
+                                 <recurse >0</>
+                                 <justfile >0</>
+                                 <emptydir >0</>
+                                 <exclude >desktop.ini</>
+                                 <comm ></>
+                              </>
+                              <_ >
+                                 <filename >d:\repos\Bubbles\setup\lang-resources</>
+                                 <recurse >0</>
+                                 <justfile >0</>
+                                 <emptydir >0</>
+                                 <exclude >desktop.ini</>
+                                 <comm ></>
+                              </>
+                              <_ >
+                                 <filename >d:\repos\Bubbles\setup\common-root\*.*</>
+                                 <recurse >0</>
+                                 <justfile >0</>
+                                 <emptydir >0</>
+                                 <exclude >desktop.ini</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                        <varlist >
+                           <rows ></>
+                        </>
+                     </>
+                     <_ tag = 0 id = copy disabled = 1 >
+                        <desc ></>
+                        <srcpath >inst</>
+                        <name >lang-resources\#clang#\Resources</>
+                        <recurse >0</>
+                        <justfile >0</>
+                        <path >inst</>
+                        <custpath ></>
+                        <ifexist >over</>
+                        <if ></>
+                        <nofiles >0</>
+                     </>
+                     <_ tag = 0 id = copy >
+                        <desc ></>
+                        <srcpath >inst</>
+                        <name >lang-resources\#clang#\Root\*.*</>
+                        <recurse >0</>
+                        <justfile >0</>
+                        <path >inst</>
+                        <custpath ></>
+                        <ifexist >over</>
+                        <if ></>
+                        <nofiles >0</>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
+                        <children >
+                           <_ tag = 0 id = regget >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >SOFTWARE\Mindjet\MindManager\20\Settings</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >LocalLibraryDirectory</>
+                                       <varname >MM20Library</>
+                                       <defval ></>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                           </>
+                           <_ tag = 0 id = unpack >
+                              <desc ></>
+                              <comptype >default</>
+                              <ratio >r5</>
+                              <solid >1</>
+                              <path >inst</>
+                              <custpath ></>
+                              <ifexist >overnewer</>
+                              <if ></>
+                              <srclist >
+                                 <rows >
+                                    <_ >
+                                       <filename >d:\repos\GoogleCalendar\setup\$appname$\CalendarManager20.dll</>
+                                       <recurse >0</>
+                                       <justfile >1</>
+                                       <emptydir >0</>
+                                       <exclude ></>
+                                    </>
+                                 </>
+                              </>
+                              <varlist >
+                                 <rows ></>
+                              </>
+                           </>
+                           <_ tag = 0 id = regset disabled = 0 >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\20\AddIns\CalendarManager20.Connect</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >Description</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager Add-in for MindManager 2020</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >FriendlyName</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >LoadBehavior</>
+                                       <regtype >num</>
+                                       <value >2</>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = regset disabled = 0 >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\20\AddIns\CalendarManager20.Connect</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >Description</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager Add-in for MindManager 2020</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >FriendlyName</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >LoadBehavior</>
+                                       <regtype >num</>
+                                       <value >3</>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = run disabled = 0 >
+                              <desc ></>
+                              <path >inst</>
+                              <name >regasm.exe</>
+                              <cmdline >/codebase /nologo /silent CalendarManager20.dll</>
+                              <work >inst</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >hide</>
+                              <if ></>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >mm20x32major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >20</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
+                        <children >
+                           <_ tag = 0 id = regget >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >SOFTWARE\Mindjet\MindManager\21\Settings</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >LocalLibraryDirectory</>
+                                       <varname >MM21Library</>
+                                       <defval ></>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                           </>
+                           <_ tag = 0 id = unpack >
+                              <desc ></>
+                              <comptype >default</>
+                              <ratio >r5</>
+                              <solid >1</>
+                              <path >inst</>
+                              <custpath ></>
+                              <ifexist >overnewer</>
+                              <if ></>
+                              <srclist >
+                                 <rows >
+                                    <_ >
+                                       <filename >d:\repos\GoogleCalendar\setup\$appname$\CalendarManager21.dll</>
+                                       <recurse >0</>
+                                       <justfile >1</>
+                                       <emptydir >0</>
+                                       <exclude ></>
+                                    </>
+                                 </>
+                              </>
+                              <varlist >
+                                 <rows ></>
+                              </>
+                           </>
+                           <_ tag = 0 id = regset disabled = 0 >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\21\AddIns\CalendarManager21.Connect</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >Description</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager Add-in for MindManager 2021</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >FriendlyName</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >LoadBehavior</>
+                                       <regtype >num</>
+                                       <value >2</>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = regset disabled = 0 >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\21\AddIns\CalendarManager21.Connect</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >Description</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager Add-in for MindManager 2021</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >FriendlyName</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >LoadBehavior</>
+                                       <regtype >num</>
+                                       <value >3</>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = run disabled = 0 >
+                              <desc ></>
+                              <path >inst</>
+                              <name >regasm.exe</>
+                              <cmdline >/codebase /nologo /silent CalendarManager21.dll</>
+                              <work >inst</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >hide</>
+                              <if ></>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >mm21x32major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >21</>
+                                 <orand >and</>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
+                        <children >
+                           <_ tag = 0 id = regget >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >SOFTWARE\Mindjet\MindManager\22\Settings</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >LocalLibraryDirectory</>
+                                       <varname >MM22Library</>
+                                       <defval ></>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                           </>
+                           <_ tag = 0 id = unpack >
+                              <desc ></>
+                              <comptype >default</>
+                              <ratio >r5</>
+                              <solid >1</>
+                              <path >inst</>
+                              <custpath ></>
+                              <ifexist >overnewer</>
+                              <if ></>
+                              <srclist >
+                                 <rows >
+                                    <_ >
+                                       <filename >d:\repos\GoogleCalendar\setup\$appname$\CalendarManager22.dll</>
+                                       <recurse >0</>
+                                       <justfile >1</>
+                                       <emptydir >0</>
+                                       <exclude ></>
+                                    </>
+                                 </>
+                              </>
+                              <varlist >
+                                 <rows ></>
+                              </>
+                           </>
+                           <_ tag = 0 id = regset disabled = 0 >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\22\AddIns\CalendarManager22.Connect</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >Description</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager Add-in for MindManager 22</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >FriendlyName</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >LoadBehavior</>
+                                       <regtype >num</>
+                                       <value >2</>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = regset disabled = 0 >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\22\AddIns\CalendarManager22.Connect</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >Description</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager Add-in for MindManager 22</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >FriendlyName</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >LoadBehavior</>
+                                       <regtype >num</>
+                                       <value >3</>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = run disabled = 0 >
+                              <desc ></>
+                              <path >inst</>
+                              <name >regasm.exe</>
+                              <cmdline >/codebase /nologo /silent CalendarManager22.dll</>
+                              <work >inst</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >hide</>
+                              <if ></>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >mm22x32major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >22</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
+                        <children >
+                           <_ tag = 0 id = regget >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >SOFTWARE\Mindjet\MindManager\23\Settings</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >LocalLibraryDirectory</>
+                                       <varname >MM23Library</>
+                                       <defval ></>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                           </>
+                           <_ tag = 0 id = unpack >
+                              <desc ></>
+                              <comptype >default</>
+                              <ratio >r5</>
+                              <solid >1</>
+                              <path >inst</>
+                              <custpath ></>
+                              <ifexist >overnewer</>
+                              <if ></>
+                              <srclist >
+                                 <rows >
+                                    <_ >
+                                       <filename >d:\repos\GoogleCalendar\setup\$appname$\CalendarManager23.dll</>
+                                       <recurse >0</>
+                                       <justfile >1</>
+                                       <emptydir >0</>
+                                       <exclude ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                              <varlist >
+                                 <rows ></>
+                              </>
+                           </>
+                           <_ tag = 0 id = regset disabled = 0 >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\23\AddIns\CalendarManager23.Connect</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >Description</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager Add-in for MindManager 23</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                    <_ >
+                                       <valname >FriendlyName</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                    <_ >
+                                       <valname >LoadBehavior</>
+                                       <regtype >num</>
+                                       <value >2</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = regset disabled = 0 >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\23\AddIns\CalendarManager23.Connect</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >Description</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager Add-in for MindManager 23</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                    <_ >
+                                       <valname >FriendlyName</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                    <_ >
+                                       <valname >LoadBehavior</>
+                                       <regtype >num</>
+                                       <value >3</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = run disabled = 0 >
+                              <desc ></>
+                              <path >inst</>
+                              <name >regasm.exe</>
+                              <cmdline >/codebase /nologo /silent CalendarManager23.dll</>
+                              <work >inst</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >hide</>
+                              <if ></>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >mm23x32major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >23</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
+                        <children >
+                           <_ tag = 0 id = regget >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >SOFTWARE\Mindjet\MindManager\20\Settings</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >LocalLibraryDirectory</>
+                                       <varname >MM20Library</>
+                                       <defval ></>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                           </>
+                           <_ tag = 0 id = unpack >
+                              <desc ></>
+                              <comptype >default</>
+                              <ratio >r5</>
+                              <solid >1</>
+                              <path >inst</>
+                              <custpath ></>
+                              <ifexist >overnewer</>
+                              <if ></>
+                              <srclist >
+                                 <rows >
+                                    <_ >
+                                       <filename >d:\repos\GoogleCalendar\setup\$appname$\CalendarManager20.dll</>
+                                       <recurse >0</>
+                                       <justfile >1</>
+                                       <emptydir >0</>
+                                       <exclude ></>
+                                    </>
+                                 </>
+                              </>
+                              <varlist >
+                                 <rows ></>
+                              </>
+                           </>
+                           <_ tag = 0 id = regset disabled = 0 >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\20\AddIns\CalendarManager20.Connect</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >Description</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager Add-in for MindManager 2020</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >FriendlyName</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >LoadBehavior</>
+                                       <regtype >num</>
+                                       <value >2</>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = run disabled = 0 >
+                              <desc ></>
+                              <path >inst</>
+                              <name >regasm.exe</>
+                              <cmdline >/codebase /nologo /silent CalendarManager20.dll</>
+                              <work >inst</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >hide</>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = run disabled = 0 >
+                              <desc ></>
+                              <path >inst</>
+                              <name >regasm64.exe</>
+                              <cmdline >/codebase /nologo /silent CalendarManager20.dll</>
+                              <work >inst</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >hide</>
+                              <if ></>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >os64</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >1</>
+                                 <orand >and</>
+                              </>
+                              <_ >
+                                 <varname >mm20x64major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >20</>
+                                 <orand >and</>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
+                        <children >
+                           <_ tag = 0 id = regget >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >SOFTWARE\Mindjet\MindManager\21\Settings</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >LocalLibraryDirectory</>
+                                       <varname >MM21Library</>
+                                       <defval ></>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                           </>
+                           <_ tag = 0 id = unpack >
+                              <desc ></>
+                              <comptype >default</>
+                              <ratio >r5</>
+                              <solid >1</>
+                              <path >inst</>
+                              <custpath ></>
+                              <ifexist >overnewer</>
+                              <if ></>
+                              <srclist >
+                                 <rows >
+                                    <_ >
+                                       <filename >d:\repos\GoogleCalendar\setup\$appname$\CalendarManager21.dll</>
+                                       <recurse >0</>
+                                       <justfile >1</>
+                                       <emptydir >0</>
+                                       <exclude ></>
+                                    </>
+                                 </>
+                              </>
+                              <varlist >
+                                 <rows ></>
+                              </>
+                           </>
+                           <_ tag = 0 id = regset disabled = 0 >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\21\AddIns\CalendarManager21.Connect</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >Description</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager Add-in for MindManager 2021</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >FriendlyName</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >LoadBehavior</>
+                                       <regtype >num</>
+                                       <value >2</>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = run disabled = 0 >
+                              <desc ></>
+                              <path >inst</>
+                              <name >regasm.exe</>
+                              <cmdline >/codebase /nologo /silent CalendarManager21.dll</>
+                              <work >inst</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >hide</>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = run disabled = 0 >
+                              <desc ></>
+                              <path >inst</>
+                              <name >regasm64.exe</>
+                              <cmdline >/codebase /nologo /silent CalendarManager21.dll</>
+                              <work >inst</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >hide</>
+                              <if ></>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >os64</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >1</>
+                                 <orand >and</>
+                              </>
+                              <_ >
+                                 <varname >mm21x64major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >21</>
+                                 <orand >and</>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
+                        <children >
+                           <_ tag = 0 id = regget >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >SOFTWARE\Mindjet\MindManager\22\Settings</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >LocalLibraryDirectory</>
+                                       <varname >MM22Library</>
+                                       <defval ></>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                           </>
+                           <_ tag = 0 id = unpack >
+                              <desc ></>
+                              <comptype >default</>
+                              <ratio >r5</>
+                              <solid >1</>
+                              <path >inst</>
+                              <custpath ></>
+                              <ifexist >overnewer</>
+                              <if ></>
+                              <srclist >
+                                 <rows >
+                                    <_ >
+                                       <filename >d:\repos\GoogleCalendar\setup\$appname$\CalendarManager22.dll</>
+                                       <recurse >0</>
+                                       <justfile >1</>
+                                       <emptydir >0</>
+                                       <exclude ></>
+                                    </>
+                                 </>
+                              </>
+                              <varlist >
+                                 <rows ></>
+                              </>
+                           </>
+                           <_ tag = 0 id = regset disabled = 0 >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\22\AddIns\CalendarManager22.Connect</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >Description</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager Add-in for MindManager 22</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >FriendlyName</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager</>
+                                       <if ></>
+                                    </>
+                                    <_ >
+                                       <valname >LoadBehavior</>
+                                       <regtype >num</>
+                                       <value >2</>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = run disabled = 0 >
+                              <desc ></>
+                              <path >inst</>
+                              <name >regasm.exe</>
+                              <cmdline >/codebase /nologo /silent CalendarManager22.dll</>
+                              <work >inst</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >hide</>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = run disabled = 0 >
+                              <desc ></>
+                              <path >inst</>
+                              <name >regasm64.exe</>
+                              <cmdline >/codebase /nologo /silent CalendarManager22.dll</>
+                              <work >inst</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >hide</>
+                              <if ></>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >os64</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >1</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                              <_ >
+                                 <varname >mm22x64major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >22</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
+                        <children >
+                           <_ tag = 0 id = regget >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >SOFTWARE\Mindjet\MindManager\23\Settings</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >LocalLibraryDirectory</>
+                                       <varname >MM23Library</>
+                                       <defval ></>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                           </>
+                           <_ tag = 0 id = unpack >
+                              <desc ></>
+                              <comptype >default</>
+                              <ratio >r5</>
+                              <solid >1</>
+                              <path >inst</>
+                              <custpath ></>
+                              <ifexist >overnewer</>
+                              <if ></>
+                              <srclist >
+                                 <rows >
+                                    <_ >
+                                       <filename >d:\repos\GoogleCalendar\setup\$appname$\CalendarManager23.dll</>
+                                       <recurse >0</>
+                                       <justfile >1</>
+                                       <emptydir >0</>
+                                       <exclude ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                              <varlist >
+                                 <rows ></>
+                              </>
+                           </>
+                           <_ tag = 0 id = regset disabled = 0 >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\23\AddIns\CalendarManager23.Connect</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >Description</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager Add-in for MindManager 23</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                    <_ >
+                                       <valname >FriendlyName</>
+                                       <regtype >str</>
+                                       <value >Calendar Manager</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                    <_ >
+                                       <valname >LoadBehavior</>
+                                       <regtype >num</>
+                                       <value >2</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = run disabled = 0 >
+                              <desc ></>
+                              <path >inst</>
+                              <name >regasm.exe</>
+                              <cmdline >/codebase /nologo /silent CalendarManager23.dll</>
+                              <work >inst</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >hide</>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = run disabled = 0 >
+                              <desc ></>
+                              <path >inst</>
+                              <name >regasm64.exe</>
+                              <cmdline >/codebase /nologo /silent CalendarManager23.dll</>
+                              <work >inst</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >hide</>
+                              <if ></>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >os64</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >1</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                              <_ >
+                                 <varname >mm23x64major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >23</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = regset >
+                        <desc ></>
+                        <root >curuser</>
+                        <subkey >SOFTWARE\PalmaRoss\CalendarManager</>
+                        <wow64 >0</>
+                        <reglist >
+                           <rows >
+                              <_ >
+                                 <valname >PalmarossCommonVersion</>
+                                 <regtype >str</>
+                                 <value >2.2.0.0</>
+                                 <if ></>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                        <if ></>
+                     </>
+                     <_ tag = 0 id = regset >
+                        <desc ></>
+                        <root >curuser</>
+                        <subkey >SOFTWARE\PalmaRoss\CalendarManager</>
+                        <wow64 >0</>
+                        <reglist >
+                           <rows >
+                              <_ >
+                                 <valname >version</>
+                                 <regtype >str</>
+                                 <value >4.2.2.0</>
+                                 <if ></>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                        <if ></>
+                     </>
+                     <_ tag = 0 id = regset >
+                        <desc ></>
+                        <root >curuser</>
+                        <subkey >SOFTWARE\PalmaRoss\CalendarManager</>
+                        <wow64 >0</>
+                        <reglist >
+                           <rows >
+                              <_ >
+                                 <valname >language</>
+                                 <regtype >str</>
+                                 <value >#clang#</>
+                                 <if ></>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                        <if ></>
+                     </>
+                     <_ id = uninstexe >
+                        <desc ></>
+                     </>
+                     <_ id = unar >
+                        <desc ></>
+                        <name ></>
+                        <path >inst</>
+                        <ifile ></>
+                        <estsize ></>
+                        <forcu >0</>
+                     </>
+                  </>
+                  <desc >Go into the item for viewing unpacking actions.</>
+                  <auto >1</>
+                  <buttons >nc</>
+                  <design >left</>
+                  <headlogo ></>
+                  <varlist >
+                     <rows ></>
+                  </>
+                  <head ></>
+                  <headtext ></>
+                  <dlgtext ></>
+                  <if ></>
+               </>
+               <_ id = dlgfin >
+                  <desc >С запросом запуска ММ</>
+                  <buttons >c</>
+                  <design >left</>
+                  <headlogo ></>
+                  <chlist >
+                     <rows >
+                        <_ >
+                           <varname >runapp</>
+                           <value >#runMM#</>
+                        </>
+                     </>
+                  </>
+                  <varlist >
+                     <rows >
+                        <_ >
+                           <varname >runapp</>
+                           <value >0</>
+                           <if ></>
+                        </>
+                     </>
+                  </>
+                  <head ></>
+                  <headtext ></>
+                  <dlgtext ></>
+                  <if ></>
+               </>
+               <_ tag = 0 id = if expanded = 0 >
+                  <children >
+                     <_ tag = 0 id = regget >
+                        <desc >Путь к MindManager.exe 22x64</>
+                        <root >locmach</>
+                        <subkey >Software\Mindjet\MindManager\23\Installer</>
+                        <wow64 >1</>
+                        <reglist >
+                           <rows >
+                              <_ >
+                                 <valname >MainDir</>
+                                 <varname >MMPath</>
+                                 <defval >4</>
+                                 <if ></>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 2 >
+                        <children >
+                           <_ tag = 0 id = regget >
+                              <desc >Путь к MindManager.exe 22x32</>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\23\Installer</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >MainDir</>
+                                       <varname >MMPath</>
+                                       <defval >4</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                           </>
+                        </>
+                        <desc >Если путь не определен</>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >MMPath</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >4</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 2 >
+                        <children >
+                           <_ tag = 0 id = regget >
+                              <desc >Путь к MindManager.exe 22x64</>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\22\Installer</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >MainDir</>
+                                       <varname >MMPath</>
+                                       <defval >4</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                           </>
+                        </>
+                        <desc >Если путь не определен</>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >MMPath</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >4</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 2 >
+                        <children >
+                           <_ tag = 0 id = regget >
+                              <desc >Путь к MindManager.exe 22x32</>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\22\Installer</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >MainDir</>
+                                       <varname >MMPath</>
+                                       <defval >4</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                           </>
+                        </>
+                        <desc >Если путь не определен</>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >MMPath</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >4</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 2 >
+                        <children >
+                           <_ tag = 0 id = regget >
+                              <desc >Путь к MindManager.exe 21x64</>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\21\Installer</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >MainDir</>
+                                       <varname >MMPath</>
+                                       <defval >4</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                           </>
+                        </>
+                        <desc >Если путь не определен</>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >MMPath</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >4</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 2 >
+                        <children >
+                           <_ tag = 0 id = regget >
+                              <desc >Путь к MindManager.exe 21x32</>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\21\Installer</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >MainDir</>
+                                       <varname >MMPath</>
+                                       <defval >4</>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                           </>
+                        </>
+                        <desc >Если путь не определен</>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >MMPath</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >4</>
+                                 <orand >and</>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 2 >
+                        <children >
+                           <_ tag = 0 id = regget >
+                              <desc >Путь к MindManager.exe 20x64</>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\20\Installer</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >MainDir</>
+                                       <varname >MMPath</>
+                                       <defval >4</>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                           </>
+                        </>
+                        <desc >Если путь не определен</>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >MMPath</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >4</>
+                                 <orand >and</>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 2 >
+                        <children >
+                           <_ tag = 0 id = regget >
+                              <desc >Путь к MindManager.exe 20x32</>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\20\Installer</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >MainDir</>
+                                       <varname >MMPath</>
+                                       <defval >4</>
+                                       <if ></>
+                                    </>
+                                 </>
+                              </>
+                           </>
+                        </>
+                        <desc >Если путь не определен</>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >MMPath</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >4</>
+                                 <orand >and</>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = run disabled = 0 >
+                        <desc >запуск MindManager</>
+                        <path >custom</>
+                        <name >#MMPath#\MindManager.exe</>
+                        <cmdline ></>
+                        <work >custom</>
+                        <defwork ></>
+                        <wait >0</>
+                        <runas >norm</>
+                        <if ></>
+                     </>
+                  </>
+                  <desc >Если запускать ММ</>
+                  <else ></>
+                  <condlist >
+                     <rows >
+                        <_ >
+                           <varname >runapp</>
+                           <iftype >equal</>
+                           <not >0</>
+                           <value >1</>
+                           <orand >or</>
+                           <comm ></>
+                        </>
+                     </>
+                  </>
+               </>
+            </>
+            <icofile >default</>
+            <resfile ></>
+            <leftimg >install - 1</>
+            <caption ></>
+            <verinfo >1</>
+            <noadmin >0</>
+            <selfdelete >0</>
+            <allowinst >0</>
+            <manfile ></>
+            <priv >0</>
+         </>
+      </>
+   </>
+   <uninstallroot sorttype = 0 >
+      <children >
+         <uninstall id = uninstall expanded = 2 >
+            <children >
+               <_ id = dlguconf >
+                  <desc ></>
+                  <buttons >c</>
+                  <design >left</>
+                  <headlogo ></>
+                  <varlist >
+                     <rows ></>
+                  </>
+                  <head ></>
+                  <headtext ></>
+                  <dlgtext ></>
+                  <if ></>
+               </>
+               <_ tag = 0 id = langres >
+                  <desc ></>
+                  <name >english</>
+                  <varlist >
+                     <rows >
+                        <_ >
+                           <varname >ifdeleteallfiles</>
+                           <value >Do you want to delete all settings, databases and other files as well?</>
+                        </>
+                        <_ >
+                           <varname >needclosemm_deinst</>
+                           <value >You need to close MindManager to continue.
+Please save all unsaved work and click OK.
+To abort deinstalling, click Cancel.</>
+                        </>
+                        <_ >
+                           <varname >needrerun_deinst</>
+                           <value >CalendarManager was not removed.
+Please try further.</>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ tag = 0 id = langres >
+                  <desc ></>
+                  <name >russian</>
+                  <varlist >
+                     <rows >
+                        <_ >
+                           <varname >needclosemm_deinst</>
+                           <value >Для продолжения нужно закрыть все окна MindManager.
+Сохраните все несохранённые документы и нажмите ОК.
+Для отмены удаления нажмите Отмена.</>
+                        </>
+                        <_ >
+                           <varname >ifdeleteallfiles</>
+                           <value >Хотите также удалить все настройки, базы данных и прочие файлы?</>
+                        </>
+                        <_ >
+                           <varname >needrerun_deinst</>
+                           <value >Ошибка в удалении CalendarManager.
+Пожалуйста, повторите попытку позже.</>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ tag = 0 id = check expanded = 2 disabled = 0 >
+                  <children >
+                     <_ tag = 0 id = message expanded = 2 >
+                        <children >
+                           <_ tag = 0 id = message expanded = 2 >
+                              <children >
+                                 <_ tag = 0 id = exit >
+                                    <desc ></>
+                                    <extype >exit</>
+                                    <code >1</>
+                                    <msg ></>
+                                    <if ></>
+                                 </>
+                              </>
+                              <desc ></>
+                              <type >info</>
+                              <caption >Setup is not complete</>
+                              <text >#needrerun#</>
+                              <btns >ok</>
+                              <resvar >msgret</>
+                              <msgif >ok</>
+                              <help >0</>
+                              <hcmd ></>
+                              <defbtn >def</>
+                              <msgmode >def</>
+                              <if ></>
+                           </>
+                        </>
+                        <desc ></>
+                        <type >quest</>
+                        <caption >Need to close app</>
+                        <text >#needclosemm#</>
+                        <btns >okcancel</>
+                        <resvar >msgret</>
+                        <msgif >cancel</>
+                        <if ></>
+                        <help >0</>
+                        <hcmd ></>
+                        <defbtn >def</>
+                        <msgmode >def</>
+                     </>
+                  </>
+                  <desc >mm</>
+                  <checktype >process</>
+                  <name >MindManager.exe</>
+                  <not >0</>
+                  <resvar >mm_running</>
+                  <msg ></>
+                  <if ></>
+               </>
+               <_ tag = 0 id = close >
+                  <desc ></>
+                  <closetype >process</>
+                  <name >MindManager.exe</>
+                  <closelist >
+                     <rows ></>
+                  </>
+               </>
+               <_ id = dlguprog expanded = 2 >
+                  <children >
+                     <_ id = unprocess disabled = 0 >
+                        <desc ></>
+                     </>
+                     <_ tag = 0 id = regget >
+                        <desc ></>
+                        <root >locmach</>
+                        <subkey >Software\Mindjet\MindManager\20\Settings</>
+                        <wow64 >0</>
+                        <reglist >
+                           <rows >
+                              <_ >
+                                 <valname >ProductVersionMajor</>
+                                 <varname >mm20x32major</>
+                                 <defval >4</>
+                                 <if ></>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = regget >
+                        <desc ></>
+                        <root >locmach</>
+                        <subkey >Software\Mindjet\MindManager\21\Settings</>
+                        <wow64 >0</>
+                        <reglist >
+                           <rows >
+                              <_ >
+                                 <valname >ProductVersionMajor</>
+                                 <varname >mm21x32major</>
+                                 <defval >4</>
+                                 <if ></>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = regget >
+                        <desc ></>
+                        <root >locmach</>
+                        <subkey >Software\Mindjet\MindManager\20\Settings</>
+                        <wow64 >1</>
+                        <reglist >
+                           <rows >
+                              <_ >
+                                 <valname >ProductVersionMajor</>
+                                 <varname >mm20x64major</>
+                                 <defval ></>
+                                 <if ></>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = regget >
+                        <desc ></>
+                        <root >locmach</>
+                        <subkey >Software\Mindjet\MindManager\21\Settings</>
+                        <wow64 >1</>
+                        <reglist >
+                           <rows >
+                              <_ >
+                                 <valname >ProductVersionMajor</>
+                                 <varname >mm21x64major</>
+                                 <defval ></>
+                                 <if ></>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = regget >
+                        <desc ></>
+                        <root >locmach</>
+                        <subkey >Software\Mindjet\MindManager\22\Settings</>
+                        <wow64 >0</>
+                        <reglist >
+                           <rows >
+                              <_ >
+                                 <valname >ProductVersionMajor</>
+                                 <varname >mm22x32major</>
+                                 <defval >4</>
+                                 <if ></>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = regget >
+                        <desc ></>
+                        <root >locmach</>
+                        <subkey >Software\Mindjet\MindManager\22\Settings</>
+                        <wow64 >1</>
+                        <reglist >
+                           <rows >
+                              <_ >
+                                 <valname >ProductVersionMajor</>
+                                 <varname >mm22x64major</>
+                                 <defval ></>
+                                 <if ></>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = regget >
+                        <desc ></>
+                        <root >locmach</>
+                        <subkey >Software\Mindjet\MindManager\23\Settings</>
+                        <wow64 >0</>
+                        <reglist >
+                           <rows >
+                              <_ >
+                                 <valname >ProductVersionMajor</>
+                                 <varname >mm23x32major</>
+                                 <defval >4</>
+                                 <if ></>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = regget >
+                        <desc ></>
+                        <root >locmach</>
+                        <subkey >Software\Mindjet\MindManager\23\Settings</>
+                        <wow64 >1</>
+                        <reglist >
+                           <rows >
+                              <_ >
+                                 <valname >ProductVersionMajor</>
+                                 <varname >mm23x64major</>
+                                 <defval ></>
+                                 <if ></>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 >
+                        <children >
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\20\User Interface\Custom\MultiMaps20.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\20\AddIns\CalendarManager20.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\20\AddIns\CalendarManager20.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >mm20x32major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >20</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 >
+                        <children >
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\21\User Interface\Custom\MultiMaps21.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\21\AddIns\CalendarManager21.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\21\AddIns\CalendarManager21.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >mm21x32major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >21</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 >
+                        <children >
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\22\User Interface\Custom\MultiMaps22.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\22\AddIns\CalendarManager22.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\22\AddIns\CalendarManager22.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >mm22x32major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >22</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 >
+                        <children >
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\23\User Interface\Custom\MultiMaps23.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\23\AddIns\CalendarManager23.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\23\AddIns\CalendarManager23.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >mm23x32major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >23</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 >
+                        <children >
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\20\User Interface\Custom\MultiMaps20.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\20\AddIns\CalendarManager20.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\20\AddIns\CalendarManager20.Connect</>
+                              <subdel >1</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >os64</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >1</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                              <_ >
+                                 <varname >mm20x64major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >20</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 >
+                        <children >
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\21\User Interface\Custom\MultiMaps21.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\21\AddIns\CalendarManager21.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\21\AddIns\CalendarManager21.Connect</>
+                              <subdel >1</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >os64</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >1</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                              <_ >
+                                 <varname >mm21x64major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >21</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 2 >
+                        <children >
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\22\User Interface\Custom\MultiMaps22.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\22\AddIns\CalendarManager22.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\22\AddIns\CalendarManager22.Connect</>
+                              <subdel >1</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >os64</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >1</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                              <_ >
+                                 <varname >mm22x64major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >22</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 2 >
+                        <children >
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\23\User Interface\Custom\MultiMaps23.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\23\AddIns\CalendarManager23.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\23\AddIns\CalendarManager23.Connect</>
+                              <subdel >1</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >os64</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >1</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                              <_ >
+                                 <varname >mm23x64major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >23</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                  </>
+                  <desc ></>
+                  <buttons >nc</>
+                  <design >left</>
+                  <headlogo ></>
+                  <varlist >
+                     <rows ></>
+                  </>
+                  <auto >1</>
+                  <head ></>
+                  <headtext ></>
+                  <dlgtext ></>
+                  <if ></>
+               </>
+               <_ tag = 0 id = message expanded = 2 >
+                  <children >
+                     <_ tag = 0 id = regdel >
+                        <desc >Удалить CalendarManager из реестра</>
+                        <root >curuser</>
+                        <subkey >Software\PalmaRoss\CalendarManager</>
+                        <subdel >1</>
+                        <subemptydel >0</>
+                        <wow64 >0</>
+                        <reglist >
+                           <rows ></>
+                        </>
+                     </>
+                     <_ tag = 0 id = delete >
+                        <desc >Удалить папку Documents\CalendarManager</>
+                        <path >custom</>
+                        <name >#docpath#\PalmaRoss\CalendarManager</>
+                        <recurse >1</>
+                        <justfile >0</>
+                        <delro >1</>
+                        <if ></>
+                     </>
+                  </>
+                  <desc >Удалить все настройки и файлы?</>
+                  <type >quest</>
+                  <caption ></>
+                  <text >#ifdeleteallfiles#</>
+                  <btns >okcancel</>
+                  <help >0</>
+                  <hcmd ></>
+                  <defbtn >def</>
+                  <msgmode >def</>
+                  <resvar >msgret</>
+                  <msgif >ok</>
+                  <if ></>
+               </>
+               <_ id = dlgundel >
+                  <desc ></>
+                  <buttons >nc</>
+                  <design >left</>
+                  <headlogo ></>
+                  <varlist >
+                     <rows ></>
+                  </>
+                  <head ></>
+                  <headtext ></>
+                  <dlgtext ></>
+                  <if ></>
+               </>
+               <_ id = dlgufin >
+                  <desc ></>
+                  <buttons >nc</>
+                  <design >left</>
+                  <headlogo ></>
+                  <varlist >
+                     <rows ></>
+                  </>
+                  <head ></>
+                  <headtext ></>
+                  <dlgtext ></>
+                  <feedback ></>
+                  <if ></>
+               </>
+            </>
+            <unicon >uninstall</>
+            <unresfile ></>
+            <leftimg >uninstall - 1</>
+            <caption ></>
+            <noadmin >0</>
+            <priv >0</>
+            <manfile ></>
+         </>
+      </>
+   </>
+   <phone ></>
+   <shfolder ></>
+   <headcol ></>
+   <headtext ></>
+   <headimg ></>
+   <stretchback >0</>
+   <silentpar >-silent</>
+   <custfont ></>
+   <upinclude >0</>
+   <uppath >inst</>
+   <upexe >calendarmanager-update.exe</>
+   <upurl >http://update.palmaross.com/versions</>
+   <upxml >calendarmanager-update.ini</>
+   <upredir >http://update.palmaross.com/updates</>
+   <csfile ></>
+   <csinst >"<exefilename>"</>
+   <csuninst >"<exefilename>"</>
+   <csupdate >"<exefilename>"</>
+   <crautorun >0</>
+   <autoicon ></>
+   <multilist >
+      <rows >
+         <_ >
+            <varname >exename</>
+            <value1 >CalendarManagerSetup</>
+            <value2 >CalendarManagersOLSetup</>
+            <value3 ></>
+            <value4 ></>
+            <value5 ></>
+            <value6 ></>
+            <value7 ></>
+            <value8 ></>
+            <value9 ></>
+            <value10 ></>
+            <value11 ></>
+            <value12 ></>
+            <value13 ></>
+            <value14 ></>
+            <value15 ></>
+            <value16 ></>
+            <value17 ></>
+            <value18 ></>
+            <value19 ></>
+            <value20 ></>
+         </>
+         <_ >
+            <varname >appname</>
+            <value1 >CalendarManager</>
+            <value2 >CalendarManager</>
+            <value3 ></>
+            <value4 ></>
+            <value5 ></>
+            <value6 ></>
+            <value7 ></>
+            <value8 ></>
+            <value9 ></>
+            <value10 ></>
+            <value11 ></>
+            <value12 ></>
+            <value13 ></>
+            <value14 ></>
+            <value15 ></>
+            <value16 ></>
+            <value17 ></>
+            <value18 ></>
+            <value19 ></>
+            <value20 ></>
+         </>
+         <_ >
+            <varname >version</>
+            <value1 >4.2.2.0</>
+            <value2 >4.2.2.0</>
+            <value3 ></>
+            <value4 ></>
+            <value5 ></>
+            <value6 ></>
+            <value7 ></>
+            <value8 ></>
+            <value9 ></>
+            <value10 ></>
+            <value11 ></>
+            <value12 ></>
+            <value13 ></>
+            <value14 ></>
+            <value15 ></>
+            <value16 ></>
+            <value17 ></>
+            <value18 ></>
+            <value19 ></>
+            <value20 ></>
+         </>
+      </>
+   </>
+   <ignnotfound >0</>
+   <tozip >0</>
+   <zipfile ></>
+   <updateroot sorttype = 0 >
+      <children >
+         <update id = update expanded = 2 >
+            <children >
+               <_ tag = 0 id = varset >
+                  <desc ></>
+                  <varlist >
+                     <rows >
+                        <_ >
+                           <varname >silent</>
+                           <value >0</>
+                           <if ></>
+                           <subst ></>
+                           <super ></>
+                        </>
+                        <_ >
+                           <varname >param</>
+                           <value >#updatexml#</>
+                           <if ></>
+                           <subst ></>
+                           <super ></>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ tag = 0 id = if expanded = 2 >
+                  <children >
+                     <_ tag = 0 id = varset >
+                        <desc ></>
+                        <varlist >
+                           <rows >
+                              <_ >
+                                 <varname >silent</>
+                                 <value >1</>
+                                 <if ></>
+                                 <subst ></>
+                                 <super ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                  </>
+                  <desc ></>
+                  <else ></>
+                  <condlist >
+                     <rows >
+                        <_ >
+                           <varname ></>
+                           <iftype >ifcommand</>
+                           <not >0</>
+                           <value >-s</>
+                           <orand >and</>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ tag = 0 id = download >
+                  <desc ></>
+                  <url ></>
+                  <filelist >
+                     <rows >
+                        <_ >
+                           <urlfile >#updatexml#</>
+                           <path >temp</>
+                           <custpath ></>
+                           <file >update.ini</>
+                           <if ></>
+                           <ifexist ></>
+                           <var ></>
+                        </>
+                     </>
+                  </>
+                  <ssl >0</>
+               </>
+               <_ tag = 0 id = iniget >
+                  <desc ></>
+                  <path >temp</>
+                  <ifile >update.ini</>
+                  <section >main</>
+                  <inilist >
+                     <rows >
+                        <_ >
+                           <key >version</>
+                           <varname >newver</>
+                           <defval >0</>
+                           <if ></>
+                        </>
+                        <_ >
+                           <key >url</>
+                           <varname >url</>
+                           <defval ></>
+                           <if ></>
+                        </>
+                     </>
+                  </>
+                  <utf >0</>
+               </>
+               <_ tag = 0 id = if expanded = 2 >
+                  <children >
+                     <_ tag = 0 id = if expanded = 2 >
+                        <children >
+                           <_ tag = 0 id = exit >
+                              <desc ></>
+                              <extype >exit</>
+                              <code >1</>
+                              <msg ></>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >silent</>
+                                 <iftype >notempty</>
+                                 <not >0</>
+                                 <value ></>
+                                 <orand >and</>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 2 >
+                        <children >
+                           <_ tag = 0 id = exit >
+                              <desc ></>
+                              <extype >exit</>
+                              <code >1</>
+                              <msg >#luperrdown#</>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >silent</>
+                                 <iftype >empty</>
+                                 <not >0</>
+                                 <value ></>
+                                 <orand >and</>
+                              </>
+                           </>
+                        </>
+                     </>
+                  </>
+                  <desc ></>
+                  <else ></>
+                  <condlist >
+                     <rows >
+                        <_ >
+                           <varname >newver</>
+                           <iftype >empty</>
+                           <not >0</>
+                           <value ></>
+                           <orand >and</>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ tag = 0 id = if expanded = 2 >
+                  <children >
+                     <_ tag = 0 id = message expanded = 2 >
+                        <children >
+                           <_ tag = 0 id = shell >
+                              <desc ></>
+                              <path >custom</>
+                              <name >#url#</>
+                              <if ></>
+                              <runasadmin >0</>
+                           </>
+                        </>
+                        <desc ></>
+                        <type >quest</>
+                        <caption >#lupcaption#</>
+                        <text >#lupnewer#</>
+                        <btns >yesno</>
+                        <resvar >msgret</>
+                        <msgif >yes</>
+                        <if ></>
+                        <help >0</>
+                        <hcmd ></>
+                        <defbtn >def</>
+                        <msgmode >def</>
+                     </>
+                  </>
+                  <desc ></>
+                  <else >lowerver</>
+                  <condlist >
+                     <rows >
+                        <_ >
+                           <varname >newver</>
+                           <iftype >greaterver</>
+                           <not >0</>
+                           <value >#ver#</>
+                           <orand >and</>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ tag = 0 id = function expanded = 2 >
+                  <children >
+                     <_ tag = 0 id = message expanded = 2 >
+                        <children >
+                           <_ tag = 0 id = empty ></>
+                        </>
+                        <desc ></>
+                        <type >info</>
+                        <caption >#lupcaption#</>
+                        <text >#lupok#</>
+                        <btns >def</>
+                        <resvar >msgret</>
+                        <msgif >def</>
+                        <if >!silent</>
+                        <help >0</>
+                        <hcmd ></>
+                        <defbtn >def</>
+                        <msgmode >def</>
+                     </>
+                  </>
+                  <desc ></>
+                  <name >lowerver</>
+               </>
+            </>
+            <upicon >update</>
+            <resfile ></>
+            <leftimg >update - 1</>
+            <caption ></>
+            <noadmin >1</>
+            <manfile ></>
+            <priv >0</>
+         </>
+      </>
+   </>
+</>

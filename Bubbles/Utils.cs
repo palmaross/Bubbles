@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Globalization;
 using Mindjet.MindManager.Interop;
-using System.Threading;
 using System.IO;
 using System.Linq;
 
@@ -430,16 +429,16 @@ namespace Bubbles
         /// <param name="signature">Custom Icon signature</param>
         /// <param name="iconName">Icon name</param>
         /// <param name="path">Path to custom icon</param>
-        public static void GetIcon(MmStockIcon aIcon, string signature, string iconName, string path, 
-            string groupName = "", bool mutex = false)
+        /// <param name="addtomap">If method is called by AddToMap command</param>
+        /// <return>False if icon is not in the specified group</return>
+        public static bool GetIcon(MmStockIcon aIcon, string signature, string iconName, string path,
+            string groupName = "", bool mutex = false, bool addtomap = false)
         {
             foreach (MapMarkerGroup mg in MMUtils.ActiveDocument.MapMarkerGroups)
             {
+                bool found = false;
                 if (mg.Type == MmMapMarkerGroupType.mmMapMarkerGroupTypeIcon || mg.Type == MmMapMarkerGroupType.mmMapMarkerGroupTypeSingleIcon)
                 {
-                    if (groupName != "" && mg.Name != groupName)
-                        continue; // we need a certain group
-
                     foreach (MapMarker icon in mg)
                     {
                         if (icon.Icon.Type == MmIconType.mmIconTypeStock)
@@ -447,11 +446,18 @@ namespace Bubbles
                             if (icon.Icon.StockIcon == aIcon)
                             {
                                 if (groupName == "" || mg.Name == groupName)
-                                    return; // icon exists already
+                                    return true; // icon exists in the right group already
 
-                                // Ups. Icon is located in another group.
-                                if (!RelocateIcon(mg, groupName, icon)) 
-                                    return;
+                                if (!addtomap) // adding icon to topic
+                                    return false; // icon is located in the other group
+
+                                // Icon should be added to the specified map marker group,
+                                // but it's located in the other group.
+                                if (!RelocateIcon(mg, groupName, icon))
+                                    return false; // user wants to remain icon in the other group.
+
+                                // Icon is deleted. Will be added to group below
+                                found = true;
                                 break;
                             }
                         }
@@ -460,24 +466,32 @@ namespace Bubbles
                             if (icon.Icon.CustomIconSignature == signature)
                             {
                                 if (groupName == "" || mg.Name == groupName)
-                                    return; // icon exists already
+                                    return true; // icon exists in the right group already
 
-                                // Ups. Icon is located in another group.
+                                if (!addtomap) // adding icon to topic
+                                    return false; // icon is located in the other group
+
+                                // Ups. Icon should be added to the specified map marker group,
+                                // but it's located in the other group.
                                 if (!RelocateIcon(mg, groupName, icon))
-                                    return;
+                                    return false; // user wants remain icon in another group.
+
+                                // Icon is deleted. Will be added to group below
+                                found = true;
                                 break;
                             }
                         }
+                        if (found) break;
                     }
                 }
             }
 
-            // Icon not found. Add icon to the group
+            // Icon not found or deleted. Add icon to the group
             MapMarkerGroup _mg;
             if (groupName == "")
                 _mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeSingleIcon);
             else
-                _mg = GetIconGroup(groupName, mutex);
+                _mg = GetIconGroup(groupName, mutex, true);
 
             if (_mg != null)
             {
@@ -486,6 +500,7 @@ namespace Bubbles
                 else
                     _mg.AddCustomIconMarker(iconName, path);
             }
+            return true;
         }
 
         /// <summary>
@@ -525,19 +540,46 @@ namespace Bubbles
             if (mg.Type == MmMapMarkerGroupType.mmMapMarkerGroupTypeSingleIcon)
             {
                 // Icon found in the Single Icons group.
-                // Delete it (will be added to our group below).
+                // Delete it. Will be added to our group further.
                 icon.Delete();
             }
-            else // // Icon found in another group. Ask user what to do...
+            else // Icon found in another group. Ask user what to do...
             {
-                if (MessageBox.Show(String.Format(Utils.getString("askuser_whattodo_withicon"), mg.Name, groupName), "",
+                if (MessageBox.Show(String.Format(Utils.getString("icons.askuser_whattodo_withicon"), mg.Name, groupName), "",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     icon.Delete(); // User wants to move icon to his group.
-                                   // Delete icon (will be added to the group below).
+                                   // Delete icon. Will be added to the group further.
                 else
                     return false; // Icon remains in another group.
             }
             return true;
+        }
+
+        /// <summary>
+        /// Check if topic contains mutually exclusive icons. If yes, delete them.
+        /// </summary>
+        /// <param name="t">Topic to check</param>
+        /// <param name="Icons">Stick icon set</param>
+        /// <param name="aItem">exclude this item from checking</param>
+        public static void CheckMutuallyExclusive(Topic t, List<IconItem> Icons)
+        {
+            foreach (IconItem item in Icons)
+            {
+                if (item.FileName.StartsWith("stock"))
+                {
+                    MmStockIcon stockIcon = StockIcons[item.FileName];
+                    if (stockIcon != 0)
+                    {
+                        if (t.AllIcons.ContainsStockIcon(stockIcon))
+                            t.AllIcons.RemoveStockIcon(stockIcon);
+                    }
+                }
+                else
+                {
+                    if (t.AllIcons.ContainsCustomIcon(item.FileName))
+                        t.AllIcons.RemoveCustomIcon(item.FileName);
+                }
+            }
         }
 
         public static List<MapMarker> GetIconsFromGroup(string groupName)
