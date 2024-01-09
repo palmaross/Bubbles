@@ -68,9 +68,9 @@ namespace Bubbles
 
             try
             {
-                if (Directory.Exists(m_dataPath + "IconDB"))
+                if (!Directory.Exists(m_dataPath + "IconDB"))
                     Directory.CreateDirectory(m_dataPath + "IconDB");
-                if (Directory.Exists(m_dataPath + "ImageDB"))
+                if (!Directory.Exists(m_dataPath + "ImageDB"))
                     Directory.CreateDirectory(m_dataPath + "ImageDB");
             }
             catch { };
