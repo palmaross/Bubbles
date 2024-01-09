@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{243ABB0B-DD55-4E6E-8F67-ED9ACEB51A0E}</ProjectGuid>
+    <ProjectGuid>{47753526-1994-4211-A1DA-926C94F51BB2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bubbles23</RootNamespace>
-    <AssemblyName>Bubbles23</AssemblyName>
+    <RootNamespace>Sticks22</RootNamespace>
+    <AssemblyName>Sticks22</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -44,9 +44,9 @@
     <Reference Include="extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="PalmaRossCommon23, Version=1.0.0.0, Culture=neutral, PublicKeyToken=057dcba4e358e84f, processorArchitecture=MSIL">
+    <Reference Include="PalmaRossCommon22, Version=1.0.0.0, Culture=neutral, PublicKeyToken=057dcba4e358e84f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Common\PalmaRossCommon23.dll</HintPath>
+      <HintPath>..\..\Common\PalmaRossCommon22.dll</HintPath>
     </Reference>
     <Reference Include="PopupControl">
       <HintPath>..\..\DLLs\PopupControl.dll</HintPath>
@@ -143,8 +143,8 @@
       <DependentUpon>GetNameDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Bubbles.cs" />
-    <Compile Include="Bubbles23.cs" />
-    <Compile Include="AssemblyInfo23.cs" />
+    <Compile Include="Bubbles22.cs" />
+    <Compile Include="AssemblyInfo22.cs" />
     <Compile Include="BubbleBookmarks.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -752,7 +752,7 @@
   <ItemGroup>
     <COMReference Include="MindManager">
       <Guid>{1E1D4AF9-6640-49C1-A33B-8CE8B47C9785}</Guid>
-      <VersionMajor>23</VersionMajor>
+      <VersionMajor>22</VersionMajor>
       <VersionMinor>0</VersionMinor>
       <Lcid>0</Lcid>
       <WrapperTool>primary</WrapperTool>

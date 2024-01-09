@@ -28,8 +28,7 @@ namespace Bubbles
 
         public static void Init()
         {
-            Registered_AddinName = "Bubbles23.Connect";
-            FriendlyAddinName = "Bubbles";
+            FriendlyAddinName = "Sticks";
             I18n = MMUtils._hashtable;
             I18n_common = MMUtils._hashtableCommon;
             ImagesPath = MMUtils.m_imagesPath;
@@ -66,6 +65,16 @@ namespace Bubbles
             }
 
             GetCustomIcons(di);
+
+            try
+            {
+                if (Directory.Exists(m_dataPath + "IconDB"))
+                    Directory.CreateDirectory(m_dataPath + "IconDB");
+                if (Directory.Exists(m_dataPath + "ImageDB"))
+                    Directory.CreateDirectory(m_dataPath + "ImageDB");
+            }
+            catch { };
+
             di = new DirectoryInfo(m_dataPath + "IconDB");
             foreach (FileInfo fi in di.GetFiles())
             {

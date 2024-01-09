@@ -52,12 +52,6 @@ namespace Bubbles
                 StickerDummy.DummyStickerImageY = dlg.pStickerImage.Location.Y;
             }
 
-            try { 
-                Directory.CreateDirectory(Utils.m_dataPath + "IconDB");
-                Directory.CreateDirectory(Utils.m_dataPath + "ImageDB");
-            }
-            catch { };
-
             DataTable dt;
             using (BubblesDB db = new BubblesDB())
                 dt = db.ExecuteQuery("select * from STICKS order by type");

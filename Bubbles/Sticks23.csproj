@@ -1,0 +1,879 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{243ABB0B-DD55-4E6E-8F67-ED9ACEB51A0E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sticks23</RootNamespace>
+    <AssemblyName>Sticks23</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup>
+    <Reference Include="Community.CsharpSqlite4, Version=3.7.7.1, Culture=neutral, PublicKeyToken=c3dfbcf789af31c4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PalmaRossCommon\SQLite-csharp\Community.CsharpSqlite\bin\Release\Community.CsharpSqlite4.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="PalmaRossCommon23, Version=1.0.0.0, Culture=neutral, PublicKeyToken=057dcba4e358e84f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Common\PalmaRossCommon23.dll</HintPath>
+    </Reference>
+    <Reference Include="PopupControl">
+      <HintPath>..\..\DLLs\PopupControl.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsInput, Version=1.0.4.0, Culture=neutral, PublicKeyToken=9b287f7dc5073cad, processorArchitecture=MSIL">
+      <HintPath>..\packages\InputSimulator.1.0.4.0\lib\net20\WindowsInput.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AddTopicTemplateDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddTopicTemplateDlg.Designer.cs">
+      <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AlignSticksDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AlignSticksDlg.Designer.cs">
+      <DependentUpon>AlignSticksDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AppManager\TransactionWrapper.cs" />
+    <Compile Include="BubbleOrganizer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BubbleOrganizer.Designer.cs">
+      <DependentUpon>BubbleOrganizer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BulkOperationsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BulkOperationsDlg.Designer.cs">
+      <DependentUpon>BulkOperationsDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DragDropTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DragDropTest.Designer.cs">
+      <DependentUpon>DragDropTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BookmarkListDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BookmarkListDlg.Designer.cs">
+      <DependentUpon>BookmarkListDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ManageConfigsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManageConfigsDlg.Designer.cs">
+      <DependentUpon>ManageConfigsDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ManageResourceIcons.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ManageResourceIcons.Designer.cs">
+      <DependentUpon>ManageResourceIcons.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MyDateTimePicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MyDateTimePicker.Designer.cs">
+      <DependentUpon>MyDateTimePicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewSourceDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewSourceDlg.Designer.cs">
+      <DependentUpon>NewSourceDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AphorismDB.cs" />
+    <Compile Include="AppManager\DatabaseWrapper.cs" />
+    <Compile Include="BubbleFormat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BubbleFormat.Designer.cs">
+      <DependentUpon>BubbleFormat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GetNameDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GetNameDlg.Designer.cs">
+      <DependentUpon>GetNameDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Bubbles.cs" />
+    <Compile Include="Bubbles23.cs" />
+    <Compile Include="AssemblyInfo23.cs" />
+    <Compile Include="BubbleBookmarks.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BubbleBookmarks.Designer.cs">
+      <DependentUpon>BubbleBookmarks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BubbleTaskInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BubbleTaskInfo.Designer.cs">
+      <DependentUpon>BubbleTaskInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BubbleMySources.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BubbleMySources.Designer.cs">
+      <DependentUpon>BubbleMySources.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MySourcesListDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MySourcesListDlg.Designer.cs">
+      <DependentUpon>MySourcesListDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BubblePaste.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BubblePaste.Designer.cs">
+      <DependentUpon>BubblePaste.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BubbleIcons.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BubbleIcons.Designer.cs">
+      <DependentUpon>BubbleIcons.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainMenuDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainMenuDlg.Designer.cs">
+      <DependentUpon>MainMenuDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Organizer\ManageNoteGroups.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Organizer\ManageNoteGroups.Designer.cs">
+      <DependentUpon>ManageNoteGroups.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Organizer\ManageNoteMarkers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Organizer\ManageNoteMarkers.Designer.cs">
+      <DependentUpon>ManageNoteMarkers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Organizer\ManageNoteTags.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Organizer\ManageNoteTags.Designer.cs">
+      <DependentUpon>ManageNoteTags.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Organizer\NoteDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Organizer\NoteDlg.Designer.cs">
+      <DependentUpon>NoteDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ResourcesDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ResourcesDlg.Designer.cs">
+      <DependentUpon>ResourcesDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StickPopup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StickPopup.Designer.cs">
+      <DependentUpon>StickPopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SelectIconDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectIconDlg.Designer.cs">
+      <DependentUpon>SelectIconDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SelectImageDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectImageDlg.Designer.cs">
+      <DependentUpon>SelectImageDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SelectStickDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectStickDlg.Designer.cs">
+      <DependentUpon>SelectStickDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsDlg.Designer.cs">
+      <DependentUpon>SettingsDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AppManager\BubblesDB.cs" />
+    <Compile Include="SizeablePictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SnippetsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SnippetsDlg.Designer.cs">
+      <DependentUpon>SnippetsDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StickerDummy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StickerDummy.Designer.cs">
+      <DependentUpon>StickerDummy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StickUtils.cs" />
+    <Compile Include="Organizer\NotesDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Organizer\NotesDlg.Designer.cs">
+      <DependentUpon>NotesDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TaskTemplateDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TaskTemplateDlg.Designer.cs">
+      <DependentUpon>TaskTemplateDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TopicNotesDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TopicNotesDlg.Designer.cs">
+      <DependentUpon>TopicNotesDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TopicTemplatePreview.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TopicTemplatePreview.Designer.cs">
+      <DependentUpon>TopicTemplatePreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utils.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="app21.config" />
+    <None Include="I18n.default.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Sticks.chm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="images\1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\addicon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\addsubtopic.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\addtopic.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\addTextToTopic.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\addtotopic.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\align.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\bookmarkCentral.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\bookmarkFloat.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\bookmarkMain.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\bookmarkRest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\book_add.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\calendar.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\check.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\chm.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\close.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\close_sticker.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\collapse.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\collapse_expand.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\configuration.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddBefore.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddBefore20.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddCallout.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddCallout20.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddFloating.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddParent.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddParent20.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddSubtopic.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddSubtopic20.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddTopic.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpAddTopic20.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\cpTopicTemplate.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\Cursor1.cur">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\deleteall.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\deleteMain.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\deleteStick.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\detach.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\edit.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\emptyIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\expand.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\filter.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\filterbyicon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\filterremove.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\folder.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\formattedText.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\f_bold.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\f_boldActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\f_italic.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\f_italicActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\f_strike.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\f_strikeActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\f_under.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\f_underActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\groups.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\help.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\hide.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\list.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\manage.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\manageGroups.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\manageicons.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\managetags.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mm_project.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ms_audio.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ms_excel.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ms_exe.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ms_file.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ms_img.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ms_macros.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ms_map.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ms_pdf.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ms_txt.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ms_video.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ms_web.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ms_word.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ms_youtube.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwBookmarks.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwBookmarksActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwCopyPaste.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwCopyPasteActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwFormat.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwFormatActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwIcons.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwIcons24.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwIconsActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwNotepadActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwOrganizer.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwTaskInfo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwSettings.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwSources.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwSourcesActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\mwTskInfoActive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\newresource.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\newStick.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\newsticker.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\noteLink.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\paste.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pasteTextToTopic.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\callout.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\close_float.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\copyText.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\PasteLink.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\PasteNotes.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pasteText.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\period.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pr1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pr2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pr3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pr4.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pr5.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pro0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pro10.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pro100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pro25.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pro35.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pro50.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pro65.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pro75.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pro90.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\remember.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\removeallicons.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\removeicon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\removetaskinfo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\4.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\5.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\6.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\7.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\resources.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\resource_assign.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\resource_new.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\resource_new_active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\rotate.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\show.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\snippets.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\sort.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\sortAZ.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\sortZA.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\STICKS.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\tag.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\tag_s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\topic_setdate_active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\topic_setdate_noactive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\typeTemplate.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\uncheck.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\unformattedText.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\unformatText.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="MindManager">
+      <Guid>{1E1D4AF9-6640-49C1-A33B-8CE8B47C9785}</Guid>
+      <VersionMajor>23</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AddTopicTemplateDlg.resx">
+      <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AlignSticksDlg.resx">
+      <DependentUpon>AlignSticksDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BubbleOrganizer.resx">
+      <DependentUpon>BubbleOrganizer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BulkOperationsDlg.resx">
+      <DependentUpon>BulkOperationsDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DragDropTest.resx">
+      <DependentUpon>DragDropTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BookmarkListDlg.resx">
+      <DependentUpon>BookmarkListDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManageConfigsDlg.resx">
+      <DependentUpon>ManageConfigsDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManageResourceIcons.resx">
+      <DependentUpon>ManageResourceIcons.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MyDateTimePicker.resx">
+      <DependentUpon>MyDateTimePicker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewSourceDlg.resx">
+      <DependentUpon>NewSourceDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BubbleFormat.resx">
+      <DependentUpon>BubbleFormat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GetNameDlg.resx">
+      <DependentUpon>GetNameDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BubbleBookmarks.resx">
+      <DependentUpon>BubbleBookmarks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BubbleTaskInfo.resx">
+      <DependentUpon>BubbleTaskInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BubbleMySources.resx">
+      <DependentUpon>BubbleMySources.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MySourcesListDlg.resx">
+      <DependentUpon>MySourcesListDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BubblePaste.resx">
+      <DependentUpon>BubblePaste.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BubbleIcons.resx">
+      <DependentUpon>BubbleIcons.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainMenuDlg.resx">
+      <DependentUpon>MainMenuDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Organizer\ManageNoteGroups.resx">
+      <DependentUpon>ManageNoteGroups.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Organizer\ManageNoteMarkers.resx">
+      <DependentUpon>ManageNoteMarkers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Organizer\ManageNoteTags.resx">
+      <DependentUpon>ManageNoteTags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Organizer\NoteDlg.resx">
+      <DependentUpon>NoteDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResourcesDlg.resx">
+      <DependentUpon>ResourcesDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StickPopup.resx">
+      <DependentUpon>StickPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectIconDlg.resx">
+      <DependentUpon>SelectIconDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectImageDlg.resx">
+      <DependentUpon>SelectImageDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectStickDlg.resx">
+      <DependentUpon>SelectStickDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsDlg.resx">
+      <DependentUpon>SettingsDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SnippetsDlg.resx">
+      <DependentUpon>SnippetsDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StickerDummy.resx">
+      <DependentUpon>StickerDummy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Organizer\NotesDlg.resx">
+      <DependentUpon>NotesDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TaskTemplateDlg.resx">
+      <DependentUpon>TaskTemplateDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TopicNotesDlg.resx">
+      <DependentUpon>TopicNotesDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TopicTemplatePreview.resx">
+      <DependentUpon>TopicTemplatePreview.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>"%25WINDIR%25\Microsoft.NET\Framework64\v4.0.30319\regasm" "/codebase" "$(TargetPath)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("PalmaRoss")]
-[assembly: AssemblyProduct("Sticks Add-In for MindManager 23")]
+[assembly: AssemblyProduct("Sticks Add-In for MindManager 22")]
 [assembly: AssemblyCopyright("Copyright © 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(true)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("243abb0b-dd55-4e6e-8f67-ed9aceb51a0e")]
+[assembly: Guid("ECB7783A-62D8-48CC-BDB1-1C865828B4AE")]
 
 // Version information for an assembly consists of the following four values:
 //

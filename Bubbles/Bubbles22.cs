@@ -9,7 +9,7 @@
     ///   The object for implementing an Add-in.
     /// </summary>
     /// <seealso class='IDTExtensibility2' />
-    [GuidAttribute("A6E25E96-3200-4C90-9D4C-58BB430A8406"), ProgId("Sticks23.Connect")]
+    [GuidAttribute("47753526-1994-4211-A1DA-926C94F51BB2"), ProgId("Sticks22.Connect")]
     public class Connect : Object, Extensibility.IDTExtensibility2
     {
         /// <summary>
@@ -47,9 +47,9 @@
 
             try
             {
-                MMUtils.Version = 23;
-                MMUtils.Registered_AddinName = "Sticks23.Connect";
-                MMUtils.CLSID = "A6E25E96-3200-4C90-9D4C-58BB430A8406";
+                MMUtils.Version = 22;
+                MMUtils.Registered_AddinName = "Sticks22.Connect";
+                MMUtils.CLSID = "47753526-1994-4211-A1DA-926C94F51BB2";
                 MMUtils.CreateAddinFolder = true;
                 MMUtils.CreateAddinAppDataFolder = false;
                 MMUtils.checkForUpdates = true;
@@ -59,7 +59,7 @@
                 MMUtils.Company = "PalmaRoss";
                 Utils.Company = "PalmaRoss";
                 Utils.AddinName = "Sticks";
-                Utils.Registered_AddinName = "Sticks23.Connect";
+                Utils.Registered_AddinName = "Sticks22.Connect";
                 MMUtils.Language = Utils.getRegistry("language", "english");
                 MMUtils.AddinVersion = Utils.getRegistry("version");
                 MMUtils.licenseKeyStartsWith = "BB";
