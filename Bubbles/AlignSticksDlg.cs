@@ -21,6 +21,7 @@ namespace Bubbles
             chBoxExpandSticks2.Text = Utils.getString("AlignSticksDlg.chBoxExpandSticks");
             lblAlign.Text = Utils.getString("AlignSticksDlg.lblAlign");
             cbSelectAll.Text = Utils.getString("SettingsDlg.cbSelectAll");
+            lblDistance.Text = Utils.getString("AlignSticksDlg.lblDistance");
             btnRemember.Text = Utils.getString("AlignSticksDlg.btnRemember");
             btnCreateConfig.Text = Utils.getString("AlignSticksDlg.btnCreateConfig");
             btnAlign.Text = Utils.getString("AlignSticksDlg.btnAlign");
