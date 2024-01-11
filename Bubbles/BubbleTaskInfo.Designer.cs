@@ -238,7 +238,7 @@
             // 
             this.p2.Location = new System.Drawing.Point(22, 25);
             this.p2.Name = "p2";
-            this.p2.Size = new System.Drawing.Size(19, 3);
+            this.p2.Size = new System.Drawing.Size(16, 3);
             this.p2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.p2.TabIndex = 88;
             this.p2.TabStop = false;
@@ -264,7 +264,7 @@
             this.pTopicStartDate.Image = ((System.Drawing.Image)(resources.GetObject("pTopicStartDate.Image")));
             this.pTopicStartDate.Location = new System.Drawing.Point(-1, 16);
             this.pTopicStartDate.Name = "pTopicStartDate";
-            this.pTopicStartDate.Size = new System.Drawing.Size(32, 14);
+            this.pTopicStartDate.Size = new System.Drawing.Size(32, 15);
             this.pTopicStartDate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pTopicStartDate.TabIndex = 94;
             this.pTopicStartDate.TabStop = false;
@@ -276,7 +276,7 @@
             this.pTopicDueDate.Image = ((System.Drawing.Image)(resources.GetObject("pTopicDueDate.Image")));
             this.pTopicDueDate.Location = new System.Drawing.Point(-1, 16);
             this.pTopicDueDate.Name = "pTopicDueDate";
-            this.pTopicDueDate.Size = new System.Drawing.Size(32, 14);
+            this.pTopicDueDate.Size = new System.Drawing.Size(32, 15);
             this.pTopicDueDate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pTopicDueDate.TabIndex = 96;
             this.pTopicDueDate.TabStop = false;

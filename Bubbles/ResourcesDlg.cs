@@ -6,7 +6,6 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using Image = System.Drawing.Image;
 
 namespace Bubbles
@@ -95,6 +94,8 @@ namespace Bubbles
             mri.aParentForm = this;
 
             pResourceMode.BringToFront(); ResourceEnter.BringToFront();
+            txtResources.AutoSize = false;
+            txtResources.Size = new Size(txtResources.Width, ResourceEnter.Width);
 
             Init();
         }

@@ -83,9 +83,17 @@ namespace Bubbles
             // Set today's date
             pStartDate.Text = DateTime.Now.Date.ToString("dd, MM").Replace(", ", "/");
             pStartDate.Tag = DateTime.Now.Date.AddHours(8);
+            pStartDate.AutoSize = false;
+            pStartDate.Size = new Size(pStartDate.Width, p2.Width);
 
             pDueDate.Text = DateTime.Now.Date.ToString("dd, MM").Replace(", ", "/");
             pDueDate.Tag = DateTime.Now.Date.AddHours(8);
+            pDueDate.AutoSize = false;
+            pDueDate.Size = new Size(pDueDate.Width, p2.Width);
+
+            numDuration.AutoSize = false;
+            numDuration.Size = new Size(numDuration.Width, p2.Width);
+            linkDurationUnit.BringToFront();
 
             BubblesButton.SetDates();
 

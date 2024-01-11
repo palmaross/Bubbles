@@ -244,7 +244,7 @@
             this.panelIcons.Controls.Add(this.p3);
             this.panelIcons.Controls.Add(this.p2);
             this.panelIcons.Controls.Add(this.p1);
-            this.panelIcons.Location = new System.Drawing.Point(19, 101);
+            this.panelIcons.Location = new System.Drawing.Point(18, 101);
             this.panelIcons.Name = "panelIcons";
             this.panelIcons.Size = new System.Drawing.Size(125, 20);
             this.panelIcons.TabIndex = 40;
