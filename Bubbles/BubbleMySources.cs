@@ -149,11 +149,8 @@ namespace Bubbles
                         return;
                     sourcePath = _dlg.txtPath.Text;
                     sourceTitle = _dlg.txtTitle.Text;
-                    position = _dlg.rbtnEnd.Checked ? "end" :
-                        _dlg.rbtnBegin.Checked ? "begin" :
-                        _dlg.rbtnLeft.Checked ? "left" : "right";
                 }
-                NewIcon(sourcePath, sourceTitle, position);
+                NewIcon(sourcePath, sourceTitle, "end");
             }
             else if (e.ClickedItem.Name == "BI_delete")
             {
@@ -376,7 +373,7 @@ namespace Bubbles
 
                 // Get source list location
                 Rectangle child = dlg.RectangleToScreen(dlg.ClientRectangle);
-                dlg.Location = StickUtils.GetChildLocation(this, child, orientation);
+                dlg.Location = StickUtils.GetChildLocation(this, child, orientation, "sources");
                 
                 dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }

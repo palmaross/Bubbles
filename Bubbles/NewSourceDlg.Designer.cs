@@ -34,16 +34,10 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.lblSpecifyPath = new System.Windows.Forms.Label();
-            this.rbtnBegin = new System.Windows.Forms.RadioButton();
-            this.rbtnEnd = new System.Windows.Forms.RadioButton();
-            this.rbtnRight = new System.Windows.Forms.RadioButton();
-            this.rbtnLeft = new System.Windows.Forms.RadioButton();
-            this.lblInsertSource = new System.Windows.Forms.GroupBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.lblTitle = new System.Windows.Forms.Label();
             this.txtTitle = new System.Windows.Forms.TextBox();
-            this.lblInsertSource.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtPath
@@ -68,7 +62,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(283, 144);
+            this.btnCancel.Location = new System.Drawing.Point(283, 102);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 2;
@@ -78,7 +72,7 @@
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(199, 144);
+            this.btnOK.Location = new System.Drawing.Point(199, 102);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 3;
@@ -94,61 +88,6 @@
             this.lblSpecifyPath.Size = new System.Drawing.Size(274, 13);
             this.lblSpecifyPath.TabIndex = 4;
             this.lblSpecifyPath.Text = "Укажите путь к источнику или вставьте веб-ссылку:";
-            // 
-            // rbtnBegin
-            // 
-            this.rbtnBegin.AutoSize = true;
-            this.rbtnBegin.Location = new System.Drawing.Point(174, 18);
-            this.rbtnBegin.Name = "rbtnBegin";
-            this.rbtnBegin.Size = new System.Drawing.Size(70, 17);
-            this.rbtnBegin.TabIndex = 11;
-            this.rbtnBegin.Text = "В начало";
-            this.rbtnBegin.UseVisualStyleBackColor = true;
-            // 
-            // rbtnEnd
-            // 
-            this.rbtnEnd.AutoSize = true;
-            this.rbtnEnd.Checked = true;
-            this.rbtnEnd.Location = new System.Drawing.Point(271, 18);
-            this.rbtnEnd.Name = "rbtnEnd";
-            this.rbtnEnd.Size = new System.Drawing.Size(65, 17);
-            this.rbtnEnd.TabIndex = 10;
-            this.rbtnEnd.TabStop = true;
-            this.rbtnEnd.Text = "В конец";
-            this.rbtnEnd.UseVisualStyleBackColor = true;
-            // 
-            // rbtnRight
-            // 
-            this.rbtnRight.AutoSize = true;
-            this.rbtnRight.Location = new System.Drawing.Point(92, 18);
-            this.rbtnRight.Name = "rbtnRight";
-            this.rbtnRight.Size = new System.Drawing.Size(62, 17);
-            this.rbtnRight.TabIndex = 9;
-            this.rbtnRight.Text = "Справа";
-            this.rbtnRight.UseVisualStyleBackColor = true;
-            // 
-            // rbtnLeft
-            // 
-            this.rbtnLeft.AutoSize = true;
-            this.rbtnLeft.Location = new System.Drawing.Point(9, 18);
-            this.rbtnLeft.Name = "rbtnLeft";
-            this.rbtnLeft.Size = new System.Drawing.Size(56, 17);
-            this.rbtnLeft.TabIndex = 8;
-            this.rbtnLeft.Text = "Слева";
-            this.rbtnLeft.UseVisualStyleBackColor = true;
-            // 
-            // lblInsertSource
-            // 
-            this.lblInsertSource.Controls.Add(this.rbtnEnd);
-            this.lblInsertSource.Controls.Add(this.rbtnBegin);
-            this.lblInsertSource.Controls.Add(this.rbtnLeft);
-            this.lblInsertSource.Controls.Add(this.rbtnRight);
-            this.lblInsertSource.Location = new System.Drawing.Point(12, 90);
-            this.lblInsertSource.Name = "lblInsertSource";
-            this.lblInsertSource.Size = new System.Drawing.Size(346, 42);
-            this.lblInsertSource.TabIndex = 12;
-            this.lblInsertSource.TabStop = false;
-            this.lblInsertSource.Text = "Вставить источник";
             // 
             // openFileDialog1
             // 
@@ -170,12 +109,12 @@
             this.txtTitle.Size = new System.Drawing.Size(228, 20);
             this.txtTitle.TabIndex = 14;
             // 
-            // AddSourceDlg
+            // NewSourceDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(370, 177);
+            this.ClientSize = new System.Drawing.Size(370, 135);
             this.Controls.Add(this.txtTitle);
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.lblSpecifyPath);
@@ -183,17 +122,14 @@
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnBrowse);
             this.Controls.Add(this.txtPath);
-            this.Controls.Add(this.lblInsertSource);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "AddSourceDlg";
+            this.Name = "NewSourceDlg";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "AddSourceDlg";
-            this.lblInsertSource.ResumeLayout(false);
-            this.lblInsertSource.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -204,11 +140,6 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Label lblSpecifyPath;
-        public System.Windows.Forms.RadioButton rbtnBegin;
-        public System.Windows.Forms.RadioButton rbtnEnd;
-        public System.Windows.Forms.RadioButton rbtnRight;
-        public System.Windows.Forms.RadioButton rbtnLeft;
-        private System.Windows.Forms.GroupBox lblInsertSource;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Label lblTitle;

@@ -200,7 +200,7 @@
             this.btnDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnDown.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnDown.Image = ((System.Drawing.Image)(resources.GetObject("btnDown.Image")));
-            this.btnDown.Location = new System.Drawing.Point(491, 250);
+            this.btnDown.Location = new System.Drawing.Point(491, 203);
             this.btnDown.Margin = new System.Windows.Forms.Padding(6);
             this.btnDown.Name = "btnDown";
             this.btnDown.Size = new System.Drawing.Size(20, 20);
@@ -214,7 +214,7 @@
             this.btnUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnUp.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnUp.Image = ((System.Drawing.Image)(resources.GetObject("btnUp.Image")));
-            this.btnUp.Location = new System.Drawing.Point(491, 218);
+            this.btnUp.Location = new System.Drawing.Point(491, 171);
             this.btnUp.Margin = new System.Windows.Forms.Padding(6);
             this.btnUp.Name = "btnUp";
             this.btnUp.Size = new System.Drawing.Size(20, 20);

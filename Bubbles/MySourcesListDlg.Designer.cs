@@ -35,31 +35,38 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.p2 = new System.Windows.Forms.PictureBox();
             this.itemHeight = new System.Windows.Forms.PictureBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.MS_delete = new System.Windows.Forms.ToolStripMenuItem();
+            this.MS_rename = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.btnClose)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.itemHeight)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // listView1
             // 
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.listView1.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.ForeColor = System.Drawing.SystemColors.WindowText;
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(1, 1);
+            this.listView1.Location = new System.Drawing.Point(0, 0);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(238, 105);
+            this.listView1.Size = new System.Drawing.Size(216, 120);
             this.listView1.TabIndex = 6;
             this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.SmallIcon;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
             // 
             // btnClose
             // 
+            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.Image = ((System.Drawing.Image)(resources.GetObject("btnClose.Image")));
-            this.btnClose.Location = new System.Drawing.Point(224, 0);
+            this.btnClose.Location = new System.Drawing.Point(204, 0);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(16, 16);
             this.btnClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -93,16 +100,47 @@
             this.itemHeight.TabStop = false;
             this.itemHeight.Visible = false;
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MS_delete,
+            this.MS_rename});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(118, 48);
+            // 
+            // MS_delete
+            // 
+            this.MS_delete.Name = "MS_delete";
+            this.MS_delete.Size = new System.Drawing.Size(117, 22);
+            this.MS_delete.Text = "Delete";
+            // 
+            // MS_rename
+            // 
+            this.MS_rename.Name = "MS_rename";
+            this.MS_rename.Size = new System.Drawing.Size(117, 22);
+            this.MS_rename.Text = "Rename";
+            // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.listView1);
+            this.panel1.Location = new System.Drawing.Point(2, -16);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(216, 120);
+            this.panel1.TabIndex = 12;
+            // 
             // MySourcesListDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(240, 107);
+            this.ClientSize = new System.Drawing.Size(220, 108);
+            this.Controls.Add(this.btnClose);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.itemHeight);
             this.Controls.Add(this.p2);
-            this.Controls.Add(this.btnClose);
-            this.Controls.Add(this.listView1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MySourcesListDlg";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
@@ -110,6 +148,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.btnClose)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.itemHeight)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -120,5 +160,9 @@
         public System.Windows.Forms.ImageList imageList1;
         public System.Windows.Forms.PictureBox itemHeight;
         private System.Windows.Forms.PictureBox p2;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem MS_delete;
+        private System.Windows.Forms.ToolStripMenuItem MS_rename;
+        private System.Windows.Forms.Panel panel1;
     }
 }

@@ -14,17 +14,10 @@ namespace Bubbles
             Sources = sources;
 
             Text = Utils.getString("mysources.contextmenu.new");
-            lblSpecifyPath.Text = Utils.getString("SelectIconDlg.lblSpecifyPath");
+            lblSpecifyPath.Text = Utils.getString("NewSourceDlg.lblSpecifyPath");
             toolTip1.SetToolTip(btnBrowse, Utils.getString("button.browse"));
-            lblTitle.Text = Utils.getString("SelectIconDlg.lblTitle");
-            lblInsertSource.Text = Utils.getString("SelectIconDlg.lblInsertSource");
-            rbtnLeft.Text = Utils.getString("SelectIconDlg.rbtnLeft");
-            rbtnRight.Text = Utils.getString("SelectIconDlg.rbtnRight");
-            rbtnEnd.Text = Utils.getString("SelectIconDlg.rbtnEnd");
-            rbtnBegin.Text = Utils.getString("SelectIconDlg.rbtnBegin");
+            lblTitle.Text = Utils.getString("NewSourceDlg.lblTitle");
             btnCancel.Text = Utils.getString("button.cancel");
-
-            rbtnLeft.Enabled = !manage; rbtnRight.Enabled = !manage;
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)

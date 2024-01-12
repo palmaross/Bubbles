@@ -204,7 +204,7 @@ namespace Bubbles
             // Remove all icons
             foreach (PictureBox p in form.Controls.OfType<PictureBox>().Reverse())
             {
-                if (p.Tag == null) // not dynamic icons
+                if (p.Tag == null || p.Name == "SourceList") // not dynamic icons
                     continue;
                 p.Dispose();
             }
@@ -214,6 +214,8 @@ namespace Bubbles
                 stickLength = MinLength;
             else
                 stickLength = MinLength;
+
+            if (sticktype == typesources) stickLength += icondist;
 
             using (BubblesDB db = new BubblesDB())
             {
@@ -782,7 +784,7 @@ namespace Bubbles
             {
                 // common comands popup
                 X = parent.Right - child.Width; // child right = parent right
-                if (popup == "getname" || popup == "resources" || popup == "bookmarks")
+                if (popup == "getname" || popup == "resources" || popup == "bookmarks" || popup == "sources")
                     X = parent.Left; // child right = parent right
                 Y = parent.Bottom; // child top = parent bottom
 
@@ -822,7 +824,7 @@ namespace Bubbles
                 // common comands popup
                 X = parent.Right; // child left = parent right
                 Y = parent.Bottom - child.Height; // child bottom = parent bottom
-                if (popup == "getname" || popup == "resources" || popup == "bookmarks")
+                if (popup == "getname" || popup == "resources" || popup == "bookmarks" || popup == "sources")
                     Y = parent.Top; // child top = parent top
 
                 if (popup == "add")
