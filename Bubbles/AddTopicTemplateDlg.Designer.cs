@@ -64,12 +64,18 @@
             this.grTemplate = new System.Windows.Forms.GroupBox();
             this.lblTopics = new System.Windows.Forms.Label();
             this.txtCustom = new System.Windows.Forms.TextBox();
+            this.Edit = new System.Windows.Forms.PictureBox();
+            this.Delete = new System.Windows.Forms.PictureBox();
+            this.New = new System.Windows.Forms.PictureBox();
             this.panelNewTemplate.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTopics)).BeginInit();
             this.panelManageTemplates.SuspendLayout();
             this.grAdd.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             this.grTemplate.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Edit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Delete)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.New)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTopicText
@@ -241,7 +247,7 @@
             this.cbTemplates.FormattingEnabled = true;
             this.cbTemplates.Location = new System.Drawing.Point(77, 11);
             this.cbTemplates.Name = "cbTemplates";
-            this.cbTemplates.Size = new System.Drawing.Size(239, 21);
+            this.cbTemplates.Size = new System.Drawing.Size(148, 21);
             this.cbTemplates.Sorted = true;
             this.cbTemplates.TabIndex = 28;
             this.cbTemplates.SelectedIndexChanged += new System.EventHandler(this.cbTemplates_SelectedIndexChanged);
@@ -432,12 +438,48 @@
             this.txtCustom.TabIndex = 39;
             this.txtCustom.Visible = false;
             // 
+            // Edit
+            // 
+            this.Edit.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Edit.Image = ((System.Drawing.Image)(resources.GetObject("Edit.Image")));
+            this.Edit.Location = new System.Drawing.Point(270, 12);
+            this.Edit.Name = "Edit";
+            this.Edit.Size = new System.Drawing.Size(20, 20);
+            this.Edit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Edit.TabIndex = 56;
+            this.Edit.TabStop = false;
+            // 
+            // Delete
+            // 
+            this.Delete.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Delete.Image = ((System.Drawing.Image)(resources.GetObject("Delete.Image")));
+            this.Delete.Location = new System.Drawing.Point(295, 12);
+            this.Delete.Name = "Delete";
+            this.Delete.Size = new System.Drawing.Size(20, 20);
+            this.Delete.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Delete.TabIndex = 55;
+            this.Delete.TabStop = false;
+            // 
+            // New
+            // 
+            this.New.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.New.Image = ((System.Drawing.Image)(resources.GetObject("New.Image")));
+            this.New.Location = new System.Drawing.Point(245, 12);
+            this.New.Name = "New";
+            this.New.Size = new System.Drawing.Size(20, 20);
+            this.New.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.New.TabIndex = 54;
+            this.New.TabStop = false;
+            // 
             // AddTopicTemplateDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(328, 427);
+            this.Controls.Add(this.Edit);
+            this.Controls.Add(this.Delete);
+            this.Controls.Add(this.New);
             this.Controls.Add(this.txtCustom);
             this.Controls.Add(this.linkSaveTemplate);
             this.Controls.Add(this.p1);
@@ -471,6 +513,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
             this.grTemplate.ResumeLayout(false);
             this.grTemplate.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Edit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Delete)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.New)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -512,5 +557,8 @@
         private System.Windows.Forms.Label lblTopics;
         private System.Windows.Forms.LinkLabel linkSaveTemplate;
         private System.Windows.Forms.TextBox txtCustom;
+        private System.Windows.Forms.PictureBox Edit;
+        private System.Windows.Forms.PictureBox Delete;
+        private System.Windows.Forms.PictureBox New;
     }
 }

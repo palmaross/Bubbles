@@ -348,6 +348,7 @@ namespace Bubbles
             {
                 if (CollapseAll) return;
 
+                collapseState = this.Location; // remember collapsed location
                 StickUtils.Expand(this, RealLength, orientation, cmsCommon);
                 collapsed = false;
             }
@@ -357,9 +358,11 @@ namespace Bubbles
 
                 StickUtils.Collapse(this, orientation, cmsCommon);
                 collapsed = true;
+                if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command 
+                    this.Location = collapseState; // restore collapsed location
             }
         }
-
+        Point collapseState = new Point(0, 0);
 
         private void p100_Click(object sender, EventArgs e)
         {

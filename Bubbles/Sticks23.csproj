@@ -79,7 +79,14 @@
     <Compile Include="AlignSticksDlg.Designer.cs">
       <DependentUpon>AlignSticksDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppManager\AlfaChanges.cs" />
     <Compile Include="AppManager\TransactionWrapper.cs" />
+    <Compile Include="BubbleAddTopic.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BubbleAddTopic.Designer.cs">
+      <DependentUpon>BubbleAddTopic.cs</DependentUpon>
+    </Compile>
     <Compile Include="BubbleOrganizer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -766,6 +773,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AlignSticksDlg.resx">
       <DependentUpon>AlignSticksDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BubbleAddTopic.resx">
+      <DependentUpon>BubbleAddTopic.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BubbleOrganizer.resx">
       <DependentUpon>BubbleOrganizer.cs</DependentUpon>

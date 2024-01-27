@@ -69,6 +69,8 @@
             this.BO_configuration = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.BO_help = new System.Windows.Forms.ToolStripMenuItem();
+            this.AddTopics = new System.Windows.Forms.PictureBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
@@ -84,11 +86,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.TaskInfo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Settings)).BeginInit();
             this.BulkOperations.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AddTopics)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.AddTopics);
             this.panel1.Controls.Add(this.pIconDist);
             this.panel1.Controls.Add(this.p2);
             this.panel1.Controls.Add(this.pBulkOperations);
@@ -190,22 +195,24 @@
             // 
             // lblOrganizer
             // 
-            this.lblOrganizer.Location = new System.Drawing.Point(111, 55);
+            this.lblOrganizer.Location = new System.Drawing.Point(-13, 47);
             this.lblOrganizer.Name = "lblOrganizer";
             this.lblOrganizer.Size = new System.Drawing.Size(70, 13);
             this.lblOrganizer.TabIndex = 33;
             this.lblOrganizer.Text = "Органайзер";
             this.lblOrganizer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblOrganizer.Visible = false;
             // 
             // Organizer
             // 
             this.Organizer.Image = ((System.Drawing.Image)(resources.GetObject("Organizer.Image")));
-            this.Organizer.Location = new System.Drawing.Point(130, 21);
+            this.Organizer.Location = new System.Drawing.Point(63, 11);
             this.Organizer.Name = "Organizer";
             this.Organizer.Size = new System.Drawing.Size(32, 32);
             this.Organizer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Organizer.TabIndex = 32;
             this.Organizer.TabStop = false;
+            this.Organizer.Visible = false;
             this.Organizer.Click += new System.EventHandler(this.MenuIcon_Click);
             // 
             // lblFormat
@@ -249,7 +256,7 @@
             // 
             // lblBookmarks
             // 
-            this.lblBookmarks.Location = new System.Drawing.Point(184, 41);
+            this.lblBookmarks.Location = new System.Drawing.Point(112, 55);
             this.lblBookmarks.Name = "lblBookmarks";
             this.lblBookmarks.Size = new System.Drawing.Size(69, 13);
             this.lblBookmarks.TabIndex = 24;
@@ -276,7 +283,7 @@
             // 
             // lblMySources
             // 
-            this.lblMySources.Location = new System.Drawing.Point(252, 55);
+            this.lblMySources.Location = new System.Drawing.Point(181, 41);
             this.lblMySources.Name = "lblMySources";
             this.lblMySources.Size = new System.Drawing.Size(75, 13);
             this.lblMySources.TabIndex = 21;
@@ -286,7 +293,7 @@
             // MySources
             // 
             this.MySources.Image = ((System.Drawing.Image)(resources.GetObject("MySources.Image")));
-            this.MySources.Location = new System.Drawing.Point(274, 21);
+            this.MySources.Location = new System.Drawing.Point(202, 7);
             this.MySources.Name = "MySources";
             this.MySources.Size = new System.Drawing.Size(32, 32);
             this.MySources.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -297,7 +304,7 @@
             // Bookmarks
             // 
             this.Bookmarks.Image = ((System.Drawing.Image)(resources.GetObject("Bookmarks.Image")));
-            this.Bookmarks.Location = new System.Drawing.Point(202, 7);
+            this.Bookmarks.Location = new System.Drawing.Point(130, 21);
             this.Bookmarks.Name = "Bookmarks";
             this.Bookmarks.Size = new System.Drawing.Size(32, 32);
             this.Bookmarks.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -450,6 +457,27 @@
             this.BO_help.Size = new System.Drawing.Size(190, 22);
             this.BO_help.Text = "Справка";
             // 
+            // AddTopics
+            // 
+            this.AddTopics.Image = ((System.Drawing.Image)(resources.GetObject("AddTopics.Image")));
+            this.AddTopics.Location = new System.Drawing.Point(274, 21);
+            this.AddTopics.Name = "AddTopics";
+            this.AddTopics.Size = new System.Drawing.Size(32, 32);
+            this.AddTopics.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.AddTopics.TabIndex = 80;
+            this.AddTopics.TabStop = false;
+            this.AddTopics.Click += new System.EventHandler(this.MenuIcon_Click);
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(255, 55);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(70, 13);
+            this.label2.TabIndex = 81;
+            this.label2.Text = "Добавить";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label2.Visible = false;
+            // 
             // MainMenuDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -477,6 +505,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.TaskInfo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Settings)).EndInit();
             this.BulkOperations.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.AddTopics)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -522,5 +551,7 @@
         private System.Windows.Forms.ToolStripMenuItem BO_close;
         private System.Windows.Forms.ToolStripMenuItem BO_configuration;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.Label label2;
+        public System.Windows.Forms.PictureBox AddTopics;
     }
 }

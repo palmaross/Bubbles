@@ -249,7 +249,7 @@
             // 
             this.p1.Location = new System.Drawing.Point(61, 242);
             this.p1.Name = "p1";
-            this.p1.Size = new System.Drawing.Size(50, 4);
+            this.p1.Size = new System.Drawing.Size(50, 2);
             this.p1.TabIndex = 39;
             this.p1.TabStop = false;
             this.p1.Visible = false;

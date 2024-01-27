@@ -240,6 +240,11 @@ namespace Bubbles
                 stickType = StickUtils.typeformat;
                 defaultName = Utils.getString("BubbleFormat.bubble.tooltip");
             }
+            else if (pb.Name == "AddTopics")
+            {
+                stickType = StickUtils.typeaddtopic;
+                defaultName = Utils.getString("BubbleAddTopic.bubble.tooltip");
+            }
             else if (pb.Name == "Paste")
             {
                 stickType = StickUtils.typepaste;
@@ -273,6 +278,8 @@ namespace Bubbles
                     form = new BubbleBookmarks(id, orientation, name); break;
                 case StickUtils.typeformat:
                     form = new BubbleFormat(id, orientation, name); break;
+                case StickUtils.typeaddtopic:
+                    form = new BubbleAddTopic(id, orientation, name); break;
                 case StickUtils.typepaste:
                     form = new BubblePaste(id, orientation, name); break;
                 case StickUtils.typeorganizer:
@@ -282,6 +289,8 @@ namespace Bubbles
             form.Location = GetStickLocation(location, form.Size);
             BubblesButton.STICKS.Add(id, form);
             form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+
+            StickUtils.ActivateMindManager();
         }
 
         /// <summary>

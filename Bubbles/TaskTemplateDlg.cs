@@ -36,6 +36,9 @@ namespace Bubbles
             btnApply.Text = Utils.getString("button.apply");
             btnClose.Text = Utils.getString("button.close");
 
+            btnCancel.Text = Utils.getString("button.cancel");
+            lblResourceName.Text = Utils.getString("TaskTemplateDlg.lblResourceName");
+
             toolTip1.SetToolTip(chPrimary, Utils.getString("TaskTemplateDlg.chPrimary.tooltip"));
             toolTip1.SetToolTip(numStartDate, Utils.getString("TaskTemplateDlg.numDate.tooltip"));
             toolTip1.SetToolTip(numDueDate, Utils.getString("TaskTemplateDlg.numDate.tooltip"));
@@ -141,6 +144,70 @@ namespace Bubbles
                 cbTaskTemplates.SelectedIndex = 0;
         }
 
+        private void cbTaskTemplates_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                RenameTemplate();
+        }
+
+        void RenameTemplate()
+        {
+            if (selectedItem == null) return;
+
+            var item = selectedItem;
+            string name = cbTaskTemplates.Text.Trim();
+
+            if (item.Name != name) // User changed template name
+            {
+                if (MessageBox.Show(Utils.getString("taskinfo.quicktask.rename"), "",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    db.ExecuteNonQuery("update TASKTEMPLATES set name=`" + name +
+                        "` where name=`" + item.Name + "`");
+
+                    DataTable dt = db.ExecuteQuery("select * from TASKTEMPLATES " +
+                        "where name=`" + name + "`");
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        MessageBox.Show(Utils.getString("TaskTemplateDlg.templateexists"), "",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    RemoveItem(item.Name);
+                    item.Name = name;
+                    int i = cbTaskTemplates.Items.Add(item);
+                    cbTaskTemplates.SelectedIndex = i;
+                }
+            }
+            else
+            {
+                foreach (var _item in cbTaskTemplates.Items)
+                {
+                    TaskTemplateItem __item = _item as TaskTemplateItem;
+                    if (__item.Name == name)
+                    {
+                        cbTaskTemplates.SelectedItem = __item;
+                        break;
+                    }
+                }
+            }
+        }
+
+        void RemoveItem(string name)
+        {
+            foreach (var _item in cbTaskTemplates.Items)
+            {
+                TaskTemplateItem item = _item as TaskTemplateItem;
+                if (item.Name == name)
+                {
+                    cbTaskTemplates.Items.Remove(_item);
+                    return;
+                }
+            }
+        }
+
         private void btnOk_Click(object sender, EventArgs e)
         {
             string oldName = cbTaskTemplates.Text;
@@ -173,7 +240,7 @@ namespace Bubbles
                 db.ExecuteNonQuery("update TASKTEMPLATES set name=`" + newName +
                     "` where name=`" + oldName + "`");
 
-                cbTaskTemplates.Items.Remove(oldName);
+                cbTaskTemplates.Items.Remove(cbTaskTemplates.SelectedItem);
                 int i = cbTaskTemplates.Items.Add(item);
                 cbTaskTemplates.SelectedIndex = i;
             }
@@ -189,6 +256,7 @@ namespace Bubbles
         private void cbTaskTemplates_SelectedIndexChanged(object sender, EventArgs e)
         {
             TaskTemplateItem item = cbTaskTemplates.SelectedItem as TaskTemplateItem;
+            selectedItem = item;
 
             if (item != null)
             {
@@ -351,6 +419,9 @@ namespace Bubbles
 
         private void btnApply_Click(object sender, EventArgs e)
         {
+            // First, check if template was renamed!
+            RenameTemplate();
+
             TaskTemplateItem item = cbTaskTemplates.SelectedItem as TaskTemplateItem;
 
             if (chPrimary.Checked && chPrimary.Enabled) // primary changed!
@@ -574,6 +645,7 @@ namespace Bubbles
         bool start = true;
 
         BubblesDB db = null;
+        TaskTemplateItem selectedItem = null;
     }
 
     public class DateItem

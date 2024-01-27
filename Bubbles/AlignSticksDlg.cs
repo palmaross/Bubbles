@@ -29,6 +29,7 @@ namespace Bubbles
 
             rbtnNewConfig.Text = Utils.getString("AlignSticksDlg.rbtnNewConfig");
             rbtnSaveToConfig.Text = Utils.getString("AlignSticksDlg.rbtnSaveToConfig");
+            chboxRunAtStart.Text = Utils.getString("SettingsDlg.gbRunAtStart");
 
             //add single column; -2 => autosize
             listSticks.Columns.Add("MyColumn", -2, HorizontalAlignment.Left);

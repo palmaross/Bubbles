@@ -7,8 +7,6 @@ using WindowsInput;
 using System.Linq;
 using Mindjet.MindManager.Interop;
 using Control = System.Windows.Forms.Control;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using PRMapCompanion;
 
@@ -303,8 +301,9 @@ namespace Bubbles
         /// <param name="topictype">With which topic perform the operation</param>
         void PasteAddTopic(string topictype)
         {
+            if (MMUtils.ActiveDocument == null) return;
             int count = MMUtils.ActiveDocument.Selection.OfType<Topic>().Count();
-            if (MMUtils.ActiveDocument == null || count == 0) return;
+            if (count == 0) return;
 
             bool paste = panelPasteTopic.AccessibleName == "paste";
             if (paste && !System.Windows.Forms.Clipboard.ContainsText()) return;

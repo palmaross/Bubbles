@@ -411,7 +411,7 @@ namespace Bubbles
                 foreach (PictureBox pb in form.Controls.OfType<PictureBox>())
                 {
                     // hide all icons except the first
-                    if (pb.Name != "pBold" && pb.Name != "pPaste" && pb.Tag != null && i++ > 0) // only dynamic icons
+                    if (pb.Name != "pBold" && pb.Name != "pCopy" && pb.Name != "p100" && pb.Tag != null && i++ > 0) // only dynamic icons
                         pb.Visible = false;
                 }
 
@@ -422,10 +422,20 @@ namespace Bubbles
 
         public static void Expand(Form form, int RealLength, string orientation, ContextMenuStrip cms)
         {
+            Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
+
             if (orientation == "H" && form.Width < RealLength)
+            {
                 form.Width = RealLength;
+                if (form.Right > area.Right) // close to the screen right
+                    form.Location = new Point(area.Right - RealLength, form.Location.Y); // set stick right to the screen right
+            }
             else if (orientation == "V" && form.Height < RealLength)
+            {
                 form.Height = RealLength;
+                if (form.Bottom + RealLength > area.Bottom) // close to the screen bottom
+                    form.Location = new Point(form.Location.X, area.Bottom - RealLength); // set stick bottom to the screen bottom
+            }
 
             form.BackColor = Color.Lavender;
 
@@ -437,8 +447,14 @@ namespace Bubbles
             cms.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.collapse");
         }
 
+        public static bool manage_clicked = false;
         public static void ShowCommandPopup(Form form, string orientation, string type, string popup = "")
         {
+            if (manage_clicked) // Manage icon was clicked, don't show command popup
+            {
+                manage_clicked = false; return;
+            }
+
             if (BubblesButton.commandPopup.Tag != form.Tag || BubblesButton.commandPopup.Name != popup || !BubblesButton.commandPopup.Visible)
             {
                 // Hide previous popup
@@ -895,8 +911,9 @@ namespace Bubbles
         public static List<BookmarkItem> Bookmarks = new List<BookmarkItem>();
         public static List<MySourcesItem> Sources = new List<MySourcesItem>();
 
-        public const string typestick = "stick", typeicons = "BubbleIcons", typetaskinfo = "BubbleTaskInfo", typeformat = "BubbleFormat",
-            typesources = "BubbleMySources", typebookmarks = "BubbleBookmarks", typepaste = "BubblePaste", typeorganizer = "BubbleOrganizer";
+        public const string typestick = "stick", typeicons = "BubbleIcons", typetaskinfo = "BubbleTaskInfo", 
+            typeformat = "BubbleFormat", typesources = "BubbleMySources", typebookmarks = "BubbleBookmarks",
+            typeaddtopic = "BubbleAddTopic", typepaste = "BubblePaste", typeorganizer = "BubbleOrganizer";
 
         public static int minSize;
         public static int stickThickness;

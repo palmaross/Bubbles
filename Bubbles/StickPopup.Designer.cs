@@ -593,7 +593,7 @@
             this.Controls.Add(this.panelH);
             this.Controls.Add(this.panelCommonMin);
             this.Name = "StickPopup";
-            this.Size = new System.Drawing.Size(606, 277);
+            this.Size = new System.Drawing.Size(351, 277);
             this.panelH.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();

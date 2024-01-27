@@ -131,6 +131,7 @@
             this.cbTaskTemplates.Size = new System.Drawing.Size(176, 21);
             this.cbTaskTemplates.TabIndex = 2;
             this.cbTaskTemplates.SelectedIndexChanged += new System.EventHandler(this.cbTaskTemplates_SelectedIndexChanged);
+            this.cbTaskTemplates.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbTaskTemplates_KeyDown);
             // 
             // pProgress
             // 
@@ -681,6 +682,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(358, 355);
+            this.Controls.Add(this.panelTemplateName);
             this.Controls.Add(this.txtResources);
             this.Controls.Add(this.pPeriod);
             this.Controls.Add(this.pCalendar);
@@ -729,7 +731,6 @@
             this.Controls.Add(this.pProgress);
             this.Controls.Add(this.cbTaskTemplates);
             this.Controls.Add(this.chProgress);
-            this.Controls.Add(this.panelTemplateName);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.HelpButton = true;
             this.MaximizeBox = false;

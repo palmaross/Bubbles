@@ -64,7 +64,7 @@ namespace Bubbles
             BI_addtomap.Text = Utils.getString("icons.contextmenu.addtomap");
             BI_addtomap.ToolTipText = Utils.getString("icons.contextmenu.addtomap.tooltip");
             BI_getfrommap.Text = Utils.getString("icons.contextmenu.getfrommap");
-            BI_getfrommap.ToolTipText = Utils.getString("icons.contextmenu.getfrommap.tooltip");
+            BI_getfrommap.ToolTipText = String.Format(Utils.getString("icons.contextmenu.getfrommap.tooltip"), stickname);
 
             BI_group.Tag = 0; BI_mutex.Tag = 0;
 
@@ -143,7 +143,6 @@ namespace Bubbles
             pictureHandle.Click += PictureHandle_Click; // right click to show context menu (Paste icon to the begin)
             pictureHandle.MouseDown += Move_Stick; // move the stick
             pictureHandle.MouseDoubleClick += (sender, e) => Collapse(); // collapse/expand stick
-
             Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typeicons);
 
             this.MouseDown += Move_Stick; // move the stick
@@ -178,6 +177,8 @@ namespace Bubbles
 
         private void Manage_Click(object sender, EventArgs e)
         {
+            StickUtils.manage_clicked = true;
+
             foreach (ToolStripItem item in cmsManage.Items)
                 item.Visible = true;
 
@@ -411,6 +412,8 @@ namespace Bubbles
                 {
                     toolTip1.SetToolTip(pictureHandle, newName);
                     StickName = newName;
+
+                    BI_getfrommap.ToolTipText = String.Format(Utils.getString("icons.contextmenu.getfrommap.tooltip"), StickName);
                 } 
             }
             else if (e.ClickedItem.Name == "BI_collapse")
@@ -479,16 +482,22 @@ namespace Bubbles
             if (collapsed) // Expand stick
             {
                 if (CollapseAll) return;
+
+                collapseState = this.Location; // remember collapsed location
                 StickUtils.Expand(this, RealLength, orientation, cmsManage);
                 collapsed = false;
             }
             else // Collapse stick
             {
                 if (ExpandAll) return;
+
                 StickUtils.Collapse(this, orientation, cmsManage);
                 collapsed = true;
+                if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
+                    this.Location = collapseState; // restore collapsed location
             }
         }
+        Point collapseState = new Point(0, 0);
 
         /// <summary>
         /// Add new icon at stick

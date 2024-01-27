@@ -394,6 +394,7 @@ namespace Bubbles
                 pBox.MouseMove += PBox_MouseMove;
                 pBox.DragEnter += Handle_DragEnter;
                 pBox.DragDrop += Handle_DragDrop;
+                pBox.MouseDown += PBox_MouseDown;
 
                 if (collapsed && i++ > 0) // if collapsed hide all icons except the first
                     pBox.Visible = false;
@@ -510,12 +511,20 @@ namespace Bubbles
             }
         }
 
+        private void PBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            cursor = Cursor.Position;
+        }
+        Point cursor;
+
         private void PBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
                 var pb = (PictureBox)sender;
-                pb.DoDragDrop(pb, DragDropEffects.Move);
+                if (Math.Abs(Cursor.Position.X - cursor.X) > Manage.Width / 2 ||
+                    Math.Abs(Cursor.Position.Y - cursor.Y) > Manage.Width / 2)
+                    pb.DoDragDrop(pb, DragDropEffects.Move);
             }
         }
         #endregion

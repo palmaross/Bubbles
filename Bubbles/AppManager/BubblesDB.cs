@@ -195,7 +195,6 @@ namespace Bubbles
             // "topics###5" - 5 topcs with topic text _topicName_
             // "custom###topic1###topic2###topic3###etc..."
             // "increment###start,end,step,position"
-
             m_db.ExecuteNonQuery("CREATE TABLE STICKS(id integer unique, name text, " +
                 "type text, start integer, position text, configID integer, _group integer, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");

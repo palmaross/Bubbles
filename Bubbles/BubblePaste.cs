@@ -6,8 +6,6 @@ using Mindjet.MindManager.Interop;
 using System.Runtime.InteropServices;
 using WindowsInput.Native;
 using WindowsInput;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Bubbles
 {
