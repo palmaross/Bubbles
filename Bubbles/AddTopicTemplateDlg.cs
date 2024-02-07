@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Bubbles
@@ -17,26 +16,23 @@ namespace Bubbles
             InitializeComponent();
 
             Text = Utils.getString("TopicTemplateDlg.Title");
-            lblTemplates.Text = Utils.getString("TopicTemplateDlg.lblTemplates");
-            linkManageTemplates.Text = Utils.getString("TopicTemplateDlg.linkManageTemplates");
             lblTopicText.Text = Utils.getString("TopicTemplateDlg.lblTopicText");
             grTemplate.Text = Utils.getString("TopicTemplateDlg.grTemplate");
             lblTopics.Text = Utils.getString("TopicTemplateDlg.lblTopics");
             rbtnCustom.Text = Utils.getString("TopicTemplateDlg.rbtnFreeTemplate");
             rbtnUseIncrement.Text = Utils.getString("TopicTemplateDlg.rbtnUseIncrement");
-            linkSaveTemplate.Text = Utils.getString("button.save");
-            linkNewTemplate.Text = Utils.getString("TopicTemplateDlg.linkNewTemplate");
+            btnSave.Text = Utils.getString("button.save");
             grAdd.Text = Utils.getString("button.add");
             Subtopic.Text = Utils.getString("TopicTemplateDlg.rbtnSubtopic");
             NextTopic.Text = Utils.getString("TopicTemplateDlg.rbtnNextTopic");
             TopicBefore.Text = Utils.getString("TopicTemplateDlg.rbtnTopicBefore");
             btnAddTopics.Text = Utils.getString("TopicTemplateDlg.btnAdd");
-            btnCancel.Text = Utils.getString("button.cancel");
-
-            lblRename.Text = Utils.getString("TopicTemplateDlg.lblRename");
-            btnDeleteTemplate.Text = Utils.getString("TopicTemplateDlg.btnDeleteTemplate");
             btnClose.Text = Utils.getString("button.close");
-            toolTip1.SetToolTip(btnRename, Utils.getString("button.rename"));
+
+            toolTip1.SetToolTip(New, Utils.getString("TopicTemplateDlg.pNewTemplate"));
+            toolTip1.SetToolTip(Delete, Utils.getString("TopicTemplateDlg.pDeleteTemplate"));
+            toolTip1.SetToolTip(Rename, Utils.getString("TopicTemplateDlg.pRename"));
+
             lblTemplateName.Text = Utils.getString("TopicTemplateDlg.lblTemplateName");
             btnCreate.Text = Utils.getString("TopicTemplateDlg.btnCreate");
             btnCancelCreate.Text = Utils.getString("button.cancel");
@@ -59,7 +55,8 @@ namespace Bubbles
                 foreach (DataRow row in dt.Rows)
                 {
                     TemplateItem item = new TemplateItem(Convert.ToInt32(row["id"]), 
-                        row["templateName"].ToString(), row["topicName"].ToString(), row["pattern"].ToString());
+                        row["templateName"].ToString(), row["topicName"].ToString(), 
+                        row["pattern"].ToString(), row["reserved1"].ToString());
 
                     cbTemplates.Items.Add(item);
                 }
@@ -127,9 +124,9 @@ namespace Bubbles
                 GetTopicList();
             }
 
-            string topictype = "Subtopic";
-            if (NextTopic.Checked) topictype = "NextTopic";
-            if (TopicBefore.Checked) topictype = "TopicBefore";
+            string topictype = "subtopic";
+            if (NextTopic.Checked) topictype = "nexttopic";
+            if (TopicBefore.Checked) topictype = "topicbefore";
 
             if (TopicList != null && TopicList.Count > 0)
             {
@@ -162,26 +159,22 @@ namespace Bubbles
                 StickUtils.AddTopic(transTopic, transTopicType, name);
         }
 
-        private void linkManageTemplates_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void New_Click(object sender, EventArgs e)
         {
-            if (cbTemplates.Items.Count == 0) return;
-
-            panelManageTemplates.Visible = true;
-            panelManageTemplates.BringToFront();
-
-            var item = cbTemplates.SelectedItem as TemplateItem;
-            txtRename.Text = item.TemplateName;
+            panelNewTemplate.Visible = true;
+            panelNewTemplate.BringToFront();
+            txtTemplateName.Text = "";
+            btnCreate.Text = Utils.getString("TopicTemplateDlg.btnCreate");
+            rename = false;
         }
+        bool rename = false;
 
-        private void btnRename_Click(object sender, EventArgs e)
+        private void btnCreate_Click(object sender, EventArgs e)
         {
-            string newName = txtRename.Text.Trim();
-            var item = cbTemplates.SelectedItem as TemplateItem;
-
-            if (newName == "" || newName == item.TemplateName) return;
-
             using (BubblesDB db = new BubblesDB())
             {
+                string newName = txtTemplateName.Text.Trim();
+
                 DataTable dt = db.ExecuteQuery("select * from MT_TEMPLATES where templateName=`" + newName + "`");
                 if (dt.Rows.Count > 0)
                 {
@@ -190,18 +183,58 @@ namespace Bubbles
                     return;
                 }
 
-                db.ExecuteNonQuery("update MT_TEMPLATES set templateName=`" + newName + "` where id=" + item.ID + "");
+                if (rename) // Rename template
+                {
+                    var item = cbTemplates.SelectedItem as TemplateItem;
 
-                item.TemplateName = newName;
-                cbTemplates.Items.Remove(cbTemplates.SelectedItem);
-                cbTemplates.Items.Add(item);
-                cbTemplates.SelectedItem = item;
+                    if (newName == item.TemplateName)
+                        return; // The same name, nothing to update.
+
+                    db.ExecuteNonQuery("update MT_TEMPLATES set templateName=`" + newName + "` where id=" + item.ID + "");
+
+                    item.TemplateName = newName;
+                    cbTemplates.Items.Remove(cbTemplates.SelectedItem);
+                    cbTemplates.Items.Add(item);
+                    cbTemplates.SelectedItem = item;
+
+                    panelNewTemplate.Visible = false;
+                    changed = true;
+                }
+                else // Create new template
+                {
+                    string topicName = "Topic Text";
+                    rbtnTopics.Checked = true;
+                    numTopics.Value = 3;
+                    string pattern_data = "topics###3";
+                    txtCustom.Clear();
+
+                    db.AddPattern(newName, topicName, pattern_data, "subtopic");
+
+                    // Get auto-created ID
+                    int id = 0;
+                    dt = db.ExecuteQuery("SELECT last_insert_rowid()");
+                    if (dt.Rows.Count > 0) id = Convert.ToInt32(dt.Rows[0][0]);
+
+                    var item = new TemplateItem(id, newName, topicName, pattern_data, "subtopic");
+
+                    cbTemplates.Items.Add(item);
+                    cbTemplates.SelectedItem = item;
+                    panelNewTemplate.Visible = false;
+                    changed = true;
+                }
             }
-
-            panelManageTemplates.Visible = false;
         }
 
-        private void btnDeleteTemplate_Click(object sender, EventArgs e)
+        private void Rename_Click(object sender, EventArgs e)
+        {
+            var item = cbTemplates.SelectedItem as TemplateItem;
+            txtTemplateName.Text = item.TemplateName;
+            panelNewTemplate.Visible = true; panelNewTemplate.BringToFront();
+            btnCreate.Text = Utils.getString("button.rename");
+            rename = true;
+        }
+
+        private void Delete_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show(Utils.getString("TopicTemplateDlg.deletetemplate"), "",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
@@ -214,28 +247,13 @@ namespace Bubbles
 
             cbTemplates.Items.Remove(item);
             if (cbTemplates.Items.Count > 0) cbTemplates.SelectedIndex = 0;
+
+            changed = true;
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
-            panelManageTemplates.Visible = false;
-        }
-
-        private void linkNewTemplate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            panelNewTemplate.Visible = true;
-            panelNewTemplate.BringToFront();
-            linkNewTemplate.SendToBack();
-        }
-
-        private void linkSaveTemplate_Click(object sender, EventArgs e)
-        {
-            btnCreate_Click(linkSaveTemplate, null);
-        }
-
-        private void btnCreate_Click(object sender, EventArgs e)
-        {
-            bool save = sender == linkSaveTemplate;
+            bool save = sender == btnSave;
 
             string newName = txtTemplateName.Text.Trim();
             if (save) newName = cbTemplates.Text;
@@ -254,7 +272,7 @@ namespace Bubbles
             {
                 pattern_data = "custom###";
 
-                string[] lines = txtCustom.Text.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+                string[] lines = txtCustom.Text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string line in lines)
                     pattern_data += line + "###";
 
@@ -268,50 +286,30 @@ namespace Bubbles
                     ttp.numStep.Value +"," + position;
             }
 
+            string topicType = "subtopic";
+            if (NextTopic.Checked) topicType = "nexttopic";
+            else if (TopicBefore.Checked) topicType = "topicbefore";
+
             using (BubblesDB db = new BubblesDB())
             {
-                if (save)
-                {
-                    var template = cbTemplates.SelectedItem as TemplateItem;
+                var template = cbTemplates.SelectedItem as TemplateItem;
 
-                    db.ExecuteNonQuery("update MT_TEMPLATES set " +
-                        "topicName=`" + topicName + "`, " +
-                        "pattern =`" + pattern_data + "`, " +
-                        "where id=" + template.ID + "");
+                db.ExecuteNonQuery("update MT_TEMPLATES set " +
+                    "topicName=`" + topicName + "`, " +
+                    "pattern =`" + pattern_data + "`, " +
+                    "reserved1 =`" + topicType + "` " +
+                    "where id=" + template.ID + "");
 
-                    template.TopicName = topicName;
-                    template.Pattern = pattern_data;
-                    cbTemplates.SelectedItem = template;
-                }
-                else
-                {
-                    DataTable dt = db.ExecuteQuery("select * from MT_TEMPLATES where templateName=`" + newName + "`");
-                    if (dt.Rows.Count > 0)
-                    {
-                        MessageBox.Show(Utils.getString("TopicTemplateDlg.nameexists"), "",
-                            MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        return;
-                    }
-
-                    db.AddPattern(newName, topicName, pattern_data);
-
-                    // Get auto-created ID
-                    int id = 0;
-                    dt = db.ExecuteQuery("SELECT last_insert_rowid()");
-                    if (dt.Rows.Count > 0) id = Convert.ToInt32(dt.Rows[0][0]);
-
-                    var item = new TemplateItem(id, newName, topicName, pattern_data);
-
-                    cbTemplates.Items.Add(item);
-                    cbTemplates.SelectedItem = item;
-                }
+                template.TopicName = topicName;
+                template.Pattern = pattern_data;
+                cbTemplates.SelectedItem = template;
             }
             panelNewTemplate.Visible = false;
+            changed = true;
         }
 
         private void btnCancelCreate_Click(object sender, EventArgs e)
         {
-            linkNewTemplate.BringToFront();
             panelNewTemplate.Visible = false;
         }
 
@@ -320,6 +318,13 @@ namespace Bubbles
             TemplateItem item = cbTemplates.SelectedItem as TemplateItem;
 
             txtTopicText.Text = item.TopicName;
+
+            if (item.TopicType == "" || item.TopicType == "subtopic")
+                Subtopic.Checked = true;
+            else if (item.TopicType == "nexttopic")
+                NextTopic.Checked = true;
+            else if (item.TopicType == "topicbefore")
+                TopicBefore.Checked = true;
 
             List<string> pattern = item.Pattern.Split(new string[] { "###" }, StringSplitOptions.None).ToList();
 
@@ -333,11 +338,20 @@ namespace Bubbles
                     ttp.panelIncrement.Visible = false;
                     ttp.panelMore.Visible = false;
 
-                    rbtnTopics.Checked = true;
-                    numTopics.Value = Convert.ToInt32(pattern[1]);
+                    if (!rbtnTopics.Checked)
+                    {
+                        rbtnTopics.Checked = true;
+                        break;
+                    }
 
-                    for (int i = 0; i < numTopics.Value; i++)
-                        ttp.listBox1.Items.Add(item.TopicName);
+                    int num = Convert.ToInt32(pattern[1]);
+                    if (numTopics.Value == num)
+                    {
+                        for (int i = 0; i < numTopics.Value; i++)
+                            ttp.listBox1.Items.Add(item.TopicName);
+                    }
+                    else
+                        numTopics.Value = num;
 
                     break;
                 case "custom":
@@ -383,8 +397,6 @@ namespace Bubbles
                     ttp.BringToFront();
                     break;
             }
-
-            txtRename.Text = item.TemplateName;
         }
 
         public void TemplateType_CheckedChanged(object sender, EventArgs e)
@@ -467,7 +479,7 @@ namespace Bubbles
             TemplateType_CheckedChanged(null, null);
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void btnClose_Click(object sender, EventArgs e)
         {
             if (ttp != null) ttp.Dispose();
             TopicList.Clear();
@@ -479,21 +491,24 @@ namespace Bubbles
         bool txtTopicTextTextChanged = false;
 
         int ttp_panelMore_Width;
+        public bool changed = false;
     }
 
     public class TemplateItem
     {
-        public TemplateItem(int id, string templateName, string topicName, string pattern)
+        public TemplateItem(int id, string templateName, string topicName, string pattern, string topicType)
         {
             ID = id;
             TemplateName = templateName;
             TopicName = topicName;
             Pattern = pattern;
+            TopicType = topicType;
         }
         public int ID = 0;
         public string TemplateName = "";
         public string TopicName = "";
         public string Pattern = "";
+        public string TopicType = "";
 
         public override string ToString()
         {

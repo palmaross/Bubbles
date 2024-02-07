@@ -271,16 +271,23 @@ namespace Bubbles
             if (collapsed) // Expand stick
             {
                 if (CollapseAll) return;
+
+                collapseState = this.Location; // remember collapsed location
                 StickUtils.Expand(this, RealLength, orientation, contextMenuStrip1);
                 collapsed = false;
             }
             else // Collapse stick
             {
                 if (ExpandAll) return;
+
+
                 StickUtils.Collapse(this, orientation, contextMenuStrip1);
                 collapsed = true;
+                if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
+                    this.Location = collapseState; // restore collapsed location
             }
         }
+        Point collapseState = new Point(0, 0);
 
         private void NewIcon(string sourcePath, string sourceTitle, string position)
         {

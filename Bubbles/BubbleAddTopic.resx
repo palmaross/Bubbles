@@ -191,7 +191,7 @@
         rFYoAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="TopicBefore.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="topicbefore.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
         vAAADrwBlbxySQAAAO9JREFUOE+tk80KgkAUhX3MaBMUBEHrlkGCkJu2vUFEvUEJvYDgJugVeoubZ/IM
@@ -201,7 +201,7 @@
         pFCAxpwyvN4p60myH0yWgFQzkDs4AAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="NextTopic.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="nexttopic.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
         vAAADrwBlbxySQAAANpJREFUOE/VkkEKwjAQRXNMceNCELyAS8FCwW7cegMRj6AFL1DoRvAK3mLsq52Q
@@ -211,7 +211,7 @@
         AAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="Subtopic.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="subtopic.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
         vAAADrwBlbxySQAAANNJREFUOE/VkkEKwjAQRXtMceNCELyAS8FCwG7cegMRj6AFL1DIRvAK3uLbH5gy

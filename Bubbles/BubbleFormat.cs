@@ -166,6 +166,7 @@ namespace Bubbles
             {
                 if (CollapseAll) return;
 
+                collapseState = this.Location; // remember collapsed location
                 StickUtils.Expand(this, RealLength, orientation, contextMenuStrip1);
                 collapsed = false;
             }
@@ -175,8 +176,11 @@ namespace Bubbles
 
                 StickUtils.Collapse(this, orientation, contextMenuStrip1);
                 collapsed = true;
+                if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
+                    this.Location = collapseState; // restore collapsed location
             }
         }
+        Point collapseState = new Point(0, 0);
 
         /// <summary>
         /// Click on the text and fill color pictures

@@ -51,13 +51,11 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.Subtopic = new System.Windows.Forms.PictureBox();
             this.NextTopic = new System.Windows.Forms.PictureBox();
             this.TopicBefore = new System.Windows.Forms.PictureBox();
             this.ParentTopic = new System.Windows.Forms.PictureBox();
             this.Callout = new System.Windows.Forms.PictureBox();
             this.panelPasteTopic = new System.Windows.Forms.Panel();
-            this.ToggleTextFormat = new System.Windows.Forms.PictureBox();
             this.p11 = new System.Windows.Forms.PictureBox();
             this.panelAddTopic = new System.Windows.Forms.Panel();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
@@ -90,13 +88,11 @@
             this.panelOther.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Subtopic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NextTopic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TopicBefore)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ParentTopic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Callout)).BeginInit();
             this.panelPasteTopic.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ToggleTextFormat)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p11)).BeginInit();
             this.panelProgress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p50)).BeginInit();
@@ -345,23 +341,11 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // Subtopic
-            // 
-            this.Subtopic.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Subtopic.Image = ((System.Drawing.Image)(resources.GetObject("Subtopic.Image")));
-            this.Subtopic.Location = new System.Drawing.Point(2, 2);
-            this.Subtopic.Name = "Subtopic";
-            this.Subtopic.Size = new System.Drawing.Size(20, 20);
-            this.Subtopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.Subtopic.TabIndex = 8;
-            this.Subtopic.TabStop = false;
-            this.Subtopic.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pAddTopic_MouseClick);
-            // 
             // NextTopic
             // 
             this.NextTopic.Cursor = System.Windows.Forms.Cursors.Hand;
             this.NextTopic.Image = ((System.Drawing.Image)(resources.GetObject("NextTopic.Image")));
-            this.NextTopic.Location = new System.Drawing.Point(28, 2);
+            this.NextTopic.Location = new System.Drawing.Point(2, 2);
             this.NextTopic.Name = "NextTopic";
             this.NextTopic.Size = new System.Drawing.Size(20, 20);
             this.NextTopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -373,7 +357,7 @@
             // 
             this.TopicBefore.Cursor = System.Windows.Forms.Cursors.Hand;
             this.TopicBefore.Image = ((System.Drawing.Image)(resources.GetObject("TopicBefore.Image")));
-            this.TopicBefore.Location = new System.Drawing.Point(54, 2);
+            this.TopicBefore.Location = new System.Drawing.Point(28, 2);
             this.TopicBefore.Name = "TopicBefore";
             this.TopicBefore.Size = new System.Drawing.Size(20, 20);
             this.TopicBefore.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -385,7 +369,7 @@
             // 
             this.ParentTopic.Cursor = System.Windows.Forms.Cursors.Hand;
             this.ParentTopic.Image = ((System.Drawing.Image)(resources.GetObject("ParentTopic.Image")));
-            this.ParentTopic.Location = new System.Drawing.Point(80, 2);
+            this.ParentTopic.Location = new System.Drawing.Point(54, 2);
             this.ParentTopic.Name = "ParentTopic";
             this.ParentTopic.Size = new System.Drawing.Size(20, 20);
             this.ParentTopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -397,7 +381,7 @@
             // 
             this.Callout.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Callout.Image = ((System.Drawing.Image)(resources.GetObject("Callout.Image")));
-            this.Callout.Location = new System.Drawing.Point(106, 2);
+            this.Callout.Location = new System.Drawing.Point(79, 2);
             this.Callout.Name = "Callout";
             this.Callout.Size = new System.Drawing.Size(20, 20);
             this.Callout.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -408,32 +392,18 @@
             // panelPasteTopic
             // 
             this.panelPasteTopic.BackColor = System.Drawing.Color.AntiqueWhite;
-            this.panelPasteTopic.Controls.Add(this.ToggleTextFormat);
             this.panelPasteTopic.Controls.Add(this.Callout);
             this.panelPasteTopic.Controls.Add(this.ParentTopic);
             this.panelPasteTopic.Controls.Add(this.TopicBefore);
             this.panelPasteTopic.Controls.Add(this.NextTopic);
-            this.panelPasteTopic.Controls.Add(this.Subtopic);
             this.panelPasteTopic.Location = new System.Drawing.Point(97, 29);
             this.panelPasteTopic.Name = "panelPasteTopic";
-            this.panelPasteTopic.Size = new System.Drawing.Size(154, 24);
+            this.panelPasteTopic.Size = new System.Drawing.Size(100, 24);
             this.panelPasteTopic.TabIndex = 2;
-            // 
-            // ToggleTextFormat
-            // 
-            this.ToggleTextFormat.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ToggleTextFormat.Image = ((System.Drawing.Image)(resources.GetObject("ToggleTextFormat.Image")));
-            this.ToggleTextFormat.Location = new System.Drawing.Point(132, 2);
-            this.ToggleTextFormat.Name = "ToggleTextFormat";
-            this.ToggleTextFormat.Size = new System.Drawing.Size(20, 20);
-            this.ToggleTextFormat.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.ToggleTextFormat.TabIndex = 14;
-            this.ToggleTextFormat.TabStop = false;
-            this.ToggleTextFormat.Click += new System.EventHandler(this.ToggleTextFormat_Click);
             // 
             // p11
             // 
-            this.p11.Location = new System.Drawing.Point(231, 29);
+            this.p11.Location = new System.Drawing.Point(178, 29);
             this.p11.Name = "p11";
             this.p11.Size = new System.Drawing.Size(16, 3);
             this.p11.TabIndex = 3;
@@ -612,13 +582,11 @@
             this.panelOther.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Subtopic)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NextTopic)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TopicBefore)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ParentTopic)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Callout)).EndInit();
             this.panelPasteTopic.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ToggleTextFormat)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p11)).EndInit();
             this.panelProgress.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.p50)).EndInit();
@@ -654,14 +622,12 @@
         public System.Windows.Forms.PictureBox pClose;
         public System.Windows.Forms.Panel panelOther;
         private System.Windows.Forms.Timer timer1;
-        public System.Windows.Forms.PictureBox Subtopic;
         public System.Windows.Forms.PictureBox NextTopic;
         public System.Windows.Forms.PictureBox TopicBefore;
         public System.Windows.Forms.PictureBox ParentTopic;
         public System.Windows.Forms.PictureBox Callout;
         public System.Windows.Forms.Panel panelPasteTopic;
         private System.Windows.Forms.PictureBox p11;
-        public System.Windows.Forms.PictureBox ToggleTextFormat;
         public System.Windows.Forms.Panel panelAddTopic;
         public System.Windows.Forms.PictureBox pictureBox2;
         public System.Windows.Forms.PictureBox pictureBox1;

@@ -40,13 +40,13 @@ namespace Bubbles
             foreach (PictureBox pb in panelOther.Controls) {
                 pb.MouseHover += pb_MouseHover; pb.MouseLeave += pb_MouseLeave; }
 
-            Subtopic.Tag = Utils.getString("BubblesPaste.addsubtopic");
+            //Subtopic.Tag = Utils.getString("BubblesPaste.addsubtopic");
             NextTopic.Tag = Utils.getString("BubblesPaste.addtopic");
             TopicBefore.Tag = Utils.getString("BubblesPaste.addbefore");
             ParentTopic.Tag = Utils.getString("BubblesPaste.addparent");
             Callout.Tag = Utils.getString("BubblesPaste.addcallout");
-            ToggleTextFormat.Tag = Utils.getString("BubblesPaste.workwith.unformatted");
-            ToggleTextFormat.AccessibleName = "unformatted";
+            //ToggleTextFormat.Tag = Utils.getString("BubblesPaste.workwith.unformatted");
+            //ToggleTextFormat.AccessibleName = "unformatted";
 
             foreach (Control pb in panelPasteTopic.Controls) {
                 pb.MouseHover += pb_MouseHover; pb.MouseLeave += pb_MouseLeave; }
@@ -126,6 +126,9 @@ namespace Bubbles
                 case StickUtils.typebookmarks:
                     (stick as BubbleBookmarks).Collapse();
                     break;
+                case StickUtils.typeaddtopic:
+                    (stick as BubbleAddTopic).Collapse();
+                    break;
                 case StickUtils.typepaste:
                     (stick as BubblePaste).Collapse();
                     break;
@@ -156,6 +159,9 @@ namespace Bubbles
                     break;
                 case StickUtils.typebookmarks:
                     (stick as BubbleBookmarks).Rotate();
+                    break;
+                case StickUtils.typeaddtopic:
+                    (stick as BubbleAddTopic).Rotate();
                     break;
                 case StickUtils.typepaste:
                     (stick as BubblePaste).Rotate();
@@ -355,16 +361,6 @@ namespace Bubbles
                                     // So, we did this with one topic and we get its text in a timer time
                                     // to populate the rest topics with this text.
             }
-            else // add subtopic
-            {
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                {
-                    if (TopicList.Count == 0) TopicList.Add("#default#");
-
-                    transTopic = t; transTopicType = topictype;
-                    AddTopicTransaction(Utils.getString("addtopics.transactionname.insert"));
-                }
-            }
         }
         Topic transTopic;
         string transTopicType;
@@ -389,23 +385,23 @@ namespace Bubbles
 
         private void ToggleTextFormat_Click(object sender, EventArgs e)
         {
-            if (ToggleTextFormat.AccessibleName.ToString() == "unformatted")
-            {
-                ToggleTextFormat.Tag = Utils.getString("BubblesPaste.workwith.formatted");
-                ToggleTextFormat.AccessibleName = "formatted";
-                ToggleTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "formattedText.png");
-            }
-            else if (ToggleTextFormat.AccessibleName.ToString() == "formatted")
-            {
-                ToggleTextFormat.Tag = Utils.getString("BubblesPaste.workwith.unformatted");
-                ToggleTextFormat.AccessibleName = "unformatted";
-                ToggleTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "unformattedText.png");
-            }
+            //if (ToggleTextFormat.AccessibleName.ToString() == "unformatted")
+            //{
+            //    ToggleTextFormat.Tag = Utils.getString("BubblesPaste.workwith.formatted");
+            //    ToggleTextFormat.AccessibleName = "formatted";
+            //    ToggleTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "formattedText.png");
+            //}
+            //else if (ToggleTextFormat.AccessibleName == "formatted")
+            //{
+            //    ToggleTextFormat.Tag = Utils.getString("BubblesPaste.workwith.unformatted");
+            //    ToggleTextFormat.AccessibleName = "unformatted";
+            //    ToggleTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "unformattedText.png");
+            //}
         }
 
         bool FormattedText()
         {
-            return ToggleTextFormat.Tag.ToString() == "formatted";
+            return true;// ToggleTextFormat.AccessibleName == "formatted";
         }
 
         private void pProgress_Click(object sender, EventArgs e)

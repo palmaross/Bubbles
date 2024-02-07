@@ -3,9 +3,11 @@ using PRAManager;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using WindowsInput;
 
 namespace Bubbles
 {
@@ -24,15 +26,18 @@ namespace Bubbles
             helpProvider1.SetHelpKeyword(this, "AddTopicStick.htm");
 
             RealLength = this.Width;
+            HL1 = numUpDown.Location.X;
+            HL2 = chIncrement.Location.X;
+            HL3 = pAddMultiple.Location.X;
 
             if (orientation == "V")
             {
                 orientation = "H"; Rotate();
             }
 
-            toolTip1.SetToolTip(Subtopic, Utils.getString("BubblesPaste.addsubtopic"));
-            toolTip1.SetToolTip(NextTopic, Utils.getString("BubblesPaste.addtopic"));
-            toolTip1.SetToolTip(TopicBefore, Utils.getString("BubblesPaste.addbefore"));
+            toolTip1.SetToolTip(subtopic, Utils.getString("BubblesPaste.addsubtopic"));
+            toolTip1.SetToolTip(nexttopic, Utils.getString("BubblesPaste.addtopic"));
+            toolTip1.SetToolTip(topicbefore, Utils.getString("BubblesPaste.addbefore"));
             toolTip1.SetToolTip(ParentTopic, Utils.getString("BubblesPaste.addparent"));
             toolTip1.SetToolTip(Callout, Utils.getString("BubblesPaste.addcallout"));
             toolTip1.SetToolTip(TopicText, Utils.getString("BubbleAddTopic.TopicText"));
@@ -43,8 +48,9 @@ namespace Bubbles
             toolTip1.SetToolTip(pictureHandle, stickname);
 
             cmsAddMultiple.ItemClicked += ContextMenu_ItemClicked;
+            cmsCommon.ItemClicked += ContextMenu_ItemClicked;
             PopulateAddMultipleMenu();
-            StickUtils.SetCommonContextMenu(cmsCommon, StickUtils.typepaste);
+            StickUtils.SetCommonContextMenu(cmsCommon, StickUtils.typeaddtopic);
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
@@ -63,13 +69,11 @@ namespace Bubbles
         void PopulateAddMultipleMenu()
         {
             cmsAddMultiple.Items.Clear();
-
+            
             ToolStripItem tsi = null;
 
-            //ToolStripItem tsi = cmsAddMultiple.Items.Add(Utils.getString("taskinfo.quicktask.manage"));
             //tsi.Name = "ManageTaskTemplates";
             //StickUtils.SetContextMenuImage(cmsAddMultiple.Items["ManageTaskTemplates"], "manage.png");
-            //cmsAddMultiple.Items.Add(new ToolStripSeparator());
 
             using (BubblesDB db = new BubblesDB())
             {
@@ -78,11 +82,80 @@ namespace Bubbles
                 foreach (DataRow row in dt.Rows)
                 {
                     MT_TemplateItem item = new MT_TemplateItem(row["templateName"].ToString(),
-                        row["topicName"].ToString(), row["pattern"].ToString());
+                        row["topicName"].ToString(), row["pattern"].ToString(), "");
 
                     tsi = cmsAddMultiple.Items.Add(item.Name);
                     tsi.Tag = item; tsi.Name = "MT_Template";
+                    (tsi as ToolStripMenuItem).DropDown.Closing += DropDown_Closing;
+
+                    ToolStripItem tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("TopicTemplateDlg.lblTopicText"));
+                    tsm.Font = new System.Drawing.Font(tsi.Font, System.Drawing.FontStyle.Bold);
+
+                    ToolStripTextBox tb = new ToolStripTextBox();
+                    tb.Text = item.TopicName;
+                    tb.BorderStyle = BorderStyle.FixedSingle;
+                    tb.Size = new System.Drawing.Size(Manage.Width * 5, tb.Height);
+                    (tsi as ToolStripMenuItem).DropDownItems.Add(tb);
+
+                    tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("BubbleAddTopic_AddAs"));
+                    tsm.Font = new System.Drawing.Font(tsi.Font, System.Drawing.FontStyle.Bold);
+                    //(tsi as ToolStripMenuItem).DropDownItems.Add(new ToolStripSeparator());
+
+                    // topic type
+                    string topictype = row["reserved1"].ToString();
+                    if (topictype == "") topictype = "subtopic";
+
+                    tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("TopicTemplateDlg.rbtnSubtopic"));
+                    (tsm as ToolStripMenuItem).CheckOnClick = true;
+                    (tsm as ToolStripMenuItem).Checked = topictype == "subtopic";
+                    tsm.Name = "subtopic";
+                    tsm.Click += SubmenuItem_Click;
+                    tsm.Tag = tsi as ToolStripMenuItem;
+
+                    tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("TopicTemplateDlg.rbtnNextTopic"));
+                    (tsm as ToolStripMenuItem).CheckOnClick = true;
+                    (tsm as ToolStripMenuItem).Checked = topictype == "nexttopic";
+                    tsm.Name = "nexttopic";
+                    tsm.Click += SubmenuItem_Click;
+                    tsm.Tag = tsi as ToolStripMenuItem;
+
+                    tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("TopicTemplateDlg.rbtnTopicBefore"));
+                    (tsm as ToolStripMenuItem).CheckOnClick = true;
+                    (tsm as ToolStripMenuItem).Checked = topictype == "topicbefore";
+                    tsm.Name = "topicbefore";
+                    tsm.Click += SubmenuItem_Click;
+                    tsm.Tag = tsi as ToolStripMenuItem;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Check/Uncheck submenu items (topic type) like radiobuttons
+        /// </summary>
+        private void SubmenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripItem tsi = sender as ToolStripItem; // submenu item
+            ToolStripMenuItem tsm = tsi.Tag as ToolStripMenuItem; // submenu parent
+
+            if ((tsi as ToolStripMenuItem).Checked) // uncheck other items
+            {
+                foreach (var item in tsm.DropDownItems.OfType<ToolStripMenuItem>())
+                    if (item.Name != tsi.Name && item.Checked) item.Checked = false;
+            }
+            else // item unchecking, check the primary item
+            {
+                (tsm.DropDownItems["subtopic"] as ToolStripMenuItem).Checked = true;
+            }
+        }
+
+        /// <summary>
+        /// Do not close submenu after the click on item
+        /// </summary>
+        private void DropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        {
+            if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
+            {
+                e.Cancel = true;
             }
         }
 
@@ -100,7 +173,19 @@ namespace Bubbles
         {
             if (e.ClickedItem.Name == "MT_Template")
             {
+                ToolStripMenuItem tsm = e.ClickedItem as ToolStripMenuItem;
                 MT_TemplateItem item = e.ClickedItem.Tag as MT_TemplateItem;
+
+                string topicName = "", topicType = "subtopic";
+                foreach (var _item in tsm.DropDownItems)//.OfType<ToolStripMenuItem>())
+                {
+                    if (_item is ToolStripTextBox tb)
+                        topicName = tb.Text;
+                    else if (_item is ToolStripMenuItem _tsm)
+                        if (_tsm.Checked) topicType = _tsm.Name;
+                }
+
+                AddTopics(item, topicName, topicType);
             }
             else if (e.ClickedItem.Name == "BI_rotate")
             {
@@ -125,9 +210,94 @@ namespace Bubbles
             }
         }
 
+        private void AddTopics(MT_TemplateItem item, string topicName, string topicType)
+        {
+            TopicList.Clear();
+
+            List<string> pattern = item.Pattern.Split(new string[] { "###" }, StringSplitOptions.None).ToList();
+            string template = pattern[0];
+
+            if (template == "topics")
+            {
+                if (topicName == "") return;
+                for (int i = 0; i < Convert.ToInt32(pattern[1]); i++) 
+                    TopicList.Add(topicName);
+            }
+            else if (template == "custom")
+            {
+                for (int i = 1; i < pattern.Count; i++)
+                    TopicList.Add(pattern[i]);
+            }
+            else if (template == "increment")
+            {
+                GetTopicList(topicName, pattern[1]);
+            }
+
+            if (TopicList != null && TopicList.Count > 0)
+            {
+                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                {
+                    transTopic = t; transTopicType = topicType;
+                    AddTopicTransaction(Utils.getString("addtopics.transactionname.insert"));
+                }
+            }
+        }
+
+        List<string> GetTopicList(string name, string incrementdata)
+        {
+            TopicList.Clear();
+            string[] incrementData = incrementdata.Split(',');
+
+            int start = Convert.ToInt32(incrementData[0]);
+            int finish = Convert.ToInt32(incrementData[1]);
+            int step = Convert.ToInt32(incrementData[2]);
+
+            bool begin = incrementData[3] == "begin";
+
+            if (step > 0)
+            {
+                for (int i = start; i <= finish; i += step)
+                    TopicList.Add(GetPreview(name, i, begin));
+            }
+            else
+            {
+                for (int i = start; i >= finish; i += step)
+                    TopicList.Add(GetPreview(name, i, begin));
+            }
+
+            return TopicList;
+        }
+
+        string GetPreview(string topictext, int number, bool begin)
+        {
+            if (begin) topictext = number + " " + topictext;
+            else topictext += " " + number;
+
+            return topictext;
+        }
+
         public void Rotate()
         {
             orientation = StickUtils.RotateStick(this, Manage, orientation);
+
+            if (orientation == "H")
+            {
+                TopicText.Location = new Point(TopicText.Location.Y, V1.Location.Y);
+                TopicText.Width = this.Height * 2;
+                numUpDown.Location = new Point(HL1, V1.Location.Y);
+                chIncrement.Location = new Point(HL2, V1.Location.Y);
+                pAddMultiple.Location = new Point(HL3, V1.Location.Y);
+                this.Width = RealLength;
+            }
+            else
+            {
+                TopicText.Location = new Point(0, TopicText.Location.X);
+                TopicText.Width = this.Width;
+                numUpDown.Location = new Point(0, V1.Location.X);
+                chIncrement.Location = new Point(0, V2.Location.X);
+                pAddMultiple.Location = new Point(pAddMultiple.Location.X, V3.Location.X);
+                this.Height -= TopicText.Width * 2;
+            }
         }
 
         /// <summary>
@@ -140,16 +310,23 @@ namespace Bubbles
             if (collapsed) // Expand stick
             {
                 if (CollapseAll) return;
+
+                collapseState = this.Location; // remember collapsed location
                 StickUtils.Expand(this, RealLength, orientation, cmsCommon);
                 collapsed = false;
             }
             else // Collapse stick
             {
                 if (ExpandAll) return;
+
                 StickUtils.Collapse(this, orientation, cmsCommon);
                 collapsed = true;
+
+                if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
+                    this.Location = collapseState; // restore collapsed location
             }
         }
+        Point collapseState = new Point(0, 0);
 
         private void Manage_Click(object sender, EventArgs e)
         {
@@ -163,15 +340,23 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-                {
-                    MessageBox.Show(Utils.getString("BubblesPaste.pAddMultiple.error"), "",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+                //if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
+                //{
+                //    MessageBox.Show(Utils.getString("BubblesPaste.pAddMultiple.error"), "",
+                //        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //    return;
+                //}
 
                 using (AddTopicTemplateDlg dlg = new AddTopicTemplateDlg())
+                {
+                    dlg.changed = false;
                     dlg.ShowDialog();
+                    if (dlg.changed)
+                    {
+                        // Templates were changed. Update menu
+                        PopulateAddMultipleMenu();
+                    }
+                }
             }
             else if (e.Button == MouseButtons.Right)
             {
@@ -192,9 +377,9 @@ namespace Bubbles
         }
 
         /// <summary>
-        /// Add topic or paste to topic
+        /// Add topic or multiple topics
         /// </summary>
-        /// <param name="topictype">With which topic perform the operation</param>
+        /// <param name="topictype">Which topic perform the operation with</param>
         void AddTopic(string topictype)
         {
             if (MMUtils.ActiveDocument == null) return;
@@ -204,30 +389,39 @@ namespace Bubbles
             string topicText = TopicText.Text;
             transTopicType = topictype;
 
-            if (topictype == "Subtopic" || topictype == "NextTopic" || topictype == "TopicBefore")
+            if (topictype == "subtopic" || topictype == "nexttopic" || topictype == "topicbefore")
             {
-                if (numUpDown.Value > 1)
+                if (chIncrement.Checked)
                 {
-                    if (chIncrement.Checked)
-                    {
-                        for (int i = 1; i <= numUpDown.Value; i++)
-                            TopicList.Add(topicText + i);
-                    }
-                    else
-                    {
-                        if (topicText == "") topicText = "#default#";
-                        for (int i = 1; i <= numUpDown.Value; i++)
-                            TopicList.Add(topicText);
-                    }
+                    for (int i = 1; i <= numUpDown.Value; i++)
+                        TopicList.Add(topicText + i);
                 }
                 else
-                    TopicList.Add("#default#");
+                {
+                    if (topicText == "") topicText = "#default#";
+                    for (int i = 1; i <= numUpDown.Value; i++)
+                        TopicList.Add(topicText);
+                }
+            }
+            else
+            {
+                if (topicText == "") topicText = "#default#";
+                TopicList.Add(topicText);
+
+                //IDataObject data_object = System.Windows.Forms.Clipboard.GetDataObject();
+                //if (data_object.GetDataPresent(DataFormats.Rtf))
+                //{
+                //    rchRtf.Rtf =
+                //        data_object.GetData(DataFormats.Rtf).ToString();
+                //    txtRtfCode.Text =
+                //        data_object.GetData(DataFormats.Rtf).ToString();
+                //}
             }
 
             // add topic
             foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
             {
-                transTopic = t; 
+                transTopic = t;
                 AddTopicTransaction(Utils.getString("addtopics.transactionname.insert"));
             }
         }
@@ -245,7 +439,7 @@ namespace Bubbles
 
         public void AddTopics(Document pDocument)
         {
-            if (TopicList.Count > 1 && transTopicType == "NextTopic")
+            if (TopicList.Count > 1 && transTopicType == "nexttopic")
                 TopicList = TopicList.Reverse<string>().ToList();
 
             foreach (var name in TopicList)
@@ -266,20 +460,24 @@ namespace Bubbles
         public static extern bool ReleaseCapture();
 
         InputSimulator sim = new InputSimulator();
+
+        int HL1, HL2, HL3;
     }
 
     public class MT_TemplateItem
     {
-        public MT_TemplateItem(string name, string topicName, string pattern)
+        public MT_TemplateItem(string name, string topicName, string pattern, string topicType)
         {
             Name = name;
             TopicName = topicName;
             Pattern = pattern;
+            TopicType = topicType;
         }
 
         public string Name = "";
         public string TopicName = "";
         public string Pattern = "";
+        public string TopicType = "";
 
         public override string ToString()
         {

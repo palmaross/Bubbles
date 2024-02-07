@@ -6,6 +6,8 @@ using Mindjet.MindManager.Interop;
 using System.Runtime.InteropServices;
 using WindowsInput.Native;
 using WindowsInput;
+using System.Drawing;
+using System.Collections.Generic;
 
 namespace Bubbles
 {
@@ -28,18 +30,18 @@ namespace Bubbles
             if (orientation == "V") {
                 orientation = "H"; Rotate(); }
 
-            toolTip1.SetToolTip(pCut, Utils.getString("BubblesPaste.pCut.tooltip"));
+            toolTip1.SetToolTip(subtopic, Utils.getString("BubblesPaste.pastesubtopic"));
             toolTip1.SetToolTip(pPaste, Utils.getString("BubblesPaste.pPaste.tooltip"));
             toolTip1.SetToolTip(pCopy, Utils.getString("BubblesPaste.pCopy.tooltip"));
             toolTip1.SetToolTip(PasteLink, Utils.getString("BubblesPaste.PasteLink.tooltip"));
             toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.AddNotes.tooltip"));
-            toolTip1.SetToolTip(pAddCallout, Utils.getString("BubblesPaste.addcallout"));
-            toolTip1.SetToolTip(pAddMultiple, Utils.getString("BubblesPaste.pAddMultiple"));
+            toolTip1.SetToolTip(ToggleTextFormat, Utils.getString("BubblesPaste.workwith.unformatted"));
             toolTip1.SetToolTip(UnformatText, Utils.getString("BubblesPaste.unformate.tooltip"));
 
             toolTip1.SetToolTip(pictureHandle, stickname);
 
             cmsPasteText.ItemClicked += ContextMenu_ItemClicked;
+            cmsCommon.ItemClicked += ContextMenu_ItemClicked;
 
             cmsPasteText.Items["CP_copy_unformatted"].Text = Utils.getString("paste.contextmenu.copy_unformatted");
             cmsPasteText.Items["CP_copy_formatted"].Text = Utils.getString("paste.contextmenu.copy_formatted");
@@ -151,16 +153,22 @@ namespace Bubbles
             if (collapsed) // Expand stick
             {
                 if (CollapseAll) return;
+
+                collapseState = this.Location; // remember collapsed location
                 StickUtils.Expand(this, RealLength, orientation, cmsCommon);
                 collapsed = false;
             }
             else // Collapse stick
             {
                 if (ExpandAll) return;
+
                 StickUtils.Collapse(this, orientation, cmsCommon);
                 collapsed = true;
+                if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
+                    this.Location = collapseState; // restore collapsed location
             }
         }
+        Point collapseState = new Point(0, 0);
 
         private void PasteLink_Click(object sender, EventArgs e)
         {
@@ -192,25 +200,12 @@ namespace Bubbles
 
         private void AddPasteTopic_MouseHover(object sender, EventArgs e)
         {
-            PictureBox pb = sender as PictureBox;
+            //PictureBox pb = sender as PictureBox;
 
-            if (pb.Name == "pPasteTopic")
-                StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste, "paste");
-            else
-                StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste, "add");
-        }
-
-        /// <summary>
-        /// Paste general (Ctrl+V)
-        /// </summary>
-        private void pPaste_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void callout_Click(object sender, EventArgs e)
-        {
-
+            //if (pb.Name == "pPasteTopic")
+            //    StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste, "paste");
+            //else
+            //    StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste, "add");
         }
 
         private void pCopy_MouseClick(object sender, MouseEventArgs e)
@@ -232,14 +227,14 @@ namespace Bubbles
             }
         }
 
-        private void pCut_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                StickUtils.ActivateMindManager();
-                sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_X);
-            }
-        }
+        //private void pCut_MouseClick(object sender, MouseEventArgs e)
+        //{
+        //    if (e.Button == MouseButtons.Left)
+        //    {
+        //        StickUtils.ActivateMindManager();
+        //        sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_X);
+        //    }
+        //}
 
         private void pPaste_MouseClick(object sender, MouseEventArgs e)
         {
@@ -279,19 +274,69 @@ namespace Bubbles
 
             cmsCommon.Show(Cursor.Position);
         }
-        
-        private void pAddMultiple_Click(object sender, EventArgs e)
-        {
-            if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-            {
-                MessageBox.Show(Utils.getString("BubblesPaste.pAddMultiple.error"), "",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
 
-            using (AddTopicTemplateDlg dlg = new AddTopicTemplateDlg())
-                dlg.ShowDialog();
+        private void PasteTopic_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (MMUtils.ActiveDocument == null || 
+                MMUtils.ActiveDocument.Selection.PrimaryTopic == null) 
+                return;
+
+            if (e.Button == MouseButtons.Left)
+            {
+                //PasteTopic((sender as PictureBox).Name);
+                transTopic = MMUtils.ActiveDocument.Selection.PrimaryTopic;
+                AddTopicTransaction(Utils.getString("addtopics.transactionname.insert"));
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste, "paste");
+            }
         }
+
+        private void ToggleTextFormat_Click(object sender, EventArgs e)
+        {
+            string tooltip = Utils.getString("BubblesPaste.workwith.formatted");
+
+            if (ToggleTextFormat.Tag.ToString() == "formatted")
+            {
+                ToggleTextFormat.Tag = "unformatted";
+                ToggleTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "unformattedText.png");
+                tooltip = Utils.getString("BubblesPaste.workwith.unformatted");
+                toolTip1.SetToolTip(ToggleTextFormat, tooltip);
+            }
+            else
+            {
+                ToggleTextFormat.Tag = "formatted";
+                ToggleTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "formattedText.png");
+                toolTip1.SetToolTip(ToggleTextFormat, tooltip);
+            }
+        }
+
+        void AddTopicTransaction(string trname)
+        {
+            Transaction _tr = MMUtils.ActiveDocument.NewTransaction(trname);
+            _tr.IsUndoable = true;
+            _tr.Execute += new ITransactionEvents_ExecuteEventHandler(PasteTopics);
+            _tr.Start();
+        }
+
+        public void PasteTopics(Document pDocument)
+        {
+            if (TopicList.Count > 1 && transTopicType == "nexttopic")
+                TopicList = TopicList.Reverse<string>().ToList();
+
+            foreach (var name in TopicList)
+                StickUtils.AddTopic(transTopic, transTopicType, name);
+        }
+
+        private void pReplace_Click(object sender, EventArgs e)
+        {
+            new ReplaceDlg().Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+        }
+
+        Topic transTopic;
+        string transTopicType;
+        public List<string> TopicList = new List<string>();
 
         string orientation = "H";
         int RealLength;

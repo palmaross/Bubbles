@@ -80,6 +80,9 @@ namespace Bubbles
                     case StickUtils.typebookmarks:
                         m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.Bookmarks, null);
                         break;
+                    case StickUtils.typeaddtopic:
+                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.AddTopics, null);
+                        break;
                     case StickUtils.typepaste:
                         m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.Paste, null);
                         break;

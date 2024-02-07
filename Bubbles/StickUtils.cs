@@ -411,7 +411,8 @@ namespace Bubbles
                 foreach (PictureBox pb in form.Controls.OfType<PictureBox>())
                 {
                     // hide all icons except the first
-                    if (pb.Name != "pBold" && pb.Name != "pCopy" && pb.Name != "p100" && pb.Tag != null && i++ > 0) // only dynamic icons
+                    if (pb.Name != "pBold" && pb.Name != "pCopy" && pb.Name != "p100" &&
+                        pb.Name != "subtopic" && pb.Tag != null && i++ > 0) // only dynamic icons
                         pb.Visible = false;
                 }
 
@@ -432,8 +433,12 @@ namespace Bubbles
             }
             else if (orientation == "V" && form.Height < RealLength)
             {
-                form.Height = RealLength;
-                if (form.Bottom + RealLength > area.Bottom) // close to the screen bottom
+                if (form.Name == "BubbleAddTopic")
+                    form.Height = RealLength - form.Width * 2;
+                else
+                    form.Height = RealLength;
+
+                if (form.Bottom > area.Bottom) // close to the screen bottom
                     form.Location = new Point(form.Location.X, area.Bottom - RealLength); // set stick bottom to the screen bottom
             }
 
@@ -470,7 +475,7 @@ namespace Bubbles
                 else if (popup == "priority") ff = sp.panelPriority;
 
                 // Correct widths for specific popup
-                if (type == typepaste && popup == "add") ff.Width = sp.panelAddTopic.Width;
+                //if (type == typepaste && popup == "add") ff.Width = sp.panelAddTopic.Width;
 
                 if (type != typeicons && type != typebookmarks && type != typeformat && popup == "")
                 {
@@ -533,7 +538,7 @@ namespace Bubbles
         {
             Topic newTopic;
 
-            if (topicType == "Subtopic")
+            if (topicType == "subtopic")
             {
                 if (text == "#default#")
                     newTopic = t.AllSubTopics.Add();
@@ -559,7 +564,7 @@ namespace Bubbles
                 {
                     if (_t == t) break; i++;
                 }
-                if (topicType == "NextTopic") i++; // Otherwise, add topic before
+                if (topicType == "nexttopic") i++; // Otherwise, add topic before
 
                 t.ParentTopic.AllSubTopics.Insert(newTopic, i);
 
@@ -567,7 +572,6 @@ namespace Bubbles
                 {
                     ActivateMindManager();
 
-                    //t.SelectOnly();
                     MMUtils.ActiveDocument.Selection.Cut();
                     newTopic.SelectOnly();
 
@@ -578,7 +582,6 @@ namespace Bubbles
                     // Text will be pasted after this (and previous) method is finished!!
                 }
             }
-
             return newTopic;
         }
 
@@ -804,15 +807,15 @@ namespace Bubbles
                     X = parent.Left; // child right = parent right
                 Y = parent.Bottom; // child top = parent bottom
 
-                if (popup == "add")
+                //if (popup == "add")
+                //{
+                //    X = parent.Left + (parent as BubblePaste).pAddTopic.Left;
+                //    Y = parent.Top + ((parent as BubblePaste).pAddTopic.Top / 2);
+                //}
+                if (popup == "paste")
                 {
-                    X = parent.Left + (parent as BubblePaste).pAddTopic.Left;
-                    Y = parent.Top + ((parent as BubblePaste).pAddTopic.Top / 2);
-                }
-                else if (popup == "paste")
-                {
-                    X = parent.Left + (parent as BubblePaste).pPasteTopic.Left;
-                    Y = parent.Top + ((parent as BubblePaste).pPasteTopic.Top / 2);
+                    X = parent.Left + (parent as BubblePaste).PasteLink.Left;
+                    Y = parent.Top + ((parent as BubblePaste).subtopic.Top / 2);
                 }
                 else if (popup == "progress")
                 {
@@ -843,15 +846,15 @@ namespace Bubbles
                 if (popup == "getname" || popup == "resources" || popup == "bookmarks" || popup == "sources")
                     Y = parent.Top; // child top = parent top
 
-                if (popup == "add")
+                //if (popup == "add")
+                //{
+                //    X = parent.Left + ((parent as BubblePaste).pAddTopic.Left / 2);
+                //    Y = parent.Top + (parent as BubblePaste).pAddTopic.Top;
+                //}
+                if (popup == "paste")
                 {
-                    X = parent.Left + ((parent as BubblePaste).pAddTopic.Left / 2);
-                    Y = parent.Top + (parent as BubblePaste).pAddTopic.Top;
-                }
-                else if (popup == "paste")
-                {
-                    X = parent.Left + ((parent as BubblePaste).pPasteTopic.Left / 2);
-                    Y = parent.Top + (parent as BubblePaste).pPasteTopic.Top;
+                    X = parent.Left + ((parent as BubblePaste).subtopic.Left / 2);
+                    Y = parent.Top + (parent as BubblePaste).PasteLink.Top;
                 }
                 else if (popup == "progress")
                 {

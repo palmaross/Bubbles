@@ -255,16 +255,6 @@
   <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>114, 17</value>
   </metadata>
-  <data name="Subtopic.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vAAADrwBlbxySQAAANNJREFUOE/VkkEKwjAQRXtMceNCELyAS8FCwG7cegMRj6AFL1DIRvAK3uLbH5gy
-        pmVMaVw48JIw/fOZZFoAyEpYvPfYVxV2ZZkMa7SREBYKnHOobzWapjGhhlo2oI2EzjDFTKCWNdpI6AyH
-        Ci2+GmbtkO8x9g1NQ06MglTYgDllzfI0a7fP3Bh6if8yfL4eWF8WYM6CGmpZYxpSuDrPcbhucLxvQ7EE
-        z8zxGzXUtmEb8swC7oKEzommjWFDTdxZHJGmb6j5ieHkK2uyDEWT5beZBoo3wAGcTpE395cAAAAASUVO
-        RK5CYII=
-</value>
-  </data>
   <data name="NextTopic.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
@@ -304,15 +294,6 @@
         0GW+zBOP/0ITLw8rNB+29HzcfPezjx82QYtXfj3HcVRcKPTCmgxQ/C0gWgsjokg0YuiNu2rFvUyQOO0d
         rNYrdEZNfKmypMK2bbXiXiZIUHi72eKwO2K6mKBslTBfztSKe5kQFFF8HYTOwdyL2zhGSH0AAAAASUVO
         RK5CYII=
-</value>
-  </data>
-  <data name="ToggleTextFormat.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vQAADr0BR/uQrQAAALNJREFUOE/tlDEKwkAQReeYVjapBIuwYjpvYClWFmkCNmJtY6OHSWGzJ/jyDMoS
-        t3AkFqLFg2Vn/2MY2LEYo9pLq81ppcl2rKIZuSBDFgcu41Dtp5rtCi0PldbHhQsyZHHgMuxc5B57wIHL
-        aDn3wAud4jLmkBZCCC+T5gDXFwpT6nMXnJdlVtDnL3zmB4WA6E6unvIZIR/6nbXV57EcBl9fkmyoBYvr
-        JgTstMwcPJAh23lkV9ODNAlWabYqAAAAAElFTkSuQmCC
 </value>
   </data>
   <metadata name="helpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">

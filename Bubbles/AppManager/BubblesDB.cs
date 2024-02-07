@@ -152,13 +152,14 @@ namespace Bubbles
                 + ");"
                 );
         }
-        public void AddPattern(string templateName, string topicName, string pattern)
+        public void AddPattern(string templateName, string topicName, string pattern, string topicType)
         {
             m_db.ExecuteNonQuery("insert into MT_TEMPLATES values(NULL, `"
                 + templateName + "`, `"
                 + topicName + "`, `"
-                + pattern + "`, "
-                + "'', 0"
+                + pattern + "`, `"
+                + topicType + "`, "
+                + "0"
                 + ");"
             );
         }
@@ -195,6 +196,7 @@ namespace Bubbles
             // "topics###5" - 5 topcs with topic text _topicName_
             // "custom###topic1###topic2###topic3###etc..."
             // "increment###start,end,step,position"
+            // reserved 1: "subtopic", "nexttopic" or "topicbefore"
             m_db.ExecuteNonQuery("CREATE TABLE STICKS(id integer unique, name text, " +
                 "type text, start integer, position text, configID integer, _group integer, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
@@ -303,10 +305,10 @@ namespace Bubbles
             AddNoteIcon("", "", 7); AddNoteIcon("", "", 8);
 
             // Add MT_Templates
-            AddPattern(Utils.getString("Template.Day"), Utils.getString("Template.Day"), "increment###1,10,1,end");
-            AddPattern(Utils.getString("Template.Month"), Utils.getString("Template.January"), "increment###1,31,1,end");
-            AddPattern(Utils.getString("Template.Task"), Utils.getString("Template.Task"), "increment###1,5,1,end");
-            AddPattern(Utils.getString("Template.WeekDays"), "", Utils.getString("Template.WeekDays.lang"));
+            AddPattern(Utils.getString("Template.Day"), Utils.getString("Template.Day"), "increment###1,10,1,end", "subtopic");
+            AddPattern(Utils.getString("Template.Month"), Utils.getString("Template.January"), "increment###1,31,1,end", "subtopic");
+            AddPattern(Utils.getString("Template.Task"), Utils.getString("Template.Task"), "increment###1,5,1,end", "subtopic");
+            AddPattern(Utils.getString("Template.WeekDays"), "", Utils.getString("Template.WeekDays.lang"), "subtopic");
 
             // Add Resource Groups (resources icons for now)
             AddResourceGroup(Utils.getString("taskinfo.database.resources.icon1"), 0, 0);
