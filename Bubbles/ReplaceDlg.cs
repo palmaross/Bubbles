@@ -2,9 +2,11 @@
 using PRAManager;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Windows.Documents;
 
 namespace Bubbles
 {
@@ -15,36 +17,75 @@ namespace Bubbles
         {
             InitializeComponent();
 
+            Text = Utils.getString("ReplaceDlg.Title");
+            rbtnWholeMap.Text = Utils.getString("ReplaceDlg.rbtnWholeMap");
+            rbtnSelectedTopics.Text = Utils.getString("ReplaceDlg.rbtnSelectedTopics");
+            labelWith.Text = Utils.getString("ReplaceDlg.labelWith");
+            linkReplaceAll.Text = Utils.getString("ReplaceDlg.linkReplaceAll");
+            linkGoToTopic.Text = Utils.getString("ReplaceDlg.linkGoToTopic");
+            btnSkip.Text = Utils.getString("ReplaceDlg.btnSkip");
+            btnClose.Text = Utils.getString("button.close");
+
             thisHeight = this.Height;
             linkMore_LinkClicked(null, null);
+
+            this.FormClosing += ReplaceDlg_FormClosing;
+        }
+
+        private void ReplaceDlg_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.Hide();
+            e.Cancel = true;
         }
 
         private void btnReplace_Click(object sender, EventArgs e)
         {
-            List<Topic> topics = new List<Topic>();
-            bool replaceall = chbReplaceAll.Checked;
-
             string text1 = txtText1.Text; string text2 = txtText2.Text;
 
-            if (rbtnWholeMap.Checked ) { topics.AddRange(MMUtils.ActiveDocument.Range(MmRange.mmRangeAllTopics).OfType<Topic>()); }
-            else { topics.AddRange(MMUtils.ActiveDocument.Selection.OfType<Topic>()); }
-
-            foreach (Topic topic in topics)
+            if (linkMore.Tag.ToString() == "Max") // replace step by step
             {
-                //topic.Find(text1);
-                string text = topic.Title.TextRTF;
-                rtb.Clear();
-                rtb.Rtf = text;
-                //rtb.Rtf = text;
 
-                string tt = topic.Text;
-                int indexOfSearchText = rtb.Find(text1);
-                if (indexOfSearchText != -1)
+            }
+            else // Replace all
+            {
+                List<Topic> topics = new List<Topic>();
+
+                if (rbtnWholeMap.Checked) { topics.AddRange(MMUtils.ActiveDocument.Range(MmRange.mmRangeAllTopics).OfType<Topic>()); }
+                else { topics.AddRange(MMUtils.ActiveDocument.Selection.OfType<Topic>()); }
+
+                foreach (Topic topic in topics)
                 {
-                    rtb.Select(indexOfSearchText, text1.Length);
-                    rtb.SelectionBackColor = System.Drawing.Color.Yellow;
-                    topic.Title.TextRTF = rtb.Rtf;
+                    string text = topic.Text;
+                    string textRTF = topic.Title.TextRTF;
+
+                    if (text.Contains(text1))
+                    {
+                        if (textRTF.Contains(text1))
+                            topic.Title.TextRTF = textRTF.Replace(text1, text2);
+                        else // unicode
+                        {
+
+                        }
+                    }
                 }
+            }
+
+            //foreach (Topic topic in topics)
+            //{
+                //topic.Find(text1);
+                //string text = topic.Title.TextRTF;
+                //rtb.Clear();
+                //rtb.Rtf = text;
+                ////rtb.Rtf = text;
+
+                //string tt = topic.Text;
+                //int indexOfSearchText = rtb.Find(text1);
+                //if (indexOfSearchText != -1)
+                //{
+                //    rtb.Select(indexOfSearchText, text1.Length);
+                //    rtb.SelectionBackColor = System.Drawing.Color.Yellow;
+                //    topic.Title.TextRTF = rtb.Rtf;
+                //}
                 //Regex regex = new Regex(text1, RegexOptions.IgnoreCase);
                 //MatchCollection matches = regex.Matches(tt);
                 //rtb.SelectAll();
@@ -54,7 +95,7 @@ namespace Bubbles
                 //    rtb.Select(match.Index, match.Length);
                 //    rtb.SelectionBackColor = System.Drawing.Color.Yellow;
                 //}
-                tt = rtb.Rtf;
+
                 //MessageBox.Show("Text found");
                 //if (rtb.Rtf.Contains(text1))
                 //{
@@ -70,9 +111,44 @@ namespace Bubbles
                 //    text = text.Replace(text1, text2);
                 //    topic.Title.TextRTF = text;
                 //}
-            }
+            //}
         }
-        bool start = true;
+
+        //void ReplaceMethod(FlowDocument rtBox, string strOld, string strNew)
+        //{
+        //    rtBox = (FlowDocument)rtb.SelectedText;
+        //    string rtf = "";
+        //    TextRange tr = new TextRange(rtBox.ContentStart, rtBox.ContentEnd);
+        //    using (var memoryStream = new MemoryStream())
+        //    {
+        //        tr.Save(memoryStream, DataFormats.Rtf);
+        //        rtf = Encoding.Default.GetString(memoryStream.ToArray());
+        //    }
+        //    rtf = rtf.Replace(ConvertString2RTF(strOld), ConvertString2RTF(strNew));
+        //    MemoryStream stream = new MemoryStream(ASCIIEncoding.Default.GetBytes(rtf));
+        //    rtBox.SelectAll();
+        //    rtBox.Selection.Load(stream, DataFormats.Rtf);
+        //}
+
+        private string ConvertString2RTF(string input)
+        {
+            //first take care of special RTF chars  
+            StringBuilder backslashed = new StringBuilder(input);
+            backslashed.Replace(@"\", @"\\");
+            backslashed.Replace(@"{", @"\{");
+            backslashed.Replace(@"}", @"\}");
+
+            //then convert the string char by char  
+            StringBuilder sb = new StringBuilder();
+            foreach (char character in backslashed.ToString())
+            {
+                if (character <= 0x7f)
+                    sb.Append(character);
+                else
+                    sb.Append("\\u" + Convert.ToUInt32(character) + "?");
+            }
+            return sb.ToString();
+        }
 
         void test(string HTMLText)
         {
@@ -104,7 +180,7 @@ namespace Bubbles
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Hide();
         }
 
         private void linkMore_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -112,20 +188,27 @@ namespace Bubbles
             if (linkMore.Tag.ToString() == "Max")
             {
                 linkMore.Tag = "Min";
-                checkTopicText.Visible = false;
-                checkTopicNotes.Visible = false;
-                chbReplaceAll.Visible = false;
                 this.Height = thisHeight - minSize.Width;
-                linkMore.Text = "More >>>>";
+                rtb.Visible = false;
+                linkMore.Text = Utils.getString("ReplaceDlg.linkMore1");
+                btnReplace.Width = btnSkip.Width + btnSkip.Height;
+                btnReplace.Text = Utils.getString("ReplaceDlg.btnReplace2");
+                btnSkip.Visible = false;
+                lblTopicCount.Visible = false;
+                linkReset.Visible = false;
+                linkMore.Visible = false;
             }
             else
             {
                 linkMore.Tag = "Max";
-                checkTopicText.Visible = true;
-                checkTopicNotes.Visible = true;
-                chbReplaceAll.Visible = true;
                 this.Height = thisHeight;
-                linkMore.Text = "Less <<<<";
+                rtb.Visible = true;
+                linkMore.Text = Utils.getString("ReplaceDlg.linkMore2");
+                btnReplace.Width = btnSkip.Width;
+                btnReplace.Text = Utils.getString("ReplaceDlg.btnReplace1");
+                btnSkip.Visible = true;
+                lblTopicCount.Visible = true;
+                linkReset.Visible = true;
             }
         }
     }

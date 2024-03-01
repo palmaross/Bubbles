@@ -8,6 +8,12 @@ using WindowsInput.Native;
 using WindowsInput;
 using System.Drawing;
 using System.Collections.Generic;
+using Clipboard = System.Windows.Forms.Clipboard;
+using Timer = System.Windows.Forms.Timer;
+using PRMapCompanion;
+using System.Threading;
+using System.Xml.Linq;
+using System.IO;
 
 namespace Bubbles
 {
@@ -31,24 +37,28 @@ namespace Bubbles
                 orientation = "H"; Rotate(); }
 
             toolTip1.SetToolTip(subtopic, Utils.getString("BubblesPaste.pastesubtopic"));
-            toolTip1.SetToolTip(pPaste, Utils.getString("BubblesPaste.pPaste.tooltip"));
-            toolTip1.SetToolTip(pCopy, Utils.getString("BubblesPaste.pCopy.tooltip"));
+            toolTip1.SetToolTip(pPasteToTopic, Utils.getString("BubblesPaste.pPaste.tooltip"));
+            toolTip1.SetToolTip(pCopyTopicText, Utils.getString("BubblesPaste.pCopy.tooltip"));
             toolTip1.SetToolTip(PasteLink, Utils.getString("BubblesPaste.PasteLink.tooltip"));
-            toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.AddNotes.tooltip"));
-            toolTip1.SetToolTip(ToggleTextFormat, Utils.getString("BubblesPaste.workwith.unformatted"));
+            toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.PasteNotes.tooltip"));
             toolTip1.SetToolTip(UnformatText, Utils.getString("BubblesPaste.unformate.tooltip"));
+            toolTip1.SetToolTip(pReplace, Utils.getString("BubblesPaste.pReplace.tooltip"));
+
+            toolTip1.SetToolTip(OptionTextFormat, Utils.getString("BubblesPaste.workwith.unformatted"));
+            toolTip1.SetToolTip(OptionReplaceInsert, Utils.getString("paste.contextmenu.insert2"));
+            toolTip1.SetToolTip(OptionMultipleTopics, Utils.getString("paste.contextmenu.multipletopics2"));
 
             toolTip1.SetToolTip(pictureHandle, stickname);
 
-            cmsPasteText.ItemClicked += ContextMenu_ItemClicked;
+            cmsOptions.ItemClicked += ContextMenu_ItemClicked;
             cmsCommon.ItemClicked += ContextMenu_ItemClicked;
 
-            cmsPasteText.Items["CP_copy_unformatted"].Text = Utils.getString("paste.contextmenu.copy_unformatted");
-            cmsPasteText.Items["CP_copy_formatted"].Text = Utils.getString("paste.contextmenu.copy_formatted");
-            cmsPasteText.Items["CP_paste_unformatted"].Text = Utils.getString("paste.contextmenu.paste_unformatted");
-            cmsPasteText.Items["CP_paste_formatted"].Text = Utils.getString("paste.contextmenu.paste_formatted");
+            OP_myrisk.Text = Utils.getString("pastenotes.contextmenu.quickinsert");
+            OP_myrisk.ToolTipText = Utils.getString("pastenotes.contextmenu.quickinsert.tooltip");
+            OP_myrisk.Tag = "myrisk";
 
             StickUtils.SetCommonContextMenu(cmsCommon, StickUtils.typepaste);
+            //cmsOptions.Closing += CmsOptions_Closing;
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
@@ -61,6 +71,15 @@ namespace Bubbles
 
             if (collapsed) {
                 collapsed = false; Collapse(); }
+
+            PasteOperations = new Timer() { Interval = 50 };
+            PasteOperations.Tick += PasteOperations_Tick;
+        }
+
+        private void CmsOptions_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        {
+            if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
+                e.Cancel = true;
         }
 
         private void PictureHandle_MouseDown(object sender, MouseEventArgs e)
@@ -75,45 +94,30 @@ namespace Bubbles
 
         private void ContextMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Name == "CP_copy_unformatted")
+            if (e.ClickedItem == OP_myrisk)
             {
-                if (MMUtils.ActiveDocument != null)
+                if (OP_myrisk.Checked) // user unchecks _Unsafe_ Insert Notes mode
                 {
-                    string text = "";
-                    foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                        text += t.Text;
+                    PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotes.png");
 
-                    if (text != "")
-                        System.Windows.Forms.Clipboard.SetText(text);
+                    if (OptionReplaceInsert.Tag.ToString() == "replace")
+                        toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.PasteNotes.tooltip"));
+                    else
+                        toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.AddNotes.tooltip"));
                 }
-            }
-            else if(e.ClickedItem.Name == "CP_copy_formatted")
-            {
-                string text = "";
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                    text += t.Title.TextRTF + "\r\n";
-
-                if (text != "")
+                else // user checks _Unsafe_ Insert Notes mode
                 {
-                    DataObject dto = new DataObject();
-                    dto.SetText(text, TextDataFormat.Rtf);
-                    dto.SetText(text, TextDataFormat.UnicodeText);
-                    System.Windows.Forms.Clipboard.Clear();
-                    System.Windows.Forms.Clipboard.SetDataObject(dto);
+                    if (OptionReplaceInsert.Tag.ToString() == "insert")
+                    {
+                        PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotesRisk.png");
+                        toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.AddNotes.unsafe.tooltip"));
+                    }
+                    else
+                    {
+                        PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotes.png");
+                        toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.PasteNotes.tooltip"));
+                    }
                 }
-            }
-            if (e.ClickedItem.Name == "CP_paste_unformatted")
-            {
-                var text = System.Windows.Forms.Clipboard.GetData(DataFormats.Rtf);
-                if (MMUtils.ActiveDocument != null)
-                {
-                    foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                        t.Text = System.Windows.Forms.Clipboard.GetText();
-                }
-            }
-            else if (e.ClickedItem.Name == "CP_paste_formatted")
-            {
-
             }
             else if (e.ClickedItem.Name == "BI_rotate")
             {
@@ -141,6 +145,9 @@ namespace Bubbles
         public void Rotate()
         {
             orientation = StickUtils.RotateStick(this, Manage, orientation);
+
+            panelOptions.Size = new Size(panelOptions.Height, panelOptions.Width);
+            panelOptions.Location = new Point(panelOptions.Location.Y, panelOptions.Location.X);
         }
 
         /// <summary>
@@ -183,19 +190,139 @@ namespace Bubbles
             }
         }
 
-        private void PasteNotes_Click(object sender, EventArgs e)
+        private void PasteNotes_MouseClick(object sender, MouseEventArgs e)
         {
-            if (MMUtils.ActiveDocument != null &&
-                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0 &&
-                System.Windows.Forms.Clipboard.ContainsText())
+            if (e.Button == MouseButtons.Right)
             {
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                foreach (ToolStripItem item in cmsOptions.Items)
+                    item.Visible = true;
+
+                cmsOptions.Show(Cursor.Position);
+                return;
+            }
+
+            if (MMUtils.ActiveDocument == null || !Clipboard.ContainsText() ||
+                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
+                return;
+
+            replace = OptionReplaceInsert.Tag.ToString() == "replace";
+
+            SelectedTopics.Clear();
+            SelectedTopics.AddRange(MMUtils.ActiveDocument.Selection.OfType<Topic>());
+            string rtf = Clipboard.GetText(TextDataFormat.Rtf);
+
+            if (OptionTextFormat.Tag.ToString() == "formatted" && String.IsNullOrEmpty(rtf))
+            {
+                // we have to make the rtf through the copying Clipboard to the topic
+                DocumentStorage.Sync(MMUtils.ActiveDocument); // subscribe document to onObjectAdded event
+                pastetext = true;
+                PastedTopics.Clear();
+
+                StickUtils.ActivateMindManager();
+                SelectedTopics[0].SelectOnly(); // get first of the selected topics
+                PasteOperations.Start(); // start timer to process formatted text
+                                         // paste from clipboard (in MM23 Selection.Paste() doesn't work!)
+                sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
+                return;
+            }
+
+            if (replace) // replace topic notes text with text from Clipboard
+            {
+                foreach (Topic t in SelectedTopics)
                 {
-                    t.Notes.CursorPosition = -1;
-                    t.Notes.Insert(System.Windows.Forms.Clipboard.GetText());
+                    UserActionNotes = false; // do not add notes to the TopicsWithNotes
+
+                    if (OptionTextFormat.Tag.ToString() == "formatted")
+                        t.Notes.TextRTF = rtf;
+                    else
+                        t.Notes.Text = Clipboard.GetText(TextDataFormat.UnicodeText);
+
+                    UserActionNotes = false; // do not add notes to the TopicsWithNotes
                     t.Notes.Commit();
                 }
             }
+            else // insert text at the end
+            {
+                Document doc = null; Topic tcopy;
+
+                if (!OP_myrisk.Checked)
+                { doc = SaveOpenMapCopy(); }
+
+                foreach (Topic t in SelectedTopics)
+                {
+                    UserActionNotes = false; // do not add notes to the TopicsWithNotes
+
+                    if (doc != null)
+                    {
+                        tcopy = doc.FindByGuid(t.Guid) as Topic;
+                        if (tcopy == null) continue;
+                        t.Notes.TextXHTML = tcopy.Notes.TextXHTML;
+                    }
+
+                    if (OptionTextFormat.Tag.ToString() == "formatted")
+                    {
+                        t.Notes.AppendRtf(rtf);
+                    }
+                    else // unformatted text
+                    {
+                        t.Notes.CursorPosition = -1;
+                        t.Notes.Insert("\r\n" + Clipboard.GetText(TextDataFormat.UnicodeText));
+                    }
+
+                    UserActionNotes = false; // do not add notes to the TopicsWithNotes
+                    t.Notes.Commit();
+                }
+
+                if (doc != null)
+                {
+                    // Close and delete temp doc
+                    string path = doc.FullName;
+                    doc.Close();
+                    try { File.Delete(path); } catch { }
+                    doc = null; tcopy = null;
+                }
+            }
+        }
+
+        public static List<string> TopicsWithNotes = new List<string>();
+        public static bool UserActionNotes = true;
+
+        Document SaveOpenMapCopy()
+        {
+            string aName = MMUtils.nowUnixTimestamp() + ".mmap"; // temp map
+            string path = Utils.m_localDataPath + aName;
+            MMUtils.ActiveDocument.SaveAs(path, true); // save it to temp directory
+
+            // Wait document to be active, as opening is asyncronous thing.
+            long _now = MMUtils.GetTimestamp();
+            bool mapopening = false;
+
+            while ((MMUtils.GetTimestamp() - _now) < 30)
+            {
+                int _ts = (int)(MMUtils.GetTimestamp() - _now);
+                if (_ts > 30) _ts = 30;
+
+                try { System.Windows.Forms.Application.DoEvents(); }
+                catch { }
+
+                if (File.Exists(path) && !mapopening) // map has been saved
+                {
+                    if (!mapopening) // open it (if not opened already)
+                    {
+                        MMUtils.MindManager.AllDocuments.Open(path, "", false);
+                        mapopening = true;
+                    }
+
+                    // Try to locate document
+                    foreach (Document _doc in MMUtils.MindManager.AllDocuments)
+                    {
+                        if (_doc.Name == aName) 
+                            return _doc;
+                    }
+                }
+            }
+            // 30 sec. passed, document was not opened, so...
+            return null;
         }
 
         private void AddPasteTopic_MouseHover(object sender, EventArgs e)
@@ -212,48 +339,174 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
-                StickUtils.ActivateMindManager();
-                sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_C);
-            }
-            else if (e.Button == MouseButtons.Right)
-            {
-                foreach (ToolStripItem item in cmsPasteText.Items)
-                    item.Visible = false;
+                if (OptionTextFormat.Tag.ToString() == "unformatted")
+                {
+                    string text = "";
+                    foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                        text += t.Text + "\r\n";
 
-                cmsPasteText.Items["CP_copy_unformatted"].Visible = true;
-                cmsPasteText.Items["CP_copy_formatted"].Visible = true;
+                    text = text.TrimEnd('\n').TrimEnd('\r');
 
-                cmsPasteText.Show(Cursor.Position);
+                    if (text != "")
+                        Clipboard.SetText(text);
+                }
+                else
+                {
+                    rtb.Clear();
+                    foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                    {
+                        //move cursor to the end
+                        rtb.Select(rtb.TextLength, 0);
+                        //append the rtf
+                        rtb.SelectedRtf = t.Title.TextRTF;
+                    }
+
+                    DataObject dto = new DataObject();
+                    dto.SetText(rtb.Rtf, TextDataFormat.Rtf);
+                    dto.SetText(rtb.Text, TextDataFormat.UnicodeText);
+                    Clipboard.Clear(); Clipboard.SetDataObject(dto);
+                }
             }
+            //else if (e.Button == MouseButtons.Right)
+            //{
+            //    foreach (ToolStripItem item in cmsOptions.Items)
+            //        item.Visible = false;
+
+            //    cmsOptions.Show(Cursor.Position);
+            //}
         }
 
-        //private void pCut_MouseClick(object sender, MouseEventArgs e)
-        //{
-        //    if (e.Button == MouseButtons.Left)
-        //    {
-        //        StickUtils.ActivateMindManager();
-        //        sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_X);
-        //    }
-        //}
-
-        private void pPaste_MouseClick(object sender, MouseEventArgs e)
+        public static bool pastetext = false;
+        bool replace = false;
+        public void pPasteToTopic_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                StickUtils.ActivateMindManager();
-                sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
-            }
-            else if (e.Button == MouseButtons.Right)
-            {
-                foreach (ToolStripItem item in cmsPasteText.Items)
-                    item.Visible = false;
+                if (MMUtils.ActiveDocument == null || !Clipboard.ContainsText() ||
+                    MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
+                    return;
 
-                cmsPasteText.Items["CP_paste_unformatted"].Visible = true;
-                cmsPasteText.Items["CP_paste_formatted"].Visible = true;
+                replace = OptionReplaceInsert.Tag.ToString() == "replace";
 
-                cmsPasteText.Show(Cursor.Position);
+                SelectedTopics.Clear();
+                SelectedTopics.AddRange(MMUtils.ActiveDocument.Selection.OfType<Topic>());
+
+                if (OptionTextFormat.Tag.ToString() == "formatted")
+                {                 
+                    string rtf = Clipboard.GetText(TextDataFormat.Rtf);
+
+                    if (!String.IsNullOrEmpty(rtf)) // we have the rtf text already
+                    {
+                        foreach (Topic t in SelectedTopics)
+                        {
+                            if (replace) // replace topic text with unformatted text from Clipboard
+                                t.Title.TextRTF = rtf;
+                            else
+                                t.Title.InsertTextRTF(t.Text.Length + 1, rtf);
+                        }
+                    }
+                    else // we have to use the Ctrl-V method to convert clipboard content to topics
+                    {
+                        DocumentStorage.Sync(MMUtils.ActiveDocument); // subscribe document to onObjectAdded event
+                        pastetext = true;
+                        PastedTopics.Clear();
+
+                        StickUtils.ActivateMindManager();
+                        SelectedTopics[0].SelectOnly(); // select the first of selected topics
+                        PasteOperations.Start(); // start timer to process pasted topics
+                                                 // paste text from clipboard (in MM23 Selection.Paste() doesn't work!)
+                        sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
+                    }
+                }
+                else // paste unformatted text
+                {
+                    string text = Clipboard.GetText(TextDataFormat.UnicodeText);
+
+                    foreach (Topic t in SelectedTopics)
+                    {
+                        if (replace) // replace topic text with unformatted text from Clipboard
+                            t.Text = text;
+                        else // append unformatted text from Clipboard to (possibly formatted!) topic text
+                        {
+                            // Get topic font family and font size
+                            string name = t.Font.Name;
+                            float size = t.Font.Size;
+
+                            // Set unformatted text from clipboard to rtb
+                            rtb.Clear(); rtb.Text = " " + text;
+                            // Apply topic font to this text
+                            rtb.Font = new Font(name, size);
+                            // Get rtf text (to append to the topic rtf text)
+                            string ClipboardRtf = rtb.Rtf;
+
+                            rtb.Clear();
+                            rtb.Rtf = t.Title.TextRTF; // copy topic rtf to rtb
+                                                       //move cursor to the end
+                            rtb.Select(rtb.TextLength, 0);
+                            //append the rtf from clipboard
+                            rtb.SelectedRtf = ClipboardRtf;
+                            t.Title.TextRTF = rtb.Rtf;
+                        }
+                    }
+                }
             }
         }
+
+        public void PasteOperations_Tick(object sender, EventArgs e)
+        {
+            PasteOperations.Stop();
+            pastetext = false;
+            rtb.Clear();
+
+            // Pass pasted topics' text to the rtb and save links
+            foreach (Topic t in PastedTopics)
+            {
+                //move cursor to the end
+                rtb.Select(rtb.TextLength, 0);
+                //append the topic rtf
+                rtb.SelectedRtf = t.Title.TextRTF;
+
+                // save links
+                if (t.Hyperlinks.Count > 0 && !TopicLinks.Contains(t.Hyperlinks[1].Address)) 
+                { TopicLinks.Add(t.Hyperlinks[1].Address); }
+            }
+
+            // Delete aux topics
+            foreach (Topic t in PastedTopics.Reverse<Topic>())
+                t.Delete();
+
+            // 
+            foreach (Topic t in SelectedTopics)
+            {
+                if (replace)
+                {
+                    t.Title.TextRTF = rtb.Rtf;
+                }
+                else // add text to end of topic text
+                {
+                    string rtf = rtb.Rtf; rtb.Clear();
+
+                    rtb.Rtf = t.Title.TextRTF; // copy topic rtf to rtb
+                    //move cursor to the end
+                    rtb.Select(rtb.TextLength, 0);
+                    //append the rtf from aux topics
+                    rtb.SelectedRtf = rtf;
+                    t.Title.TextRTF = rtb.Rtf;
+                }
+
+                // set links
+                foreach (string link in TopicLinks)
+                    t.Hyperlinks.AddHyperlink(link);
+                TopicLinks.Clear();
+            }
+
+            PastedTopics.Clear(); SelectedTopics.Clear();
+            DocumentStorage.Sync(MMUtils.ActiveDocument, false);
+        }
+        public static List<Topic> PastedTopics = new List<Topic>();
+        public static List<Topic> SelectedTopics = new List<Topic>();
+        List<string> TopicLinks = new List<string>();
+        string pasteOperation = "";
 
         private void UnformatText_Click(object sender, EventArgs e)
         {
@@ -261,8 +514,8 @@ namespace Bubbles
             {
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                 {
-                    string text = t.Text;
-                    t.Text = text;
+                    t.Font.SetAutomatic(63);
+                    t.TextColor.SetAutomatic();
                 }
             }
         }
@@ -293,25 +546,6 @@ namespace Bubbles
             }
         }
 
-        private void ToggleTextFormat_Click(object sender, EventArgs e)
-        {
-            string tooltip = Utils.getString("BubblesPaste.workwith.formatted");
-
-            if (ToggleTextFormat.Tag.ToString() == "formatted")
-            {
-                ToggleTextFormat.Tag = "unformatted";
-                ToggleTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "unformattedText.png");
-                tooltip = Utils.getString("BubblesPaste.workwith.unformatted");
-                toolTip1.SetToolTip(ToggleTextFormat, tooltip);
-            }
-            else
-            {
-                ToggleTextFormat.Tag = "formatted";
-                ToggleTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "formattedText.png");
-                toolTip1.SetToolTip(ToggleTextFormat, tooltip);
-            }
-        }
-
         void AddTopicTransaction(string trname)
         {
             Transaction _tr = MMUtils.ActiveDocument.NewTransaction(trname);
@@ -329,9 +563,83 @@ namespace Bubbles
                 StickUtils.AddTopic(transTopic, transTopicType, name);
         }
 
+        private void OptionButton_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (sender == OptionTextFormat)
+                {
+                    if (OptionTextFormat.Tag.ToString() == "formatted")
+                    {
+                        OptionTextFormat.Tag = "unformatted";
+                        OptionTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "unformattedText.png");
+                        toolTip1.SetToolTip(OptionTextFormat, Utils.getString("BubblesPaste.workwith.unformatted"));
+                    }
+                    else
+                    {
+                        OptionTextFormat.Tag = "formatted";
+                        OptionTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "formattedText.png");
+                        toolTip1.SetToolTip(OptionTextFormat, Utils.getString("BubblesPaste.workwith.formatted"));
+                    }
+                }
+                else if (sender == OptionReplaceInsert)
+                {
+                    if (OptionReplaceInsert.Tag.ToString() == "replace")
+                    {
+                        OptionReplaceInsert.Tag = "insert";
+                        OptionReplaceInsert.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "inserttext.png");
+                        toolTip1.SetToolTip(OptionReplaceInsert, Utils.getString("paste.contextmenu.insert1"));
+
+                        if (OP_myrisk.Checked)
+                        {
+                            PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotesRisk.png");
+                            toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.AddNotes.unsafe.tooltip"));
+                        }
+                        else
+                        {
+                            PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotes.png");
+                            toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.AddNotes.tooltip"));
+                        }
+                    }
+                    else
+                    {
+                        OptionReplaceInsert.Tag = "replace";
+                        OptionReplaceInsert.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "replacetext.png");
+                        toolTip1.SetToolTip(OptionReplaceInsert, Utils.getString("paste.contextmenu.insert2"));
+                        
+                        PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotes.png");
+                        toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.PasteNotes.tooltip"));
+                    }
+                }
+                else if (sender == OptionMultipleTopics)
+                {
+                    if (OptionMultipleTopics.Tag.ToString() == "single")
+                    {
+                        OptionMultipleTopics.Tag = "multiple";
+                        OptionMultipleTopics.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "cpTopicTemplate.png");
+                        toolTip1.SetToolTip(OptionMultipleTopics, Utils.getString("paste.contextmenu.multipletopics1"));
+                    }
+                    else
+                    {
+                        OptionMultipleTopics.Tag = "single";
+                        OptionMultipleTopics.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "cpAddSingle.png");
+                        toolTip1.SetToolTip(OptionMultipleTopics, Utils.getString("paste.contextmenu.multipletopics2"));
+                    }
+                }
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                //foreach (ToolStripItem item in cmsOptions.Items)
+                //    item.Visible = true;
+
+                //cmsOptions.Show(Cursor.Position);
+            }
+        }
+
         private void pReplace_Click(object sender, EventArgs e)
         {
-            new ReplaceDlg().Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            if (!BubblesButton.m_ReplaceDlg.Visible)
+                BubblesButton.m_ReplaceDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
         Topic transTopic;
@@ -352,5 +660,7 @@ namespace Bubbles
         public static extern bool ReleaseCapture();
 
         InputSimulator sim = new InputSimulator();
+
+        public static Timer PasteOperations = new Timer();
     }
 }

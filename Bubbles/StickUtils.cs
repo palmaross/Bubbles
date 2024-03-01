@@ -528,36 +528,31 @@ namespace Bubbles
         }
 
         /// <summary>
-        /// Add new topic to a certain position (next topic, topic before, etc.) relative to given topic
+        /// Add or paste topic to a certain position (next topic, topic before, etc.) relative to given topic
         /// </summary>
         /// <param name="t">Given topic</param>
         /// <param name="topicType">"subtopic", "next", "before", "parent", "callout"</param>
         /// <param name="text">New topic text. #default#" is a new topic default text</param>
         /// <returns></returns>
-        public static Topic AddTopic(Topic t, string topicType, string text = "#default#", bool addparent = true)
+        public static Topic AddTopic(Topic t, string topicType, string text = "#default#", 
+            bool addparent = true, bool rtf = false)
         {
             Topic newTopic;
 
             if (topicType == "subtopic")
-            {
-                if (text == "#default#")
-                    newTopic = t.AllSubTopics.Add();
-                else
-                    newTopic = t.AddSubTopic(text);
-            }
+                newTopic = t.AllSubTopics.Add();
             else if (topicType == "Callout")
-            {
                 newTopic = t.AllCalloutTopics.Add();
-                if (text != "#default#")
-                    newTopic.Text = text;
-            }
-            else
-            {
-                if (text == "#default#")
-                    newTopic = t.ParentTopic.AllSubTopics.Add();
-                else
-                    newTopic = t.ParentTopic.AddSubTopic(text);
+            else // next topic, topic before or parent topic
+                newTopic = t.ParentTopic.AllSubTopics.Add();
 
+            if (rtf)
+                newTopic.Title.TextRTF = text;
+            else if (text != "#default#")
+                newTopic.Text = text;
+
+            if (topicType != "subtopic" && topicType != "Callout")
+            {
                 // Get given topic index in the branch
                 int i = 1;
                 foreach (Topic _t in t.ParentTopic.AllSubTopics)
@@ -570,16 +565,20 @@ namespace Bubbles
 
                 if (topicType == "ParentTopic")
                 {
-                    ActivateMindManager();
-
                     MMUtils.ActiveDocument.Selection.Cut();
                     newTopic.SelectOnly();
 
+#if MINDJET23
                     // Paste copied topics. In MM23 Selection.Paste() doesn't work!
+                    ActivateMindManager();
                     InputSimulator sim = new InputSimulator();
                     sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
-
                     // Text will be pasted after this (and previous) method is finished!!
+#else
+                    {
+                        MMUtils.ActiveDocument.Selection.Paste();
+                    }
+#endif
                 }
             }
             return newTopic;

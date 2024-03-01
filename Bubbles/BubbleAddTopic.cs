@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using WindowsInput;
 
 namespace Bubbles
@@ -66,6 +67,7 @@ namespace Bubbles
                 collapsed = false; Collapse();
             }
         }
+
         void PopulateAddMultipleMenu()
         {
             cmsAddMultiple.Items.Clear();
@@ -81,27 +83,37 @@ namespace Bubbles
 
                 foreach (DataRow row in dt.Rows)
                 {
+                    // Template name
                     MT_TemplateItem item = new MT_TemplateItem(row["templateName"].ToString(),
                         row["topicName"].ToString(), row["pattern"].ToString(), "");
 
                     tsi = cmsAddMultiple.Items.Add(item.Name);
                     tsi.Tag = item; tsi.Name = "MT_Template";
-                    (tsi as ToolStripMenuItem).DropDown.Closing += DropDown_Closing;
+                    (tsi as ToolStripMenuItem).DropDown.Closing += DropDown_Closing; // do not close dropdown
 
-                    ToolStripItem tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("TopicTemplateDlg.lblTopicText"));
-                    tsm.Font = new System.Drawing.Font(tsi.Font, System.Drawing.FontStyle.Bold);
+                    //// Add dropdown items ////
 
-                    ToolStripTextBox tb = new ToolStripTextBox();
-                    tb.Text = item.TopicName;
-                    tb.BorderStyle = BorderStyle.FixedSingle;
-                    tb.Size = new System.Drawing.Size(Manage.Width * 5, tb.Height);
-                    (tsi as ToolStripMenuItem).DropDownItems.Add(tb);
+                    ToolStripItem tsm;
+                    if (!item.Pattern.StartsWith("custom"))
+                    {
+                        // Label "Topic Text"
+                        tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("TopicTemplateDlg.lblTopicText"));
+                        tsm.Font = new Font(tsi.Font, FontStyle.Bold);
 
+                        // TextBox for user's topic text
+                        ToolStripTextBox tb = new ToolStripTextBox();
+                        tb.Text = item.TopicName;
+                        tb.BorderStyle = BorderStyle.FixedSingle;
+                        tb.Size = new Size(Manage.Width * 5, tb.Height);
+                        (tsi as ToolStripMenuItem).DropDownItems.Add(tb);
+                    }
+
+                    // Label "Topic Type"
                     tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("BubbleAddTopic_AddAs"));
-                    tsm.Font = new System.Drawing.Font(tsi.Font, System.Drawing.FontStyle.Bold);
+                    tsm.Font = new Font(tsi.Font, FontStyle.Bold);
                     //(tsi as ToolStripMenuItem).DropDownItems.Add(new ToolStripSeparator());
 
-                    // topic type
+                    // Topic types
                     string topictype = row["reserved1"].ToString();
                     if (topictype == "") topictype = "subtopic";
 
@@ -185,6 +197,8 @@ namespace Bubbles
                         if (_tsm.Checked) topicType = _tsm.Name;
                 }
 
+                cmsAddMultiple.Close();
+
                 AddTopics(item, topicName, topicType);
             }
             else if (e.ClickedItem.Name == "BI_rotate")
@@ -212,7 +226,7 @@ namespace Bubbles
 
         private void AddTopics(MT_TemplateItem item, string topicName, string topicType)
         {
-            TopicList.Clear();
+            TopicsToAdd.Clear();
 
             List<string> pattern = item.Pattern.Split(new string[] { "###" }, StringSplitOptions.None).ToList();
             string template = pattern[0];
@@ -221,19 +235,19 @@ namespace Bubbles
             {
                 if (topicName == "") return;
                 for (int i = 0; i < Convert.ToInt32(pattern[1]); i++) 
-                    TopicList.Add(topicName);
+                    TopicsToAdd.Add(topicName);
             }
             else if (template == "custom")
             {
                 for (int i = 1; i < pattern.Count; i++)
-                    TopicList.Add(pattern[i]);
+                    TopicsToAdd.Add(pattern[i]);
             }
             else if (template == "increment")
             {
                 GetTopicList(topicName, pattern[1]);
             }
 
-            if (TopicList != null && TopicList.Count > 0)
+            if (TopicsToAdd != null && TopicsToAdd.Count > 0)
             {
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                 {
@@ -245,7 +259,7 @@ namespace Bubbles
 
         List<string> GetTopicList(string name, string incrementdata)
         {
-            TopicList.Clear();
+            TopicsToAdd.Clear();
             string[] incrementData = incrementdata.Split(',');
 
             int start = Convert.ToInt32(incrementData[0]);
@@ -257,15 +271,15 @@ namespace Bubbles
             if (step > 0)
             {
                 for (int i = start; i <= finish; i += step)
-                    TopicList.Add(GetPreview(name, i, begin));
+                    TopicsToAdd.Add(GetPreview(name, i, begin));
             }
             else
             {
                 for (int i = start; i >= finish; i += step)
-                    TopicList.Add(GetPreview(name, i, begin));
+                    TopicsToAdd.Add(GetPreview(name, i, begin));
             }
 
-            return TopicList;
+            return TopicsToAdd;
         }
 
         string GetPreview(string topictext, int number, bool begin)
@@ -371,7 +385,7 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
-                TopicList.Clear();
+                TopicsToAdd.Clear();
                 AddTopic((sender as PictureBox).Name);
             }
         }
@@ -383,8 +397,7 @@ namespace Bubbles
         void AddTopic(string topictype)
         {
             if (MMUtils.ActiveDocument == null) return;
-            int count = MMUtils.ActiveDocument.Selection.OfType<Topic>().Count();
-            if (count == 0) return;
+            if (MMUtils.ActiveDocument.Selection.PrimaryTopic == null) return;
 
             string topicText = TopicText.Text;
             transTopicType = topictype;
@@ -394,19 +407,19 @@ namespace Bubbles
                 if (chIncrement.Checked)
                 {
                     for (int i = 1; i <= numUpDown.Value; i++)
-                        TopicList.Add(topicText + i);
+                        TopicsToAdd.Add(topicText + i);
                 }
                 else
                 {
                     if (topicText == "") topicText = "#default#";
                     for (int i = 1; i <= numUpDown.Value; i++)
-                        TopicList.Add(topicText);
+                        TopicsToAdd.Add(topicText);
                 }
             }
-            else
+            else // parent topic or callout topic. Can be one only.
             {
                 if (topicText == "") topicText = "#default#";
-                TopicList.Add(topicText);
+                TopicsToAdd.Add(topicText);
 
                 //IDataObject data_object = System.Windows.Forms.Clipboard.GetDataObject();
                 //if (data_object.GetDataPresent(DataFormats.Rtf))
@@ -418,16 +431,12 @@ namespace Bubbles
                 //}
             }
 
-            // add topic
-            foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-            {
-                transTopic = t;
-                AddTopicTransaction(Utils.getString("addtopics.transactionname.insert"));
-            }
+            // Add topics
+            AddTopicTransaction(Utils.getString("addtopics.transactionname.insert"));
         }
         Topic transTopic;
         string transTopicType;
-        public List<string> TopicList = new List<string>();
+        public List<string> TopicsToAdd = new List<string>();
 
         void AddTopicTransaction(string trname)
         {
@@ -439,11 +448,21 @@ namespace Bubbles
 
         public void AddTopics(Document pDocument)
         {
-            if (TopicList.Count > 1 && transTopicType == "nexttopic")
-                TopicList = TopicList.Reverse<string>().ToList();
+            if (TopicsToAdd.Count > 1 && transTopicType == "nexttopic")
+                TopicsToAdd = TopicsToAdd.Reverse<string>().ToList();
 
-            foreach (var name in TopicList)
-                StickUtils.AddTopic(transTopic, transTopicType, name);
+            if (transTopicType == "ParentTopic")
+            {
+                StickUtils.AddTopic(MMUtils.ActiveDocument.Selection.PrimaryTopic, transTopicType, TopicsToAdd[0]);
+            }
+            else
+            {
+                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                {
+                    foreach (var name in TopicsToAdd)
+                        StickUtils.AddTopic(t, transTopicType, name);
+                }
+            }
         }
 
         string orientation = "H";

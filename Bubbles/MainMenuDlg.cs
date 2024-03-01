@@ -19,6 +19,7 @@ namespace Bubbles
             lblOrganizer.Text = Utils.getString("stickOrganizer.name");
             lblBookmarks.Text = Utils.getString("stickBookmarks.name");
             lblMySources.Text = Utils.getString("stickSources.name");
+            lblAddTopic.Text = Utils.getString("stickAddTopics.name");
             lblCopyPaste.Text = Utils.getString("stickPaste.name");
             lblFormat.Text = Utils.getString("stickFormat.name");
             toolTip1.SetToolTip(pBulkOperations, Utils.getString("sticks.bulkoperations"));

@@ -95,6 +95,8 @@ namespace Bubbles
             HidePopup = new Timer() { Interval = 2000 };
             HidePopup.Tick += HidePopup_Tick;
             HidePopup.Start();
+
+            m_ReplaceDlg = new ReplaceDlg();
         }
 
         /// <summary>
@@ -185,10 +187,19 @@ namespace Bubbles
             if (m_Bookmarks != null)
                 m_Bookmarks.Init();
 
-            if (m_TaskInfo != null && m_TaskInfo.Visible)
+            //if ((m_TaskInfo != null && m_TaskInfo.Visible))
                 DocumentStorage.Sync(MMUtils.ActiveDocument); // subscribe document to events
-            else
-                DocumentStorage.Sync(MMUtils.ActiveDocument, false); // unsubscribe document
+            //else
+            //    DocumentStorage.Sync(MMUtils.ActiveDocument, false); // unsubscribe document
+        }
+
+        public override void onObjectAdded(MMEventArgs aArgs)
+        {
+            if (BubblePaste.pastetext)
+            {
+                if (aArgs.target is Topic t && !BubblePaste.PastedTopics.Contains(t))
+                    BubblePaste.PastedTopics.Add(t);
+            }
         }
 
         public override void onDocumentDeactivated(MMEventArgs aArgs)
@@ -197,12 +208,23 @@ namespace Bubbles
                 m_Bookmarks.Init();
         }
 
-        // For Task Info stick only.
+        // For Task Info stick. For topic notes.
         public override void onObjectChanged(MMEventArgs aArgs)
         {
+            if (aArgs.what.Contains("notesxhtmldata"))
+            {
+                if (aArgs.target is Topic t && BubblePaste.UserActionNotes)
+                {
+                    if (!BubblePaste.TopicsWithNotes.Contains(t.Guid))
+                        BubblePaste.TopicsWithNotes.Add(t.Guid);
+                }
+                BubblePaste.UserActionNotes = true;
+                return;
+            }
+
             if (m_TaskInfo == null || !m_TaskInfo.Visible) return;
 
-            if (aArgs.what.Contains("selection"))
+            else if (aArgs.what.Contains("selection"))
             {
                 // If map selection changed, change the dates in the TaskInfo stick with selected topic dates
                 SetDates();
@@ -380,6 +402,13 @@ namespace Bubbles
                 m_BookmarkList = null;
             }
 
+            if (m_ReplaceDlg != null)
+            {
+                m_ReplaceDlg.Hide();
+                m_ReplaceDlg.Dispose();
+                m_ReplaceDlg = null;
+            }
+
             if (m_Resources != null)
             {
                 m_Resources.Hide();
@@ -431,6 +460,12 @@ namespace Bubbles
             HidePopup.Tick -= HidePopup_Tick;
             HidePopup.Dispose(); HidePopup = null;
 
+            BubblePaste.PasteOperations.Stop();
+            //BubblePaste.PasteOperations.Tick -= BubblePaste.PasteOperations_Tick;
+            BubblePaste.PasteOperations.Dispose(); BubblePaste.PasteOperations = null;
+
+            BubblePaste.PastedTopics.Clear(); BubblePaste.SelectedTopics.Clear();
+
             DocumentStorage.Unsubscribe(this);
 
             Utils.StockIcons.Clear();
@@ -451,6 +486,8 @@ namespace Bubbles
 
         public static Organizer.NotesDlg m_Notes;
 
+        public static ReplaceDlg m_ReplaceDlg;
+
         public static MainMenuDlg m_bubblesMenu = null;
 
         private Command m_cmdBubbles;
@@ -465,6 +502,7 @@ namespace Bubbles
         public static Popup commandPopup = new Popup(new StickPopup().panelH);
 
         Timer HidePopup = new Timer();
+
         static ToolTip tt = new ToolTip() { ShowAlways = true, AutoPopDelay = 3000 };
     }
 }

@@ -51,7 +51,7 @@
                 MMUtils.Registered_AddinName = "Sticks23.Connect";
                 MMUtils.CLSID = "A6E25E96-3200-4C90-9D4C-58BB430A8406";
                 MMUtils.CreateAddinFolder = true;
-                MMUtils.CreateAddinAppDataFolder = false;
+                MMUtils.CreateAddinAppDataFolder = true;
                 MMUtils.checkForUpdates = true;
 
                 MMUtils.AddinName = "Sticks";

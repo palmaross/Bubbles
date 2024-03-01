@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;MINDJET22</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -216,6 +216,12 @@
     </Compile>
     <Compile Include="Organizer\NoteDlg.Designer.cs">
       <DependentUpon>NoteDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReplaceDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReplaceDlg.Designer.cs">
+      <DependentUpon>ReplaceDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="ResourcesDlg.cs">
       <SubType>Form</SubType>
@@ -838,6 +844,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Organizer\NoteDlg.resx">
       <DependentUpon>NoteDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReplaceDlg.resx">
+      <DependentUpon>ReplaceDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ResourcesDlg.resx">
       <DependentUpon>ResourcesDlg.cs</DependentUpon>

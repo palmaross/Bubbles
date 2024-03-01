@@ -35,15 +35,14 @@
             this.txtText2 = new System.Windows.Forms.TextBox();
             this.btnReplace = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
-            this.checkTopicText = new System.Windows.Forms.CheckBox();
-            this.checkTopicNotes = new System.Windows.Forms.CheckBox();
             this.btnSkip = new System.Windows.Forms.Button();
-            this.chbReplaceAll = new System.Windows.Forms.CheckBox();
             this.rtb = new System.Windows.Forms.RichTextBox();
             this.linkGoToTopic = new System.Windows.Forms.LinkLabel();
             this.linkReplaceAll = new System.Windows.Forms.LinkLabel();
             this.linkMore = new System.Windows.Forms.LinkLabel();
             this.minSize = new System.Windows.Forms.Label();
+            this.lblTopicCount = new System.Windows.Forms.Label();
+            this.linkReset = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // rbtnSelectedTopics
@@ -94,7 +93,7 @@
             // btnReplace
             // 
             this.btnReplace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnReplace.Location = new System.Drawing.Point(11, 288);
+            this.btnReplace.Location = new System.Drawing.Point(11, 256);
             this.btnReplace.Name = "btnReplace";
             this.btnReplace.Size = new System.Drawing.Size(75, 23);
             this.btnReplace.TabIndex = 5;
@@ -106,7 +105,7 @@
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(172, 288);
+            this.btnClose.Location = new System.Drawing.Point(173, 256);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 6;
@@ -114,53 +113,19 @@
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
-            // checkTopicText
-            // 
-            this.checkTopicText.AutoSize = true;
-            this.checkTopicText.Checked = true;
-            this.checkTopicText.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkTopicText.Location = new System.Drawing.Point(12, 126);
-            this.checkTopicText.Name = "checkTopicText";
-            this.checkTopicText.Size = new System.Drawing.Size(77, 17);
-            this.checkTopicText.TabIndex = 7;
-            this.checkTopicText.Text = "Topic Text";
-            this.checkTopicText.UseVisualStyleBackColor = true;
-            // 
-            // checkTopicNotes
-            // 
-            this.checkTopicNotes.AutoSize = true;
-            this.checkTopicNotes.Location = new System.Drawing.Point(123, 126);
-            this.checkTopicNotes.Name = "checkTopicNotes";
-            this.checkTopicNotes.Size = new System.Drawing.Size(84, 17);
-            this.checkTopicNotes.TabIndex = 8;
-            this.checkTopicNotes.Text = "Topic Notes";
-            this.checkTopicNotes.UseVisualStyleBackColor = true;
-            // 
             // btnSkip
             // 
             this.btnSkip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSkip.Location = new System.Drawing.Point(91, 288);
+            this.btnSkip.Location = new System.Drawing.Point(92, 256);
             this.btnSkip.Name = "btnSkip";
             this.btnSkip.Size = new System.Drawing.Size(75, 23);
             this.btnSkip.TabIndex = 11;
             this.btnSkip.Text = "Skip";
             this.btnSkip.UseVisualStyleBackColor = true;
             // 
-            // chbReplaceAll
-            // 
-            this.chbReplaceAll.AutoSize = true;
-            this.chbReplaceAll.Checked = true;
-            this.chbReplaceAll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chbReplaceAll.Location = new System.Drawing.Point(12, 149);
-            this.chbReplaceAll.Name = "chbReplaceAll";
-            this.chbReplaceAll.Size = new System.Drawing.Size(80, 17);
-            this.chbReplaceAll.TabIndex = 12;
-            this.chbReplaceAll.Text = "Replace All";
-            this.chbReplaceAll.UseVisualStyleBackColor = true;
-            // 
             // rtb
             // 
-            this.rtb.Location = new System.Drawing.Point(11, 173);
+            this.rtb.Location = new System.Drawing.Point(11, 140);
             this.rtb.Name = "rtb";
             this.rtb.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.rtb.Size = new System.Drawing.Size(235, 86);
@@ -169,7 +134,7 @@
             // 
             // linkGoToTopic
             // 
-            this.linkGoToTopic.Location = new System.Drawing.Point(146, 261);
+            this.linkGoToTopic.Location = new System.Drawing.Point(146, 228);
             this.linkGoToTopic.Name = "linkGoToTopic";
             this.linkGoToTopic.Size = new System.Drawing.Size(100, 13);
             this.linkGoToTopic.TabIndex = 14;
@@ -180,12 +145,12 @@
             // linkReplaceAll
             // 
             this.linkReplaceAll.AutoSize = true;
-            this.linkReplaceAll.Location = new System.Drawing.Point(11, 261);
+            this.linkReplaceAll.Location = new System.Drawing.Point(11, 228);
             this.linkReplaceAll.Name = "linkReplaceAll";
-            this.linkReplaceAll.Size = new System.Drawing.Size(96, 13);
+            this.linkReplaceAll.Size = new System.Drawing.Size(95, 13);
             this.linkReplaceAll.TabIndex = 15;
             this.linkReplaceAll.TabStop = true;
-            this.linkReplaceAll.Text = "Replace All Entries";
+            this.linkReplaceAll.Text = "Replace all Entries";
             // 
             // linkMore
             // 
@@ -203,26 +168,46 @@
             // 
             this.minSize.Location = new System.Drawing.Point(77, 63);
             this.minSize.Name = "minSize";
-            this.minSize.Size = new System.Drawing.Size(158, 13);
+            this.minSize.Size = new System.Drawing.Size(136, 13);
             this.minSize.TabIndex = 17;
             this.minSize.Text = "minSize";
             this.minSize.Visible = false;
+            // 
+            // lblTopicCount
+            // 
+            this.lblTopicCount.AutoSize = true;
+            this.lblTopicCount.Location = new System.Drawing.Point(10, 124);
+            this.lblTopicCount.Name = "lblTopicCount";
+            this.lblTopicCount.Size = new System.Drawing.Size(82, 13);
+            this.lblTopicCount.TabIndex = 18;
+            this.lblTopicCount.Text = "Topic 23 of 156";
+            // 
+            // linkReset
+            // 
+            this.linkReset.AutoSize = true;
+            this.linkReset.Location = new System.Drawing.Point(113, 124);
+            this.linkReset.Name = "linkReset";
+            this.linkReset.Size = new System.Drawing.Size(35, 13);
+            this.linkReset.TabIndex = 19;
+            this.linkReset.TabStop = true;
+            this.linkReset.Tag = "Max";
+            this.linkReset.Text = "Reset";
+            this.linkReset.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // ReplaceDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(259, 323);
+            this.ClientSize = new System.Drawing.Size(260, 291);
+            this.Controls.Add(this.linkReset);
+            this.Controls.Add(this.lblTopicCount);
             this.Controls.Add(this.minSize);
             this.Controls.Add(this.linkMore);
             this.Controls.Add(this.linkReplaceAll);
             this.Controls.Add(this.linkGoToTopic);
             this.Controls.Add(this.rtb);
-            this.Controls.Add(this.chbReplaceAll);
             this.Controls.Add(this.btnSkip);
-            this.Controls.Add(this.checkTopicNotes);
-            this.Controls.Add(this.checkTopicText);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnReplace);
             this.Controls.Add(this.txtText2);
@@ -236,7 +221,7 @@
             this.Name = "ReplaceDlg";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "ReplaceDlg";
+            this.Text = "Replace in topic";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -251,14 +236,13 @@
         private System.Windows.Forms.TextBox txtText2;
         private System.Windows.Forms.Button btnReplace;
         private System.Windows.Forms.Button btnClose;
-        private System.Windows.Forms.CheckBox checkTopicText;
-        private System.Windows.Forms.CheckBox checkTopicNotes;
         private System.Windows.Forms.Button btnSkip;
-        private System.Windows.Forms.CheckBox chbReplaceAll;
         private System.Windows.Forms.RichTextBox rtb;
         private System.Windows.Forms.LinkLabel linkGoToTopic;
         private System.Windows.Forms.LinkLabel linkReplaceAll;
         private System.Windows.Forms.LinkLabel linkMore;
         private System.Windows.Forms.Label minSize;
+        private System.Windows.Forms.Label lblTopicCount;
+        private System.Windows.Forms.LinkLabel linkReset;
     }
 }
