@@ -298,7 +298,7 @@
             this.lblCopyPaste.Name = "lblCopyPaste";
             this.lblCopyPaste.Size = new System.Drawing.Size(70, 13);
             this.lblCopyPaste.TabIndex = 22;
-            this.lblCopyPaste.Text = "Вставка";
+            this.lblCopyPaste.Text = "Текст Опц";
             this.lblCopyPaste.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblMySources

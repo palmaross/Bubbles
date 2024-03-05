@@ -50,6 +50,9 @@
             this.OptionReplaceInsert = new System.Windows.Forms.PictureBox();
             this.OptionMultipleTopics = new System.Windows.Forms.PictureBox();
             this.panelOptions = new System.Windows.Forms.Panel();
+            this.OptionSourceLink = new System.Windows.Forms.PictureBox();
+            this.OptionInternalLinks = new System.Windows.Forms.PictureBox();
+            this.pTopicWidth = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.PasteLink)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PasteNotes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pCopyTopicText)).BeginInit();
@@ -64,6 +67,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pReplace)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.OptionReplaceInsert)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.OptionMultipleTopics)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.OptionSourceLink)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.OptionInternalLinks)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pTopicWidth)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -113,7 +119,7 @@
             // 
             this.UnformatText.Cursor = System.Windows.Forms.Cursors.Hand;
             this.UnformatText.Image = ((System.Drawing.Image)(resources.GetObject("UnformatText.Image")));
-            this.UnformatText.Location = new System.Drawing.Point(248, 7);
+            this.UnformatText.Location = new System.Drawing.Point(287, 7);
             this.UnformatText.Name = "UnformatText";
             this.UnformatText.Size = new System.Drawing.Size(16, 16);
             this.UnformatText.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -138,7 +144,7 @@
             this.Manage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Manage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Manage.Image = ((System.Drawing.Image)(resources.GetObject("Manage.Image")));
-            this.Manage.Location = new System.Drawing.Point(272, 5);
+            this.Manage.Location = new System.Drawing.Point(330, 5);
             this.Manage.Name = "Manage";
             this.Manage.Size = new System.Drawing.Size(20, 20);
             this.Manage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -223,7 +229,7 @@
             // 
             this.pReplace.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pReplace.Image = ((System.Drawing.Image)(resources.GetObject("pReplace.Image")));
-            this.pReplace.Location = new System.Drawing.Point(228, 7);
+            this.pReplace.Location = new System.Drawing.Point(267, 7);
             this.pReplace.Name = "pReplace";
             this.pReplace.Size = new System.Drawing.Size(16, 16);
             this.pReplace.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -260,7 +266,7 @@
             this.OptionMultipleTopics.BackColor = System.Drawing.Color.OldLace;
             this.OptionMultipleTopics.Cursor = System.Windows.Forms.Cursors.Hand;
             this.OptionMultipleTopics.Image = ((System.Drawing.Image)(resources.GetObject("OptionMultipleTopics.Image")));
-            this.OptionMultipleTopics.Location = new System.Drawing.Point(201, 7);
+            this.OptionMultipleTopics.Location = new System.Drawing.Point(199, 8);
             this.OptionMultipleTopics.Name = "OptionMultipleTopics";
             this.OptionMultipleTopics.Size = new System.Drawing.Size(16, 16);
             this.OptionMultipleTopics.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -275,16 +281,60 @@
             this.panelOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelOptions.Location = new System.Drawing.Point(159, 4);
             this.panelOptions.Name = "panelOptions";
-            this.panelOptions.Size = new System.Drawing.Size(64, 23);
+            this.panelOptions.Size = new System.Drawing.Size(100, 23);
             this.panelOptions.TabIndex = 98;
+            // 
+            // OptionSourceLink
+            // 
+            this.OptionSourceLink.BackColor = System.Drawing.Color.OldLace;
+            this.OptionSourceLink.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.OptionSourceLink.Image = ((System.Drawing.Image)(resources.GetObject("OptionSourceLink.Image")));
+            this.OptionSourceLink.Location = new System.Drawing.Point(221, 8);
+            this.OptionSourceLink.Name = "OptionSourceLink";
+            this.OptionSourceLink.Size = new System.Drawing.Size(16, 16);
+            this.OptionSourceLink.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.OptionSourceLink.TabIndex = 99;
+            this.OptionSourceLink.TabStop = false;
+            this.OptionSourceLink.Tag = "no";
+            this.OptionSourceLink.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OptionButton_MouseClick);
+            // 
+            // OptionInternalLinks
+            // 
+            this.OptionInternalLinks.BackColor = System.Drawing.Color.OldLace;
+            this.OptionInternalLinks.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.OptionInternalLinks.Image = ((System.Drawing.Image)(resources.GetObject("OptionInternalLinks.Image")));
+            this.OptionInternalLinks.Location = new System.Drawing.Point(240, 8);
+            this.OptionInternalLinks.Name = "OptionInternalLinks";
+            this.OptionInternalLinks.Size = new System.Drawing.Size(16, 16);
+            this.OptionInternalLinks.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.OptionInternalLinks.TabIndex = 100;
+            this.OptionInternalLinks.TabStop = false;
+            this.OptionInternalLinks.Tag = "no";
+            this.OptionInternalLinks.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OptionButton_MouseClick);
+            // 
+            // pTopicWidth
+            // 
+            this.pTopicWidth.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pTopicWidth.Image = ((System.Drawing.Image)(resources.GetObject("pTopicWidth.Image")));
+            this.pTopicWidth.Location = new System.Drawing.Point(307, 6);
+            this.pTopicWidth.Name = "pTopicWidth";
+            this.pTopicWidth.Size = new System.Drawing.Size(18, 18);
+            this.pTopicWidth.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pTopicWidth.TabIndex = 101;
+            this.pTopicWidth.TabStop = false;
+            this.pTopicWidth.Tag = "64";
+            this.pTopicWidth.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pTopicWidth_MouseClick);
             // 
             // BubblePaste
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(294, 30);
+            this.ClientSize = new System.Drawing.Size(352, 30);
             this.ControlBox = false;
+            this.Controls.Add(this.pTopicWidth);
+            this.Controls.Add(this.OptionInternalLinks);
+            this.Controls.Add(this.OptionSourceLink);
             this.Controls.Add(this.OptionTextFormat);
             this.Controls.Add(this.OptionReplaceInsert);
             this.Controls.Add(this.OptionMultipleTopics);
@@ -318,6 +368,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pReplace)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.OptionReplaceInsert)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.OptionMultipleTopics)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.OptionSourceLink)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.OptionInternalLinks)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pTopicWidth)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -343,5 +396,8 @@
         public System.Windows.Forms.PictureBox OptionReplaceInsert;
         public System.Windows.Forms.PictureBox OptionMultipleTopics;
         private System.Windows.Forms.Panel panelOptions;
+        public System.Windows.Forms.PictureBox OptionSourceLink;
+        public System.Windows.Forms.PictureBox OptionInternalLinks;
+        private System.Windows.Forms.PictureBox pTopicWidth;
     }
 }

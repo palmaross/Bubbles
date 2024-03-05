@@ -314,7 +314,7 @@ namespace Bubbles
             bool paste = panelPasteTopic.AccessibleName == "paste";
             if (paste && !System.Windows.Forms.Clipboard.ContainsText()) return;
 
-            if (paste) // add subtopic(s) and paste clipboard conent to them
+            if (paste) // add subtopic(s) and paste clipboard content to them
             {
                 // Create subtopics for all selected topics
                 Topic _t = null; bool addparent = true;

@@ -305,6 +305,12 @@
     <Compile Include="TopicTemplatePreview.Designer.cs">
       <DependentUpon>TopicTemplatePreview.cs</DependentUpon>
     </Compile>
+    <Compile Include="TopicWidthDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TopicWidthDlg.Designer.cs">
+      <DependentUpon>TopicWidthDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -888,6 +894,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TopicTemplatePreview.resx">
       <DependentUpon>TopicTemplatePreview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TopicWidthDlg.resx">
+      <DependentUpon>TopicWidthDlg.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

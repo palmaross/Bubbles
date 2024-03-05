@@ -16,6 +16,9 @@ using WindowsInput.Native;
 using WindowsInput;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+using Clipboard = System.Windows.Forms.Clipboard;
+using static System.Windows.Forms.LinkLabel;
 
 namespace Bubbles
 {
@@ -530,12 +533,12 @@ namespace Bubbles
         /// <summary>
         /// Add or paste topic to a certain position (next topic, topic before, etc.) relative to given topic
         /// </summary>
-        /// <param name="t">Given topic</param>
+        /// <param name="t">Given (selected) topic</param>
         /// <param name="topicType">"subtopic", "next", "before", "parent", "callout"</param>
         /// <param name="text">New topic text. #default#" is a new topic default text</param>
         /// <returns></returns>
         public static Topic AddTopic(Topic t, string topicType, string text = "#default#", 
-            bool addparent = true, bool rtf = false)
+            bool rtf = false, bool sourceURL = false)
         {
             Topic newTopic;
 
@@ -549,6 +552,143 @@ namespace Bubbles
             if (rtf)
                 newTopic.Title.TextRTF = text;
             else if (text != "#default#")
+                newTopic.Text = text;
+
+            if (sourceURL && SourceURL != "")
+                newTopic.Hyperlinks.AddHyperlink(SourceURL);
+            foreach (string link in Links)
+                newTopic.Hyperlinks.AddHyperlink(link);
+
+            if (topicType != "subtopic" && topicType != "Callout")
+            {
+                // Get given topic index in the branch
+                int i = 1;
+                foreach (Topic _t in t.ParentTopic.AllSubTopics)
+                {
+                    if (_t == t) break; i++;
+                }
+                if (topicType == "nexttopic") i++; // Otherwise, add topic before
+
+                t.ParentTopic.AllSubTopics.Insert(newTopic, i);
+
+                if (topicType == "ParentTopic")
+                {
+                    MMUtils.ActiveDocument.Selection.Cut();
+                    newTopic.SelectOnly();
+
+#if MINDJET23
+                    // Paste copied topics. In MM23 Selection.Paste() doesn't work!
+                    ActivateMindManager();
+                    InputSimulator sim = new InputSimulator();
+                    sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
+                    // Text will be pasted after this (and previous) method is finished!!
+#else
+                    {
+                        MMUtils.ActiveDocument.Selection.Paste();
+                    }
+#endif
+                }
+            }
+            return newTopic;
+        }
+
+        /// <summary>
+        /// Get source url and links containing in the copied text
+        /// </summary>
+        public static void GetLinks(bool source_link, bool internal_links)
+        {
+            bool aWord = false;
+            Links.Clear(); SourceURL = "";
+
+            if (!source_link && !internal_links) return;
+
+            string text = Clipboard.GetText(TextDataFormat.UnicodeText);
+            string html = Clipboard.GetText(TextDataFormat.Html);
+            string rtf = Clipboard.GetText(TextDataFormat.Rtf);
+
+            if (!String.IsNullOrEmpty(html)) // from html page or from WORD document
+            {
+                // Get source url and detect if it's a word document
+
+                //Word.Application WordObj;
+                //WordObj = (Word.Application)Marshal.GetActiveObject("Word.Application");
+                //List<string> doc_list = new List<string>();
+                //for (int q = 0; q < WordObj.Windows.Count; q++)
+                //{
+                //    object idx = q + 1;
+                //    Word.Window WinObj = WordObj.Windows.get_Item(ref idx);
+                //    doc_list.Add(WinObj.Document.FullName);
+                //}
+
+                //string docPath = WordObj.ActiveDocument.FullName;
+
+                int i = html.IndexOf("SourceURL:");
+                if (i > 0) // yes, there is a source url
+                {
+                    i += 10; // skip the "SourceURL:"
+                    int k = html.IndexOf("\r\n", i);
+                    if (k > 0) SourceURL = html.Substring(i, k - i);
+
+                    if (!source_link || SourceURL.ToLower().EndsWith(".doc") || SourceURL.ToLower().EndsWith(".docx"))
+                    {
+                        SourceURL = ""; aWord = true;
+                    }
+                }
+
+                // Get links from code. <a href="">
+                if (internal_links)
+                {
+                    var r = new Regex("<a.*?href=\"(.*?)\".*?>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                    var output = r.Matches(html).OfType<Match>().Select(x => x.Groups[1].Value);
+                    foreach (var item in output)
+                        if (!Links.Contains(item)) Links.Add(item);
+                }
+            }
+
+            // Get links from rtf (but not from MSWord!) or plain text
+            if (internal_links)
+            {
+                if (!String.IsNullOrEmpty(rtf) && !aWord)
+                    text = rtf;
+
+                var linkParser = new Regex(@"\b(?:https?://|www\.)\S+\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                foreach (Match m in linkParser.Matches(text))
+                {
+                    string link = m.Value.TrimEnd('\\', 'p', 'a', 'r'); // correction for the links from pdf document
+                    if (link.StartsWith("www.")) link = "http://" + link;
+
+                    if (!Links.Contains(link))
+                        Links.Add(link);
+                }
+            }
+        }
+        public static List<string> Links = new List<string>();
+        public static string SourceURL = "";
+
+
+
+        /// <summary>
+        /// Add or paste topic to a certain position (next topic, topic before, etc.) relative to given topic
+        /// </summary>
+        /// <param name="t">Given (selected) topic</param>
+        /// <param name="topicType">"subtopic", "next", "before", "parent", "callout"</param>
+        /// <param name="text">Topic text</param>
+        /// <param name="links">Topic links</param>
+        /// <param name="rtf">If the topic text is formatted</param>
+        public static Topic PasteTopic(Topic t, string topicType, string text, List<string> links, bool rtf = false)
+        {
+            Topic newTopic;
+
+            if (topicType == "subtopic")
+                newTopic = t.AllSubTopics.Add();
+            else if (topicType == "Callout")
+                newTopic = t.AllCalloutTopics.Add();
+            else // next topic, topic before or parent topic
+                newTopic = t.ParentTopic.AllSubTopics.Add();
+
+            if (rtf)
+                newTopic.Title.TextRTF = text;
+            else
                 newTopic.Text = text;
 
             if (topicType != "subtopic" && topicType != "Callout")

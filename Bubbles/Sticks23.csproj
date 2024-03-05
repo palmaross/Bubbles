@@ -57,6 +57,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -308,9 +309,14 @@
     <Compile Include="TopicTemplatePreview.Designer.cs">
       <DependentUpon>TopicTemplatePreview.cs</DependentUpon>
     </Compile>
+    <Compile Include="TopicWidthDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TopicWidthDlg.Designer.cs">
+      <DependentUpon>TopicWidthDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="app21.config" />
     <None Include="I18n.default.ini">
@@ -495,6 +501,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\inserttext.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\internallinks.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\internallinks_active.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\list.png">
@@ -749,6 +761,12 @@
     <Content Include="images\sortZA.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\sourcelink.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\sourcelink_active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\STICKS.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -782,6 +800,15 @@
       <Guid>{1E1D4AF9-6640-49C1-A33B-8CE8B47C9785}</Guid>
       <VersionMajor>23</VersionMajor>
       <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
       <Lcid>0</Lcid>
       <WrapperTool>primary</WrapperTool>
       <Isolated>False</Isolated>
@@ -904,6 +931,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TopicTemplatePreview.resx">
       <DependentUpon>TopicTemplatePreview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TopicWidthDlg.resx">
+      <DependentUpon>TopicWidthDlg.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

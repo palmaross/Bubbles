@@ -251,8 +251,8 @@ namespace Bubbles
             {
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                 {
-                    transTopic = t; transTopicType = topicType;
-                    AddTopicTransaction(Utils.getString("addtopics.transactionname.insert"));
+                    transTopicType = topicType;
+                    AddTopicTransaction(Utils.getString("addtopics.transactionname.addtopics"));
                 }
             }
         }
@@ -402,6 +402,7 @@ namespace Bubbles
             string topicText = TopicText.Text;
             transTopicType = topictype;
 
+            // Create TopicsToAdd list (for adding multiple topics)
             if (topictype == "subtopic" || topictype == "nexttopic" || topictype == "topicbefore")
             {
                 if (chIncrement.Checked)
@@ -432,9 +433,8 @@ namespace Bubbles
             }
 
             // Add topics
-            AddTopicTransaction(Utils.getString("addtopics.transactionname.insert"));
+            AddTopicTransaction(Utils.getString("addtopics.transactionname.addtopics"));
         }
-        Topic transTopic;
         string transTopicType;
         public List<string> TopicsToAdd = new List<string>();
 
@@ -451,7 +451,7 @@ namespace Bubbles
             if (TopicsToAdd.Count > 1 && transTopicType == "nexttopic")
                 TopicsToAdd = TopicsToAdd.Reverse<string>().ToList();
 
-            if (transTopicType == "ParentTopic")
+            if (transTopicType == "ParentTopic") // selected topics will be subtopics of the future parent topic
             {
                 StickUtils.AddTopic(MMUtils.ActiveDocument.Selection.PrimaryTopic, transTopicType, TopicsToAdd[0]);
             }
