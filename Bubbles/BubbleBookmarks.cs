@@ -292,6 +292,7 @@ namespace Bubbles
                 if (CollapseAll) return;
 
                 collapseState = this.Location; // remember collapsed location
+                collapseOrientation = orientation;
                 StickUtils.Expand(this, RealLength, orientation, contextMenuStrip1);
                 collapsed = false;
             }
@@ -302,10 +303,14 @@ namespace Bubbles
                 StickUtils.Collapse(this, orientation, contextMenuStrip1);
                 collapsed = true;
                 if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
+                {
                     this.Location = collapseState; // restore collapsed location
+                    if (orientation != collapseOrientation) Rotate();
+                }
             }
         }
         Point collapseState = new Point(0, 0);
+        string collapseOrientation = "N";
 
         void AddIcon(string tooltip, string guid, bool maintopic = false, bool floattopic = false)
         {

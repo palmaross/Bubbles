@@ -53,6 +53,8 @@
             this.OptionSourceLink = new System.Windows.Forms.PictureBox();
             this.OptionInternalLinks = new System.Windows.Forms.PictureBox();
             this.pTopicWidth = new System.Windows.Forms.PictureBox();
+            this.cmsTopicWidths = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.OP_SourceLink = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.PasteLink)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PasteNotes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pCopyTopicText)).BeginInit();
@@ -155,11 +157,12 @@
             // cmsOptions
             // 
             this.cmsOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.OP_myrisk});
+            this.OP_myrisk,
+            this.OP_SourceLink});
             this.cmsOptions.Name = "cmsPasteText";
             this.cmsOptions.ShowCheckMargin = true;
             this.cmsOptions.ShowImageMargin = false;
-            this.cmsOptions.Size = new System.Drawing.Size(239, 26);
+            this.cmsOptions.Size = new System.Drawing.Size(239, 70);
             // 
             // OP_myrisk
             // 
@@ -325,6 +328,17 @@
             this.pTopicWidth.Tag = "64";
             this.pTopicWidth.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pTopicWidth_MouseClick);
             // 
+            // cmsTopicWidths
+            // 
+            this.cmsTopicWidths.Name = "cmsTopicWidths";
+            this.cmsTopicWidths.Size = new System.Drawing.Size(61, 4);
+            // 
+            // OP_SourceLink
+            // 
+            this.OP_SourceLink.Name = "OP_SourceLink";
+            this.OP_SourceLink.Size = new System.Drawing.Size(238, 22);
+            this.OP_SourceLink.Text = "Source Link on Topic";
+            // 
             // BubblePaste
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -399,5 +413,7 @@
         public System.Windows.Forms.PictureBox OptionSourceLink;
         public System.Windows.Forms.PictureBox OptionInternalLinks;
         private System.Windows.Forms.PictureBox pTopicWidth;
+        private System.Windows.Forms.ContextMenuStrip cmsTopicWidths;
+        private System.Windows.Forms.ToolStripMenuItem OP_SourceLink;
     }
 }

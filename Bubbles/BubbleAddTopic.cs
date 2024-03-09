@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using WindowsInput;
 
 namespace Bubbles
@@ -326,6 +325,7 @@ namespace Bubbles
                 if (CollapseAll) return;
 
                 collapseState = this.Location; // remember collapsed location
+                collapseOrientation = orientation;
                 StickUtils.Expand(this, RealLength, orientation, cmsCommon);
                 collapsed = false;
             }
@@ -337,10 +337,14 @@ namespace Bubbles
                 collapsed = true;
 
                 if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
+                {
                     this.Location = collapseState; // restore collapsed location
+                    if (orientation != collapseOrientation) Rotate();
+                }
             }
         }
         Point collapseState = new Point(0, 0);
+        string collapseOrientation = "N";
 
         private void Manage_Click(object sender, EventArgs e)
         {

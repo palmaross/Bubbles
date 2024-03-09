@@ -50,7 +50,6 @@
             this.panelOther = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.NextTopic = new System.Windows.Forms.PictureBox();
             this.TopicBefore = new System.Windows.Forms.PictureBox();
             this.ParentTopic = new System.Windows.Forms.PictureBox();
@@ -337,10 +336,6 @@
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;
             // 
-            // timer1
-            // 
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
             // NextTopic
             // 
             this.NextTopic.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -351,7 +346,7 @@
             this.NextTopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.NextTopic.TabIndex = 9;
             this.NextTopic.TabStop = false;
-            this.NextTopic.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pAddTopic_MouseClick);
+            this.NextTopic.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pPasteTopic_MouseClick);
             // 
             // TopicBefore
             // 
@@ -363,7 +358,7 @@
             this.TopicBefore.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.TopicBefore.TabIndex = 10;
             this.TopicBefore.TabStop = false;
-            this.TopicBefore.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pAddTopic_MouseClick);
+            this.TopicBefore.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pPasteTopic_MouseClick);
             // 
             // ParentTopic
             // 
@@ -375,7 +370,7 @@
             this.ParentTopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ParentTopic.TabIndex = 11;
             this.ParentTopic.TabStop = false;
-            this.ParentTopic.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pAddTopic_MouseClick);
+            this.ParentTopic.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pPasteTopic_MouseClick);
             // 
             // Callout
             // 
@@ -387,7 +382,7 @@
             this.Callout.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Callout.TabIndex = 13;
             this.Callout.TabStop = false;
-            this.Callout.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pAddTopic_MouseClick);
+            this.Callout.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pPasteTopic_MouseClick);
             // 
             // panelPasteTopic
             // 
@@ -563,7 +558,7 @@
             this.Controls.Add(this.panelH);
             this.Controls.Add(this.panelCommonMin);
             this.Name = "StickPopup";
-            this.Size = new System.Drawing.Size(351, 277);
+            this.Size = new System.Drawing.Size(351, 222);
             this.panelH.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
@@ -621,7 +616,6 @@
         public System.Windows.Forms.PictureBox p1;
         public System.Windows.Forms.PictureBox pClose;
         public System.Windows.Forms.Panel panelOther;
-        private System.Windows.Forms.Timer timer1;
         public System.Windows.Forms.PictureBox NextTopic;
         public System.Windows.Forms.PictureBox TopicBefore;
         public System.Windows.Forms.PictureBox ParentTopic;

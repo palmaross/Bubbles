@@ -536,7 +536,7 @@ namespace Bubbles
         /// <param name="t">Given (selected) topic</param>
         /// <param name="topicType">"subtopic", "next", "before", "parent", "callout"</param>
         /// <param name="text">New topic text. #default#" is a new topic default text</param>
-        /// <returns></returns>
+        /// <returns>Added topic</returns>
         public static Topic AddTopic(Topic t, string topicType, string text = "#default#", 
             bool rtf = false, bool sourceURL = false)
         {
@@ -544,7 +544,7 @@ namespace Bubbles
 
             if (topicType == "subtopic")
                 newTopic = t.AllSubTopics.Add();
-            else if (topicType == "Callout")
+            else if (topicType == "callout")
                 newTopic = t.AllCalloutTopics.Add();
             else // next topic, topic before or parent topic
                 newTopic = t.ParentTopic.AllSubTopics.Add();
@@ -559,7 +559,9 @@ namespace Bubbles
             foreach (string link in Links)
                 newTopic.Hyperlinks.AddHyperlink(link);
 
-            if (topicType != "subtopic" && topicType != "Callout")
+            TopicWidthList.Add(newTopic);
+
+            if (topicType != "subtopic" && topicType != "callout")
             {
                 // Get given topic index in the branch
                 int i = 1;
@@ -567,11 +569,11 @@ namespace Bubbles
                 {
                     if (_t == t) break; i++;
                 }
-                if (topicType == "nexttopic") i++; // Otherwise, add topic before
+                if (topicType == "nexttopic") i++; // Otherwise, topic is added before
 
                 t.ParentTopic.AllSubTopics.Insert(newTopic, i);
 
-                if (topicType == "ParentTopic")
+                if (topicType == "parenttopic") // future parent just inserted (lines above)
                 {
                     MMUtils.ActiveDocument.Selection.Cut();
                     newTopic.SelectOnly();
@@ -590,6 +592,73 @@ namespace Bubbles
                 }
             }
             return newTopic;
+        }
+
+        public static List<Topic> TopicWidthList = new List<Topic>();
+
+        public static void SetTopicWidth()
+        {
+            foreach (Topic t in TopicWidthList)
+            {
+                int textlength = t.Text.Length;
+                string rtf = t.Title.TextRTF;
+
+                string number = ""; int fs = 0; ;
+                do
+                {
+                    fs = rtf.IndexOf("\\fs", fs + 1);
+                    if (fs > 0)
+                    {
+                        number = new String(rtf.Substring(fs, 5).Where(Char.IsDigit).ToArray());
+                        if (number != "")
+                        {
+                            try
+                            {
+                                fs = Convert.ToInt32(rtf.Substring(fs + 3, 2)) / 2;
+                                break;
+                            }
+                            catch { }
+                        }
+                    }
+                }
+                while (fs != -1);
+
+                if (fs == -1) fs = 12;
+
+                textlength = StickUtils.GetTextLength(textlength, fs);
+
+                if (textlength > BubblePaste.TextChars1)
+                    t.Shape.TextWidth = BubblePaste.AutoTopicWidth1;
+                else if (textlength > BubblePaste.TextChars2)
+                    t.Shape.TextWidth = BubblePaste.AutoTopicWidth2;
+                else if (textlength > BubblePaste.TextChars3)
+                    t.Shape.TextWidth = BubblePaste.AutoTopicWidth3;
+            }
+            TopicWidthList.Clear();
+        }
+
+        /// <summary>
+        /// Get text length considering font size (default is for the size 12)
+        /// </summary>
+        /// <param name="textlength">Given plain text length</param>
+        /// <param name="fontSize"></param>
+        /// <returns></returns>
+        public static int GetTextLength(int textlength, float fontSize)
+        {
+            int fontsize = (int)fontSize;
+            if (textlength == 0 || fontSize == 12) return textlength;
+
+            if (fontSize == 8) textlength -= 33;
+            else if (fontSize == 9) textlength -= 22;
+            else if (fontSize == 10) textlength -= 15;
+            else if (fontSize == 11) textlength -= 8;
+            else if (fontSize == 13) textlength += 7;
+            else if (fontSize == 14) textlength += 14;
+            else if (fontSize == 15) textlength += 22;
+            else if (fontSize == 16) textlength += 30;
+            else if (fontSize > 16) textlength += 40;
+
+            return textlength;
         }
 
         /// <summary>

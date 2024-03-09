@@ -470,6 +470,8 @@ namespace Bubbles
 
             Utils.StockIcons.Clear();
 
+            StickUtils.TopicWidthList.Clear();
+
             m_bCreated = false;
         }
 

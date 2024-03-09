@@ -245,163 +245,13 @@ namespace Bubbles
         }
         #endregion
 
-        #region BubblePaste
-
-        private void pAddTopic_MouseClick(object sender, MouseEventArgs e)
+        private void pPasteTopic_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                PasteAddTopic((sender as PictureBox).Name);
+                if (panelPasteTopic.Tag is Form ff)
+                    (ff as BubblePaste).PasteTopic((sender as PictureBox).Name.ToLower());
             }
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            timer1.Stop();
-
-            if (topicsToPaste.Count == 1)
-            {
-                // Release the topic with pasted text
-                topicsToPaste[0].ParentTopic.SelectOnly();
-                topicsToPaste[0].SelectOnly();
-                return;
-            }
-
-            topicsToPaste[1].SelectOnly(); // we have to release the topic with pasted text (topics[0]) to achieve its text
-
-            PasteTopicTransaction(Utils.getString("addtopics.transactionname.paste"));
-        }
-        List<Topic> topicsToPaste = new List<Topic>();
-
-        void PasteTopicTransaction(string trname)
-        {
-            Transaction _tr = MMUtils.ActiveDocument.NewTransaction(trname);
-            _tr.IsUndoable = true;
-            _tr.Execute += new ITransactionEvents_ExecuteEventHandler(PasteTopics);
-            _tr.Start();
-        }
-
-        public void PasteTopics(Document pDocument)
-        {
-            // Get the needed text
-            string text = topicsToPaste[0].Text;
-            if (FormattedText())
-                text = topicsToPaste[0].Title.TextRTF;
-
-            topicsToPaste.RemoveAt(0); // topic is already handled 
-
-            foreach (Topic t in topicsToPaste)
-            {
-                if (FormattedText())
-                    t.Title.TextRTF = text;
-                else
-                    t.Text = text;
-            }
-
-            topicsToPaste.Clear();
-        }
-
-        /// <summary>
-        /// Add topic or paste to topic
-        /// </summary>
-        /// <param name="topictype">With which topic perform the operation</param>
-        void PasteAddTopic(string topictype)
-        {
-            if (MMUtils.ActiveDocument == null) return;
-            int count = MMUtils.ActiveDocument.Selection.OfType<Topic>().Count();
-            if (count == 0) return;
-
-            bool paste = panelPasteTopic.AccessibleName == "paste";
-            if (paste && !System.Windows.Forms.Clipboard.ContainsText()) return;
-
-            if (paste) // add subtopic(s) and paste clipboard content to them
-            {
-                // Create subtopics for all selected topics
-                Topic _t = null; bool addparent = true;
-
-                string text = System.Windows.Forms.Clipboard.GetText(); // unformatted text
-
-                if (!FormattedText())
-                    System.Windows.Forms.Clipboard.SetText(text); // set unformatted text to clipboard
-
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                {
-                    if (addparent || topictype != "ParentTopic")
-                    {
-                        if (topictype != "ParentTopic") text = "";
-
-                        _t = StickUtils.AddTopic(t, topictype, text); // For "pAddParent" - adds empty parent topic
-                        addparent = false;                      // There should be only one topic!
-                        topicsToPaste.Add(_t);
-                    }
-                }
-
-                if (topictype != "ParentTopic")
-                {
-                    StickUtils.ActivateMindManager(); // we need the selected topic to be active!
-
-                    // We can make the Ctrl-V with one topic only!
-                    topicsToPaste[0].SelectOnly();
-
-                    // Select topic text (in order to enter inside the topic)
-                    sim.Keyboard.KeyDown(VirtualKeyCode.F2);
-
-                    // And replace it with the clipboard formatted text (pressing Ctrl-V).
-                    // Copied text may have several lines but we don't want several topics,
-                    // we want paste all text inside the topic
-                    sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
-
-                    // Text will be pasted after this method is finished!!
-                }
-
-                if (count == 1 || topictype == "ParentTopic")
-                    topicsToPaste.Clear(); // we have already pasted the only subtopic (topicstoPaste[0])
-                else
-                    timer1.Start(); // We can't make Ctrl-V with multiple topics.
-                                    // So, we did this with one topic and we get its text in a timer time
-                                    // to populate the rest topics with this text.
-            }
-        }
-        Topic transTopic;
-        string transTopicType;
-
-        void AddTopicTransaction(string trname)
-        {
-            Transaction _tr = MMUtils.ActiveDocument.NewTransaction(trname);
-            _tr.IsUndoable = true;
-            _tr.Execute += new ITransactionEvents_ExecuteEventHandler(AddTopics);
-            _tr.Start();
-        }
-
-        public void AddTopics(Document pDocument)
-        {
-            if (TopicList.Count > 1 && transTopicType == "NextTopic")
-                TopicList = TopicList.Reverse<string>().ToList();
-
-            foreach (var name in TopicList)
-                StickUtils.AddTopic(transTopic, transTopicType, name);
-        }
-        #endregion
-
-        private void ToggleTextFormat_Click(object sender, EventArgs e)
-        {
-            //if (ToggleTextFormat.AccessibleName.ToString() == "unformatted")
-            //{
-            //    ToggleTextFormat.Tag = Utils.getString("BubblesPaste.workwith.formatted");
-            //    ToggleTextFormat.AccessibleName = "formatted";
-            //    ToggleTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "formattedText.png");
-            //}
-            //else if (ToggleTextFormat.AccessibleName == "formatted")
-            //{
-            //    ToggleTextFormat.Tag = Utils.getString("BubblesPaste.workwith.unformatted");
-            //    ToggleTextFormat.AccessibleName = "unformatted";
-            //    ToggleTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "unformattedText.png");
-            //}
-        }
-
-        bool FormattedText()
-        {
-            return true;// ToggleTextFormat.AccessibleName == "formatted";
         }
 
         private void pProgress_Click(object sender, EventArgs e)
@@ -459,6 +309,5 @@ namespace Bubbles
         }
 
         InputSimulator sim = new InputSimulator();
-        public List<string> TopicList = new List<string>();
     }
 }
