@@ -15,7 +15,7 @@ namespace Bubbles
         {
             InitializeComponent();
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "Sticks.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "TaskInfoQuickTask.htm");
 
@@ -69,7 +69,7 @@ namespace Bubbles
 
             cbStartDatePeriod.SelectedIndex = 0; cbDueDatePeriod.SelectedIndex = 0;
 
-            db = new BubblesDB();
+            db = new SticksDB();
 
             DataTable dt = db.ExecuteQuery("select * from TASKTEMPLATES order by name");
             foreach (DataRow row in dt.Rows)
@@ -644,7 +644,7 @@ namespace Bubbles
         }
         bool start = true;
 
-        BubblesDB db = null;
+        SticksDB db = null;
         TaskTemplateItem selectedItem = null;
     }
 

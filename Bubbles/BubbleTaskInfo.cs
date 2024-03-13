@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Image = System.Drawing.Image;
 using Cursor = System.Windows.Forms.Cursor;
-using PRMapCompanion;
 using System.Data;
 
 namespace Bubbles
@@ -18,13 +17,12 @@ namespace Bubbles
             InitializeComponent();
 
             BubblesButton.m_TaskInfo = this;
-            DocumentStorage.Sync(MMUtils.ActiveDocument);
 
             this.Tag = ID; // correct
             orientation = _orientation.Substring(0, 1); // "H" or "V"
             collapsed = _orientation.Substring(1, 1) == "1";
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "Sticks.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "TaskInfoStick.htm");
 
@@ -115,7 +113,7 @@ namespace Bubbles
             StickUtils.SetContextMenuImage(cmsTaskTemplates.Items["ManageTaskTemplates"], "manage.png");
             cmsTaskTemplates.Items.Add(new ToolStripSeparator());
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from TASKTEMPLATES order by name");
 
@@ -155,7 +153,7 @@ namespace Bubbles
             tsi = cmsResources.Items.Add(Utils.getString("TaskTemplateDlg.chResources"));
             tsi.Name = "label"; tsi.Font = new Font(tsi.Font, FontStyle.Bold);
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from RESOURCES order by name");
 
@@ -307,7 +305,6 @@ namespace Bubbles
             {
                 BubblesButton.STICKS.Remove((int)this.Tag);
                 BubblesButton.m_TaskInfo = null;
-                DocumentStorage.Sync(MMUtils.ActiveDocument, false);
                 this.Close();
             }
             else if (e.ClickedItem.Name == "BI_rotate")

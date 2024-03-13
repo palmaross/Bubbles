@@ -37,7 +37,7 @@ namespace Organizer
 
             int selectedIndex = 0, i = 1;
             // Fill comboboxes (groups, tags)
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from NOTEGROUPS order by name");
                 foreach (DataRow row in dt.Rows)
@@ -92,7 +92,7 @@ namespace Organizer
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     // Add new tags to the tag database
-                    using (BubblesDB db = new BubblesDB())
+                    using (SticksDB db = new SticksDB())
                     {
                         foreach (string tag in newTags)
                             db.ExecuteNonQuery("insert into NOTETAGS values(`" + tag + "`, '', 0);");
@@ -152,7 +152,7 @@ namespace Organizer
 
                 var group = cbGroups.SelectedItem as NoteGroupItem;
 
-                using (BubblesDB db = new BubblesDB())
+                using (SticksDB db = new SticksDB())
                     db.ExecuteNonQuery("update NOTES set " +
                         "name=`" + tbTitle.Text + "`, " +
                         "content=`" + tbContent.Text + "`, " +
@@ -174,7 +174,7 @@ namespace Organizer
                 var group = cbGroups.SelectedItem as NoteGroupItem;
 
                 // Save note to database
-                using (BubblesDB db = new BubblesDB())
+                using (SticksMoreDB db = new SticksMoreDB())
                 {
                     db.AddNote(txtNoteTitle.Text.Trim(), txtContent.Text.Trim(), link, group.ID, "", "", _tags);
 

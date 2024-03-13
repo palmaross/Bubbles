@@ -46,7 +46,7 @@ namespace Bubbles
 
                 if (oldname != "") // rename stick or icon or source
                 {
-                    using (BubblesDB db = new BubblesDB())
+                    using (SticksDB db = new SticksDB())
                     {
                         int stickID = (int)form.Tag;
                         if (stick) // rename stick
@@ -69,7 +69,7 @@ namespace Bubbles
         public static void CreateStick(Form newForm, string stickname, string sticktype)
         {
             int id = 0; bool contextmenu = false;
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 id = Utils.StickID();
                 db.AddStick(id, stickname, sticktype, 0, "", 0, 0);
@@ -156,7 +156,7 @@ namespace Bubbles
             Point screenXY = Utils.MMScreen(MMUtils.MindManager.Left + MMUtils.MindManager.Width / 2,
                 MMUtils.MindManager.Top + MMUtils.MindManager.Height / 2);
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 string location = "";
                 DataTable dt = db.ExecuteQuery("select * from STICKS where id=" + id + "");
@@ -220,7 +220,7 @@ namespace Bubbles
 
             if (sticktype == typesources) stickLength += icondist;
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 if (deleteall) // Clean bubble and database
                 {
@@ -339,7 +339,7 @@ namespace Bubbles
                 for (int i = 0; i < Icons.Count; i++)
                     Icons[i].Order = i + 1;
 
-                using (BubblesDB db = new BubblesDB())
+                using (SticksDB db = new SticksDB())
                     db.ExecuteNonQuery("delete from ICONS where stickID=" + id + " and filename=`" + filename + "`");
             }
             else if (type == typesources)
@@ -355,7 +355,7 @@ namespace Bubbles
                 for (int i = 0; i < Sources.Count; i++)
                     Sources[i].Order = i + 1;
 
-                using (BubblesDB db = new BubblesDB())
+                using (SticksDB db = new SticksDB())
                     db.ExecuteNonQuery("delete from SOURCES where path=`" + filename + "`");
             }
         }
@@ -368,7 +368,7 @@ namespace Bubbles
                 return false;
 
             bool contextmenu = false;
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 // Delete icons that belong to this stick and clear context menu of this button
                 if (type == typeicons)
@@ -625,14 +625,17 @@ namespace Bubbles
 
                 if (fs == -1) fs = 12;
 
-                textlength = StickUtils.GetTextLength(textlength, fs);
+                textlength = GetTextLength(textlength, fs);
 
-                if (textlength > BubblePaste.TextChars1)
-                    t.Shape.TextWidth = BubblePaste.AutoTopicWidth1;
-                else if (textlength > BubblePaste.TextChars2)
-                    t.Shape.TextWidth = BubblePaste.AutoTopicWidth2;
-                else if (textlength > BubblePaste.TextChars3)
-                    t.Shape.TextWidth = BubblePaste.AutoTopicWidth3;
+                if (textlength <= MinAutoTopicWidth) return;
+
+                foreach (var pair in AutoTopicWidths)
+                {
+                    if (textlength > pair.Key) 
+                    { 
+                        t.Shape.TextWidth = pair.Value; break; 
+                    }
+                }
             }
             TopicWidthList.Clear();
         }
@@ -811,7 +814,7 @@ namespace Bubbles
             string name, type, position, orientation = "H"; bool collapsed;
             List<int> ids = new List<int>();
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 foreach (var stick in sticks)
                 {
@@ -1134,6 +1137,12 @@ namespace Bubbles
 
         [DllImport("user32.dll")]
         static extern int SetForegroundWindow(IntPtr point);
+
+        public static int MainTopicWidth = 63;
+        public static List<int> ManualTopicWidths = new List<int>();
+        public static Dictionary<int, int> AutoTopicWidths = new Dictionary<int, int>();
+        public static int MinAutoTopicWidth;
+        public static bool TopicAutoWidth = false;
     }
 
     class ResizeStick : Form

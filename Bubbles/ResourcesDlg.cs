@@ -16,7 +16,7 @@ namespace Bubbles
         {
             InitializeComponent();
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "Sticks.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "TaskInfoResources.htm");
 
@@ -109,7 +109,7 @@ namespace Bubbles
         {
             ListResources.Clear();
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 // Add icon names to dictionary
                 DataTable dt = db.ExecuteQuery("select * from RESOURCEGROUPS");
@@ -225,7 +225,7 @@ namespace Bubbles
             string selecteditemname = selectedItem.Text;
 
             bool warning = false;
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 foreach (ListViewItem lvi in ListResources.SelectedItems)
                 {
@@ -324,7 +324,7 @@ namespace Bubbles
         {
             ListViewItem lvi; ResourceItem item;
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
                     "where name=`" + name + "` and icon=" + selectedIcon + "");
@@ -368,7 +368,7 @@ namespace Bubbles
             ResourceItem item = lvi.Tag as ResourceItem;
             string oldName = item.Name;
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
                     "where name=`" + name + "` and icon=" + item.aIcon + "");
@@ -423,7 +423,7 @@ namespace Bubbles
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 foreach (ListViewItem item in ListResources.SelectedItems)
                 {

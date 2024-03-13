@@ -8,6 +8,7 @@ using System.Globalization;
 using Mindjet.MindManager.Interop;
 using System.IO;
 using System.Linq;
+using PRMapCompanion;
 
 namespace Bubbles
 {

@@ -14,7 +14,7 @@ namespace Bubbles
 
             lblIconName.Text = Utils.getString("ManageResourceIcons.lblIconName");
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from RESOURCEGROUPS");
 
@@ -40,7 +40,7 @@ namespace Bubbles
             aParentForm.ResourceIcons.Clear();
 
             // Update RESOURCEGROUPS database and ResourceIcons dictionary
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 db.ExecuteNonQuery("update RESOURCEGROUPS set name=`" + txt1.Text.Trim() + "` where icon=" + 1 + "");
                 db.ExecuteNonQuery("update RESOURCEGROUPS set name=`" + txt2.Text.Trim() + "` where icon=" + 2 + "");

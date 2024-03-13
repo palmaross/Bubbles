@@ -18,7 +18,7 @@ namespace Bubbles
         {
             InitializeComponent();
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "Sticks.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "IconStick.htm");
 
@@ -183,7 +183,6 @@ namespace Bubbles
             if (stick.Name == "BubbleTaskInfo")
             {
                 BubblesButton.m_TaskInfo = null;
-                DocumentStorage.Sync(MMUtils.ActiveDocument, false);
             }
         }
 

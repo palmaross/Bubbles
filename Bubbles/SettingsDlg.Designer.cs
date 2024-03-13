@@ -46,7 +46,7 @@
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(236, 212);
+            this.btnClose.Location = new System.Drawing.Point(236, 223);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 1;
@@ -57,7 +57,7 @@
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSave.Location = new System.Drawing.Point(155, 212);
+            this.btnSave.Location = new System.Drawing.Point(155, 223);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 3;
@@ -71,7 +71,7 @@
             this.listRunAtStart.HideSelection = false;
             this.listRunAtStart.Location = new System.Drawing.Point(12, 60);
             this.listRunAtStart.Name = "listRunAtStart";
-            this.listRunAtStart.Size = new System.Drawing.Size(276, 70);
+            this.listRunAtStart.Size = new System.Drawing.Size(276, 80);
             this.listRunAtStart.TabIndex = 14;
             this.listRunAtStart.UseCompatibleStateImageBehavior = false;
             this.listRunAtStart.View = System.Windows.Forms.View.SmallIcon;
@@ -96,7 +96,7 @@
             this.gbRunAtStart.Controls.Add(this.listRunAtStart);
             this.gbRunAtStart.Location = new System.Drawing.Point(12, 10);
             this.gbRunAtStart.Name = "gbRunAtStart";
-            this.gbRunAtStart.Size = new System.Drawing.Size(299, 194);
+            this.gbRunAtStart.Size = new System.Drawing.Size(299, 204);
             this.gbRunAtStart.TabIndex = 16;
             this.gbRunAtStart.TabStop = false;
             this.gbRunAtStart.Text = "Запускать при старте MindManager:";
@@ -104,7 +104,7 @@
             // cbConfiguration
             // 
             this.cbConfiguration.FormattingEnabled = true;
-            this.cbConfiguration.Location = new System.Drawing.Point(13, 160);
+            this.cbConfiguration.Location = new System.Drawing.Point(13, 171);
             this.cbConfiguration.Name = "cbConfiguration";
             this.cbConfiguration.Size = new System.Drawing.Size(275, 21);
             this.cbConfiguration.TabIndex = 18;
@@ -112,7 +112,7 @@
             // rbtnConfiguration
             // 
             this.rbtnConfiguration.AutoSize = true;
-            this.rbtnConfiguration.Location = new System.Drawing.Point(85, 137);
+            this.rbtnConfiguration.Location = new System.Drawing.Point(85, 148);
             this.rbtnConfiguration.Name = "rbtnConfiguration";
             this.rbtnConfiguration.Size = new System.Drawing.Size(103, 17);
             this.rbtnConfiguration.TabIndex = 17;
@@ -137,7 +137,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(322, 244);
+            this.ClientSize = new System.Drawing.Size(322, 255);
             this.Controls.Add(this.gbRunAtStart);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnClose);

@@ -83,6 +83,8 @@
       <DependentUpon>AlignSticksDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="AppManager\AlfaChanges.cs" />
+    <Compile Include="AppManager\SticksDB.cs" />
+    <Compile Include="AppManager\SticksMoreDB.cs" />
     <Compile Include="AppManager\TransactionWrapper.cs" />
     <Compile Include="BubbleAddTopic.cs">
       <SubType>Form</SubType>
@@ -125,6 +127,12 @@
     </Compile>
     <Compile Include="ManageResourceIcons.Designer.cs">
       <DependentUpon>ManageResourceIcons.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MMOutToogle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MMOutToogle.Designer.cs">
+      <DependentUpon>MMOutToogle.cs</DependentUpon>
     </Compile>
     <Compile Include="MyDateTimePicker.cs">
       <SubType>Form</SubType>
@@ -268,7 +276,6 @@
     <Compile Include="SettingsDlg.Designer.cs">
       <DependentUpon>SettingsDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppManager\BubblesDB.cs" />
     <Compile Include="SizeablePictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -842,6 +849,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ManageResourceIcons.resx">
       <DependentUpon>ManageResourceIcons.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MMOutToogle.resx">
+      <DependentUpon>MMOutToogle.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MyDateTimePicker.resx">
       <DependentUpon>MyDateTimePicker.cs</DependentUpon>

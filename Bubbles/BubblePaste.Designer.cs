@@ -40,6 +40,7 @@
             this.Manage = new System.Windows.Forms.PictureBox();
             this.cmsOptions = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.OP_myrisk = new System.Windows.Forms.ToolStripMenuItem();
+            this.OP_SourceLink = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsCommon = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmiSize = new System.Windows.Forms.PictureBox();
             this.subtopic = new System.Windows.Forms.PictureBox();
@@ -54,7 +55,6 @@
             this.OptionInternalLinks = new System.Windows.Forms.PictureBox();
             this.pTopicWidth = new System.Windows.Forms.PictureBox();
             this.cmsTopicWidths = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.OP_SourceLink = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.PasteLink)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PasteNotes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pCopyTopicText)).BeginInit();
@@ -162,7 +162,7 @@
             this.cmsOptions.Name = "cmsPasteText";
             this.cmsOptions.ShowCheckMargin = true;
             this.cmsOptions.ShowImageMargin = false;
-            this.cmsOptions.Size = new System.Drawing.Size(239, 70);
+            this.cmsOptions.Size = new System.Drawing.Size(239, 48);
             // 
             // OP_myrisk
             // 
@@ -170,6 +170,12 @@
             this.OP_myrisk.Name = "OP_myrisk";
             this.OP_myrisk.Size = new System.Drawing.Size(238, 22);
             this.OP_myrisk.Text = "Quick Insert (my responsibility)";
+            // 
+            // OP_SourceLink
+            // 
+            this.OP_SourceLink.Name = "OP_SourceLink";
+            this.OP_SourceLink.Size = new System.Drawing.Size(238, 22);
+            this.OP_SourceLink.Text = "Source Link on Topic";
             // 
             // cmsCommon
             // 
@@ -331,13 +337,8 @@
             // cmsTopicWidths
             // 
             this.cmsTopicWidths.Name = "cmsTopicWidths";
-            this.cmsTopicWidths.Size = new System.Drawing.Size(61, 4);
-            // 
-            // OP_SourceLink
-            // 
-            this.OP_SourceLink.Name = "OP_SourceLink";
-            this.OP_SourceLink.Size = new System.Drawing.Size(238, 22);
-            this.OP_SourceLink.Text = "Source Link on Topic";
+            this.cmsTopicWidths.ShowCheckMargin = true;
+            this.cmsTopicWidths.Size = new System.Drawing.Size(83, 4);
             // 
             // BubblePaste
             // 

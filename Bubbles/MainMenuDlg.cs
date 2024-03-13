@@ -14,14 +14,14 @@ namespace Bubbles
         {
             InitializeComponent();
 
-            lblIcons.Text = Utils.getString("stickIcons.name");
-            lblTaskInfo.Text = Utils.getString("stickTaskInfo.name");
-            lblOrganizer.Text = Utils.getString("stickOrganizer.name");
-            lblBookmarks.Text = Utils.getString("stickBookmarks.name");
-            lblMySources.Text = Utils.getString("stickSources.name");
-            lblAddTopic.Text = Utils.getString("stickAddTopics.name");
-            lblCopyPaste.Text = Utils.getString("stickPaste.name");
-            lblFormat.Text = Utils.getString("stickFormat.name");
+            lblIcons.Text = Utils.getString("BubbleIcons.bubble.tooltip");
+            lblTaskInfo.Text = Utils.getString("BubbleTaskInfo.bubble.tooltip");
+            lblOrganizer.Text = Utils.getString("BubbleOrganizer.bubble.tooltip");
+            lblBookmarks.Text = Utils.getString("BubbleBookmarks.bubble.tooltip");
+            lblMySources.Text = Utils.getString("BubbleMySources.bubble.tooltip");
+            lblAddTopic.Text = Utils.getString("BubbleAddTopic.bubble.tooltip");
+            lblCopyPaste.Text = Utils.getString("BubblePaste.bubble.tooltip");
+            lblFormat.Text = Utils.getString("BubbleFormat.bubble.tooltip");
             toolTip1.SetToolTip(pBulkOperations, Utils.getString("sticks.bulkoperations"));
 
             lblStickers.Text = Utils.getString("BubblesMenuDlg.lblStickers.text");
@@ -60,7 +60,7 @@ namespace Bubbles
             configuration.DropDown.ItemClicked += BulkOperations_ItemClicked;
 
             // Fill configuration-to-run list in the Configuration sub menu
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from CONFIGS order by name");
                 if (dt.Rows.Count > 0)
@@ -152,7 +152,7 @@ namespace Bubbles
 
         ContextMenuStrip GetSticks(string type, ContextMenuStrip cms)
         {
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from STICKS where type=`" + type + "`");
 
@@ -179,7 +179,7 @@ namespace Bubbles
         /// </returns>
         private int GetStick(string type, int id, ref string position, ref string name)
         {
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt;
                 if (id != 0)
@@ -320,7 +320,7 @@ namespace Bubbles
 
             if (id == 0) // The very first stick
             {
-                using (BubblesDB db = new BubblesDB())
+                using (SticksDB db = new SticksDB())
                 {
                     // create "My Icons" stick
                     name = Utils.getString(type + ".bubble.tooltip");
@@ -534,7 +534,7 @@ namespace Bubbles
                         dlg.ShowDialog();
 ;                    break;
                 case "BO_help":
-                    try { Process.Start(Utils.dllPath + "Sticks.chm"); } catch { }
+                    try { Process.Start(Utils.dllPath + "WowStix.chm"); } catch { }
                     break;
             }
         }

@@ -37,7 +37,7 @@ namespace Bubbles
             listSticks.GridLines = true;
 
             // Fill stick list
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from STICKS order by type, name");
                 foreach (DataRow dr in dt.Rows)
@@ -48,7 +48,7 @@ namespace Bubbles
             }
 
             // Fill configuration combobox
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from CONFIGS order by name");
                 if (dt.Rows.Count > 0)
@@ -276,7 +276,7 @@ namespace Bubbles
                 string newName = txtConfigName.Text.Trim();
                 if (String.IsNullOrEmpty(newName)) return;
 
-                using (BubblesDB db = new BubblesDB())
+                using (SticksDB db = new SticksDB())
                 {
                     DataTable dt = db.ExecuteQuery("select * from CONFIGS where name=`" + newName + "`");
                     if (dt.Rows.Count > 0)

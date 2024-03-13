@@ -20,7 +20,7 @@ namespace Bubbles
             orientation = _orientation.Substring(0, 1); // "H" or "V"
             collapsed = _orientation.Substring(1, 1) == "1";
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "Sticks.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "BookmarksStick.htm.htm");
 

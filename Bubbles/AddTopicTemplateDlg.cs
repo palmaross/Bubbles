@@ -48,7 +48,7 @@ namespace Bubbles
             imageList1.Images.Add(System.Drawing.Image.FromFile(Utils.ImagesPath + "cpAddTopic.png"));
             imageList1.Images.Add(System.Drawing.Image.FromFile(Utils.ImagesPath + "cpAddBefore.png"));
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from MT_TEMPLATES order by templateName");
 
@@ -56,7 +56,7 @@ namespace Bubbles
                 {
                     TemplateItem item = new TemplateItem(Convert.ToInt32(row["id"]), 
                         row["templateName"].ToString(), row["topicName"].ToString(), 
-                        row["pattern"].ToString(), row["reserved1"].ToString());
+                        row["pattern"].ToString(), row["topicType"].ToString());
 
                     cbTemplates.Items.Add(item);
                 }
@@ -66,14 +66,14 @@ namespace Bubbles
                 cbTemplates.SelectedIndex = 0;
         }
 
+        // Generate topics with increment
         List<string> GetTopicList()
         {
             TopicList.Clear();
 
             if (rbtnTopics.Checked) return null;
 
-            string name = txtTopicText.Text.Trim();
-            if (name == "") return null;
+            string name = txtTopicText.Text;
 
             int start = (int)ttp.numStart.Value;
             int finish = (int)ttp.numFinish.Value;
@@ -97,8 +97,10 @@ namespace Bubbles
 
         string GetPreview(string topictext, int number, bool begin)
         {
-            if (begin) topictext = number + " " + topictext;
-            else topictext += " " + number;
+            //if (begin) topictext = number + " " + topictext;
+            //else topictext += " " + number;
+            if (begin) topictext = number + topictext;
+            else topictext += number;
 
             return topictext;
         }
@@ -171,7 +173,7 @@ namespace Bubbles
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 string newName = txtTemplateName.Text.Trim();
 
@@ -242,7 +244,7 @@ namespace Bubbles
 
             var item = cbTemplates.SelectedItem as TemplateItem;
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
                 db.ExecuteNonQuery("delete from MT_TEMPLATES where id=" + item.ID + "");
 
             cbTemplates.Items.Remove(item);
@@ -290,7 +292,7 @@ namespace Bubbles
             if (NextTopic.Checked) topicType = "nexttopic";
             else if (TopicBefore.Checked) topicType = "topicbefore";
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 var template = cbTemplates.SelectedItem as TemplateItem;
 
@@ -431,9 +433,6 @@ namespace Bubbles
                 txtCustom.Visible = false;
                 ttp.panelIncrement.Visible = true;
                 ttp.panelIncrement.Location = ttp.p1.Location;
-
-                if (txtTopicText.Text.Trim() == "")
-                    txtTopicText.Text = Utils.getString("Template.Preview.Topic");
 
                 if (GetTopicList() == null)
                     return;

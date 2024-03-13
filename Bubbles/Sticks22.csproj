@@ -79,6 +79,7 @@
     <Compile Include="AlignSticksDlg.Designer.cs">
       <DependentUpon>AlignSticksDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppManager\SticksDB.cs" />
     <Compile Include="AppManager\TransactionWrapper.cs" />
     <Compile Include="BubbleAddTopic.cs">
       <SubType>Form</SubType>
@@ -264,7 +265,7 @@
     <Compile Include="SettingsDlg.Designer.cs">
       <DependentUpon>SettingsDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppManager\BubblesDB.cs" />
+    <Compile Include="AppManager\SticksMoreDB.cs" />
     <Compile Include="SizeablePictureBox.cs">
       <SubType>Component</SubType>
     </Compile>

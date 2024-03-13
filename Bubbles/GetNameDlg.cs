@@ -52,7 +52,7 @@ namespace Bubbles
             }
 
             // Check if name exists
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 if (stick)
                 {

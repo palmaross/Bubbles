@@ -23,7 +23,7 @@ namespace Organizer
             init = true;
             InitializeComponent();
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "Sticks.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "OrganizerNotes.htm");
 
@@ -93,7 +93,7 @@ namespace Organizer
             cbGroups.Items.Add(new NoteGroupItem(Utils.getString("notes.notegroup.nogroup"), 0));
 
             // Fill group comboboxes with custom groups
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from NOTEGROUPS order by name");
                 foreach (DataRow row in dt.Rows)
@@ -124,7 +124,7 @@ namespace Organizer
         {
             if (NOTES.Count == 0) // first start or group changed
             {
-                using (BubblesDB db = new BubblesDB())
+                using (SticksDB db = new SticksDB())
                 {
                     DataTable dt;
                     if (groupID == -1) // Notes from all groups
@@ -168,7 +168,7 @@ namespace Organizer
             for (int i = panelNoteIcons2.Controls.Count - 1; i > 0; i--)
                 panelNoteIcons2.Controls.RemoveAt(i);
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from NOTEICONS order by _order");  
                 foreach (DataRow row in dt.Rows)
@@ -228,7 +228,7 @@ namespace Organizer
 
             if (((PictureBox)sender).Tag == null) // empty icon clicked
             {
-                using (BubblesDB db = new BubblesDB())
+                using (SticksDB db = new SticksDB())
                     db.ExecuteNonQuery("update NOTES set " + NoteIcon.Tag.ToString() + "='' where id=" + noteID + "");
             }
             else // icon changed
@@ -237,7 +237,7 @@ namespace Organizer
                 string[] parts = icon.Split(':');
                 toolTip1.SetToolTip(NoteIcon, parts[0]);
 
-                using (BubblesDB db = new BubblesDB())
+                using (SticksDB db = new SticksDB())
                     db.ExecuteNonQuery("update NOTES set " + NoteIcon.Tag.ToString() + "=`" + icon +
                         "` where id=" + noteID + "");
             }
@@ -492,7 +492,7 @@ namespace Organizer
                 flowLayoutPanel1.Controls.Remove(note);
             }
             // Delete notes from the database
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 foreach (int id in ids)
                     db.ExecuteNonQuery("delete from NOTES where id=" + id + "");

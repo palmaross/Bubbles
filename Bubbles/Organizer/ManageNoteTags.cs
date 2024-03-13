@@ -22,7 +22,7 @@ namespace Organizer
             groupBoxRenameTag.Text = Utils.getString("notes.tags.groupBoxRenameTag");
             btnRenameTag.Text = Utils.getString("button.rename");
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from NOTETAGS");
                 foreach (DataRow dr in dt.Rows)
@@ -39,7 +39,7 @@ namespace Organizer
             if (String.IsNullOrEmpty(tagName))
                 return;
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from NOTETAGS where name=`" + tagName + "`");
                 if (dt.Rows.Count > 0)
@@ -77,7 +77,7 @@ namespace Organizer
 
             if (newName == oldName) return;
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from NOTETAGS where tag=`" + newName + "`");
                 if (dt.Rows.Count > 0)
@@ -152,7 +152,7 @@ namespace Organizer
 
             string tag = cbTags.SelectedItem.ToString();
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
                 db.ExecuteNonQuery("delete from NOTETAGS where name=`" + tag + "`");
 
             // Delete tag in the all open Note windows

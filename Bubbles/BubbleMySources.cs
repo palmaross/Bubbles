@@ -18,7 +18,7 @@ namespace Bubbles
 
             this.Tag = ID;
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "Sticks.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "MySourcesStick.htm");
 
@@ -71,7 +71,7 @@ namespace Bubbles
             youtube = Image.FromFile(Utils.ImagesPath + "ms_youtube.png");
             chm = Image.FromFile(Utils.ImagesPath + "chm.png");
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from SOURCES where stickID=" + ID + " order by _order");
                 foreach (DataRow row in dt.Rows)
@@ -180,7 +180,7 @@ namespace Bubbles
                     toolTip1.SetToolTip(selectedIcon, name);
 
                     // Change title in the database
-                    using (BubblesDB db = new BubblesDB())
+                    using (SticksDB db = new SticksDB())
                         db.ExecuteNonQuery("update SOURCES set title=`" + name + "` where path=`" + 
                             item.Path + "` and stickID=" + (int)this.Tag + "");
                 }
@@ -312,7 +312,7 @@ namespace Bubbles
             string type = GetFileType(sourcePath);
 
             MySourcesItem item = new MySourcesItem(sourceTitle, sourcePath, type, order);
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
                 db.AddSource(sourceTitle, sourcePath, type, order, (int)this.Tag);
 
             Sources.Insert(order - 1, item);

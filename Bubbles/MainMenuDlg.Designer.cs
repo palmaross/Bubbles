@@ -294,11 +294,11 @@
             // 
             // lblCopyPaste
             // 
-            this.lblCopyPaste.Location = new System.Drawing.Point(322, 80);
+            this.lblCopyPaste.Location = new System.Drawing.Point(315, 80);
             this.lblCopyPaste.Name = "lblCopyPaste";
-            this.lblCopyPaste.Size = new System.Drawing.Size(70, 13);
+            this.lblCopyPaste.Size = new System.Drawing.Size(84, 13);
             this.lblCopyPaste.TabIndex = 22;
-            this.lblCopyPaste.Text = "Текст Опц";
+            this.lblCopyPaste.Text = "Text Operations";
             this.lblCopyPaste.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblMySources

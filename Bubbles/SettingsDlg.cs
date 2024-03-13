@@ -20,7 +20,7 @@ namespace Bubbles
             btnClose.Text = Utils.getString("button.close");
 
             // Fill sticks list
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from STICKS order by type");
                 bool allselected = true;
@@ -49,7 +49,7 @@ namespace Bubbles
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 if (rbtnSticks.Checked)
                 {

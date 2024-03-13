@@ -21,7 +21,7 @@ namespace Bubbles
             orientation = _orientation.Substring(0, 1); // "H" or "V"
             collapsed = _orientation.Substring(1, 1) == "1";
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "Sticks.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "AddTopicStick.htm");
 
@@ -73,10 +73,10 @@ namespace Bubbles
             
             ToolStripItem tsi = null;
 
-            //tsi.Name = "ManageTaskTemplates";
+            //tsi.Name = "ManageTemplates";
             //StickUtils.SetContextMenuImage(cmsAddMultiple.Items["ManageTaskTemplates"], "manage.png");
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from MT_TEMPLATES order by templateName");
 
@@ -113,7 +113,7 @@ namespace Bubbles
                     //(tsi as ToolStripMenuItem).DropDownItems.Add(new ToolStripSeparator());
 
                     // Topic types
-                    string topictype = row["reserved1"].ToString();
+                    string topictype = row["topicType"].ToString();
                     if (topictype == "") topictype = "subtopic";
 
                     tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("TopicTemplateDlg.rbtnSubtopic"));
@@ -138,6 +138,10 @@ namespace Bubbles
                     tsm.Tag = tsi as ToolStripMenuItem;
                 }
             }
+
+            cmsAddMultiple.Items.Add(new ToolStripSeparator());
+            tsi = cmsAddMultiple.Items.Add(Utils.getString("BubbleAddTopic.ManageTemplates"));
+            tsi.Name = "ManageTemplates";
         }
 
         /// <summary>
@@ -188,7 +192,7 @@ namespace Bubbles
                 MT_TemplateItem item = e.ClickedItem.Tag as MT_TemplateItem;
 
                 string topicName = "", topicType = "subtopic";
-                foreach (var _item in tsm.DropDownItems)//.OfType<ToolStripMenuItem>())
+                foreach (var _item in tsm.DropDownItems)
                 {
                     if (_item is ToolStripTextBox tb)
                         topicName = tb.Text;
@@ -199,6 +203,19 @@ namespace Bubbles
                 cmsAddMultiple.Close();
 
                 AddTopics(item, topicName, topicType);
+            }
+            else if (e.ClickedItem.Name == "ManageTemplates")
+            {
+                using (AddTopicTemplateDlg dlg = new AddTopicTemplateDlg())
+                {
+                    dlg.changed = false;
+                    dlg.ShowDialog();
+                    if (dlg.changed)
+                    {
+                        // Templates were changed. Update menu
+                        PopulateAddMultipleMenu();
+                    }
+                }
             }
             else if (e.ClickedItem.Name == "BI_rotate")
             {
@@ -283,8 +300,8 @@ namespace Bubbles
 
         string GetPreview(string topictext, int number, bool begin)
         {
-            if (begin) topictext = number + " " + topictext;
-            else topictext += " " + number;
+            if (begin) topictext = number + topictext;
+            else topictext += number;
 
             return topictext;
         }
@@ -358,26 +375,6 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
-                //if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-                //{
-                //    MessageBox.Show(Utils.getString("BubblesPaste.pAddMultiple.error"), "",
-                //        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //    return;
-                //}
-
-                using (AddTopicTemplateDlg dlg = new AddTopicTemplateDlg())
-                {
-                    dlg.changed = false;
-                    dlg.ShowDialog();
-                    if (dlg.changed)
-                    {
-                        // Templates were changed. Update menu
-                        PopulateAddMultipleMenu();
-                    }
-                }
-            }
-            else if (e.Button == MouseButtons.Right)
-            {
                 foreach (ToolStripItem item in cmsAddMultiple.Items)
                     item.Visible = true;
 
@@ -390,7 +387,8 @@ namespace Bubbles
             if (e.Button == MouseButtons.Left)
             {
                 TopicsToAdd.Clear();
-                AddTopic((sender as PictureBox).Name);
+                StickUtils.SourceURL = ""; StickUtils.Links.Clear();
+                AddTopic((sender as PictureBox).Name.ToLower());
             }
         }
 
@@ -455,7 +453,7 @@ namespace Bubbles
             if (TopicsToAdd.Count > 1 && transTopicType == "nexttopic")
                 TopicsToAdd = TopicsToAdd.Reverse<string>().ToList();
 
-            if (transTopicType == "ParentTopic") // selected topics will be subtopics of the future parent topic
+            if (transTopicType == "parenttopic") // selected topics will be subtopics of the future parent topic
             {
                 StickUtils.AddTopic(MMUtils.ActiveDocument.Selection.PrimaryTopic, transTopicType, TopicsToAdd[0]);
             }

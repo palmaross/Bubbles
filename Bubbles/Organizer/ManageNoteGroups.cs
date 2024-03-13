@@ -30,7 +30,7 @@ namespace Organizer
             if (String.IsNullOrEmpty(groupName))
                 return;
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksMoreDB db = new SticksMoreDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from NOTEGROUPS where name=`" + groupName + "`");
                 if (dt.Rows.Count > 0)
@@ -68,7 +68,7 @@ namespace Organizer
             if (newName.ToLower() == item.Name.ToLower())
                 return;
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from NOTEGROUPS where name=`" + newName + "`");
                 if (dt.Rows.Count > 0)
@@ -99,7 +99,7 @@ namespace Organizer
 
             NoteGroupItem item = cbGroups.SelectedItem as NoteGroupItem;
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 db.ExecuteNonQuery("delete from NOTEGROUPS where id=" + item.ID + "");
 
@@ -141,7 +141,7 @@ namespace Organizer
             BubblesButton.m_Notes.cbGroups.Items.Add(new NoteGroupItem(Utils.getString("notes.notegroup.nogroup"), 0));
 
             // Fill group comboboxes with custom groups
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from NOTEGROUPS order by name");
                 foreach (DataRow row in dt.Rows)

@@ -31,7 +31,7 @@ namespace BubblesAppManager
                     OldDashboardDB db_old = new OldDashboardDB(); // get old db
 
                     //BubblesDB.defaults = false;
-                    BubblesDB db_new = new BubblesDB(); // create new db without values
+                    SticksDB db_new = new SticksDB(); // create new db without values
 
                     // https://tableplus.com/blog/2018/07/sqlite-how-to-copy-table-to-another-database.html
 

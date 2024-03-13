@@ -22,7 +22,7 @@ namespace Bubbles
             orientation = _orientation.Substring(0,1); // "H" or "V"
             collapsed = _orientation.Substring(1, 1) == "1";
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "Sticks.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "IconStick.htm");
 
@@ -74,7 +74,7 @@ namespace Bubbles
 
             if (ID != 0) // if id = 0 - new stick is creating, ignore this step
             {
-                using (BubblesDB db = new BubblesDB())
+                using (SticksDB db = new SticksDB())
                 {
                     // Check if there is a group or no
                     DataTable dt = db.ExecuteQuery("select * from STICKS where id=" + ID + "");
@@ -263,7 +263,7 @@ namespace Bubbles
 
                 // Update database
                 int _group = (int)BI_group.Tag + (int)BI_mutex.Tag;
-                using (BubblesDB db = new BubblesDB())
+                using (SticksDB db = new SticksDB())
                     db.ExecuteNonQuery("update STICKS set _group=" + _group + " where id=" + (int)this.Tag + "");
             }
             else if (e.ClickedItem.Name == "BI_mutex")
@@ -283,7 +283,7 @@ namespace Bubbles
 
                 // Update database
                 int _group = 1 + (int)BI_mutex.Tag;
-                using (BubblesDB db = new BubblesDB())
+                using (SticksDB db = new SticksDB())
                     db.ExecuteNonQuery("update STICKS set _group=" + _group + " where id=" + (int)this.Tag + "");
             }
             else if (e.ClickedItem.Name == "BI_addtomap")
@@ -372,7 +372,7 @@ namespace Bubbles
                     toolTip1.SetToolTip(selectedIcon, name);
 
                     // Change title in the database
-                    using (BubblesDB db = new BubblesDB())
+                    using (SticksDB db = new SticksDB())
                         db.ExecuteNonQuery("update ICONS set name=`" + name + "` where filename=`" +
                             item.Path + "` and stickID=" + (int)this.Tag + "");
                 }
@@ -551,7 +551,7 @@ namespace Bubbles
             }
 
             IconItem item = new IconItem(iconName, fileName, order, iconPath);
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
                 db.AddIcon(iconName, fileName, order, (int)this.Tag);
 
             Icons.Insert(order - 1, item);

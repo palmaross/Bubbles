@@ -27,7 +27,7 @@ namespace Bubbles
             toolTip1.SetToolTip(configNew, Utils.getString("ManageConfigsDlg.configNew"));
             toolTip1.SetToolTip(configEdit, Utils.getString("ManageConfigsDlg.configEdit"));
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 // Fill configuration combobox
                 DataTable dt = db.ExecuteQuery("select * from CONFIGS order by name");
@@ -57,7 +57,7 @@ namespace Bubbles
             if (MessageBox.Show(String.Format(Utils.getString("ManageConfigsDlg.deleteconfig"), config.Name), "",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                using (BubblesDB db = new BubblesDB())
+                using (SticksDB db = new SticksDB())
                 {
                     db.ExecuteNonQuery("delete from CONFIGS where id=" + config.ID + "");
                     db.ExecuteNonQuery("delete from STICKS where configID=" + config.ID + "");
@@ -99,7 +99,7 @@ namespace Bubbles
             var item = cbConfigs.SelectedItem as ConfigItem;
             if (item != null) oldName = item.Name;
 
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from CONFIGS where name=`" + newName + "`");
                 if (dt.Rows.Count > 0)
@@ -161,7 +161,7 @@ namespace Bubbles
 
             // Update _start_ configuration
             // First, set all configurations to unstart
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from CONFIGS");
                 foreach (DataRow dr in dt.Rows)
@@ -183,7 +183,7 @@ namespace Bubbles
                 if (sticks.Count > 0)
                 {
                     // Delete configuration's sticks in the database
-                    using (BubblesDB db = new BubblesDB())
+                    using (SticksDB db = new SticksDB())
                         db.ExecuteNonQuery("delete from STICKS where configID=" + config.ID + "");
                     
                     // Add visible sticks to the configuration

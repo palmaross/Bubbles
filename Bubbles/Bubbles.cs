@@ -2,7 +2,6 @@
 using System.Runtime.InteropServices;
 using Mindjet.MindManager.Interop;
 using PRAManager;
-using System.IO;
 using PRMapCompanion;
 using System.Windows.Forms;
 using System.Drawing;
@@ -52,8 +51,10 @@ namespace Bubbles
                 StickerDummy.DummyStickerImageY = dlg.pStickerImage.Location.Y;
             }
 
+            InitializeTopicWidthDlg();
+
             DataTable dt;
-            using (BubblesDB db = new BubblesDB())
+            using (SticksDB db = new SticksDB())
                 dt = db.ExecuteQuery("select * from STICKS order by type");
 
             foreach (DataRow dr in dt.Rows)
@@ -91,12 +92,16 @@ namespace Bubbles
                         break;
                 }
             }
+            dt.Dispose(); dt = null;
 
             HidePopup = new Timer() { Interval = 2000 };
             HidePopup.Tick += HidePopup_Tick;
             HidePopup.Start();
 
             m_ReplaceDlg = new ReplaceDlg();
+
+            if (MMUtils.ActiveDocument != null)
+                onDocumentActivated(null);
         }
 
         /// <summary>
@@ -187,18 +192,26 @@ namespace Bubbles
             if (m_Bookmarks != null)
                 m_Bookmarks.Init();
 
-            //if ((m_TaskInfo != null && m_TaskInfo.Visible))
-                DocumentStorage.Sync(MMUtils.ActiveDocument); // subscribe document to events
-            //else
-            //    DocumentStorage.Sync(MMUtils.ActiveDocument, false); // unsubscribe document
+            DocumentStorage.Sync(MMUtils.ActiveDocument); // subscribe document to events
         }
 
         public override void onObjectAdded(MMEventArgs aArgs)
         {
-            if (BubblePaste.pastetext)
+            if (aArgs.target is Topic t)
             {
-                if (aArgs.target is Topic t && !BubblePaste.PastedTopics.Contains(t))
-                    BubblePaste.PastedTopics.Add(t);
+                // Paste operation from stick
+                if (BubblePaste.pastetext)
+                {
+                    if (!BubblePaste.PastedTopics.Contains(t))
+                        BubblePaste.PastedTopics.Add(t);
+                }
+                // Paste operation from MindManager.
+                else if (StickUtils.TopicAutoWidth) // Topic autowidth enabled
+                {
+                    StickUtils.TopicWidthList.Add(t);
+                    StickUtils.SetTopicWidth();
+                    StickUtils.TopicWidthList.Clear();
+                }
             }
         }
 
@@ -208,9 +221,29 @@ namespace Bubbles
                 m_Bookmarks.Init();
         }
 
+        public override void onDocumentClipboardPasteOrDrop(MMEventArgs aArgs)
+        {
+            if (BubblePaste.pastetext) return;
+            MMPaste = true;
+        }
+        bool MMPaste = false;
+
         // For Task Info stick. For topic notes.
         public override void onObjectChanged(MMEventArgs aArgs)
         {
+            if (aArgs.target is Topic _t && aArgs.what == "text" && // topic text changed
+                StickUtils.TopicAutoWidth && // Topic AutoWidth enabled
+                MMPaste && // Text is pasted into topic via MindManager
+                !BubblePaste.pastetext) // to insure: it's not a BubblePaste stick operation
+            {
+                // Set topic width
+                StickUtils.TopicWidthList.Add(_t);
+                StickUtils.SetTopicWidth();
+                StickUtils.TopicWidthList.Clear();
+            }
+
+            MMPaste = false;
+
             if (aArgs.what.Contains("notesxhtmldata"))
             {
                 if (aArgs.target is Topic t && BubblePaste.UserActionNotes)
@@ -222,16 +255,17 @@ namespace Bubbles
                 return;
             }
 
-            if (m_TaskInfo == null || !m_TaskInfo.Visible) return;
-
-            else if (aArgs.what.Contains("selection"))
+            if (m_TaskInfo != null && m_TaskInfo.Visible)
             {
-                // If map selection changed, change the dates in the TaskInfo stick with selected topic dates
-                SetDates();
-            }
-            else if (aArgs.what.Contains("task")) // it's possible that user changed task dates
-            {
-                SetDates2();
+                if (aArgs.what.Contains("selection"))
+                {
+                    // If map selection changed, change the dates in the TaskInfo stick with selected topic dates
+                    SetDates();
+                }
+                else if (aArgs.what.Contains("task")) // it's possible that user changed task dates
+                {
+                    SetDates2();
+                }
             }
         }
 
@@ -374,6 +408,88 @@ namespace Bubbles
             }
         }
 
+        void InitializeTopicWidthDlg()
+        {
+            List<int> mwidths = new List<int>();
+            Dictionary<int, int> awidths = new Dictionary<int, int>();
+
+            using (SticksDB db = new SticksDB())
+            {
+                DataTable dtWidths = db.ExecuteQuery("select * from TOPICWIDTHS");
+
+                foreach (DataRow row in dtWidths.Rows)
+                {
+                    int _value = Convert.ToInt32(row["_value"]);
+                    int chars = Convert.ToInt32(row["chars"]);
+                    bool _checked = row["_checked"].ToString() == "1";
+
+                    switch (row["name"].ToString())
+                    {
+                        case "numMainWidth":
+                            topicWidthDlg.numMainWidth.Value = _value;
+                            StickUtils.MainTopicWidth = _value; break;
+                        case "numWidth1":
+                            topicWidthDlg.numWidth1.Value = _value;
+                            topicWidthDlg.cbm1.Checked = _checked; break;
+                        case "numWidth2":
+                            topicWidthDlg.numWidth2.Value = _value;
+                            topicWidthDlg.cbm2.Checked = _checked; break;
+                        case "numWidth3":
+                            topicWidthDlg.numWidth3.Value = _value;
+                            topicWidthDlg.cbm3.Checked = _checked; break;
+                        case "numWidth4":
+                            topicWidthDlg.numWidth4.Value = _value;
+                            topicWidthDlg.cbm4.Checked = _checked; break;
+                        case "numWidth5":
+                            topicWidthDlg.numWidth5.Value = _value;
+                            topicWidthDlg.cbm5.Checked = _checked; break;
+                        case "numWidth6":
+                            topicWidthDlg.numWidth6.Value = _value;
+                            topicWidthDlg.cbm6.Checked = _checked; break;
+
+                        case "numAuto1":
+                            topicWidthDlg.cbTextMore1.Checked = _checked;
+                            topicWidthDlg.numChars1.Value = chars;
+                            topicWidthDlg.numAuto1.Value = _value; break;
+                        case "numAuto2":
+                            topicWidthDlg.cbTextMore2.Checked = _checked;
+                            topicWidthDlg.numChars2.Value = chars;
+                            topicWidthDlg.numAuto2.Value = _value; break;
+                        case "numAuto3":
+                            topicWidthDlg.cbTextMore3.Checked = _checked;
+                            topicWidthDlg.numChars3.Value = chars;
+                            topicWidthDlg.numAuto3.Value = _value; break;
+                        case "numAuto4":
+                            topicWidthDlg.cbTextMore4.Checked = _checked;
+                            topicWidthDlg.numChars4.Value = chars;
+                            topicWidthDlg.numAuto4.Value = _value; break;
+                        case "numAuto5":
+                            topicWidthDlg.cbTextMore5.Checked = _checked;
+                            topicWidthDlg.numChars5.Value = chars;
+                            topicWidthDlg.numAuto5.Value = _value; break;
+                        case "numAuto6":
+                            topicWidthDlg.cbTextMore6.Checked = _checked;
+                            topicWidthDlg.numChars6.Value = chars;
+                            topicWidthDlg.numAuto6.Value = _value; break;
+                    }
+
+                    if (row["name"].ToString().StartsWith("numWidth"))
+                    {
+                        if (_checked && !mwidths.Contains(_value)) mwidths.Add(_value);
+                    }
+                    else if (row["name"].ToString().StartsWith("numAuto"))
+                    {
+                        if (_checked && !awidths.Keys.Contains(chars)) awidths[chars] = _value;
+                    }
+                }
+            }
+
+            StickUtils.ManualTopicWidths = mwidths.OrderBy(i => i).ToList();
+            StickUtils.AutoTopicWidths = awidths.OrderByDescending(key => key.Key).ToDictionary(pair => pair.Key, pair => pair.Value);
+            StickUtils.MinAutoTopicWidth = StickUtils.AutoTopicWidths.Keys.Last();
+            StickUtils.TopicAutoWidth = Utils.getRegistry("MMAutoWidth", "0") == "1";
+        }
+
         public void Destroy()
         {
             if (!m_bCreated)
@@ -407,6 +523,13 @@ namespace Bubbles
                 m_ReplaceDlg.Hide();
                 m_ReplaceDlg.Dispose();
                 m_ReplaceDlg = null;
+            }
+
+            if (topicWidthDlg != null)
+            {
+                topicWidthDlg.Hide();
+                topicWidthDlg.Dispose();
+                topicWidthDlg = null;
             }
 
             if (m_Resources != null)
@@ -506,5 +629,7 @@ namespace Bubbles
         Timer HidePopup = new Timer();
 
         static ToolTip tt = new ToolTip() { ShowAlways = true, AutoPopDelay = 3000 };
+
+        public static TopicWidthDlg topicWidthDlg = new TopicWidthDlg();
     }
 }
