@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Sticks")]
+[assembly: AssemblyTitle("WowStix")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("PalmaRoss")]
-[assembly: AssemblyProduct("Sticks Add-In for MindManager 22")]
-[assembly: AssemblyCopyright("Copyright © 2023")]
+[assembly: AssemblyProduct("WowStix Add-In for MindManager 22")]
+[assembly: AssemblyCopyright("Copyright © 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

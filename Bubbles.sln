@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sticks23", "Bubbles\Sticks23.csproj", "{243ABB0B-DD55-4E6E-8F67-ED9ACEB51A0E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowStix23", "Bubbles\WowStix23.csproj", "{243ABB0B-DD55-4E6E-8F67-ED9ACEB51A0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sticks22", "Bubbles\Sticks22.csproj", "{47753526-1994-4211-A1DA-926C94F51BB2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowStix22", "Bubbles\WowStix22.csproj", "{47753526-1994-4211-A1DA-926C94F51BB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

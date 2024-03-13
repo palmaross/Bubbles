@@ -212,6 +212,12 @@ namespace Bubbles
             // "sticker"
             // "template"
             // "reminder:12:05" (12:05) or "reminder:20" (in 20 minutes)
+            // "timer" обратный отсчет
+            // "stopwatch" секундомер
+            // "autoplay:interval:random"
+
+            m_db.ExecuteNonQuery("CREATE TABLE STICKERTEXTS(id INTEGER PRIMARY KEY, stickid int, " +
+                "stickertext text, reserved1 text, reserved2 integer);");
 
             m_db.ExecuteNonQuery("END");
 

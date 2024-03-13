@@ -73,6 +73,9 @@ namespace Bubbles
                     Directory.CreateDirectory(m_dataPath + "IconDB");
                 if (!Directory.Exists(m_dataPath + "ImageDB"))
                     Directory.CreateDirectory(m_dataPath + "ImageDB");
+
+                File.Copy(dllPath + "\\Images\\" + "hello1.png", m_dataPath + "ImageDB\\" + "hello1.png");
+                File.Copy(dllPath + "\\Images\\" + "pato.gif", m_dataPath + "ImageDB\\" + "pato.gif");
             }
             catch { };
 

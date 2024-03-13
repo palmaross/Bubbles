@@ -1,4 +1,4 @@
-﻿<project version = 9 civer = 8.10.1 winver = "2.12/6.2.9200" >
+﻿<project version = 9 civer = 8.10.0 winver = "2.12/6.2.9200" >
    <autorun >0</>
    <autoclose >1</>
    <compname >PalmaRoss</>
@@ -17,7 +17,7 @@
    <lang >english</>
    <addlang >russian</>
    <selfextr >1</>
-   <instpath >#progfiles#\PalmaRoss\Sticks</>
+   <instpath >#progfiles#\PalmaRoss\WowStix</>
    <voltype >nolimit</>
    <volsize ></>
    <volpattern >disk%i.pak</>
@@ -27,8 +27,8 @@
    <bl ></>
    <blurl ></>
    <unpath >inst</>
-   <unexe >uninstall-bb.exe</>
-   <unlog >uninstall-bb.ini</>
+   <unexe >uninstall-ws.exe</>
+   <unlog >uninstall-ws.ini</>
    <installroot sorttype = 0 >
       <children >
          <install id = install expanded = 2 >
@@ -76,14 +76,14 @@
                            <varname >mm_not_found</>
                            <value >Do you have MindManager installed? 
 We can't detect it on your system. 
-Sticks setup is not possible. Sorry.</>
+WowStix setup is not possible. Sorry.</>
                            <comm ></>
                         </>
                         <_ >
                            <varname >mm_not_supported</>
                            <value >Your version of MindManager is not supported!
 
-This Sticks version works with MindManager 22 and above.</>
+This WowStix version works with MindManager 22 and above.</>
                            <comm ></>
                         </>
                         <_ >
@@ -100,7 +100,7 @@ To abort installation, click Cancel.</>
                         </>
                         <_ >
                            <varname >needrerun</>
-                           <value >Sticks was not installed.
+                           <value >WowStix was not installed.
 Please re-run Setup further.</>
                            <comm ></>
                         </>
@@ -121,14 +121,14 @@ Please re-run Setup further.</>
                            <varname >mm_not_found</>
                            <value >У вас установлен MindManager? 
 Мы его не обнаружили. 
-Установке Sticks невозможна. Извините.</>
+Установке WowStix невозможна. Извините.</>
                            <comm ></>
                         </>
                         <_ >
                            <varname >mm_not_supported</>
                            <value >Ваша версия MindManager не поддерживается!
 
-Данная версия Sticks работает с MindManager 22 и выше.</>
+Данная версия WowStix работает с MindManager 22 и выше.</>
                            <comm ></>
                         </>
                         <_ >
@@ -145,7 +145,7 @@ Please re-run Setup further.</>
                         </>
                         <_ >
                            <varname >needrerun</>
-                           <value >Надстройка Sticks не установлена.
+                           <value >Надстройка WowStix не установлена.
 Вам потребуется произвести установку снова.</>
                            <comm ></>
                         </>
@@ -483,7 +483,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                <_ tag = 0 id = regget >
                   <desc ></>
                   <root >curuser</>
-                  <subkey >SOFTWARE\PalmaRoss\Sticks</>
+                  <subkey >SOFTWARE\PalmaRoss\WowStix</>
                   <wow64 >0</>
                   <reglist >
                      <rows >
@@ -724,9 +724,9 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                         <custpath ></>
                         <ifexist >over</>
                         <if ></>
-                        <nofiles >0</>
+                        <nofiles >1</>
                      </>
-                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
                         <children >
                            <_ tag = 0 id = unpack >
                               <desc ></>
@@ -740,7 +740,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <srclist >
                                  <rows >
                                     <_ >
-                                       <filename >d:\repos\Bubbles\setup\$appname$\Sticks22.dll</>
+                                       <filename >d:\repos\Bubbles\setup\$appname$\WowStix22.dll</>
                                        <recurse >0</>
                                        <justfile >1</>
                                        <emptydir >0</>
@@ -756,21 +756,21 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            <_ tag = 0 id = regset disabled = 0 >
                               <desc ></>
                               <root >locmach</>
-                              <subkey >Software\Mindjet\MindManager\22\AddIns\Sticks22.Connect</>
+                              <subkey >Software\Mindjet\MindManager\22\AddIns\WowStix22.Connect</>
                               <wow64 >0</>
                               <reglist >
                                  <rows >
                                     <_ >
                                        <valname >Description</>
                                        <regtype >str</>
-                                       <value >Sticks Add-in for MindManager 22</>
+                                       <value >WowStix Add-in for MindManager 22</>
                                        <if ></>
                                        <comm ></>
                                     </>
                                     <_ >
                                        <valname >FriendlyName</>
                                        <regtype >str</>
-                                       <value >Sticks</>
+                                       <value >WowStix</>
                                        <if ></>
                                        <comm ></>
                                     </>
@@ -788,21 +788,21 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            <_ tag = 0 id = regset disabled = 0 >
                               <desc ></>
                               <root >curuser</>
-                              <subkey >Software\Mindjet\MindManager\22\AddIns\Sticks22.Connect</>
+                              <subkey >Software\Mindjet\MindManager\22\AddIns\WowStix22.Connect</>
                               <wow64 >0</>
                               <reglist >
                                  <rows >
                                     <_ >
                                        <valname >Description</>
                                        <regtype >str</>
-                                       <value >Sticks Add-in for MindManager 22</>
+                                       <value >WowStix Add-in for MindManager 22</>
                                        <if ></>
                                        <comm ></>
                                     </>
                                     <_ >
                                        <valname >FriendlyName</>
                                        <regtype >str</>
-                                       <value >Sticks</>
+                                       <value >WowStix</>
                                        <if ></>
                                        <comm ></>
                                     </>
@@ -821,7 +821,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <desc ></>
                               <path >inst</>
                               <name >regasm.exe</>
-                              <cmdline >/codebase /nologo /silent Sticks22.dll</>
+                              <cmdline >/codebase /nologo /silent WowStix22.dll</>
                               <work >inst</>
                               <defwork ></>
                               <wait >1</>
@@ -844,7 +844,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            </>
                         </>
                      </>
-                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
                         <children >
                            <_ tag = 0 id = unpack >
                               <desc ></>
@@ -858,7 +858,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <srclist >
                                  <rows >
                                     <_ >
-                                       <filename >d:\repos\Bubbles\setup\$appname$\Sticks23.dll</>
+                                       <filename >d:\repos\Bubbles\setup\$appname$\WowStix23.dll</>
                                        <recurse >0</>
                                        <justfile >1</>
                                        <emptydir >0</>
@@ -874,21 +874,21 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            <_ tag = 0 id = regset disabled = 0 >
                               <desc ></>
                               <root >locmach</>
-                              <subkey >Software\Mindjet\MindManager\23\AddIns\Sticks23.Connect</>
+                              <subkey >Software\Mindjet\MindManager\23\AddIns\WowStix23.Connect</>
                               <wow64 >0</>
                               <reglist >
                                  <rows >
                                     <_ >
                                        <valname >Description</>
                                        <regtype >str</>
-                                       <value >Sticks Add-in for MindManager 23</>
+                                       <value >WowStix Add-in for MindManager 23</>
                                        <if ></>
                                        <comm ></>
                                     </>
                                     <_ >
                                        <valname >FriendlyName</>
                                        <regtype >str</>
-                                       <value >Sticks</>
+                                       <value >WowStix</>
                                        <if ></>
                                        <comm ></>
                                     </>
@@ -906,21 +906,21 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            <_ tag = 0 id = regset disabled = 0 >
                               <desc ></>
                               <root >curuser</>
-                              <subkey >Software\Mindjet\MindManager\23\AddIns\Sticks23.Connect</>
+                              <subkey >Software\Mindjet\MindManager\23\AddIns\WowStix23.Connect</>
                               <wow64 >0</>
                               <reglist >
                                  <rows >
                                     <_ >
                                        <valname >Description</>
                                        <regtype >str</>
-                                       <value >Sticks Add-in for MindManager 23</>
+                                       <value >WowStix Add-in for MindManager 23</>
                                        <if ></>
                                        <comm ></>
                                     </>
                                     <_ >
                                        <valname >FriendlyName</>
                                        <regtype >str</>
-                                       <value >Sticks</>
+                                       <value >WowStix</>
                                        <if ></>
                                        <comm ></>
                                     </>
@@ -939,7 +939,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <desc ></>
                               <path >inst</>
                               <name >regasm.exe</>
-                              <cmdline >/codebase /nologo /silent Sticks23.dll</>
+                              <cmdline >/codebase /nologo /silent WowStix23.dll</>
                               <work >inst</>
                               <defwork ></>
                               <wait >1</>
@@ -962,7 +962,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            </>
                         </>
                      </>
-                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
                         <children >
                            <_ tag = 0 id = unpack >
                               <desc ></>
@@ -976,7 +976,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <srclist >
                                  <rows >
                                     <_ >
-                                       <filename >d:\repos\Bubbles\setup\$appname$\Sticks22.dll</>
+                                       <filename >d:\repos\Bubbles\setup\$appname$\WowStix22.dll</>
                                        <recurse >0</>
                                        <justfile >1</>
                                        <emptydir >0</>
@@ -992,21 +992,21 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            <_ tag = 0 id = regset disabled = 0 >
                               <desc ></>
                               <root >locmach</>
-                              <subkey >Software\Mindjet\MindManager\22\AddIns\Sticks22.Connect</>
+                              <subkey >Software\Mindjet\MindManager\22\AddIns\WowStix22.Connect</>
                               <wow64 >1</>
                               <reglist >
                                  <rows >
                                     <_ >
                                        <valname >Description</>
                                        <regtype >str</>
-                                       <value >Sticks Add-in for MindManager 22</>
+                                       <value >WowStix Add-in for MindManager 22</>
                                        <if ></>
                                        <comm ></>
                                     </>
                                     <_ >
                                        <valname >FriendlyName</>
                                        <regtype >str</>
-                                       <value >Sticks</>
+                                       <value >WowStix</>
                                        <if ></>
                                        <comm ></>
                                     </>
@@ -1025,7 +1025,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <desc ></>
                               <path >inst</>
                               <name >regasm.exe</>
-                              <cmdline >/codebase /nologo /silent Sticks22.dll</>
+                              <cmdline >/codebase /nologo /silent WowStix22.dll</>
                               <work >inst</>
                               <defwork ></>
                               <wait >1</>
@@ -1036,7 +1036,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <desc ></>
                               <path >inst</>
                               <name >regasm64.exe</>
-                              <cmdline >/codebase /nologo /silent Sticks22.dll</>
+                              <cmdline >/codebase /nologo /silent WowStix22.dll</>
                               <work >inst</>
                               <defwork ></>
                               <wait >1</>
@@ -1081,7 +1081,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <srclist >
                                  <rows >
                                     <_ >
-                                       <filename >d:\repos\Bubbles\setup\$appname$\Sticks23.dll</>
+                                       <filename >d:\repos\Bubbles\setup\$appname$\WowStix23.dll</>
                                        <recurse >0</>
                                        <justfile >1</>
                                        <emptydir >0</>
@@ -1097,21 +1097,21 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            <_ tag = 0 id = regset disabled = 0 >
                               <desc ></>
                               <root >locmach</>
-                              <subkey >Software\Mindjet\MindManager\23\AddIns\Sticks23.Connect</>
+                              <subkey >Software\Mindjet\MindManager\23\AddIns\WowStix23.Connect</>
                               <wow64 >1</>
                               <reglist >
                                  <rows >
                                     <_ >
                                        <valname >Description</>
                                        <regtype >str</>
-                                       <value >Sticks Add-in for MindManager 23</>
+                                       <value >WowStix Add-in for MindManager 23</>
                                        <if ></>
                                        <comm ></>
                                     </>
                                     <_ >
                                        <valname >FriendlyName</>
                                        <regtype >str</>
-                                       <value >Sticks</>
+                                       <value >WowStix</>
                                        <if ></>
                                        <comm ></>
                                     </>
@@ -1130,7 +1130,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <desc ></>
                               <path >inst</>
                               <name >regasm.exe</>
-                              <cmdline >/codebase /nologo /silent Sticks23.dll</>
+                              <cmdline >/codebase /nologo /silent WowStix23.dll</>
                               <work >inst</>
                               <defwork ></>
                               <wait >1</>
@@ -1141,7 +1141,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <desc ></>
                               <path >inst</>
                               <name >regasm64.exe</>
-                              <cmdline >/codebase /nologo /silent Sticks23.dll</>
+                              <cmdline >/codebase /nologo /silent WowStix23.dll</>
                               <work >inst</>
                               <defwork ></>
                               <wait >1</>
@@ -1175,7 +1175,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                      <_ tag = 0 id = regset >
                         <desc ></>
                         <root >curuser</>
-                        <subkey >SOFTWARE\PalmaRoss\CalendarManager</>
+                        <subkey >SOFTWARE\PalmaRoss\WowStix</>
                         <wow64 >0</>
                         <reglist >
                            <rows >
@@ -1193,7 +1193,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                      <_ tag = 0 id = regset >
                         <desc ></>
                         <root >curuser</>
-                        <subkey >SOFTWARE\PalmaRoss\CalendarManager</>
+                        <subkey >SOFTWARE\PalmaRoss\WowStix</>
                         <wow64 >0</>
                         <reglist >
                            <rows >
@@ -1207,7 +1207,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <_ >
                                  <valname >version</>
                                  <regtype >str</>
-                                 <value >1.0.0.0</>
+                                 <value >1.0.0.4</>
                                  <if ></>
                                  <comm ></>
                               </>
@@ -1270,7 +1270,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                   <dlgtext ></>
                   <if ></>
                </>
-               <_ tag = 0 id = if expanded = 0 >
+               <_ tag = 0 id = if expanded = 2 >
                   <children >
                      <_ tag = 0 id = regget >
                         <desc >Путь к MindManager.exe 22x64</>
@@ -1471,7 +1471,7 @@ To abort deinstalling, click Cancel.</>
                         </>
                         <_ >
                            <varname >needrerun_deinst</>
-                           <value >Sticks was not removed.
+                           <value >WowStix was not removed.
 Please try further.</>
                            <comm ></>
                         </>
@@ -1497,7 +1497,7 @@ Please try further.</>
                         </>
                         <_ >
                            <varname >needrerun_deinst</>
-                           <value >Ошибка в удалении Sticks.
+                           <value >Ошибка в удалении WowStix.
 Пожалуйста, повторите попытку позже.</>
                            <comm ></>
                         </>
@@ -1530,6 +1530,7 @@ Please try further.</>
                               <defbtn >def</>
                               <msgmode >def</>
                               <if ></>
+                              <length ></>
                            </>
                         </>
                         <desc ></>
@@ -1544,6 +1545,7 @@ Please try further.</>
                         <hcmd ></>
                         <defbtn >def</>
                         <msgmode >def</>
+                        <length ></>
                      </>
                   </>
                   <desc >mm</>
@@ -1640,7 +1642,7 @@ Please try further.</>
                            <_ tag = 0 id = regdel >
                               <desc ></>
                               <root >curuser</>
-                              <subkey >Software\Mindjet\MindManager\22\User Interface\Custom\Sticks22.Connect</>
+                              <subkey >Software\Mindjet\MindManager\22\User Interface\Custom\WowStix22.Connect</>
                               <subdel >1</>
                               <wow64 >0</>
                               <reglist >
@@ -1651,7 +1653,7 @@ Please try further.</>
                            <_ tag = 0 id = regdel >
                               <desc ></>
                               <root >curuser</>
-                              <subkey >Software\Mindjet\MindManager\22\AddIns\Sticks22.Connect</>
+                              <subkey >Software\Mindjet\MindManager\22\AddIns\WowStix22.Connect</>
                               <subdel >1</>
                               <wow64 >0</>
                               <reglist >
@@ -1662,7 +1664,7 @@ Please try further.</>
                            <_ tag = 0 id = regdel >
                               <desc ></>
                               <root >locmach</>
-                              <subkey >Software\Mindjet\MindManager\22\AddIns\Sticks22.Connect</>
+                              <subkey >Software\Mindjet\MindManager\22\AddIns\WowStix22.Connect</>
                               <subdel >1</>
                               <wow64 >0</>
                               <reglist >
@@ -1691,7 +1693,7 @@ Please try further.</>
                            <_ tag = 0 id = regdel >
                               <desc ></>
                               <root >curuser</>
-                              <subkey >Software\Mindjet\MindManager\23\User Interface\Custom\Sticks23.Connect</>
+                              <subkey >Software\Mindjet\MindManager\23\User Interface\Custom\WowStix23.Connect</>
                               <subdel >1</>
                               <wow64 >0</>
                               <reglist >
@@ -1702,7 +1704,7 @@ Please try further.</>
                            <_ tag = 0 id = regdel >
                               <desc ></>
                               <root >curuser</>
-                              <subkey >Software\Mindjet\MindManager\23\AddIns\Sticks23.Connect</>
+                              <subkey >Software\Mindjet\MindManager\23\AddIns\WowStix23.Connect</>
                               <subdel >1</>
                               <wow64 >0</>
                               <reglist >
@@ -1713,7 +1715,7 @@ Please try further.</>
                            <_ tag = 0 id = regdel >
                               <desc ></>
                               <root >locmach</>
-                              <subkey >Software\Mindjet\MindManager\23\AddIns\Sticks23.Connect</>
+                              <subkey >Software\Mindjet\MindManager\23\AddIns\WowStix23.Connect</>
                               <subdel >1</>
                               <wow64 >0</>
                               <reglist >
@@ -1742,7 +1744,7 @@ Please try further.</>
                            <_ tag = 0 id = regdel >
                               <desc ></>
                               <root >curuser</>
-                              <subkey >Software\Mindjet\MindManager\22\User Interface\Custom\Sticks22.Connect</>
+                              <subkey >Software\Mindjet\MindManager\22\User Interface\Custom\WowStix22.Connect</>
                               <subdel >1</>
                               <wow64 >0</>
                               <reglist >
@@ -1753,7 +1755,7 @@ Please try further.</>
                            <_ tag = 0 id = regdel >
                               <desc ></>
                               <root >curuser</>
-                              <subkey >Software\Mindjet\MindManager\22\AddIns\Sticks22.Connect</>
+                              <subkey >Software\Mindjet\MindManager\22\AddIns\WowStix22.Connect</>
                               <subdel >1</>
                               <wow64 >0</>
                               <reglist >
@@ -1764,7 +1766,7 @@ Please try further.</>
                            <_ tag = 0 id = regdel >
                               <desc ></>
                               <root >locmach</>
-                              <subkey >Software\Mindjet\MindManager\22\AddIns\Sticks22.Connect</>
+                              <subkey >Software\Mindjet\MindManager\22\AddIns\WowStix22.Connect</>
                               <subdel >1</>
                               <wow64 >1</>
                               <reglist >
@@ -1801,7 +1803,7 @@ Please try further.</>
                            <_ tag = 0 id = regdel >
                               <desc ></>
                               <root >curuser</>
-                              <subkey >Software\Mindjet\MindManager\23\User Interface\Custom\Sticks23.Connect</>
+                              <subkey >Software\Mindjet\MindManager\23\User Interface\Custom\WowStix23.Connect</>
                               <subdel >1</>
                               <wow64 >0</>
                               <reglist >
@@ -1812,7 +1814,7 @@ Please try further.</>
                            <_ tag = 0 id = regdel >
                               <desc ></>
                               <root >curuser</>
-                              <subkey >Software\Mindjet\MindManager\23\AddIns\Sticks23.Connect</>
+                              <subkey >Software\Mindjet\MindManager\23\AddIns\WowStix23.Connect</>
                               <subdel >1</>
                               <wow64 >0</>
                               <reglist >
@@ -1823,7 +1825,7 @@ Please try further.</>
                            <_ tag = 0 id = regdel >
                               <desc ></>
                               <root >locmach</>
-                              <subkey >Software\Mindjet\MindManager\23\AddIns\Sticks23.Connect</>
+                              <subkey >Software\Mindjet\MindManager\23\AddIns\WowStix23.Connect</>
                               <subdel >1</>
                               <wow64 >1</>
                               <reglist >
@@ -1874,7 +1876,7 @@ Please try further.</>
                      <_ tag = 0 id = regdel >
                         <desc >Удалить CalendarManager из реестра</>
                         <root >curuser</>
-                        <subkey >Software\PalmaRoss\Sticks</>
+                        <subkey >Software\PalmaRoss\WowStix</>
                         <subdel >1</>
                         <subemptydel >0</>
                         <wow64 >0</>
@@ -1885,7 +1887,7 @@ Please try further.</>
                      <_ tag = 0 id = delete >
                         <desc >Удалить папку Documents\CalendarManager</>
                         <path >custom</>
-                        <name >#docpath#\PalmaRoss\Sticks</>
+                        <name >#docpath#\PalmaRoss\WowStix</>
                         <recurse >1</>
                         <justfile >0</>
                         <delro >1</>
@@ -1954,9 +1956,9 @@ Please try further.</>
    <custfont ></>
    <upinclude >0</>
    <uppath >inst</>
-   <upexe >sticks-update.exe</>
+   <upexe >wowstix-update.exe</>
    <upurl >http://update.palmaross.com/versions</>
-   <upxml >sticks-update.ini</>
+   <upxml >wowstix-update.ini</>
    <upredir >http://update.palmaross.com/updates</>
    <csfile ></>
    <csinst >"<exefilename>"</>
@@ -1968,8 +1970,8 @@ Please try further.</>
       <rows >
          <_ >
             <varname >exename</>
-            <value1 >SticksSetup</>
-            <value2 >SticksOLSetup</>
+            <value1 >WowStixSetup</>
+            <value2 >WowStixOLSetup</>
             <value3 ></>
             <value4 ></>
             <value5 ></>
@@ -1991,8 +1993,8 @@ Please try further.</>
          </>
          <_ >
             <varname >appname</>
-            <value1 >Sticks</>
-            <value2 >Sticks</>
+            <value1 >WowStix</>
+            <value2 >WowStix</>
             <value3 ></>
             <value4 ></>
             <value5 ></>
@@ -2014,8 +2016,8 @@ Please try further.</>
          </>
          <_ >
             <varname >version</>
-            <value1 >1.0.0.0</>
-            <value2 >1.0.0.0</>
+            <value1 >1.0.0.4</>
+            <value2 >1.0.0.4</>
             <value3 ></>
             <value4 ></>
             <value5 ></>

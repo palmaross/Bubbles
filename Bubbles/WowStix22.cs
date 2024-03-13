@@ -9,7 +9,7 @@
     ///   The object for implementing an Add-in.
     /// </summary>
     /// <seealso class='IDTExtensibility2' />
-    [GuidAttribute("47753526-1994-4211-A1DA-926C94F51BB2"), ProgId("Sticks22.Connect")]
+    [GuidAttribute("47753526-1994-4211-A1DA-926C94F51BB2"), ProgId("WowStix22.Connect")]
     public class Connect : Object, Extensibility.IDTExtensibility2
     {
         /// <summary>
@@ -39,7 +39,7 @@
             string myDocumentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             try
             {
-                string logfile = myDocumentsFolder + "\\Sticks_logfile.txt";
+                string logfile = myDocumentsFolder + "\\WowStix_logfile.txt";
                 if (System.IO.File.Exists(logfile))
                     System.IO.File.Delete(logfile);
             }
@@ -48,21 +48,21 @@
             try
             {
                 MMUtils.Version = 22;
-                MMUtils.Registered_AddinName = "Sticks22.Connect";
+                MMUtils.Registered_AddinName = "WowStix22.Connect";
                 MMUtils.CLSID = "47753526-1994-4211-A1DA-926C94F51BB2";
                 MMUtils.CreateAddinFolder = true;
                 MMUtils.CreateAddinAppDataFolder = false;
                 MMUtils.checkForUpdates = true;
 
-                MMUtils.AddinName = "Sticks";
-                MMUtils.FriendlyAddinName = "Sticks";
+                MMUtils.AddinName = "WowStix";
+                MMUtils.FriendlyAddinName = "WowStix";
                 MMUtils.Company = "PalmaRoss";
                 Utils.Company = "PalmaRoss";
-                Utils.AddinName = "Sticks";
-                Utils.Registered_AddinName = "Sticks22.Connect";
+                Utils.AddinName = "WowStix";
+                Utils.Registered_AddinName = "WowStix22.Connect";
                 MMUtils.Language = Utils.getRegistry("language", "english");
                 MMUtils.AddinVersion = Utils.getRegistry("version");
-                MMUtils.licenseKeyStartsWith = "BB";
+                MMUtils.licenseKeyStartsWith = "WS";
 
                 MMUtils.MindManager = (Application)application;
                 if (MMUtils.DoNotStartAddin)

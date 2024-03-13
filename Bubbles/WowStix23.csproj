@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{47753526-1994-4211-A1DA-926C94F51BB2}</ProjectGuid>
+    <ProjectGuid>{243ABB0B-DD55-4E6E-8F67-ED9ACEB51A0E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sticks22</RootNamespace>
-    <AssemblyName>Sticks22</AssemblyName>
+    <RootNamespace>Bubbles</RootNamespace>
+    <AssemblyName>WowStix23</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;MINDJET22</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;MINDJET23</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -44,24 +44,27 @@
     <Reference Include="extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="PalmaRossCommon22, Version=1.0.0.0, Culture=neutral, PublicKeyToken=057dcba4e358e84f, processorArchitecture=MSIL">
+    <Reference Include="PalmaRossCommon23, Version=1.0.0.0, Culture=neutral, PublicKeyToken=057dcba4e358e84f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Common\PalmaRossCommon22.dll</HintPath>
+      <HintPath>..\..\Common\PalmaRossCommon23.dll</HintPath>
     </Reference>
     <Reference Include="PopupControl">
       <HintPath>..\..\DLLs\PopupControl.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
     <Reference Include="WindowsInput, Version=1.0.4.0, Culture=neutral, PublicKeyToken=9b287f7dc5073cad, processorArchitecture=MSIL">
       <HintPath>..\packages\InputSimulator.1.0.4.0\lib\net20\WindowsInput.dll</HintPath>
     </Reference>
@@ -79,7 +82,9 @@
     <Compile Include="AlignSticksDlg.Designer.cs">
       <DependentUpon>AlignSticksDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppManager\AlfaChanges.cs" />
     <Compile Include="AppManager\SticksDB.cs" />
+    <Compile Include="AppManager\SticksMoreDB.cs" />
     <Compile Include="AppManager\TransactionWrapper.cs" />
     <Compile Include="BubbleAddTopic.cs">
       <SubType>Form</SubType>
@@ -123,6 +128,12 @@
     <Compile Include="ManageResourceIcons.Designer.cs">
       <DependentUpon>ManageResourceIcons.cs</DependentUpon>
     </Compile>
+    <Compile Include="MMOutToogle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MMOutToogle.Designer.cs">
+      <DependentUpon>MMOutToogle.cs</DependentUpon>
+    </Compile>
     <Compile Include="MyDateTimePicker.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -150,8 +161,8 @@
       <DependentUpon>GetNameDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Bubbles.cs" />
-    <Compile Include="Bubbles22.cs" />
-    <Compile Include="AssemblyInfo22.cs" />
+    <Compile Include="WowStix23.cs" />
+    <Compile Include="AssemblyInfo23.cs" />
     <Compile Include="BubbleBookmarks.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -265,7 +276,6 @@
     <Compile Include="SettingsDlg.Designer.cs">
       <DependentUpon>SettingsDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppManager\SticksMoreDB.cs" />
     <Compile Include="SizeablePictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -314,14 +324,14 @@
     </Compile>
     <Compile Include="Utils.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="app21.config" />
     <None Include="I18n.default.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="I18n.ini" />
     <None Include="packages.config" />
-    <None Include="Sticks.chm">
+    <None Include="WowStix.chm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -407,6 +417,9 @@
     <Content Include="images\cpAddParent20.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\cpAddSingle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\cpAddSubtopic.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -488,10 +501,22 @@
     <Content Include="images\groups.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\hello1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\help.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\hide.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\inserttext.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\internallinks.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\internallinks_active.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\list.png">
@@ -614,6 +639,9 @@
     <Content Include="images\paste.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\PasteNotesRisk.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\pasteTextToTopic.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -633,6 +661,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\pasteText.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\pato.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\period.png">
@@ -710,6 +741,9 @@
     <Content Include="images\7.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\replacetext.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\resources.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -738,6 +772,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\sortZA.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\sourcelink.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\sourcelink_active.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\STICKS.png">
@@ -771,8 +811,17 @@
   <ItemGroup>
     <COMReference Include="MindManager">
       <Guid>{1E1D4AF9-6640-49C1-A33B-8CE8B47C9785}</Guid>
-      <VersionMajor>22</VersionMajor>
+      <VersionMajor>23</VersionMajor>
       <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
       <Lcid>0</Lcid>
       <WrapperTool>primary</WrapperTool>
       <Isolated>False</Isolated>
@@ -806,6 +855,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ManageResourceIcons.resx">
       <DependentUpon>ManageResourceIcons.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MMOutToogle.resx">
+      <DependentUpon>MMOutToogle.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MyDateTimePicker.resx">
       <DependentUpon>MyDateTimePicker.cs</DependentUpon>
