@@ -55,11 +55,10 @@ namespace Bubbles
                 );
         }
 
-        public void AddResource(string name, int icon, string color, int groupID)
+        public void AddResource(string name, string color, int groupID)
         {
             m_db.ExecuteNonQuery("insert into RESOURCES values(`"
-                + name + "`, "
-                + icon + ", `"
+                + name + "`, `"
                 + color + "`, "
                 + groupID + ", "
                 + "'', 0"
@@ -67,12 +66,10 @@ namespace Bubbles
                 );
         }
 
-        public void AddResourceGroup(string name, int mutexclusive, int icon)
+        public void AddResourceGroup(string name)
         {
             m_db.ExecuteNonQuery("insert into RESOURCEGROUPS values(NULL, `"
                 + name + "`, "
-                + mutexclusive + ", "
-                + icon + ", "
                 + "'', 0"
                 + ");"
                 );
@@ -180,10 +177,10 @@ namespace Bubbles
             // filename: file name for stock icons, signature for custom icons
             //m_db.ExecuteNonQuery("CREATE TABLE ICONGROUPS(id INTEGER PRIMARY KEY, name text, " +
             //    "mutexclusive int, reserved1 text, reserved2 integer);");
-            m_db.ExecuteNonQuery("CREATE TABLE RESOURCES(name text, icon int, color string, " +
-                "groupID int, reserved1 text, reserved2 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE RESOURCES(name text, color string, groupID int, " +
+                "reserved1 text, reserved2 integer);");
             m_db.ExecuteNonQuery("CREATE TABLE RESOURCEGROUPS(id INTEGER PRIMARY KEY, name text, " +
-                "mutexclusive int, icon int, reserved1 text, reserved2 integer);");
+                "reserved1 text, reserved2 integer);");
             m_db.ExecuteNonQuery("CREATE TABLE TAGS(name text, color string, groupID int, " +
                 "reserved1 text, reserved2 integer);");
             m_db.ExecuteNonQuery("CREATE TABLE TAGGROUPS(id INTEGER PRIMARY KEY, name text, mutexclusive int, " +
@@ -265,16 +262,17 @@ namespace Bubbles
             AddPattern(Utils.getString("Template.WeekDays"), "", Utils.getString("Template.WeekDays.lang"), "subtopic");
 
             // Add Resource Groups (resources icons for now)
-            AddResourceGroup(Utils.getString("taskinfo.database.resources.icon1"), 0, 0);
-            AddResourceGroup(Utils.getString("taskinfo.database.resources.icon2"), 0, 1);
-            AddResourceGroup("", 0, 2); AddResourceGroup("", 0, 3); AddResourceGroup("", 0, 4);
-            AddResourceGroup("", 0, 5); AddResourceGroup("", 0, 6); AddResourceGroup("", 0, 7);
+            AddResourceGroup(Utils.getString("taskinfo.database.resourcegroup1"));
             // Add Resources
-            AddResource(Utils.getString("taskinfo.database.resources.res1"), 0, "", 0);
-            AddResource(Utils.getString("taskinfo.database.resources.res2"), 1, "", 0);
+            AddResource(Utils.getString("taskinfo.database.resources.res1"), "", 0);
+            AddResource(Utils.getString("taskinfo.database.resources.res2"), "", 0);
+            AddResource(Utils.getString("taskinfo.database.resources.res3"), "", 1);
+            AddResource(Utils.getString("taskinfo.database.resources.res4"), "", 1);
 
-            // Add Task Template
+            // Add Task Templates
             AddTaskTemplate(1, Utils.getString("quicktask.template.default"), 0, 0, "rel:today:1;rel:today:1", "", "", "");
+            AddTaskTemplate(0, Utils.getString("quicktask.template.important"), 0, 1, "rel:today:1;rel:today:1", "", "", "");
+            AddTaskTemplate(0, Utils.getString("quicktask.template.completed"), 100, 0, ";rel:today:1", "", "", "");
 
             // Add values for Topic Width dialog
             AddTopicWidth("numMainWidth", 0, 64, 1);

@@ -279,7 +279,7 @@ namespace Bubbles
                 return;
             }
 
-            // There are topics seleted
+            // There are topics selected
 
             // Enable Task Info stick controls if they are disabled
             if (!m_TaskInfo.pPriority.Enabled) EnableTaskInfoControls();
@@ -291,6 +291,8 @@ namespace Bubbles
         public static void SetDates2()
         {
             Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
+            if (t == null) return;
+
             DateTime startdate = t.Task.StartDate, duedate = t.Task.DueDate;
             bool startequal = true, dueequal = true;
 
@@ -392,7 +394,7 @@ namespace Bubbles
             foreach (System.Windows.Forms.Control c in m_TaskInfo.Controls)
             {
                 if (c.Name != "pictureHandle" && c.Name != "Manage" && 
-                    c.Name != "pResources" && c.Name != "pQuickTask")
+                    c.Name != "pResources" && c.Name != "pQuickTask" && c.Name != "pRemoveTaskInfo")
                 {
                     c.Enabled = enable;
                 }

@@ -329,7 +329,8 @@ namespace Bubbles
                     dtpStartDate.Visible = true;
                     cbStartDatePeriod.SelectedIndex = 0;
                     numStartDate.Enabled = false;
-                    pStartPlace.Image = pCalendar.Image; pStartPlace.Tag = "calendar";
+                    pStartPlace.Image = pPeriod.Image; pStartPlace.Tag = "period";
+                    toolTip1.SetToolTip(pStartPlace, Utils.getString("TaskTemplateDlg.relativedate.tooltip"));
                 }
                 if (chDueDate.Checked)
                 {
@@ -352,8 +353,9 @@ namespace Bubbles
                 {
                     dtpDueDate.Visible = true;
                     cbDueDatePeriod.SelectedIndex = 0;
-                    numDueDate.Enabled = false;
-                    pDuePlace.Image = pCalendar.Image; pDuePlace.Tag = "calendar";
+                    pDuePlace.Image = pPeriod.Image; pDuePlace.Tag = "period";
+                    toolTip1.SetToolTip(pDuePlace, Utils.getString("TaskTemplateDlg.relativedate.tooltip"));
+
                 }
                 if (chResources.Checked)
                 {
@@ -565,10 +567,8 @@ namespace Bubbles
 
         private void pIcon_Click(object sender, EventArgs e)
         {
-            using (SelectIconDlg _dlg = new SelectIconDlg(new List<string>()))
+            using (SelectIconDlg _dlg = new SelectIconDlg(new List<string>(), true))
             {
-                _dlg.aIconName = false;
-
                 if (_dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
                     return;
 

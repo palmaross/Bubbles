@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>12, 11</value>
+    <value>3, 10</value>
   </metadata>
   <metadata name="cmsDuration.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>207, 8</value>
+    <value>202, 16</value>
   </metadata>
   <metadata name="helpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>97, 11</value>
+    <value>86, 11</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="Manage.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -159,7 +159,7 @@
 </value>
   </data>
   <metadata name="cmsCommon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>323, 14</value>
+    <value>311, 13</value>
   </metadata>
   <data name="pPriority.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -217,11 +217,11 @@
   </data>
   <data name="pQuickTask.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vAAADrwBlbxySQAAAJVJREFUOE9j+P//PxyvXbPmPwgjiyFjbPIoChoaGv6DMLIYMsYmz7Bv716wIDkY
-        pBds6sPFsf8/LQsgCYP0gPSCDcCmgBgMN4ASDDaAXEDQgJ8/vqNgdEDQgJpzef+TloSTbsC2n6vBmGwD
-        YBrRMTrAaQDMRrJdQLIB379jShID4AZMnz6dLEPABgBpsCHk4P///zMAAMltPV9bAlYUAAAAAElFTkSu
-        QmCC
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vQAADr0BR/uQrQAAAK9JREFUOE9j+A8D68EAykECaOIIDQ1gAOUgATRxhv3790OEiAFAxQxA6uHi2E/L
+        AggioDKgYpAGNAk8CKqBJADSAPUOEYDaGr7+/HLk7gEoBwzwaQCqrt5clLUyHsoHAywaNlxcvfjUXIjq
+        zBVxD9/dh0rAALoGoBuSloQDlaKpBgpCGFicBNGDZjaKhu/fv0M4WAFQKTICaZg+fTp+PUAAVAphEEh8
+        EEVAANXw/z8AI5ZebLXI/lQAAAAASUVORK5CYII=
 </value>
   </data>
   <data name="pRemoveTaskInfo.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -249,13 +249,13 @@
 </value>
   </data>
   <metadata name="cmsDates.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>697, 12</value>
+    <value>671, 18</value>
   </metadata>
   <metadata name="cmsTaskTemplates.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>432, 14</value>
+    <value>418, 14</value>
   </metadata>
-  <metadata name="cmsResources.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>568, 12</value>
+  <metadata name="cmsRemoveTaskInfo.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>753, 13</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>46</value>

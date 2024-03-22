@@ -35,7 +35,11 @@ namespace Bubbles
             // Rounded corners
             var attribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
             var preference = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
-            DwmSetWindowAttribute(this.Handle, attribute, ref preference, sizeof(uint));
+            try
+            {
+                // Works only on Windows 11!
+                DwmSetWindowAttribute(this.Handle, attribute, ref preference, sizeof(uint));
+            } catch { }
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;

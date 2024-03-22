@@ -460,7 +460,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                      <rows >
                         <_ >
                            <varname >Pathregkey</>
-                           <value >Software\PalmaRoss\Sticks</>
+                           <value >Software\PalmaRoss\WowStix</>
                            <if ></>
                            <comm ></>
                         </>

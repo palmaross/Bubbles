@@ -67,6 +67,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddIconGroupDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddIconGroupDlg.Designer.cs">
+      <DependentUpon>AddIconGroupDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="AddTopicTemplateDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,12 +123,7 @@
     <Compile Include="ManageConfigsDlg.Designer.cs">
       <DependentUpon>ManageConfigsDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="ManageResourceIcons.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ManageResourceIcons.Designer.cs">
-      <DependentUpon>ManageResourceIcons.cs</DependentUpon>
-    </Compile>
+    <Compile Include="MapMarkers.cs" />
     <Compile Include="MyDateTimePicker.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -780,6 +781,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AddIconGroupDlg.resx">
+      <DependentUpon>AddIconGroupDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AddTopicTemplateDlg.resx">
       <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -803,9 +807,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ManageConfigsDlg.resx">
       <DependentUpon>ManageConfigsDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ManageResourceIcons.resx">
-      <DependentUpon>ManageResourceIcons.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MyDateTimePicker.resx">
       <DependentUpon>MyDateTimePicker.cs</DependentUpon>

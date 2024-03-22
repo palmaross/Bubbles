@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Mindjet.MindManager.Interop;
 using PRAManager;
@@ -10,13 +11,19 @@ namespace Bubbles
 {
     public partial class SelectIconDlg : Form
     {
-        public SelectIconDlg(List<string> filenames)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filenames">Filenames of icons of the Icon stick</param>
+        /// <param name="tasktemplate">If dialog is called from TaskTemplateDlg</param>
+        public SelectIconDlg(List<string> filenames, bool tasktemplate = false)
         {
             InitializeComponent();
 
             Text = Utils.getString("SelectIconDlg.caption");
 
             FileNames = filenames;
+            taskTemplate = tasktemplate;
 
             imageList1.Images.Add(Image.FromFile(Utils.ImagesPath + "folder.png"));
             space = pSpace.Width;
@@ -40,9 +47,23 @@ namespace Bubbles
 
         private void ListDirectory(TreeView treeView, string path)
         {
-            //treeView.Nodes.Clear();
+            if (!taskTemplate)
+            {
+                var directoryNode = new TreeNode()
+                {
+                    ImageIndex = 0,
+                    SelectedImageIndex = 0,
+                    Tag = "PP",
+                    Text = Utils.getString("SelectIconDlg.PriPro")
+                };
+                treeView.Nodes.Add(directoryNode);
+            }
+
             var rootDirectoryInfo = new DirectoryInfo(path);
             treeView.Nodes.Add(CreateDirectoryNode(rootDirectoryInfo));
+
+            if (!taskTemplate)
+                treeView.SelectedNode = treeView.Nodes[1];
         }
 
         private TreeNode CreateDirectoryNode(DirectoryInfo directoryInfo)
@@ -70,32 +91,41 @@ namespace Bubbles
             panel1.Controls.Clear();
             txtIconName.Visible = false;
             string path = e.Node.Tag.ToString();
-            DirectoryInfo di = new DirectoryInfo(path);
 
-            //locX += space; locY += space;
-            int i = 0;
-            foreach (var file in di.GetFiles())
+            if (path == "PP")
             {
-                i++;
-                PictureBox icon = new PictureBox
-                {
-                    Location = new Point(locX, locY),
-                    Width = pBox.Width, Height = pBox.Height,
-                    SizeMode = PictureBoxSizeMode.Zoom,
-                    Image = Image.FromFile(file.FullName),
-                    Name = file.FullName
-                };
-                panel1.Controls.Add(icon);
-                icon.MouseClick += Icon_MouseClick;
+                panel1.Controls.Add(panelPP);
+                panelPP.Visible = true;
+            }
+            else
+            {
+                DirectoryInfo di = new DirectoryInfo(path);
 
-                if (i == 6) // 6 icons in row
+                int i = 0;
+                foreach (var file in di.GetFiles())
                 {
-                    locX = 0;
-                    locY += pBox.Height + space;
-                    i = 0;
+                    i++;
+                    PictureBox icon = new PictureBox
+                    {
+                        Location = new Point(locX, locY),
+                        Width = pBox.Width,
+                        Height = pBox.Height,
+                        SizeMode = PictureBoxSizeMode.Zoom,
+                        Image = Image.FromFile(file.FullName),
+                        Name = file.FullName
+                    };
+                    panel1.Controls.Add(icon);
+                    icon.MouseClick += Icon_MouseClick;
+
+                    if (i == 6) // 6 icons in row
+                    {
+                        locX = 0;
+                        locY += pBox.Height + space;
+                        i = 0;
+                    }
+                    else
+                        locX += pBox.Width + space;
                 }
-                else
-                    locX += pBox.Width + space;
             }
             locX = 0;
             locY = 0;
@@ -105,11 +135,20 @@ namespace Bubbles
         {
             PictureBox icon = sender as PictureBox;
             iconPath = icon.Name;
-            string filename = Path.GetFileNameWithoutExtension(iconPath);
+            string filename;
+
+            if (iconPath.StartsWith("pr")) // Priority or Progress icon
+            {
+                filename = "pripro" + iconPath;
+                iconPath = Utils.dllPath + "Images\\" + iconPath + ".png";
+            }
+            else
+                filename = Path.GetFileNameWithoutExtension(iconPath);
 
             foreach (var _filename in FileNames) // проверим, есть ли в пузыре этот значок
             {
-                if (_filename == filename + ".ico" || // custom icon
+                if (_filename == filename || // Priority or Progress
+                    _filename == filename + ".ico" || // custom icon
                     _filename == "stock" + filename) // stock icon
                 {
                     MessageBox.Show(Utils.getString("float_icons.iconexists"));
@@ -117,22 +156,49 @@ namespace Bubbles
                 }
             }
 
-            if (aIconName)
+            if (!taskTemplate) // This dialog is called from Icon stick
             {
-                txtIconName.Visible = true;
-                txtIconName.BringToFront();
+                if (ModifierKeys == Keys.Control)
+                {
+                    if (SelectedIcons.Keys.Contains(icon))
+                    {
+                        SelectedIcons.Remove(icon);
+                        icon.BackColor = SystemColors.Control;
+                        return;
+                    }
+                    else
+                        SelectedIcons.Add(icon, iconPath);
 
-                int locx = panel1.Location.X + icon.Location.X;
-                int locy = panel1.Location.Y + icon.Location.Y + icon.Height;
-                if (locx > panel1.Location.X + panel1.Width - txtIconName.Width)
-                    locx = panel1.Location.X + panel1.Width - txtIconName.Width;
+                    icon.BackColor = SystemColors.Highlight;
+                }
+                else
+                {
+                    foreach (PictureBox pb in SelectedIcons.Keys.Reverse())
+                    {
+                        pb.BackColor = SystemColors.Control;
+                        SelectedIcons.Remove(pb);
+                    }
 
-                txtIconName.Text = Path.GetFileNameWithoutExtension(icon.Name);
-                txtIconName.Location = new Point(locx, locy);
-                txtIconName.Focus();
-                txtIconName.SelectAll();
+                    icon.BackColor = SystemColors.Highlight;
+                    SelectedIcons.Add(icon, iconPath);
+                }
+
+                //txtIconName.Visible = true;
+                //txtIconName.BringToFront();
+
+                //// Get name textbox location
+                //int locx = panel1.Location.X + icon.Location.X;
+                //int locy = panel1.Location.Y + icon.Location.Y + icon.Height;
+                //if (locx > panel1.Location.X + panel1.Width - txtIconName.Width)
+                //    locx = panel1.Location.X + panel1.Width - txtIconName.Width;
+
+                //// Show name textbox
+                //txtIconName.Text = Path.GetFileNameWithoutExtension(icon.Name);
+                //txtIconName.Location = new Point(locx, locy);
+                //txtIconName.Focus();
+                //txtIconName.SelectAll();
             }
-            else
+            else // This dialog is called from TaskTemplate dialog
                 DialogResult = DialogResult.OK;
         }
 
@@ -150,8 +216,11 @@ namespace Bubbles
         public string iconPath = "";
         public string iconName = "";
 
-        public bool aIconName = true;
+        bool taskTemplate = false;
 
+        /// <summary>Filenames of stick icons. To try the icon exists in the stick</summary>
         private List<string> FileNames = new List<string>();
+        /// <summary>Filenames of the selected here icons.</summary>
+        public Dictionary<PictureBox, string> SelectedIcons = new Dictionary<PictureBox, string>();
     }
 }

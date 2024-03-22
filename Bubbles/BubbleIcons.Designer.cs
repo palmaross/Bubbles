@@ -34,12 +34,7 @@
             this.cmsManage = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.BI_new = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_removeallfromtopic = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.BI_group = new System.Windows.Forms.ToolStripMenuItem();
-            this.BI_mutex = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_addtomap = new System.Windows.Forms.ToolStripMenuItem();
-            this.BI_getfrommap = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.label1 = new System.Windows.Forms.Label();
             this.Manage = new System.Windows.Forms.PictureBox();
@@ -66,14 +61,9 @@
             this.cmsManage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.BI_new,
             this.BI_removeallfromtopic,
-            this.toolStripSeparator1,
-            this.BI_group,
-            this.BI_mutex,
-            this.BI_addtomap,
-            this.BI_getfrommap,
-            this.toolStripSeparator2});
+            this.BI_addtomap});
             this.cmsManage.Name = "contextMenuStrip1";
-            this.cmsManage.Size = new System.Drawing.Size(226, 170);
+            this.cmsManage.Size = new System.Drawing.Size(226, 92);
             // 
             // BI_new
             // 
@@ -87,39 +77,11 @@
             this.BI_removeallfromtopic.Size = new System.Drawing.Size(225, 22);
             this.BI_removeallfromtopic.Text = "Удалить все значки на теме";
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(222, 6);
-            // 
-            // BI_group
-            // 
-            this.BI_group.Name = "BI_group";
-            this.BI_group.Size = new System.Drawing.Size(225, 22);
-            this.BI_group.Text = "Group";
-            // 
-            // BI_mutex
-            // 
-            this.BI_mutex.Name = "BI_mutex";
-            this.BI_mutex.Size = new System.Drawing.Size(225, 22);
-            this.BI_mutex.Text = "Mutually Exclusive";
-            // 
             // BI_addtomap
             // 
             this.BI_addtomap.Name = "BI_addtomap";
             this.BI_addtomap.Size = new System.Drawing.Size(225, 22);
             this.BI_addtomap.Text = "Add to Map";
-            // 
-            // BI_getfrommap
-            // 
-            this.BI_getfrommap.Name = "BI_getfrommap";
-            this.BI_getfrommap.Size = new System.Drawing.Size(225, 22);
-            this.BI_getfrommap.Text = "Get from Map";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(222, 6);
             // 
             // label1
             // 
@@ -232,11 +194,6 @@
         public System.Windows.Forms.PictureBox pictureHandle;
         public System.Windows.Forms.PictureBox Manage;
         private System.Windows.Forms.PictureBox p1;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem BI_group;
-        private System.Windows.Forms.ToolStripMenuItem BI_mutex;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem BI_addtomap;
-        private System.Windows.Forms.ToolStripMenuItem BI_getfrommap;
     }
 }

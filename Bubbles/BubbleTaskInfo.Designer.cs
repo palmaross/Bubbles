@@ -63,7 +63,7 @@
             this.pDueDate = new System.Windows.Forms.MaskedTextBox();
             this.panelDuration = new System.Windows.Forms.Panel();
             this.cmsTaskTemplates = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.cmsResources = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsRemoveTaskInfo = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsDuration.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
@@ -232,7 +232,7 @@
             this.pRemoveTaskInfo.TabIndex = 87;
             this.pRemoveTaskInfo.TabStop = false;
             this.pRemoveTaskInfo.Tag = "1";
-            this.pRemoveTaskInfo.Click += new System.EventHandler(this.pRemoveTaskInfo_Click);
+            this.pRemoveTaskInfo.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pRemoveTaskInfo_MouseClick);
             // 
             // p2
             // 
@@ -319,7 +319,7 @@
             this.Dates_nextweek});
             this.cmsDates.Name = "cmsDates";
             this.cmsDates.ShowImageMargin = false;
-            this.cmsDates.Size = new System.Drawing.Size(169, 158);
+            this.cmsDates.Size = new System.Drawing.Size(169, 180);
             // 
             // Dates_today
             // 
@@ -403,10 +403,11 @@
             this.cmsTaskTemplates.ShowImageMargin = false;
             this.cmsTaskTemplates.Size = new System.Drawing.Size(36, 4);
             // 
-            // cmsResources
+            // cmsRemoveTaskInfo
             // 
-            this.cmsResources.Name = "cmsResources";
-            this.cmsResources.Size = new System.Drawing.Size(61, 4);
+            this.cmsRemoveTaskInfo.Name = "cmsRemoveTskInfo";
+            this.cmsRemoveTaskInfo.ShowCheckMargin = true;
+            this.cmsRemoveTaskInfo.Size = new System.Drawing.Size(83, 4);
             // 
             // BubbleTaskInfo
             // 
@@ -482,7 +483,6 @@
         public System.Windows.Forms.MaskedTextBox pDueDate;
         public System.Windows.Forms.Panel panelDueDate;
         private System.Windows.Forms.ContextMenuStrip cmsTaskTemplates;
-        private System.Windows.Forms.ContextMenuStrip cmsResources;
         private System.Windows.Forms.ContextMenuStrip cmsDates;
         private System.Windows.Forms.ToolStripMenuItem Dates_today;
         private System.Windows.Forms.ToolStripMenuItem Dates_tomorrow;
@@ -491,5 +491,6 @@
         private System.Windows.Forms.ToolStripMenuItem Dates_today_tomorrow;
         private System.Windows.Forms.ToolStripMenuItem Dates_tomorrow_tomorrow;
         private System.Windows.Forms.ToolStripMenuItem Dates_thisweek;
+        private System.Windows.Forms.ContextMenuStrip cmsRemoveTaskInfo;
     }
 }

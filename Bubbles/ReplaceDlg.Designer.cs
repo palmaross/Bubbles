@@ -43,6 +43,8 @@
             this.minSize = new System.Windows.Forms.Label();
             this.lblTopicCount = new System.Windows.Forms.Label();
             this.linkReset = new System.Windows.Forms.LinkLabel();
+            this.cbKeepFormatting = new System.Windows.Forms.CheckBox();
+            this.lblReplace = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // rbtnSelectedTopics
@@ -69,15 +71,15 @@
             // 
             // txtText1
             // 
-            this.txtText1.Location = new System.Drawing.Point(12, 40);
+            this.txtText1.Location = new System.Drawing.Point(66, 38);
             this.txtText1.Name = "txtText1";
-            this.txtText1.Size = new System.Drawing.Size(235, 20);
+            this.txtText1.Size = new System.Drawing.Size(182, 20);
             this.txtText1.TabIndex = 2;
             // 
             // labelWith
             // 
             this.labelWith.AutoSize = true;
-            this.labelWith.Location = new System.Drawing.Point(12, 63);
+            this.labelWith.Location = new System.Drawing.Point(13, 83);
             this.labelWith.Name = "labelWith";
             this.labelWith.Size = new System.Drawing.Size(26, 13);
             this.labelWith.TabIndex = 3;
@@ -85,15 +87,15 @@
             // 
             // txtText2
             // 
-            this.txtText2.Location = new System.Drawing.Point(12, 81);
+            this.txtText2.Location = new System.Drawing.Point(66, 79);
             this.txtText2.Name = "txtText2";
-            this.txtText2.Size = new System.Drawing.Size(235, 20);
+            this.txtText2.Size = new System.Drawing.Size(182, 20);
             this.txtText2.TabIndex = 4;
             // 
             // btnReplace
             // 
             this.btnReplace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnReplace.Location = new System.Drawing.Point(11, 256);
+            this.btnReplace.Location = new System.Drawing.Point(11, 244);
             this.btnReplace.Name = "btnReplace";
             this.btnReplace.Size = new System.Drawing.Size(75, 23);
             this.btnReplace.TabIndex = 5;
@@ -105,7 +107,7 @@
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(173, 256);
+            this.btnClose.Location = new System.Drawing.Point(173, 244);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 6;
@@ -116,7 +118,7 @@
             // btnSkip
             // 
             this.btnSkip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSkip.Location = new System.Drawing.Point(92, 256);
+            this.btnSkip.Location = new System.Drawing.Point(92, 244);
             this.btnSkip.Name = "btnSkip";
             this.btnSkip.Size = new System.Drawing.Size(75, 23);
             this.btnSkip.TabIndex = 11;
@@ -125,16 +127,16 @@
             // 
             // rtb
             // 
-            this.rtb.Location = new System.Drawing.Point(11, 140);
+            this.rtb.Location = new System.Drawing.Point(12, 161);
             this.rtb.Name = "rtb";
             this.rtb.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.rtb.Size = new System.Drawing.Size(235, 86);
+            this.rtb.Size = new System.Drawing.Size(235, 46);
             this.rtb.TabIndex = 13;
             this.rtb.Text = "";
             // 
             // linkGoToTopic
             // 
-            this.linkGoToTopic.Location = new System.Drawing.Point(146, 228);
+            this.linkGoToTopic.Location = new System.Drawing.Point(144, 216);
             this.linkGoToTopic.Name = "linkGoToTopic";
             this.linkGoToTopic.Size = new System.Drawing.Size(100, 13);
             this.linkGoToTopic.TabIndex = 14;
@@ -145,7 +147,7 @@
             // linkReplaceAll
             // 
             this.linkReplaceAll.AutoSize = true;
-            this.linkReplaceAll.Location = new System.Drawing.Point(11, 228);
+            this.linkReplaceAll.Location = new System.Drawing.Point(9, 216);
             this.linkReplaceAll.Name = "linkReplaceAll";
             this.linkReplaceAll.Size = new System.Drawing.Size(95, 13);
             this.linkReplaceAll.TabIndex = 15;
@@ -154,7 +156,7 @@
             // 
             // linkMore
             // 
-            this.linkMore.Location = new System.Drawing.Point(79, 104);
+            this.linkMore.Location = new System.Drawing.Point(80, 125);
             this.linkMore.Name = "linkMore";
             this.linkMore.Size = new System.Drawing.Size(88, 13);
             this.linkMore.TabIndex = 16;
@@ -166,9 +168,9 @@
             // 
             // minSize
             // 
-            this.minSize.Location = new System.Drawing.Point(77, 63);
+            this.minSize.Location = new System.Drawing.Point(78, 61);
             this.minSize.Name = "minSize";
-            this.minSize.Size = new System.Drawing.Size(136, 13);
+            this.minSize.Size = new System.Drawing.Size(102, 13);
             this.minSize.TabIndex = 17;
             this.minSize.Text = "minSize";
             this.minSize.Visible = false;
@@ -176,7 +178,7 @@
             // lblTopicCount
             // 
             this.lblTopicCount.AutoSize = true;
-            this.lblTopicCount.Location = new System.Drawing.Point(10, 124);
+            this.lblTopicCount.Location = new System.Drawing.Point(11, 145);
             this.lblTopicCount.Name = "lblTopicCount";
             this.lblTopicCount.Size = new System.Drawing.Size(82, 13);
             this.lblTopicCount.TabIndex = 18;
@@ -185,7 +187,7 @@
             // linkReset
             // 
             this.linkReset.AutoSize = true;
-            this.linkReset.Location = new System.Drawing.Point(113, 124);
+            this.linkReset.Location = new System.Drawing.Point(114, 145);
             this.linkReset.Name = "linkReset";
             this.linkReset.Size = new System.Drawing.Size(35, 13);
             this.linkReset.TabIndex = 19;
@@ -194,12 +196,33 @@
             this.linkReset.Text = "Reset";
             this.linkReset.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // cbKeepFormatting
+            // 
+            this.cbKeepFormatting.AutoSize = true;
+            this.cbKeepFormatting.Location = new System.Drawing.Point(13, 109);
+            this.cbKeepFormatting.Name = "cbKeepFormatting";
+            this.cbKeepFormatting.Size = new System.Drawing.Size(120, 17);
+            this.cbKeepFormatting.TabIndex = 20;
+            this.cbKeepFormatting.Text = "Keep text formatting";
+            this.cbKeepFormatting.UseVisualStyleBackColor = true;
+            // 
+            // lblReplace
+            // 
+            this.lblReplace.AutoSize = true;
+            this.lblReplace.Location = new System.Drawing.Point(13, 42);
+            this.lblReplace.Name = "lblReplace";
+            this.lblReplace.Size = new System.Drawing.Size(47, 13);
+            this.lblReplace.TabIndex = 21;
+            this.lblReplace.Text = "Replace";
+            // 
             // ReplaceDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(260, 291);
+            this.ClientSize = new System.Drawing.Size(260, 279);
+            this.Controls.Add(this.lblReplace);
+            this.Controls.Add(this.cbKeepFormatting);
             this.Controls.Add(this.linkReset);
             this.Controls.Add(this.lblTopicCount);
             this.Controls.Add(this.minSize);
@@ -244,5 +267,7 @@
         private System.Windows.Forms.Label minSize;
         private System.Windows.Forms.Label lblTopicCount;
         private System.Windows.Forms.LinkLabel linkReset;
+        private System.Windows.Forms.CheckBox cbKeepFormatting;
+        private System.Windows.Forms.Label lblReplace;
     }
 }

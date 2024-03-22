@@ -157,7 +157,7 @@
             // chPriority
             // 
             this.chPriority.AutoSize = true;
-            this.chPriority.Location = new System.Drawing.Point(12, 73);
+            this.chPriority.Location = new System.Drawing.Point(12, 74);
             this.chPriority.Name = "chPriority";
             this.chPriority.Size = new System.Drawing.Size(60, 17);
             this.chPriority.TabIndex = 5;
@@ -213,7 +213,7 @@
             // chIcon
             // 
             this.chIcon.AutoSize = true;
-            this.chIcon.Location = new System.Drawing.Point(11, 215);
+            this.chIcon.Location = new System.Drawing.Point(11, 216);
             this.chIcon.Name = "chIcon";
             this.chIcon.Size = new System.Drawing.Size(50, 17);
             this.chIcon.TabIndex = 9;
@@ -283,7 +283,7 @@
             // lblTag
             // 
             this.lblTag.AutoSize = true;
-            this.lblTag.Location = new System.Drawing.Point(214, 247);
+            this.lblTag.Location = new System.Drawing.Point(225, 247);
             this.lblTag.Name = "lblTag";
             this.lblTag.Size = new System.Drawing.Size(28, 13);
             this.lblTag.TabIndex = 23;

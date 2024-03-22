@@ -56,6 +56,28 @@ namespace Bubbles
             cmsDates.Items["Dates_nextweek"].Text = Utils.getString("quicktasktemplate.nextweek");
             cmsDates.ItemClicked += ContextMenu_ItemClicked;
 
+            ToolStripItem tsi = new ToolStripLabel(Utils.getString("taskinfo.cmsRemoveTaskInfo.Label"));
+            tsi.Font = new Font(tsi.Font, FontStyle.Bold);
+            cmsRemoveTaskInfo.Items.Add(tsi);
+
+            tsi = cmsRemoveTaskInfo.Items.Add(Utils.getString("taskinfo.Dates"));
+            tsi.Name = "TaskInfoDates"; cmsRemoveTaskInfo.Items.Add(tsi);
+            (tsi as ToolStripMenuItem).CheckOnClick = true;
+            (tsi as ToolStripMenuItem).Checked = true;
+            tsi = cmsRemoveTaskInfo.Items.Add(Utils.getString("taskinfo.Progress"));
+            tsi.Name = "TaskInfoProgress"; cmsRemoveTaskInfo.Items.Add(tsi);
+            (tsi as ToolStripMenuItem).CheckOnClick = true;
+            (tsi as ToolStripMenuItem).Checked = true;
+            tsi = cmsRemoveTaskInfo.Items.Add(Utils.getString("taskinfo.Priority"));
+            tsi.Name = "TaskInfoPriority"; cmsRemoveTaskInfo.Items.Add(tsi);
+            (tsi as ToolStripMenuItem).CheckOnClick = true;
+            tsi = cmsRemoveTaskInfo.Items.Add(Utils.getString("taskinfo.Resources"));
+            tsi.Name = "TaskInfoResources"; cmsRemoveTaskInfo.Items.Add(tsi);
+            (tsi as ToolStripMenuItem).CheckOnClick = true;
+
+            cmsRemoveTaskInfo.ItemClicked += ContextMenu_ItemClicked;
+            cmsRemoveTaskInfo.Closing += CmsRemoveTaskInfo_Closing;
+
             cmsCommon.ItemClicked += cmsCommon_ItemClicked;
             StickUtils.SetCommonContextMenu(cmsCommon, StickUtils.typetaskinfo);
 
@@ -98,10 +120,12 @@ namespace Bubbles
             // Quick Task button context menu
             cmsTaskTemplates.ItemClicked += ContextMenu_ItemClicked;
             PopulateQuickTasks();
+        }
 
-            // Resources button context menu
-            cmsResources.ItemClicked += ContextMenu_ItemClicked;
-            PopulateResources();
+        private void CmsRemoveTaskInfo_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        {
+            if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
+                e.Cancel = true;
         }
 
         void PopulateQuickTasks()
@@ -115,7 +139,7 @@ namespace Bubbles
 
             using (SticksDB db = new SticksDB())
             {
-                DataTable dt = db.ExecuteQuery("select * from TASKTEMPLATES order by name");
+                DataTable dt = db.ExecuteQuery("select * from TASKTEMPLATES order by prime DESC, name");
 
                 foreach (DataRow row in dt.Rows)
                 {
@@ -131,61 +155,12 @@ namespace Bubbles
             }
         }
 
-        void PopulateResources()
-        {
-            cmsResources.Items.Clear();
-
-            ToolStripItem tsi = cmsResources.Items.Add(Utils.getString("taskinfo.resources.window"));
-            tsi.Name = "ManageResources";
-            StickUtils.SetContextMenuImage(tsi, "resources.png");
-
-            ToolStripTextBox tst = new ToolStripTextBox { Name = "ManualResource" };
-            cmsResources.Items.Add(tst);
-            tst.AutoSize = false; tst.BorderStyle = BorderStyle.FixedSingle;
-            tst.Size = new Size(panelStartDate.Width * 4, p100.Height);
-            tst.Text = "Resource Name";
-            tst.ToolTipText = "Type resource name and press ENTER\r\nto assign resource to topic";
-            tst.ForeColor = SystemColors.GrayText;
-            tst.MouseDown += ResourceTextBox_MouseDown;
-            tst.KeyDown += ResourceTextBox_KeyDown;
-            StickUtils.SetContextMenuImage(tst, "edit.png"); // ?? doesn't set...
-
-            tsi = cmsResources.Items.Add(Utils.getString("TaskTemplateDlg.chResources"));
-            tsi.Name = "label"; tsi.Font = new Font(tsi.Font, FontStyle.Bold);
-
-            using (SticksDB db = new SticksDB())
-            {
-                DataTable dt = db.ExecuteQuery("select * from RESOURCES order by name");
-
-                foreach (DataRow row in dt.Rows)
-                {
-                    tsi = cmsResources.Items.Add(row["name"].ToString());
-                    tsi.Name = "Resource";
-                }
-            }
-        }
-
         private void ResourceTextBox_MouseDown(object sender, MouseEventArgs e)
         {
             if ((sender as ToolStripTextBox).ForeColor == SystemColors.GrayText)
             {
                 (sender as ToolStripTextBox).Text = "";
                 (sender as ToolStripTextBox).ForeColor = SystemColors.WindowText;
-            }
-        }
-
-        private void ResourceTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                string resources = (sender as ToolStripTextBox).Text.Trim();
-                if (resources == "") return;
-
-                string[] listResources = resources.Split(',').Select(s => s.Trim()).ToArray();
-                ResourcesDlg.SetResources(listResources);
-
-                e.Handled = true; // to avoid the "ding" sound
-                e.SuppressKeyPress = true;
             }
         }
 
@@ -206,25 +181,6 @@ namespace Bubbles
                     dlg.ShowDialog();
 
                 PopulateQuickTasks();
-            }
-            else if (e.ClickedItem.Name == "Resource")
-            {
-                string[] listResources = new string[1] { e.ClickedItem.Text };
-                ResourcesDlg.SetResources(listResources);
-            }
-            else if (e.ClickedItem.Name == "ManageResources")
-            {
-                if (BubblesButton.m_Resources == null)
-                    BubblesButton.m_Resources = new ResourcesDlg();
-
-                if (BubblesButton.m_Resources.Visible)
-                    BubblesButton.m_Resources.Hide();
-                else
-                {
-                    BubblesButton.m_Resources.Location =
-                        StickUtils.GetChildLocation(this, BubblesButton.m_Resources.Bounds, orientation, "resources");
-                    BubblesButton.m_Resources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-                }
             }
             else if (e.ClickedItem.Name.StartsWith("Dates_"))
             {
@@ -592,17 +548,34 @@ namespace Bubbles
         /// <summary>True - Duration was set by MM </summary>
         public bool MMDuration = false;
 
-        private void pRemoveTaskInfo_Click(object sender, EventArgs e)
+        private void pRemoveTaskInfo_MouseClick(object sender, MouseEventArgs e)
         {
-            if (MMUtils.ActiveDocument != null && MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0)
+            if (e.Button == MouseButtons.Left)
             {
-                DateTime dt = DateTime.Now.Date;
-
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                if (MMUtils.ActiveDocument != null && MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0)
                 {
-                    t.Task.StartDate = MMUtils.NULLDATE; t.Task.DueDate = MMUtils.NULLDATE;
-                    t.Task.Complete = -1;
+                    foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                    {
+                        if ((cmsRemoveTaskInfo.Items["TaskInfoDates"] as ToolStripMenuItem).Checked) {
+                            t.Task.StartDate = MMUtils.NULLDATE; t.Task.DueDate = MMUtils.NULLDATE; }
+
+                        if ((cmsRemoveTaskInfo.Items["TaskInfoProgress"] as ToolStripMenuItem).Checked)
+                            t.Task.Complete = -1;
+
+                        if ((cmsRemoveTaskInfo.Items["TaskInfoPriority"] as ToolStripMenuItem).Checked)
+                            t.Task.Priority = 0;
+
+                        if ((cmsRemoveTaskInfo.Items["TaskInfoResources"] as ToolStripMenuItem).Checked)
+                            t.Task.Resources = "";
+                    }
                 }
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                foreach (ToolStripItem item in cmsRemoveTaskInfo.Items)
+                    item.Visible = true;
+
+                cmsRemoveTaskInfo.Show(Cursor.Position);
             }
         }
 
@@ -639,12 +612,16 @@ namespace Bubbles
 
             foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
             {
+                CheckTopicTaskInfo(t);
+
                 t.Task.Complete = QuickTask.Progress;
                 t.Task.Priority = GetPriority(QuickTask.Priority);
-                DateTime? dt = Utils.GetDate(startdate);
-                if (dt != null) t.Task.StartDate = (DateTime)dt;
-                dt = Utils.GetDate(duedate);
-                if (dt != null) t.Task.DueDate = (DateTime)dt;
+                DateTime? dtstart = Utils.GetDate(startdate);
+                DateTime? dtdue = Utils.GetDate(duedate);
+                if (dtstart != null && !(dtstart == Utils.NULLDATE && t.Task.HasDueDate))
+                    t.Task.StartDate = (DateTime)dtstart;
+                if (dtdue != null && !(dtdue == Utils.NULLDATE && t.Task.HasStartDate)) 
+                    t.Task.DueDate = (DateTime)dtdue;
                 if (QuickTask.Resources != "")
                     t.Task.Resources = QuickTask.Resources;
                 if (QuickTask.aIcon != "")
@@ -653,13 +630,36 @@ namespace Bubbles
                 {
                     string[] tags = QuickTask.Tags.Split(';');
                     string[] tag1 = tags[0].Split(':');
-                    Utils.AddTagToTopic(t, tag1[1], "", tag1[0], "");
+                    MapMarkers.AddTagToTopic(t, tag1[1], "", tag1[0], "");
 
                     if (tags.Length > 1)
                     {
                         string[] tag2 = tags[1].Split(':');
-                        Utils.AddTagToTopic(t, tag2[1], "", tag2[0], "");
+                        MapMarkers.AddTagToTopic(t, tag2[1], "", tag2[0], "");
                     }
+                }
+            }
+        }
+
+        void CheckTopicTaskInfo(Topic t)
+        {
+            if (t.Task.Priority != 0 && QuickTask.Priority == 0 ||
+                (t.Task.Complete >= 0 && QuickTask.Progress == -1) ||
+                ((t.Task.StartDate != Utils.NULLDATE || t.Task.DueDate != Utils.NULLDATE) && QuickTask.Dates == "") ||
+                (t.Task.Resources != "" && QuickTask.Resources == ""))
+            {
+                string text = t.Text;
+                if (text.Length > 40) text = text.Substring(0, 37) + "...";
+
+                if (MessageBox.Show(String.Format(Utils.getString("quicktask.DeleteTaskInfo"), text),
+                    Utils.getString("quicktask.DeleteTaskInfo.title"), 
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    if (t.Task.Priority != 0) t.Task.Priority = 0;
+                    if (t.Task.Complete >= 0) t.Task.Complete = -1;
+                    if (t.Task.Resources != "") t.Task.Resources = "";
+                    if (t.Task.StartDate != Utils.NULLDATE) t.Task.StartDate = Utils.NULLDATE;
+                    if (t.Task.DueDate != Utils.NULLDATE) t.Task.DueDate = Utils.NULLDATE;
                 }
             }
         }
@@ -671,7 +671,7 @@ namespace Bubbles
                 MmStockIcon icon = BubbleIcons.StockIconFromString(fileName);
                 if (icon != 0)
                 {
-                    Utils.GetIcon(icon, "", "", "");
+                    MapMarkers.GetIcon(icon, "", "", "");
 
                     if (!t.AllIcons.ContainsStockIcon(icon))
                         t.AllIcons.AddStockIcon(icon);
@@ -683,7 +683,7 @@ namespace Bubbles
                 if (System.IO.File.Exists(path))
                 {
                     string signature = MMUtils.MindManager.Utilities.GetCustomIconSignature(path);
-                    Utils.GetIcon(0, signature, "", path);
+                    MapMarkers.GetIcon(0, signature, "", path);
 
                     if (!t.AllIcons.ContainsCustomIcon(signature))
                         t.AllIcons.AddCustomIconFromMap(signature);
@@ -725,13 +725,6 @@ namespace Bubbles
         private void pResources_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-            {
-                foreach (ToolStripItem item in cmsResources.Items)
-                    item.Visible = true;
-
-                cmsResources.Show(Cursor.Position);
-            }
-            else if (e.Button == MouseButtons.Right)
             {
                 if (BubblesButton.m_Resources == null)
                     BubblesButton.m_Resources = new ResourcesDlg();

@@ -19,7 +19,9 @@ namespace Bubbles
             Text = Utils.getString("ReplaceDlg.Title");
             rbtnWholeMap.Text = Utils.getString("ReplaceDlg.rbtnWholeMap");
             rbtnSelectedTopics.Text = Utils.getString("ReplaceDlg.rbtnSelectedTopics");
+            lblReplace.Text = Utils.getString("ReplaceDlg.btnReplace1");
             labelWith.Text = Utils.getString("ReplaceDlg.labelWith");
+            cbKeepFormatting.Text = Utils.getString("ReplaceDlg.cbKeepFormatting");
             linkReplaceAll.Text = Utils.getString("ReplaceDlg.linkReplaceAll");
             linkGoToTopic.Text = Utils.getString("ReplaceDlg.linkGoToTopic");
             btnSkip.Text = Utils.getString("ReplaceDlg.btnSkip");
@@ -59,11 +61,46 @@ namespace Bubbles
 
                     if (text.Contains(text1))
                     {
-                        if (textRTF.Contains(text1))
-                            topic.Title.TextRTF = textRTF.Replace(text1, text2);
-                        else // unicode
+                        if (!cbKeepFormatting.Checked)
                         {
+                            topic.Text = topic.Text.Replace(text1, text2);
+                            continue;
+                        }
 
+                        if (textRTF.Contains(text1)) // standart text (utf-8, mostly English)
+                            topic.Title.TextRTF = textRTF.Replace(text1, text2);
+                        else // not Utf-8
+                        {
+                            // get "coded" text1
+                            rtb.Clear(); rtb.Text = text1; rtb.SelectAll();
+                            string selected = rtb.SelectedRtf;
+                            string text1Rtf = selected;
+                            int i = text1Rtf.IndexOf("\\fs16") + 5;
+                            if (i < 5) continue;
+                            int k = text1Rtf.LastIndexOf("}");
+                            if (k < i) continue;
+                            text1Rtf = text1Rtf.Substring(i, k - i);
+                            if (text1Rtf.StartsWith(" "))
+                                text1Rtf = text1Rtf.Substring(1);
+                            text1Rtf = text1Rtf.Replace("\\f1", "");
+
+                            if (textRTF.Contains(text1Rtf))
+                            {
+                                // get "coded" text2
+                                rtb.Clear(); rtb.Text = text2; rtb.SelectAll();
+                                selected = rtb.SelectedRtf;
+                                string text2Rtf = selected;
+                                i = text2Rtf.IndexOf("\\fs16") + 5;
+                                if (i < 5) continue;
+                                k = text2Rtf.LastIndexOf("}");
+                                if (k < i) continue;
+                                text2Rtf = text2Rtf.Substring(i, k - i);
+                                if (text2Rtf.StartsWith(" "))
+                                    text2Rtf = text2Rtf.Substring(1);
+                                text1Rtf = text1Rtf.Replace("\\f1", "");
+
+                                topic.Title.TextRTF = textRTF.Replace(text1Rtf, text2Rtf);
+                            }
                         }
                     }
                 }
@@ -191,7 +228,7 @@ namespace Bubbles
                 rtb.Visible = false;
                 linkMore.Text = Utils.getString("ReplaceDlg.linkMore1");
                 btnReplace.Width = btnSkip.Width + btnSkip.Height;
-                btnReplace.Text = Utils.getString("ReplaceDlg.btnReplace2");
+                btnReplace.Text = Utils.getString("ReplaceDlg.btnReplace1");
                 btnSkip.Visible = false;
                 lblTopicCount.Visible = false;
                 linkReset.Visible = false;
@@ -204,7 +241,7 @@ namespace Bubbles
                 rtb.Visible = true;
                 linkMore.Text = Utils.getString("ReplaceDlg.linkMore2");
                 btnReplace.Width = btnSkip.Width;
-                btnReplace.Text = Utils.getString("ReplaceDlg.btnReplace1");
+                btnReplace.Text = Utils.getString("ReplaceDlg.btnReplace2");
                 btnSkip.Visible = true;
                 lblTopicCount.Visible = true;
                 linkReset.Visible = true;

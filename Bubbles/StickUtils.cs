@@ -18,7 +18,6 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Clipboard = System.Windows.Forms.Clipboard;
-using static System.Windows.Forms.LinkLabel;
 
 namespace Bubbles
 {
@@ -933,6 +932,9 @@ namespace Bubbles
 
             ToolStripItem tsi = null;
 
+            tsi = cms.Items.Add(Utils.getString("contextmenu.stickoperations"));
+            tsi.Font = new Font(tsi.Font, FontStyle.Bold);
+
             if (stickType == typeicons || stickType == typesources || stickType == typebookmarks)
             {
                 tsi = cms.Items.Add(deleteall);
@@ -942,9 +944,6 @@ namespace Bubbles
                 if (stickType == typeicons || stickType == typetaskinfo)
                     tsi.ToolTipText = Utils.getString("contextmenu.clearstick.tooltip");
             }
-
-            tsi = cms.Items.Add(Utils.getString("contextmenu.stickoperations"));
-            tsi.Font = new Font(tsi.Font, FontStyle.Bold);
 
             tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.collapse"));
             tsi.Name = "BI_collapse";
@@ -1014,7 +1013,8 @@ namespace Bubbles
             {
                 // common comands popup
                 X = parent.Right - child.Width; // child right = parent right
-                if (popup == "getname" || popup == "resources" || popup == "bookmarks" || popup == "sources")
+                if (popup == "getname" || popup == "resources" || popup == "bookmarks" || 
+                    popup == "sources" || popup == "icons")
                     X = parent.Left; // child right = parent right
                 Y = parent.Bottom; // child top = parent bottom
 
@@ -1054,7 +1054,8 @@ namespace Bubbles
                 // common comands popup
                 X = parent.Right; // child left = parent right
                 Y = parent.Bottom - child.Height; // child bottom = parent bottom
-                if (popup == "getname" || popup == "resources" || popup == "bookmarks" || popup == "sources")
+                if (popup == "getname" || popup == "resources" || popup == "bookmarks" || 
+                    popup == "sources" || popup == "icons")
                     Y = parent.Top; // child top = parent top
 
                 //if (popup == "add")
