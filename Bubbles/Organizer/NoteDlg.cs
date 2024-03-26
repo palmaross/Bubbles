@@ -37,7 +37,7 @@ namespace Organizer
 
             int selectedIndex = 0, i = 1;
             // Fill comboboxes (groups, tags)
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from NOTEGROUPS order by name");
                 foreach (DataRow row in dt.Rows)
@@ -92,7 +92,7 @@ namespace Organizer
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     // Add new tags to the tag database
-                    using (SticksDB db = new SticksDB())
+                    using (StixDB db = new StixDB())
                     {
                         foreach (string tag in newTags)
                             db.ExecuteNonQuery("insert into NOTETAGS values(`" + tag + "`, '', 0);");
@@ -152,7 +152,7 @@ namespace Organizer
 
                 var group = cbGroups.SelectedItem as NoteGroupItem;
 
-                using (SticksDB db = new SticksDB())
+                using (StixDB db = new StixDB())
                     db.ExecuteNonQuery("update NOTES set " +
                         "name=`" + tbTitle.Text + "`, " +
                         "content=`" + tbContent.Text + "`, " +

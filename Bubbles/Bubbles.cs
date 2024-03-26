@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using PopupControl;
 using System.Linq;
+using System.Windows.Media.Imaging;
 
 namespace Bubbles
 {
@@ -37,6 +38,8 @@ namespace Bubbles
 
             m_bubbleSnippets = new BubbleSnippets();
             m_bubblesMenu = new MainMenuDlg();
+            m_StixBase = new StixBase(0, "H");
+            STICKS.Add(0, m_StixBase);
             commandPopup.Tag = 0; // Tag is a stick ID
 
             DocumentStorage.Subscribe(this);
@@ -54,7 +57,7 @@ namespace Bubbles
             InitializeTopicWidthDlg();
 
             DataTable dt;
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
                 dt = db.ExecuteQuery("select * from STICKS order by type");
 
             foreach (DataRow dr in dt.Rows)
@@ -66,29 +69,32 @@ namespace Bubbles
 
                 switch (dr["type"].ToString()) 
                 {
+                    case StickUtils.typebase:
+                        m_cmdBubbles_Click();
+                        break;
                     case StickUtils.typeicons:
-                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.pIcons, null);
+                        m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.pIcons, null);
                         break;
                     case StickUtils.typetaskinfo:
-                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.TaskInfo, null);
+                        m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.TaskInfo, null);
                         break;
                     case StickUtils.typeformat:
-                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.Format, null);
+                        m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.Format, null);
                         break;
                     case StickUtils.typesources:
-                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.MySources, null);
+                        m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.MySources, null);
                         break;
                     case StickUtils.typebookmarks:
-                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.Bookmarks, null);
+                        m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.Bookmarks, null);
                         break;
                     case StickUtils.typeaddtopic:
-                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.AddTopics, null);
+                        m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.AddTopics, null);
                         break;
-                    case StickUtils.typepaste:
-                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.Paste, null);
+                    case StickUtils.typetextops:
+                        m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.Paste, null);
                         break;
                     case StickUtils.typeorganizer:
-                        m_bubblesMenu.MenuIcon_Click(m_bubblesMenu.Organizer, null);
+                        m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.Organizer, null);
                         break;
                 }
             }
@@ -125,6 +131,18 @@ namespace Bubbles
 
         private void m_cmdBubbles_Click()
         {
+            if (m_StixBase.Visible)
+                m_StixBase.Hide();
+            else
+            {
+                m_StixBase.Location = new Point( MMUtils.MindManager.Left + m_StixBase.pStart.Width,
+                    MMUtils.MindManager.Top + MMUtils.MindManager.Height - m_StixBase.Height - m_StixBase.pStart.Width);
+
+                m_StixBase.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            }
+
+            return;
+
             if (m_bubblesMenu.Visible)
                 m_bubblesMenu.Hide();
             else
@@ -200,10 +218,10 @@ namespace Bubbles
             if (aArgs.target is Topic t)
             {
                 // Paste operation from stick
-                if (BubblePaste.pastetext)
+                if (BubbleTextOps.pastetext)
                 {
-                    if (!BubblePaste.PastedTopics.Contains(t))
-                        BubblePaste.PastedTopics.Add(t);
+                    if (!BubbleTextOps.PastedTopics.Contains(t))
+                        BubbleTextOps.PastedTopics.Add(t);
                 }
                 // Paste operation from MindManager.
                 else if (StickUtils.TopicAutoWidth) // Topic autowidth enabled
@@ -223,7 +241,7 @@ namespace Bubbles
 
         public override void onDocumentClipboardPasteOrDrop(MMEventArgs aArgs)
         {
-            if (BubblePaste.pastetext) return;
+            if (BubbleTextOps.pastetext) return;
             MMPaste = true;
         }
         bool MMPaste = false;
@@ -234,7 +252,7 @@ namespace Bubbles
             if (aArgs.target is Topic _t && aArgs.what == "text" && // topic text changed
                 StickUtils.TopicAutoWidth && // Topic AutoWidth enabled
                 MMPaste && // Text is pasted into topic via MindManager
-                !BubblePaste.pastetext) // to insure: it's not a BubblePaste stick operation
+                !BubbleTextOps.pastetext) // to insure: it's not a BubblePaste stick operation
             {
                 // Set topic width
                 StickUtils.TopicWidthList.Add(_t);
@@ -246,12 +264,12 @@ namespace Bubbles
 
             if (aArgs.what.Contains("notesxhtmldata"))
             {
-                if (aArgs.target is Topic t && BubblePaste.UserActionNotes)
+                if (aArgs.target is Topic t && BubbleTextOps.UserActionNotes)
                 {
-                    if (!BubblePaste.TopicsWithNotes.Contains(t.Guid))
-                        BubblePaste.TopicsWithNotes.Add(t.Guid);
+                    if (!BubbleTextOps.TopicsWithNotes.Contains(t.Guid))
+                        BubbleTextOps.TopicsWithNotes.Add(t.Guid);
                 }
-                BubblePaste.UserActionNotes = true;
+                BubbleTextOps.UserActionNotes = true;
                 return;
             }
 
@@ -415,7 +433,7 @@ namespace Bubbles
             List<int> mwidths = new List<int>();
             Dictionary<int, int> awidths = new Dictionary<int, int>();
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 DataTable dtWidths = db.ExecuteQuery("select * from TOPICWIDTHS");
 
@@ -554,6 +572,11 @@ namespace Bubbles
             m_bubblesMenu.Dispose();
             m_bubblesMenu = null;
 
+            if (m_StixBase.Visible)
+                m_StixBase.Hide();
+            m_StixBase.Dispose();
+            m_StixBase = null;
+
             if (m_Notes != null)
             {
                 m_Notes.Dispose();
@@ -585,11 +608,11 @@ namespace Bubbles
             HidePopup.Tick -= HidePopup_Tick;
             HidePopup.Dispose(); HidePopup = null;
 
-            BubblePaste.PasteOperations.Stop();
+            BubbleTextOps.PasteOperations.Stop();
             //BubblePaste.PasteOperations.Tick -= BubblePaste.PasteOperations_Tick;
-            BubblePaste.PasteOperations.Dispose(); BubblePaste.PasteOperations = null;
+            BubbleTextOps.PasteOperations.Dispose(); BubbleTextOps.PasteOperations = null;
 
-            BubblePaste.PastedTopics.Clear(); BubblePaste.SelectedTopics.Clear();
+            BubbleTextOps.PastedTopics.Clear(); BubbleTextOps.SelectedTopics.Clear();
 
             DocumentStorage.Unsubscribe(this);
 
@@ -616,6 +639,7 @@ namespace Bubbles
         public static ReplaceDlg m_ReplaceDlg;
 
         public static MainMenuDlg m_bubblesMenu = null;
+        public static StixBase m_StixBase = null;
 
         private Command m_cmdBubbles;
         private Mindjet.MindManager.Interop.Control m_ctrlBubbles;

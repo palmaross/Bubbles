@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using Clipboard = System.Windows.Forms.Clipboard;
+using Color = System.Drawing.Color;
 
 namespace Bubbles
 {
@@ -65,11 +66,9 @@ namespace Bubbles
 
             StickUtils.SetCommonContextMenu(cmsManage, StickUtils.typeicons);
 
-            cmsManage.Closing += ContextMenuStrip1_Closing;
-
             if (ID != 0) // if id = 0 - new stick is creating, ignore this step
             {
-                using (SticksDB db = new SticksDB())
+                using (StixDB db = new StixDB())
                 {
                     // Check if there is a group or no
                     DataTable dt = db.ExecuteQuery("select * from STICKS where id=" + ID + "");
@@ -138,15 +137,37 @@ namespace Bubbles
 
             if (collapsed) {
                 collapsed = false; Collapse(); }
+
+            // Apply scale factor
+            this.Paint += this_Paint; // paint the border depending on scale factor
+            scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
+            ScaleStick(100F, scaleFactor);
+        }
+        public void ScaleStick(float fromScale, float toScale)
+        {
+            if (fromScale == toScale) return;
+            if (toScale < 100 || toScale > 267) return;
+
+            float scale = 100F / fromScale;
+            if (scale != 1)
+                this.Scale(new SizeF(scale, scale)); // reset to 100%
+
+            this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
+            scaleFactor = toScale;
+
+            StickUtils.icondist = (int)(StickUtils.icondist * (toScale / 100));
+            MinLength = (int)(MinLength * (toScale / 100));
         }
 
-        private void ContextMenuStrip1_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+
+        private void this_Paint(object sender, PaintEventArgs e)
         {
-            if (groupclicked)
-            {
-                groupclicked = false;
-                e.Cancel = true;
-            }
+            if (scaleFactor < 125) return;
+            int width = 1;
+            //if (scaleFactor > 200) width = 2;
+            ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle,
+                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid,
+                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid);
         }
 
         private void BubbleIcons_MouseClick(object sender, MouseEventArgs e)
@@ -257,7 +278,7 @@ namespace Bubbles
                     toolTip1.SetToolTip(selectedIcon, name);
 
                     // Change title in the database
-                    using (SticksDB db = new SticksDB())
+                    using (StixDB db = new StixDB())
                         db.ExecuteNonQuery("update ICONS set name=`" + name + "` where filename=`" +
                             item.Path + "` and stickID=" + (int)this.Tag + "");
                 }
@@ -443,7 +464,7 @@ namespace Bubbles
             }
 
             IconItem item = new IconItem(iconName, fileName, order, iconPath);
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
                 db.AddIcon(iconName, fileName, order, (int)this.Tag);
 
             Icons.Insert(order - 1, item);
@@ -1098,6 +1119,7 @@ namespace Bubbles
         bool groupclicked = false;
 
         string StickName;
+        public float scaleFactor = 100;
 
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;

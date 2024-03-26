@@ -50,7 +50,7 @@ namespace Bubbles
             List<int> mwidths = new List<int>();
             Dictionary<int, int> awidths = new Dictionary<int, int>();
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 db.ExecuteNonQuery("update TOPICWIDTHS set " +
                     "_value=" + numMainWidth.Value +
@@ -128,7 +128,7 @@ namespace Bubbles
             StickUtils.AutoTopicWidths = awidths.OrderByDescending(key => key.Key).ToDictionary(pair => pair.Key, pair => pair.Value);
             StickUtils.MinAutoTopicWidth = StickUtils.AutoTopicWidths.Keys.Last();
 
-            (form as BubblePaste).PopulateTopicWidth();
+            (form as BubbleTextOps).PopulateTopicWidth();
         }
 
         private void lblMoreAuto_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

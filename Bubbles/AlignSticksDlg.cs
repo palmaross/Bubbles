@@ -37,7 +37,7 @@ namespace Bubbles
             listSticks.GridLines = true;
 
             // Fill stick list
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from STICKS order by type, name");
                 foreach (DataRow dr in dt.Rows)
@@ -48,7 +48,7 @@ namespace Bubbles
             }
 
             // Fill configuration combobox
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from CONFIGS order by name");
                 if (dt.Rows.Count > 0)
@@ -173,8 +173,8 @@ namespace Bubbles
                 case StickUtils.typebookmarks:
                     (stick as BubbleBookmarks).Rotate();
                     break;
-                case StickUtils.typepaste:
-                    (stick as BubblePaste).Rotate();
+                case StickUtils.typetextops:
+                    (stick as BubbleTextOps).Rotate();
                     break;
                 case StickUtils.typeorganizer:
                     (stick as BubbleOrganizer).Rotate();
@@ -201,8 +201,8 @@ namespace Bubbles
                 case StickUtils.typebookmarks:
                     (stick as BubbleBookmarks).Collapse(false, true);
                     break;
-                case StickUtils.typepaste:
-                    (stick as BubblePaste).Collapse(false, true);
+                case StickUtils.typetextops:
+                    (stick as BubbleTextOps).Collapse(false, true);
                     break;
                 case StickUtils.typeorganizer:
                     (stick as BubbleOrganizer).Collapse(false, true);
@@ -276,7 +276,7 @@ namespace Bubbles
                 string newName = txtConfigName.Text.Trim();
                 if (String.IsNullOrEmpty(newName)) return;
 
-                using (SticksDB db = new SticksDB())
+                using (StixDB db = new StixDB())
                 {
                     DataTable dt = db.ExecuteQuery("select * from CONFIGS where name=`" + newName + "`");
                     if (dt.Rows.Count > 0)

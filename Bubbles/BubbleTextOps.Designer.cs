@@ -1,6 +1,6 @@
 ﻿namespace Bubbles
 {
-    partial class BubblePaste
+    partial class BubbleTextOps
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BubblePaste));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BubbleTextOps));
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.PasteLink = new System.Windows.Forms.PictureBox();
@@ -340,7 +340,7 @@
             this.cmsTopicWidths.ShowCheckMargin = true;
             this.cmsTopicWidths.Size = new System.Drawing.Size(83, 4);
             // 
-            // BubblePaste
+            // BubbleTextOps
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -366,7 +366,7 @@
             this.Controls.Add(this.PasteNotes);
             this.Controls.Add(this.PasteLink);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "BubblePaste";
+            this.Name = "BubbleTextOps";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             ((System.ComponentModel.ISupportInitialize)(this.PasteLink)).EndInit();

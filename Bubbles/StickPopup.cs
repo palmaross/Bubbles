@@ -129,8 +129,8 @@ namespace Bubbles
                 case StickUtils.typeaddtopic:
                     (stick as BubbleAddTopic).Collapse();
                     break;
-                case StickUtils.typepaste:
-                    (stick as BubblePaste).Collapse();
+                case StickUtils.typetextops:
+                    (stick as BubbleTextOps).Collapse();
                     break;
                 case StickUtils.typeorganizer:
                     (stick as BubbleOrganizer).Collapse();
@@ -163,8 +163,8 @@ namespace Bubbles
                 case StickUtils.typeaddtopic:
                     (stick as BubbleAddTopic).Rotate();
                     break;
-                case StickUtils.typepaste:
-                    (stick as BubblePaste).Rotate();
+                case StickUtils.typetextops:
+                    (stick as BubbleTextOps).Rotate();
                     break;
                 case StickUtils.typeorganizer:
                     (stick as BubbleOrganizer).Rotate();
@@ -249,7 +249,7 @@ namespace Bubbles
             if (e.Button == MouseButtons.Left)
             {
                 if (panelPasteTopic.Tag is Form ff)
-                    (ff as BubblePaste).PasteTopic((sender as PictureBox).Name.ToLower());
+                    (ff as BubbleTextOps).PasteTopic((sender as PictureBox).Name.ToLower());
             }
         }
 

@@ -45,7 +45,7 @@ namespace Bubbles
 
                 if (oldname != "") // rename stick or icon or source
                 {
-                    using (SticksDB db = new SticksDB())
+                    using (StixDB db = new StixDB())
                     {
                         int stickID = (int)form.Tag;
                         if (stick) // rename stick
@@ -68,7 +68,7 @@ namespace Bubbles
         public static void CreateStick(Form newForm, string stickname, string sticktype)
         {
             int id = 0; bool contextmenu = false;
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 id = Utils.StickID();
                 db.AddStick(id, stickname, sticktype, 0, "", 0, 0);
@@ -155,7 +155,7 @@ namespace Bubbles
             Point screenXY = Utils.MMScreen(MMUtils.MindManager.Left + MMUtils.MindManager.Width / 2,
                 MMUtils.MindManager.Top + MMUtils.MindManager.Height / 2);
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 string location = "";
                 DataTable dt = db.ExecuteQuery("select * from STICKS where id=" + id + "");
@@ -219,7 +219,7 @@ namespace Bubbles
 
             if (sticktype == typesources) stickLength += icondist;
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 if (deleteall) // Clean bubble and database
                 {
@@ -338,7 +338,7 @@ namespace Bubbles
                 for (int i = 0; i < Icons.Count; i++)
                     Icons[i].Order = i + 1;
 
-                using (SticksDB db = new SticksDB())
+                using (StixDB db = new StixDB())
                     db.ExecuteNonQuery("delete from ICONS where stickID=" + id + " and filename=`" + filename + "`");
             }
             else if (type == typesources)
@@ -354,7 +354,7 @@ namespace Bubbles
                 for (int i = 0; i < Sources.Count; i++)
                     Sources[i].Order = i + 1;
 
-                using (SticksDB db = new SticksDB())
+                using (StixDB db = new StixDB())
                     db.ExecuteNonQuery("delete from SOURCES where path=`" + filename + "`");
             }
         }
@@ -367,7 +367,7 @@ namespace Bubbles
                 return false;
 
             bool contextmenu = false;
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 // Delete icons that belong to this stick and clear context menu of this button
                 if (type == typeicons)
@@ -472,7 +472,7 @@ namespace Bubbles
 
                 // Control ff is a panel with icons from the StickPopup() User Control
                 if (popup == "") ff = sp.panelH;
-                else if (type == typepaste) ff = sp.panelPasteTopic;
+                else if (type == typetextops) ff = sp.panelPasteTopic;
                 else if (popup == "progress") ff = sp.panelProgress;
                 else if (popup == "priority") ff = sp.panelPriority;
 
@@ -813,7 +813,7 @@ namespace Bubbles
             string name, type, position, orientation = "H"; bool collapsed;
             List<int> ids = new List<int>();
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 foreach (var stick in sticks)
                 {
@@ -926,6 +926,7 @@ namespace Bubbles
 
         public static void SetCommonContextMenu(ContextMenuStrip cms, string stickType = "")
         {
+            // Delete all icons from stix
             string deleteall = Utils.getString("contextmenu.clearstick");
             if (stickType == typesources) deleteall = Utils.getString("mysources.contextmenu.deleteall");
             if (stickType == typebookmarks) deleteall = Utils.getString("bookmarks.contextmenu.deleteall");
@@ -990,6 +991,16 @@ namespace Bubbles
             tsi.Name = "BI_close";
             tsi.ImageScaling = ToolStripItemImageScaling.None;
             tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "close_sticker.png"), cmiSize);
+
+            if (stickType == typebase)
+            {
+                cms.Items.Add(new ToolStripSeparator());
+
+                tsi = cms.Items.Add(Utils.getString("SettingsDlg.Title"));
+                tsi.Name = "BS_settings";
+                tsi.ImageScaling = ToolStripItemImageScaling.None;
+                tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "manage.png"), cmiSize);
+            }
         }
 
         public static void SetContextMenuImage(ToolStripItem tsi, string imgName)
@@ -1025,8 +1036,8 @@ namespace Bubbles
                 //}
                 if (popup == "paste")
                 {
-                    X = parent.Left + (parent as BubblePaste).PasteLink.Left;
-                    Y = parent.Top + ((parent as BubblePaste).subtopic.Top / 2);
+                    X = parent.Left + (parent as BubbleTextOps).PasteLink.Left;
+                    Y = parent.Top + ((parent as BubbleTextOps).subtopic.Top / 2);
                 }
                 else if (popup == "progress")
                 {
@@ -1065,8 +1076,8 @@ namespace Bubbles
                 //}
                 if (popup == "paste")
                 {
-                    X = parent.Left + ((parent as BubblePaste).subtopic.Left / 2);
-                    Y = parent.Top + (parent as BubblePaste).PasteLink.Top;
+                    X = parent.Left + ((parent as BubbleTextOps).subtopic.Left / 2);
+                    Y = parent.Top + (parent as BubbleTextOps).PasteLink.Top;
                 }
                 else if (popup == "progress")
                 {
@@ -1126,9 +1137,11 @@ namespace Bubbles
         public static List<BookmarkItem> Bookmarks = new List<BookmarkItem>();
         public static List<MySourcesItem> Sources = new List<MySourcesItem>();
 
-        public const string typestick = "stick", typeicons = "BubbleIcons", typetaskinfo = "BubbleTaskInfo", 
+        // types must match Stix names!
+        public const string typestick = "stick", typebase = "StixBase",
+            typeicons = "BubbleIcons", typetaskinfo = "BubbleTaskInfo", 
             typeformat = "BubbleFormat", typesources = "BubbleMySources", typebookmarks = "BubbleBookmarks",
-            typeaddtopic = "BubbleAddTopic", typepaste = "BubblePaste", typeorganizer = "BubbleOrganizer";
+            typeaddtopic = "BubbleAddTopic", typetextops = "BubbleTextOps", typeorganizer = "BubbleOrganizer";
 
         public static int minSize;
         public static int stickThickness;

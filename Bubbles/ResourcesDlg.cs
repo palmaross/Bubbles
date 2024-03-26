@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace Bubbles
 {
@@ -47,14 +48,6 @@ namespace Bubbles
             this.MinimumSize = new Size(this.Width, this.Height / 2);
             this.MaximumSize = new Size(this.Width, Screen.AllScreens.Max(s => s.Bounds.Height));
 
-            //add single column; -2 => autosize
-            ListMapResources.Columns.Add("MyColumn", -2, HorizontalAlignment.Left);
-            ListMapResources.GridLines = true;
-
-            //add single column; -2 => autosize
-            ListDBResources.Columns.Add("MyColumn", -2, HorizontalAlignment.Left);
-            ListDBResources.GridLines = true;
-
             InitCurrentMapResources();
             InitDataBaseResources();
         }
@@ -87,50 +80,39 @@ namespace Bubbles
         {
             ListDBResources.Clear();
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 // Fill Resource Groups
-                cbDataBaseResources.Items.Add("All Resources");
-                DataTable dt = db.ExecuteQuery("select * from RESOURCEGROUPS order by name");
-                foreach (DataRow dr in dt.Rows)
-                    cbDataBaseResources.Items.Add(dr["name"].ToString());
-                cbDataBaseResources.SelectedIndex = 0;
+                ResourceGroup gitem = new ResourceGroup(0, Utils.getString("ResourcesDlg.allresources"));
+                cbDataBaseResources.Items.Add(gitem);
 
-                // Fill Resource List
-                dt = db.ExecuteQuery("select * from RESOURCES order by name");
+                DataTable dt = db.ExecuteQuery("select * from RESOURCEGROUPS order by name");
+
                 foreach (DataRow dr in dt.Rows)
                 {
-                    ResourceItem item = new ResourceItem(
-                        dr["name"].ToString(), dr["color"].ToString(), Convert.ToInt32(dr["groupID"]));
-
-                    ListViewItem lvi = ListDBResources.Items.Add(item.Name); lvi.Tag = item;
-                    if (item.aColor != "")
-                        lvi.BackColor = ColorTranslator.FromHtml(item.aColor);
+                    gitem = new ResourceGroup(Convert.ToInt32(dr["id"]), dr["name"].ToString());
+                    cbDataBaseResources.Items.Add(gitem);
                 }
+
+                cbDataBaseResources.SelectedIndex = 0;
             }
         }
 
         private void ContextMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            ListView lv = selectedItem.ListView;
+            ListView lv = selectedList;
             if (lv == null) return;
 
             string[] listResources = new string[lv.SelectedItems.Count];
             for (int i = 0; i < lv.SelectedItems.Count; i++)
                 listResources[i] = lv.SelectedItems[i].Text;
 
-            // Rename selected resource
-            if (e.ClickedItem.Name == "mi_rename")
-            {
-                selectedItem.ListView.LabelEdit = true;
-                selectedItem.BeginEdit();            
-            }
-            // Add to topic selected resources
-            else if (e.ClickedItem.Name == "mi_addtotopic")
+            // Add selected resources to topic
+            if (e.ClickedItem.Name == "mi_addtotopic")
             {
                 SetResources(listResources, true);
             }
-            // Remove topic selected resources
+            // Remove selected resources from topic
             else if (e.ClickedItem.Name == "mi_remove")
             {
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
@@ -148,6 +130,42 @@ namespace Bubbles
                     else
                         t.Task.Resources = string.Join(",", taskResources);
                 }
+            }
+            // Add selected resource to Map Index
+            else if (e.ClickedItem.Name == "mi_addtomap")
+            {
+                MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
+
+                foreach (ListViewItem item in lv.SelectedItems)
+                {
+                    ResourceItem res = item.Tag as ResourceItem;
+
+                    bool found = false;
+                    // Check if Map Resources contain selected resource
+                    foreach (MapMarker mm in mg)
+                    {
+                        if (mm.Label == res.Name)
+                        {
+                            found = true; break; // yes, contain
+                        }
+                    }
+                    if (found) continue;  // yes, contain
+
+                    // Add resource to Map Resources
+                    MapMarker mmm = mg.AddResourceMarker(res.Name);
+                    // Set color
+                    if (res.aColor != "")
+                    {
+                        int i = int.Parse(res.aColor.Substring(1), System.Globalization.NumberStyles.HexNumber);
+                        mmm.Color.SetValue(i);
+                    }
+                }
+            }
+            // Rename selected resource
+            else if (e.ClickedItem.Name == "mi_rename")
+            {
+                selectedItem.ListView.LabelEdit = true;
+                selectedItem.BeginEdit();
             }
             // Delete selected resources from map or database
             if (e.ClickedItem.Name == "mi_delete")
@@ -173,7 +191,7 @@ namespace Bubbles
                 {
                     int groupID = 0;
 
-                    using (SticksDB db = new SticksDB())
+                    using (StixDB db = new StixDB())
                     {
                         foreach (string res in listResources)
                         {
@@ -198,7 +216,7 @@ namespace Bubbles
                 string colorHEX = string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", c.A, c.R, c.G, c.B).ToLower();
                 if (colorHEX == "#ffffffff") colorHEX = ""; // white, no color
 
-                using (SticksDB db = new SticksDB())
+                using (StixDB db = new StixDB())
                 {
                     foreach (ListViewItem item in lv.SelectedItems)
                     {
@@ -237,7 +255,51 @@ namespace Bubbles
                     }
                 }
             }
+            // Copy/Cut selected resource
+            else if (e.ClickedItem.Name == "mi_copy" || e.ClickedItem.Name == "mi_cut")
+            {
+                CopyCutResources(lv, e.ClickedItem.Name == "mi_cut");
+            }
+            // Paste selected resource
+            else if (e.ClickedItem.Name == "mi_paste")
+            {
+                PasteResources(lv);
+            }
         }
+
+        void CopyCutResources(ListView lv, bool cut)
+        {
+            if (lv.SelectedItems.Count == 0) return;
+            CopiedResources.Clear();
+            string resources = "";
+
+            foreach (ListViewItem item in lv.SelectedItems)
+            {
+                ResourceItem res = item.Tag as ResourceItem;
+                CopiedResources.Add(res);
+                resources += res.Name + "\r\n";
+
+                if (cut)
+                {
+                    item.Remove();
+                }
+            }
+
+            resources = resources.TrimEnd('\r', '\n');
+            System.Windows.Forms.Clipboard.SetText(resources);
+
+            string message = Utils.getString("ResourcesDlg.copy.success");
+            MMUtils.MindManager.NotificationsDialog.ShowNotification("", message, MmNotificationsDialogOptions.mmNotificationsDialogOptionsAutoClose);
+        }
+
+        void PasteResources(ListView lv)
+        {
+            foreach (var item in CopiedResources)
+            {
+
+            }
+        }
+
 
         private void this_Paint(object sender, PaintEventArgs e)
         {
@@ -248,7 +310,7 @@ namespace Bubbles
         {
             ListViewItem lvi; ResourceItem item;
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
                     "where name=`" + name + "`");
@@ -288,7 +350,7 @@ namespace Bubbles
             ResourceItem item = lvi.Tag as ResourceItem;
             string oldName = item.Name;
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
                     "where name=`" + name + "`");
@@ -365,12 +427,10 @@ namespace Bubbles
         private void listResources_MouseClick(object sender, MouseEventArgs e)
         {
             ListView lv = sender as ListView;
+            selectedList = lv;
             lv.LabelEdit = false;
 
-            if (lv.SelectedItems.Count == 0) return;
-
-            if (e == null || // from context menu
-                e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left && lv.SelectedItems.Count == 1)
             {
                 if ((ModifierKeys & Keys.Control) == Keys.Control ||
                     (ModifierKeys & Keys.Shift) == Keys.Shift ||
@@ -382,6 +442,16 @@ namespace Bubbles
             }
             else if (e.Button == MouseButtons.Right) // ContextMenu
             {
+                if (lv.SelectedItems.Count == 0)
+                {
+                    foreach (ToolStripItem item in cmsResource.Items)
+                        item.Visible = false;
+
+                    mi_paste.Visible = true;
+                    cmsResource.Show(Cursor.Position);
+                    return;
+                }
+
                 // Get selected item
                 for (int i = 0; i < lv.Items.Count; i++)
                 {
@@ -398,7 +468,10 @@ namespace Bubbles
                     item.Visible = true;
 
                 if (lv == ListMapResources)
+                {
                     mi_addtomap.Visible = false;
+                    mi_copy.Visible = false;
+                }
                 if (lv.SelectedItems.Count > 1)
                     mi_rename.Visible = false;
 
@@ -415,11 +488,11 @@ namespace Bubbles
             {
                 int k = lv.SelectedItems.Count;
 
-                string message = Utils.getString("");
+                string message = Utils.getString("ResourcesDlg.delete.map");
                 if (lv.Name == "ListDBResources")
-                    message = Utils.getString("");
+                    message = Utils.getString("ResourcesDlg.delete.database");
 
-                if (MessageBox.Show(message, Utils.getString(""),
+                if (MessageBox.Show(message, Utils.getString("ResourcesDlg.delete.title"),
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     foreach (ListViewItem item in lv.SelectedItems)
@@ -438,6 +511,12 @@ namespace Bubbles
                         item.Remove(); // delete resource from list
                     }
                 }
+            }
+            // Copy/Cut selected resources.
+            else if (e.KeyCode == Keys.C || e.KeyCode == Keys.X)
+            {
+                if (ModifierKeys == Keys.Control)
+                    CopyCutResources(lv, e.KeyCode == Keys.X);
             }
             // Set selected resources. Edit mode?
             else if (e.KeyCode == Keys.Enter)
@@ -534,8 +613,6 @@ namespace Bubbles
         /// <summary>
         /// Add to 
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void ResourceEnter_Click(object sender, EventArgs e)
         {
             TextBox tb = sender as TextBox;
@@ -585,8 +662,10 @@ namespace Bubbles
         }
 
         List<ResourceItem> MapResources = new List<ResourceItem>();
+        List<ResourceItem> CopiedResources = new List<ResourceItem>();
 
         ListViewItem selectedItem = null;
+        ListView selectedList = null;
         public int thisHeight;
 
         public const int WM_NCLBUTTONDOWN = 0xA1;
@@ -723,7 +802,7 @@ namespace Bubbles
             {
                 ResourceItem res = lv.SelectedItems[0].Tag as ResourceItem;
 
-                using (SticksDB db = new SticksDB())
+                using (StixDB db = new StixDB())
                 {
                     DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
                         "where name=`" + newName + "` and groupID=" + res.GroupID);
@@ -757,6 +836,32 @@ namespace Bubbles
             ToolTip tip = new ToolTip();
             tip.Show("ESC to cancel edit", this, p, 2000);
         }
+
+        private void cbDataBaseResources_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListDBResources.Clear();
+
+            ResourceGroup group = cbDataBaseResources.SelectedItem as ResourceGroup;
+
+            using (StixDB db = new StixDB())
+            {
+                DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
+                    "where groupID=" + group.GroupID + " order by name");
+
+                if (group.GroupID == 0)
+                    dt = db.ExecuteQuery("select * from RESOURCES order by name");
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    ResourceItem res = new ResourceItem(
+                        dr["name"].ToString(), dr["color"].ToString(), Convert.ToInt32(dr["groupID"]));
+                    
+                    var lvi = ListDBResources.Items.Add(res.Name); lvi.Tag = res;
+                    if (res.aColor != "")
+                        lvi.BackColor = ColorTranslator.FromHtml(res.aColor);
+                }
+            }
+        }
     }
 
     public class ResourceItem
@@ -772,6 +877,22 @@ namespace Bubbles
         public int GroupID = 0;
 
         public override string ToString() 
+        {
+            return Name;
+        }
+    }
+
+    public class ResourceGroup
+    {
+        public ResourceGroup(int id, string name)
+        {
+            Name = name;
+            GroupID = id;
+        }
+        public string Name = "";
+        public int GroupID = 0;
+
+        public override string ToString()
         {
             return Name;
         }

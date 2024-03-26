@@ -26,7 +26,7 @@ namespace Organizer
 
             NoteIcons = new List<PictureBox>() { p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16 };
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 // Fill Note Icons sets
                 DataTable dt = db.ExecuteQuery("select * from NOTEICONS order by id");
@@ -114,7 +114,7 @@ namespace Organizer
             selectedIcon.BorderStyle = BorderStyle.FixedSingle;
             txtRename.Text = "";
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
                 db.ExecuteNonQuery("update NOTEICONS set name='', fileName='' where id=" + item.ID + "");
         }
 
@@ -130,7 +130,7 @@ namespace Organizer
             selectedIcon.Tag = item;
             toolTip1.SetToolTip(selectedIcon, item.Name);
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 db.ExecuteNonQuery("update NOTEICONS set " +
                     "name=`" + item.Name + "` where id=" + item.ID + "");
@@ -172,7 +172,7 @@ namespace Organizer
             selectedIcon.BackColor = Color.Transparent;
             txtRename.Text = iconName;
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 db.ExecuteNonQuery("update NOTEICONS set " +
                     "name=`" + iconName +
@@ -213,7 +213,7 @@ namespace Organizer
                 else
                     source.BorderStyle = BorderStyle.None;
 
-                using (SticksDB db = new SticksDB())
+                using (StixDB db = new StixDB())
                 {
                     db.ExecuteNonQuery("update NOTEICONS set " +
                         "_order=" + _target.Order + " where id=" + _target.ID + "");
@@ -248,7 +248,7 @@ namespace Organizer
                 _target.Name = name;
                 target.Tag = _target;
 
-                using (SticksDB db = new SticksDB())
+                using (StixDB db = new StixDB())
                 {
                     db.ExecuteNonQuery("update NOTEICONS set " +
                         "fileName=`" + _target.FileName + "`, " +

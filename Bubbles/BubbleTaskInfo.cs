@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Image = System.Drawing.Image;
 using Cursor = System.Windows.Forms.Cursor;
 using System.Data;
+using Color = System.Drawing.Color;
 
 namespace Bubbles
 {
@@ -120,6 +121,34 @@ namespace Bubbles
             // Quick Task button context menu
             cmsTaskTemplates.ItemClicked += ContextMenu_ItemClicked;
             PopulateQuickTasks();
+
+            // Apply scale factor
+            this.Paint += this_Paint; // paint the border depending on scale factor
+            scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
+            ScaleStick(100F, scaleFactor);
+        }
+
+        public void ScaleStick(float fromScale, float toScale)
+        {
+            if (fromScale == toScale) return;
+            if (toScale < 100 || toScale > 267) return;
+
+            float scale = 100F / fromScale;
+            if (scale != 1)
+                this.Scale(new SizeF(scale, scale)); // reset to 100%
+
+            this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
+            scaleFactor = toScale;
+        }
+
+        private void this_Paint(object sender, PaintEventArgs e)
+        {
+            if (scaleFactor < 125) return;
+            int width = 1;
+            //if (scaleFactor > 200) width = 2;
+            ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle,
+                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid,
+                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid);
         }
 
         private void CmsRemoveTaskInfo_Closing(object sender, ToolStripDropDownClosingEventArgs e)
@@ -137,7 +166,7 @@ namespace Bubbles
             StickUtils.SetContextMenuImage(cmsTaskTemplates.Items["ManageTaskTemplates"], "manage.png");
             cmsTaskTemplates.Items.Add(new ToolStripSeparator());
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from TASKTEMPLATES order by prime DESC, name");
 
@@ -748,6 +777,7 @@ namespace Bubbles
         TaskTemplateItem primaryQuickTask = null;
         TaskTemplateItem QuickTask = null;
         string daterightclick = "";
+        public float scaleFactor = 100;
 
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;

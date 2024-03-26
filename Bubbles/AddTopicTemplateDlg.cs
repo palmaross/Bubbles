@@ -48,7 +48,7 @@ namespace Bubbles
             imageList1.Images.Add(System.Drawing.Image.FromFile(Utils.ImagesPath + "cpAddTopic.png"));
             imageList1.Images.Add(System.Drawing.Image.FromFile(Utils.ImagesPath + "cpAddBefore.png"));
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from MT_TEMPLATES order by templateName");
 
@@ -173,7 +173,7 @@ namespace Bubbles
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 string newName = txtTemplateName.Text.Trim();
 
@@ -244,7 +244,7 @@ namespace Bubbles
 
             var item = cbTemplates.SelectedItem as TemplateItem;
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
                 db.ExecuteNonQuery("delete from MT_TEMPLATES where id=" + item.ID + "");
 
             cbTemplates.Items.Remove(item);
@@ -292,7 +292,7 @@ namespace Bubbles
             if (NextTopic.Checked) topicType = "nexttopic";
             else if (TopicBefore.Checked) topicType = "topicbefore";
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 var template = cbTemplates.SelectedItem as TemplateItem;
 

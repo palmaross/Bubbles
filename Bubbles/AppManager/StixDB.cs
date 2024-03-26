@@ -3,14 +3,14 @@ using BubblesAppManager;
 
 namespace Bubbles
 {
-    internal class SticksDB : DatabaseWrapper
+    internal class StixDB : DatabaseWrapper
     {
         public override string ToString() => "Bubbles Database";
 
         protected static string _getDatabaseName()
         {
             string path = Utils.m_defaultDataPath;
-            return path + "sticks.db";
+            return path + "stix.db";
         }
 
         public override string getDatabaseName() => _getDatabaseName();
@@ -218,10 +218,14 @@ namespace Bubbles
 
             m_db.ExecuteNonQuery("END");
 
-            // Add first My Icons stick
+            // Add Base stick
             Random r = new Random();
 
             int id = r.Next();
+            AddStick(id, Utils.getString("StixBase.Name"), StickUtils.typebase, 1, "", 0, 0);
+
+            // Add first My Icons stick
+            id = r.Next();
             AddStick(id, Utils.getString("BubbleIcons.bubble.tooltip"), StickUtils.typeicons, 0, "", 0, 0);
 
             AddIcon(Utils.getString("icons.firststick.icon1"), "stockexclamation-mark", 1, id);
@@ -249,7 +253,7 @@ namespace Bubbles
 
             // Add Text Operations stick
             id = r.Next();
-            AddStick(id, Utils.getString("BubblePaste.bubble.tooltip"), StickUtils.typepaste, 0, "", 0, 0);
+            AddStick(id, Utils.getString("BubbleTextOps.bubble.tooltip"), StickUtils.typetextops, 0, "", 0, 0);
 
             // Add Format stick
             id = r.Next();

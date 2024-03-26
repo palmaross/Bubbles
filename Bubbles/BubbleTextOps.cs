@@ -11,13 +11,14 @@ using System.Windows.Forms;
 using WindowsInput;
 using WindowsInput.Native;
 using Clipboard = System.Windows.Forms.Clipboard;
+using Color = System.Drawing.Color;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Bubbles
 {
-    internal partial class BubblePaste : Form
+    internal partial class BubbleTextOps : Form
     {
-        public BubblePaste(int ID, string _orientation, string stickname)
+        public BubbleTextOps(int ID, string _orientation, string stickname)
         {
             InitializeComponent();
 
@@ -59,7 +60,7 @@ namespace Bubbles
             OP_myrisk.ToolTipText = Utils.getString("pastenotes.contextmenu.quickinsert.tooltip");
             OP_myrisk.Tag = "myrisk";
 
-            StickUtils.SetCommonContextMenu(cmsCommon, StickUtils.typepaste);
+            StickUtils.SetCommonContextMenu(cmsCommon, StickUtils.typetextops);
 
             PopulateTopicWidth();
 
@@ -70,13 +71,41 @@ namespace Bubbles
             pictureHandle.MouseDown += PictureHandle_MouseDown;
             pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
 
-            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste);
+            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typetextops);
 
             if (collapsed) {
                 collapsed = false; Collapse(); }
 
             PasteOperations = new Timer() { Interval = 50 };
             PasteOperations.Tick += PasteOperations_Tick;
+
+            // Apply scale factor
+            this.Paint += this_Paint; // paint the border depending on scale factor
+            scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
+            ScaleStick(100F, scaleFactor);
+        }
+
+        public void ScaleStick(float fromScale, float toScale)
+        {
+            if (fromScale == toScale) return;
+            if (toScale < 100 || toScale > 267) return;
+
+            float scale = 100F / fromScale;
+            if (scale != 1)
+                this.Scale(new SizeF(scale, scale)); // reset to 100%
+
+            this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
+            scaleFactor = toScale;
+        }
+
+        private void this_Paint(object sender, PaintEventArgs e)
+        {
+            if (scaleFactor < 125) return;
+            int width = 1;
+            //if (scaleFactor > 200) width = 2;
+            ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle,
+                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid,
+                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid);
         }
 
         private void CmsOptions_Closing(object sender, ToolStripDropDownClosingEventArgs e)
@@ -687,7 +716,7 @@ namespace Bubbles
 
             if (onetopic) // Merge text from pasted topics
             {
-                foreach (Topic t in BubblePaste.PastedTopics)
+                foreach (Topic t in BubbleTextOps.PastedTopics)
                 {
                     //move cursor to the end
                     rtb.Select(rtb.TextLength, 0);
@@ -697,12 +726,12 @@ namespace Bubbles
             }
 
             if (onetopic) // Delete pasted topics
-                foreach (Topic t in BubblePaste.PastedTopics.Reverse<Topic>())
+                foreach (Topic t in BubbleTextOps.PastedTopics.Reverse<Topic>())
                     t.Delete();
 
             // Paste resulting (above) text to the selected topics
             int p = 0, i = 0; // selected topics count
-            foreach (Topic t in BubblePaste.SelectedTopics)
+            foreach (Topic t in BubbleTextOps.SelectedTopics)
             {
                 p++; i++;
                 Topic frameTopic = null;
@@ -715,7 +744,7 @@ namespace Bubbles
                     }
                     else // Multiple topics to paste. Subtopic, Next Topic or Topic before
                     {
-                        foreach (Topic _t in BubblePaste.PastedTopics)
+                        foreach (Topic _t in BubbleTextOps.PastedTopics)
                         {
                             if (!StickUtils.TopicWidthList.Contains(_t))
                                 StickUtils.TopicWidthList.Add(_t);
@@ -807,7 +836,7 @@ namespace Bubbles
             }
             else if (e.Button == MouseButtons.Right)
             {
-                StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste, "paste");
+                StickUtils.ShowCommandPopup(this, orientation, StickUtils.typetextops, "paste");
             }
         }
 
@@ -1119,6 +1148,7 @@ namespace Bubbles
         string orientation = "H";
         int RealLength;
         bool collapsed = false;
+        public float scaleFactor = 100;
 
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;

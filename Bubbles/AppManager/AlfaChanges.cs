@@ -31,7 +31,7 @@ namespace BubblesAppManager
                     OldDashboardDB db_old = new OldDashboardDB(); // get old db
 
                     //BubblesDB.defaults = false;
-                    SticksDB db_new = new SticksDB(); // create new db without values
+                    StixDB db_new = new StixDB(); // create new db without values
 
                     // https://tableplus.com/blog/2018/07/sqlite-how-to-copy-table-to-another-database.html
 
@@ -41,7 +41,6 @@ namespace BubblesAppManager
                     DataTable dt = db_old.ExecuteQuery("select * from TEMPLATES order by name");
                     if (dt.Rows.Count > 0)
                     {
-                        int i = 1;
                         foreach (DataRow row in dt.Rows)
                         {
                             string templateFileName = (string)row["template"];

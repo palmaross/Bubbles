@@ -85,7 +85,7 @@
     <Compile Include="AlignSticksDlg.Designer.cs">
       <DependentUpon>AlignSticksDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppManager\SticksDB.cs" />
+    <Compile Include="AppManager\StixDB.cs" />
     <Compile Include="AppManager\TransactionWrapper.cs" />
     <Compile Include="BubbleAddTopic.cs">
       <SubType>Form</SubType>
@@ -98,6 +98,12 @@
     </Compile>
     <Compile Include="BubbleOrganizer.Designer.cs">
       <DependentUpon>BubbleOrganizer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BubbleTextOps.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BubbleTextOps.Designer.cs">
+      <DependentUpon>BubbleTextOps.cs</DependentUpon>
     </Compile>
     <Compile Include="BulkOperationsDlg.cs">
       <SubType>Form</SubType>
@@ -151,6 +157,12 @@
       <DependentUpon>GetNameDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Bubbles.cs" />
+    <Compile Include="StixBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StixBase.Designer.cs">
+      <DependentUpon>StixBase.cs</DependentUpon>
+    </Compile>
     <Compile Include="WowStix22.cs" />
     <Compile Include="AssemblyInfo22.cs" />
     <Compile Include="BubbleBookmarks.cs">
@@ -176,12 +188,6 @@
     </Compile>
     <Compile Include="MySourcesListDlg.Designer.cs">
       <DependentUpon>MySourcesListDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="BubblePaste.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BubblePaste.Designer.cs">
-      <DependentUpon>BubblePaste.cs</DependentUpon>
     </Compile>
     <Compile Include="BubbleIcons.cs">
       <SubType>Form</SubType>
@@ -796,6 +802,9 @@
     <EmbeddedResource Include="BubbleOrganizer.resx">
       <DependentUpon>BubbleOrganizer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="BubbleTextOps.resx">
+      <DependentUpon>BubbleTextOps.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BulkOperationsDlg.resx">
       <DependentUpon>BulkOperationsDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -831,9 +840,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MySourcesListDlg.resx">
       <DependentUpon>MySourcesListDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="BubblePaste.resx">
-      <DependentUpon>BubblePaste.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BubbleIcons.resx">
       <DependentUpon>BubbleIcons.cs</DependentUpon>
@@ -887,6 +893,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Organizer\NotesDlg.resx">
       <DependentUpon>NotesDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StixBase.resx">
+      <DependentUpon>StixBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TaskTemplateDlg.resx">
       <DependentUpon>TaskTemplateDlg.cs</DependentUpon>

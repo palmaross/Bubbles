@@ -121,7 +121,7 @@
             this.Manage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Manage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Manage.Image = ((System.Drawing.Image)(resources.GetObject("Manage.Image")));
-            this.Manage.Location = new System.Drawing.Point(269, 5);
+            this.Manage.Location = new System.Drawing.Point(276, 5);
             this.Manage.Name = "Manage";
             this.Manage.Size = new System.Drawing.Size(20, 20);
             this.Manage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -212,9 +212,9 @@
             // 
             this.pQuickTask.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pQuickTask.Image = ((System.Drawing.Image)(resources.GetObject("pQuickTask.Image")));
-            this.pQuickTask.Location = new System.Drawing.Point(226, 7);
+            this.pQuickTask.Location = new System.Drawing.Point(226, 5);
             this.pQuickTask.Name = "pQuickTask";
-            this.pQuickTask.Size = new System.Drawing.Size(16, 16);
+            this.pQuickTask.Size = new System.Drawing.Size(20, 20);
             this.pQuickTask.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pQuickTask.TabIndex = 85;
             this.pQuickTask.TabStop = false;
@@ -225,9 +225,9 @@
             // 
             this.pRemoveTaskInfo.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pRemoveTaskInfo.Image = ((System.Drawing.Image)(resources.GetObject("pRemoveTaskInfo.Image")));
-            this.pRemoveTaskInfo.Location = new System.Drawing.Point(246, 7);
+            this.pRemoveTaskInfo.Location = new System.Drawing.Point(251, 5);
             this.pRemoveTaskInfo.Name = "pRemoveTaskInfo";
-            this.pRemoveTaskInfo.Size = new System.Drawing.Size(16, 16);
+            this.pRemoveTaskInfo.Size = new System.Drawing.Size(20, 20);
             this.pRemoveTaskInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pRemoveTaskInfo.TabIndex = 87;
             this.pRemoveTaskInfo.TabStop = false;
@@ -319,7 +319,7 @@
             this.Dates_nextweek});
             this.cmsDates.Name = "cmsDates";
             this.cmsDates.ShowImageMargin = false;
-            this.cmsDates.Size = new System.Drawing.Size(169, 180);
+            this.cmsDates.Size = new System.Drawing.Size(169, 158);
             // 
             // Dates_today
             // 
@@ -414,7 +414,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(293, 30);
+            this.ClientSize = new System.Drawing.Size(300, 30);
             this.ControlBox = false;
             this.Controls.Add(this.panelDuration);
             this.Controls.Add(this.panelDueDate);

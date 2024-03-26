@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Bubbles
@@ -16,11 +17,17 @@ namespace Bubbles
             cbSelectAll.Text = Utils.getString("SettingsDlg.cbSelectAll");
             rbtnConfiguration.Text = Utils.getString("SettingsDlg.rbtnConfiguration");
 
+            gbScaleFactor.Text = Utils.getString("SettingsDlg.gbScaleFactor");
+            lblStix.Text = Utils.getString("SettingsDlg.lblStix");
+            lblStixBase.Text = Utils.getString("SettingsDlg.lblStixBase");
+            lblBoxes.Text = Utils.getString("SettingsDlg.lblBoxes");
+            btnTestScale1.Text = Utils.getString("SettingsDlg.btnTestScale");
+
             btnSave.Text = Utils.getString("button.save");
             btnClose.Text = Utils.getString("button.close");
 
             // Fill sticks list
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from STICKS order by type");
                 bool allselected = true;
@@ -45,11 +52,16 @@ namespace Bubbles
                 if (cbConfiguration.Items.Count > 0)
                     cbConfiguration.SelectedIndex = 0;
             }
+
+            // Fill Scale Factor
+            numStix.Text = stixScaleFactor.ToString() + "%";
+            numStixBase.Text = stixbaseScaleFactor.ToString() + "%";
+            numBoxes.Text = boxesScaleFactor.ToString() + "%";
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 if (rbtnSticks.Checked)
                 {
@@ -76,6 +88,11 @@ namespace Bubbles
                     }
                 }
             }
+
+            // Save Scale Factor
+            Utils.setRegistry("ScaleFactor_Stix", numStix.Text.Trim('%'));
+            Utils.setRegistry("ScaleFactor_StixBase", numStixBase.Text.Trim('%'));
+            Utils.setRegistry("ScaleFactor_Boxes", numBoxes.Text.Trim('%'));
         }
 
         private void cbSelectAll_CheckedChanged(object sender, EventArgs e)
@@ -89,6 +106,103 @@ namespace Bubbles
                     item.Checked = false;
             }
         }
+
+        private void cbStix_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox cb = sender as ComboBox;
+
+            if (cb == cbStix)
+                numStix.Text = cbStix.Text;
+            else if (cb == cbStixBase)
+                numStixBase.Text = cbStixBase.Text;
+            else if (cb == cbBoxes)
+                numBoxes.Text = cbBoxes.Text;
+        }
+
+        private void btnTestScale_Click(object sender, EventArgs e)
+        {
+            float scaleFactor;
+
+            if (sender == btnTestScale1) // All visible stix
+            {
+                try { scaleFactor = Convert.ToInt32(numStix.Text.Trim('%').Trim());
+                } catch { return; }
+
+                foreach (var pair in BubblesButton.STICKS)
+                {
+                    Form stick = pair.Value;
+                    if (stick.Name == "StixBase" || !stick.Visible) continue;
+
+                    switch (stick.Name)
+                    {
+                        case StickUtils.typeicons:
+                            (stick as BubbleIcons).ScaleStick(stixbaseScaleFactor, scaleFactor);
+                            break;
+                        case StickUtils.typetaskinfo:
+                            (stick as BubbleTaskInfo).ScaleStick(stixbaseScaleFactor, scaleFactor);
+                            break;
+                        case StickUtils.typeaddtopic:
+                            (stick as BubbleAddTopic).ScaleStick(stixbaseScaleFactor, scaleFactor);
+                            break;
+                        case StickUtils.typeformat:
+                            (stick as BubbleFormat).ScaleStick(stixbaseScaleFactor, scaleFactor);
+                            break;
+                        case StickUtils.typesources:
+                            (stick as BubbleMySources).ScaleStick(stixbaseScaleFactor, scaleFactor);
+                            break;
+                        case StickUtils.typebookmarks:
+                            (stick as BubbleBookmarks).ScaleStick(stixbaseScaleFactor, scaleFactor);
+                            break;
+                        case StickUtils.typetextops:
+                            (stick as BubbleTextOps).ScaleStick(stixbaseScaleFactor, scaleFactor);
+                            break;
+                    }
+                }
+                stixScaleFactor = scaleFactor;
+            }
+            else if (sender == btnTestScale2) // Base stick
+            {
+                try { scaleFactor = Convert.ToInt32(numStixBase.Text.Trim('%').Trim());
+                } catch { return; }
+
+                BubblesButton.m_StixBase.ScaleStick(stixbaseScaleFactor, scaleFactor);
+                stixbaseScaleFactor = scaleFactor;
+            }
+            else if(sender == btnTestScale3) // Boxes
+            {
+                
+            }
+        }
+
+        private void numStix_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e == null || e.KeyCode == Keys.Enter)
+            {
+                MaskedTextBox mtb = sender as MaskedTextBox;
+                int value;
+
+                try { value = Convert.ToInt32(mtb.Text.Trim('%').Trim());
+                } catch { mtb.Text = "100%"; return; }
+
+                if (value < 100) { mtb.Text = "100%"; return; }
+                if (value > 267) { mtb.Text = "267%"; return; }
+
+                if (e != null)
+                {
+                    e.Handled = true; // to avoid the "ding" sound
+                    e.SuppressKeyPress = true;
+                }
+            }
+        }
+
+        private void numStix_Leave(object sender, EventArgs e)
+        {
+            numStix_KeyDown(sender, null);
+        }
+
+        float stixScaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
+        float stixbaseScaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_StixBase", "100"));
+        float boxesScaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Boxes", "100"));
     }
 
     public class ConfigItem

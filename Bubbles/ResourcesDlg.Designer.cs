@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ResourcesDlg));
             this.ListDBResources = new System.Windows.Forms.ListView();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
             this.pMore = new System.Windows.Forms.PictureBox();
             this.pHelp = new System.Windows.Forms.PictureBox();
@@ -51,11 +50,21 @@
             this.mi_addtotopic = new System.Windows.Forms.ToolStripMenuItem();
             this.mi_remove = new System.Windows.Forms.ToolStripMenuItem();
             this.mi_addtomap = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.mi_rename = new System.Windows.Forms.ToolStripMenuItem();
             this.mi_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.mi_color = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.mi_copy = new System.Windows.Forms.ToolStripMenuItem();
+            this.mi_cut = new System.Windows.Forms.ToolStripMenuItem();
+            this.mi_paste = new System.Windows.Forms.ToolStripMenuItem();
             this.cbReplaceResources = new System.Windows.Forms.CheckBox();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.cmsMore = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mm_managegroups = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.mm_pastetomap = new System.Windows.Forms.ToolStripMenuItem();
+            this.mm_pastetogroup = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pMore)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHelp)).BeginInit();
@@ -67,6 +76,7 @@
             this.splitContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p11)).BeginInit();
             this.cmsResource.SuspendLayout();
+            this.cmsMore.SuspendLayout();
             this.SuspendLayout();
             // 
             // ListDBResources
@@ -84,27 +94,11 @@
             this.ListDBResources.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.ListDBResources.TabIndex = 0;
             this.ListDBResources.UseCompatibleStateImageBehavior = false;
-            this.ListDBResources.View = System.Windows.Forms.View.SmallIcon;
+            this.ListDBResources.View = System.Windows.Forms.View.List;
             this.ListDBResources.AfterLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.ListResources_AfterLabelEdit);
             this.ListDBResources.BeforeLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.ListResources_BeforeLabelEdit);
             this.ListDBResources.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ResourceList_KeyUp);
-            this.ListDBResources.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listResources_MouseClick);
-            // 
-            // imageList1
-            // 
-            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "Banana.png");
-            this.imageList1.Images.SetKeyName(1, "Basil.png");
-            this.imageList1.Images.SetKeyName(2, "Blueberry.png");
-            this.imageList1.Images.SetKeyName(3, "Flamingo.png");
-            this.imageList1.Images.SetKeyName(4, "Grape.png");
-            this.imageList1.Images.SetKeyName(5, "Graphite.png");
-            this.imageList1.Images.SetKeyName(6, "Lavender.png");
-            this.imageList1.Images.SetKeyName(7, "Peacock.png");
-            this.imageList1.Images.SetKeyName(8, "Sage.png");
-            this.imageList1.Images.SetKeyName(9, "Tangerine.png");
-            this.imageList1.Images.SetKeyName(10, "Tomato.png");
+            this.ListDBResources.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listResources_MouseClick);
             // 
             // panel1
             // 
@@ -183,12 +177,12 @@
             this.ListMapResources.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.ListMapResources.TabIndex = 7;
             this.ListMapResources.UseCompatibleStateImageBehavior = false;
-            this.ListMapResources.View = System.Windows.Forms.View.SmallIcon;
+            this.ListMapResources.View = System.Windows.Forms.View.List;
             this.ListMapResources.AfterLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.ListResources_AfterLabelEdit);
             this.ListMapResources.BeforeLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.ListResources_BeforeLabelEdit);
             this.ListMapResources.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ResourceList_KeyUp);
             this.ListMapResources.Leave += new System.EventHandler(this.ListMapResources_Leave);
-            this.ListMapResources.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listResources_MouseClick);
+            this.ListMapResources.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listResources_MouseClick);
             // 
             // txtCurrentMap
             // 
@@ -276,6 +270,7 @@
             this.cbDataBaseResources.Name = "cbDataBaseResources";
             this.cbDataBaseResources.Size = new System.Drawing.Size(165, 21);
             this.cbDataBaseResources.TabIndex = 12;
+            this.cbDataBaseResources.SelectedIndexChanged += new System.EventHandler(this.cbDataBaseResources_SelectedIndexChanged);
             // 
             // txtAllResources
             // 
@@ -294,47 +289,81 @@
             this.mi_addtotopic,
             this.mi_remove,
             this.mi_addtomap,
+            this.toolStripSeparator3,
             this.mi_rename,
             this.mi_delete,
-            this.mi_color});
+            this.mi_color,
+            this.toolStripSeparator1,
+            this.mi_copy,
+            this.mi_cut,
+            this.mi_paste});
             this.cmsResource.Name = "cmsResource";
-            this.cmsResource.Size = new System.Drawing.Size(190, 136);
+            this.cmsResource.ShowImageMargin = false;
+            this.cmsResource.Size = new System.Drawing.Size(165, 214);
             // 
             // mi_addtotopic
             // 
             this.mi_addtotopic.Name = "mi_addtotopic";
-            this.mi_addtotopic.Size = new System.Drawing.Size(189, 22);
+            this.mi_addtotopic.Size = new System.Drawing.Size(164, 22);
             this.mi_addtotopic.Text = "Add to topic(s)";
             // 
             // mi_remove
             // 
             this.mi_remove.Name = "mi_remove";
-            this.mi_remove.Size = new System.Drawing.Size(189, 22);
+            this.mi_remove.Size = new System.Drawing.Size(164, 22);
             this.mi_remove.Text = "Remove from topic(s)";
             // 
             // mi_addtomap
             // 
             this.mi_addtomap.Name = "mi_addtomap";
-            this.mi_addtomap.Size = new System.Drawing.Size(189, 22);
+            this.mi_addtomap.Size = new System.Drawing.Size(164, 22);
             this.mi_addtomap.Text = "Add to map";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(161, 6);
             // 
             // mi_rename
             // 
             this.mi_rename.Name = "mi_rename";
-            this.mi_rename.Size = new System.Drawing.Size(189, 22);
+            this.mi_rename.Size = new System.Drawing.Size(164, 22);
             this.mi_rename.Text = "Rename";
             // 
             // mi_delete
             // 
             this.mi_delete.Name = "mi_delete";
-            this.mi_delete.Size = new System.Drawing.Size(189, 22);
+            this.mi_delete.Size = new System.Drawing.Size(164, 22);
             this.mi_delete.Text = "Delete";
             // 
             // mi_color
             // 
             this.mi_color.Name = "mi_color";
-            this.mi_color.Size = new System.Drawing.Size(189, 22);
+            this.mi_color.Size = new System.Drawing.Size(164, 22);
             this.mi_color.Text = "Color...";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(161, 6);
+            // 
+            // mi_copy
+            // 
+            this.mi_copy.Name = "mi_copy";
+            this.mi_copy.Size = new System.Drawing.Size(164, 22);
+            this.mi_copy.Text = "Copy (Ctrl+C)";
+            // 
+            // mi_cut
+            // 
+            this.mi_cut.Name = "mi_cut";
+            this.mi_cut.Size = new System.Drawing.Size(164, 22);
+            this.mi_cut.Text = "Cut (Ctrl+X)";
+            // 
+            // mi_paste
+            // 
+            this.mi_paste.Name = "mi_paste";
+            this.mi_paste.Size = new System.Drawing.Size(164, 22);
+            this.mi_paste.Text = "Paste copied (Ctrl+V)";
             // 
             // cbReplaceResources
             // 
@@ -346,6 +375,39 @@
             this.cbReplaceResources.Text = "Replace Resource(s)";
             this.cbReplaceResources.UseVisualStyleBackColor = false;
             // 
+            // cmsMore
+            // 
+            this.cmsMore.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mm_managegroups,
+            this.toolStripSeparator2,
+            this.mm_pastetomap,
+            this.mm_pastetogroup});
+            this.cmsMore.Name = "cmsMore";
+            this.cmsMore.Size = new System.Drawing.Size(159, 76);
+            // 
+            // mm_managegroups
+            // 
+            this.mm_managegroups.Name = "mm_managegroups";
+            this.mm_managegroups.Size = new System.Drawing.Size(158, 22);
+            this.mm_managegroups.Text = "Manage Groups";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(155, 6);
+            // 
+            // mm_pastetomap
+            // 
+            this.mm_pastetomap.Name = "mm_pastetomap";
+            this.mm_pastetomap.Size = new System.Drawing.Size(158, 22);
+            this.mm_pastetomap.Text = "Paste to Map";
+            // 
+            // mm_pastetogroup
+            // 
+            this.mm_pastetogroup.Name = "mm_pastetogroup";
+            this.mm_pastetogroup.Size = new System.Drawing.Size(158, 22);
+            this.mm_pastetogroup.Text = "Paste to Group";
+            // 
             // ResourcesDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -356,7 +418,6 @@
             this.Controls.Add(this.pHandle);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.KeyPreview = true;
             this.Name = "ResourcesDlg";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
@@ -374,6 +435,7 @@
             this.splitContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.p11)).EndInit();
             this.cmsResource.ResumeLayout(false);
+            this.cmsMore.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -384,7 +446,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pClose;
         private System.Windows.Forms.PictureBox pHelp;
-        private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.PictureBox pHandle;
@@ -406,5 +467,15 @@
         private System.Windows.Forms.ToolStripMenuItem mi_remove;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.ComboBox cbDataBaseResources;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem mi_copy;
+        private System.Windows.Forms.ToolStripMenuItem mi_cut;
+        private System.Windows.Forms.ToolStripMenuItem mi_paste;
+        private System.Windows.Forms.ContextMenuStrip cmsMore;
+        private System.Windows.Forms.ToolStripMenuItem mm_managegroups;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem mm_pastetomap;
+        private System.Windows.Forms.ToolStripMenuItem mm_pastetogroup;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     }
 }

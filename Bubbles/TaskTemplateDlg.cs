@@ -69,7 +69,7 @@ namespace Bubbles
 
             cbStartDatePeriod.SelectedIndex = 0; cbDueDatePeriod.SelectedIndex = 0;
 
-            db = new SticksDB();
+            db = new StixDB();
 
             DataTable dt = db.ExecuteQuery("select * from TASKTEMPLATES order by name");
             foreach (DataRow row in dt.Rows)
@@ -644,7 +644,7 @@ namespace Bubbles
         }
         bool start = true;
 
-        SticksDB db = null;
+        StixDB db = null;
         TaskTemplateItem selectedItem = null;
     }
 

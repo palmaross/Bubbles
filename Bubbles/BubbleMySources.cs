@@ -71,7 +71,7 @@ namespace Bubbles
             youtube = Image.FromFile(Utils.ImagesPath + "ms_youtube.png");
             chm = Image.FromFile(Utils.ImagesPath + "chm.png");
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from SOURCES where stickID=" + ID + " order by _order");
                 foreach (DataRow row in dt.Rows)
@@ -101,7 +101,38 @@ namespace Bubbles
             if (collapsed) {
                 collapsed = false; Collapse(); }
 
-            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste);
+            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typetextops);
+
+            // Apply scale factor
+            this.Paint += this_Paint; // paint the border depending on scale factor
+            scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
+            ScaleStick(100F, scaleFactor);
+        }
+
+        public void ScaleStick(float fromScale, float toScale)
+        {
+            if (fromScale == toScale) return;
+            if (toScale < 100 || toScale > 267) return;
+
+            float scale = 100F / fromScale;
+            if (scale != 1)
+                this.Scale(new SizeF(scale, scale)); // reset to 100%
+
+            this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
+            scaleFactor = toScale;
+
+            StickUtils.icondist = (int)(StickUtils.icondist * (toScale / 100));
+            MinLength = (int)(MinLength * (toScale / 100));
+        }
+
+        private void this_Paint(object sender, PaintEventArgs e)
+        {
+            if (scaleFactor < 125) return;
+            int width = 1;
+            //if (scaleFactor > 200) width = 2;
+            ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle,
+                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid,
+                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid);
         }
 
         private void Manage_Click(object sender, EventArgs e)
@@ -180,7 +211,7 @@ namespace Bubbles
                     toolTip1.SetToolTip(selectedIcon, name);
 
                     // Change title in the database
-                    using (SticksDB db = new SticksDB())
+                    using (StixDB db = new StixDB())
                         db.ExecuteNonQuery("update SOURCES set title=`" + name + "` where path=`" + 
                             item.Path + "` and stickID=" + (int)this.Tag + "");
                 }
@@ -312,7 +343,7 @@ namespace Bubbles
             string type = GetFileType(sourcePath);
 
             MySourcesItem item = new MySourcesItem(sourceTitle, sourcePath, type, order);
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
                 db.AddSource(sourceTitle, sourcePath, type, order, (int)this.Tag);
 
             Sources.Insert(order - 1, item);
@@ -548,8 +579,9 @@ namespace Bubbles
 
         int MinLength, RealLength;
         bool collapsed = false;
+        public float scaleFactor = 100;
 
-        string new_icon, position; 
+        string position; 
 
         public static Image audio, excel, exe, file, image, macros, map, pdf, txt, video, http, word, youtube, chm;
 

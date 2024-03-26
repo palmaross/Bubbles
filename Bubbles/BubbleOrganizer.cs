@@ -48,7 +48,7 @@ namespace Bubbles
             pictureHandle.MouseDown += PictureHandle_MouseDown;
             pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
 
-            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste);
+            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typetextops);
 
             if (collapsed) {
                 collapsed = false; Collapse(); }

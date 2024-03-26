@@ -63,7 +63,7 @@
             this.BI_removeallfromtopic,
             this.BI_addtomap});
             this.cmsManage.Name = "contextMenuStrip1";
-            this.cmsManage.Size = new System.Drawing.Size(226, 92);
+            this.cmsManage.Size = new System.Drawing.Size(226, 70);
             // 
             // BI_new
             // 

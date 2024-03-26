@@ -35,7 +35,7 @@ namespace Bubbles
             contextMenuItemNew = new ToolStripMenuItem { Text = "Новый сниппет" };
             contextMenuItemNew.Click += toolStripMenuItemNew_Click;
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from SNIPPETS");
 
@@ -116,7 +116,7 @@ namespace Bubbles
             {
                 if (edit)
                 {
-                    using (SticksDB db = new SticksDB())
+                    using (StixDB db = new StixDB())
                     {
                         DataTable dt = db.ExecuteQuery("select * from SNIPPETS where snippet=`" + txtAddItem.Text + "`");
                         if (dt.Rows.Count == 0)
@@ -167,7 +167,7 @@ namespace Bubbles
 
             int i = listBox1.SelectedIndex;
 
-            using (SticksDB db = new SticksDB())
+            using (StixDB db = new StixDB())
                 db.ExecuteNonQuery("delete from SNIPPETS where snippet=`" + listBox1.SelectedItem.ToString() + "`");
 
             listBox1.Items.RemoveAt(i);
