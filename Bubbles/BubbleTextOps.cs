@@ -23,10 +23,9 @@ namespace Bubbles
             InitializeComponent();
 
             this.Tag = ID;
-            orientation = _orientation.Substring(0, 1); // "H" or "V"
-            collapsed = _orientation.Substring(1, 1) == "1";
+            orientation = _orientation; // "H" or "V"
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "PasteStick.htm");
 
@@ -60,7 +59,7 @@ namespace Bubbles
             OP_myrisk.ToolTipText = Utils.getString("pastenotes.contextmenu.quickinsert.tooltip");
             OP_myrisk.Tag = "myrisk";
 
-            StickUtils.SetCommonContextMenu(cmsCommon, StickUtils.typetextops);
+            StixUtils.SetCommonContextMenu(cmsCommon, StixUtils.typetextops);
 
             PopulateTopicWidth();
 
@@ -71,7 +70,7 @@ namespace Bubbles
             pictureHandle.MouseDown += PictureHandle_MouseDown;
             pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
 
-            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typetextops);
+            Manage.MouseHover += (sender, e) => StixUtils.ShowCommandPopup(this, orientation, StixUtils.typetextops);
 
             if (collapsed) {
                 collapsed = false; Collapse(); }
@@ -153,14 +152,14 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "ManageTopicWidths")
             {
-                if (BubblesButton.topicWidthDlg.Visible)
+                if (StixButton.topicWidthDlg.Visible)
                 {
-                    BubblesButton.topicWidthDlg.Hide();
+                    StixButton.topicWidthDlg.Hide();
                 }
                 else
                 {
-                    BubblesButton.topicWidthDlg.form = this;
-                    BubblesButton.topicWidthDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                    StixButton.topicWidthDlg.form = this;
+                    StixButton.topicWidthDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                 }
             }
             else if (e.ClickedItem.Name == "ManualWidth")
@@ -176,12 +175,12 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "MMAutoWidth")
             {
-                if (StickUtils.TopicAutoWidth)
-                    StickUtils.TopicAutoWidth = false;
+                if (StixUtils.TopicAutoWidth)
+                    StixUtils.TopicAutoWidth = false;
                 else
-                    StickUtils.TopicAutoWidth = true;
+                    StixUtils.TopicAutoWidth = true;
 
-                Utils.setRegistry("MMAutoWidth", StickUtils.TopicAutoWidth ? "1" : "0");
+                Utils.setRegistry("MMAutoWidth", StixUtils.TopicAutoWidth ? "1" : "0");
             }
             else if (e.ClickedItem.Name == "MMAutoWidthOut")
             {
@@ -193,7 +192,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
-                BubblesButton.STICKS.Remove((int)this.Tag);
+                StixButton.STICKS.Remove((int)this.Tag);
                 this.Close();
             }
             else if (e.ClickedItem.Name == "BI_help")
@@ -202,7 +201,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
-                StickUtils.SaveStick(this.Bounds, (int)this.Tag, orientation, collapsed);
+                StixUtils.SaveStick(this.Bounds, (int)this.Tag, orientation);
             }
             else if (e.ClickedItem.Name == "BI_collapse")
             {
@@ -212,7 +211,7 @@ namespace Bubbles
 
         public void Rotate()
         {
-            orientation = StickUtils.RotateStick(this, Manage, orientation);
+            orientation = StixUtils.RotateStick(this, Manage, orientation);
 
             panelOptions.Size = new Size(panelOptions.Height, panelOptions.Width);
             panelOptions.Location = new Point(panelOptions.Location.Y, panelOptions.Location.X);
@@ -231,14 +230,14 @@ namespace Bubbles
 
                 collapseState = this.Location; // remember collapsed location
                 collapseOrientation = orientation;
-                StickUtils.Expand(this, RealLength, orientation, cmsCommon);
+                StixUtils.Expand(this, RealLength, orientation, cmsCommon);
                 collapsed = false;
             }
             else // Collapse stick
             {
                 if (ExpandAll) return;
 
-                StickUtils.Collapse(this, orientation, cmsCommon);
+                StixUtils.Collapse(this, orientation, cmsCommon);
                 collapsed = true;
                 if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
                 {
@@ -284,7 +283,7 @@ namespace Bubbles
             SelectedTopics.AddRange(MMUtils.ActiveDocument.Selection.OfType<Topic>());
             string rtf = Clipboard.GetText(TextDataFormat.Rtf);
 
-            StickUtils.GetLinks(OptionSourceLink.Tag.ToString() == "yes",
+            StixUtils.GetLinks(OptionSourceLink.Tag.ToString() == "yes",
                 OptionInternalLinks.Tag.ToString() == "yes");
 
             if (OptionTextFormat.Tag.ToString() == "formatted" && String.IsNullOrEmpty(rtf))
@@ -294,7 +293,7 @@ namespace Bubbles
                 pasteOperation = "topicnotes";
                 PastedTopics.Clear();
 
-                StickUtils.ActivateMindManager();
+                StixUtils.ActivateMindManager();
                 SelectedTopics[0].SelectOnly(); // get first of the selected topics
                 PasteOperations.Start(); // start timer to process formatted text
                                          // paste from clipboard (in MM23 Selection.Paste() doesn't work!)
@@ -384,13 +383,13 @@ namespace Bubbles
         {
             t.Notes.CursorPosition = -1;
 
-            if (StickUtils.SourceURL != "")
-                t.Notes.InsertTextHyperlink(StickUtils.SourceURL,  Utils.getString("BubblesPaste.AddNotes.Source"));
+            if (StixUtils.SourceURL != "")
+                t.Notes.InsertTextHyperlink(StixUtils.SourceURL,  Utils.getString("BubblesPaste.AddNotes.Source"));
 
-            if (StickUtils.Links.Count > 0)
+            if (StixUtils.Links.Count > 0)
             {
                 int i = 1;
-                foreach (string link in StickUtils.Links)
+                foreach (string link in StixUtils.Links)
                     t.Notes.InsertTextHyperlink(link, Utils.getString("BubblesPaste.AddNotes.Link") + " " + i++);
             }
         }
@@ -496,10 +495,10 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
-                StickUtils.TopicWidthList.Clear();
+                StixUtils.TopicWidthList.Clear();
 
                 // Get links from copied text
-                StickUtils.GetLinks(OptionSourceLink.Tag.ToString() == "yes", 
+                StixUtils.GetLinks(OptionSourceLink.Tag.ToString() == "yes", 
                     OptionInternalLinks.Tag.ToString() == "yes");
 
                 if (MMUtils.ActiveDocument == null || !Clipboard.ContainsText() ||
@@ -529,7 +528,7 @@ namespace Bubbles
                         pastetext = true;
                         PastedTopics.Clear();
 
-                        StickUtils.ActivateMindManager();
+                        StixUtils.ActivateMindManager();
                         pasteOperation = "pastetotopic";
                         SelectedTopics[0].SelectOnly(); // select the first of selected topics
                         PasteOperations.Start(); // start timer to process pasted topics
@@ -564,16 +563,16 @@ namespace Bubbles
                     t.Title.InsertTextRTF(t.Text.Length + 1, rtf);
 
                 // Add links
-                if (StickUtils.SourceURL != "")
-                    t.Hyperlinks.AddHyperlink(StickUtils.SourceURL);
-                foreach (string link in StickUtils.Links)
+                if (StixUtils.SourceURL != "")
+                    t.Hyperlinks.AddHyperlink(StixUtils.SourceURL);
+                foreach (string link in StixUtils.Links)
                     t.Hyperlinks.AddHyperlink(link);
 
-                StickUtils.TopicWidthList.Add(t);
+                StixUtils.TopicWidthList.Add(t);
             }
             pastetopic = false;
-            if (StickUtils.TopicAutoWidth)
-                StickUtils.SetTopicWidth();
+            if (StixUtils.TopicAutoWidth)
+                StixUtils.SetTopicWidth();
         }
         bool pastetopic = false;
 
@@ -612,16 +611,16 @@ namespace Bubbles
                 }
 
                 // Add links
-                if (StickUtils.SourceURL != "")
-                    t.Hyperlinks.AddHyperlink(StickUtils.SourceURL);
-                foreach (string link in StickUtils.Links)
+                if (StixUtils.SourceURL != "")
+                    t.Hyperlinks.AddHyperlink(StixUtils.SourceURL);
+                foreach (string link in StixUtils.Links)
                     t.Hyperlinks.AddHyperlink(link);
 
-                StickUtils.TopicWidthList.Add(t);
+                StixUtils.TopicWidthList.Add(t);
             }
 
-            if (StickUtils.TopicAutoWidth)
-                StickUtils.SetTopicWidth();
+            if (StixUtils.TopicAutoWidth)
+                StixUtils.SetTopicWidth();
         }
 
         
@@ -650,7 +649,7 @@ namespace Bubbles
         public void PasteToTopic(Document pDocument)
         {
             rtb.Clear();
-            StickUtils.TopicWidthList.Clear();
+            StixUtils.TopicWidthList.Clear();
 
             foreach (Topic t in PastedTopics)
             {
@@ -689,18 +688,18 @@ namespace Bubbles
                     }
 
                     // Set links
-                    if (StickUtils.SourceURL != "")
-                        t.Hyperlinks.AddHyperlink(StickUtils.SourceURL);
+                    if (StixUtils.SourceURL != "")
+                        t.Hyperlinks.AddHyperlink(StixUtils.SourceURL);
 
-                    foreach (string link in StickUtils.Links)
+                    foreach (string link in StixUtils.Links)
                         t.Hyperlinks.AddHyperlink(link);
 
-                    StickUtils.TopicWidthList.Add(t);
+                    StixUtils.TopicWidthList.Add(t);
                 }
             }
 
-            if (StickUtils.TopicAutoWidth)
-                StickUtils.SetTopicWidth();
+            if (StixUtils.TopicAutoWidth)
+                StixUtils.SetTopicWidth();
 
             PastedTopics.Clear(); SelectedTopics.Clear();
         }
@@ -712,7 +711,7 @@ namespace Bubbles
                 transTopicType == "Callout" || transTopicType == "ParentTopic";
 
             rtb.Clear();
-            StickUtils.TopicWidthList.Clear();
+            StixUtils.TopicWidthList.Clear();
 
             if (onetopic) // Merge text from pasted topics
             {
@@ -738,22 +737,22 @@ namespace Bubbles
                 {
                     if (onetopic) // Also, Callout and Parent topic
                     {
-                        frameTopic = StickUtils.AddTopic(t, transTopicType, rtb.Rtf, true, true);
-                        if (!StickUtils.TopicWidthList.Contains(frameTopic))
-                            StickUtils.TopicWidthList.Add(frameTopic);
+                        frameTopic = StixUtils.AddTopic(t, transTopicType, rtb.Rtf, true, true);
+                        if (!StixUtils.TopicWidthList.Contains(frameTopic))
+                            StixUtils.TopicWidthList.Add(frameTopic);
                     }
                     else // Multiple topics to paste. Subtopic, Next Topic or Topic before
                     {
                         foreach (Topic _t in BubbleTextOps.PastedTopics)
                         {
-                            if (!StickUtils.TopicWidthList.Contains(_t))
-                                StickUtils.TopicWidthList.Add(_t);
+                            if (!StixUtils.TopicWidthList.Contains(_t))
+                                StixUtils.TopicWidthList.Add(_t);
 
                             // Add the Source URL to the FIRST topic
                             // Other topics have links already
-                            if (i++ == 1 && StickUtils.SourceURL != "")
+                            if (i++ == 1 && StixUtils.SourceURL != "")
                             {
-                                _t.Hyperlinks.AddHyperlink(StickUtils.SourceURL);
+                                _t.Hyperlinks.AddHyperlink(StixUtils.SourceURL);
                                 if (_t.Hyperlinks.Count > 1)
                                     _t.Hyperlinks.MoveToTop(_t.Hyperlinks.Count);
                             }
@@ -764,8 +763,8 @@ namespace Bubbles
                             {
                                 if (OptionTextFormat.Tag.ToString() == "unformatted")
                                     _t.Font.SetAutomatic(63);
-                                if (!StickUtils.TopicWidthList.Contains(_t))
-                                    StickUtils.TopicWidthList.Add(_t);
+                                if (!StixUtils.TopicWidthList.Contains(_t))
+                                    StixUtils.TopicWidthList.Add(_t);
                             }
                             if (transTopicType != "subtopic" && p == 1)
                             {
@@ -782,25 +781,25 @@ namespace Bubbles
 
                             if (p > 1) // Other selected topics
                             {
-                                StickUtils.Links.Clear();
+                                StixUtils.Links.Clear();
                                 foreach (Hyperlink link in _t.Hyperlinks)
-                                    StickUtils.Links.Add(link.Address);
+                                    StixUtils.Links.Add(link.Address);
 
                                 if (OptionTextFormat.Tag.ToString() == "formatted")
-                                    frameTopic = StickUtils.AddTopic(t, transTopicType, _t.Title.TextRTF, true);
+                                    frameTopic = StixUtils.AddTopic(t, transTopicType, _t.Title.TextRTF, true);
                                 else
-                                    frameTopic = StickUtils.AddTopic(t, transTopicType, _t.Text);
+                                    frameTopic = StixUtils.AddTopic(t, transTopicType, _t.Text);
 
-                                if (!StickUtils.TopicWidthList.Contains(frameTopic))
-                                    StickUtils.TopicWidthList.Add(frameTopic);
+                                if (!StixUtils.TopicWidthList.Contains(frameTopic))
+                                    StixUtils.TopicWidthList.Add(frameTopic);
                             }
                         }
                     }
                 }
             }
 
-            if (StickUtils.TopicAutoWidth)
-                StickUtils.SetTopicWidth();
+            if (StixUtils.TopicAutoWidth)
+                StixUtils.SetTopicWidth();
 
             PastedTopics.Clear(); SelectedTopics.Clear();
         }
@@ -836,7 +835,7 @@ namespace Bubbles
             }
             else if (e.Button == MouseButtons.Right)
             {
-                StickUtils.ShowCommandPopup(this, orientation, StickUtils.typetextops, "paste");
+                StixUtils.ShowCommandPopup(this, orientation, StixUtils.typetextops, "paste");
             }
         }
 
@@ -851,7 +850,7 @@ namespace Bubbles
             bool singleforced = !Clipboard.ContainsData(System.Windows.DataFormats.Html) &&
                 !Clipboard.ContainsData(System.Windows.DataFormats.Rtf);
 
-            StickUtils.GetLinks(OptionSourceLink.Tag.ToString() == "yes",
+            StixUtils.GetLinks(OptionSourceLink.Tag.ToString() == "yes",
                 OptionInternalLinks.Tag.ToString() == "yes");
 
             if (formatted && !singleforced)
@@ -868,7 +867,7 @@ namespace Bubbles
                     pasteOperation = "pasteastopic";
                     PastedTopics.Clear();
 
-                    StickUtils.ActivateMindManager();
+                    StixUtils.ActivateMindManager();
                     SelectedTopics[0].SelectOnly(); // select the first of selected topics
                     PasteOperations.Start(); // start timer to process pasted topics
                                              // paste text from clipboard (in MM23 Selection.Paste() doesn't work!)
@@ -891,13 +890,13 @@ namespace Bubbles
                         StringSplitOptions.RemoveEmptyEntries).ToList();
 
                     // We have formatted multiline text with links. MindManager, help!
-                    if (TopicsToAdd.Count > 1 && StickUtils.Links.Count > 1 && !singleforced)
+                    if (TopicsToAdd.Count > 1 && StixUtils.Links.Count > 1 && !singleforced)
                     {
                         pastetext = true; // for onObjectAdded event
                         pasteOperation = "pasteastopic";
                         PastedTopics.Clear();
 
-                        StickUtils.ActivateMindManager();
+                        StixUtils.ActivateMindManager();
                         SelectedTopics[0].SelectOnly(); // select the first of selected topics
                         PasteOperations.Start(); // start timer to process pasted topics
                                                  // paste text from clipboard (in MM23 Selection.Paste() doesn't work!)
@@ -931,23 +930,23 @@ namespace Bubbles
 
             if (transTopicType == "parenttopic") // selected topics will be subtopics of the future parent topic
             {
-                StickUtils.AddTopic(MMUtils.ActiveDocument.Selection.PrimaryTopic, transTopicType, TopicsToAdd[0], rtf, true);
+                StixUtils.AddTopic(MMUtils.ActiveDocument.Selection.PrimaryTopic, transTopicType, TopicsToAdd[0], rtf, true);
             }
             else
             {
-                StickUtils.TopicWidthList.Clear();
+                StixUtils.TopicWidthList.Clear();
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                 {
                     bool firsttopic = true; // Source Link is added to the first topic only!
                     foreach (var name in TopicsToAdd)
                     {
-                        StickUtils.AddTopic(t, transTopicType, name, rtf, firsttopic);
+                        StixUtils.AddTopic(t, transTopicType, name, rtf, firsttopic);
                         if (firsttopic) firsttopic = false;
                     }
                 }
             }
-            if (StickUtils.TopicAutoWidth)
-                StickUtils.SetTopicWidth();
+            if (StixUtils.TopicAutoWidth)
+                StixUtils.SetTopicWidth();
         }
 
         private void OptionButton_MouseClick(object sender, MouseEventArgs e)
@@ -1055,8 +1054,8 @@ namespace Bubbles
 
         private void pReplace_Click(object sender, EventArgs e)
         {
-            if (!BubblesButton.m_ReplaceDlg.Visible)
-                BubblesButton.m_ReplaceDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            if (!StixButton.m_ReplaceDlg.Visible)
+                StixButton.m_ReplaceDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
         public void PopulateTopicWidth()
@@ -1071,7 +1070,7 @@ namespace Bubbles
             tsi.Font = new Font(tsi.Font, FontStyle.Bold);
             cmsTopicWidths.Items.Add(tsi);
 
-            foreach (int width in StickUtils.ManualTopicWidths)
+            foreach (int width in StixUtils.ManualTopicWidths)
             {
                 tsi = cmsTopicWidths.Items.Add(width.ToString());
                 tsi.Name = "ManualWidth"; tsi.Tag = width.ToString();
@@ -1094,7 +1093,7 @@ namespace Bubbles
             tsi.Name = "MMAutoWidth";
             tsi.ToolTipText = Utils.getString("BubblesPaste.MMAutoWidth.tooltip");
             (tsi as ToolStripMenuItem).CheckOnClick = true;
-            (tsi as ToolStripMenuItem).Checked = StickUtils.TopicAutoWidth;
+            (tsi as ToolStripMenuItem).Checked = StixUtils.TopicAutoWidth;
             cmsTopicWidths.Items.Add(tsi);
 
             //var dd = (tsi as ToolStripMenuItem).DropDown;
@@ -1131,7 +1130,7 @@ namespace Bubbles
                 if (MMUtils.ActiveDocument == null) return;
 
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                    t.Shape.TextWidth = StickUtils.MainTopicWidth;
+                    t.Shape.TextWidth = StixUtils.MainTopicWidth;
             }
             else if (e.Button == MouseButtons.Right)
             {

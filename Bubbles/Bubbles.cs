@@ -9,11 +9,10 @@ using System.Collections.Generic;
 using System.Data;
 using PopupControl;
 using System.Linq;
-using System.Windows.Media.Imaging;
 
 namespace Bubbles
 {
-    class BubblesButton : MMBase
+    class StixButton : MMBase
     {
         public void Create()
         {
@@ -56,6 +55,8 @@ namespace Bubbles
 
             InitializeTopicWidthDlg();
 
+            OmniSticksButton.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+
             DataTable dt;
             using (StixDB db = new StixDB())
                 dt = db.ExecuteQuery("select * from STICKS order by type");
@@ -69,31 +70,28 @@ namespace Bubbles
 
                 switch (dr["type"].ToString()) 
                 {
-                    case StickUtils.typebase:
-                        m_cmdBubbles_Click();
-                        break;
-                    case StickUtils.typeicons:
+                    case StixUtils.typeicons:
                         m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.pIcons, null);
                         break;
-                    case StickUtils.typetaskinfo:
+                    case StixUtils.typetaskinfo:
                         m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.TaskInfo, null);
                         break;
-                    case StickUtils.typeformat:
+                    case StixUtils.typeformat:
                         m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.Format, null);
                         break;
-                    case StickUtils.typesources:
+                    case StixUtils.typesources:
                         m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.MySources, null);
                         break;
-                    case StickUtils.typebookmarks:
+                    case StixUtils.typebookmarks:
                         m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.Bookmarks, null);
                         break;
-                    case StickUtils.typeaddtopic:
+                    case StixUtils.typeaddtopic:
                         m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.AddTopics, null);
                         break;
-                    case StickUtils.typetextops:
+                    case StixUtils.typetextops:
                         m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.Paste, null);
                         break;
-                    case StickUtils.typeorganizer:
+                    case StixUtils.typeorganizer:
                         m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.Organizer, null);
                         break;
                 }
@@ -125,43 +123,13 @@ namespace Bubbles
                     commandPopup.Name.StartsWith("calendar"))
                 return;
 
-                StickUtils.ActivateMindManager(); // = Hide popup
+                StixUtils.ActivateMindManager(); // = Hide popup
             }
         }
 
         private void m_cmdBubbles_Click()
         {
-            if (m_StixBase.Visible)
-                m_StixBase.Hide();
-            else
-            {
-                m_StixBase.Location = new Point( MMUtils.MindManager.Left + m_StixBase.pStart.Width,
-                    MMUtils.MindManager.Top + MMUtils.MindManager.Height - m_StixBase.Height - m_StixBase.pStart.Width);
-
-                m_StixBase.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-            }
-
-            return;
-
-            if (m_bubblesMenu.Visible)
-                m_bubblesMenu.Hide();
-            else
-            {
-                m_bubblesMenu.Location = new Point(Cursor.Position.X - m_bubblesMenu.Width / 2, MMUtils.MindManager.Top + MMUtils.MindManager.Height - m_bubblesMenu.Height - m_bubblesMenu.Settings.Height);
-                m_bubblesMenu.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-                int locX = m_bubblesMenu.panel1.Location.X;
-                int startLoc = m_bubblesMenu.panel1.Location.Y + m_bubblesMenu.panel1.Height;
-                m_bubblesMenu.panel1.Location = new Point(locX, m_bubblesMenu.label1.Location.Y);
-                m_bubblesMenu.Refresh();
-
-                do
-                {
-                    startLoc = startLoc - 7;
-                    m_bubblesMenu.panel1.Location = new Point(locX, startLoc);
-                    m_bubblesMenu.panel1.Refresh();
-                }
-                while (m_bubblesMenu.panel1.Location.Y > 0);
-            }
+            
         }
 
         private void m_cmdBubbles_UpdateState(ref bool pEnabled, ref bool pChecked)
@@ -224,11 +192,11 @@ namespace Bubbles
                         BubbleTextOps.PastedTopics.Add(t);
                 }
                 // Paste operation from MindManager.
-                else if (StickUtils.TopicAutoWidth) // Topic autowidth enabled
+                else if (StixUtils.TopicAutoWidth) // Topic autowidth enabled
                 {
-                    StickUtils.TopicWidthList.Add(t);
-                    StickUtils.SetTopicWidth();
-                    StickUtils.TopicWidthList.Clear();
+                    StixUtils.TopicWidthList.Add(t);
+                    StixUtils.SetTopicWidth();
+                    StixUtils.TopicWidthList.Clear();
                 }
             }
         }
@@ -250,14 +218,14 @@ namespace Bubbles
         public override void onObjectChanged(MMEventArgs aArgs)
         {
             if (aArgs.target is Topic _t && aArgs.what == "text" && // topic text changed
-                StickUtils.TopicAutoWidth && // Topic AutoWidth enabled
+                StixUtils.TopicAutoWidth && // Topic AutoWidth enabled
                 MMPaste && // Text is pasted into topic via MindManager
                 !BubbleTextOps.pastetext) // to insure: it's not a BubblePaste stick operation
             {
                 // Set topic width
-                StickUtils.TopicWidthList.Add(_t);
-                StickUtils.SetTopicWidth();
-                StickUtils.TopicWidthList.Clear();
+                StixUtils.TopicWidthList.Add(_t);
+                StixUtils.SetTopicWidth();
+                StixUtils.TopicWidthList.Clear();
             }
 
             MMPaste = false;
@@ -447,7 +415,7 @@ namespace Bubbles
                     {
                         case "numMainWidth":
                             topicWidthDlg.numMainWidth.Value = _value;
-                            StickUtils.MainTopicWidth = _value; break;
+                            StixUtils.MainTopicWidth = _value; break;
                         case "numWidth1":
                             topicWidthDlg.numWidth1.Value = _value;
                             topicWidthDlg.cbm1.Checked = _checked; break;
@@ -504,10 +472,10 @@ namespace Bubbles
                 }
             }
 
-            StickUtils.ManualTopicWidths = mwidths.OrderBy(i => i).ToList();
-            StickUtils.AutoTopicWidths = awidths.OrderByDescending(key => key.Key).ToDictionary(pair => pair.Key, pair => pair.Value);
-            StickUtils.MinAutoTopicWidth = StickUtils.AutoTopicWidths.Keys.Last();
-            StickUtils.TopicAutoWidth = Utils.getRegistry("MMAutoWidth", "0") == "1";
+            StixUtils.ManualTopicWidths = mwidths.OrderBy(i => i).ToList();
+            StixUtils.AutoTopicWidths = awidths.OrderByDescending(key => key.Key).ToDictionary(pair => pair.Key, pair => pair.Value);
+            StixUtils.MinAutoTopicWidth = StixUtils.AutoTopicWidths.Keys.Last();
+            StixUtils.TopicAutoWidth = Utils.getRegistry("MMAutoWidth", "0") == "1";
         }
 
         public void Destroy()
@@ -572,6 +540,13 @@ namespace Bubbles
             m_bubblesMenu.Dispose();
             m_bubblesMenu = null;
 
+            OmniSticksButton.Destroy();
+
+            if (OmniSticksButton.Visible)
+                OmniSticksButton.Hide();
+            OmniSticksButton.Dispose();
+            OmniSticksButton = null;
+
             if (m_StixBase.Visible)
                 m_StixBase.Hide();
             m_StixBase.Dispose();
@@ -618,12 +593,14 @@ namespace Bubbles
 
             Utils.StockIcons.Clear();
 
-            StickUtils.TopicWidthList.Clear();
+            StixUtils.TopicWidthList.Clear();
 
             m_bCreated = false;
         }
 
         private bool m_bCreated;
+
+        public OmniButton OmniSticksButton = new OmniButton();
 
         public static BubbleSnippets m_bubbleSnippets = null;
 
@@ -650,7 +627,7 @@ namespace Bubbles
         public static Dictionary<int, Form> STICKS = new Dictionary<int, Form>();
         public static Dictionary<int, Form> pNOTES = new Dictionary<int, Form>();
 
-        public static Popup commandPopup = new Popup(new StickPopup().panelH);
+        public static Popup commandPopup = new Popup(new StixPopup().panelH);
 
         Timer HidePopup = new Timer();
 

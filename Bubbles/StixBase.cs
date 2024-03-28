@@ -1,10 +1,8 @@
-﻿using Mindjet.MindManager.Interop;
-using PRAManager;
+﻿using PRAManager;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Color = System.Drawing.Color;
@@ -45,10 +43,10 @@ namespace Bubbles
             toolTip1.SetToolTip(boxSources, Utils.getString("Box.Sources"));
             toolTip1.SetToolTip(Stickers, Utils.getString("stickers.contextmenu.mystickers"));
 
-            toolTip1.SetToolTip(pictureHandle, Utils.getString("StixBase.Name"));
+            //toolTip1.SetToolTip(pictureHandle, Utils.getString("StixBase.Name"));
 
-            StickUtils.SetCommonContextMenu(cmsCommon, StickUtils.typebase);
-            cmsCommon.ItemClicked += ContextMenu_ItemClicked;
+            //StixUtils.SetCommonContextMenu(cmsHelp, StixUtils.typebase);
+            cmsHelp.ItemClicked += ContextMenu_ItemClicked;
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
@@ -56,23 +54,40 @@ namespace Bubbles
 
             // To move stix
             this.MouseDown += Move_Stick;
-            pictureHandle.MouseDown += Move_Stick;
-            pictureHandle.MouseDoubleClick += (sender, e) => { this.Hide(); };
+            //pictureHandle.MouseDown += Move_Stick;
+            //pictureHandle.MouseDoubleClick += (sender, e) => { this.Hide(); };
 
-            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typetextops);
+            //Manage.MouseHover += (sender, e) => StixUtils.ShowCommandPopup(this, orientation, StixUtils.typetextops);
             this.Paint += this_Paint; // paint the border
             panelBoxes.Paint += PanelBoxes_Paint;
+            this.Deactivate += This_Deactivate;
             //panelOther.Paint += PanelOther_Paint;
 
             // Apply scale factor
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_StixBase", "100"));
             ScaleStick(100F, scaleFactor);
+
+            // Rounded corners
+            var attribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
+            var preference = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
+            try
+            {
+                // Works only on Windows 11!
+                DwmSetWindowAttribute(this.Handle, attribute, ref preference, sizeof(uint));
+            }
+            catch { }
+        }
+
+        private void This_Deactivate(object sender, EventArgs e)
+        {
+            //if (!keepmenu)
+                this.Hide();
         }
 
         public void ScaleStick(float fromScale, float toScale)
         {
             if (fromScale == toScale) return;
-            if (toScale < 100 || toScale > 267) return;
+            if (toScale < 100 || toScale > 300) return;
 
             float scale = 100F / fromScale;
             if (scale != 1)
@@ -123,50 +138,44 @@ namespace Bubbles
 
         private void ContextMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Name == "77")
+            if (e.ClickedItem.Name == "cm_about")
             {
                 
             }
-            else if (e.ClickedItem.Name == "BI_rotate")
-            {
-                Rotate();
-            }
-            else if (e.ClickedItem.Name == "BI_close")
-            {
-                this.Hide();
-            }
-            else if (e.ClickedItem.Name == "BI_help")
+            else if (e.ClickedItem.Name == "cm_help")
             {
                 Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "stixbase.htm");
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
-                StickUtils.SaveStick(this.Bounds, (int)this.Tag, orientation, false); // todo
+                StixUtils.SaveStick(this.Bounds, (int)this.Tag, orientation);
             }
-            else if (e.ClickedItem.Name == "BS_settings")
+            else if (e.ClickedItem.Name == "cm_settings")
             {
                 using (SettingsDlg dlg = new SettingsDlg())
+                {
                     dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                }
             }
         }
 
         public void Rotate()
         {
-            orientation = StickUtils.RotateStick(this, Manage, orientation);
+            orientation = StixUtils.RotateStick(this, Manage, orientation);
 
             panelBoxes.Location = new Point(panelBoxes.Location.Y, panelBoxes.Location.X);
             panelBoxes.Size = new Size(panelBoxes.Height, panelBoxes.Width);
 
-            panelOther.Location = new Point(panelOther.Location.Y, panelOther.Location.X);
-            panelOther.Size = new Size(panelOther.Height, panelOther.Width);
+            //panelOther.Location = new Point(panelOther.Location.Y, panelOther.Location.X);
+            //panelOther.Size = new Size(panelOther.Height, panelOther.Width);
         }
 
         private void Manage_Click(object sender, EventArgs e)
         {
-            foreach (ToolStripItem item in cmsCommon.Items)
+            foreach (ToolStripItem item in cmsHelp.Items)
                 item.Visible = true;
 
-            cmsCommon.Show(Cursor.Position);
+            cmsHelp.Show(Cursor.Position);
         }
 
         private void StxIcon_MouseClick(object sender, MouseEventArgs e)
@@ -237,7 +246,7 @@ namespace Bubbles
 
             if (pb.Name == "stxIcons")
             {
-                stickType = StickUtils.typeicons;
+                stickType = StixUtils.typeicons;
                 defaultName = Utils.getString("BubbleIcons.bubble.tooltip");
                 if (cmsIcons.Items.Count > 0 && startId == 0)
                 {
@@ -246,12 +255,12 @@ namespace Bubbles
             }
             else if (pb.Name == "stxTaskInfo")
             {
-                stickType = StickUtils.typetaskinfo;
+                stickType = StixUtils.typetaskinfo;
                 defaultName = Utils.getString("BubbleTaskInfo.bubble.tooltip");
             }
             else if (pb.Name == "stxSources")
             {
-                stickType = StickUtils.typesources;
+                stickType = StixUtils.typesources;
                 defaultName = Utils.getString("BubbleMySources.bubble.tooltip");
                 if (cmsMySources.Items.Count > 0 && startId == 0)
                 {
@@ -260,27 +269,27 @@ namespace Bubbles
             }
             else if (pb.Name == "stxBookmarks")
             {
-                stickType = StickUtils.typebookmarks;
+                stickType = StixUtils.typebookmarks;
                 defaultName = Utils.getString("BubbleBookmarks.bubble.tooltip");
             }
             else if (pb.Name == "stxFormat")
             {
-                stickType = StickUtils.typeformat;
+                stickType = StixUtils.typeformat;
                 defaultName = Utils.getString("BubbleFormat.bubble.tooltip");
             }
             else if (pb.Name == "stxAddTopic")
             {
-                stickType = StickUtils.typeaddtopic;
+                stickType = StixUtils.typeaddtopic;
                 defaultName = Utils.getString("BubbleAddTopic.bubble.tooltip");
             }
             else if (pb.Name == "stxTextOps")
             {
-                stickType = StickUtils.typetextops;
+                stickType = StixUtils.typetextops;
                 defaultName = Utils.getString("BubbleTextOps.bubble.tooltip");
             }
             else if (pb.Name == "Organizer")
             {
-                stickType = StickUtils.typeorganizer;
+                stickType = StixUtils.typeorganizer;
                 defaultName = Utils.getString("BubbleOrganizer.bubble.tooltip");
             }
 
@@ -296,30 +305,31 @@ namespace Bubbles
             Form form = null;
             switch (stickType)
             {
-                case StickUtils.typeicons:
+                case StixUtils.typeicons:
                     form = new BubbleIcons(id, orientation, name); break;
-                case StickUtils.typetaskinfo:
+                case StixUtils.typetaskinfo:
                     form = new BubbleTaskInfo(id, orientation, name); break;
-                case StickUtils.typesources:
-                    form = new BubbleMySources(id, orientation, name); break;
-                case StickUtils.typebookmarks:
+                case StixUtils.typesources:
+                    form = new BubbleSources(id, orientation, name); break;
+                case StixUtils.typebookmarks:
                     form = new BubbleBookmarks(id, orientation, name); break;
-                case StickUtils.typeformat:
+                case StixUtils.typeformat:
                     form = new BubbleFormat(id, orientation, name); break;
-                case StickUtils.typeaddtopic:
+                case StixUtils.typeaddtopic:
                     form = new BubbleAddTopic(id, orientation, name); break;
-                case StickUtils.typetextops:
+                case StixUtils.typetextops:
                     form = new BubbleTextOps(id, orientation, name); break;
-                case StickUtils.typeorganizer:
+                case StixUtils.typeorganizer:
                     form = new BubbleOrganizer(id, orientation, name); break;
             }
 
             form.Location = GetStickLocation(location, form.Size);
-            BubblesButton.STICKS.Add(id, form);
+            StixButton.STICKS.Add(id, form);
             form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
 
-            StickUtils.ActivateMindManager();
+            StixUtils.ActivateMindManager();
         }
+
         public Point GetStickLocation(string location, Size size)
         {
             Point thisLocation = new Point();
@@ -361,11 +371,10 @@ namespace Bubbles
         /// <returns>0 - stick troubles, don't run, 1 - stick ok, run it, 2 - stick already runned</returns>
         int StickClicked(string type, ref string orientation, ref string location, ref string name, ref int id)
         {
-            string position = "";
-            id = GetStick(type, id, ref position, ref name);
+            id = GetStick(type, id, ref location, ref orientation, ref name);
 
             // If stick is running, show it (if it is hidden) or tell user that it is already running
-            foreach (var stick in BubblesButton.STICKS)
+            foreach (var stick in StixButton.STICKS)
             {
                 if (stick.Key == id)
                 {
@@ -386,16 +395,8 @@ namespace Bubbles
                     // create "My Icons" stick
                     name = Utils.getString(type + ".bubble.tooltip");
                     id = Utils.StickID();
-                    db.AddStick(id, name, type, 0, "", 0, 0);
+                    db.AddStick(id, name, type, 0, "H", "");
                 }
-            }
-
-            orientation = "H0"; location = ""; // "H0" - Horizontal&Not collapsed
-            if (position != "")
-            {
-                string[] parts = position.Split('#');
-                orientation = parts[0];
-                location = parts[1];
             }
             return 1;
         }
@@ -408,7 +409,7 @@ namespace Bubbles
         /// <param name="name"></param>
         /// <returns>0 - Very new stick, -1 - User don't want select a stick, N - stick ID
         /// </returns>
-        private int GetStick(string type, int id, ref string position, ref string name)
+        private int GetStick(string type, int id, ref string location, ref string orientation, ref string name)
         {
             using (StixDB db = new StixDB())
             {
@@ -422,7 +423,8 @@ namespace Bubbles
                     return 0;
                 else if (dt.Rows.Count == 1) // only one stick, do not show SelectStickDlg
                 {
-                    position = dt.Rows[0]["position"].ToString();
+                    location = dt.Rows[0]["location"].ToString();
+                    orientation = dt.Rows[0]["orientation"].ToString();
                     name = dt.Rows[0]["name"].ToString();
                     return Convert.ToInt32(dt.Rows[0]["id"]);
                 }
@@ -452,20 +454,33 @@ namespace Bubbles
 
         public float scaleFactor = 100;
         int thisWidth; int thisHeight;
-        List<StartControl> thisControls = new List<StartControl>();
-    }
 
-    public class StartControl
-    {
-        public StartControl(Control c, int _width, int _height, int x, int y)
+        // The enum flag for DwmSetWindowAttribute's second parameter, which tells the function what attribute to set.
+        // Copied from dwmapi.h
+        public enum DWMWINDOWATTRIBUTE
         {
-            control = c;
-            width = _width;
-            height = _height;
-            X = x; Y = y;
+            DWMWA_WINDOW_CORNER_PREFERENCE = 33
         }
 
-        public Control control;
-        public int width, height, X, Y;
+        // The DWM_WINDOW_CORNER_PREFERENCE enum for DwmSetWindowAttribute's third parameter, which tells the function
+        // what value of the enum to set.
+        // Copied from dwmapi.h
+        public enum DWM_WINDOW_CORNER_PREFERENCE
+        {
+            DWMWCP_DEFAULT = 0,
+            DWMWCP_DONOTROUND = 1,
+            DWMWCP_ROUND = 2,
+            DWMWCP_ROUNDSMALL = 3
+        }
+
+        // Import dwmapi.dll and define DwmSetWindowAttribute in C# corresponding to the native function.
+        [DllImport("dwmapi.dll", CharSet = CharSet.Unicode, PreserveSig = false)]
+        internal static extern void DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE attribute,
+            ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute, uint cbAttribute);
+
+        private void Stickers_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

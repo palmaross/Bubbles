@@ -50,7 +50,7 @@ namespace Bubbles
 
             using (StixDB db = new StixDB())
             {
-                DataTable dt = db.ExecuteQuery("select * from MT_TEMPLATES order by templateName");
+                DataTable dt = db.ExecuteQuery("select * from ADDTOPIC_TEMPLATES order by templateName");
 
                 foreach (DataRow row in dt.Rows)
                 {
@@ -158,7 +158,7 @@ namespace Bubbles
                 TopicList = TopicList.Reverse<string>().ToList();
 
             foreach (var name in TopicList)
-                StickUtils.AddTopic(transTopic, transTopicType, name);
+                StixUtils.AddTopic(transTopic, transTopicType, name);
         }
 
         private void New_Click(object sender, EventArgs e)
@@ -177,7 +177,7 @@ namespace Bubbles
             {
                 string newName = txtTemplateName.Text.Trim();
 
-                DataTable dt = db.ExecuteQuery("select * from MT_TEMPLATES where templateName=`" + newName + "`");
+                DataTable dt = db.ExecuteQuery("select * from ADDTOPIC_TEMPLATES where templateName=`" + newName + "`");
                 if (dt.Rows.Count > 0)
                 {
                     MessageBox.Show(Utils.getString("TopicTemplateDlg.nameexists"), "",
@@ -192,7 +192,7 @@ namespace Bubbles
                     if (newName == item.TemplateName)
                         return; // The same name, nothing to update.
 
-                    db.ExecuteNonQuery("update MT_TEMPLATES set templateName=`" + newName + "` where id=" + item.ID + "");
+                    db.ExecuteNonQuery("update ADDTOPIC_TEMPLATES set templateName=`" + newName + "` where id=" + item.ID + "");
 
                     item.TemplateName = newName;
                     cbTemplates.Items.Remove(cbTemplates.SelectedItem);
@@ -245,7 +245,7 @@ namespace Bubbles
             var item = cbTemplates.SelectedItem as TemplateItem;
 
             using (StixDB db = new StixDB())
-                db.ExecuteNonQuery("delete from MT_TEMPLATES where id=" + item.ID + "");
+                db.ExecuteNonQuery("delete from ADDTOPIC_TEMPLATES where id=" + item.ID + "");
 
             cbTemplates.Items.Remove(item);
             if (cbTemplates.Items.Count > 0) cbTemplates.SelectedIndex = 0;
@@ -296,7 +296,7 @@ namespace Bubbles
             {
                 var template = cbTemplates.SelectedItem as TemplateItem;
 
-                db.ExecuteNonQuery("update MT_TEMPLATES set " +
+                db.ExecuteNonQuery("update ADDTOPIC_TEMPLATES set " +
                     "topicName=`" + topicName + "`, " +
                     "pattern =`" + pattern_data + "`, " +
                     "reserved1 =`" + topicType + "` " +

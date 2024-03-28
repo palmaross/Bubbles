@@ -14,7 +14,7 @@ namespace Bubbles
         {
             InitializeComponent();
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "IconStick.htm");
 
@@ -40,10 +40,10 @@ namespace Bubbles
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
 
             contextMenuStrip1.Items["MI_gototopic"].Text = Utils.getString("TopicNotesDlg.contextmenu.gototopic");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["MI_gototopic"], "expand.png");
+            StixUtils.SetContextMenuImage(contextMenuStrip1.Items["MI_gototopic"], "expand.png");
 
             contextMenuStrip1.Items["MI_remove"].Text = Utils.getString("TopicNotesDlg.contextmenu.remove");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["MI_remove"], "deleteall.png");
+            StixUtils.SetContextMenuImage(contextMenuStrip1.Items["MI_remove"], "deleteall.png");
 
             fBold = Image.FromFile(Utils.ImagesPath + "f_bold.png");
             fItalic = Image.FromFile(Utils.ImagesPath + "f_italic.png");

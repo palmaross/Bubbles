@@ -1,6 +1,6 @@
 ﻿namespace Bubbles
 {
-    partial class StickPopup
+    partial class StixPopup
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StickPopup));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StixPopup));
             this.panelH = new System.Windows.Forms.Panel();
             this.p2 = new System.Windows.Forms.PictureBox();
             this.p1 = new System.Windows.Forms.PictureBox();
@@ -545,7 +545,7 @@
             this.pPR4.TabStop = false;
             this.pPR4.Click += new System.EventHandler(this.pPriority_Click);
             // 
-            // StickPopup
+            // StixPopup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -557,7 +557,7 @@
             this.Controls.Add(this.panelPasteTopic);
             this.Controls.Add(this.panelH);
             this.Controls.Add(this.panelCommonMin);
-            this.Name = "StickPopup";
+            this.Name = "StixPopup";
             this.Size = new System.Drawing.Size(351, 222);
             this.panelH.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();

@@ -9,7 +9,7 @@
     ///   The object for implementing an Add-in.
     /// </summary>
     /// <seealso class='IDTExtensibility2' />
-    [GuidAttribute("47753526-1994-4211-A1DA-926C94F51BB2"), ProgId("WowStix22.Connect")]
+    [GuidAttribute("47753526-1994-4211-A1DA-926C94F51BB2"), ProgId("OmniStix22.Connect")]
     public class Connect : Object, Extensibility.IDTExtensibility2
     {
         /// <summary>
@@ -39,7 +39,7 @@
             string myDocumentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             try
             {
-                string logfile = myDocumentsFolder + "\\WowStix_logfile.txt";
+                string logfile = myDocumentsFolder + "\\OmniStix_logfile.txt";
                 if (System.IO.File.Exists(logfile))
                     System.IO.File.Delete(logfile);
             }
@@ -48,21 +48,21 @@
             try
             {
                 MMUtils.Version = 22;
-                MMUtils.Registered_AddinName = "WowStix22.Connect";
+                MMUtils.Registered_AddinName = "OmniStix22.Connect";
                 MMUtils.CLSID = "47753526-1994-4211-A1DA-926C94F51BB2";
                 MMUtils.CreateAddinFolder = true;
                 MMUtils.CreateAddinAppDataFolder = false;
                 MMUtils.checkForUpdates = true;
 
-                MMUtils.AddinName = "WowStix";
-                MMUtils.FriendlyAddinName = "WowStix";
+                MMUtils.AddinName = "OmniStix";
+                MMUtils.FriendlyAddinName = "OmniStix";
                 MMUtils.Company = "PalmaRoss";
                 Utils.Company = "PalmaRoss";
-                Utils.AddinName = "WowStix";
-                Utils.Registered_AddinName = "WowStix22.Connect";
+                Utils.AddinName = "OmniStix";
+                Utils.Registered_AddinName = "OmniStix22.Connect";
                 MMUtils.Language = Utils.getRegistry("language", "english");
                 MMUtils.AddinVersion = Utils.getRegistry("version");
-                MMUtils.licenseKeyStartsWith = "WS";
+                MMUtils.licenseKeyStartsWith = "OS";
 
                 MMUtils.MindManager = (Application)application;
                 if (MMUtils.DoNotStartAddin)
@@ -73,12 +73,12 @@
                 PRMapCompanion.DocumentStorage.Init();
 
                 // Start interface
-                m_Bubbles = new BubblesButton();
+                m_Bubbles = new StixButton();
                 m_Bubbles.Create();
             }
             catch (Exception e)
             {
-                MMBase.TRACE("Error while starting Sticks&Stickers...\r\n\r\n" + e.Message + "\r\n\r\n" + e.StackTrace);
+                MMBase.TRACE("Error while starting OmniStix...\r\n\r\n" + e.Message + "\r\n\r\n" + e.StackTrace);
                 MMUtils.ErrorToSupport();
             }
         }
@@ -142,6 +142,6 @@
         {
         }
 
-        private BubblesButton m_Bubbles;
+        private StixButton m_Bubbles;
     }
 }

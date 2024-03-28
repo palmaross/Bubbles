@@ -1,6 +1,6 @@
 ﻿namespace Bubbles
 {
-    partial class AlignSticksDlg
+    partial class AlignStixDlg
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AlignSticksDlg));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AlignStixDlg));
             this.pictureBoxHH = new System.Windows.Forms.PictureBox();
             this.pictureBoxHV = new System.Windows.Forms.PictureBox();
             this.pictureBoxVV = new System.Windows.Forms.PictureBox();
@@ -352,7 +352,6 @@
             this.btnConfigOK.TabIndex = 43;
             this.btnConfigOK.Text = "ОК";
             this.btnConfigOK.UseVisualStyleBackColor = true;
-            this.btnConfigOK.Click += new System.EventHandler(this.btnConfigOK_Click);
             // 
             // txtConfigName
             // 

@@ -12,9 +12,9 @@ using PRMapCompanion;
 
 namespace Bubbles
 {
-    public partial class StickPopup : UserControl
+    public partial class StixPopup : UserControl
     {
-        public StickPopup()
+        public StixPopup()
         {
             InitializeComponent();
 
@@ -107,32 +107,32 @@ namespace Bubbles
         private void pCollapse_Click(object sender, EventArgs e)
         {
             var stick = panelH.Tag as Form;
-            StickUtils.ActivateMindManager(); // In order to hide Popup
+            StixUtils.ActivateMindManager(); // In order to hide Popup
 
             switch (stick.Name)
             {
-                case StickUtils.typeicons:
+                case StixUtils.typeicons:
                     (stick as BubbleIcons).Collapse();
                     break;
-                case StickUtils.typetaskinfo:
+                case StixUtils.typetaskinfo:
                     (stick as BubbleTaskInfo).Collapse();
                     break;
-                case StickUtils.typeformat:
+                case StixUtils.typeformat:
                     (stick as BubbleFormat).Collapse();
                     break;
-                case StickUtils.typesources:
-                    (stick as BubbleMySources).Collapse();
+                case StixUtils.typesources:
+                    (stick as BubbleSources).Collapse();
                     break;
-                case StickUtils.typebookmarks:
+                case StixUtils.typebookmarks:
                     (stick as BubbleBookmarks).Collapse();
                     break;
-                case StickUtils.typeaddtopic:
+                case StixUtils.typeaddtopic:
                     (stick as BubbleAddTopic).Collapse();
                     break;
-                case StickUtils.typetextops:
+                case StixUtils.typetextops:
                     (stick as BubbleTextOps).Collapse();
                     break;
-                case StickUtils.typeorganizer:
+                case StixUtils.typeorganizer:
                     (stick as BubbleOrganizer).Collapse();
                     break;
             }
@@ -141,32 +141,32 @@ namespace Bubbles
         private void pRotate_Click(object sender, EventArgs e)
         {
             var stick = panelH.Tag as Form;
-            StickUtils.ActivateMindManager(); // In order to hide Popup
+            StixUtils.ActivateMindManager(); // In order to hide Popup
 
             switch (stick.Name)
             {
-                case StickUtils.typeicons:
+                case StixUtils.typeicons:
                     (stick as BubbleIcons).Rotate();
                     break;
-                case StickUtils.typetaskinfo:
+                case StixUtils.typetaskinfo:
                     (stick as BubbleTaskInfo).Rotate();
                     break;
-                case StickUtils.typeformat:
+                case StixUtils.typeformat:
                     (stick as BubbleFormat).Rotate();
                     break;
-                case StickUtils.typesources:
-                    (stick as BubbleMySources).Rotate();
+                case StixUtils.typesources:
+                    (stick as BubbleSources).Rotate();
                     break;
-                case StickUtils.typebookmarks:
+                case StixUtils.typebookmarks:
                     (stick as BubbleBookmarks).Rotate();
                     break;
-                case StickUtils.typeaddtopic:
+                case StixUtils.typeaddtopic:
                     (stick as BubbleAddTopic).Rotate();
                     break;
-                case StickUtils.typetextops:
+                case StixUtils.typetextops:
                     (stick as BubbleTextOps).Rotate();
                     break;
-                case StickUtils.typeorganizer:
+                case StixUtils.typeorganizer:
                     (stick as BubbleOrganizer).Rotate();
                     break;
             }
@@ -175,28 +175,26 @@ namespace Bubbles
         private void pClose_Click(object sender, EventArgs e)
         {
             var stick = panelH.Tag as Form;
-            StickUtils.ActivateMindManager(); // In order to hide Popup
+            StixUtils.ActivateMindManager(); // In order to hide Popup
 
-            BubblesButton.STICKS.Remove((int)stick.Tag);
+            StixButton.STICKS.Remove((int)stick.Tag);
             stick.Close();
 
             if (stick.Name == "BubbleTaskInfo")
             {
-                BubblesButton.m_TaskInfo = null;
+                StixButton.m_TaskInfo = null;
             }
         }
 
         private void pRemember_Click(object sender, EventArgs e)
         {
             var stick = panelH.Tag as Form;
-            StickUtils.ActivateMindManager(); // In order to hide Popup
+            StixUtils.ActivateMindManager(); // In order to hide Popup
 
             string orientation = "H";
             if (stick.Width < stick.Height) orientation = "V";
 
-            bool collapsed = stick.Width == StickUtils.minSize;
-
-            StickUtils.SaveStick(stick.Bounds, (int)stick.Tag, orientation, collapsed);
+            StixUtils.SaveStick(stick.Bounds, (int)stick.Tag, orientation);
         }
         #endregion
 

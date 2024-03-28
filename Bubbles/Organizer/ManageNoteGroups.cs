@@ -47,7 +47,7 @@ namespace Organizer
 
                 NoteGroupItem item = new NoteGroupItem(groupName, id);
                 cbGroups.Items.Add(item);
-                BubblesButton.m_Notes.cbGroups.Items.Add(item);
+                StixButton.m_Notes.cbGroups.Items.Add(item);
 
                 cbGroups.SelectedItem = item;
                 if (!btnDeleteGroup.Enabled)
@@ -133,12 +133,12 @@ namespace Organizer
 
         private void UpdateMainNoteGroups()
         {
-            int selIndex = BubblesButton.m_Notes.cbGroups.SelectedIndex;
-            BubblesButton.m_Notes.cbGroups.Items.Clear();
+            int selIndex = StixButton.m_Notes.cbGroups.SelectedIndex;
+            StixButton.m_Notes.cbGroups.Items.Clear();
 
             // PreFill group comboboxes (All Groups and No Group)
-            BubblesButton.m_Notes.cbGroups.Items.Add(new NoteGroupItem(Utils.getString("notes.notegroup.all"), -1));
-            BubblesButton.m_Notes.cbGroups.Items.Add(new NoteGroupItem(Utils.getString("notes.notegroup.nogroup"), 0));
+            StixButton.m_Notes.cbGroups.Items.Add(new NoteGroupItem(Utils.getString("notes.notegroup.all"), -1));
+            StixButton.m_Notes.cbGroups.Items.Add(new NoteGroupItem(Utils.getString("notes.notegroup.nogroup"), 0));
 
             // Fill group comboboxes with custom groups
             using (StixDB db = new StixDB())
@@ -147,10 +147,10 @@ namespace Organizer
                 foreach (DataRow row in dt.Rows)
                 {
                     NoteGroupItem item = new NoteGroupItem(row["name"].ToString(), Convert.ToInt32(row["id"]));
-                    BubblesButton.m_Notes.cbGroups.Items.Add(item);
+                    StixButton.m_Notes.cbGroups.Items.Add(item);
                 }
             }
-            BubblesButton.m_Notes.cbGroups.SelectedIndex = selIndex;
+            StixButton.m_Notes.cbGroups.SelectedIndex = selIndex;
         }
     }
 }

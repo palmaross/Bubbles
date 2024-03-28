@@ -23,7 +23,7 @@ namespace Organizer
             init = true;
             InitializeComponent();
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "OrganizerNotes.htm");
 
@@ -56,28 +56,28 @@ namespace Organizer
             cmsSort.ItemClicked += ContextMenu_ItemClicked;
 
             cmsMoreButton.Items["N_delete"].Text = Utils.getString("notes.contextmenu.delete");
-            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_delete"], "deleteall.png");
+            StixUtils.SetContextMenuImage(cmsMoreButton.Items["N_delete"], "deleteall.png");
 
             cmsMoreButton.Items["N_deleteall"].Text = Utils.getString("notes.contextmenu.deleteall");
-            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_deleteall"], "deleteall.png");
+            StixUtils.SetContextMenuImage(cmsMoreButton.Items["N_deleteall"], "deleteall.png");
 
             cmsMoreButton.Items["N_edit"].Text = Utils.getString("notes.contextmenu.edit");
-            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_edit"], "edit.png");
+            StixUtils.SetContextMenuImage(cmsMoreButton.Items["N_edit"], "edit.png");
 
             cmsMoreButton.Items["N_addtopic"].Text = Utils.getString("notes.contextmenu.addtopic");
-            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_addtopic"], "addtotopic.png");
+            StixUtils.SetContextMenuImage(cmsMoreButton.Items["N_addtopic"], "addtotopic.png");
 
             cmsMoreButton.Items["N_managegroups"].Text = Utils.getString("notes.contextmenu.managegroups");
-            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_managegroups"], "groups.png");
+            StixUtils.SetContextMenuImage(cmsMoreButton.Items["N_managegroups"], "groups.png");
 
             cmsMoreButton.Items["N_managetags"].Text = Utils.getString("notes.contextmenu.managetags");
-            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_managetags"], "managetags.png");
+            StixUtils.SetContextMenuImage(cmsMoreButton.Items["N_managetags"], "managetags.png");
 
             cmsMoreButton.Items["N_managemarkers"].Text = Utils.getString("notes.contextmenu.managemarkers");
-            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_managemarkers"], "emptyIcon.png");
+            StixUtils.SetContextMenuImage(cmsMoreButton.Items["N_managemarkers"], "emptyIcon.png");
 
             cmsMoreButton.Items["N_help"].Text = Utils.getString("button.help");
-            StickUtils.SetContextMenuImage(cmsMoreButton.Items["N_help"], "help.png");
+            StixUtils.SetContextMenuImage(cmsMoreButton.Items["N_help"], "help.png");
 
             cmsSort.Items["N_sortAZ"].Text = Utils.getString("notes.contextmenu.sortAZ");
             cmsSort.Items["N_sortZA"].Text = Utils.getString("notes.contextmenu.sortZA");
@@ -508,9 +508,9 @@ namespace Organizer
             NoteItem item = note.Tag as NoteItem;
 
             // Check if note window is open already
-            if (BubblesButton.pNOTES.Keys.Contains(item.ID))
+            if (StixButton.pNOTES.Keys.Contains(item.ID))
             {
-                BubblesButton.pNOTES[item.ID].WindowState = FormWindowState.Normal;
+                StixButton.pNOTES[item.ID].WindowState = FormWindowState.Normal;
                 return;
             }
 
@@ -596,7 +596,7 @@ namespace Organizer
         private void pClose_Click(object sender, EventArgs e)
         {
             this.Close();
-            BubblesButton.m_Notes = null;
+            StixButton.m_Notes = null;
         }
 
         private void pMore_Click(object sender, EventArgs e)

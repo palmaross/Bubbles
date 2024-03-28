@@ -12,7 +12,7 @@ namespace Bubbles
         {
             InitializeComponent();
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "PasteStick.htm#TopicWidths");
 
@@ -123,10 +123,10 @@ namespace Bubbles
                 if (cbTextMore6.Checked && !awidths.Keys.Contains((int)numChars6.Value)) awidths[(int)numChars6.Value] = (int)numAuto6.Value;
             }
 
-            StickUtils.MainTopicWidth = (int)numMainWidth.Value;
-            StickUtils.ManualTopicWidths = mwidths.OrderBy(i => i).ToList();
-            StickUtils.AutoTopicWidths = awidths.OrderByDescending(key => key.Key).ToDictionary(pair => pair.Key, pair => pair.Value);
-            StickUtils.MinAutoTopicWidth = StickUtils.AutoTopicWidths.Keys.Last();
+            StixUtils.MainTopicWidth = (int)numMainWidth.Value;
+            StixUtils.ManualTopicWidths = mwidths.OrderBy(i => i).ToList();
+            StixUtils.AutoTopicWidths = awidths.OrderByDescending(key => key.Key).ToDictionary(pair => pair.Key, pair => pair.Value);
+            StixUtils.MinAutoTopicWidth = StixUtils.AutoTopicWidths.Keys.Last();
 
             (form as BubbleTextOps).PopulateTopicWidth();
         }

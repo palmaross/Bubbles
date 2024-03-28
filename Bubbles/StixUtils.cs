@@ -21,7 +21,7 @@ using Clipboard = System.Windows.Forms.Clipboard;
 
 namespace Bubbles
 {
-    internal class StickUtils
+    internal class StixUtils
     {
         /// <summary>
         /// 
@@ -51,7 +51,7 @@ namespace Bubbles
                         if (stick) // rename stick
                         {
                             db.ExecuteNonQuery("update STICKS set name=`" + name + "` where id=" + stickID + "");
-                            BubblesButton.m_bubblesMenu.RenameContextMenuItem(type, stickID.ToString(), name);
+                            StixButton.m_bubblesMenu.RenameContextMenuItem(type, stickID.ToString(), name);
                         }
                         else if (type == typeicons)
                             db.ExecuteNonQuery("update ICONS set name=`" + name +
@@ -71,11 +71,11 @@ namespace Bubbles
             using (StixDB db = new StixDB())
             {
                 id = Utils.StickID();
-                db.AddStick(id, stickname, sticktype, 0, "", 0, 0);
+                db.AddStick(id, stickname, sticktype, 0, "H", "");
 
-                newForm.Location = BubblesButton.m_bubblesMenu.GetStickLocation("", newForm.Size);
+                newForm.Location = StixButton.m_bubblesMenu.GetStickLocation("", newForm.Size);
                 newForm.Tag = id;
-                BubblesButton.STICKS.Add(id, newForm);
+                StixButton.STICKS.Add(id, newForm);
                 newForm.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
 
                 // Create context menu for stick button in the main menu if there are more than one sticks of this type
@@ -83,7 +83,7 @@ namespace Bubbles
                 if (dt.Rows.Count > 1) contextmenu = true;
             }
             if (contextmenu == true)
-                BubblesButton.m_bubblesMenu.AddSelectMenu(sticktype);
+                StixButton.m_bubblesMenu.AddSelectMenu(sticktype);
         }
 
         /// <summary>
@@ -140,16 +140,14 @@ namespace Bubbles
             return orientation;
         }
 
-        public static string SaveStick(Rectangle rec, int id, string orientation, bool collapsed, int configID = 0)
+        public static void SaveStick(Rectangle rec, int id, string orientation)
         {
-            string position = "";
-
             if (!Utils.IsOnMMWindow(rec))
             {
                 if (MessageBox.Show(Utils.getString("sticks.stickisoutMMwindow.text"),
                     Utils.getString("sticks.stickisoutMMwindow.title"),
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.Cancel)
-                    return "";
+                    return;
             }
 
             Point screenXY = Utils.MMScreen(MMUtils.MindManager.Left + MMUtils.MindManager.Width / 2,
@@ -161,13 +159,7 @@ namespace Bubbles
                 DataTable dt = db.ExecuteQuery("select * from STICKS where id=" + id + "");
 
                 if (dt.Rows.Count > 0)
-                    position = dt.Rows[0]["position"].ToString();
-
-                if (position != "")
-                {
-                    string[] parts = position.Split('#');
-                    location = parts[1];
-                }
+                    location = dt.Rows[0]["location"].ToString();
 
                 bool found = false;
                 if (!String.IsNullOrEmpty(location)) // Search for screen
@@ -189,13 +181,11 @@ namespace Bubbles
                     location += ";" + screenXY.X + "," + screenXY.Y + ":" + rec.X + "," + rec.Y;
                 location = location.TrimStart(';');
 
-                string _collapsed = collapsed ? "1" : "0";
-                position = orientation + _collapsed + "#" + location.TrimStart(';');
-
-                db.ExecuteNonQuery("update STICKS set position=`" + position + 
-                    "` where id=" + id + " and configID=" + configID + "");
+                db.ExecuteNonQuery("update STICKS set " +
+                    "location=`" + location + "`, " +
+                    "orientation=`" + orientation +
+                    "` where id=" + id + "");
             }
-            return position; // for CreateConfiguration() method
         }
 
         public static List<PictureBox> RefreshStick(Form form, PictureBox p1, string orientation, 
@@ -373,19 +363,19 @@ namespace Bubbles
                 if (type == typeicons)
                 {
                     db.ExecuteNonQuery("delete from ICONS where stickID=" + id + "");
-                    if (BubblesButton.m_bubblesMenu.cmsIcons.Items.Count > 0)
-                        BubblesButton.m_bubblesMenu.cmsIcons.Items.Clear();
+                    if (StixButton.m_bubblesMenu.cmsIcons.Items.Count > 0)
+                        StixButton.m_bubblesMenu.cmsIcons.Items.Clear();
                 }
                 else if (type == typesources)
                 {
                     db.ExecuteNonQuery("delete from SOURCES where stickID=" + id + "");
-                    if (BubblesButton.m_bubblesMenu.cmsMySources.Items.Count > 0)
-                        BubblesButton.m_bubblesMenu.cmsMySources.Items.Clear();
+                    if (StixButton.m_bubblesMenu.cmsMySources.Items.Count > 0)
+                        StixButton.m_bubblesMenu.cmsMySources.Items.Clear();
                 }
 
                 // Delete the stick
                 db.ExecuteNonQuery("delete from STICKS where id=" + id + "");
-                BubblesButton.STICKS.Remove(id);
+                StixButton.STICKS.Remove(id);
 
                 DataTable dt = db.ExecuteQuery("select * from STICKS where type=`" + type + "`");
                 if (dt.Rows.Count > 1) contextmenu = true;
@@ -393,7 +383,7 @@ namespace Bubbles
 
             // Create context menu for the main menu button if there are more than one stick of this type
             if (contextmenu == true)
-                BubblesButton.m_bubblesMenu.AddSelectMenu(type);
+                StixButton.m_bubblesMenu.AddSelectMenu(type);
 
             return true;
         }
@@ -455,19 +445,19 @@ namespace Bubbles
         }
 
         public static bool manage_clicked = false;
-        public static void ShowCommandPopup(Form form, string orientation, string type, string popup = "")
+        public static void ShowCommandPopup(Form form, string orientation, string type, string popup = "", float scaleFactor = 100)
         {
             if (manage_clicked) // Manage icon was clicked, don't show command popup
             {
                 manage_clicked = false; return;
             }
 
-            if (BubblesButton.commandPopup.Tag != form.Tag || BubblesButton.commandPopup.Name != popup || !BubblesButton.commandPopup.Visible)
+            if (StixButton.commandPopup.Tag != form.Tag || StixButton.commandPopup.Name != popup || !StixButton.commandPopup.Visible)
             {
                 // Hide previous popup
                 ActivateMindManager(); // In order to hide previous Popup
 
-                var sp = new StickPopup();
+                var sp = new StixPopup();
                 Control ff = null;
 
                 // Control ff is a panel with icons from the StickPopup() User Control
@@ -475,6 +465,9 @@ namespace Bubbles
                 else if (type == typetextops) ff = sp.panelPasteTopic;
                 else if (popup == "progress") ff = sp.panelProgress;
                 else if (popup == "priority") ff = sp.panelPriority;
+
+                if (popup != "" && scaleFactor != 100)
+                    ff.Scale(new SizeF(scaleFactor / 100, scaleFactor / 100)); // scale popup
 
                 // Correct widths for specific popup
                 //if (type == typepaste && popup == "add") ff.Width = sp.panelAddTopic.Width;
@@ -517,15 +510,15 @@ namespace Bubbles
                 }
 
                 ff.Tag = form; ff.AccessibleName = popup;
-                BubblesButton.commandPopup = new Popup(ff);
-                BubblesButton.commandPopup.Tag = form.Tag; // stick id
-                BubblesButton.commandPopup.Name = popup;
-                BubblesButton.commandPopup.ShowingAnimation = PopupAnimations.Center;
-                BubblesButton.commandPopup.AnimationDuration = 300;
+                StixButton.commandPopup = new Popup(ff);
+                StixButton.commandPopup.Tag = form.Tag; // stick id
+                StixButton.commandPopup.Name = popup;
+                StixButton.commandPopup.ShowingAnimation = PopupAnimations.Center;
+                StixButton.commandPopup.AnimationDuration = 300;
 
                 Rectangle child = ff.RectangleToScreen(ff.ClientRectangle);
                 Point loc = GetChildLocation(form, child, orientation, popup);
-                BubblesButton.commandPopup.Show(loc);
+                StixButton.commandPopup.Show(loc);
             }
         }
 
@@ -808,54 +801,6 @@ namespace Bubbles
             }
         }
 
-        public static void CreateConfiguration(Dictionary<int, Form> sticks, int configID, int start)
-        {
-            string name, type, position, orientation = "H"; bool collapsed;
-            List<int> ids = new List<int>();
-
-            using (StixDB db = new StixDB())
-            {
-                foreach (var stick in sticks)
-                {
-                    // Update _start_ configuration
-                    // First, set all configurations to unstart
-
-                    DataTable dt = db.ExecuteQuery("select * from CONFIGS");
-                    foreach (DataRow dr in dt.Rows)
-                        db.ExecuteNonQuery("update CONFIGS set start=" + 0 + " where id=" + Convert.ToInt32(dr["id"]) + "");
-
-                    // And, if the configuration has to be started, set start state to it
-                    if (start == 1)
-                        db.ExecuteNonQuery("update CONFIGS set start=1 where id=" + configID + "");
-
-                    int stickid = stick.Key;
-                    ids.Add(stickid);
-
-                    dt = db.ExecuteQuery("select * from STICKS where id=" + stickid + "");
-                    if (dt.Rows.Count == 0) continue; // impossible, but...
-
-                    name = dt.Rows[0]["name"].ToString();
-                    type = stick.Value.Name;
-
-                    if (stick.Value.Width < stick.Value.Height) orientation = "V";
-                    if (orientation == "H")
-                        collapsed = stick.Value.Width == minSize;
-                    else
-                        collapsed = stick.Value.Height == minSize;
-
-                    dt = db.ExecuteQuery("select * from STICKS where id=" + stickid + " and configID=" + configID + "");
-                    // If stick is not in the configuration already, add it there
-                    if (dt.Rows.Count == 0) db.AddStick(stickid, name, type, 0, "", configID, 0);
-
-                    // Update stick position
-                    position = SaveStick(stick.Value.Bounds, stickid, orientation, collapsed, configID);
-                    db.ExecuteNonQuery("update STICKS set position=`" + position + "` where id=" + stickid + " and configID=" + configID + "");
-                }
-            }
-        }
-
-        public static List<Form> ToConfig = new List<Form>();
-
         public static string Handle_DragDrop(ref string path, string[] draggedFiles, 
             List<IconItem> aIcons, List<MySourcesItem> aSources)
         {
@@ -907,21 +852,21 @@ namespace Bubbles
         {
             switch (type)
             {
-                case "audio": return BubbleMySources.audio;
-                case "excel": return BubbleMySources.excel;
-                case "exe": return BubbleMySources.exe;
-                case "image": return BubbleMySources.image;
-                case "macros": return BubbleMySources.macros;
-                case "map": return BubbleMySources.map;
-                case "pdf": return BubbleMySources.pdf;
-                case "txt": return BubbleMySources.txt;
-                case "video": return BubbleMySources.video;
-                case "http": return BubbleMySources.http;
-                case "word": return BubbleMySources.word;
-                case "youtube": return BubbleMySources.youtube;
-                case "chm": return BubbleMySources.chm;
+                case "audio": return BubbleSources.audio;
+                case "excel": return BubbleSources.excel;
+                case "exe": return BubbleSources.exe;
+                case "image": return BubbleSources.image;
+                case "macros": return BubbleSources.macros;
+                case "map": return BubbleSources.map;
+                case "pdf": return BubbleSources.pdf;
+                case "txt": return BubbleSources.txt;
+                case "video": return BubbleSources.video;
+                case "http": return BubbleSources.http;
+                case "word": return BubbleSources.word;
+                case "youtube": return BubbleSources.youtube;
+                case "chm": return BubbleSources.chm;
             }
-            return BubbleMySources.file;
+            return BubbleSources.file;
         }
 
         public static void SetCommonContextMenu(ContextMenuStrip cms, string stickType = "")
@@ -1157,6 +1102,7 @@ namespace Bubbles
         public static Dictionary<int, int> AutoTopicWidths = new Dictionary<int, int>();
         public static int MinAutoTopicWidth;
         public static bool TopicAutoWidth = false;
+        public static float ScalingFactor = 100;
     }
 
     class ResizeStick : Form

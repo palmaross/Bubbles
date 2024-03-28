@@ -19,10 +19,9 @@ namespace Bubbles
             InitializeComponent();
 
             this.Tag = ID;
-            orientation = _orientation.Substring(0, 1); // "H" or "V"
-            collapsed = _orientation.Substring(1, 1) == "1";
+            orientation = _orientation;
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "AddTopicStick.htm");
 
@@ -51,7 +50,7 @@ namespace Bubbles
             cmsAddMultiple.ItemClicked += ContextMenu_ItemClicked;
             cmsCommon.ItemClicked += ContextMenu_ItemClicked;
             PopulateAddMultipleMenu();
-            StickUtils.SetCommonContextMenu(cmsCommon, StickUtils.typeaddtopic);
+            StixUtils.SetCommonContextMenu(cmsCommon, StixUtils.typeaddtopic);
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
@@ -60,7 +59,7 @@ namespace Bubbles
             pictureHandle.MouseDown += PictureHandle_MouseDown;
             pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
 
-            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typetextops);
+            Manage.MouseHover += (sender, e) => StixUtils.ShowCommandPopup(this, orientation, StixUtils.typetextops);
 
             if (collapsed)
             {
@@ -107,7 +106,7 @@ namespace Bubbles
 
             using (StixDB db = new StixDB())
             {
-                DataTable dt = db.ExecuteQuery("select * from MT_TEMPLATES order by templateName");
+                DataTable dt = db.ExecuteQuery("select * from ADDTOPIC_TEMPLATES order by templateName");
 
                 foreach (DataRow row in dt.Rows)
                 {
@@ -252,7 +251,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
-                BubblesButton.STICKS.Remove((int)this.Tag);
+                StixButton.STICKS.Remove((int)this.Tag);
                 this.Close();
             }
             else if (e.ClickedItem.Name == "BI_help")
@@ -261,7 +260,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
-                StickUtils.SaveStick(this.Bounds, (int)this.Tag, orientation, collapsed);
+                StixUtils.SaveStick(this.Bounds, (int)this.Tag, orientation);
             }
             else if (e.ClickedItem.Name == "BI_collapse")
             {
@@ -337,7 +336,7 @@ namespace Bubbles
 
         public void Rotate()
         {
-            orientation = StickUtils.RotateStick(this, Manage, orientation);
+            orientation = StixUtils.RotateStick(this, Manage, orientation);
 
             if (orientation == "H")
             {
@@ -372,14 +371,14 @@ namespace Bubbles
 
                 collapseState = this.Location; // remember collapsed location
                 collapseOrientation = orientation;
-                StickUtils.Expand(this, RealLength, orientation, cmsCommon);
+                StixUtils.Expand(this, RealLength, orientation, cmsCommon);
                 collapsed = false;
             }
             else // Collapse stick
             {
                 if (ExpandAll) return;
 
-                StickUtils.Collapse(this, orientation, cmsCommon);
+                StixUtils.Collapse(this, orientation, cmsCommon);
                 collapsed = true;
 
                 if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
@@ -416,7 +415,7 @@ namespace Bubbles
             if (e.Button == MouseButtons.Left)
             {
                 TopicsToAdd.Clear();
-                StickUtils.SourceURL = ""; StickUtils.Links.Clear();
+                StixUtils.SourceURL = ""; StixUtils.Links.Clear();
                 AddTopic((sender as PictureBox).Name.ToLower());
             }
         }
@@ -484,14 +483,14 @@ namespace Bubbles
 
             if (transTopicType == "parenttopic") // selected topics will be subtopics of the future parent topic
             {
-                StickUtils.AddTopic(MMUtils.ActiveDocument.Selection.PrimaryTopic, transTopicType, TopicsToAdd[0]);
+                StixUtils.AddTopic(MMUtils.ActiveDocument.Selection.PrimaryTopic, transTopicType, TopicsToAdd[0]);
             }
             else
             {
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                 {
                     foreach (var name in TopicsToAdd)
-                        StickUtils.AddTopic(t, transTopicType, name);
+                        StixUtils.AddTopic(t, transTopicType, name);
                 }
             }
         }

@@ -37,10 +37,10 @@ namespace Bubbles
             mwFormatActive = new Bitmap(Utils.ImagesPath + "mwFormatActive.png");
             mwOrganizer = new Bitmap(Utils.ImagesPath + "mwOrganizer.png");
 
-            StickUtils.minSize = pMinSize.Width;
-            StickUtils.stickThickness = pMinSize.Height;
-            StickUtils.icondist = pIconDist.Width;
-            StickUtils.cmiSize = p2.Size;
+            StixUtils.minSize = pMinSize.Width;
+            StixUtils.stickThickness = pMinSize.Height;
+            StixUtils.icondist = pIconDist.Width;
+            StixUtils.cmiSize = p2.Size;
 
             // Bulk operations context menu
             BulkOperations.Items["BO_hide"].ToolTipText = Utils.getString("contextmenu.hide.tooltip");
@@ -52,26 +52,7 @@ namespace Bubbles
 
             BulkOperations.ItemClicked += BulkOperations_ItemClicked;
             foreach (ToolStripItem item in BulkOperations.Items.OfType<ToolStripMenuItem>())
-                StickUtils.SetContextMenuImage(item, item.Name.Substring(3) + ".png");
-
-            configuration = BulkOperations.Items["BO_configuration"] as ToolStripMenuItem;
-            configuration.DropDown.Items.Add(Utils.getString("contextmenu.configuration.save")).Name = "Config_create";
-            configuration.DropDown.Items.Add(Utils.getString("contextmenu.configuration.manage")).Name = "Config_manage";
-            configuration.DropDown.ItemClicked += BulkOperations_ItemClicked;
-
-            // Fill configuration-to-run list in the Configuration sub menu
-            using (StixDB db = new StixDB())
-            {
-                DataTable dt = db.ExecuteQuery("select * from CONFIGS order by name");
-                if (dt.Rows.Count > 0)
-                {
-                    var label = configuration.DropDown.Items.Add(Utils.getString("contextmenu.configuration.run"));
-                    label.Font = new Font(label.Font, FontStyle.Bold);
-
-                    foreach (DataRow dr in dt.Rows)
-                        configuration.DropDown.Items.Add(dr["name"].ToString()).Tag = Convert.ToInt32(dr["id"]);
-                }
-            }
+                StixUtils.SetContextMenuImage(item, item.Name.Substring(3) + ".png");
 
             this.Deactivate += This_Deactivate;
 
@@ -91,20 +72,20 @@ namespace Bubbles
         /// <param name="type">Icons, TaskInfo or MySources. If "", then all</param>
         public void AddSelectMenu(string type = "")
         {
-            if (type == "" || type == StickUtils.typeicons)
+            if (type == "" || type == StixUtils.typeicons)
             {
                 if (cmsIcons.Items.Count > 0) cmsIcons.Items.Clear();
-                cmsIcons = GetSticks(StickUtils.typeicons, cmsIcons);
+                cmsIcons = GetSticks(StixUtils.typeicons, cmsIcons);
                 if (cmsIcons.Items.Count > 0)
                 {
                     pIcons.ContextMenuStrip = cmsIcons;
                     cmsIcons.ItemClicked += cms_ItemClicked;
                 }
             }
-            if (type == "" || type == StickUtils.typesources)
+            if (type == "" || type == StixUtils.typesources)
             {
                 if (cmsMySources.Items.Count > 0) cmsMySources.Items.Clear();
-                cmsMySources = GetSticks(StickUtils.typesources, cmsMySources);
+                cmsMySources = GetSticks(StixUtils.typesources, cmsMySources);
                 if (cmsMySources.Items.Count > 0)
                 {
                     MySources.ContextMenuStrip = cmsMySources;
@@ -115,7 +96,7 @@ namespace Bubbles
 
         public void RenameContextMenuItem(string type, string id, string newname)
         {
-            if (type == StickUtils.typeicons && cmsIcons.Items.Count > 1)
+            if (type == StixUtils.typeicons && cmsIcons.Items.Count > 1)
             {
                 foreach (ToolStripItem item in cmsIcons.Items)
                 {
@@ -140,11 +121,11 @@ namespace Bubbles
 
             switch (type)
             {
-                case StickUtils.typeicons:
+                case StixUtils.typeicons:
                     MenuIcon_Click(pIcons, null); break;
-                case StickUtils.typetaskinfo:
+                case StixUtils.typetaskinfo:
                     MenuIcon_Click(TaskInfo, null); break;
-                case StickUtils.typesources:
+                case StixUtils.typesources:
                     MenuIcon_Click(MySources, null); break;
             }
         }
@@ -210,7 +191,7 @@ namespace Bubbles
 
             if (pb.Name == "pIcons")
             {
-                stickType = StickUtils.typeicons;
+                stickType = StixUtils.typeicons;
                 defaultName = Utils.getString("BubbleIcons.bubble.tooltip");
                 if (cmsIcons.Items.Count > 0 && startId == 0)
                 {
@@ -219,12 +200,12 @@ namespace Bubbles
             }
             else if (pb.Name == "TaskInfo")
             {
-                stickType = StickUtils.typetaskinfo;
+                stickType = StixUtils.typetaskinfo;
                 defaultName = Utils.getString("BubbleTaskInfo.bubble.tooltip");
             }
             else if (pb.Name == "MySources")
             {
-                stickType = StickUtils.typesources;
+                stickType = StixUtils.typesources;
                 defaultName = Utils.getString("BubbleMySources.bubble.tooltip");
                 if (cmsMySources.Items.Count > 0 && startId == 0)
                 {
@@ -233,27 +214,27 @@ namespace Bubbles
             }
             else if (pb.Name == "Bookmarks")
             {
-                stickType = StickUtils.typebookmarks;
+                stickType = StixUtils.typebookmarks;
                 defaultName = Utils.getString("BubbleBookmarks.bubble.tooltip");
             }
             else if (pb.Name == "Format")
             {
-                stickType = StickUtils.typeformat;
+                stickType = StixUtils.typeformat;
                 defaultName = Utils.getString("BubbleFormat.bubble.tooltip");
             }
             else if (pb.Name == "AddTopics")
             {
-                stickType = StickUtils.typeaddtopic;
+                stickType = StixUtils.typeaddtopic;
                 defaultName = Utils.getString("BubbleAddTopic.bubble.tooltip");
             }
             else if (pb.Name == "Paste")
             {
-                stickType = StickUtils.typetextops;
+                stickType = StixUtils.typetextops;
                 defaultName = Utils.getString("BubblePaste.bubble.tooltip");
             }
             else if (pb.Name == "Organizer")
             {
-                stickType = StickUtils.typeorganizer;
+                stickType = StixUtils.typeorganizer;
                 defaultName = Utils.getString("BubbleOrganizer.bubble.tooltip");
             }
 
@@ -269,29 +250,29 @@ namespace Bubbles
             Form form = null;
             switch (stickType)
             {
-                case StickUtils.typeicons:
+                case StixUtils.typeicons:
                     form = new BubbleIcons(id, orientation, name); break;
-                case StickUtils.typetaskinfo:
+                case StixUtils.typetaskinfo:
                     form = new BubbleTaskInfo(id, orientation, name); break;
-                case StickUtils.typesources:
-                    form = new BubbleMySources(id, orientation, name); break;
-                case StickUtils.typebookmarks:
+                case StixUtils.typesources:
+                    form = new BubbleSources(id, orientation, name); break;
+                case StixUtils.typebookmarks:
                     form = new BubbleBookmarks(id, orientation, name); break;
-                case StickUtils.typeformat:
+                case StixUtils.typeformat:
                     form = new BubbleFormat(id, orientation, name); break;
-                case StickUtils.typeaddtopic:
+                case StixUtils.typeaddtopic:
                     form = new BubbleAddTopic(id, orientation, name); break;
-                case StickUtils.typetextops:
+                case StixUtils.typetextops:
                     form = new BubbleTextOps(id, orientation, name); break;
-                case StickUtils.typeorganizer:
+                case StixUtils.typeorganizer:
                     form = new BubbleOrganizer(id, orientation, name); break;
             }
 
             form.Location = GetStickLocation(location, form.Size);
-            BubblesButton.STICKS.Add(id, form);
+            StixButton.STICKS.Add(id, form);
             form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
 
-            StickUtils.ActivateMindManager();
+            StixUtils.ActivateMindManager();
         }
 
         /// <summary>
@@ -304,7 +285,7 @@ namespace Bubbles
             id = GetStick(type, id, ref position, ref name);
 
             // If stick is running, show it (if it is hidden) or tell user that it is already running
-            foreach (var stick in BubblesButton.STICKS)
+            foreach (var stick in StixButton.STICKS)
             {
                 if (stick.Key == id)
                 {
@@ -325,7 +306,7 @@ namespace Bubbles
                     // create "My Icons" stick
                     name = Utils.getString(type + ".bubble.tooltip");
                     id = Utils.StickID();
-                    db.AddStick(id, name, type, 0, "", 0, 0);
+                    db.AddStick(id, name, type, 0, "H", "");
                 }
             }
 
@@ -407,7 +388,7 @@ namespace Bubbles
                 item.Visible = true; item.Enabled = true;
             }
 
-            int total = BubblesButton.STICKS.Count;
+            int total = StixButton.STICKS.Count;
             if (total == 0)
             {
                 foreach (ToolStripItem item in BulkOperations.Items)
@@ -422,7 +403,7 @@ namespace Bubbles
             }
 
             int visibles = 0, invisibles = 0;
-            foreach (var stick in BubblesButton.STICKS.Values)
+            foreach (var stick in StixButton.STICKS.Values)
             {
                 if (stick.Visible) visibles++; else invisibles++;
             }
@@ -467,74 +448,68 @@ namespace Bubbles
             switch (e.ClickedItem.Name)
             {
                 case "BO_show":
-                    foreach (var stick in BubblesButton.STICKS.Values) {
+                    foreach (var stick in StixButton.STICKS.Values) {
                         if (!stick.Visible) stick.Show(); }
                     break;
                 case "BO_hide":
-                    foreach (var stick in BubblesButton.STICKS.Values)
+                    foreach (var stick in StixButton.STICKS.Values)
                         stick.Hide();
                     break;
                 case "BO_close":
-                    foreach (var stick in BubblesButton.STICKS.Values) {
+                    foreach (var stick in StixButton.STICKS.Values) {
                         stick.Close(); stick.Dispose(); }
-                    BubblesButton.STICKS.Clear();
+                    StixButton.STICKS.Clear();
                     break;
                 case "BO_collapse":
                 case "BO_expand":
                     bool collapse = true; bool expand = false;
                     if (e.ClickedItem.Name == "BO_expand") { collapse = false; expand = true; };
 
-                    foreach (var stick in BubblesButton.STICKS.Values)
+                    foreach (var stick in StixButton.STICKS.Values)
                     {
                         switch (stick.Name)
                         {
-                            case StickUtils.typeicons:
+                            case StixUtils.typeicons:
                                 (stick as BubbleIcons).Collapse(collapse, expand);
                                 break;
-                            case StickUtils.typetaskinfo:
+                            case StixUtils.typetaskinfo:
                                 (stick as BubbleTaskInfo).Collapse(collapse, expand);
                                 break;
-                            case StickUtils.typeformat:
+                            case StixUtils.typeformat:
                                 (stick as BubbleFormat).Collapse(collapse, expand);
                                 break;
-                            case StickUtils.typesources:
-                                (stick as BubbleMySources).Collapse(collapse, expand);
+                            case StixUtils.typesources:
+                                (stick as BubbleSources).Collapse(collapse, expand);
                                 break;
-                            case StickUtils.typebookmarks:
+                            case StixUtils.typebookmarks:
                                 (stick as BubbleBookmarks).Collapse(collapse, expand);
                                 break;
-                            case StickUtils.typetextops:
+                            case StixUtils.typetextops:
                                 (stick as BubbleTextOps).Collapse(collapse, expand);
                                 break;
-                            case StickUtils.typeorganizer:
+                            case StixUtils.typeorganizer:
                                 (stick as BubbleOrganizer).Collapse(collapse, expand);
                                 break;
                         }
                     }
                     break;
                 case "BO_remember":
-                    foreach (var stick in BubblesButton.STICKS)
+                    foreach (var stick in StixButton.STICKS)
                     {
-                        bool collapsed = stick.Value.Width == StickUtils.minSize;
                         string orientation = "H";
                         if (stick.Value.Width < stick.Value.Height) orientation = "V";
 
-                        StickUtils.SaveStick(stick.Value.Bounds, stick.Key, orientation, collapsed);
+                        StixUtils.SaveStick(stick.Value.Bounds, stick.Key, orientation);
                     }
                     break;
                 case "BO_align":
-                    using (AlignSticksDlg dlg = new AlignSticksDlg())
+                    using (AlignStixDlg dlg = new AlignStixDlg())
                     {
                         dlg.ShowDialog();
                     }
                     break;
-                case "Config_manage":
-                case "Config_create":
-                    using (ManageConfigsDlg dlg = new ManageConfigsDlg())
-                        dlg.ShowDialog();
-;                    break;
                 case "BO_help":
-                    try { Process.Start(Utils.dllPath + "WowStix.chm"); } catch { }
+                    try { Process.Start(Utils.dllPath + "OmniStix.chm"); } catch { }
                     break;
             }
         }

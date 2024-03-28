@@ -186,10 +186,10 @@
             // 
             // numDuration
             // 
-            this.numDuration.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.numDuration.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.numDuration.Location = new System.Drawing.Point(0, 0);
             this.numDuration.Name = "numDuration";
-            this.numDuration.Size = new System.Drawing.Size(30, 19);
+            this.numDuration.Size = new System.Drawing.Size(30, 20);
             this.numDuration.TabIndex = 83;
             this.numDuration.Tag = "1";
             this.numDuration.ValueChanged += new System.EventHandler(this.numDuration_ValueChanged);
@@ -255,14 +255,13 @@
             this.linkDurationUnit.TabIndex = 90;
             this.linkDurationUnit.TabStop = true;
             this.linkDurationUnit.Text = "month";
-            this.linkDurationUnit.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.linkDurationUnit.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.linkDurationUnit.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkDurationUnit_LinkClicked);
             // 
             // pTopicStartDate
             // 
             this.pTopicStartDate.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pTopicStartDate.Image = ((System.Drawing.Image)(resources.GetObject("pTopicStartDate.Image")));
-            this.pTopicStartDate.Location = new System.Drawing.Point(-1, 16);
+            this.pTopicStartDate.Location = new System.Drawing.Point(0, 16);
             this.pTopicStartDate.Name = "pTopicStartDate";
             this.pTopicStartDate.Size = new System.Drawing.Size(32, 15);
             this.pTopicStartDate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -273,8 +272,7 @@
             // pTopicDueDate
             // 
             this.pTopicDueDate.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pTopicDueDate.Image = ((System.Drawing.Image)(resources.GetObject("pTopicDueDate.Image")));
-            this.pTopicDueDate.Location = new System.Drawing.Point(-1, 16);
+            this.pTopicDueDate.Location = new System.Drawing.Point(0, 16);
             this.pTopicDueDate.Name = "pTopicDueDate";
             this.pTopicDueDate.Size = new System.Drawing.Size(32, 15);
             this.pTopicDueDate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -284,8 +282,8 @@
             // 
             // panelStartDate
             // 
-            this.panelStartDate.Controls.Add(this.pStartDate);
             this.panelStartDate.Controls.Add(this.pTopicStartDate);
+            this.panelStartDate.Controls.Add(this.pStartDate);
             this.panelStartDate.Location = new System.Drawing.Point(113, 0);
             this.panelStartDate.Name = "panelStartDate";
             this.panelStartDate.Size = new System.Drawing.Size(32, 32);
@@ -365,8 +363,8 @@
             // 
             // panelDueDate
             // 
-            this.panelDueDate.Controls.Add(this.pDueDate);
             this.panelDueDate.Controls.Add(this.pTopicDueDate);
+            this.panelDueDate.Controls.Add(this.pDueDate);
             this.panelDueDate.Location = new System.Drawing.Point(187, 0);
             this.panelDueDate.Name = "panelDueDate";
             this.panelDueDate.Size = new System.Drawing.Size(32, 32);

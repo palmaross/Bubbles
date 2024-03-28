@@ -613,7 +613,7 @@ namespace Bubbles
             string image = "";
 
 
-            using (StixDB db = new StixDB())
+            using (StickersDB db = new StickersDB())
             {
                 if (this.Tag == null || string.IsNullOrEmpty(this.Tag.ToString())) // New sticker (id = this.Tag)
                 {

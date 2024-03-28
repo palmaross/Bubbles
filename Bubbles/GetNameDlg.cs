@@ -20,15 +20,15 @@ namespace Bubbles
 
             if (stick)
                 label1.Text = Utils.getString("NewStickDlg.label.title") + ":"; // stick name
-            else if (stickType == StickUtils.typeicons)
+            else if (stickType == StixUtils.typeicons)
                 label1.Text = Utils.getString("NewStickDlg.icon.title") + ":"; // icon name
-            else if (stickType == StickUtils.typesources)
+            else if (stickType == StixUtils.typesources)
                 label1.Text = Utils.getString("NewStickDlg.source.title") + ":"; // source name
             btnCancel.Text = Utils.getString("button.cancel");
 
             // Get location
             Rectangle child = this.RectangleToScreen(this.ClientRectangle);
-            this.Location = StickUtils.GetChildLocation(form, child, orientation, "getname");
+            this.Location = StixUtils.GetChildLocation(form, child, orientation, "getname");
 
             textBox1.Text = name;
             this.Paint += This_Paint; // paint the border
@@ -64,7 +64,7 @@ namespace Bubbles
                         return;
                     }
                 }
-                else if (stickType == StickUtils.typeicons)
+                else if (stickType == StixUtils.typeicons)
                 {
                     DataTable dt = db.ExecuteQuery("SELECT from ICONS where name=`" + newName + "` and id=" + stickID + "");
                     if (dt.Rows.Count > 0)
@@ -74,7 +74,7 @@ namespace Bubbles
                         return;
                     }
                 }
-                else if (stickType == StickUtils.typesources)
+                else if (stickType == StixUtils.typesources)
                 {
                     DataTable dt = db.ExecuteQuery("SELECT from SOURCES where title=`" + newName + "` and id=" + stickID + "");
                     if (dt.Rows.Count > 0)

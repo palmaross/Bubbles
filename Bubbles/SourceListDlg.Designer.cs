@@ -1,6 +1,6 @@
 ﻿namespace Bubbles
 {
-    partial class MySourcesListDlg
+    partial class SourceListDlg
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MySourcesListDlg));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SourceListDlg));
             this.listView1 = new System.Windows.Forms.ListView();
             this.btnClose = new System.Windows.Forms.PictureBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);

@@ -40,16 +40,15 @@ namespace Bubbles
             );
         }
 
-        public void AddStick(int id, string name, string type, int start, string position, int configID, int group)
+        public void AddStick(int id, string name, string type, int start, string orientation, string location)
         {
             m_db.ExecuteNonQuery("insert into STICKS values("
                 + id + ", `"
                 + name + "`, `"
                 + type + "`, "
                 + start + ", `"
-                + position + "`, "
-                + configID + ", "
-                + group + ", "
+                + orientation + "`, `"
+                + location + "`, "
                 + "'', '', 0, 0"
                 + ");"
                 );
@@ -87,7 +86,7 @@ namespace Bubbles
 
         public void AddPattern(string templateName, string topicName, string pattern, string topicType)
         {
-            m_db.ExecuteNonQuery("insert into MT_TEMPLATES values(NULL, `"
+            m_db.ExecuteNonQuery("insert into ADDTOPIC_TEMPLATES values(NULL, `"
                 + templateName + "`, `"
                 + topicName + "`, `"
                 + pattern + "`, `"
@@ -114,25 +113,6 @@ namespace Bubbles
                 );
         }
 
-        public void AddSticker(string content, string textcolor, string fillcolor,
-            string fontfamily, int textsize, int textbold, string sticksize, string image, string alignment, string type)
-        {
-            m_db.ExecuteNonQuery("insert into STICKERS values(NULL, `"
-                + content + "`, `"
-                + textcolor + "`, `"
-                + fillcolor + "`, `"
-                + fontfamily + "`, "
-                + textsize + ", "
-                + textbold + ", `"
-                + sticksize + "`, `"
-                + image + "`, `"
-                + alignment + "`, `"
-                + type + "`, "
-                + "'', '', 0, 0"
-                + ");"
-                );
-        }
-
         public void AddTopicWidth(string name, int chars, int _value, int _checked)
         {
             m_db.ExecuteNonQuery("insert into TOPICWIDTHS values(`"
@@ -150,33 +130,21 @@ namespace Bubbles
             base.CreateDatabase();
             m_db.ExecuteNonQuery("BEGIN EXCLUSIVE");
 
-            m_db.ExecuteNonQuery("CREATE TABLE CONFIGS(id INTEGER PRIMARY KEY, name text, start int, " +
-               "reserved1 text, reserved2 integer);");
-
-            m_db.ExecuteNonQuery("CREATE TABLE MT_TEMPLATES(id INTEGER PRIMARY KEY, " +
-                "templateName text, topicName text, pattern text, topicType text, " +
-                "reserved1 text, reserved2 integer);");
-            // pattern_data:
-            // "topics###5" - 5 topcs with topic text _topicName_
-            // "custom###topic1###topic2###topic3###etc..."
-            // "increment###start,end,step,position"
-            // topicType: "subtopic", "nexttopic" or "topicbefore"
             m_db.ExecuteNonQuery("CREATE TABLE STICKS(id integer unique, name text, " +
-                "type text, start integer, position text, configID integer, _group integer, " +
+                "type text, start integer, orientation text, location text, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
             // name = stick name (by user)
             // type - icons, bookmarks, etc.
             // start - run sticker when MM started
-            // group: 0 - no group, 1 - no mutually exclusive group, 2 - mutually exclusive group
-            // position - H#5120,0:5126,363;0,0:2,358 (Horizontal;screen1Location;screen2Location)
+            // orientation - "H" or "V"
+            // location - 5120,0:5126,363;0,0:2,358 (screen1Location;screen2Location)
 
-            //// Sticks ////
+            //// Stix ////
             m_db.ExecuteNonQuery("CREATE TABLE ICONS(name text, filename text, _order integer, " +
                 "stickID int, reserved1 text, reserved2 integer);");
             // group: 0 - no group, 1 - no mutually exclusive group, 2 - mutually exclusive group
             // filename: file name for stock icons, signature for custom icons
-            //m_db.ExecuteNonQuery("CREATE TABLE ICONGROUPS(id INTEGER PRIMARY KEY, name text, " +
-            //    "mutexclusive int, reserved1 text, reserved2 integer);");
+
             m_db.ExecuteNonQuery("CREATE TABLE RESOURCES(name text, color string, groupID int, " +
                 "reserved1 text, reserved2 integer);");
             m_db.ExecuteNonQuery("CREATE TABLE RESOURCEGROUPS(id INTEGER PRIMARY KEY, name text, " +
@@ -189,6 +157,7 @@ namespace Bubbles
             m_db.ExecuteNonQuery("CREATE TABLE SOURCES(title text, path text, type text, _order integer, stickID int, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
 
+            // Quick tasks
             m_db.ExecuteNonQuery("CREATE TABLE TASKTEMPLATES(prime int, name text, progress int, " +
                 "priority int, dates text, icon text, resources text, tags text, properties text, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
@@ -198,23 +167,18 @@ namespace Bubbles
             // tags - group:tag;group:tag
             // properties - name:value:type;name:value:type;name:value:type
 
+            // Add Topic templates
+            m_db.ExecuteNonQuery("CREATE TABLE ADDTOPIC_TEMPLATES(id INTEGER PRIMARY KEY, " +
+                "templateName text, topicName text, pattern text, topicType text, " +
+                "reserved1 text, reserved2 integer);");
+            // pattern_data:
+            // "topics###5" - 5 topcs with topic text _topicName_
+            // "custom###topic1###topic2###topic3###etc..."
+            // "increment###start,end,step,position"
+            // topicType: "subtopic", "nexttopic" or "topicbefore"
+
             m_db.ExecuteNonQuery("CREATE TABLE TOPICWIDTHS(name text, chars int, _value int, _checked int," +
                 "reserved1 text, reserved2 integer);");
-
-            // Stickers
-            m_db.ExecuteNonQuery("CREATE TABLE STICKERS(id INTEGER PRIMARY KEY, content text, textcolor text, fillcolor text, " +
-                "fontfamily text, textsize integer, textbold integer, sticksize text, image text, alignment text, type text, " +
-                "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
-            // type:
-            // "sticker"
-            // "template"
-            // "reminder:12:05" (12:05) or "reminder:20" (in 20 minutes)
-            // "timer" обратный отсчет
-            // "stopwatch" секундомер
-            // "autoplay:interval:random"
-
-            m_db.ExecuteNonQuery("CREATE TABLE STICKERTEXTS(id INTEGER PRIMARY KEY, stickid int, " +
-                "stickertext text, reserved1 text, reserved2 integer);");
 
             m_db.ExecuteNonQuery("END");
 
@@ -222,44 +186,44 @@ namespace Bubbles
             Random r = new Random();
 
             int id = r.Next();
-            AddStick(id, Utils.getString("StixBase.Name"), StickUtils.typebase, 1, "", 0, 0);
+            AddStick(id, Utils.getString("StixBase.Name"), StixUtils.typebase, 1, "H", "");
 
-            // Add first My Icons stick
+            // Add first Icons stick
             id = r.Next();
-            AddStick(id, Utils.getString("BubbleIcons.bubble.tooltip"), StickUtils.typeicons, 0, "", 0, 0);
+            AddStick(id, Utils.getString("BubbleIcons.bubble.tooltip"), StixUtils.typeicons, 0, "H", "");
 
             AddIcon(Utils.getString("icons.firststick.icon1"), "stockexclamation-mark", 1, id);
             AddIcon(Utils.getString("icons.firststick.icon2"), "stockquestion-mark", 2, id);
 
             // Add TaskInfo stick
             id = r.Next();
-            AddStick(id, Utils.getString("BubbleTaskInfo.bubble.tooltip"), StickUtils.typetaskinfo, 0, "", 0, 0);
+            AddStick(id, Utils.getString("BubbleTaskInfo.bubble.tooltip"), StixUtils.typetaskinfo, 0, "H", "");
 
             // Add first My Sources stick
             id = r.Next();
-            AddStick(id, Utils.getString("BubbleMySources.bubble.tooltip"), StickUtils.typesources, 0, "", 0, 0);
+            AddStick(id, Utils.getString("BubbleMySources.bubble.tooltip"), StixUtils.typesources, 0, "H", "");
 
             AddSource(Utils.getString("mysources.first1.text"), "https://palmaross.com/", "http", 1, id);
-            AddSource(Utils.getString("mysources.first2.text"), Utils.dllPath + "WowStix.chm", "file", 2, id);
+            AddSource(Utils.getString("mysources.first2.text"), Utils.dllPath + "OmniStix.chm", "file", 2, id);
             AddSource(Utils.getString("mysources.first3.text"), "c:\\Windows\\System32\\notepad.exe", "exe", 3, id);
 
             // Add Bookmarks stick
             id = r.Next();
-            AddStick(id, Utils.getString("BubbleBookmarks.bubble.tooltip"), StickUtils.typebookmarks, 0, "", 0, 0);
+            AddStick(id, Utils.getString("BubbleBookmarks.bubble.tooltip"), StixUtils.typebookmarks, 0, "H", "");
 
             // Add <Add Topic> stick
             id = r.Next();
-            AddStick(id, Utils.getString("BubbleAddTopic.bubble.tooltip"), StickUtils.typeaddtopic, 0, "", 0, 0);
+            AddStick(id, Utils.getString("BubbleAddTopic.bubble.tooltip"), StixUtils.typeaddtopic, 0, "H", "");
 
             // Add Text Operations stick
             id = r.Next();
-            AddStick(id, Utils.getString("BubbleTextOps.bubble.tooltip"), StickUtils.typetextops, 0, "", 0, 0);
+            AddStick(id, Utils.getString("BubbleTextOps.bubble.tooltip"), StixUtils.typetextops, 0, "H", "");
 
             // Add Format stick
             id = r.Next();
-            AddStick(id, Utils.getString("BubbleFormat.bubble.tooltip"), StickUtils.typeformat, 0, "", 0, 0);
+            AddStick(id, Utils.getString("BubbleFormat.bubble.tooltip"), StixUtils.typeformat, 0, "H", "");
 
-            // Add MT_Templates
+            // Add ADDTOPIC_TEMPLATES
             AddPattern(Utils.getString("Template.Day"), Utils.getString("Template.Day") + " ", "increment###1,10,1,end", "subtopic");
             AddPattern(Utils.getString("Template.Month"), Utils.getString("Template.January") + " ", "increment###1,31,1,end", "subtopic");
             AddPattern(Utils.getString("Template.Task"), Utils.getString("Template.Task") + " ", "increment###1,5,1,end", "subtopic");
@@ -286,14 +250,6 @@ namespace Bubbles
             AddTopicWidth("numAuto1", 500, 200, 1); AddTopicWidth("numAuto2", 200, 160, 1);
             AddTopicWidth("numAuto3", 150, 120, 1); AddTopicWidth("numAuto4", 150, 120, 1);
             AddTopicWidth("numAuto5", 150, 120, 1); AddTopicWidth("numAuto6", 150, 120, 1);
-
-            // Add a couple of sticker templates
-            AddSticker(Utils.getString("stickertemplate1.text"), "#ff0000ff", "#ff00ffff", "Segoe Print",
-                14, 1, StickerDummy.DummyStickerWidth + ":" + StickerDummy.DummyStickerHeight, "", "center", "template");
-            AddSticker(Utils.getString("stickertemplate2.text"), "#ff0000ff", "#ff0000ff", "Segoe Print",
-                14, 1, StickerDummy.DummyStickerWidth + ":" + StickerDummy.DummyStickerHeight, "", "center", "template");
-            AddSticker(Utils.getString("stickertemplate3.text"), "#ff0000ff", "#ff00ff00", "Segoe Print",
-                14, 1, StickerDummy.DummyStickerWidth + ":" + StickerDummy.DummyStickerHeight, "", "center", "template");
         }
     }
 }

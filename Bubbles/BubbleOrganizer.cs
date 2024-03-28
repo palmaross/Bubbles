@@ -15,10 +15,9 @@ namespace Bubbles
             InitializeComponent();
 
             this.Tag = ID;
-            orientation = _orientation.Substring(0, 1); // "H" or "V"
-            collapsed = _orientation.Substring(1, 1) == "1";
+            orientation = _orientation; // "H" or "V"
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "OrganizerStick.htm");
 
@@ -39,7 +38,7 @@ namespace Bubbles
 
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
 
-            StickUtils.SetCommonContextMenu(contextMenuStrip1, StickUtils.typeorganizer);
+            StixUtils.SetCommonContextMenu(contextMenuStrip1, StixUtils.typeorganizer);
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
@@ -48,7 +47,7 @@ namespace Bubbles
             pictureHandle.MouseDown += PictureHandle_MouseDown;
             pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
 
-            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typetextops);
+            Manage.MouseHover += (sender, e) => StixUtils.ShowCommandPopup(this, orientation, StixUtils.typetextops);
 
             if (collapsed) {
                 collapsed = false; Collapse(); }
@@ -72,7 +71,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
-                BubblesButton.STICKS.Remove((int)this.Tag);
+                StixButton.STICKS.Remove((int)this.Tag);
                 this.Close();
             }
             else if (e.ClickedItem.Name == "BI_help")
@@ -81,7 +80,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
-                StickUtils.SaveStick(this.Bounds, (int)this.Tag, orientation, collapsed);
+                StixUtils.SaveStick(this.Bounds, (int)this.Tag, orientation);
             }
             else if (e.ClickedItem.Name == "BI_collapse")
             {
@@ -102,7 +101,7 @@ namespace Bubbles
 
                 collapseState = this.Location; // remember collapsed location
                 collapseOrientation = orientation;
-                StickUtils.Expand(this, RealLength, orientation, contextMenuStrip1);
+                StixUtils.Expand(this, RealLength, orientation, contextMenuStrip1);
                 pIdeas.Visible = true;
                 collapsed = false;
             }
@@ -110,7 +109,7 @@ namespace Bubbles
             {
                 if (ExpandAll) return;
 
-                StickUtils.Collapse(this, orientation, contextMenuStrip1);
+                StixUtils.Collapse(this, orientation, contextMenuStrip1);
                 pIdeas.Visible = false;
                 collapsed = true;
                 if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
@@ -125,7 +124,7 @@ namespace Bubbles
 
         public void Rotate()
         {
-            orientation = StickUtils.RotateStick(this, Manage, orientation);
+            orientation = StixUtils.RotateStick(this, Manage, orientation);
         }
 
         private void PasteLink_Click(object sender, EventArgs e)
@@ -140,15 +139,15 @@ namespace Bubbles
 
         private void Notes_Click(object sender, EventArgs e)
         {
-            if (BubblesButton.m_Notes == null)
+            if (StixButton.m_Notes == null)
             {
-                BubblesButton.m_Notes = new Organizer.NotesDlg();
-                BubblesButton.m_Notes.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                StixButton.m_Notes = new Organizer.NotesDlg();
+                StixButton.m_Notes.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
             else
             {
-                if (BubblesButton.m_Notes.WindowState == FormWindowState.Minimized)
-                    BubblesButton.m_Notes.WindowState = FormWindowState.Normal;
+                if (StixButton.m_Notes.WindowState == FormWindowState.Minimized)
+                    StixButton.m_Notes.WindowState = FormWindowState.Normal;
             }
         }
 

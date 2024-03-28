@@ -22,7 +22,7 @@ namespace Bubbles
 
             // Get location
             Rectangle child = this.RectangleToScreen(this.ClientRectangle);
-            this.Location = StickUtils.GetChildLocation(form, child, orientation, "icons");
+            this.Location = StixUtils.GetChildLocation(form, child, orientation, "icons");
 
             txtGroupName.Text = name;
             this.Paint += This_Paint; // paint the border

@@ -17,13 +17,12 @@ namespace Bubbles
         {
             InitializeComponent();
 
-            BubblesButton.m_TaskInfo = this;
+            StixButton.m_TaskInfo = this;
 
-            this.Tag = ID; // correct
-            orientation = _orientation.Substring(0, 1); // "H" or "V"
-            collapsed = _orientation.Substring(1, 1) == "1";
+            this.Tag = ID;
+            orientation = _orientation;
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "TaskInfoStick.htm");
 
@@ -80,7 +79,7 @@ namespace Bubbles
             cmsRemoveTaskInfo.Closing += CmsRemoveTaskInfo_Closing;
 
             cmsCommon.ItemClicked += cmsCommon_ItemClicked;
-            StickUtils.SetCommonContextMenu(cmsCommon, StickUtils.typetaskinfo);
+            StixUtils.SetCommonContextMenu(cmsCommon, StixUtils.typetaskinfo);
 
             if (collapsed) {
                 collapsed = false; Collapse(); }
@@ -97,7 +96,7 @@ namespace Bubbles
             pictureHandle.MouseDown += Move_Stick;
             this.MouseDown += Move_Stick;
             Manage.Click += Manage_Click;
-            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typetaskinfo);
+            Manage.MouseHover += (sender, e) => StixUtils.ShowCommandPopup(this, orientation, StixUtils.typetaskinfo);
 
             this.ActiveControl = null;
 
@@ -116,11 +115,13 @@ namespace Bubbles
             numDuration.Size = new Size(numDuration.Width, p2.Width);
             linkDurationUnit.BringToFront();
 
-            BubblesButton.SetDates();
+            StixButton.SetDates();
 
             // Quick Task button context menu
             cmsTaskTemplates.ItemClicked += ContextMenu_ItemClicked;
             PopulateQuickTasks();
+
+            fsize = pStartDate.Font.Size; ffsize = linkDurationUnit.Font.Size;
 
             // Apply scale factor
             this.Paint += this_Paint; // paint the border depending on scale factor
@@ -131,7 +132,7 @@ namespace Bubbles
         public void ScaleStick(float fromScale, float toScale)
         {
             if (fromScale == toScale) return;
-            if (toScale < 100 || toScale > 267) return;
+            if (toScale < 100 || toScale > 300) return;
 
             float scale = 100F / fromScale;
             if (scale != 1)
@@ -139,7 +140,16 @@ namespace Bubbles
 
             this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
             scaleFactor = toScale;
+
+            float _fsize = fsize * (toScale / 100);
+            float _ffsize = ffsize * (toScale / 100);
+
+            pStartDate.Font = new Font(pStartDate.Font.FontFamily, _fsize);
+            pDueDate.Font = new Font(pStartDate.Font.FontFamily, _fsize);
+            numDuration.Font = new Font(numDuration.Font.FontFamily, _fsize);
+            linkDurationUnit.Font = new Font(numDuration.Font.FontFamily, _ffsize);
         }
+        float fsize, ffsize;
 
         private void this_Paint(object sender, PaintEventArgs e)
         {
@@ -163,7 +173,7 @@ namespace Bubbles
 
             ToolStripItem tsi = cmsTaskTemplates.Items.Add(Utils.getString("taskinfo.quicktask.manage"));
             tsi.Name = "ManageTaskTemplates";
-            StickUtils.SetContextMenuImage(cmsTaskTemplates.Items["ManageTaskTemplates"], "manage.png");
+            StixUtils.SetContextMenuImage(cmsTaskTemplates.Items["ManageTaskTemplates"], "manage.png");
             cmsTaskTemplates.Items.Add(new ToolStripSeparator());
 
             using (StixDB db = new StixDB())
@@ -288,8 +298,8 @@ namespace Bubbles
         {
             if (e.ClickedItem.Name == "BI_close")
             {
-                BubblesButton.STICKS.Remove((int)this.Tag);
-                BubblesButton.m_TaskInfo = null;
+                StixButton.STICKS.Remove((int)this.Tag);
+                StixButton.m_TaskInfo = null;
                 this.Close();
             }
             else if (e.ClickedItem.Name == "BI_rotate")
@@ -302,7 +312,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
-                StickUtils.SaveStick(this.Bounds, (int)this.Tag, orientation, collapsed);
+                StixUtils.SaveStick(this.Bounds, (int)this.Tag, orientation);
             }
             else if (e.ClickedItem.Name == "BI_collapse")
             {
@@ -312,7 +322,7 @@ namespace Bubbles
 
         public void Rotate()
         {
-            orientation = StickUtils.RotateStick(this, Manage, orientation);
+            orientation = StixUtils.RotateStick(this, Manage, orientation);
 
             panelStartDate.Location = new Point(panelStartDate.Location.Y, panelStartDate.Location.X);
             panelDueDate.Location = new Point(panelDueDate.Location.Y, panelDueDate.Location.X);
@@ -332,14 +342,14 @@ namespace Bubbles
 
                 collapseState = this.Location; // remember collapsed location
                 collapseOrientation = orientation;
-                StickUtils.Expand(this, RealLength, orientation, cmsCommon);
+                StixUtils.Expand(this, RealLength, orientation, cmsCommon);
                 collapsed = false;
             }
             else // Collapse stick
             {
                 if (ExpandAll) return;
 
-                StickUtils.Collapse(this, orientation, cmsCommon);
+                StixUtils.Collapse(this, orientation, cmsCommon);
                 collapsed = true;
                 if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
                 {
@@ -390,7 +400,7 @@ namespace Bubbles
             }
             else if (e.Button == MouseButtons.Right)
             {
-                StickUtils.ShowCommandPopup(this, orientation, StickUtils.typetaskinfo, "progress");
+                StixUtils.ShowCommandPopup(this, orientation, StixUtils.typetaskinfo, "progress", scaleFactor);
             }
         }
 
@@ -416,7 +426,7 @@ namespace Bubbles
             }
             else if (e.Button == MouseButtons.Right)
             {
-                StickUtils.ShowCommandPopup(this, orientation, StickUtils.typetaskinfo, "priority");
+                StixUtils.ShowCommandPopup(this, orientation, StixUtils.typetaskinfo, "priority", scaleFactor);
             }
         }
 
@@ -429,7 +439,7 @@ namespace Bubbles
                 { date = "calendar_duedate"; dt = (DateTime)pDueDate.Tag; }
 
                 MyDateTimePicker mdtp = new MyDateTimePicker();
-                mdtp.Location = StickUtils.GetChildLocation(this, mdtp.Bounds, orientation, date);
+                mdtp.Location = StixUtils.GetChildLocation(this, mdtp.Bounds, orientation, date);
                 mdtp.dateTimePicker1.Value = dt;
                 mdtp.AccessibleName = date;
                 mdtp.Show(); // ShowDialog() produce a "ding" sound when closing form
@@ -531,7 +541,7 @@ namespace Bubbles
                     break;
             }
 
-            StickUtils.ActivateMindManager(); // cmsDuration.Hide() locks MindManager
+            StixUtils.ActivateMindManager(); // cmsDuration.Hide() locks MindManager
         }
 
         /// <summary>
@@ -755,16 +765,16 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (BubblesButton.m_Resources == null)
-                    BubblesButton.m_Resources = new ResourcesDlg();
+                if (StixButton.m_Resources == null)
+                    StixButton.m_Resources = new ResourcesDlg();
 
-                if (BubblesButton.m_Resources.Visible)
-                    BubblesButton.m_Resources.Hide();
+                if (StixButton.m_Resources.Visible)
+                    StixButton.m_Resources.Hide();
                 else
                 {
-                    BubblesButton.m_Resources.Location =
-                        StickUtils.GetChildLocation(this, BubblesButton.m_Resources.Bounds, orientation, "resources");
-                    BubblesButton.m_Resources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                    StixButton.m_Resources.Location =
+                        StixUtils.GetChildLocation(this, StixButton.m_Resources.Bounds, orientation, "resources");
+                    StixButton.m_Resources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                 }
             }
         }

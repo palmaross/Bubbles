@@ -5,9 +5,9 @@ using System.Windows.Forms;
 
 namespace Bubbles
 {
-    public partial class MySourcesListDlg : Form
+    public partial class SourceListDlg : Form
     {
-        public MySourcesListDlg()
+        public SourceListDlg()
         {
             InitializeComponent();
 
@@ -25,10 +25,10 @@ namespace Bubbles
             contextMenuStrip1.ItemClicked += ContextMenuStrip_ItemClicked;
 
             MS_delete.Text = Utils.getString("button.delete");
-            StickUtils.SetContextMenuImage(MS_delete, "deleteall.png");
+            StixUtils.SetContextMenuImage(MS_delete, "deleteall.png");
 
             MS_rename.Text = Utils.getString("button.rename");
-            StickUtils.SetContextMenuImage(MS_delete, "edit.png");
+            StixUtils.SetContextMenuImage(MS_delete, "edit.png");
 
             imageList1.ImageSize = p2.Size;
             listView1.SmallImageList = imageList1;

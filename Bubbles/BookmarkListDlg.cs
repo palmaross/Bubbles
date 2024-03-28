@@ -59,8 +59,8 @@ namespace Bubbles
 
             if (deleteall)
             {
-                if (BubblesButton.m_Bookmarks != null && !fromStick)
-                    BubblesButton.m_Bookmarks.Init(true, true);
+                if (StixButton.m_Bookmarks != null && !fromStick)
+                    StixButton.m_Bookmarks.Init(true, true);
                 return;
             }
 
@@ -89,8 +89,8 @@ namespace Bubbles
                 }
             }
             // Refresh BubbleBookmarks stick
-            if (BubblesButton.m_Bookmarks != null && !fromStick)
-                BubblesButton.m_Bookmarks.Init(true);
+            if (StixButton.m_Bookmarks != null && !fromStick)
+                StixButton.m_Bookmarks.Init(true);
         }
 
         void LoadFromMapRecursive(Topic _t)
@@ -249,7 +249,7 @@ namespace Bubbles
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            BubblesButton.m_BookmarkList = null;
+            StixButton.m_BookmarkList = null;
             this.Close();
         }
 

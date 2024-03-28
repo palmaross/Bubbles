@@ -27,7 +27,7 @@ namespace Organizer
             }
 
             this.Tag = id;
-            BubblesButton.pNOTES.Add(id, this);
+            StixButton.pNOTES.Add(id, this);
 
             lblGroup.Text = Utils.getString("notes.lblGroup");
             btnSave.Text = Utils.getString("button.save");
@@ -99,7 +99,7 @@ namespace Organizer
                     }
 
                     // Add new tags to the all open Note windows (including this window)
-                    foreach (Form note in BubblesButton.pNOTES.Values)
+                    foreach (Form note in StixButton.pNOTES.Values)
                     {
                         foreach (string tag in newTags)
                         {
@@ -118,8 +118,8 @@ namespace Organizer
                 TextBox tbContent = (TextBox)note.Controls.Find("Content", false)[0];
                 TextBox tbLink = (TextBox)note.Controls.Find("Link", false)[0];
                 TextBox tbTags = (TextBox)note.Controls.Find("Tags", false)[0];
-                tbLink.Location = BubblesButton.m_Notes.dummyLink.Location;
-                tbTags.Location = BubblesButton.m_Notes.dummyTags.Location;
+                tbLink.Location = StixButton.m_Notes.dummyLink.Location;
+                tbTags.Location = StixButton.m_Notes.dummyTags.Location;
 
                 tbTitle.Text = txtNoteTitle.Text.Trim();
 
@@ -135,9 +135,9 @@ namespace Organizer
                 else
                 {
                     if (Tags.Text.Trim() == "")
-                        tbLink.Location = BubblesButton.m_Notes.dummyTags.Location;
+                        tbLink.Location = StixButton.m_Notes.dummyTags.Location;
                     else
-                        tbLink.Location = BubblesButton.m_Notes.dummyLink.Location;
+                        tbLink.Location = StixButton.m_Notes.dummyLink.Location;
                 }
 
                 tbTags.Text = Tags.Text.Trim(); tbTags.BringToFront();
@@ -188,14 +188,14 @@ namespace Organizer
                 Text = txtNoteTitle.Text.Trim();
 
                 // this ID changed, update the form in the pNOTES list
-                BubblesButton.pNOTES.Remove((int)this.Tag);
+                StixButton.pNOTES.Remove((int)this.Tag);
                 this.Tag = id;
-                BubblesButton.pNOTES.Add(id, this);
+                StixButton.pNOTES.Add(id, this);
 
-                NoteGroupItem item = BubblesButton.m_Notes.cbGroups.SelectedItem as NoteGroupItem;
+                NoteGroupItem item = StixButton.m_Notes.cbGroups.SelectedItem as NoteGroupItem;
                 if (item.ID == -1 || group.ID == item.ID) // "All groups" ot this group shown in the Notes window
                 {
-                    Panel newnote = BubblesButton.m_Notes.AddNote(
+                    Panel newnote = StixButton.m_Notes.AddNote(
                     txtNoteTitle.Text.Trim(), txtContent.Text.Trim(), link, aNoteTags: _tags);
                     newnote.Tag = new NoteItem(txtNoteTitle.Text.Trim(), txtContent.Text.Trim(), link, id, group.ID, "", "", _tags);
                 }
@@ -204,13 +204,13 @@ namespace Organizer
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            BubblesButton.pNOTES.Remove((int)this.Tag);
+            StixButton.pNOTES.Remove((int)this.Tag);
             this.Close();
         }
 
         private void NoteDlg_FormClosing(object sender, FormClosingEventArgs e)
         {
-            BubblesButton.pNOTES.Remove((int)this.Tag);
+            StixButton.pNOTES.Remove((int)this.Tag);
         }
 
         public void AddContextMenu(RichTextBox rtb)

@@ -56,12 +56,12 @@ namespace Bubbles
             if (pToggle.Tag.ToString() == "1")
             {
                 pToggle.Image = Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
-                StickUtils.TopicAutoWidth = false;
+                StixUtils.TopicAutoWidth = false;
             }
             else
             {
                 pToggle.Image = Image.FromFile(Utils.ImagesPath + "topic_setdate_active.png");
-                StickUtils.TopicAutoWidth = true;
+                StixUtils.TopicAutoWidth = true;
             }
         }
 

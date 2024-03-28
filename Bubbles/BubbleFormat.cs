@@ -20,10 +20,9 @@ namespace Bubbles
             InitializeComponent();
 
             this.Tag = ID;
-            orientation = _orientation.Substring(0, 1); // "H" or "V"
-            collapsed = _orientation.Substring(1, 1) == "1";
+            orientation = _orientation; // "H" or "V"
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "StickFormat.htm");
 
@@ -46,7 +45,7 @@ namespace Bubbles
             // Context menu
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
             contextMenuStrip1.Items["BI_color"].Text = Utils.getString("bubbleformat.contextmenu.color");
-            StickUtils.SetCommonContextMenu(contextMenuStrip1, StickUtils.typeformat);
+            StixUtils.SetCommonContextMenu(contextMenuStrip1, StixUtils.typeformat);
 
             fontcolor1.MouseClick += Icon_Click;
             fontcolor2.MouseClick += Icon_Click;
@@ -76,7 +75,7 @@ namespace Bubbles
             pictureHandle.MouseDown += PictureHandle_MouseDown;
             Manage.Click += Manage_Click;
 
-            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typeformat);
+            Manage.MouseHover += (sender, e) => StixUtils.ShowCommandPopup(this, orientation, StixUtils.typeformat);
 
             // Apply scale factor
             this.Paint += this_Paint; // paint the border depending on scale factor
@@ -156,7 +155,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
-                BubblesButton.STICKS.Remove((int)this.Tag);
+                StixButton.STICKS.Remove((int)this.Tag);
                 this.Close();
             }
             else if (e.ClickedItem.Name == "BI_rotate")
@@ -169,7 +168,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
-                StickUtils.SaveStick(this.Bounds, (int)this.Tag, orientation, collapsed);
+                StixUtils.SaveStick(this.Bounds, (int)this.Tag, orientation);
             }
 
             else if (e.ClickedItem.Name == "BI_collapse")
@@ -180,7 +179,7 @@ namespace Bubbles
 
         public void Rotate()
         {
-            orientation = StickUtils.RotateStick(this, Manage, orientation);
+            orientation = StixUtils.RotateStick(this, Manage, orientation);
         }
 
         /// <summary>
@@ -196,14 +195,14 @@ namespace Bubbles
 
                 collapseState = this.Location; // remember collapsed location
                 collapseOrientation = orientation;
-                StickUtils.Expand(this, RealLength, orientation, contextMenuStrip1);
+                StixUtils.Expand(this, RealLength, orientation, contextMenuStrip1);
                 collapsed = false;
             }
             else // Collapse stick
             {
                 if (ExpandAll) return;
 
-                StickUtils.Collapse(this, orientation, contextMenuStrip1);
+                StixUtils.Collapse(this, orientation, contextMenuStrip1);
                 collapsed = true;
                 if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
                 {

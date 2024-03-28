@@ -6,9 +6,9 @@ using System.Windows.Forms;
 
 namespace Bubbles
 {
-    public partial class AlignSticksDlg : Form
+    public partial class AlignStixDlg : Form
     {
-        public AlignSticksDlg()
+        public AlignStixDlg()
         {
             InitializeComponent();
 
@@ -42,7 +42,7 @@ namespace Bubbles
                 DataTable dt = db.ExecuteQuery("select * from STICKS order by type, name");
                 foreach (DataRow dr in dt.Rows)
                 {
-                    if (BubblesButton.STICKS.ContainsKey(Convert.ToInt32(dr["id"])))
+                    if (StixButton.STICKS.ContainsKey(Convert.ToInt32(dr["id"])))
                         listSticks.Items.Add(dr["name"].ToString()).Tag = dr["id"].ToString();
                 }
             }
@@ -82,14 +82,14 @@ namespace Bubbles
         {
             Point loc = new Point(0, 0);
             int prevStickWidth = 0, prevStickHeight = 0;
-            int thickness = StickUtils.stickThickness;
+            int thickness = StixUtils.stickThickness;
             int gap = p1.Height * (int)numDistance.Value;
             bool first = true;
 
             foreach (ListViewItem item in listSticks.CheckedItems)
             {
                 int id = Convert.ToInt32(item.Tag);
-                var stick = BubblesButton.STICKS[id];
+                var stick = StixButton.STICKS[id];
 
                 if (rbtnHH.Checked)
                 {
@@ -158,25 +158,25 @@ namespace Bubbles
         {
             switch (stick.Name)
             {
-                case StickUtils.typeicons:
+                case StixUtils.typeicons:
                     (stick as BubbleIcons).Rotate();
                     break;
-                case StickUtils.typetaskinfo:
+                case StixUtils.typetaskinfo:
                     (stick as BubbleTaskInfo).Rotate();
                     break;
-                case StickUtils.typeformat:
+                case StixUtils.typeformat:
                     (stick as BubbleFormat).Rotate();
                     break;
-                case StickUtils.typesources:
-                    (stick as BubbleMySources).Rotate();
+                case StixUtils.typesources:
+                    (stick as BubbleSources).Rotate();
                     break;
-                case StickUtils.typebookmarks:
+                case StixUtils.typebookmarks:
                     (stick as BubbleBookmarks).Rotate();
                     break;
-                case StickUtils.typetextops:
+                case StixUtils.typetextops:
                     (stick as BubbleTextOps).Rotate();
                     break;
-                case StickUtils.typeorganizer:
+                case StixUtils.typeorganizer:
                     (stick as BubbleOrganizer).Rotate();
                     break;
             }
@@ -186,25 +186,25 @@ namespace Bubbles
         {
             switch (stick.Name)
             {
-                case StickUtils.typeicons:
+                case StixUtils.typeicons:
                     (stick as BubbleIcons).Collapse(false, true);
                     break;
-                case StickUtils.typetaskinfo:
+                case StixUtils.typetaskinfo:
                     (stick as BubbleTaskInfo).Collapse(false, true);
                     break;
-                case StickUtils.typeformat:
+                case StixUtils.typeformat:
                     (stick as BubbleFormat).Collapse(false, true);
                     break;
-                case StickUtils.typesources:
-                    (stick as BubbleMySources).Collapse(false, true);
+                case StixUtils.typesources:
+                    (stick as BubbleSources).Collapse(false, true);
                     break;
-                case StickUtils.typebookmarks:
+                case StixUtils.typebookmarks:
                     (stick as BubbleBookmarks).Collapse(false, true);
                     break;
-                case StickUtils.typetextops:
+                case StixUtils.typetextops:
                     (stick as BubbleTextOps).Collapse(false, true);
                     break;
-                case StickUtils.typeorganizer:
+                case StixUtils.typeorganizer:
                     (stick as BubbleOrganizer).Collapse(false, true);
                     break;
             }
@@ -256,51 +256,6 @@ namespace Bubbles
         private void btnCreateConfig_Click(object sender, EventArgs e)
         {
             panelConfig.Visible = true;
-        }
-
-        private void btnConfigOK_Click(object sender, EventArgs e)
-        {
-            int id = 0;
-
-            Dictionary<int, Form> sticks = new Dictionary<int, Form>();
-
-            foreach (ListViewItem item in listSticks.CheckedItems)
-            {
-                id = Convert.ToInt32(item.Tag);
-                var stick = BubblesButton.STICKS[id];
-                sticks.Add(id, stick);
-            }
-
-            if (rbtnNewConfig.Checked)
-            {
-                string newName = txtConfigName.Text.Trim();
-                if (String.IsNullOrEmpty(newName)) return;
-
-                using (StixDB db = new StixDB())
-                {
-                    DataTable dt = db.ExecuteQuery("select * from CONFIGS where name=`" + newName + "`");
-                    if (dt.Rows.Count > 0)
-                    {
-                        MessageBox.Show(Utils.getString("ManageConfigsDlg.nameexists"), "",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error); return;
-                    }
-                    db.AddConfig(newName, 0);
-                    // Get config id
-                    dt = db.ExecuteQuery("SELECT last_insert_rowid()");
-                    if (dt.Rows.Count > 0) id = Convert.ToInt32(dt.Rows[0][0]);
-
-                    var item = new ConfigItem(newName, id);
-                    cbConfigurations.Items.Add(item);
-                }
-            }
-            else
-            {
-                var item = cbConfigurations.SelectedItem as ConfigItem;
-                id = item.ID;
-            }
-
-            int start = chboxRunAtStart.Checked ? 1 : 0;
-            StickUtils.CreateConfiguration(sticks, id, start);
         }
 
         private void btnConfigCancel_Click(object sender, EventArgs e)

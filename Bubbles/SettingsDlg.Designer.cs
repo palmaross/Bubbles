@@ -36,13 +36,8 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.cbSelectAll = new System.Windows.Forms.CheckBox();
             this.gbRunAtStart = new System.Windows.Forms.GroupBox();
-            this.cbConfiguration = new System.Windows.Forms.ComboBox();
-            this.rbtnConfiguration = new System.Windows.Forms.RadioButton();
-            this.rbtnSticks = new System.Windows.Forms.RadioButton();
             this.gbScaleFactor = new System.Windows.Forms.GroupBox();
-            this.btnTestScale3 = new System.Windows.Forms.Button();
-            this.btnTestScale2 = new System.Windows.Forms.Button();
-            this.btnTestScale1 = new System.Windows.Forms.Button();
+            this.btnTestScale = new System.Windows.Forms.Button();
             this.numBoxes = new System.Windows.Forms.MaskedTextBox();
             this.numStixBase = new System.Windows.Forms.MaskedTextBox();
             this.numStix = new System.Windows.Forms.MaskedTextBox();
@@ -64,7 +59,7 @@
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(236, 329);
+            this.btnClose.Location = new System.Drawing.Point(236, 275);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 1;
@@ -75,7 +70,7 @@
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSave.Location = new System.Drawing.Point(155, 329);
+            this.btnSave.Location = new System.Drawing.Point(155, 275);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 3;
@@ -87,7 +82,7 @@
             // 
             this.listRunAtStart.CheckBoxes = true;
             this.listRunAtStart.HideSelection = false;
-            this.listRunAtStart.Location = new System.Drawing.Point(12, 60);
+            this.listRunAtStart.Location = new System.Drawing.Point(12, 42);
             this.listRunAtStart.Name = "listRunAtStart";
             this.listRunAtStart.Size = new System.Drawing.Size(276, 80);
             this.listRunAtStart.TabIndex = 14;
@@ -97,7 +92,7 @@
             // cbSelectAll
             // 
             this.cbSelectAll.AutoSize = true;
-            this.cbSelectAll.Location = new System.Drawing.Point(13, 40);
+            this.cbSelectAll.Location = new System.Drawing.Point(13, 22);
             this.cbSelectAll.Name = "cbSelectAll";
             this.cbSelectAll.Size = new System.Drawing.Size(139, 17);
             this.cbSelectAll.TabIndex = 15;
@@ -107,53 +102,18 @@
             // 
             // gbRunAtStart
             // 
-            this.gbRunAtStart.Controls.Add(this.cbConfiguration);
-            this.gbRunAtStart.Controls.Add(this.rbtnConfiguration);
-            this.gbRunAtStart.Controls.Add(this.rbtnSticks);
             this.gbRunAtStart.Controls.Add(this.cbSelectAll);
             this.gbRunAtStart.Controls.Add(this.listRunAtStart);
             this.gbRunAtStart.Location = new System.Drawing.Point(12, 10);
             this.gbRunAtStart.Name = "gbRunAtStart";
-            this.gbRunAtStart.Size = new System.Drawing.Size(299, 204);
+            this.gbRunAtStart.Size = new System.Drawing.Size(299, 134);
             this.gbRunAtStart.TabIndex = 16;
             this.gbRunAtStart.TabStop = false;
             this.gbRunAtStart.Text = "Запускать при старте MindManager:";
             // 
-            // cbConfiguration
-            // 
-            this.cbConfiguration.FormattingEnabled = true;
-            this.cbConfiguration.Location = new System.Drawing.Point(13, 171);
-            this.cbConfiguration.Name = "cbConfiguration";
-            this.cbConfiguration.Size = new System.Drawing.Size(275, 21);
-            this.cbConfiguration.TabIndex = 18;
-            // 
-            // rbtnConfiguration
-            // 
-            this.rbtnConfiguration.AutoSize = true;
-            this.rbtnConfiguration.Location = new System.Drawing.Point(85, 148);
-            this.rbtnConfiguration.Name = "rbtnConfiguration";
-            this.rbtnConfiguration.Size = new System.Drawing.Size(103, 17);
-            this.rbtnConfiguration.TabIndex = 17;
-            this.rbtnConfiguration.Text = "Конфигурацию:";
-            this.rbtnConfiguration.UseVisualStyleBackColor = true;
-            // 
-            // rbtnSticks
-            // 
-            this.rbtnSticks.AutoSize = true;
-            this.rbtnSticks.Checked = true;
-            this.rbtnSticks.Location = new System.Drawing.Point(85, 19);
-            this.rbtnSticks.Name = "rbtnSticks";
-            this.rbtnSticks.Size = new System.Drawing.Size(119, 17);
-            this.rbtnSticks.TabIndex = 16;
-            this.rbtnSticks.TabStop = true;
-            this.rbtnSticks.Text = "Выбранные стики:";
-            this.rbtnSticks.UseVisualStyleBackColor = true;
-            // 
             // gbScaleFactor
             // 
-            this.gbScaleFactor.Controls.Add(this.btnTestScale3);
-            this.gbScaleFactor.Controls.Add(this.btnTestScale2);
-            this.gbScaleFactor.Controls.Add(this.btnTestScale1);
+            this.gbScaleFactor.Controls.Add(this.btnTestScale);
             this.gbScaleFactor.Controls.Add(this.numBoxes);
             this.gbScaleFactor.Controls.Add(this.numStixBase);
             this.gbScaleFactor.Controls.Add(this.numStix);
@@ -163,42 +123,22 @@
             this.gbScaleFactor.Controls.Add(this.cbStix);
             this.gbScaleFactor.Controls.Add(this.cbStixBase);
             this.gbScaleFactor.Controls.Add(this.cbBoxes);
-            this.gbScaleFactor.Location = new System.Drawing.Point(12, 222);
+            this.gbScaleFactor.Location = new System.Drawing.Point(12, 161);
             this.gbScaleFactor.Name = "gbScaleFactor";
             this.gbScaleFactor.Size = new System.Drawing.Size(299, 98);
             this.gbScaleFactor.TabIndex = 17;
             this.gbScaleFactor.TabStop = false;
-            this.gbScaleFactor.Text = "Scale Factor (allowed values: 100 to 267%)";
+            this.gbScaleFactor.Text = "Scale Factor (allowed values: 100 to 300%)";
             // 
-            // btnTestScale3
+            // btnTestScale
             // 
-            this.btnTestScale3.Location = new System.Drawing.Point(164, 67);
-            this.btnTestScale3.Name = "btnTestScale3";
-            this.btnTestScale3.Size = new System.Drawing.Size(54, 23);
-            this.btnTestScale3.TabIndex = 20;
-            this.btnTestScale3.Text = "Test";
-            this.btnTestScale3.UseVisualStyleBackColor = true;
-            this.btnTestScale3.Click += new System.EventHandler(this.btnTestScale_Click);
-            // 
-            // btnTestScale2
-            // 
-            this.btnTestScale2.Location = new System.Drawing.Point(164, 43);
-            this.btnTestScale2.Name = "btnTestScale2";
-            this.btnTestScale2.Size = new System.Drawing.Size(54, 23);
-            this.btnTestScale2.TabIndex = 19;
-            this.btnTestScale2.Text = "Test";
-            this.btnTestScale2.UseVisualStyleBackColor = true;
-            this.btnTestScale2.Click += new System.EventHandler(this.btnTestScale_Click);
-            // 
-            // btnTestScale1
-            // 
-            this.btnTestScale1.Location = new System.Drawing.Point(164, 20);
-            this.btnTestScale1.Name = "btnTestScale1";
-            this.btnTestScale1.Size = new System.Drawing.Size(54, 23);
-            this.btnTestScale1.TabIndex = 18;
-            this.btnTestScale1.Text = "Test";
-            this.btnTestScale1.UseVisualStyleBackColor = true;
-            this.btnTestScale1.Click += new System.EventHandler(this.btnTestScale_Click);
+            this.btnTestScale.Location = new System.Drawing.Point(189, 41);
+            this.btnTestScale.Name = "btnTestScale";
+            this.btnTestScale.Size = new System.Drawing.Size(70, 27);
+            this.btnTestScale.TabIndex = 19;
+            this.btnTestScale.Text = "Test";
+            this.btnTestScale.UseVisualStyleBackColor = true;
+            this.btnTestScale.Click += new System.EventHandler(this.btnTestScale_Click);
             // 
             // numBoxes
             // 
@@ -315,7 +255,7 @@
             // 
             this.label4.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(90, 323);
+            this.label4.Location = new System.Drawing.Point(90, 274);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(16, 16);
             this.label4.TabIndex = 9;
@@ -325,7 +265,7 @@
             // numericUpDown1
             // 
             this.numericUpDown1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.numericUpDown1.Location = new System.Drawing.Point(70, 322);
+            this.numericUpDown1.Location = new System.Drawing.Point(70, 273);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(38, 21);
             this.numericUpDown1.TabIndex = 7;
@@ -335,7 +275,7 @@
             // 
             this.comboBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(70, 322);
+            this.comboBox2.Location = new System.Drawing.Point(70, 273);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(55, 21);
             this.comboBox2.TabIndex = 8;
@@ -347,7 +287,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(322, 361);
+            this.ClientSize = new System.Drawing.Size(322, 309);
             this.Controls.Add(this.gbScaleFactor);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.numericUpDown1);
@@ -380,9 +320,6 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.CheckBox cbSelectAll;
         private System.Windows.Forms.GroupBox gbRunAtStart;
-        private System.Windows.Forms.ComboBox cbConfiguration;
-        private System.Windows.Forms.RadioButton rbtnConfiguration;
-        private System.Windows.Forms.RadioButton rbtnSticks;
         private System.Windows.Forms.GroupBox gbScaleFactor;
         private System.Windows.Forms.MaskedTextBox numStix;
         private System.Windows.Forms.Label lblBoxes;
@@ -396,8 +333,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cbStixBase;
         private System.Windows.Forms.ComboBox cbBoxes;
-        private System.Windows.Forms.Button btnTestScale1;
-        private System.Windows.Forms.Button btnTestScale3;
-        private System.Windows.Forms.Button btnTestScale2;
+        private System.Windows.Forms.Button btnTestScale;
     }
 }

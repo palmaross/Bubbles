@@ -13,15 +13,13 @@ namespace Bubbles
 
             Text = Utils.getString("SettingsDlg.Title");
             gbRunAtStart.Text = Utils.getString("SettingsDlg.gbRunAtStart");
-            rbtnSticks.Text = Utils.getString("SettingsDlg.rbtnSticks");
             cbSelectAll.Text = Utils.getString("SettingsDlg.cbSelectAll");
-            rbtnConfiguration.Text = Utils.getString("SettingsDlg.rbtnConfiguration");
 
             gbScaleFactor.Text = Utils.getString("SettingsDlg.gbScaleFactor");
             lblStix.Text = Utils.getString("SettingsDlg.lblStix");
             lblStixBase.Text = Utils.getString("SettingsDlg.lblStixBase");
             lblBoxes.Text = Utils.getString("SettingsDlg.lblBoxes");
-            btnTestScale1.Text = Utils.getString("SettingsDlg.btnTestScale");
+            btnTestScale.Text = Utils.getString("SettingsDlg.btnTestScale");
 
             btnSave.Text = Utils.getString("button.save");
             btnClose.Text = Utils.getString("button.close");
@@ -40,17 +38,6 @@ namespace Bubbles
                 }
                 if (allselected)
                     cbSelectAll.Checked = true;
-
-
-                // Fill configurations
-                dt = db.ExecuteQuery("select * from CONFIGS order by name");
-                foreach (DataRow dr in dt.Rows)
-                {
-                    var item = new ConfigItem(dr["name"].ToString(), Convert.ToInt32(dr["id"]));
-                    cbConfiguration.Items.Add(item);
-                }
-                if (cbConfiguration.Items.Count > 0)
-                    cbConfiguration.SelectedIndex = 0;
             }
 
             // Fill Scale Factor
@@ -63,36 +50,20 @@ namespace Bubbles
         {
             using (StixDB db = new StixDB())
             {
-                if (rbtnSticks.Checked)
+                // Save to database starting sticks
+                foreach (ListViewItem item in listRunAtStart.Items)
                 {
-                    // Save to database starting sticks
-                    foreach (ListViewItem item in listRunAtStart.Items)
-                    {
-                        int id = Convert.ToInt32(item.Tag);
-                        int start = Convert.ToInt32(item.Checked);
-                        db.ExecuteNonQuery("update STICKS set start=" + start + " where id=" + id + "");
-                    }
-                    // Disable starting configuration
-                    db.ExecuteNonQuery("update CONFIGS set start=" + 0 + " where start=" + 1 + "");
-                }
-                else if (rbtnConfiguration.Checked)
-                {
-                    if (cbConfiguration.Items.Count > 0)
-                    {
-                        db.ExecuteNonQuery("update CONFIGS set start=" + 0 + " where start=" + 1 + "");
-                        var item = cbConfiguration.SelectedItem as ConfigItem;
-                        // Save to database starting configuration
-                        db.ExecuteNonQuery("update CONFIGS set start=" + 1 + " where id=" + item.ID + "");
-                        // Disable starting sticks
-                        db.ExecuteNonQuery("update STICKS set start=" + 0 + " where start=" + 1 + "");
-                    }
+                    int id = Convert.ToInt32(item.Tag);
+                    int start = Convert.ToInt32(item.Checked);
+                    db.ExecuteNonQuery("update STICKS set start=" + start + " where id=" + id + "");
                 }
             }
 
-            // Save Scale Factor
-            Utils.setRegistry("ScaleFactor_Stix", numStix.Text.Trim('%'));
-            Utils.setRegistry("ScaleFactor_StixBase", numStixBase.Text.Trim('%'));
-            Utils.setRegistry("ScaleFactor_Boxes", numBoxes.Text.Trim('%'));
+            // Apply and save Scale Factor
+            btnTestScale_Click(null, null);
+            Utils.setRegistry("ScaleFactor_Stix", stixScaleFactor.ToString());
+            Utils.setRegistry("ScaleFactor_StixBase", stixbaseScaleFactor.ToString());
+            Utils.setRegistry("ScaleFactor_Boxes", boxesScaleFactor.ToString());
         }
 
         private void cbSelectAll_CheckedChanged(object sender, EventArgs e)
@@ -121,57 +92,57 @@ namespace Bubbles
 
         private void btnTestScale_Click(object sender, EventArgs e)
         {
-            float scaleFactor;
+            float SF_Stix, SF_StixBase, SF_Boxes;
 
-            if (sender == btnTestScale1) // All visible stix
+            try { SF_Stix = Convert.ToInt32(numStix.Text.Trim('%').Trim());
+            } catch { SF_Stix = 100; }
+
+            try { SF_StixBase = Convert.ToInt32(numStixBase.Text.Trim('%').Trim());
+            } catch { SF_StixBase = 100; }
+
+            try { SF_Boxes = Convert.ToInt32(numBoxes.Text.Trim('%').Trim());
+            } catch { SF_Boxes = 100; }
+
+            foreach (var pair in StixButton.STICKS)
             {
-                try { scaleFactor = Convert.ToInt32(numStix.Text.Trim('%').Trim());
-                } catch { return; }
+                Form stick = pair.Value;
+                if (stick == null) continue;
 
-                foreach (var pair in BubblesButton.STICKS)
+                switch (stick.Name)
                 {
-                    Form stick = pair.Value;
-                    if (stick.Name == "StixBase" || !stick.Visible) continue;
-
-                    switch (stick.Name)
-                    {
-                        case StickUtils.typeicons:
-                            (stick as BubbleIcons).ScaleStick(stixbaseScaleFactor, scaleFactor);
-                            break;
-                        case StickUtils.typetaskinfo:
-                            (stick as BubbleTaskInfo).ScaleStick(stixbaseScaleFactor, scaleFactor);
-                            break;
-                        case StickUtils.typeaddtopic:
-                            (stick as BubbleAddTopic).ScaleStick(stixbaseScaleFactor, scaleFactor);
-                            break;
-                        case StickUtils.typeformat:
-                            (stick as BubbleFormat).ScaleStick(stixbaseScaleFactor, scaleFactor);
-                            break;
-                        case StickUtils.typesources:
-                            (stick as BubbleMySources).ScaleStick(stixbaseScaleFactor, scaleFactor);
-                            break;
-                        case StickUtils.typebookmarks:
-                            (stick as BubbleBookmarks).ScaleStick(stixbaseScaleFactor, scaleFactor);
-                            break;
-                        case StickUtils.typetextops:
-                            (stick as BubbleTextOps).ScaleStick(stixbaseScaleFactor, scaleFactor);
-                            break;
-                    }
+                    case StixUtils.typebase:
+                        (stick as StixBase).ScaleStick(stixbaseScaleFactor, SF_StixBase);
+                        break;
+                    case StixUtils.typeicons:
+                        (stick as BubbleIcons).ScaleStick(stixScaleFactor, SF_Stix);
+                        break;
+                    case StixUtils.typetaskinfo:
+                        (stick as BubbleTaskInfo).ScaleStick(stixScaleFactor, SF_Stix);
+                        break;
+                    case StixUtils.typeaddtopic:
+                        (stick as BubbleAddTopic).ScaleStick(stixScaleFactor, SF_Stix);
+                        break;
+                    case StixUtils.typeformat:
+                        (stick as BubbleFormat).ScaleStick(stixScaleFactor, SF_Stix);
+                        break;
+                    case StixUtils.typesources:
+                        (stick as BubbleSources).ScaleStick(stixScaleFactor, SF_Stix);
+                        break;
+                    case StixUtils.typebookmarks:
+                        (stick as BubbleBookmarks).ScaleStick(stixScaleFactor, SF_Stix);
+                        break;
+                    case StixUtils.typetextops:
+                        (stick as BubbleTextOps).ScaleStick(stixScaleFactor, SF_Stix);
+                        break;
                 }
-                stixScaleFactor = scaleFactor;
             }
-            else if (sender == btnTestScale2) // Base stick
-            {
-                try { scaleFactor = Convert.ToInt32(numStixBase.Text.Trim('%').Trim());
-                } catch { return; }
+            stixScaleFactor = SF_Stix;
+            stixbaseScaleFactor = SF_StixBase;
 
-                BubblesButton.m_StixBase.ScaleStick(stixbaseScaleFactor, scaleFactor);
-                stixbaseScaleFactor = scaleFactor;
-            }
-            else if(sender == btnTestScale3) // Boxes
-            {
-                
-            }
+            //foreach (var pair in BubblesButton.BOXES) // Boxes
+            //{
+
+            //}
         }
 
         private void numStix_KeyDown(object sender, KeyEventArgs e)
@@ -185,7 +156,7 @@ namespace Bubbles
                 } catch { mtb.Text = "100%"; return; }
 
                 if (value < 100) { mtb.Text = "100%"; return; }
-                if (value > 267) { mtb.Text = "267%"; return; }
+                if (value > 300) { mtb.Text = "300%"; return; }
 
                 if (e != null)
                 {

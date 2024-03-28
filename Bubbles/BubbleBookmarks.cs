@@ -15,13 +15,12 @@ namespace Bubbles
         {
             InitializeComponent();
 
-            BubblesButton.m_Bookmarks = this;
+            StixButton.m_Bookmarks = this;
 
             this.Tag = ID;
-            orientation = _orientation.Substring(0, 1); // "H" or "V"
-            collapsed = _orientation.Substring(1, 1) == "1";
+            orientation = _orientation; // "H" or "V"
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "BookmarksStick.htm.htm");
 
@@ -43,20 +42,20 @@ namespace Bubbles
             cmsDelete.ItemClicked += ContextMenuStrip1_ItemClicked;
 
             contextMenuStrip1.Items["BI_addbookmark"].Text = Utils.getString("bookmarks.contextmenu.add");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_addbookmark"], "book_add.png");
+            StixUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_addbookmark"], "book_add.png");
 
             cmsDelete.Items["BI_delete"].Text = Utils.getString("bookmarks.contextmenu.delete");
 
             contextMenuStrip1.Items["BI_main"].Text = Utils.getString("bookmarks.contextmenu.maintopics");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_main"], "bookmarkMain.png");
+            StixUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_main"], "bookmarkMain.png");
 
             contextMenuStrip1.Items["BI_deletemain"].Text = Utils.getString("bookmarks.contextmenu.deletemaintopics");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_deletemain"], "deletemain.png");
+            StixUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_deletemain"], "deletemain.png");
 
             contextMenuStrip1.Items["BI_bookmarklist"].Text = Utils.getString("bookmarks.contextmenu.list");
-            StickUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_bookmarklist"], "list.png");
+            StixUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_bookmarklist"], "list.png");
 
-            StickUtils.SetCommonContextMenu(contextMenuStrip1, StickUtils.typebookmarks);
+            StixUtils.SetCommonContextMenu(contextMenuStrip1, StixUtils.typebookmarks);
 
             this.MouseDown += Move_Stick;
             pictureHandle.MouseDown += Move_Stick;
@@ -64,7 +63,7 @@ namespace Bubbles
             pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
 
             // Show command popup
-            Manage.MouseHover += (sender, e) => StickUtils.ShowCommandPopup(this, orientation, StickUtils.typebookmarks);            
+            Manage.MouseHover += (sender, e) => StixUtils.ShowCommandPopup(this, orientation, StixUtils.typebookmarks);            
 
             Init();
 
@@ -133,8 +132,8 @@ namespace Bubbles
 
                 if (deleteall)
                 {
-                    if (BubblesButton.m_BookmarkList != null && !fromList)
-                        BubblesButton.m_BookmarkList.Init(true, true);
+                    if (StixButton.m_BookmarkList != null && !fromList)
+                        StixButton.m_BookmarkList.Init(true, true);
                     return;
                 }
             }
@@ -171,8 +170,8 @@ namespace Bubbles
             }
 
             // Refresh Bookmarks list
-            if (BubblesButton.m_BookmarkList != null && !fromList)
-                BubblesButton.m_BookmarkList.Init(true);
+            if (StixButton.m_BookmarkList != null && !fromList)
+                StixButton.m_BookmarkList.Init(true);
         }
 
         void LoadFromMapRecursive(Topic _t)
@@ -281,8 +280,8 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
-                BubblesButton.STICKS.Remove((int)this.Tag);
-                BubblesButton.m_Bookmarks = null;
+                StixButton.STICKS.Remove((int)this.Tag);
+                StixButton.m_Bookmarks = null;
                 this.Close();
             }
             else if (e.ClickedItem.Name == "BI_rotate")
@@ -295,7 +294,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
-                StickUtils.SaveStick(this.Bounds, (int)this.Tag, orientation, collapsed);
+                StixUtils.SaveStick(this.Bounds, (int)this.Tag, orientation);
             }
             else if (e.ClickedItem.Name == "BI_collapse")
             {
@@ -305,7 +304,7 @@ namespace Bubbles
 
         public void Rotate()
         {
-            orientation = StickUtils.RotateStick(this, Manage, orientation, BookmarkList);
+            orientation = StixUtils.RotateStick(this, Manage, orientation, BookmarkList);
         }
 
 
@@ -322,14 +321,14 @@ namespace Bubbles
 
                 collapseState = this.Location; // remember collapsed location
                 collapseOrientation = orientation;
-                StickUtils.Expand(this, RealLength, orientation, contextMenuStrip1);
+                StixUtils.Expand(this, RealLength, orientation, contextMenuStrip1);
                 collapsed = false;
             }
             else // Collapse stick
             {
                 if (ExpandAll) return;
 
-                StickUtils.Collapse(this, orientation, contextMenuStrip1);
+                StixUtils.Collapse(this, orientation, contextMenuStrip1);
                 collapsed = true;
                 if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
                 {
@@ -452,17 +451,17 @@ namespace Bubbles
 
         public void BookmarkList_Click(object sender, EventArgs e)
         {
-            if (BubblesButton.m_BookmarkList == null)
+            if (StixButton.m_BookmarkList == null)
             {
-                BubblesButton.m_BookmarkList = new BookmarkListDlg();
+                StixButton.m_BookmarkList = new BookmarkListDlg();
 
                 // Get bookmark list location
-                Rectangle child = BubblesButton.m_BookmarkList.RectangleToScreen(BubblesButton.m_BookmarkList.ClientRectangle);
-                BubblesButton.m_BookmarkList.Location = StickUtils.GetChildLocation(this, child, orientation, "bookmarks");
+                Rectangle child = StixButton.m_BookmarkList.RectangleToScreen(StixButton.m_BookmarkList.ClientRectangle);
+                StixButton.m_BookmarkList.Location = StixUtils.GetChildLocation(this, child, orientation, "bookmarks");
                 
-                BubblesButton.m_BookmarkList.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                StixButton.m_BookmarkList.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
-            BubblesButton.m_BookmarkList.Init(true);
+            StixButton.m_BookmarkList.Init(true);
         }
 
         public static Dictionary<Document, List<BookmarkItem>> BookmarkedDocuments = new Dictionary<Document, List<BookmarkItem>>();

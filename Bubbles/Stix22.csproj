@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{243ABB0B-DD55-4E6E-8F67-ED9ACEB51A0E}</ProjectGuid>
+    <ProjectGuid>{47753526-1994-4211-A1DA-926C94F51BB2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Bubbles</RootNamespace>
-    <AssemblyName>WowStix23</AssemblyName>
+    <AssemblyName>OmniStix22</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;MINDJET23</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;MINDJET22</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -44,27 +44,24 @@
     <Reference Include="extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="PalmaRossCommon23, Version=1.0.0.0, Culture=neutral, PublicKeyToken=057dcba4e358e84f, processorArchitecture=MSIL">
+    <Reference Include="PalmaRossCommon22, Version=1.0.0.0, Culture=neutral, PublicKeyToken=057dcba4e358e84f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Common\PalmaRossCommon23.dll</HintPath>
+      <HintPath>..\..\Common\PalmaRossCommon22.dll</HintPath>
     </Reference>
     <Reference Include="PopupControl">
       <HintPath>..\..\DLLs\PopupControl.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
     <Reference Include="WindowsInput, Version=1.0.4.0, Culture=neutral, PublicKeyToken=9b287f7dc5073cad, processorArchitecture=MSIL">
       <HintPath>..\packages\InputSimulator.1.0.4.0\lib\net20\WindowsInput.dll</HintPath>
     </Reference>
@@ -82,15 +79,14 @@
     <Compile Include="AddTopicTemplateDlg.Designer.cs">
       <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="AlignSticksDlg.cs">
+    <Compile Include="AlignStixDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AlignSticksDlg.Designer.cs">
-      <DependentUpon>AlignSticksDlg.cs</DependentUpon>
+    <Compile Include="AlignStixDlg.Designer.cs">
+      <DependentUpon>AlignStixDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppManager\AlfaChanges.cs" />
+    <Compile Include="AppManager\StickersDB.cs" />
     <Compile Include="AppManager\StixDB.cs" />
-    <Compile Include="AppManager\SticksMoreDB.cs" />
     <Compile Include="AppManager\TransactionWrapper.cs" />
     <Compile Include="BubbleAddTopic.cs">
       <SubType>Form</SubType>
@@ -103,6 +99,18 @@
     </Compile>
     <Compile Include="BubbleOrganizer.Designer.cs">
       <DependentUpon>BubbleOrganizer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BubbleSources.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BubbleSources.Designer.cs">
+      <DependentUpon>BubbleSources.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BubbleTextOps.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BubbleTextOps.Designer.cs">
+      <DependentUpon>BubbleTextOps.cs</DependentUpon>
     </Compile>
     <Compile Include="BulkOperationsDlg.cs">
       <SubType>Form</SubType>
@@ -122,19 +130,7 @@
     <Compile Include="BookmarkListDlg.Designer.cs">
       <DependentUpon>BookmarkListDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="ManageConfigsDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ManageConfigsDlg.Designer.cs">
-      <DependentUpon>ManageConfigsDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="MapMarkers.cs" />
-    <Compile Include="MMOutToogle.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MMOutToogle.Designer.cs">
-      <DependentUpon>MMOutToogle.cs</DependentUpon>
-    </Compile>
     <Compile Include="MyDateTimePicker.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -147,7 +143,6 @@
     <Compile Include="NewSourceDlg.Designer.cs">
       <DependentUpon>NewSourceDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="AphorismDB.cs" />
     <Compile Include="AppManager\DatabaseWrapper.cs" />
     <Compile Include="BubbleFormat.cs">
       <SubType>Form</SubType>
@@ -162,14 +157,39 @@
       <DependentUpon>GetNameDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Bubbles.cs" />
+    <Compile Include="OmniButton.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OmniButton.Designer.cs">
+      <DependentUpon>OmniButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ResourcesMMDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ResourcesMMDlg.Designer.cs">
+      <DependentUpon>ResourcesMMDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SourceListDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SourceListDlg.Designer.cs">
+      <DependentUpon>SourceListDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="StixBase.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="StixBase.Designer.cs">
       <DependentUpon>StixBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="WowStix23.cs" />
-    <Compile Include="AssemblyInfo23.cs" />
+    <Compile Include="StixPopup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StixPopup.Designer.cs">
+      <DependentUpon>StixPopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StixUtils.cs" />
+    <Compile Include="OmniStix22.cs" />
+    <Compile Include="AssemblyInfo22.cs" />
     <Compile Include="BubbleBookmarks.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -181,24 +201,6 @@
     </Compile>
     <Compile Include="BubbleTaskInfo.Designer.cs">
       <DependentUpon>BubbleTaskInfo.cs</DependentUpon>
-    </Compile>
-    <Compile Include="BubbleMySources.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BubbleMySources.Designer.cs">
-      <DependentUpon>BubbleMySources.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MySourcesListDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MySourcesListDlg.Designer.cs">
-      <DependentUpon>MySourcesListDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="BubbleTextOps.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BubbleTextOps.Designer.cs">
-      <DependentUpon>BubbleTextOps.cs</DependentUpon>
     </Compile>
     <Compile Include="BubbleIcons.cs">
       <SubType>Form</SubType>
@@ -248,12 +250,6 @@
     <Compile Include="ResourcesDlg.Designer.cs">
       <DependentUpon>ResourcesDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="StickPopup.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="StickPopup.Designer.cs">
-      <DependentUpon>StickPopup.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -283,6 +279,7 @@
     <Compile Include="SettingsDlg.Designer.cs">
       <DependentUpon>SettingsDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppManager\SticksMoreDB.cs" />
     <Compile Include="SizeablePictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -298,7 +295,6 @@
     <Compile Include="StickerDummy.Designer.cs">
       <DependentUpon>StickerDummy.cs</DependentUpon>
     </Compile>
-    <Compile Include="StickUtils.cs" />
     <Compile Include="Organizer\NotesDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -331,16 +327,14 @@
     </Compile>
     <Compile Include="Utils.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app21.config" />
     <None Include="I18n.default.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="I18n.ini" />
+    <None Include="OmniStix.chm" />
     <None Include="packages.config" />
-    <None Include="WowStix.chm">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="images\1.png">
@@ -424,9 +418,6 @@
     <Content Include="images\cpAddParent20.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\cpAddSingle.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="images\cpAddSubtopic.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -508,25 +499,10 @@
     <Content Include="images\groups.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\hello1.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="images\help.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\hide.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\icongroup.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\inserttext.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\internallinks.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\internallinks_active.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\list.png">
@@ -649,9 +625,6 @@
     <Content Include="images\paste.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\PasteNotesRisk.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="images\pasteTextToTopic.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -671,9 +644,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\pasteText.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\pato.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\period.png">
@@ -751,9 +721,6 @@
     <Content Include="images\7.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\replacetext.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="images\resources.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -782,12 +749,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\sortZA.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\sourcelink.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\sourcelink_active.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\STICKS.png">
@@ -821,17 +782,8 @@
   <ItemGroup>
     <COMReference Include="MindManager">
       <Guid>{1E1D4AF9-6640-49C1-A33B-8CE8B47C9785}</Guid>
-      <VersionMajor>23</VersionMajor>
+      <VersionMajor>22</VersionMajor>
       <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="VBIDE">
-      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>5</VersionMajor>
-      <VersionMinor>3</VersionMinor>
       <Lcid>0</Lcid>
       <WrapperTool>primary</WrapperTool>
       <Isolated>False</Isolated>
@@ -845,14 +797,20 @@
     <EmbeddedResource Include="AddTopicTemplateDlg.resx">
       <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AlignSticksDlg.resx">
-      <DependentUpon>AlignSticksDlg.cs</DependentUpon>
+    <EmbeddedResource Include="AlignStixDlg.resx">
+      <DependentUpon>AlignStixDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BubbleAddTopic.resx">
       <DependentUpon>BubbleAddTopic.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BubbleOrganizer.resx">
       <DependentUpon>BubbleOrganizer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BubbleSources.resx">
+      <DependentUpon>BubbleSources.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BubbleTextOps.resx">
+      <DependentUpon>BubbleTextOps.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BulkOperationsDlg.resx">
       <DependentUpon>BulkOperationsDlg.cs</DependentUpon>
@@ -862,12 +820,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="BookmarkListDlg.resx">
       <DependentUpon>BookmarkListDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ManageConfigsDlg.resx">
-      <DependentUpon>ManageConfigsDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MMOutToogle.resx">
-      <DependentUpon>MMOutToogle.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MyDateTimePicker.resx">
       <DependentUpon>MyDateTimePicker.cs</DependentUpon>
@@ -887,20 +839,14 @@
     <EmbeddedResource Include="BubbleTaskInfo.resx">
       <DependentUpon>BubbleTaskInfo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BubbleMySources.resx">
-      <DependentUpon>BubbleMySources.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MySourcesListDlg.resx">
-      <DependentUpon>MySourcesListDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="BubbleTextOps.resx">
-      <DependentUpon>BubbleTextOps.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="BubbleIcons.resx">
       <DependentUpon>BubbleIcons.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainMenuDlg.resx">
       <DependentUpon>MainMenuDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OmniButton.resx">
+      <DependentUpon>OmniButton.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Organizer\ManageNoteGroups.resx">
       <DependentUpon>ManageNoteGroups.cs</DependentUpon>
@@ -920,13 +866,12 @@
     <EmbeddedResource Include="ResourcesDlg.resx">
       <DependentUpon>ResourcesDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StickPopup.resx">
-      <DependentUpon>StickPopup.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResourcesMMDlg.resx">
+      <DependentUpon>ResourcesMMDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SelectIconDlg.resx">
       <DependentUpon>SelectIconDlg.cs</DependentUpon>
@@ -943,6 +888,9 @@
     <EmbeddedResource Include="SnippetsDlg.resx">
       <DependentUpon>SnippetsDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SourceListDlg.resx">
+      <DependentUpon>SourceListDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StickerDummy.resx">
       <DependentUpon>StickerDummy.cs</DependentUpon>
     </EmbeddedResource>
@@ -951,6 +899,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StixBase.resx">
       <DependentUpon>StixBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StixPopup.resx">
+      <DependentUpon>StixPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TaskTemplateDlg.resx">
       <DependentUpon>TaskTemplateDlg.cs</DependentUpon>
