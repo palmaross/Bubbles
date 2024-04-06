@@ -32,7 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ResourcesDlg));
             this.ListDBResources = new System.Windows.Forms.ListView();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.pMore = new System.Windows.Forms.PictureBox();
             this.pHelp = new System.Windows.Forms.PictureBox();
             this.pClose = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -40,12 +39,13 @@
             this.pHandle = new System.Windows.Forms.PictureBox();
             this.ListMapResources = new System.Windows.Forms.ListView();
             this.txtCurrentMap = new System.Windows.Forms.TextBox();
-            this.cbAddToDB = new System.Windows.Forms.CheckBox();
             this.lblCurrentMap = new System.Windows.Forms.Label();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.splitter = new System.Windows.Forms.PictureBox();
             this.p11 = new System.Windows.Forms.PictureBox();
-            this.cbDataBaseResources = new System.Windows.Forms.ComboBox();
-            this.txtAllResources = new System.Windows.Forms.TextBox();
+            this.btnClose = new System.Windows.Forms.PictureBox();
+            this.cbResourceGroup = new System.Windows.Forms.ComboBox();
+            this.txtNewResourceDB = new System.Windows.Forms.TextBox();
             this.cmsResource = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mi_addtotopic = new System.Windows.Forms.ToolStripMenuItem();
             this.mi_remove = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,16 +57,18 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.mi_copy = new System.Windows.Forms.ToolStripMenuItem();
             this.mi_cut = new System.Windows.Forms.ToolStripMenuItem();
-            this.mi_paste = new System.Windows.Forms.ToolStripMenuItem();
-            this.cbReplaceResources = new System.Windows.Forms.CheckBox();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.cmsMore = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.mm_managegroups = new System.Windows.Forms.ToolStripMenuItem();
+            this.mm_new = new System.Windows.Forms.ToolStripMenuItem();
+            this.mm_rename = new System.Windows.Forms.ToolStripMenuItem();
+            this.mm_delete = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.mm_addtomap = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.mm_pastetomap = new System.Windows.Forms.ToolStripMenuItem();
-            this.mm_pastetogroup = new System.Windows.Forms.ToolStripMenuItem();
+            this.mm_paste = new System.Windows.Forms.ToolStripMenuItem();
+            this.mm_pastefromclipboard = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnRemoveResources = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pMore)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHelp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pClose)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHandle)).BeginInit();
@@ -74,7 +76,9 @@
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p11)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnClose)).BeginInit();
             this.cmsResource.SuspendLayout();
             this.cmsMore.SuspendLayout();
             this.SuspendLayout();
@@ -85,16 +89,16 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ListDBResources.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.ListDBResources.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.ListDBResources.HideSelection = false;
-            this.ListDBResources.LabelEdit = true;
-            this.ListDBResources.Location = new System.Drawing.Point(1, 33);
+            this.ListDBResources.Location = new System.Drawing.Point(1, 40);
             this.ListDBResources.Name = "ListDBResources";
             this.ListDBResources.ShowItemToolTips = true;
-            this.ListDBResources.Size = new System.Drawing.Size(158, 79);
+            this.ListDBResources.Size = new System.Drawing.Size(158, 88);
             this.ListDBResources.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.ListDBResources.TabIndex = 0;
             this.ListDBResources.UseCompatibleStateImageBehavior = false;
-            this.ListDBResources.View = System.Windows.Forms.View.List;
+            this.ListDBResources.View = System.Windows.Forms.View.Details;
             this.ListDBResources.AfterLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.ListResources_AfterLabelEdit);
             this.ListDBResources.BeforeLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.ListResources_BeforeLabelEdit);
             this.ListDBResources.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ResourceList_KeyUp);
@@ -102,7 +106,6 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.pMore);
             this.panel1.Controls.Add(this.pHelp);
             this.panel1.Controls.Add(this.pClose);
             this.panel1.Location = new System.Drawing.Point(1, 1);
@@ -110,17 +113,6 @@
             this.panel1.Size = new System.Drawing.Size(165, 18);
             this.panel1.TabIndex = 1;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
-            // 
-            // pMore
-            // 
-            this.pMore.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pMore.Image = ((System.Drawing.Image)(resources.GetObject("pMore.Image")));
-            this.pMore.Location = new System.Drawing.Point(3, 1);
-            this.pMore.Name = "pMore";
-            this.pMore.Size = new System.Drawing.Size(16, 16);
-            this.pMore.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pMore.TabIndex = 6;
-            this.pMore.TabStop = false;
             // 
             // pHelp
             // 
@@ -156,7 +148,7 @@
             // 
             this.pHandle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pHandle.Image = ((System.Drawing.Image)(resources.GetObject("pHandle.Image")));
-            this.pHandle.Location = new System.Drawing.Point(70, 268);
+            this.pHandle.Location = new System.Drawing.Point(70, 289);
             this.pHandle.Name = "pHandle";
             this.pHandle.Size = new System.Drawing.Size(24, 6);
             this.pHandle.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -169,15 +161,16 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ListMapResources.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.ListMapResources.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.ListMapResources.HideSelection = false;
-            this.ListMapResources.Location = new System.Drawing.Point(1, 46);
+            this.ListMapResources.Location = new System.Drawing.Point(1, 38);
             this.ListMapResources.Name = "ListMapResources";
             this.ListMapResources.ShowItemToolTips = true;
-            this.ListMapResources.Size = new System.Drawing.Size(158, 57);
+            this.ListMapResources.Size = new System.Drawing.Size(158, 70);
             this.ListMapResources.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.ListMapResources.TabIndex = 7;
             this.ListMapResources.UseCompatibleStateImageBehavior = false;
-            this.ListMapResources.View = System.Windows.Forms.View.List;
+            this.ListMapResources.View = System.Windows.Forms.View.Details;
             this.ListMapResources.AfterLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.ListResources_AfterLabelEdit);
             this.ListMapResources.BeforeLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.ListResources_BeforeLabelEdit);
             this.ListMapResources.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ResourceList_KeyUp);
@@ -186,40 +179,28 @@
             // 
             // txtCurrentMap
             // 
-            this.txtCurrentMap.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtCurrentMap.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.txtCurrentMap.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.txtCurrentMap.Location = new System.Drawing.Point(1, 15);
+            this.txtCurrentMap.Location = new System.Drawing.Point(1, 17);
             this.txtCurrentMap.Name = "txtCurrentMap";
-            this.txtCurrentMap.Size = new System.Drawing.Size(159, 13);
+            this.txtCurrentMap.Size = new System.Drawing.Size(162, 21);
             this.txtCurrentMap.TabIndex = 8;
+            this.txtCurrentMap.Tag = "resource";
             this.txtCurrentMap.Text = "New";
-            this.txtCurrentMap.Enter += new System.EventHandler(this.txtAllResources_Enter);
+            this.txtCurrentMap.Enter += new System.EventHandler(this.txtResources_Enter);
             this.txtCurrentMap.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtResources_KeyDown);
-            this.txtCurrentMap.Leave += new System.EventHandler(this.txtNewResource_Leave);
-            // 
-            // cbAddToDB
-            // 
-            this.cbAddToDB.BackColor = System.Drawing.Color.MintCream;
-            this.cbAddToDB.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cbAddToDB.Checked = true;
-            this.cbAddToDB.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbAddToDB.Location = new System.Drawing.Point(1, 28);
-            this.cbAddToDB.Name = "cbAddToDB";
-            this.cbAddToDB.Size = new System.Drawing.Size(159, 17);
-            this.cbAddToDB.TabIndex = 9;
-            this.cbAddToDB.Text = "Add to DataBase";
-            this.cbAddToDB.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cbAddToDB.UseVisualStyleBackColor = false;
+            this.txtCurrentMap.Leave += new System.EventHandler(this.txtResources_Leave);
             // 
             // lblCurrentMap
             // 
-            this.lblCurrentMap.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblCurrentMap.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lblCurrentMap.Location = new System.Drawing.Point(33, 0);
             this.lblCurrentMap.Name = "lblCurrentMap";
             this.lblCurrentMap.Size = new System.Drawing.Size(93, 13);
             this.lblCurrentMap.TabIndex = 10;
             this.lblCurrentMap.Text = "Current Map";
             this.lblCurrentMap.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.lblCurrentMap.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lblCurrentMap_MouseClick);
             // 
             // splitContainer
             // 
@@ -227,28 +208,38 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.splitContainer.Location = new System.Drawing.Point(2, 36);
+            this.splitContainer.Location = new System.Drawing.Point(2, 39);
             this.splitContainer.Name = "splitContainer";
             this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // splitContainer.Panel1
             // 
             this.splitContainer.Panel1.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.splitContainer.Panel1.Controls.Add(this.splitter);
             this.splitContainer.Panel1.Controls.Add(this.p11);
             this.splitContainer.Panel1.Controls.Add(this.ListMapResources);
             this.splitContainer.Panel1.Controls.Add(this.txtCurrentMap);
             this.splitContainer.Panel1.Controls.Add(this.lblCurrentMap);
-            this.splitContainer.Panel1.Controls.Add(this.cbAddToDB);
             // 
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.splitContainer.Panel2.Controls.Add(this.cbDataBaseResources);
-            this.splitContainer.Panel2.Controls.Add(this.txtAllResources);
+            this.splitContainer.Panel2.Controls.Add(this.btnClose);
+            this.splitContainer.Panel2.Controls.Add(this.cbResourceGroup);
+            this.splitContainer.Panel2.Controls.Add(this.txtNewResourceDB);
             this.splitContainer.Panel2.Controls.Add(this.ListDBResources);
-            this.splitContainer.Size = new System.Drawing.Size(163, 228);
-            this.splitContainer.SplitterDistance = 107;
+            this.splitContainer.Size = new System.Drawing.Size(163, 246);
+            this.splitContainer.SplitterDistance = 111;
             this.splitContainer.TabIndex = 12;
+            // 
+            // splitter
+            // 
+            this.splitter.Location = new System.Drawing.Point(36, 97);
+            this.splitter.Name = "splitter";
+            this.splitter.Size = new System.Drawing.Size(10, 6);
+            this.splitter.TabIndex = 12;
+            this.splitter.TabStop = false;
+            this.splitter.Visible = false;
             // 
             // p11
             // 
@@ -259,29 +250,47 @@
             this.p11.TabStop = false;
             this.p11.Visible = false;
             // 
-            // cbDataBaseResources
+            // btnClose
             // 
-            this.cbDataBaseResources.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.cbDataBaseResources.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbDataBaseResources.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cbDataBaseResources.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.cbDataBaseResources.FormattingEnabled = true;
-            this.cbDataBaseResources.Location = new System.Drawing.Point(0, 0);
-            this.cbDataBaseResources.Name = "cbDataBaseResources";
-            this.cbDataBaseResources.Size = new System.Drawing.Size(165, 21);
-            this.cbDataBaseResources.TabIndex = 12;
-            this.cbDataBaseResources.SelectedIndexChanged += new System.EventHandler(this.cbDataBaseResources_SelectedIndexChanged);
+            this.btnClose.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.btnClose.Image = ((System.Drawing.Image)(resources.GetObject("btnClose.Image")));
+            this.btnClose.Location = new System.Drawing.Point(144, 21);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(15, 15);
+            this.btnClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.btnClose.TabIndex = 6;
+            this.btnClose.TabStop = false;
+            this.btnClose.Visible = false;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
-            // txtAllResources
+            // cbResourceGroup
             // 
-            this.txtAllResources.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtAllResources.Location = new System.Drawing.Point(1, 18);
-            this.txtAllResources.Name = "txtAllResources";
-            this.txtAllResources.Size = new System.Drawing.Size(159, 13);
-            this.txtAllResources.TabIndex = 11;
-            this.txtAllResources.Enter += new System.EventHandler(this.txtAllResources_Enter);
-            this.txtAllResources.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtResources_KeyDown);
-            this.txtAllResources.Leave += new System.EventHandler(this.txtNewResource_Leave);
+            this.cbResourceGroup.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.cbResourceGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbResourceGroup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbResourceGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.cbResourceGroup.FormattingEnabled = true;
+            this.cbResourceGroup.Location = new System.Drawing.Point(0, 0);
+            this.cbResourceGroup.Name = "cbResourceGroup";
+            this.cbResourceGroup.Size = new System.Drawing.Size(165, 23);
+            this.cbResourceGroup.TabIndex = 12;
+            this.cbResourceGroup.SelectedIndexChanged += new System.EventHandler(this.cbDataBaseResources_SelectedIndexChanged);
+            this.cbResourceGroup.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cbResourceGroup_MouseDown);
+            // 
+            // txtNewResourceDB
+            // 
+            this.txtNewResourceDB.BackColor = System.Drawing.SystemColors.Window;
+            this.txtNewResourceDB.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.txtNewResourceDB.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.txtNewResourceDB.Location = new System.Drawing.Point(2, 19);
+            this.txtNewResourceDB.Name = "txtNewResourceDB";
+            this.txtNewResourceDB.Size = new System.Drawing.Size(162, 21);
+            this.txtNewResourceDB.TabIndex = 11;
+            this.txtNewResourceDB.Tag = "resource";
+            this.txtNewResourceDB.Text = "111";
+            this.txtNewResourceDB.Enter += new System.EventHandler(this.txtResources_Enter);
+            this.txtNewResourceDB.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtResources_KeyDown);
+            this.txtNewResourceDB.Leave += new System.EventHandler(this.txtResources_Leave);
             // 
             // cmsResource
             // 
@@ -295,11 +304,10 @@
             this.mi_color,
             this.toolStripSeparator1,
             this.mi_copy,
-            this.mi_cut,
-            this.mi_paste});
+            this.mi_cut});
             this.cmsResource.Name = "cmsResource";
             this.cmsResource.ShowImageMargin = false;
-            this.cmsResource.Size = new System.Drawing.Size(165, 214);
+            this.cmsResource.Size = new System.Drawing.Size(165, 192);
             // 
             // mi_addtotopic
             // 
@@ -317,7 +325,7 @@
             // 
             this.mi_addtomap.Name = "mi_addtomap";
             this.mi_addtomap.Size = new System.Drawing.Size(164, 22);
-            this.mi_addtomap.Text = "Add to map";
+            this.mi_addtomap.Text = "Add to Map";
             // 
             // toolStripSeparator3
             // 
@@ -359,63 +367,89 @@
             this.mi_cut.Size = new System.Drawing.Size(164, 22);
             this.mi_cut.Text = "Cut (Ctrl+X)";
             // 
-            // mi_paste
-            // 
-            this.mi_paste.Name = "mi_paste";
-            this.mi_paste.Size = new System.Drawing.Size(164, 22);
-            this.mi_paste.Text = "Paste copied (Ctrl+V)";
-            // 
-            // cbReplaceResources
-            // 
-            this.cbReplaceResources.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.cbReplaceResources.Location = new System.Drawing.Point(2, 18);
-            this.cbReplaceResources.Name = "cbReplaceResources";
-            this.cbReplaceResources.Size = new System.Drawing.Size(163, 17);
-            this.cbReplaceResources.TabIndex = 11;
-            this.cbReplaceResources.Text = "Replace Resource(s)";
-            this.cbReplaceResources.UseVisualStyleBackColor = false;
-            // 
             // cmsMore
             // 
             this.cmsMore.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mm_managegroups,
+            this.mm_new,
+            this.mm_rename,
+            this.mm_delete,
+            this.toolStripSeparator4,
+            this.mm_addtomap,
             this.toolStripSeparator2,
-            this.mm_pastetomap,
-            this.mm_pastetogroup});
+            this.mm_paste,
+            this.mm_pastefromclipboard});
             this.cmsMore.Name = "cmsMore";
-            this.cmsMore.Size = new System.Drawing.Size(159, 76);
+            this.cmsMore.ShowImageMargin = false;
+            this.cmsMore.Size = new System.Drawing.Size(164, 148);
             // 
-            // mm_managegroups
+            // mm_new
             // 
-            this.mm_managegroups.Name = "mm_managegroups";
-            this.mm_managegroups.Size = new System.Drawing.Size(158, 22);
-            this.mm_managegroups.Text = "Manage Groups";
+            this.mm_new.Name = "mm_new";
+            this.mm_new.Size = new System.Drawing.Size(163, 22);
+            this.mm_new.Text = "New Group";
+            // 
+            // mm_rename
+            // 
+            this.mm_rename.Name = "mm_rename";
+            this.mm_rename.Size = new System.Drawing.Size(163, 22);
+            this.mm_rename.Text = "Rename Group";
+            // 
+            // mm_delete
+            // 
+            this.mm_delete.Name = "mm_delete";
+            this.mm_delete.Size = new System.Drawing.Size(163, 22);
+            this.mm_delete.Text = "Delete Group";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(160, 6);
+            // 
+            // mm_addtomap
+            // 
+            this.mm_addtomap.Name = "mm_addtomap";
+            this.mm_addtomap.Size = new System.Drawing.Size(163, 22);
+            this.mm_addtomap.Text = "Add to Map";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(155, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(160, 6);
             // 
-            // mm_pastetomap
+            // mm_paste
             // 
-            this.mm_pastetomap.Name = "mm_pastetomap";
-            this.mm_pastetomap.Size = new System.Drawing.Size(158, 22);
-            this.mm_pastetomap.Text = "Paste to Map";
+            this.mm_paste.Name = "mm_paste";
+            this.mm_paste.Size = new System.Drawing.Size(163, 22);
+            this.mm_paste.Text = "Paste Copied (Ctrl+V)";
             // 
-            // mm_pastetogroup
+            // mm_pastefromclipboard
             // 
-            this.mm_pastetogroup.Name = "mm_pastetogroup";
-            this.mm_pastetogroup.Size = new System.Drawing.Size(158, 22);
-            this.mm_pastetogroup.Text = "Paste to Group";
+            this.mm_pastefromclipboard.Name = "mm_pastefromclipboard";
+            this.mm_pastefromclipboard.Size = new System.Drawing.Size(163, 22);
+            this.mm_pastefromclipboard.Text = "Paste form Clipboard";
+            // 
+            // btnRemoveResources
+            // 
+            this.btnRemoveResources.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.btnRemoveResources.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnRemoveResources.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnRemoveResources.Location = new System.Drawing.Point(2, 18);
+            this.btnRemoveResources.Name = "btnRemoveResources";
+            this.btnRemoveResources.Size = new System.Drawing.Size(163, 23);
+            this.btnRemoveResources.TabIndex = 13;
+            this.btnRemoveResources.Text = "Remove Resources";
+            this.btnRemoveResources.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.btnRemoveResources.UseVisualStyleBackColor = false;
+            this.btnRemoveResources.Click += new System.EventHandler(this.btnRemoveResources_Click);
             // 
             // ResourcesDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(167, 279);
-            this.Controls.Add(this.cbReplaceResources);
+            this.ClientSize = new System.Drawing.Size(167, 300);
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.pHandle);
+            this.Controls.Add(this.btnRemoveResources);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "ResourcesDlg";
@@ -423,7 +457,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "ResourcesDlg";
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pMore)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHelp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pClose)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHandle)).EndInit();
@@ -433,7 +466,9 @@
             this.splitContainer.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitter)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p11)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnClose)).EndInit();
             this.cmsResource.ResumeLayout(false);
             this.cmsMore.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -449,15 +484,11 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.PictureBox pHandle;
-        private System.Windows.Forms.PictureBox pMore;
-        private System.Windows.Forms.ListView ListMapResources;
         private System.Windows.Forms.TextBox txtCurrentMap;
-        private System.Windows.Forms.CheckBox cbAddToDB;
         private System.Windows.Forms.Label lblCurrentMap;
         private System.Windows.Forms.SplitContainer splitContainer;
-        private System.Windows.Forms.TextBox txtAllResources;
+        private System.Windows.Forms.TextBox txtNewResourceDB;
         private System.Windows.Forms.ContextMenuStrip cmsResource;
-        private System.Windows.Forms.CheckBox cbReplaceResources;
         private System.Windows.Forms.ToolStripMenuItem mi_delete;
         private System.Windows.Forms.ToolStripMenuItem mi_rename;
         private System.Windows.Forms.ToolStripMenuItem mi_color;
@@ -466,16 +497,23 @@
         private System.Windows.Forms.PictureBox p11;
         private System.Windows.Forms.ToolStripMenuItem mi_remove;
         private System.Windows.Forms.ColorDialog colorDialog1;
-        private System.Windows.Forms.ComboBox cbDataBaseResources;
+        private System.Windows.Forms.ComboBox cbResourceGroup;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem mi_copy;
         private System.Windows.Forms.ToolStripMenuItem mi_cut;
-        private System.Windows.Forms.ToolStripMenuItem mi_paste;
         private System.Windows.Forms.ContextMenuStrip cmsMore;
-        private System.Windows.Forms.ToolStripMenuItem mm_managegroups;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem mm_pastetomap;
-        private System.Windows.Forms.ToolStripMenuItem mm_pastetogroup;
+        private System.Windows.Forms.ToolStripMenuItem mm_pastefromclipboard;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        public System.Windows.Forms.ListView ListMapResources;
+        private System.Windows.Forms.Button btnRemoveResources;
+        private System.Windows.Forms.ToolStripMenuItem mm_new;
+        private System.Windows.Forms.ToolStripMenuItem mm_rename;
+        private System.Windows.Forms.ToolStripMenuItem mm_delete;
+        private System.Windows.Forms.ToolStripMenuItem mm_paste;
+        private System.Windows.Forms.PictureBox btnClose;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem mm_addtomap;
+        private System.Windows.Forms.PictureBox splitter;
     }
 }

@@ -1,67 +1,70 @@
 ﻿using PRAManager;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using Color = System.Drawing.Color;
-using Control = System.Windows.Forms.Control;
 
 namespace Bubbles
 {
     internal partial class StixBase : Form
     {
-        public StixBase(int ID, string _orientation)
+        public StixBase()
         {
             InitializeComponent();
 
-            thisHeight = this.Height;
-            thisWidth = this.Width;
-
-            this.Tag = ID;
-            orientation = _orientation; // "H" or "V"
-
-            helpProvider1.HelpNamespace = Utils.dllPath + "Sticks.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "stixbase.htm");
-
-            if (orientation == "V")
-            {
-                orientation = "H"; Rotate();
-            }
 
             toolTip1.SetToolTip(stxIcons, Utils.getString("BubbleIcons.bubble.tooltip"));
             toolTip1.SetToolTip(stxTaskInfo, Utils.getString("BubbleTaskInfo.bubble.tooltip"));
             toolTip1.SetToolTip(stxBookmarks, Utils.getString("BubbleBookmarks.bubble.tooltip"));
             toolTip1.SetToolTip(stxSources, Utils.getString("BubbleMySources.bubble.tooltip"));
-            toolTip1.SetToolTip(stxAddTopic, Utils.getString("BubbleAddTopic.bubble.tooltip"));
+            toolTip1.SetToolTip(stxAddTopics, Utils.getString("BubbleAddTopic.bubble.tooltip"));
             toolTip1.SetToolTip(stxTextOps, Utils.getString("BubbleTextOps.bubble.tooltip"));
             toolTip1.SetToolTip(stxFormat, Utils.getString("BubbleFormat.bubble.tooltip"));
             toolTip1.SetToolTip(boxResources, Utils.getString("Box.Resources"));
             toolTip1.SetToolTip(boxBookmarks, Utils.getString("Box.Bookmarks"));
             toolTip1.SetToolTip(boxSources, Utils.getString("Box.Sources"));
-            toolTip1.SetToolTip(Stickers, Utils.getString("stickers.contextmenu.mystickers"));
+            toolTip1.SetToolTip(Stickers, Utils.getString("stickers.contextmenu.stickers"));
 
-            //toolTip1.SetToolTip(pictureHandle, Utils.getString("StixBase.Name"));
+            cm_show.Text = Utils.getString("bulkoperations.contextmenu.show");
+            cm_hide.Text = Utils.getString("bulkoperations.contextmenu.hide");
+            cm_close.Text = Utils.getString("bulkoperations.contextmenu.close");
+            cm_remember.Text = Utils.getString("bulkoperations.contextmenu.remember");
 
-            //StixUtils.SetCommonContextMenu(cmsHelp, StixUtils.typebase);
-            cmsHelp.ItemClicked += ContextMenu_ItemClicked;
+            cm_show.ToolTipText = Utils.getString("contextmenu.show.tooltip");
+            cm_hide.ToolTipText = Utils.getString("contextmenu.hide.tooltip");
+            cm_close.ToolTipText = Utils.getString("bulkoperations.contextmenu.close");
+            cm_remember.ToolTipText = Utils.getString("contextmenu.remember.tooltip");
+
+            cm_settings.Text = Utils.getString("SettingsDlg.Title");
+            cm_help.Text = Utils.getString("button.help");
+            cm_about.Text = Utils.getString("stixbase.contextmenu.about");
+            cm_autoclose.Text = Utils.getString("stixbase.contextmenu.autohide");
+            cm_closemenu.Text = Utils.getString("button.close");
+
+            StixUtils.icondist = pIconDist.Width;
+            StixUtils.cmiSize = p2.Size;
+
+            cmsManage.ItemClicked += ContextMenu_ItemClicked;
+            StixUtils.SetContextMenuImage(cm_show, "show.png");
+            StixUtils.SetContextMenuImage(cm_hide, "hide.png");
+            StixUtils.SetContextMenuImage(cm_close, "deleteall.png");
+            StixUtils.SetContextMenuImage(cm_remember, "remember.png");
+            StixUtils.SetContextMenuImage(cm_settings, "manage.png");
+            StixUtils.SetContextMenuImage(cm_help, "chm.png");
+            StixUtils.SetContextMenuImage(cm_about, "help.png");
+            StixUtils.SetContextMenuImage(cm_autoclose, "check.png");
+            StixUtils.SetContextMenuImage(cm_closemenu, "deleteStick.png");
+            cm_autoclose.Tag = "auto";
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
             this.ResizeRedraw = true;
 
-            // To move stix
-            this.MouseDown += Move_Stick;
-            //pictureHandle.MouseDown += Move_Stick;
-            //pictureHandle.MouseDoubleClick += (sender, e) => { this.Hide(); };
-
-            //Manage.MouseHover += (sender, e) => StixUtils.ShowCommandPopup(this, orientation, StixUtils.typetextops);
-            this.Paint += this_Paint; // paint the border
-            panelBoxes.Paint += PanelBoxes_Paint;
             this.Deactivate += This_Deactivate;
-            //panelOther.Paint += PanelOther_Paint;
 
             // Apply scale factor
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_StixBase", "100"));
@@ -76,12 +79,24 @@ namespace Bubbles
                 DwmSetWindowAttribute(this.Handle, attribute, ref preference, sizeof(uint));
             }
             catch { }
+
+            this.MouseDown += Move_Stick;
+            panelBoxes.MouseDown += Move_Stick;
+        }
+
+        private void Move_Stick(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
         }
 
         private void This_Deactivate(object sender, EventArgs e)
         {
-            //if (!keepmenu)
+            if (cm_autoclose.Tag.ToString() == "auto")
+            {
+                cmsManage.Close();
                 this.Hide();
+            }
         }
 
         public void ScaleStick(float fromScale, float toScale)
@@ -97,85 +112,74 @@ namespace Bubbles
             scaleFactor = toScale;
         }
 
-        private void PanelOther_Paint(object sender, PaintEventArgs e)
-        {
-            ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle,
-                Color.Black, 1, ButtonBorderStyle.Solid,
-                Color.Black, 0, ButtonBorderStyle.None,
-                Color.Black, 1, ButtonBorderStyle.Solid,
-                Color.Black, 0, ButtonBorderStyle.None);
-        }
-
-        private void PanelBoxes_Paint(object sender, PaintEventArgs e)
-        {
-            ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle,
-                Color.Black, 1, ButtonBorderStyle.Solid,
-                Color.Black, 0, ButtonBorderStyle.None,
-                Color.Black, 0, ButtonBorderStyle.Solid,
-                Color.Black, 0, ButtonBorderStyle.None);
-        }
-
-        private void this_Paint(object sender, PaintEventArgs e)
-        {
-            if (scaleFactor < 125) return;
-            int width = 1;
-            //if (scaleFactor > 200) width = 2;
-            ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle,
-                Color.Black, width, ButtonBorderStyle.Solid,
-                Color.Black, width, ButtonBorderStyle.Solid,
-                Color.Black, width, ButtonBorderStyle.Solid,
-                Color.Black, width, ButtonBorderStyle.Solid);
-        }
-
-        private void Move_Stick(object sender, MouseEventArgs e)
-        {
-            if (e.Clicks == 1)
-            {
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
-            }
-        }
-
         private void ContextMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Name == "cm_about")
+            switch (e.ClickedItem.Name)
             {
-                
-            }
-            else if (e.ClickedItem.Name == "cm_help")
-            {
-                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "stixbase.htm");
-            }
-            else if (e.ClickedItem.Name == "BI_store")
-            {
-                StixUtils.SaveStick(this.Bounds, (int)this.Tag, orientation);
-            }
-            else if (e.ClickedItem.Name == "cm_settings")
-            {
-                using (SettingsDlg dlg = new SettingsDlg())
-                {
-                    dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-                }
-            }
-        }
+                case "cm_help":
+                    Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "stixbase.htm");
+                    break;
+                case "cm_settings":
+                    using (SettingsDlg dlg = new SettingsDlg())
+                        dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                    break;
+                case "cm_about":
 
-        public void Rotate()
-        {
-            orientation = StixUtils.RotateStick(this, Manage, orientation);
+                    break;
 
-            panelBoxes.Location = new Point(panelBoxes.Location.Y, panelBoxes.Location.X);
-            panelBoxes.Size = new Size(panelBoxes.Height, panelBoxes.Width);
+                //Bulk operations
+                case "cm_show":
+                    foreach (var stick in StixButton.STICKS.Values)
+                    {
+                        if (!stick.Visible) stick.Show();
+                    }
+                    break;
+                case "cm_hide":
+                    foreach (var stick in StixButton.STICKS.Values)
+                        stick.Hide();
+                    break;
+                case "cm_close":
+                    foreach (var stick in StixButton.STICKS.Values)
+                    {
+                        stick.Close(); stick.Dispose();
+                    }
+                    StixButton.STICKS.Clear();
+                    break;
+                case "cm_remember":
+                    foreach (var stick in StixButton.STICKS)
+                    {
+                        string orientation = "H";
 
-            //panelOther.Location = new Point(panelOther.Location.Y, panelOther.Location.X);
-            //panelOther.Size = new Size(panelOther.Height, panelOther.Width);
+                        if (stick.Value.Width < stick.Value.Height) orientation = "V";
+
+                        StixUtils.SaveStick(stick.Value.Bounds, stick.Key, orientation);
+                    }
+                    break;
+                case "cm_autoclose":
+                    if (cm_autoclose.Tag.ToString() == "auto")
+                    {
+                        cm_autoclose.Image = Image.FromFile(Utils.ImagesPath + "uncheck.png");
+                        cm_autoclose.Tag = "manual";
+                    }
+                    else
+                    {
+                        cm_autoclose.Image = Image.FromFile(Utils.ImagesPath + "check.png");
+                        cm_autoclose.Tag = "auto";
+                    }
+                    break;
+                case "cm_closemenu":
+                    cmsManage.Close();
+                    this.Hide();
+                    break;
+            }
         }
 
         private void Manage_Click(object sender, EventArgs e)
         {
-            foreach (ToolStripItem item in cmsHelp.Items)
+            foreach (ToolStripItem item in cmsManage.Items)
                 item.Visible = true;
 
-            cmsHelp.Show(Cursor.Position);
+            cmsManage.Show(Cursor.Position);
         }
 
         private void StxIcon_MouseClick(object sender, MouseEventArgs e)
@@ -200,7 +204,7 @@ namespace Bubbles
 
         private void StxAddTopic_Click(object sender, EventArgs e)
         {
-            BaseIcon_MouseClick(stxAddTopic, null);
+            BaseIcon_MouseClick(stxAddTopics, null);
         }
 
         private void StxTextOps_Click(object sender, EventArgs e)
@@ -220,7 +224,22 @@ namespace Bubbles
 
         private void BoxResources_Click(object sender, EventArgs e)
         {
+            if (StixButton.m_Resources == null)
+                StixButton.m_Resources = new ResourcesDlg();
 
+            StixButton.m_Resources.InitCurrentMapResources();
+
+            if (StixButton.m_Resources.Visible)
+                StixButton.m_Resources.WindowState = FormWindowState.Normal;
+            else
+            {
+                if (StixButton.m_Resources.Location.IsEmpty)
+                {
+                    StixButton.m_Resources.Location =
+                        new Point(StixButton.OmniSticksButton.Location.X, this.Bottom);
+                }
+                StixButton.m_Resources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            }
         }
 
         private void BoxSources_Click(object sender, EventArgs e)
@@ -277,7 +296,7 @@ namespace Bubbles
                 stickType = StixUtils.typeformat;
                 defaultName = Utils.getString("BubbleFormat.bubble.tooltip");
             }
-            else if (pb.Name == "stxAddTopic")
+            else if (pb.Name == "stxAddTopics")
             {
                 stickType = StixUtils.typeaddtopic;
                 defaultName = Utils.getString("BubbleAddTopic.bubble.tooltip");
@@ -292,8 +311,9 @@ namespace Bubbles
                 stickType = StixUtils.typeorganizer;
                 defaultName = Utils.getString("BubbleOrganizer.bubble.tooltip");
             }
+            else return;
 
-            string orientation = "H0", location = "", name = ""; int id = startId; // "H0" - Horizontal&Not collapsed
+            string orientation = "H", location = "", name = ""; int id = startId;
 
             if (StickClicked(stickType, ref orientation, ref location, ref name, ref id) == 2)
             {
@@ -339,7 +359,7 @@ namespace Bubbles
             // 0,0 - screen2.Location, 2,358 - this.Location on the screen2
 
             if (String.IsNullOrEmpty(location))
-                thisLocation = new Point(MMUtils.MindManager.Left + MMUtils.MindManager.Width - this.Width - label1.Width * 2, MMUtils.MindManager.Top + label1.Width);
+                thisLocation = new Point(StixButton.OmniSticksButton.Location.X, this.Bottom);
             else
             {
                 // Location of the screen where center of MindManager is located
@@ -435,26 +455,76 @@ namespace Bubbles
             }
         }
 
-        string orientation = "H";
+        public void RenameContextMenuItem(string type, string id, string newname)
+        {
+            if (type == StixUtils.typeicons && cmsIcons.Items.Count > 1)
+            {
+                foreach (ToolStripItem item in cmsIcons.Items)
+                {
+                    string[] tag = item.Tag.ToString().Split(':');
+                    if (tag[0] == id)
+                    {
+                        item.Text = newname;
+                        item.Tag = id + ":" + newname;
+                        return;
+                    }
+                }
+            }
+        }
 
-        // For this_MouseDown
-        public const int WM_NCLBUTTONDOWN = 0xA1;
-        public const int HT_CAPTION = 0x2;
+        /// <summary>
+        /// Create Context Menu for multiple sticks per button
+        /// </summary>
+        /// <param name="type">Icons, TaskInfo or MySources. If "", then all</param>
+        public void AddSelectMenu(string type = "")
+        {
+            if (type == "" || type == StixUtils.typeicons)
+            {
+                if (cmsIcons.Items.Count > 0) cmsIcons.Items.Clear();
+                cmsIcons = GetSticks(StixUtils.typeicons, cmsIcons);
+                if (cmsIcons.Items.Count > 0)
+                {
+                    //pIcons.ContextMenuStrip = cmsIcons;
+                }
+            }
+            if (type == "" || type == StixUtils.typesources)
+            {
+                if (cmsMySources.Items.Count > 0) cmsMySources.Items.Clear();
+                cmsMySources = GetSticks(StixUtils.typesources, cmsMySources);
+                if (cmsMySources.Items.Count > 0)
+                {
+                    //MySources.ContextMenuStrip = cmsMySources;
+                }
+            }
+        }
 
-        [DllImportAttribute("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-        [DllImportAttribute("user32.dll")]
-        public static extern bool ReleaseCapture();
+        ContextMenuStrip GetSticks(string type, ContextMenuStrip cms)
+        {
+            using (StixDB db = new StixDB())
+            {
+                DataTable dt = db.ExecuteQuery("select * from STICKS where type=`" + type + "`");
+
+                if (dt.Rows.Count > 1)
+                {
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        ToolStripMenuItem tsm = new ToolStripMenuItem(row["name"].ToString());
+                        tsm.Tag = row["id"] + ":" + type;
+                        cms.Items.Add(tsm);
+                    }
+                }
+            }
+            return cms;
+        }
 
         public int startId = 0;
 
         public ContextMenuStrip cmsIcons = new ContextMenuStrip() { ShowImageMargin = false };
         public ContextMenuStrip cmsMySources = new ContextMenuStrip() { ShowImageMargin = false };
-        public ToolStripMenuItem configuration;
 
         public float scaleFactor = 100;
-        int thisWidth; int thisHeight;
 
+        // Rounded corners
         // The enum flag for DwmSetWindowAttribute's second parameter, which tells the function what attribute to set.
         // Copied from dwmapi.h
         public enum DWMWINDOWATTRIBUTE
@@ -478,9 +548,13 @@ namespace Bubbles
         internal static extern void DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE attribute,
             ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute, uint cbAttribute);
 
-        private void Stickers_Click(object sender, EventArgs e)
-        {
+        // For this_MouseDown
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
 
-        }
+        [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
+        public static extern bool ReleaseCapture();
     }
 }

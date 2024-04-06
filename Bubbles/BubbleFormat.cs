@@ -33,8 +33,6 @@ namespace Bubbles
             toolTip1.SetToolTip(pictureHandle, stickname);
             toolTip1.SetToolTip(pClearFormat, Utils.getString("bubbleformat.clearformat"));
 
-            RealLength = this.Width;
-
             if (orientation == "V") {
                 orientation = "H"; Rotate(); }
 
@@ -68,14 +66,9 @@ namespace Bubbles
             fillcolor2.Paint += pVisualStatus_Paint;
             fillcolor3.Paint += pVisualStatus_Paint;
 
-            if (collapsed) {
-                collapsed = false; Collapse(); }
-
-            pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
+            pictureHandle.MouseDoubleClick += (sender, e) => this.Hide();
             pictureHandle.MouseDown += PictureHandle_MouseDown;
             Manage.Click += Manage_Click;
-
-            Manage.MouseHover += (sender, e) => StixUtils.ShowCommandPopup(this, orientation, StixUtils.typeformat);
 
             // Apply scale factor
             this.Paint += this_Paint; // paint the border depending on scale factor
@@ -170,10 +163,12 @@ namespace Bubbles
             {
                 StixUtils.SaveStick(this.Bounds, (int)this.Tag, orientation);
             }
-
-            else if (e.ClickedItem.Name == "BI_collapse")
+            else if (e.ClickedItem.Name == "BI_scale")
             {
-                Collapse();
+                ScaleStickDlg dlg = new ScaleStickDlg(this, StixUtils.typeformat, scaleFactor);
+                dlg.Location =
+                    StixUtils.GetChildLocation(this, dlg.Bounds, orientation, "scale");
+                dlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
         }
 
@@ -181,38 +176,6 @@ namespace Bubbles
         {
             orientation = StixUtils.RotateStick(this, Manage, orientation);
         }
-
-        /// <summary>
-        /// Collapse/Expand stick
-        /// </summary>
-        /// <param name="CollapseAll">"Collapse All" command from Main Menu</param>
-        /// <param name="ExpandAll">"Expand All" command from Main Menu</param>
-        public void Collapse(bool CollapseAll = false, bool ExpandAll = false)
-        {
-            if (collapsed) // Expand stick
-            {
-                if (CollapseAll) return;
-
-                collapseState = this.Location; // remember collapsed location
-                collapseOrientation = orientation;
-                StixUtils.Expand(this, RealLength, orientation, contextMenuStrip1);
-                collapsed = false;
-            }
-            else // Collapse stick
-            {
-                if (ExpandAll) return;
-
-                StixUtils.Collapse(this, orientation, contextMenuStrip1);
-                collapsed = true;
-                if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
-                {
-                    this.Location = collapseState; // restore collapsed location
-                    if (orientation != collapseOrientation) Rotate();
-                }
-            }
-        }
-        Point collapseState = new Point(0, 0);
-        string collapseOrientation = "N";
 
         /// <summary>
         /// Click on the text and fill color pictures
@@ -338,9 +301,7 @@ namespace Bubbles
 
         PictureBox selectedIcon = null;
         string orientation = "H";
-        bool collapsed = false;
 
-        int RealLength;
         public float scaleFactor = 100;
 
         // For this_MouseDown

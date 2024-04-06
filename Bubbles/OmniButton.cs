@@ -1,5 +1,7 @@
-﻿using PRAManager;
+﻿using Mindjet.MindManager.Interop;
+using PRAManager;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -7,6 +9,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using Color = System.Drawing.Color;
+using Control = System.Windows.Forms.Control;
 
 namespace Bubbles
 {
@@ -55,6 +59,7 @@ namespace Bubbles
         protected override void OnLoad(EventArgs e)
         {
             this.Height = thisHeight;
+            DrawForm(null, null);
 
             if (!DesignMode)
             {
@@ -75,7 +80,9 @@ namespace Bubbles
 
         private void DrawForm(object pSender, EventArgs pE)
         {
-            // Location of the screen where center of MindManager is located
+            // Check if MM position is changed
+
+            // Get screen (location of the screen where the center of MindManager is located)
             Point rec = Utils.MMScreen(MMUtils.MindManager.Left + MMUtils.MindManager.Width / 2,
                 MMUtils.MindManager.Top + MMUtils.MindManager.Height / 2);
 
@@ -86,6 +93,38 @@ namespace Bubbles
             if (this.Location.X != X || this.Location.Y != Y)
                 this.Location = new Point(X, Y);
 
+            // Check if the Resource group is changed
+            if (StixButton.m_Resources != null && StixButton.m_Resources.Visible)
+            {
+                MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
+                List<string> MapResources = new List<string>();
+                MapResources.AddRange(StixButton.m_Resources.MapResources.Keys);
+
+                foreach (MapMarker mm in mg)
+                {
+                    if (MapResources.Contains(mm.Label))
+                    {
+                        // Check if the resource color is right
+                        string color = "#" + mm.Color.Value.ToString("X");
+                        if (color == "#0") color = "";
+
+                        if (color == StixButton.m_Resources.MapResources[mm.Label])
+                        {
+                            MapResources.Remove(mm.Label); continue;
+                        }
+
+                        StixButton.m_Resources.InitCurrentMapResources(); break;
+                    }
+                    else // Add resource to StixButton.m_Resources
+                    {
+                        StixButton.m_Resources.InitCurrentMapResources(); break;
+                    }
+                }
+
+                if (MapResources.Count > 0) { StixButton.m_Resources.InitCurrentMapResources(); }
+            }
+
+            // Start the OmniStix button (the first time only)
             if (start)
             {
                 start = false;

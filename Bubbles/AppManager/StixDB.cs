@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Data;
 using BubblesAppManager;
+using static Community.CsharpSqlite.Sqlite3;
 
 namespace Bubbles
 {
@@ -186,10 +188,7 @@ namespace Bubbles
             Random r = new Random();
 
             int id = r.Next();
-            AddStick(id, Utils.getString("StixBase.Name"), StixUtils.typebase, 1, "H", "");
-
             // Add first Icons stick
-            id = r.Next();
             AddStick(id, Utils.getString("BubbleIcons.bubble.tooltip"), StixUtils.typeicons, 0, "H", "");
 
             AddIcon(Utils.getString("icons.firststick.icon1"), "stockexclamation-mark", 1, id);
@@ -229,13 +228,24 @@ namespace Bubbles
             AddPattern(Utils.getString("Template.Task"), Utils.getString("Template.Task") + " ", "increment###1,5,1,end", "subtopic");
             AddPattern(Utils.getString("Template.WeekDays"), "", Utils.getString("Template.WeekDays.lang"), "subtopic");
 
-            // Add Resource Groups (resources icons for now)
-            AddResourceGroup(Utils.getString("taskinfo.database.resourcegroup1"));
             // Add Resources
-            AddResource(Utils.getString("taskinfo.database.resources.res1"), "", 0);
-            AddResource(Utils.getString("taskinfo.database.resources.res2"), "", 0);
-            AddResource(Utils.getString("taskinfo.database.resources.res3"), "", 1);
-            AddResource(Utils.getString("taskinfo.database.resources.res4"), "", 1);
+
+            int _id = 0;
+            AddResourceGroup(Utils.getString("taskinfo.database.resourcegroup1"));
+            // Get created group id
+            DataTable dt = ExecuteQuery("SELECT last_insert_rowid()");
+            if (dt.Rows.Count > 0) _id = Convert.ToInt32(dt.Rows[0][0]);
+            // Add Resources to group
+            AddResource(Utils.getString("taskinfo.database.resources.res1"), "", _id);
+            AddResource(Utils.getString("taskinfo.database.resources.res2"), "", _id);
+
+            AddResourceGroup(Utils.getString("taskinfo.database.resourcegroup2"));
+            // Get created group id
+            dt = ExecuteQuery("SELECT last_insert_rowid()");
+            if (dt.Rows.Count > 0) _id = Convert.ToInt32(dt.Rows[0][0]); else _id = 1;
+            // Add Resources to group
+            AddResource(Utils.getString("taskinfo.database.resources.res3"), "#ff80ff80", _id);
+            AddResource(Utils.getString("taskinfo.database.resources.res4"), "#ffffff80", _id);
 
             // Add Task Templates
             AddTaskTemplate(1, Utils.getString("quicktask.template.default"), 0, 0, "rel:today:1;rel:today:1", "", "", "");

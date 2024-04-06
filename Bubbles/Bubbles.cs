@@ -19,15 +19,6 @@ namespace Bubbles
             if (m_bCreated)
                 return;
 
-            m_cmdBubbles = MMUtils.MindManager.Commands.Add(Utils.Registered_AddinName, "ribbon.palmaross.bubbles");
-            m_cmdBubbles.Caption = "";
-            m_cmdBubbles.ToolTip = Utils.getString("main.tooltip") + "\n" + Utils.getString("main.name");
-            m_cmdBubbles.UpdateState += new ICommandEvents_UpdateStateEventHandler(m_cmdBubbles_UpdateState);
-            m_cmdBubbles.LargeImagePath = Utils.ImagesPath + "STICKS.png";
-            m_cmdBubbles.ImagePath = Utils.ImagesPath + "STICKS.png";
-            m_cmdBubbles.Click += new ICommandEvents_ClickEventHandler(m_cmdBubbles_Click);
-            m_ctrlBubbles = MMUtils.MindManager.StatusBarControls.AddButton(m_cmdBubbles);
-
             m_cmdDetachNotes = MMUtils.MindManager.Commands.Add(Utils.Registered_AddinName, "bubbles.detach_notes");
             m_cmdDetachNotes.Caption = Utils.getString("bubbles.notes.detach");
             m_cmdDetachNotes.UpdateState += new ICommandEvents_UpdateStateEventHandler(m_cmdDetachNotes_UpdateState);
@@ -36,8 +27,7 @@ namespace Bubbles
             m_cmdDetachNotes.SetDynamicMenu(MmDynamicMenu.mmDynamicMenuContextTopic);
 
             m_bubbleSnippets = new BubbleSnippets();
-            m_bubblesMenu = new MainMenuDlg();
-            m_StixBase = new StixBase(0, "H");
+            m_StixBase = new StixBase();
             STICKS.Add(0, m_StixBase);
             commandPopup.Tag = 0; // Tag is a stick ID
 
@@ -66,33 +56,30 @@ namespace Bubbles
                 if (Convert.ToInt32(dr["start"]) == 0)
                     continue;
 
-                m_bubblesMenu.startId = Convert.ToInt32(dr["id"]);
+                m_StixBase.startId = Convert.ToInt32(dr["id"]);
 
                 switch (dr["type"].ToString()) 
                 {
                     case StixUtils.typeicons:
-                        m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.pIcons, null);
+                        m_StixBase.BaseIcon_MouseClick(m_StixBase.stxIcons, null);
                         break;
                     case StixUtils.typetaskinfo:
-                        m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.TaskInfo, null);
+                        m_StixBase.BaseIcon_MouseClick(m_StixBase.stxTaskInfo, null);
                         break;
                     case StixUtils.typeformat:
-                        m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.Format, null);
+                        m_StixBase.BaseIcon_MouseClick(m_StixBase.stxFormat, null);
                         break;
                     case StixUtils.typesources:
-                        m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.MySources, null);
+                        m_StixBase.BaseIcon_MouseClick(m_StixBase.stxSources, null);
                         break;
                     case StixUtils.typebookmarks:
-                        m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.Bookmarks, null);
+                        m_StixBase.BaseIcon_MouseClick(m_StixBase.stxBookmarks, null);
                         break;
                     case StixUtils.typeaddtopic:
-                        m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.AddTopics, null);
+                        m_StixBase.BaseIcon_MouseClick(m_StixBase.stxAddTopics, null);
                         break;
                     case StixUtils.typetextops:
-                        m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.Paste, null);
-                        break;
-                    case StixUtils.typeorganizer:
-                        m_StixBase.BaseIcon_MouseClick(m_bubblesMenu.Organizer, null);
+                        m_StixBase.BaseIcon_MouseClick(m_StixBase.stxTextOps, null);
                         break;
                 }
             }
@@ -125,17 +112,6 @@ namespace Bubbles
 
                 StixUtils.ActivateMindManager(); // = Hide popup
             }
-        }
-
-        private void m_cmdBubbles_Click()
-        {
-            
-        }
-
-        private void m_cmdBubbles_UpdateState(ref bool pEnabled, ref bool pChecked)
-        {
-            pEnabled = true;
-            pChecked = false;
         }
 
         private void m_cmdDetachNotes_UpdateState(ref bool pEnabled, ref bool pChecked)
@@ -175,8 +151,9 @@ namespace Bubbles
 
         public override void onDocumentActivated(MMEventArgs aArgs)
         {
-            if (m_Bookmarks != null)
-                m_Bookmarks.Init();
+            if (m_Bookmarks != null) m_Bookmarks.Init();
+            if (m_Resources != null && m_Resources.Visible) m_Resources.InitCurrentMapResources();
+            if (m_TaskInfo != null && m_TaskInfo.Visible) m_TaskInfo.PopulateResources();
 
             DocumentStorage.Sync(MMUtils.ActiveDocument); // subscribe document to events
         }
@@ -483,9 +460,6 @@ namespace Bubbles
             if (!m_bCreated)
                 return;
 
-            m_ctrlBubbles.Delete(); Marshal.ReleaseComObject(m_ctrlBubbles); m_ctrlBubbles = null;
-            Marshal.ReleaseComObject(m_cmdBubbles); m_cmdBubbles = null;
-
             Marshal.ReleaseComObject(m_cmdDetachNotes); m_cmdDetachNotes = null;
 
             if (m_bubbleSnippets.Visible)
@@ -534,11 +508,6 @@ namespace Bubbles
                 m_topicNotes.Dispose();
                 m_topicNotes = null;
             }
-
-            if (m_bubblesMenu.Visible)
-                m_bubblesMenu.Hide();
-            m_bubblesMenu.Dispose();
-            m_bubblesMenu = null;
 
             OmniSticksButton.Destroy();
 
@@ -600,7 +569,7 @@ namespace Bubbles
 
         private bool m_bCreated;
 
-        public OmniButton OmniSticksButton = new OmniButton();
+        public static OmniButton OmniSticksButton = new OmniButton();
 
         public static BubbleSnippets m_bubbleSnippets = null;
 
@@ -615,11 +584,7 @@ namespace Bubbles
 
         public static ReplaceDlg m_ReplaceDlg;
 
-        public static MainMenuDlg m_bubblesMenu = null;
         public static StixBase m_StixBase = null;
-
-        private Command m_cmdBubbles;
-        private Mindjet.MindManager.Interop.Control m_ctrlBubbles;
 
         private Command m_cmdDetachNotes;
         public static TopicNotesDlg m_topicNotes;

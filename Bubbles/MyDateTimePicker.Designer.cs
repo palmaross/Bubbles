@@ -49,10 +49,11 @@
             // 
             // Apply
             // 
+            this.Apply.BackColor = System.Drawing.SystemColors.Window;
             this.Apply.Image = ((System.Drawing.Image)(resources.GetObject("Apply.Image")));
-            this.Apply.Location = new System.Drawing.Point(79, 0);
+            this.Apply.Location = new System.Drawing.Point(78, 1);
             this.Apply.Name = "Apply";
-            this.Apply.Size = new System.Drawing.Size(16, 17);
+            this.Apply.Size = new System.Drawing.Size(14, 14);
             this.Apply.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Apply.TabIndex = 1;
             this.Apply.TabStop = false;
@@ -62,9 +63,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(95, 17);
-            this.Controls.Add(this.Apply);
+            this.ClientSize = new System.Drawing.Size(93, 16);
             this.Controls.Add(this.dateTimePicker1);
+            this.Controls.Add(this.Apply);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MyDateTimePicker";
             this.ShowIcon = false;

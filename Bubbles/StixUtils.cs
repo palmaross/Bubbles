@@ -51,7 +51,7 @@ namespace Bubbles
                         if (stick) // rename stick
                         {
                             db.ExecuteNonQuery("update STICKS set name=`" + name + "` where id=" + stickID + "");
-                            StixButton.m_bubblesMenu.RenameContextMenuItem(type, stickID.ToString(), name);
+                            StixButton.m_StixBase.RenameContextMenuItem(type, stickID.ToString(), name);
                         }
                         else if (type == typeicons)
                             db.ExecuteNonQuery("update ICONS set name=`" + name +
@@ -73,7 +73,7 @@ namespace Bubbles
                 id = Utils.StickID();
                 db.AddStick(id, stickname, sticktype, 0, "H", "");
 
-                newForm.Location = StixButton.m_bubblesMenu.GetStickLocation("", newForm.Size);
+                newForm.Location = StixButton.m_StixBase.GetStickLocation("", newForm.Size);
                 newForm.Tag = id;
                 StixButton.STICKS.Add(id, newForm);
                 newForm.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
@@ -83,7 +83,7 @@ namespace Bubbles
                 if (dt.Rows.Count > 1) contextmenu = true;
             }
             if (contextmenu == true)
-                StixButton.m_bubblesMenu.AddSelectMenu(sticktype);
+                StixButton.m_StixBase.AddSelectMenu(sticktype);
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace Bubbles
         }
 
         public static List<PictureBox> RefreshStick(Form form, PictureBox p1, string orientation, 
-            int MinLength, bool collapsed, string sticktype, bool deleteall = false)
+            int MinLength, string sticktype, bool deleteall = false)
         {
             List <PictureBox> lpb = new List<PictureBox>();
 
@@ -243,9 +243,9 @@ namespace Bubbles
             }
 
             if (orientation == "H")
-                if (!collapsed) form.Width = stickLength;
+                form.Width = stickLength;
             else
-                if (!collapsed) form.Height = stickLength;
+                form.Height = stickLength;
 
             return lpb;
         }
@@ -306,7 +306,7 @@ namespace Bubbles
             }
             else
             {
-                pBox.Location = new Point(p1.Location.X, icondist * k++);
+                pBox.Location = new Point(p1.Location.X, p1.Location.Y + (icondist * k++));
                 if (k > 4)
                     stickLength += icondist;
             }
@@ -363,14 +363,14 @@ namespace Bubbles
                 if (type == typeicons)
                 {
                     db.ExecuteNonQuery("delete from ICONS where stickID=" + id + "");
-                    if (StixButton.m_bubblesMenu.cmsIcons.Items.Count > 0)
-                        StixButton.m_bubblesMenu.cmsIcons.Items.Clear();
+                    if (StixButton.m_StixBase.cmsIcons.Items.Count > 0)
+                        StixButton.m_StixBase.cmsIcons.Items.Clear();
                 }
                 else if (type == typesources)
                 {
                     db.ExecuteNonQuery("delete from SOURCES where stickID=" + id + "");
-                    if (StixButton.m_bubblesMenu.cmsMySources.Items.Count > 0)
-                        StixButton.m_bubblesMenu.cmsMySources.Items.Clear();
+                    if (StixButton.m_StixBase.cmsMySources.Items.Count > 0)
+                        StixButton.m_StixBase.cmsMySources.Items.Clear();
                 }
 
                 // Delete the stick
@@ -383,65 +383,9 @@ namespace Bubbles
 
             // Create context menu for the main menu button if there are more than one stick of this type
             if (contextmenu == true)
-                StixButton.m_bubblesMenu.AddSelectMenu(type);
+                StixButton.m_StixBase.AddSelectMenu(type);
 
             return true;
-        }
-
-        public static void Collapse(Form form, string orientation, ContextMenuStrip cms)
-        {
-            if (form.Width > minSize || form.Height > minSize)
-            {
-                if (orientation == "H")
-                    form.Width = minSize;
-                else
-                    form.Height = minSize;
-
-                form.BackColor = Color.Gainsboro;
-
-                int i = 0;
-                foreach (PictureBox pb in form.Controls.OfType<PictureBox>())
-                {
-                    // hide all icons except the first
-                    if (pb.Name != "pBold" && pb.Name != "pCopy" && pb.Name != "p100" &&
-                        pb.Name != "subtopic" && pb.Tag != null && i++ > 0) // only dynamic icons
-                        pb.Visible = false;
-                }
-
-                cms.Items["BI_collapse"].Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "expand.png"), cmiSize);
-                cms.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.expand");
-            }
-        }
-
-        public static void Expand(Form form, int RealLength, string orientation, ContextMenuStrip cms)
-        {
-            Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
-
-            if (orientation == "H" && form.Width < RealLength)
-            {
-                form.Width = RealLength;
-                if (form.Right > area.Right) // close to the screen right
-                    form.Location = new Point(area.Right - RealLength, form.Location.Y); // set stick right to the screen right
-            }
-            else if (orientation == "V" && form.Height < RealLength)
-            {
-                if (form.Name == "BubbleAddTopic")
-                    form.Height = RealLength - form.Width * 2;
-                else
-                    form.Height = RealLength;
-
-                if (form.Bottom > area.Bottom) // close to the screen bottom
-                    form.Location = new Point(form.Location.X, area.Bottom - RealLength); // set stick bottom to the screen bottom
-            }
-
-            form.BackColor = Color.Lavender;
-
-            // show all icons
-            foreach (PictureBox pb in form.Controls.OfType<PictureBox>())
-                if (pb.Tag != null) pb.Visible = true;
-
-            cms.Items["BI_collapse"].Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "collapse.png"), cmiSize);
-            cms.Items["BI_collapse"].Text = Utils.getString("float_icons.contextmenu.collapse");
         }
 
         public static bool manage_clicked = false;
@@ -461,16 +405,13 @@ namespace Bubbles
                 Control ff = null;
 
                 // Control ff is a panel with icons from the StickPopup() User Control
-                if (popup == "") ff = sp.panelH;
-                else if (type == typetextops) ff = sp.panelPasteTopic;
+                //if (popup == "") ff = sp.panelH;
+                if (type == typetextops) ff = sp.panelPasteTopic;
                 else if (popup == "progress") ff = sp.panelProgress;
                 else if (popup == "priority") ff = sp.panelPriority;
 
                 if (popup != "" && scaleFactor != 100)
                     ff.Scale(new SizeF(scaleFactor / 100, scaleFactor / 100)); // scale popup
-
-                // Correct widths for specific popup
-                //if (type == typepaste && popup == "add") ff.Width = sp.panelAddTopic.Width;
 
                 if (type != typeicons && type != typebookmarks && type != typeformat && popup == "")
                 {
@@ -871,31 +812,24 @@ namespace Bubbles
 
         public static void SetCommonContextMenu(ContextMenuStrip cms, string stickType = "")
         {
-            // Delete all icons from stix
-            string deleteall = Utils.getString("contextmenu.clearstick");
-            if (stickType == typesources) deleteall = Utils.getString("mysources.contextmenu.deleteall");
-            if (stickType == typebookmarks) deleteall = Utils.getString("bookmarks.contextmenu.deleteall");
-
             ToolStripItem tsi = null;
-
-            tsi = cms.Items.Add(Utils.getString("contextmenu.stickoperations"));
-            tsi.Font = new Font(tsi.Font, FontStyle.Bold);
 
             if (stickType == typeicons || stickType == typesources || stickType == typebookmarks)
             {
-                tsi = cms.Items.Add(deleteall);
+                tsi = new ToolStripLabel(Utils.getString("contextmenu.stickoperations"));
+                tsi.Font = new Font(tsi.Font, FontStyle.Bold); cms.Items.Add(tsi);
+
+                tsi = cms.Items.Add(Utils.getString("contextmenu.clearstick"));
                 tsi.Name = "BI_deleteall";
                 tsi.ImageScaling = ToolStripItemImageScaling.None;
                 tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "deleteall.png"), cmiSize);
-                if (stickType == typeicons || stickType == typetaskinfo)
-                    tsi.ToolTipText = Utils.getString("contextmenu.clearstick.tooltip");
-            }
 
-            tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.collapse"));
-            tsi.Name = "BI_collapse";
-            tsi.ImageScaling = ToolStripItemImageScaling.None;
-            tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "collapse.png"), cmiSize);
-            tsi.ToolTipText = Utils.getString("float_icons.contextmenu.collapse.tooltip");
+                string deleteall = Utils.getString("contextmenu.clearstick.tooltip");
+                if (stickType == typesources) deleteall = Utils.getString("mysources.contextmenu.deleteall");
+                if (stickType == typebookmarks) deleteall = Utils.getString("bookmarks.contextmenu.deleteall");
+
+                tsi.ToolTipText = deleteall;
+            }
 
             tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.rotate"));
             tsi.Name = "BI_rotate";
@@ -925,6 +859,11 @@ namespace Bubbles
                 tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "newStick.png"), cmiSize);
             }
 
+            tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.scale"));
+            tsi.Name = "BI_scale";
+            tsi.ImageScaling = ToolStripItemImageScaling.None;
+            tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "remember.png"), cmiSize);
+
             cms.Items.Add(new ToolStripSeparator());
 
             tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.help"));
@@ -936,16 +875,6 @@ namespace Bubbles
             tsi.Name = "BI_close";
             tsi.ImageScaling = ToolStripItemImageScaling.None;
             tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "close_sticker.png"), cmiSize);
-
-            if (stickType == typebase)
-            {
-                cms.Items.Add(new ToolStripSeparator());
-
-                tsi = cms.Items.Add(Utils.getString("SettingsDlg.Title"));
-                tsi.Name = "BS_settings";
-                tsi.ImageScaling = ToolStripItemImageScaling.None;
-                tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "manage.png"), cmiSize);
-            }
         }
 
         public static void SetContextMenuImage(ToolStripItem tsi, string imgName)
@@ -971,7 +900,7 @@ namespace Bubbles
                 X = parent.Right - child.Width; // child right = parent right
                 if (popup == "getname" || popup == "resources" || popup == "bookmarks" || 
                     popup == "sources" || popup == "icons")
-                    X = parent.Left; // child right = parent right
+                    X = parent.Left; // child right = parent left
                 Y = parent.Bottom; // child top = parent bottom
 
                 //if (popup == "add")
@@ -1088,8 +1017,6 @@ namespace Bubbles
             typeformat = "BubbleFormat", typesources = "BubbleMySources", typebookmarks = "BubbleBookmarks",
             typeaddtopic = "BubbleAddTopic", typetextops = "BubbleTextOps", typeorganizer = "BubbleOrganizer";
 
-        public static int minSize;
-        public static int stickThickness;
         public static int stickLength;
         public static int icondist;
         public static Size cmiSize;

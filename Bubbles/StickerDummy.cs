@@ -58,7 +58,7 @@ namespace Bubbles
             contextMenuMain.ItemClicked += ContextMenuMain_ItemClicked;
 
             contextMenuMain.Items["CM_newsticker"].Text = Utils.getString("stickers.contextmenu.newsticker");
-            contextMenuMain.Items["CM_mystickers"].Text = Utils.getString("stickers.contextmenu.mystickers");
+            contextMenuMain.Items["CM_mystickers"].Text = Utils.getString("stickers.contextmenu.stickers");
             contextMenuMain.Items["CM_templates"].Text = Utils.getString("stickers.contextmenu.templates");
             AddStickers();
 

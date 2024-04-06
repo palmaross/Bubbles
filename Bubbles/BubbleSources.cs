@@ -28,7 +28,7 @@ namespace Bubbles
 
             orientation = _orientation; // "H" or "V"
 
-            MinLength = this.Width; RealLength = this.Width;
+            MinLength = this.Width;
 
             if (orientation == "V") {
                 orientation = "H"; Rotate(); }
@@ -95,12 +95,7 @@ namespace Bubbles
             pictureHandle.AllowDrop = true;
             pictureHandle.DragEnter += Handle_DragEnter;
             pictureHandle.DragDrop += Handle_DragDrop;
-            pictureHandle.MouseDoubleClick += (sender, e) => Collapse(); // collapse/expand stick
-
-            if (collapsed) {
-                collapsed = false; Collapse(); }
-
-            Manage.MouseHover += (sender, e) => StixUtils.ShowCommandPopup(this, orientation, StixUtils.typetextops);
+            pictureHandle.MouseDoubleClick += (sender, e) => this.Hide();
 
             // Apply scale factor
             this.Paint += this_Paint; // paint the border depending on scale factor
@@ -115,7 +110,11 @@ namespace Bubbles
 
             float scale = 100F / fromScale;
             if (scale != 1)
+            {
                 this.Scale(new SizeF(scale, scale)); // reset to 100%
+                StixUtils.icondist = (int)(StixUtils.icondist * scale);
+                MinLength = (int)(MinLength * scale);
+            }
 
             this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
             scaleFactor = toScale;
@@ -264,8 +263,7 @@ namespace Bubbles
                 string name = StixUtils.GetName(this, orientation, StixUtils.typestick, "");
                 if (name != "")
                 {
-                    string _collapsed = collapsed ? "1" : "0";
-                    BubbleSources form = new BubbleSources(0, orientation + _collapsed, name);
+                    BubbleSources form = new BubbleSources(0, orientation, name);
                     StixUtils.CreateStick(form, name, StixUtils.typesources);
                 }
             }
@@ -275,14 +273,17 @@ namespace Bubbles
                     toolTip1.GetToolTip(pictureHandle), true);
                 if (newName != "") toolTip1.SetToolTip(pictureHandle, newName);
             }
-            else if (e.ClickedItem.Name == "BI_collapse")
-            {
-                Collapse();
-            }
             else if (e.ClickedItem.Name == "BI_delete_stick")
             {
                 if (StixUtils.DeleteStick((int)this.Tag, StixUtils.typesources))
                     this.Close();
+            }
+            else if (e.ClickedItem.Name == "BI_scale")
+            {
+                ScaleStickDlg dlg = new ScaleStickDlg(this, StixUtils.typesources, scaleFactor);
+                dlg.Location =
+                    StixUtils.GetChildLocation(this, dlg.Bounds, orientation, "scale");
+                dlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
         }
 
@@ -290,39 +291,6 @@ namespace Bubbles
         {
             orientation = StixUtils.RotateStick(this, Manage, orientation, SourceList);
         }
-
-        /// <summary>
-        /// Collapse/Expand stick
-        /// </summary>
-        /// <param name="CollapseAll">"Collapse All" command from Main Menu</param>
-        /// <param name="ExpandAll">"Expand All" command from Main Menu</param>
-        public void Collapse(bool CollapseAll = false, bool ExpandAll = false)
-        {
-            if (collapsed) // Expand stick
-            {
-                if (CollapseAll) return;
-
-                collapseState = this.Location; // remember collapsed location
-                collapseOrientation = orientation;
-                StixUtils.Expand(this, RealLength, orientation, contextMenuStrip1);
-                collapsed = false;
-            }
-            else // Collapse stick
-            {
-                if (ExpandAll) return;
-
-
-                StixUtils.Collapse(this, orientation, contextMenuStrip1);
-                collapsed = true;
-                if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
-                {
-                    this.Location = collapseState; // restore collapsed location
-                    if (orientation != collapseOrientation) Rotate();
-                }
-            }
-        }
-        Point collapseState = new Point(0, 0);
-        string collapseOrientation = "N";
 
         private void NewIcon(string sourcePath, string sourceTitle, string position)
         {
@@ -425,9 +393,7 @@ namespace Bubbles
         {
             StixUtils.Sources.Clear(); StixUtils.Sources.AddRange(Sources);
             List<PictureBox> pBoxs = StixUtils.RefreshStick(this, p1, orientation, MinLength, 
-                collapsed, StixUtils.typesources, deleteall);
-
-            RealLength = StixUtils.stickLength;
+                StixUtils.typesources, deleteall);
 
             int i = 0;
             foreach (PictureBox pBox in pBoxs)
@@ -437,9 +403,6 @@ namespace Bubbles
                 pBox.DragEnter += Handle_DragEnter;
                 pBox.DragDrop += Handle_DragDrop;
                 pBox.MouseDown += PBox_MouseDown;
-
-                if (collapsed && i++ > 0) // if collapsed hide all icons except the first
-                    pBox.Visible = false;
             }
         }
 
@@ -576,8 +539,7 @@ namespace Bubbles
         string orientation = "H";
         bool manage = false;
 
-        int MinLength, RealLength;
-        bool collapsed = false;
+        int MinLength;
         public float scaleFactor = 100;
 
         string position; 

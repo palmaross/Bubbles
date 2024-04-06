@@ -22,7 +22,6 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "IconStick.htm");
 
-            pCollapse.Tag = Utils.getString("float_icons.contextmenu.collapse_expand");
             pRotate.Tag = Utils.getString("float_icons.contextmenu.rotate");
             pRemember.Tag = Utils.getString("float_icons.contextmenu.settings");
             pClose.Tag = Utils.getString("float_icons.contextmenu.close");
@@ -104,39 +103,6 @@ namespace Bubbles
         }
 
         #region CommonComandsPopup
-        private void pCollapse_Click(object sender, EventArgs e)
-        {
-            var stick = panelH.Tag as Form;
-            StixUtils.ActivateMindManager(); // In order to hide Popup
-
-            switch (stick.Name)
-            {
-                case StixUtils.typeicons:
-                    (stick as BubbleIcons).Collapse();
-                    break;
-                case StixUtils.typetaskinfo:
-                    (stick as BubbleTaskInfo).Collapse();
-                    break;
-                case StixUtils.typeformat:
-                    (stick as BubbleFormat).Collapse();
-                    break;
-                case StixUtils.typesources:
-                    (stick as BubbleSources).Collapse();
-                    break;
-                case StixUtils.typebookmarks:
-                    (stick as BubbleBookmarks).Collapse();
-                    break;
-                case StixUtils.typeaddtopic:
-                    (stick as BubbleAddTopic).Collapse();
-                    break;
-                case StixUtils.typetextops:
-                    (stick as BubbleTextOps).Collapse();
-                    break;
-                case StixUtils.typeorganizer:
-                    (stick as BubbleOrganizer).Collapse();
-                    break;
-            }
-        }
 
         private void pRotate_Click(object sender, EventArgs e)
         {

@@ -60,15 +60,9 @@ namespace Bubbles
             this.MouseDown += Move_Stick;
             pictureHandle.MouseDown += Move_Stick;
             Manage.Click += Manage_Click;
-            pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
-
-            // Show command popup
-            Manage.MouseHover += (sender, e) => StixUtils.ShowCommandPopup(this, orientation, StixUtils.typebookmarks);            
+            pictureHandle.MouseDoubleClick += (sender, e) => this.Hide();
 
             Init();
-
-            if (collapsed) {
-                collapsed = false; Collapse();  }
 
             // Apply scale factor
             this.Paint += this_Paint; // paint the border depending on scale factor
@@ -103,13 +97,10 @@ namespace Bubbles
         {
             prev = null; RealLength = MinLength; Bookmarks.Clear();
 
-            if (!collapsed)
-            {
-                if (orientation == "H")
-                    this.Width = MinLength;
-                else
-                    this.Height = MinLength;
-            }
+            if (orientation == "H")
+                this.Width = MinLength;
+            else
+                this.Height = MinLength;
 
             foreach (PictureBox p in this.Controls.OfType<PictureBox>().Reverse())
             {
@@ -160,14 +151,10 @@ namespace Bubbles
                 }
             }
 
-            // If stick is collapsed, do not set the resulting width
-            if (!collapsed)
-            {
-                if (orientation == "H")
-                    this.Width = RealLength;
-                else
-                    this.Height = RealLength;
-            }
+            if (orientation == "H")
+                this.Width = RealLength;
+            else
+                this.Height = RealLength;
 
             // Refresh Bookmarks list
             if (StixButton.m_BookmarkList != null && !fromList)
@@ -296,9 +283,12 @@ namespace Bubbles
             {
                 StixUtils.SaveStick(this.Bounds, (int)this.Tag, orientation);
             }
-            else if (e.ClickedItem.Name == "BI_collapse")
+            else if (e.ClickedItem.Name == "BI_scale")
             {
-                Collapse();
+                ScaleStickDlg dlg = new ScaleStickDlg(this, StixUtils.typebookmarks, scaleFactor);
+                dlg.Location =
+                    StixUtils.GetChildLocation(this, dlg.Bounds, orientation, "scale");
+                dlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
         }
 
@@ -306,39 +296,6 @@ namespace Bubbles
         {
             orientation = StixUtils.RotateStick(this, Manage, orientation, BookmarkList);
         }
-
-
-        /// <summary>
-        /// Collapse/Expand stick
-        /// </summary>
-        /// <param name="CollapseAll">"Collapse All" command from Main Menu</param>
-        /// <param name="ExpandAll">"Expand All" command from Main Menu</param>
-        public void Collapse(bool CollapseAll = false, bool ExpandAll = false)
-        {
-            if (collapsed) // Expand stick
-            {
-                if (CollapseAll) return;
-
-                collapseState = this.Location; // remember collapsed location
-                collapseOrientation = orientation;
-                StixUtils.Expand(this, RealLength, orientation, contextMenuStrip1);
-                collapsed = false;
-            }
-            else // Collapse stick
-            {
-                if (ExpandAll) return;
-
-                StixUtils.Collapse(this, orientation, contextMenuStrip1);
-                collapsed = true;
-                if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
-                {
-                    this.Location = collapseState; // restore collapsed location
-                    if (orientation != collapseOrientation) Rotate();
-                }
-            }
-        }
-        Point collapseState = new Point(0, 0);
-        string collapseOrientation = "N";
 
         void AddIcon(string tooltip, string guid, bool maintopic = false, bool floattopic = false)
         {
@@ -469,7 +426,7 @@ namespace Bubbles
         
         PictureBox selectedIcon = null;
         string orientation = "H";
-        bool collapsed = false;
+
         public float scaleFactor = 100;
 
         int MinLength, RealLength;

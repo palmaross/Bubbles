@@ -37,8 +37,6 @@ namespace Bubbles
             toolTip1.SetToolTip(pStartDate, Utils.getString("taskinfo.pStartDate.tooltip"));
             toolTip1.SetToolTip(pDueDate, Utils.getString("taskinfo.pDueDate.tooltip"));
 
-            RealLength = this.Width;
-
             if (orientation == "V") {
                 orientation = "H"; Rotate(); }
 
@@ -81,9 +79,6 @@ namespace Bubbles
             cmsCommon.ItemClicked += cmsCommon_ItemClicked;
             StixUtils.SetCommonContextMenu(cmsCommon, StixUtils.typetaskinfo);
 
-            if (collapsed) {
-                collapsed = false; Collapse(); }
-
             ST_DurationUnits.Items.Add(Utils.getString("task.durationunits.minute"));
             ST_DurationUnits.Items.Add(Utils.getString("task.durationunits.hour"));
             ST_DurationUnits.Items.Add(Utils.getString("task.durationunits.day"));
@@ -92,11 +87,10 @@ namespace Bubbles
             ST_DurationUnits.SelectedIndex = 2;
             linkDurationUnit.Text = Utils.getString("task.durationunit.day");
 
-            pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
+            pictureHandle.MouseDoubleClick += (sender, e) => this.Hide();
             pictureHandle.MouseDown += Move_Stick;
             this.MouseDown += Move_Stick;
             Manage.Click += Manage_Click;
-            Manage.MouseHover += (sender, e) => StixUtils.ShowCommandPopup(this, orientation, StixUtils.typetaskinfo);
 
             this.ActiveControl = null;
 
@@ -120,6 +114,10 @@ namespace Bubbles
             // Quick Task button context menu
             cmsTaskTemplates.ItemClicked += ContextMenu_ItemClicked;
             PopulateQuickTasks();
+
+            // Resources context menu
+            cmsResources.ItemClicked += ContextMenu_ItemClicked;
+            PopulateResources();
 
             fsize = pStartDate.Font.Size; ffsize = linkDurationUnit.Font.Size;
 
@@ -167,6 +165,123 @@ namespace Bubbles
                 e.Cancel = true;
         }
 
+        public void PopulateResources()
+        {
+            if (MMUtils.ActiveDocument == null) return;
+
+            cmsResources.Items.Clear();
+
+            ToolStripItem tsi = cmsResources.Items.Add(Utils.getString("Box.Resources"));
+            tsi.Name = "ResourceBox";
+
+            tsi = cmsResources.Items.Add(Utils.getString("taskinfo.resources.delete"));
+            tsi.ToolTipText = Utils.getString("taskinfo.resources.delete.tooltip");
+            tsi.Name = "RemoveResources";
+
+            ToolStripTextBox mtb = new ToolStripTextBox();
+            mtb.Size = new Size(panelDueDate.Width * 4, mtb.Height);
+            mtb.BorderStyle = BorderStyle.FixedSingle;
+            mtb.Text = Utils.getString("ResourcesDlg.dummytext");
+            mtb.ForeColor = SystemColors.GrayText;
+            //mtb.ToolTipText = Utils.getString("taskinfo.newresource.tooltip");
+            mtb.KeyDown += Mtb_KeyDown;
+            mtb.GotFocus += Mtb_GotFocus;
+            mtb.LostFocus += Mtb_LostFocus;
+            cmsResources.Items.Add(mtb);
+
+            cmsResources.Items.Add(new ToolStripSeparator());
+
+            tsi = new ToolStripLabel(Utils.getString("taskinfo.MapResources"));
+            tsi.Font = new Font(tsi.Font, FontStyle.Bold);
+            cmsResources.Items.Add(tsi);
+
+            MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
+            foreach (MapMarker mm in mg)
+            {
+                string color = "#" + mm.Color.Value.ToString("X");
+                if (color == "#0") color = "";
+
+                tsi = cmsResources.Items.Add(mm.Label);
+                tsi.Name = "cm_resource";
+
+                if (color != "")
+                {
+                    Color c = ColorTranslator.FromHtml(color);
+                    tsi.BackColor = c;
+                    int cc = (int)Math.Sqrt(c.R * c.R * .299 + c.G * c.G * .587 + c.B * c.B * .114);
+                    if (cc > 130) tsi.ForeColor = SystemColors.WindowText;
+                    else tsi.ForeColor = SystemColors.Window;
+                }
+            }
+        }
+
+        private void Mtb_LostFocus(object sender, EventArgs e)
+        {
+            ToolStripTextBox tb = sender as ToolStripTextBox;
+            tb.Text = ""; tb.Text = Utils.getString("ResourcesDlg.dummytext");
+            tb.ForeColor = SystemColors.GrayText;
+        }
+
+        private void Mtb_GotFocus(object sender, EventArgs e)
+        {
+            ToolStripTextBox tb = sender as ToolStripTextBox;
+
+            if (tb.Text == Utils.getString("ResourcesDlg.dummytext"))
+            {
+                tb.Text = ""; tb.ForeColor = SystemColors.WindowText;
+            }
+        }
+
+        private void Mtb_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ToolStripTextBox tb = sender as ToolStripTextBox;
+
+                string _resources = tb.Text.Trim();
+                if (_resources == "") return;
+
+                string[] resources = _resources.Split(',').Select(x => x.Trim()).ToArray();
+
+                // Add to topics
+                if (MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0)
+                {
+                    // Assign resource(s) to topic(s)
+                    foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                    {
+                        string[] topicResources = t.Task.Resources.Split(',').Select(x => x.Trim()).ToArray();
+                        string[] newResources = topicResources.Union(resources).ToArray();
+
+                        string result = "";
+                        foreach (string res in newResources)
+                            result += res + ",";
+                        result = result.TrimEnd(',');
+
+                        t.Task.Resources = result;
+                    }
+                }
+
+                // Add to Map Index
+                MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
+                foreach (string res in resources)
+                {
+                    bool found = false;
+                    foreach (MapMarker mm in mg)
+                        if (mm.Label == res) found = true;
+
+                    if (!found)
+                        mg.AddResourceMarker(res);
+                }
+
+                tb.Text = ""; tb.Text = Utils.getString("ResourcesDlg.dummytext");
+                tb.ForeColor = SystemColors.GrayText;
+                PopulateResources();
+
+                e.Handled = true; // to avoid the "ding" sound
+                e.SuppressKeyPress = true;
+            }
+        }
+
         void PopulateQuickTasks()
         {
             cmsTaskTemplates.Items.Clear();
@@ -205,7 +320,57 @@ namespace Bubbles
 
         private void ContextMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Name == "TaskTemplate")
+            if (e.ClickedItem.Name == "ResourceBox")
+            {
+                if (StixButton.m_Resources == null)
+                    StixButton.m_Resources = new ResourcesDlg();
+
+                if (StixButton.m_Resources.Visible)
+                    StixButton.m_Resources.Hide();
+                else
+                {
+                    StixButton.m_Resources.InitCurrentMapResources();
+
+                    if (StixButton.m_Resources.Location.IsEmpty)
+                    {
+                        StixButton.m_Resources.Location =
+                        StixUtils.GetChildLocation(this, StixButton.m_Resources.Bounds, orientation, "resources");
+                    }
+                    StixButton.m_Resources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                }
+            }
+            else if (e.ClickedItem.Name == "RemoveResources")
+            {
+                if (MMUtils.ActiveDocument == null ||
+                    MMUtils.ActiveDocument.Selection.PrimaryTopic == null)
+                    return;
+
+                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                {
+                    t.Task.Resources = "";
+                }
+            }
+            else if (e.ClickedItem.Name == "cm_resource")
+            {
+                if (MMUtils.ActiveDocument == null ||
+                    MMUtils.ActiveDocument.Selection.PrimaryTopic == null)
+                    return;
+
+                string res = e.ClickedItem.Text;
+
+                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                {
+                    string[] topicResources = t.Task.Resources.Split(',').Select(x => x.Trim()).ToArray();
+
+                    if (topicResources.Contains(res)) continue;
+
+                    if (t.Task.Resources == "")
+                        t.Task.Resources = res;
+                    else
+                        t.Task.Resources += "," + res;
+                }
+            }
+            else if (e.ClickedItem.Name == "TaskTemplate")
             {
                 QuickTask = e.ClickedItem.Tag as TaskTemplateItem;
 
@@ -314,9 +479,12 @@ namespace Bubbles
             {
                 StixUtils.SaveStick(this.Bounds, (int)this.Tag, orientation);
             }
-            else if (e.ClickedItem.Name == "BI_collapse")
+            else if (e.ClickedItem.Name == "BI_scale")
             {
-                Collapse();
+                ScaleStickDlg dlg = new ScaleStickDlg(this, StixUtils.typetaskinfo, scaleFactor);
+                dlg.Location =
+                    StixUtils.GetChildLocation(this, dlg.Bounds, orientation, "scale");
+                dlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
         }
 
@@ -328,38 +496,6 @@ namespace Bubbles
             panelDueDate.Location = new Point(panelDueDate.Location.Y, panelDueDate.Location.X);
             panelDuration.Location = new Point(panelDuration.Location.Y, panelDuration.Location.X);
         }
-
-        /// <summary>
-        /// Collapse/Expand stick
-        /// </summary>
-        /// <param name="CollapseAll">"Collapse All" command from Main Menu</param>
-        /// <param name="ExpandAll">"Expand All" command from Main Menu</param>
-        public void Collapse(bool CollapseAll = false, bool ExpandAll = false)
-        {
-            if (collapsed) // Expand stick
-            {
-                if (CollapseAll) return;
-
-                collapseState = this.Location; // remember collapsed location
-                collapseOrientation = orientation;
-                StixUtils.Expand(this, RealLength, orientation, cmsCommon);
-                collapsed = false;
-            }
-            else // Collapse stick
-            {
-                if (ExpandAll) return;
-
-                StixUtils.Collapse(this, orientation, cmsCommon);
-                collapsed = true;
-                if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
-                {
-                    this.Location = collapseState; // restore collapsed location
-                    if (orientation != collapseOrientation) Rotate();
-                }
-            }
-        }
-        Point collapseState = new Point(0, 0);
-        string collapseOrientation = "N";
 
         private void p100_Click(object sender, EventArgs e)
         {
@@ -438,7 +574,7 @@ namespace Bubbles
                 if (sender as MaskedTextBox == pDueDate) 
                 { date = "calendar_duedate"; dt = (DateTime)pDueDate.Tag; }
 
-                MyDateTimePicker mdtp = new MyDateTimePicker();
+                MyDateTimePicker mdtp = new MyDateTimePicker(scaleFactor);
                 mdtp.Location = StixUtils.GetChildLocation(this, mdtp.Bounds, orientation, date);
                 mdtp.dateTimePicker1.Value = dt;
                 mdtp.AccessibleName = date;
@@ -765,24 +901,20 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (StixButton.m_Resources == null)
-                    StixButton.m_Resources = new ResourcesDlg();
+                PopulateResources();
 
-                if (StixButton.m_Resources.Visible)
-                    StixButton.m_Resources.Hide();
-                else
-                {
-                    StixButton.m_Resources.Location =
-                        StixUtils.GetChildLocation(this, StixButton.m_Resources.Bounds, orientation, "resources");
-                    StixButton.m_Resources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-                }
+                foreach (ToolStripItem item in cmsResources.Items)
+                    item.Visible = true;
+
+                cmsResources.Show(Cursor.Position);
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                
             }
         }
 
         string orientation = "H";
-        bool collapsed = false;
-
-        int RealLength;
 
         TaskTemplateItem primaryQuickTask = null;
         TaskTemplateItem QuickTask = null;

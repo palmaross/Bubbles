@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace Bubbles
@@ -43,7 +42,7 @@ namespace Bubbles
             // Fill Scale Factor
             numStix.Text = stixScaleFactor.ToString() + "%";
             numStixBase.Text = stixbaseScaleFactor.ToString() + "%";
-            numBoxes.Text = boxesScaleFactor.ToString() + "%";
+            //numBoxes.Text = boxesScaleFactor.ToString() + "%";
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -111,38 +110,33 @@ namespace Bubbles
                 switch (stick.Name)
                 {
                     case StixUtils.typebase:
-                        (stick as StixBase).ScaleStick(stixbaseScaleFactor, SF_StixBase);
+                        (stick as StixBase).ScaleStick((stick as StixBase).scaleFactor, SF_StixBase);
                         break;
                     case StixUtils.typeicons:
-                        (stick as BubbleIcons).ScaleStick(stixScaleFactor, SF_Stix);
+                        (stick as BubbleIcons).ScaleStick((stick as BubbleIcons).scaleFactor, SF_Stix);
                         break;
                     case StixUtils.typetaskinfo:
-                        (stick as BubbleTaskInfo).ScaleStick(stixScaleFactor, SF_Stix);
+                        (stick as BubbleTaskInfo).ScaleStick((stick as BubbleTaskInfo).scaleFactor, SF_Stix);
                         break;
                     case StixUtils.typeaddtopic:
-                        (stick as BubbleAddTopic).ScaleStick(stixScaleFactor, SF_Stix);
+                        (stick as BubbleAddTopic).ScaleStick((stick as BubbleAddTopic).scaleFactor, SF_Stix);
                         break;
                     case StixUtils.typeformat:
-                        (stick as BubbleFormat).ScaleStick(stixScaleFactor, SF_Stix);
+                        (stick as BubbleFormat).ScaleStick((stick as BubbleFormat).scaleFactor, SF_Stix);
                         break;
                     case StixUtils.typesources:
-                        (stick as BubbleSources).ScaleStick(stixScaleFactor, SF_Stix);
+                        (stick as BubbleSources).ScaleStick((stick as BubbleSources).scaleFactor, SF_Stix);
                         break;
                     case StixUtils.typebookmarks:
-                        (stick as BubbleBookmarks).ScaleStick(stixScaleFactor, SF_Stix);
+                        (stick as BubbleBookmarks).ScaleStick((stick as BubbleBookmarks).scaleFactor, SF_Stix);
                         break;
                     case StixUtils.typetextops:
-                        (stick as BubbleTextOps).ScaleStick(stixScaleFactor, SF_Stix);
+                        (stick as BubbleTextOps).ScaleStick((stick as BubbleTextOps).scaleFactor, SF_Stix);
                         break;
                 }
             }
             stixScaleFactor = SF_Stix;
             stixbaseScaleFactor = SF_StixBase;
-
-            //foreach (var pair in BubblesButton.BOXES) // Boxes
-            //{
-
-            //}
         }
 
         private void numStix_KeyDown(object sender, KeyEventArgs e)

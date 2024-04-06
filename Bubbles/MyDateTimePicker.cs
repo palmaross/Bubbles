@@ -1,6 +1,7 @@
 ﻿using Mindjet.MindManager.Interop;
 using PRAManager;
 using System;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -8,13 +9,27 @@ namespace Bubbles
 {
     public partial class MyDateTimePicker : Form
     {
-        public MyDateTimePicker()
+        public MyDateTimePicker(float toScale)
         {
             InitializeComponent();
 
             toolTip1.SetToolTip(Apply, Utils.getString("taskinfo.datetimepicker.setdate"));
 
             this.MinimumSize = this.Size;
+
+            if (toScale >= 100 && toScale <= 300 && toScale != 100)
+            {
+                this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
+                float _fsize = dateTimePicker1.Font.Size * (toScale / 100);
+                dateTimePicker1.Font = new Font(dateTimePicker1.Font.FontFamily, _fsize);
+            }
+
+            this.Paint += This_Paint; // paint the border
+        }
+
+        private void This_Paint(object sender, PaintEventArgs e)
+        {
+            ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle, System.Drawing.Color.Black, ButtonBorderStyle.Solid);
         }
 
         // Apply date to the selected topic and close this window

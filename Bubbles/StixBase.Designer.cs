@@ -32,17 +32,25 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StixBase));
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
-            this.stxAddTopic = new System.Windows.Forms.PictureBox();
+            this.stxAddTopics = new System.Windows.Forms.PictureBox();
             this.stxTextOps = new System.Windows.Forms.PictureBox();
             this.stxFormat = new System.Windows.Forms.PictureBox();
             this.stxTaskInfo = new System.Windows.Forms.PictureBox();
             this.stxIcons = new System.Windows.Forms.PictureBox();
             this.boxSources = new System.Windows.Forms.PictureBox();
             this.Manage = new System.Windows.Forms.PictureBox();
-            this.cmsHelp = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsManage = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cm_hide = new System.Windows.Forms.ToolStripMenuItem();
+            this.cm_show = new System.Windows.Forms.ToolStripMenuItem();
+            this.cm_close = new System.Windows.Forms.ToolStripMenuItem();
+            this.cm_remember = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.cm_settings = new System.Windows.Forms.ToolStripMenuItem();
             this.cm_help = new System.Windows.Forms.ToolStripMenuItem();
             this.cm_about = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.cm_autoclose = new System.Windows.Forms.ToolStripMenuItem();
+            this.cm_closemenu = new System.Windows.Forms.ToolStripMenuItem();
             this.stxSources = new System.Windows.Forms.PictureBox();
             this.stxBookmarks = new System.Windows.Forms.PictureBox();
             this.boxResources = new System.Windows.Forms.PictureBox();
@@ -50,37 +58,41 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panelBoxes = new System.Windows.Forms.Panel();
             this.Stickers = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.stxAddTopic)).BeginInit();
+            this.pIconDist = new System.Windows.Forms.PictureBox();
+            this.p2 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.stxAddTopics)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxTextOps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxFormat)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxTaskInfo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxIcons)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxSources)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
-            this.cmsHelp.SuspendLayout();
+            this.cmsManage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.stxSources)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxBookmarks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxResources)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxBookmarks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Stickers)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
             // 
             this.toolTip1.ShowAlways = true;
             // 
-            // stxAddTopic
+            // stxAddTopics
             // 
-            this.stxAddTopic.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.stxAddTopic.Image = ((System.Drawing.Image)(resources.GetObject("stxAddTopic.Image")));
-            this.stxAddTopic.Location = new System.Drawing.Point(143, 4);
-            this.stxAddTopic.Name = "stxAddTopic";
-            this.stxAddTopic.Size = new System.Drawing.Size(24, 24);
-            this.stxAddTopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.stxAddTopic.TabIndex = 75;
-            this.stxAddTopic.TabStop = false;
-            this.stxAddTopic.Tag = "1";
-            this.stxAddTopic.Click += new System.EventHandler(this.StxAddTopic_Click);
+            this.stxAddTopics.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.stxAddTopics.Image = ((System.Drawing.Image)(resources.GetObject("stxAddTopics.Image")));
+            this.stxAddTopics.Location = new System.Drawing.Point(143, 4);
+            this.stxAddTopics.Name = "stxAddTopics";
+            this.stxAddTopics.Size = new System.Drawing.Size(24, 24);
+            this.stxAddTopics.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.stxAddTopics.TabIndex = 75;
+            this.stxAddTopics.TabStop = false;
+            this.stxAddTopics.Tag = "1";
+            this.stxAddTopics.Click += new System.EventHandler(this.StxAddTopic_Click);
             // 
             // stxTextOps
             // 
@@ -161,32 +173,86 @@
             this.Manage.TabStop = false;
             this.Manage.Click += new System.EventHandler(this.Manage_Click);
             // 
-            // cmsHelp
+            // cmsManage
             // 
-            this.cmsHelp.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsManage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cm_hide,
+            this.cm_show,
+            this.cm_close,
+            this.cm_remember,
+            this.toolStripSeparator1,
             this.cm_settings,
             this.cm_help,
-            this.cm_about});
-            this.cmsHelp.Name = "cmsCommon";
-            this.cmsHelp.Size = new System.Drawing.Size(117, 70);
+            this.cm_about,
+            this.toolStripSeparator2,
+            this.cm_autoclose,
+            this.cm_closemenu});
+            this.cmsManage.Name = "cmsCommon";
+            this.cmsManage.Size = new System.Drawing.Size(181, 214);
+            // 
+            // cm_hide
+            // 
+            this.cm_hide.Name = "cm_hide";
+            this.cm_hide.Size = new System.Drawing.Size(180, 22);
+            this.cm_hide.Text = "Hide All Stix";
+            // 
+            // cm_show
+            // 
+            this.cm_show.Name = "cm_show";
+            this.cm_show.Size = new System.Drawing.Size(180, 22);
+            this.cm_show.Text = "Show Hidden Stix";
+            // 
+            // cm_close
+            // 
+            this.cm_close.Name = "cm_close";
+            this.cm_close.Size = new System.Drawing.Size(180, 22);
+            this.cm_close.Text = "Close All Stix";
+            // 
+            // cm_remember
+            // 
+            this.cm_remember.Name = "cm_remember";
+            this.cm_remember.Size = new System.Drawing.Size(180, 22);
+            this.cm_remember.Text = "Remember All Stix";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // cm_settings
             // 
             this.cm_settings.Name = "cm_settings";
-            this.cm_settings.Size = new System.Drawing.Size(116, 22);
+            this.cm_settings.Size = new System.Drawing.Size(180, 22);
             this.cm_settings.Text = "Settings";
             // 
             // cm_help
             // 
             this.cm_help.Name = "cm_help";
-            this.cm_help.Size = new System.Drawing.Size(116, 22);
+            this.cm_help.Size = new System.Drawing.Size(180, 22);
             this.cm_help.Text = "Help";
             // 
             // cm_about
             // 
             this.cm_about.Name = "cm_about";
-            this.cm_about.Size = new System.Drawing.Size(116, 22);
+            this.cm_about.Size = new System.Drawing.Size(180, 22);
             this.cm_about.Text = "About";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            // 
+            // cm_autoclose
+            // 
+            this.cm_autoclose.Name = "cm_autoclose";
+            this.cm_autoclose.Size = new System.Drawing.Size(180, 22);
+            this.cm_autoclose.Text = "Close Automatically";
+            // 
+            // cm_closemenu
+            // 
+            this.cm_closemenu.Name = "cm_closemenu";
+            this.cm_closemenu.Size = new System.Drawing.Size(180, 22);
+            this.cm_closemenu.Text = "Close";
             // 
             // stxSources
             // 
@@ -272,8 +338,27 @@
             this.Stickers.TabIndex = 97;
             this.Stickers.TabStop = false;
             this.Stickers.Tag = "1";
-            this.Stickers.Click += new System.EventHandler(this.Stickers_Click);
             this.Stickers.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Stickers_MouseClick);
+            // 
+            // pIconDist
+            // 
+            this.pIconDist.Location = new System.Drawing.Point(108, 52);
+            this.pIconDist.Name = "pIconDist";
+            this.pIconDist.Size = new System.Drawing.Size(22, 16);
+            this.pIconDist.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pIconDist.TabIndex = 99;
+            this.pIconDist.TabStop = false;
+            this.pIconDist.Visible = false;
+            // 
+            // p2
+            // 
+            this.p2.Location = new System.Drawing.Point(123, 34);
+            this.p2.Name = "p2";
+            this.p2.Size = new System.Drawing.Size(12, 12);
+            this.p2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.p2.TabIndex = 98;
+            this.p2.TabStop = false;
+            this.p2.Visible = false;
             // 
             // StixBase
             // 
@@ -282,6 +367,8 @@
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(243, 68);
             this.ControlBox = false;
+            this.Controls.Add(this.pIconDist);
+            this.Controls.Add(this.p2);
             this.Controls.Add(this.Stickers);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.boxBookmarks);
@@ -294,25 +381,27 @@
             this.Controls.Add(this.stxTaskInfo);
             this.Controls.Add(this.stxFormat);
             this.Controls.Add(this.stxTextOps);
-            this.Controls.Add(this.stxAddTopic);
+            this.Controls.Add(this.stxAddTopics);
             this.Controls.Add(this.panelBoxes);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "StixBase";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            ((System.ComponentModel.ISupportInitialize)(this.stxAddTopic)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.stxAddTopics)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxTextOps)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxFormat)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxTaskInfo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxIcons)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxSources)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
-            this.cmsHelp.ResumeLayout(false);
+            this.cmsManage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.stxSources)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxBookmarks)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxResources)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxBookmarks)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Stickers)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -321,17 +410,10 @@
         #endregion
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.HelpProvider helpProvider1;
-        private System.Windows.Forms.PictureBox stxAddTopic;
-        private System.Windows.Forms.PictureBox stxTextOps;
-        private System.Windows.Forms.PictureBox stxTaskInfo;
-        private System.Windows.Forms.PictureBox stxIcons;
         private System.Windows.Forms.PictureBox boxSources;
-        private System.Windows.Forms.ContextMenuStrip cmsHelp;
-        private System.Windows.Forms.PictureBox stxBookmarks;
+        private System.Windows.Forms.ContextMenuStrip cmsManage;
         public System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panelBoxes;
-        private System.Windows.Forms.PictureBox stxFormat;
-        private System.Windows.Forms.PictureBox stxSources;
         private System.Windows.Forms.PictureBox boxResources;
         private System.Windows.Forms.PictureBox boxBookmarks;
         public System.Windows.Forms.PictureBox Manage;
@@ -339,5 +421,22 @@
         private System.Windows.Forms.ToolStripMenuItem cm_settings;
         private System.Windows.Forms.ToolStripMenuItem cm_help;
         private System.Windows.Forms.ToolStripMenuItem cm_about;
+        private System.Windows.Forms.ToolStripMenuItem cm_close;
+        private System.Windows.Forms.ToolStripMenuItem cm_hide;
+        private System.Windows.Forms.ToolStripMenuItem cm_show;
+        private System.Windows.Forms.ToolStripMenuItem cm_remember;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        public System.Windows.Forms.PictureBox stxAddTopics;
+        public System.Windows.Forms.PictureBox stxTextOps;
+        public System.Windows.Forms.PictureBox stxTaskInfo;
+        public System.Windows.Forms.PictureBox stxIcons;
+        public System.Windows.Forms.PictureBox stxBookmarks;
+        public System.Windows.Forms.PictureBox stxFormat;
+        public System.Windows.Forms.PictureBox stxSources;
+        private System.Windows.Forms.PictureBox pIconDist;
+        private System.Windows.Forms.PictureBox p2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem cm_autoclose;
+        private System.Windows.Forms.ToolStripMenuItem cm_closemenu;
     }
 }

@@ -57,14 +57,7 @@ namespace Bubbles
             this.ResizeRedraw = true;
 
             pictureHandle.MouseDown += PictureHandle_MouseDown;
-            pictureHandle.MouseDoubleClick += (sender, e) => Collapse();
-
-            Manage.MouseHover += (sender, e) => StixUtils.ShowCommandPopup(this, orientation, StixUtils.typetextops);
-
-            if (collapsed)
-            {
-                collapsed = false; Collapse();
-            }
+            pictureHandle.MouseDoubleClick += (sender, e) => this.Hide();
 
             // Apply scale factor
             this.Paint += this_Paint; // paint the border depending on scale factor
@@ -262,9 +255,12 @@ namespace Bubbles
             {
                 StixUtils.SaveStick(this.Bounds, (int)this.Tag, orientation);
             }
-            else if (e.ClickedItem.Name == "BI_collapse")
+            else if (e.ClickedItem.Name == "BI_scale")
             {
-                Collapse();
+                ScaleStickDlg dlg = new ScaleStickDlg(this, StixUtils.typeaddtopic, scaleFactor);
+                dlg.Location =
+                    StixUtils.GetChildLocation(this, dlg.Bounds, orientation, "scale");
+                dlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
         }
 
@@ -357,39 +353,6 @@ namespace Bubbles
                 this.Height -= TopicText.Width * 2;
             }
         }
-
-        /// <summary>
-        /// Collapse/Expand stick
-        /// </summary>
-        /// <param name="CollapseAll">"Collapse All" command from Main Menu</param>
-        /// <param name="ExpandAll">"Expand All" command from Main Menu</param>
-        public void Collapse(bool CollapseAll = false, bool ExpandAll = false)
-        {
-            if (collapsed) // Expand stick
-            {
-                if (CollapseAll) return;
-
-                collapseState = this.Location; // remember collapsed location
-                collapseOrientation = orientation;
-                StixUtils.Expand(this, RealLength, orientation, cmsCommon);
-                collapsed = false;
-            }
-            else // Collapse stick
-            {
-                if (ExpandAll) return;
-
-                StixUtils.Collapse(this, orientation, cmsCommon);
-                collapsed = true;
-
-                if (collapseState.X + collapseState.Y > 0) // ignore initial collapse command
-                {
-                    this.Location = collapseState; // restore collapsed location
-                    if (orientation != collapseOrientation) Rotate();
-                }
-            }
-        }
-        Point collapseState = new Point(0, 0);
-        string collapseOrientation = "N";
 
         private void Manage_Click(object sender, EventArgs e)
         {
@@ -497,7 +460,6 @@ namespace Bubbles
 
         string orientation = "H";
         int RealLength;
-        bool collapsed = false;
         public float scaleFactor = 100;
 
         // For this_MouseDown

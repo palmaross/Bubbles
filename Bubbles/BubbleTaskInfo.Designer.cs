@@ -64,6 +64,7 @@
             this.panelDuration = new System.Windows.Forms.Panel();
             this.cmsTaskTemplates = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsRemoveTaskInfo = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsResources = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsDuration.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
@@ -407,6 +408,12 @@
             this.cmsRemoveTaskInfo.ShowCheckMargin = true;
             this.cmsRemoveTaskInfo.Size = new System.Drawing.Size(83, 4);
             // 
+            // cmsResources
+            // 
+            this.cmsResources.Name = "cmsResources";
+            this.cmsResources.ShowImageMargin = false;
+            this.cmsResources.Size = new System.Drawing.Size(156, 26);
+            // 
             // BubbleTaskInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -490,5 +497,6 @@
         private System.Windows.Forms.ToolStripMenuItem Dates_tomorrow_tomorrow;
         private System.Windows.Forms.ToolStripMenuItem Dates_thisweek;
         private System.Windows.Forms.ContextMenuStrip cmsRemoveTaskInfo;
+        private System.Windows.Forms.ContextMenuStrip cmsResources;
     }
 }

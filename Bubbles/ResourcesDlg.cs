@@ -6,7 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml.Linq;
+using Color = System.Drawing.Color;
 
 namespace Bubbles
 {
@@ -21,13 +21,20 @@ namespace Bubbles
             helpProvider1.SetHelpKeyword(this, "TaskInfoResources.htm");
 
             txtCurrentMap.Text = Utils.getString("ResourcesDlg.dummytext");
+            toolTip1.SetToolTip(txtCurrentMap, Utils.getString("ResourcesDlg.addnewresource.curmap.tooltip"));
             txtCurrentMap.ForeColor = SystemColors.GrayText;
-            txtAllResources.Text = Utils.getString("ResourcesDlg.dummytext");
-            txtAllResources.ForeColor = SystemColors.GrayText;
+            txtNewResourceDB.Text = Utils.getString("ResourcesDlg.dummytext");
+            toolTip1.SetToolTip(txtNewResourceDB, Utils.getString("ResourcesDlg.addnewresource.db.tooltip"));
+            txtNewResourceDB.ForeColor = SystemColors.GrayText;
 
-            toolTip1.SetToolTip(pMore, Utils.getString("ResourcesDlg.pMore"));
             toolTip1.SetToolTip(pHelp, Utils.getString("button.help"));
             toolTip1.SetToolTip(pClose, Utils.getString("button.close"));
+
+            btnRemoveResources.Text = Utils.getString("taskinfo.resources.delete");
+            toolTip1.SetToolTip(btnRemoveResources, Utils.getString("taskinfo.resources.delete.tooltip"));
+            lblCurrentMap.Text = Utils.getString("ResourcesDlg.lblCurrentMap");
+
+            //lblGroupName.Text = Utils.getString("ResourcesDlg.lblGroupName");
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
@@ -35,14 +42,35 @@ namespace Bubbles
 
             thisHeight = this.Height;
 
+            ListDBResources.Columns.Add("", 0, HorizontalAlignment.Left);
+            ListDBResources.HeaderStyle = ColumnHeaderStyle.None;
+            ListDBResources.Columns[0].Width = ListDBResources.Width - 4 - SystemInformation.VerticalScrollBarWidth;
+
+            ListMapResources.Columns.Add("", 0, HorizontalAlignment.Left);
+            ListMapResources.HeaderStyle = ColumnHeaderStyle.None;
+            ListMapResources.Columns[0].Width = ListMapResources.Width - 4 - SystemInformation.VerticalScrollBarWidth;
+
             // Context menu
             cmsResource.ItemClicked += ContextMenu_ItemClicked;
+            cmsMore.ItemClicked += ContextMenu_ItemClicked;
 
             mi_addtotopic.Text = Utils.getString("ResourcesDlg.menuAddToTopic");
+            mi_remove.Text = Utils.getString("ResourcesDlg.menuRemoveFromTopic");
             mi_addtomap.Text = Utils.getString("ResourcesDlg.menuAddToMap");
             mi_addtomap.ToolTipText = Utils.getString("ResourcesDlg.menuAddToMap.tooltip");
             mi_rename.Text = Utils.getString("button.rename");
             mi_delete.Text = Utils.getString("button.delete");
+            mi_color.Text = Utils.getString("bubbleformat.contextmenu.color");
+            mi_copy.Text = Utils.getString("ResourcesDlg.Copy");
+            mi_cut.Text = Utils.getString("ResourcesDlg.Cut");
+
+            mm_new.Text = Utils.getString("ResourcesDlg.NewGroup");
+            mm_rename.Text = Utils.getString("ResourcesDlg.RenameGroup");
+            mm_delete.Text = Utils.getString("ResourcesDlg.DeleteGroup");
+            mm_addtomap.Text = Utils.getString("ResourcesDlg.menuAddToMap");
+            mm_addtomap.ToolTipText = Utils.getString("ResourcesDlg.menuAddToMap.group.tooltip");
+            mm_paste.Text = Utils.getString("ResourcesDlg.Paste");
+            mm_pastefromclipboard.Text = Utils.getString("ResourcesDlg.PasteClipboard");
 
             this.Paint += this_Paint; // paint the border
             this.MinimumSize = new Size(this.Width, this.Height / 2);
@@ -50,11 +78,43 @@ namespace Bubbles
 
             InitCurrentMapResources();
             InitDataBaseResources();
+
+            StixUtils.ActivateMindManager();
+
+            splitContainer.Paint += SplitContainer_Paint;
+            this.ResizeEnd += ResourcesDlg_ResizeEnd;
+        }
+
+        private void ResourcesDlg_ResizeEnd(object sender, EventArgs e)
+        {
+            this.Refresh(); // to reset splitter
+        }
+
+        private void SplitContainer_Paint(object sender, PaintEventArgs e)
+        {
+            SplitContainer s = sender as SplitContainer;
+            s.SplitterWidth = splitter.Height;
+
+            if (s != null)
+            {
+                int gripLineWidth = splitter.Width;
+                // Fill Splitter rectangle
+                e.Graphics.FillRectangle(SystemBrushes.Control,
+                    s.SplitterRectangle.X, s.SplitterDistance, s.SplitterRectangle.Width, s.SplitterWidth);
+                // Draw gripper dots in center
+                Pen _dashedPen = new Pen(Color.Black, splitter.Height / 3);
+                _dashedPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+                e.Graphics.DrawLine(_dashedPen,
+                    (s.SplitterRectangle.Width / 2) - (gripLineWidth / 2),
+                    s.SplitterDistance + s.SplitterWidth / 2,
+                    (s.SplitterRectangle.Width / 2) + (gripLineWidth / 2),
+                    s.SplitterDistance + s.SplitterWidth / 2);
+            }
         }
 
         public void InitCurrentMapResources()
         {
-            ListMapResources.Clear();
+            ListMapResources.Items.Clear();
             MapResources.Clear();
 
             MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
@@ -64,52 +124,130 @@ namespace Bubbles
                 if (color == "#0") color = "";
 
                 ResourceItem item = new ResourceItem(mm.Label, color, 0);
-                MapResources.Add(item);
-            }
 
-            MapResources = MapResources.OrderBy(m => m.Name).ToList();
-            foreach (var item in MapResources)
-            {
-                var res = ListMapResources.Items.Add(item.Name); res.Tag = item;
-                if (item.aColor != "")
-                    res.BackColor = ColorTranslator.FromHtml(item.aColor);
+                var res = ListMapResources.Items.Add(mm.Label); res.Tag = item;
+                if (color != "")
+                {
+                    Color c = ColorTranslator.FromHtml(color);
+                    res.BackColor = c;
+                    int cc = (int)Math.Sqrt(c.R * c.R * .299 + c.G * c.G * .587 + c.B * c.B * .114);
+                    if (cc > 130) res.ForeColor = SystemColors.WindowText;
+                    else res.ForeColor = SystemColors.Window;
+                }
+
+                MapResources.Add(mm.Label, color);
             }
         }
 
         public void InitDataBaseResources()
         {
-            ListDBResources.Clear();
+            ListDBResources.Items.Clear();
+            cbResourceGroup.Items.Clear();
 
             using (StixDB db = new StixDB())
             {
                 // Fill Resource Groups
                 ResourceGroup gitem = new ResourceGroup(0, Utils.getString("ResourcesDlg.allresources"));
-                cbDataBaseResources.Items.Add(gitem);
+                cbResourceGroup.Items.Add(gitem);
 
                 DataTable dt = db.ExecuteQuery("select * from RESOURCEGROUPS order by name");
 
                 foreach (DataRow dr in dt.Rows)
                 {
                     gitem = new ResourceGroup(Convert.ToInt32(dr["id"]), dr["name"].ToString());
-                    cbDataBaseResources.Items.Add(gitem);
+                    cbResourceGroup.Items.Add(gitem);
                 }
 
-                cbDataBaseResources.SelectedIndex = 0;
+                if (cbResourceGroup.Items.Count > 0)
+                    cbResourceGroup.SelectedIndex = 0;
             }
         }
 
         private void ContextMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             ListView lv = selectedList;
+
+            // New group.
+            if (e.ClickedItem.Name == "mm_new")
+            {
+                txtNewResourceDB.BackColor = SystemColors.GradientInactiveCaption;
+                txtNewResourceDB.Text = Utils.getString("ResourcesDlg.group.dummytext");
+                txtNewResourceDB.Font = new Font(txtNewResourceDB.Font, FontStyle.Bold);
+                txtNewResourceDB.ForeColor = SystemColors.GrayText;
+                txtNewResourceDB.Tag = "new";
+                txtNewResourceDB.Enabled = true;
+                btnClose.Visible = true;
+            }
+            // Rename group.
+            else if (e.ClickedItem.Name == "mm_rename")
+            {
+                ResourceGroup g = cbResourceGroup.SelectedItem as ResourceGroup;
+                txtNewResourceDB.BackColor = SystemColors.GradientInactiveCaption;
+                txtNewResourceDB.Text = g.Name + " (2)";
+                txtNewResourceDB.Font = new Font(txtNewResourceDB.Font, FontStyle.Bold);
+                txtNewResourceDB.ForeColor = SystemColors.WindowText;
+                txtNewResourceDB.Tag = "rename";
+                btnClose.Visible = true;
+            }
+            // Delete group.
+            else if (e.ClickedItem.Name == "mm_delete")
+            {
+                ResourceGroup g = cbResourceGroup.SelectedItem as ResourceGroup;
+
+                if (lv.Items.Count == 0 ||
+                    MessageBox.Show(String.Format(Utils.getString("ResourcesDlg.delete.group"), g.Name),
+                    "", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                {
+                    using (StixDB db = new StixDB())
+                    {
+                        db.ExecuteNonQuery("delete from RESOURCES where groupID=" + g.GroupID + "");
+                        db.ExecuteNonQuery("delete from RESOURCEGROUPS where id=" + g.GroupID + "");
+                    }
+
+                    cbResourceGroup.Items.Remove(g);
+                    if (cbResourceGroup.Items.Count > 0) 
+                        cbResourceGroup.SelectedIndex = 0;
+                }
+            }
+            // Add all group's resources to Map Index
+            else if (e.ClickedItem.Name == "mm_addtomap")
+            {
+                Dictionary<string, string> _resources = new Dictionary<string, string>();
+                foreach (ListViewItem item in lv.Items)
+                {
+                    ResourceItem res = item.Tag as ResourceItem;
+                    _resources.Add(res.Name, res.aColor);
+                }
+                AddResourcesToMap(_resources);
+            }
+            // Paste copied resources to map or to group.
+            else if (e.ClickedItem.Name == "mm_paste")
+            {
+                PasteResources(lv);
+            }
+            // Paste from clipboard to map or to group.
+            else if (e.ClickedItem.Name == "mm_pastefromclipboard")
+            {
+                PasteResources(lv, true); return;
+            }
+
             if (lv == null) return;
 
             string[] listResources = new string[lv.SelectedItems.Count];
             for (int i = 0; i < lv.SelectedItems.Count; i++)
                 listResources[i] = lv.SelectedItems[i].Text;
 
+            Dictionary<string, string> resources = new Dictionary<string, string>();
+            foreach (ListViewItem item in lv.SelectedItems)
+            {
+                ResourceItem res = item.Tag as ResourceItem;
+                resources.Add(res.Name, res.aColor);
+            }
+
             // Add selected resources to topic
             if (e.ClickedItem.Name == "mi_addtotopic")
             {
+                AddResourcesToMap(resources);
                 SetResources(listResources, true);
             }
             // Remove selected resources from topic
@@ -134,32 +272,7 @@ namespace Bubbles
             // Add selected resource to Map Index
             else if (e.ClickedItem.Name == "mi_addtomap")
             {
-                MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
-
-                foreach (ListViewItem item in lv.SelectedItems)
-                {
-                    ResourceItem res = item.Tag as ResourceItem;
-
-                    bool found = false;
-                    // Check if Map Resources contain selected resource
-                    foreach (MapMarker mm in mg)
-                    {
-                        if (mm.Label == res.Name)
-                        {
-                            found = true; break; // yes, contain
-                        }
-                    }
-                    if (found) continue;  // yes, contain
-
-                    // Add resource to Map Resources
-                    MapMarker mmm = mg.AddResourceMarker(res.Name);
-                    // Set color
-                    if (res.aColor != "")
-                    {
-                        int i = int.Parse(res.aColor.Substring(1), System.Globalization.NumberStyles.HexNumber);
-                        mmm.Color.SetValue(i);
-                    }
-                }
+                AddResourcesToMap(resources);
             }
             // Rename selected resource
             else if (e.ClickedItem.Name == "mi_rename")
@@ -170,15 +283,13 @@ namespace Bubbles
             // Delete selected resources from map or database
             if (e.ClickedItem.Name == "mi_delete")
             {
-                string message = Utils.getString("ResourcesDlg.delete.map");
-                if (lv == ListDBResources) message = Utils.getString("ResourcesDlg.delete.database");
-
-                if (MessageBox.Show(message, "", MessageBoxButtons.OKCancel, 
-                    MessageBoxIcon.Warning) == DialogResult.Cancel) return;
-
                 // Delete resources from Map Index
                 if (lv == ListMapResources)
                 {
+                    if (MessageBox.Show(Utils.getString("ResourcesDlg.delete.map"), "",
+                        MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                        return;
+
                     MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
                     foreach (MapMarker mm in mg)
                     {
@@ -189,19 +300,29 @@ namespace Bubbles
                 // Delete resources from database
                 else if (lv == ListDBResources)
                 {
-                    int groupID = 0;
+                    DialogResult rc = MessageBox.Show(Utils.getString("ResourcesDlg.delete.map"), "",
+                        MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+                    if (rc == DialogResult.Cancel) return;
+
+                    ResourceGroup g = cbResourceGroup.SelectedItem as ResourceGroup;
+                    int groupID = g.GroupID;
 
                     using (StixDB db = new StixDB())
                     {
                         foreach (string res in listResources)
                         {
-                            db.ExecuteNonQuery("delete from RESOURCES " +
-                                "where name=`" + res + "` and groupID=" + groupID + "");
+                            if (rc == DialogResult.Yes) // delete from database
+                                db.ExecuteNonQuery("delete from RESOURCES " + 
+                                    "where name=`" + res + "`");
+                            else // delete from selected group
+                                db.ExecuteNonQuery("delete from RESOURCES " +
+                                    "where name=`" + res + "` and groupID=" + groupID + "");
                         }
                     }
                 }
 
-                // Remove from list
+                // Remove items from list.
                 foreach (ListViewItem item in lv.SelectedItems)
                     lv.Items.Remove(item);
             }
@@ -212,7 +333,7 @@ namespace Bubbles
                 if (colorDialog1.ShowDialog() == DialogResult.Cancel)
                     return;
 
-                System.Drawing.Color c = colorDialog1.Color;
+                Color c = colorDialog1.Color;
                 string colorHEX = string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", c.A, c.R, c.G, c.B).ToLower();
                 if (colorHEX == "#ffffffff") colorHEX = ""; // white, no color
 
@@ -224,8 +345,18 @@ namespace Bubbles
 
                         if (item.BackColor == c) continue;
 
-                        if (colorHEX == "") item.BackColor = SystemColors.Window;
-                        else item.BackColor = ColorTranslator.FromHtml(colorHEX);
+                        if (colorHEX == "") { 
+                            item.BackColor = SystemColors.Window;
+                            item.ForeColor = SystemColors.WindowText;
+                        }
+                        else {
+                            item.BackColor = ColorTranslator.FromHtml(colorHEX);
+                            int cc = (int)Math.Sqrt(c.R * c.R * .299 + c.G * c.G * .587 + c.B * c.B * .114);
+                            if (cc > 130) item.ForeColor = SystemColors.WindowText;
+                            else item.ForeColor = SystemColors.Window;
+                        }
+
+                        ri.aColor = colorHEX; item.Tag = ri;
 
                         // Change resource color in the Map Index
                         if (lv == ListMapResources)
@@ -260,10 +391,33 @@ namespace Bubbles
             {
                 CopyCutResources(lv, e.ClickedItem.Name == "mi_cut");
             }
-            // Paste selected resource
-            else if (e.ClickedItem.Name == "mi_paste")
+        }
+
+        void AddResourcesToMap(Dictionary<string, string> resources)
+        {
+            MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
+
+            foreach (var res in resources)
             {
-                PasteResources(lv);
+                bool found = false;
+                // Check if Map Resources contain selected resource
+                foreach (MapMarker mm in mg)
+                {
+                    if (mm.Label == res.Key)
+                    {
+                        found = true; break; // yes, contain
+                    }
+                }
+                if (found) continue;  // yes, contain
+
+                // Add resource to Map Resources
+                MapMarker mmm = mg.AddResourceMarker(res.Key);
+                // Set color
+                if (res.Value != "")
+                {
+                    int i = int.Parse(res.Value.Substring(1), System.Globalization.NumberStyles.HexNumber);
+                    mmm.Color.SetValue(i);
+                }
             }
         }
 
@@ -279,10 +433,7 @@ namespace Bubbles
                 CopiedResources.Add(res);
                 resources += res.Name + "\r\n";
 
-                if (cut)
-                {
-                    item.Remove();
-                }
+                if (cut) item.Remove();
             }
 
             resources = resources.TrimEnd('\r', '\n');
@@ -292,126 +443,121 @@ namespace Bubbles
             MMUtils.MindManager.NotificationsDialog.ShowNotification("", message, MmNotificationsDialogOptions.mmNotificationsDialogOptionsAutoClose);
         }
 
-        void PasteResources(ListView lv)
+        void PasteResources(ListView lv, bool clipboard = false)
         {
-            foreach (var item in CopiedResources)
-            {
+            string show = "", group = ""; int groupID = 0;
+            List<ResourceItem> resources = new List<ResourceItem>();
 
+            if (clipboard)
+            {
+                string text = System.Windows.Forms.Clipboard.GetText().Trim();
+                if (text == "") {
+                    MessageBox.Show(Utils.getString("pasteresources.clipboard.empty")); return; }
+
+                string[] parts = text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string part in parts)
+                {
+                    string[] pparts = part.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToArray();
+                    foreach (var res in pparts)
+                    {
+                        if (res.Length > 40) // It's too long for resource. Clipboard no valid
+                        {
+                            MessageBox.Show(Utils.getString("pasteresources.clipboard.notvalid")); return;
+                        }
+
+                        show += "\r\n" + res;
+                        resources.Add(new ResourceItem(res, "", 0));
+                    }
+                }
+            }
+            else // paste copied resources
+            {
+                if (CopiedResources.Count == 0) return;
+
+                foreach (var res in CopiedResources) show += "\r\n" + res.Name;
+                resources.AddRange(CopiedResources);
+            }
+
+            string where = Utils.getString("pasteresources.preview.curmap");
+            if (lv == ListDBResources)
+            {
+                ResourceGroup item = cbResourceGroup.SelectedItem as ResourceGroup;
+                if (item.GroupID == 0)  {
+                    MessageBox.Show(Utils.getString("pasteresources.group.error")); return;
+                }
+
+                groupID = item.GroupID; group = item.Name;
+                where = String.Format(Utils.getString("pasteresources.preview.group"), group);
+            }
+
+            if (MessageBox.Show(String.Format(Utils.getString("pasteresources.preview"),where, show),
+                Utils.getString("pasteresources.clipboard.title"),
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                using (StixDB db = new StixDB())
+                {
+                    foreach (var res in resources)
+                    {
+                        if (lv == ListMapResources)
+                        {
+                            MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
+
+                            bool found = false;
+                            // Check if Map Resources contain selected resource
+                            foreach (MapMarker mm in mg)
+                            {
+                                if (mm.Label == res.Name)
+                                {
+                                    found = true; break; // yes, contain
+                                }
+                            }
+                            if (found) continue;  // yes, contain
+
+                            // Add resource to Map Resources
+                            MapMarker mmm = mg.AddResourceMarker(res.Name);
+                            // Set color
+                            if (res.aColor != "")
+                            {
+                                int i = int.Parse(res.aColor.Substring(1), System.Globalization.NumberStyles.HexNumber);
+                                mmm.Color.SetValue(i);
+                            }
+                        }
+                        else // Paste to selected group
+                        {
+                            // Add to database
+                            DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
+                                "where name=`" + res.Name + "` and groupID=" + groupID + "");
+
+                            if (dt.Rows.Count == 0)
+                                db.AddResource(res.Name, res.aColor, groupID);
+
+                            // Add to list
+                            bool found = false;
+                            foreach (ListViewItem item in ListDBResources.Items)
+                                if (item.Text == res.Name) found = true;
+                            if (found) continue;
+
+                            ListViewItem lvi = ListDBResources.Items.Add(res.Name);
+                            res.GroupID = groupID; lvi.Tag = res;
+
+                            if (res.aColor != "")
+                            {
+                                Color c = ColorTranslator.FromHtml(res.aColor);
+                                lvi.BackColor = c;
+
+                                int cc = (int)Math.Sqrt(c.R * c.R * .299 + c.G * c.G * .587 + c.B * c.B * .114);
+                                if (cc > 130) lvi.ForeColor = SystemColors.WindowText;
+                                else lvi.ForeColor = SystemColors.Window;
+                            }
+                        }
+                    }
+                }
             }
         }
-
 
         private void this_Paint(object sender, PaintEventArgs e)
         {
-            ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle, System.Drawing.Color.Black, ButtonBorderStyle.Solid);
-        }
-
-        private void NewResource(string name)
-        {
-            ListViewItem lvi; ResourceItem item;
-
-            using (StixDB db = new StixDB())
-            {
-                DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
-                    "where name=`" + name + "`");
-
-                if (dt.Rows.Count > 0)
-                {
-                    MessageBox.Show(Utils.getString("ResourcesDlg.resourceexists"), "",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                db.AddResource(name, "", 0);
-
-                item = new ResourceItem(name, "", 0);
-
-                lvi = ListDBResources.Items.Add(item.Name);
-
-                lvi.Tag = item;
-            }
-
-            SortResources();
-            lvi = FindResource(name);
-            ListDBResources.Select();
-            if (lvi != null) {
-                lvi.Selected = true; selectedItem = lvi; }
-        }
-
-        private void EditResource()
-        {
-            string name = txtCurrentMap.Text.Trim();
-            if (String.IsNullOrEmpty(name)) return;
-
-            if (ListDBResources.SelectedItems.Count > 1)
-                return;
-
-            ListViewItem lvi = selectedItem; 
-            ResourceItem item = lvi.Tag as ResourceItem;
-            string oldName = item.Name;
-
-            using (StixDB db = new StixDB())
-            {
-                DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
-                    "where name=`" + name + "`");
-
-                if (dt.Rows.Count > 0)
-                {
-                    MessageBox.Show(Utils.getString("ResourcesDlg.resourceexists"), "",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                // Update resource in the database
-                db.ExecuteNonQuery("update RESOURCES set name=`" + name +
-                    "` where name=`" + oldName + "`");
-            }
-
-            foreach (ListViewItem _item in ListDBResources.Items)
-            {
-                ResourceItem __item = _item.Tag as ResourceItem;
-                if (__item.Name == oldName)
-                {
-                    __item.Name = name; _item.Tag = __item; _item.Text = name;
-                }
-            }
-
-            //item.Name = name;
-            //lvi.Tag = item;
-            //lvi.Text = name;
-            txtCurrentMap.Visible = false;
-            SortResources();
-
-            lvi = FindResource(name);
-            ListDBResources.Select();
-            if (lvi != null) {
-                lvi.Selected = true; lvi.EnsureVisible(); selectedItem = lvi; }
-        }
-
-        ListViewItem FindResource(string name)
-        {
-            foreach (ListViewItem resource in ListDBResources.Items)
-            {
-                ResourceItem item = resource.Tag as ResourceItem;
-                if (item.Name == name)
-                    return resource;
-            }
-            return null;
-        }
-
-        private void SortResources()
-        {
-            List<ResourceItem> items = new List<ResourceItem>();
-            foreach (ListViewItem item in ListDBResources.Items)
-                items.Add(item.Tag as ResourceItem);
-
-            items = items.OrderBy(x => x.Name).ToList();
-
-            ListDBResources.Items.Clear();
-            foreach (var item in items)
-            {
-                ListDBResources.Items.Add(item.Name).Tag = item;
-            }
+            ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle, Color.Black, ButtonBorderStyle.Solid);
         }
 
         private void pHelp_Click(object sender, EventArgs e)
@@ -437,8 +583,19 @@ namespace Bubbles
                     lv.SelectedItems[0] == null)
                     return;
 
-                string[] listResources = new string[] { lv.SelectedItems[0].Text };
-                SetResources(listResources);
+                if (MMUtils.ActiveDocument.Selection.PrimaryTopic != null)
+                {
+                    Dictionary<string, string> resources = new Dictionary<string, string>();
+                    foreach (ListViewItem item in lv.SelectedItems)
+                    {
+                        ResourceItem res = item.Tag as ResourceItem;
+                        resources.Add(res.Name, res.aColor);
+                    }
+                    AddResourcesToMap(resources);
+
+                    string[] listResources = new string[] { lv.SelectedItems[0].Text };
+                    SetResources(listResources);
+                }
             }
             else if (e.Button == MouseButtons.Right) // ContextMenu
             {
@@ -447,7 +604,7 @@ namespace Bubbles
                     foreach (ToolStripItem item in cmsResource.Items)
                         item.Visible = false;
 
-                    mi_paste.Visible = true;
+                    mm_paste.Visible = true;
                     cmsResource.Show(Cursor.Position);
                     return;
                 }
@@ -470,8 +627,19 @@ namespace Bubbles
                 if (lv == ListMapResources)
                 {
                     mi_addtomap.Visible = false;
-                    mi_copy.Visible = false;
+                    mi_cut.Visible = false;
                 }
+                else if (lv == ListDBResources)
+                {
+                    ResourceGroup rg = cbResourceGroup.SelectedItem as ResourceGroup;
+                    if (rg.GroupID == 0)
+                    {
+                        mi_delete.Visible = false;
+                        mi_cut.Visible = false;
+                        mi_color.Visible = false;
+                    }
+                }
+
                 if (lv.SelectedItems.Count > 1)
                     mi_rename.Visible = false;
 
@@ -537,22 +705,21 @@ namespace Bubbles
             }
         }
 
+        /// <summary>
+        /// Add selected resources to topic and to map
+        /// </summary>
+        /// <param name="listResources">Resources to add. Name and color</param>
+        /// <param name="addforced">if command is from context menu</param>
         private void SetResources(string[] listResources, bool addforced = false)
         {
             if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
                 return;
 
+            // Get string for replace
             string resources = "";
             foreach (string res in listResources)
                 resources += res + ",";
             resources = resources.TrimEnd(',');
-
-            if (cbReplaceResources.Checked)
-            {
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                    t.Task.Resources = resources;
-                return;
-            }
 
             string listResource = listResources[0];
 
@@ -601,12 +768,86 @@ namespace Bubbles
         /// </summary>
         private void txtResources_KeyDown(object sender, KeyEventArgs e)
         {
+            TextBox tb = sender as TextBox;
+
             if (e.KeyCode == Keys.Enter)
             {
-                ResourceEnter_Click(sender, null);
+                // New Resource add to topics and map.
+                if (tb.Tag.ToString() == "resource")
+                {
+                    ResourceEnter_Click(sender, null);
+                }
+                // New Group add. Or rename group.
+                else
+                {
+                    if (tb.Tag.ToString() == "new")
+                    {
+                        ResourceGroup item;
+
+                        string newName = txtNewResourceDB.Text.Trim();
+                        if (newName == "") return;
+
+                        if (cbResourceGroup.Items.Count > 0)
+                        {
+                            if (cbResourceGroup.SelectedItem != null)
+                            {
+                                item = cbResourceGroup.SelectedItem as ResourceGroup;
+                                if (newName == item.Name) return;
+                            }
+                        }
+
+                        using (StixDB db = new StixDB())
+                        {
+                            DataTable dt = db.ExecuteQuery("select from RESOURCEGROUPS where name=`" + newName + "`");
+                            if (dt.Rows.Count > 0)
+                            {
+                                MessageBox.Show(Utils.getString("ResourcesDlg.groupexists")); return;
+                            }
+                            db.AddResourceGroup(newName);
+                        }
+
+                        // Close group mode of the txtNewResourceDB.
+                        btnClose_Click(null, null);
+
+                        // Reinit combobox and select new group.
+                        InitDataBaseResources();
+                        cbResourceGroup.SelectedIndex = cbResourceGroup.FindStringExact(newName);
+                    }
+                    else if (tb.Tag.ToString() == "rename")
+                    {
+                        ResourceGroup g = cbResourceGroup.SelectedItem as ResourceGroup;
+
+                        string newName = txtNewResourceDB.Text.Trim();
+                        if (newName == "" || newName == g.Name) return;
+
+                        using (StixDB db = new StixDB())
+                        {
+                            DataTable dt = db.ExecuteQuery("select * from RESOURCEGROUPS where name=`" + newName + "`");
+                            if (dt.Rows.Count > 0)
+                            {
+                                MessageBox.Show(Utils.getString("ResourcesDlg.groupexists"));
+                                txtNewResourceDB.Text = g.Name + " (2)";
+                                return;
+                            }
+
+                            db.ExecuteNonQuery("update RESOURCEGROUPS set name=`" + newName + "` where id=" + g.GroupID + "");
+                        }
+
+                        // Close group mode of the txtNewResourceDB.
+                        btnClose_Click(null, null);
+
+                        // Reinit combobox and select renamed group.
+                        InitDataBaseResources();
+                        cbResourceGroup.SelectedIndex = cbResourceGroup.FindStringExact(newName);
+                    }
+                }
 
                 e.Handled = true; // to avoid the "ding" sound
                 e.SuppressKeyPress = true;
+            }
+            if (e.KeyCode == Keys.Escape)
+            {
+                
             }
         }
 
@@ -622,46 +863,105 @@ namespace Bubbles
 
             string[] resources = _resources.Split(',').Select(x => x.Trim()).ToArray();
 
-            if ((string)txtCurrentMap.Tag == "newresource") // add new resource(s) to the database
+            if (tb == txtNewResourceDB) // add new resource(s) to the database
             {
-                if (resources.Length > 1)
-                {
-                    MessageBox.Show(Utils.getString("ResourcesDlg.onlyoneresource"), "",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                NewResource(_resources);
+                ResourceGroup group = cbResourceGroup.SelectedItem as ResourceGroup;
+
+                foreach (string res in resources)
+                    NewResource(res, group.GroupID);
+
+                tb.Text = "";
             }
-            else if (MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0)
+            else // Add to the topic and to the Map Index
             {
-                // Assign resource(s) to topic(s)
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                // Add to topics
+                if (MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0)
                 {
-                    string[] topicResources = t.Task.Resources.Split(',').Select(x => x.Trim()).ToArray();
-                    string[] newResources = topicResources.Union(resources).ToArray();
+                    // Assign resource(s) to topic(s)
+                    foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                    {
+                        string[] topicResources = t.Task.Resources.Split(',').Select(x => x.Trim()).ToArray();
+                        string[] newResources = topicResources.Union(resources).ToArray();
 
-                    string result = "";
-                    foreach (string res in newResources)
-                        result += res + ",";
-                    result = result.TrimEnd(',');
+                        string result = "";
+                        foreach (string res in newResources)
+                            result += res + ",";
+                        result = result.TrimEnd(',');
 
-                    t.Task.Resources = result;
+                        t.Task.Resources = result;
+                    }
+                }
+
+                // Add to Map Index
+                MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
+                foreach (string res in resources)
+                {
+                    bool found = false;
+                    foreach (MapMarker mm in mg)
+                        if (mm.Label == res) found = true;
+
+                    if (!found)
+                        mg.AddResourceMarker(res);
+                }
+
+                tb.Text = "";
+
+                // Add resource to the list
+                foreach (string res in resources)
+                {
+                    bool found = false;
+                    foreach (ListViewItem resource in ListMapResources.Items)
+                    {
+                        if (resource.Text == res)
+                        {
+                            found = true; break;
+                        }
+                    }
+                    if (!found)
+                        ListMapResources.Items.Add(res);
                 }
             }
         }
 
-        private void txtRename_KeyDown(object sender, KeyEventArgs e)
+        private void NewResource(string name, int groupID)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-                EditResource();
+            ListViewItem lvi; ResourceItem item;
 
-                e.Handled = true; // to avoid the "ding" sound
-                e.SuppressKeyPress = true;
+            using (StixDB db = new StixDB())
+            {
+                DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
+                    "where name=`" + name + "` and groupID=" + groupID + "");
+
+                if (dt.Rows.Count > 0) return;
+
+                db.AddResource(name, "", groupID);
+
+                item = new ResourceItem(name, "", groupID);
+
+                lvi = ListDBResources.Items.Add(item.Name);
+                lvi.Tag = item;
             }
         }
 
-        List<ResourceItem> MapResources = new List<ResourceItem>();
+        #region Manage Groups
+
+        /// <summary>
+        /// Toggle txtNewResourceDB to resource mode.
+        /// </summary>
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            txtNewResourceDB.BackColor = Color.White;
+            txtNewResourceDB.Text = Utils.getString("ResourcesDlg.dummytext");
+            toolTip1.SetToolTip(txtNewResourceDB, Utils.getString("ResourcesDlg.addnewresource.db.tooltip"));
+            txtNewResourceDB.ForeColor = SystemColors.GrayText;
+            txtNewResourceDB.Font = new Font(txtNewResourceDB.Font, FontStyle.Regular);
+            btnClose.Visible = false;
+            txtNewResourceDB.Tag = "resource";
+        }
+
+        #endregion
+
+        public Dictionary<string, string> MapResources = new Dictionary<string, string>();
         List<ResourceItem> CopiedResources = new List<ResourceItem>();
 
         ListViewItem selectedItem = null;
@@ -740,22 +1040,29 @@ namespace Bubbles
         }
         #endregion
 
-        private void txtNewResource_Leave(object sender, EventArgs e)
+        private void txtResources_Leave(object sender, EventArgs e)
         {
             TextBox tb = sender as TextBox;
 
-            if (tb.Text.Trim() == "")
+            if (tb.Tag.ToString() == "resource")
             {
-                tb.Text = Utils.getString("ResourcesDlg.dummytext");
-                tb.ForeColor = SystemColors.GrayText;
+                if (tb.Text.Trim() == "")
+                {
+                    tb.Text = Utils.getString("ResourcesDlg.dummytext");
+                    tb.ForeColor = SystemColors.GrayText;
+                }
+            }
+            else
+            {
+                btnClose_Click(null, null);
             }
         }
 
-        private void txtAllResources_Enter(object sender, EventArgs e)
+        private void txtResources_Enter(object sender, EventArgs e)
         {
             TextBox tb = sender as TextBox;
 
-            if (tb.ForeColor == SystemColors.GrayText)
+            if (tb.Tag.ToString() != "rename" && tb.ForeColor == SystemColors.GrayText)
             {
                 tb.Text = "";
                 tb.ForeColor = SystemColors.WindowText;
@@ -805,7 +1112,7 @@ namespace Bubbles
                 using (StixDB db = new StixDB())
                 {
                     DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
-                        "where name=`" + newName + "` and groupID=" + res.GroupID);
+                        "where name=`" + newName + "`");
 
                     if (dt.Rows.Count > 0)
                     {
@@ -817,7 +1124,7 @@ namespace Bubbles
                     res.Name = newName; lv.SelectedItems[0].Tag = res;
 
                     db.ExecuteNonQuery("update RESOURCES set name=`" + newName +
-                        "` where name=`" + oldName + "` and groupID=" + res.GroupID);
+                        "` where name=`" + oldName + "`");
                 }
             }
         }
@@ -839,9 +1146,9 @@ namespace Bubbles
 
         private void cbDataBaseResources_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ListDBResources.Clear();
+            ListDBResources.Items.Clear();
 
-            ResourceGroup group = cbDataBaseResources.SelectedItem as ResourceGroup;
+            ResourceGroup group = cbResourceGroup.SelectedItem as ResourceGroup;
 
             using (StixDB db = new StixDB())
             {
@@ -855,12 +1162,89 @@ namespace Bubbles
                 {
                     ResourceItem res = new ResourceItem(
                         dr["name"].ToString(), dr["color"].ToString(), Convert.ToInt32(dr["groupID"]));
-                    
+
+                    if (ResourceExists(res)) continue;
+
                     var lvi = ListDBResources.Items.Add(res.Name); lvi.Tag = res;
                     if (res.aColor != "")
-                        lvi.BackColor = ColorTranslator.FromHtml(res.aColor);
+                    {
+                        Color c = ColorTranslator.FromHtml(res.aColor);
+                        lvi.BackColor = c;
+                        int cc = (int)Math.Sqrt(c.R * c.R * .299 + c.G * c.G * .587 + c.B * c.B * .114);
+                        if (cc > 130) lvi.ForeColor = SystemColors.WindowText;
+                        else lvi.ForeColor = SystemColors.Window;
+                    }
                 }
             }
+
+            if (group.GroupID == 0 && txtNewResourceDB.Tag.ToString() == "resource")
+                txtNewResourceDB.Enabled = false;
+            else
+                txtNewResourceDB.Enabled = true;
+        }
+
+        bool ResourceExists(ResourceItem res)
+        {
+            foreach (ListViewItem item in ListDBResources.Items)
+            {
+                ResourceItem ri = item.Tag as ResourceItem;
+                if (ri.Name == res.Name && ri.aColor == res.aColor)
+                    return true;
+            }
+            return false;
+        }
+
+        private void btnRemoveResources_Click(object sender, EventArgs e)
+        {
+            if (MMUtils.ActiveDocument == null ||
+                    MMUtils.ActiveDocument.Selection.PrimaryTopic == null)
+                return;
+
+            foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+            {
+                t.Task.Resources = "";
+            }
+        }
+
+        private void cbResourceGroup_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                selectedList = ListDBResources;
+                ResourceGroup g = cbResourceGroup.SelectedItem as ResourceGroup;
+
+                foreach (ToolStripItem item in cmsMore.Items)
+                    item.Visible = false;
+
+                if (g.GroupID == 0)
+                {
+                    mm_new.Visible = true;
+                }
+                else
+                {
+                    foreach (ToolStripItem item in cmsMore.Items)
+                        item.Visible = true;
+                    mm_pastefromclipboard.ToolTipText = Utils.getString("ResourcesDlg.PasteToGroup.tooltip");
+                }
+
+                cmsMore.Show(Cursor.Position);
+                return;
+            }
+        }
+
+        private void lblCurrentMap_MouseClick(object sender, MouseEventArgs e)
+        {
+            selectedList = ListMapResources;
+
+            foreach (ToolStripItem item in cmsMore.Items)
+                item.Visible = false;
+
+            mm_paste.Visible = true;
+            mm_pastefromclipboard.Visible = true;
+            mm_pastefromclipboard.ToolTipText = Utils.getString("ResourcesDlg.PasteToMap.tooltip");
+
+            cmsMore.Show(Cursor.Position);
+            return;
         }
     }
 

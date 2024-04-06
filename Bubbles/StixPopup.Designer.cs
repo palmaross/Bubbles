@@ -189,7 +189,6 @@
             this.pCollapse.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pCollapse.TabIndex = 1;
             this.pCollapse.TabStop = false;
-            this.pCollapse.Click += new System.EventHandler(this.pCollapse_Click);
             // 
             // toolTip1
             // 

@@ -82,12 +82,6 @@
     <Compile Include="AddTopicTemplateDlg.Designer.cs">
       <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="AlignStixDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AlignStixDlg.Designer.cs">
-      <DependentUpon>AlignStixDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="AppManager\AlfaChanges.cs" />
     <Compile Include="AppManager\StixDB.cs" />
     <Compile Include="AppManager\SticksMoreDB.cs" />
@@ -104,12 +98,6 @@
     <Compile Include="BubbleOrganizer.Designer.cs">
       <DependentUpon>BubbleOrganizer.cs</DependentUpon>
     </Compile>
-    <Compile Include="BulkOperationsDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BulkOperationsDlg.Designer.cs">
-      <DependentUpon>BulkOperationsDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="DragDropTest.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,12 +111,6 @@
       <DependentUpon>BookmarkListDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="MapMarkers.cs" />
-    <Compile Include="MMOutToogle.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MMOutToogle.Designer.cs">
-      <DependentUpon>MMOutToogle.cs</DependentUpon>
-    </Compile>
     <Compile Include="MyDateTimePicker.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -161,6 +143,12 @@
     </Compile>
     <Compile Include="OmniButton.Designer.cs">
       <DependentUpon>OmniButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ScaleStickDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ScaleStickDlg.Designer.cs">
+      <DependentUpon>ScaleStickDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="StixBase.cs">
       <SubType>Form</SubType>
@@ -205,12 +193,6 @@
     </Compile>
     <Compile Include="BubbleIcons.Designer.cs">
       <DependentUpon>BubbleIcons.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MainMenuDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainMenuDlg.Designer.cs">
-      <DependentUpon>MainMenuDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Organizer\ManageNoteGroups.cs">
       <SubType>UserControl</SubType>
@@ -845,26 +827,17 @@
     <EmbeddedResource Include="AddTopicTemplateDlg.resx">
       <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AlignStixDlg.resx">
-      <DependentUpon>AlignStixDlg.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="BubbleAddTopic.resx">
       <DependentUpon>BubbleAddTopic.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BubbleOrganizer.resx">
       <DependentUpon>BubbleOrganizer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BulkOperationsDlg.resx">
-      <DependentUpon>BulkOperationsDlg.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="DragDropTest.resx">
       <DependentUpon>DragDropTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BookmarkListDlg.resx">
       <DependentUpon>BookmarkListDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MMOutToogle.resx">
-      <DependentUpon>MMOutToogle.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MyDateTimePicker.resx">
       <DependentUpon>MyDateTimePicker.cs</DependentUpon>
@@ -890,6 +863,9 @@
     <EmbeddedResource Include="OmniButton.resx">
       <DependentUpon>OmniButton.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ScaleStickDlg.resx">
+      <DependentUpon>ScaleStickDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SourceListDlg.resx">
       <DependentUpon>SourceListDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -898,9 +874,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="BubbleIcons.resx">
       <DependentUpon>BubbleIcons.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainMenuDlg.resx">
-      <DependentUpon>MainMenuDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Organizer\ManageNoteGroups.resx">
       <DependentUpon>ManageNoteGroups.cs</DependentUpon>
