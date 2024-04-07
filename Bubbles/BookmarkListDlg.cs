@@ -14,12 +14,26 @@ namespace Bubbles
         {
             InitializeComponent();
 
-            toolTip1.SetToolTip(btnAdd, Utils.getString("bookmarks.contextmenu.add"));
-            toolTip1.SetToolTip(btnDelete, Utils.getString("bookmarks.contextmenu.delete"));
-            toolTip1.SetToolTip(pAddMain, Utils.getString("bookmarks.contextmenu.maintopics"));
-            toolTip1.SetToolTip(pDeleteMain, Utils.getString("bookmarks.contextmenu.deletemaintopics"));
-            toolTip1.SetToolTip(btnDeleteAll, Utils.getString("bookmarks.contextmenu.deleteall"));
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
+            helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
+            helpProvider1.SetHelpKeyword(this, "BookmarksStick.htm");
+
+            toolTip1.SetToolTip(btnAdd, Utils.getString("bookmarks.contextmenu.add.tooltip"));
             toolTip1.SetToolTip(btnClose, Utils.getString("button.close"));
+            toolTip1.SetToolTip(btnHelp, Utils.getString("button.help"));
+
+            b_deleteall.Text = Utils.getString("bookmarks.contextmenu.deleteall");
+            b_deleteall.ToolTipText = Utils.getString("bookmarks.contextmenu.deleteall.tooltip");
+
+            b_delete.Text = Utils.getString("bookmarks.contextmenu.delete");
+
+            b_main.Text = Utils.getString("bookmarks.contextmenu.maintopics");
+            b_main.ToolTipText = Utils.getString("bookmarks.contextmenu.maintopics.tooltip");
+
+            b_removemain.Text = Utils.getString("bookmarks.contextmenu.deletemaintopics");
+            b_removemain.ToolTipText = Utils.getString("bookmarks.contextmenu.deletemaintopics.tooltip");
+
+            cmsMore.ItemClicked += CmsMore_ItemClicked;
 
             // ListBox item context menu
             ToolStripMenuItem contextMenuItemDelete = new ToolStripMenuItem { Text = Utils.getString("button.delete") };
@@ -39,6 +53,69 @@ namespace Bubbles
             listBookmarks.MouseClick += ListBookmarks_MouseClick;
 
             this.Paint += BookmarkListDlg_Paint; // paint the border
+
+            listBookmarks.Resize += ListBookmarks_Resize;
+        }
+
+        private void ListBookmarks_Resize(object sender, EventArgs e)
+        {
+            this.Refresh();
+        }
+
+        private void CmsMore_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem == b_main)
+            {
+                if (MMUtils.ActiveDocument == null) return;
+
+                foreach (Topic t in MMUtils.ActiveDocument.CentralTopic.AllSubTopics)
+                    t.GetAttributes(ATTR_NAMESPACE).SetAttributeValue(ATTR_BOOKMARKED, "1");
+
+                if (BubbleBookmarks.BookmarkedDocuments.ContainsKey(MMUtils.ActiveDocument))
+                    BubbleBookmarks.BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
+
+                Init(false);
+            }
+            else if (e.ClickedItem == b_removemain)
+            {
+                if (MMUtils.ActiveDocument == null) return;
+
+                foreach (Topic t in MMUtils.ActiveDocument.CentralTopic.AllSubTopics)
+                    t.GetAttributes(ATTR_NAMESPACE).DeleteAll();
+                BubbleBookmarks.BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
+
+                Init(false);
+            }
+            else if (e.ClickedItem == b_delete)
+            {
+                btnDelete_Click();
+            }
+            else if (e.ClickedItem == b_deleteall)
+            {
+                if (MMUtils.ActiveDocument == null) return;
+
+                if (BubbleBookmarks.BookmarkedDocuments.Keys.Contains(MMUtils.ActiveDocument))
+                {
+                    Topic t;
+                    foreach (BookmarkItem item in BubbleBookmarks.BookmarkedDocuments[MMUtils.ActiveDocument])
+                    {
+                        t = MMUtils.ActiveDocument.FindByGuid(item.TopicGuid) as Topic;
+                        if (t != null)
+                            t.GetAttributes(ATTR_NAMESPACE).DeleteAll();
+                    }
+                    t = null;
+                    BubbleBookmarks.BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
+                }
+                else
+                {
+                    foreach (Topic t in MMUtils.ActiveDocument.Range(MmRange.mmRangeAllTopics))
+                    {
+                        if (t.ContainsAttributesNamespace(ATTR_NAMESPACE))
+                            t.GetAttributes(ATTR_NAMESPACE).DeleteAll();
+                    }
+                }
+                Init(false, true);
+            }
         }
 
         private void BookmarkListDlg_Paint(object sender, PaintEventArgs e)
@@ -54,7 +131,7 @@ namespace Bubbles
             if (MMUtils.ActiveDocument == null) return;
 
             Topic cTopic = MMUtils.ActiveDocument.CentralTopic;
-            listBookmarks.Items.Add(new BookmarkItem(cTopic.Text.Trim(), cTopic.Guid));
+            listBookmarks.Items.Add(new BookmarkItem(cTopic.Text.Trim(), cTopic.Guid, ""));
             cTopic = null;
 
             if (deleteall)
@@ -97,12 +174,25 @@ namespace Bubbles
         {
             if (_t.GetAttributes(ATTR_NAMESPACE).HasAttribute(ATTR_BOOKMARKED))
             {
-                BookmarkItem item = new BookmarkItem(_t.Text.Trim(), _t.Guid, _t.IsMainTopic, _t.IsFloatingTopic);
+                string topictype =
+                    _t.IsCentralTopic ? Central :
+                    _t.IsMainTopic ? Main :
+                    _t.IsFloatingTopic ? Float : Normal;
+
+                BookmarkItem item = new BookmarkItem(_t.Text.Trim(), _t.Guid, topictype);
                 BubbleBookmarks.Bookmarks.Add(item);
                 listBookmarks.Items.Add(item);
             }
             foreach (Topic t in _t.AllSubTopics)
                 LoadFromMapRecursive(t);
+        }
+
+        private void btnMore_Click(object sender, EventArgs e)
+        {
+            foreach (ToolStripItem item in cmsMore.Items)
+                item.Visible = true;
+
+            cmsMore.Show(Cursor.Position);
         }
 
         /// <summary>
@@ -136,8 +226,17 @@ namespace Bubbles
             }
 
             BookmarkItem item = (BookmarkItem)listBookmarks.SelectedItem;
+            if (item == null) return;
+
             Topic t = MMUtils.ActiveDocument.FindByGuid(item.TopicGuid) as Topic;
-            if (t != null)
+            if (t == null)
+            {
+                MessageBox.Show(Utils.getString("bookmarks.topic.noexists"), "",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                listBookmarks.Items.Remove(listBookmarks.SelectedItem);
+            }
+            else
             {
                 if (!t.IsSelected)
                 {
@@ -174,7 +273,7 @@ namespace Bubbles
         }
 
         // Delete selected in this dialog bookmark
-        private void btnDelete_Click(object sender, EventArgs e)
+        private void btnDelete_Click()
         {
             if (listBookmarks.SelectedItem == null) return;
 
@@ -223,30 +322,6 @@ namespace Bubbles
             Init(false, true);
         }
 
-        private void pAddMain_Click(object sender, EventArgs e)
-        {
-            if (MMUtils.ActiveDocument == null) return;
-
-            foreach (Topic t in MMUtils.ActiveDocument.CentralTopic.AllSubTopics)
-                t.GetAttributes(ATTR_NAMESPACE).SetAttributeValue(ATTR_BOOKMARKED, "1");
-
-            if (BubbleBookmarks.BookmarkedDocuments.ContainsKey(MMUtils.ActiveDocument))
-                BubbleBookmarks.BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
-
-            Init(false);
-        }
-
-        private void pDeleteMain_Click(object sender, EventArgs e)
-        {
-            if (MMUtils.ActiveDocument == null) return;
-
-            foreach (Topic t in MMUtils.ActiveDocument.CentralTopic.AllSubTopics)
-                t.GetAttributes(ATTR_NAMESPACE).DeleteAll();
-            BubbleBookmarks.BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
-
-            Init(false);
-        }
-
         private void btnClose_Click(object sender, EventArgs e)
         {
             StixButton.m_BookmarkList = null;
@@ -286,12 +361,12 @@ namespace Bubbles
         // Click on the "Delete" command in the item context menu = remove this bookmark from map topic
         private void toolStripMenuItemDelete_Click(object sender, EventArgs e)
         {
-            btnDelete_Click(null, null);
+            btnDelete_Click();
         }
 
         private void btnHelp_Click(object sender, EventArgs e)
         {
-            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "bookmarks_express.htm");
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "BookmarksStick.htm");
         }
 
         private void listBox_MouseMove(object sender, MouseEventArgs e)
@@ -319,21 +394,26 @@ namespace Bubbles
 
             if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                 e = new DrawItemEventArgs(e.Graphics, e.Font, e.Bounds, e.Index,
-                                          e.State ^ DrawItemState.Selected, e.ForeColor,
-                                          System.Drawing.Color.Lavender); // selected item color
+                                e.State ^ DrawItemState.Selected, e.ForeColor,
+                                System.Drawing.Color.Lavender); // selected item color
 
             e.DrawBackground();
             listBookmarks.ItemHeight = listBookmarks.Font.Height;
+            Font central = new Font(listBookmarks.Font, FontStyle.Bold);
 
             if (e.Index < 0) return;
             BookmarkItem _data = listBookmarks.Items[e.Index] as BookmarkItem;
 
-            if (_data.MainTopic)
+            if (_data.TopicType == "")
+                e.Graphics.DrawString(_data.TopicName, central, Brushes.Black, e.Bounds);
+            if (_data.TopicType == Main)
                 e.Graphics.DrawString(_data.TopicName, listBookmarks.Font, Brushes.Blue, e.Bounds);
-            else if (_data.FloatTopic)
-                e.Graphics.DrawString(_data.TopicName, listBookmarks.Font, Brushes.Sienna, e.Bounds);
-            else
-                e.Graphics.DrawString(_data.TopicName, listBookmarks.Font, Brushes.Black, e.Bounds); e.DrawFocusRectangle();
+            else if (_data.TopicType == Float)
+                e.Graphics.DrawString(_data.TopicName, listBookmarks.Font, Brushes.Magenta, e.Bounds);
+            else if (_data.TopicType == Normal)
+                e.Graphics.DrawString(_data.TopicName, listBookmarks.Font, Brushes.Black, e.Bounds); 
+            
+            e.DrawFocusRectangle();
         }
 
         #region resize dialog
@@ -408,5 +488,7 @@ namespace Bubbles
 
         public static string ATTR_NAMESPACE = "PALMAROSS_EXPRESSBOOKMARKS";
         public static string ATTR_BOOKMARKED = "BOOKMARKED";
+
+        const string Central = "central", Float = "float", Main = "main", Normal = "normal";
     }
 }

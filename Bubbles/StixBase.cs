@@ -1,7 +1,9 @@
-﻿using PRAManager;
+﻿using Bubbles.Properties;
+using PRAManager;
 using System;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -48,6 +50,13 @@ namespace Bubbles
             StixUtils.icondist = pIconDist.Width;
             StixUtils.cmiSize = p2.Size;
 
+            Color c = ColorTranslator.FromHtml("#e0e5ed");
+            this.BackColor = c;
+            c = ColorTranslator.FromHtml("#c9d7eb");
+            panelBoxes.BackColor = c;
+            foreach (PictureBox pb in panelBoxes.Controls.OfType<PictureBox>())
+                pb.BackColor = c;
+
             cmsManage.ItemClicked += ContextMenu_ItemClicked;
             StixUtils.SetContextMenuImage(cm_show, "show.png");
             StixUtils.SetContextMenuImage(cm_hide, "hide.png");
@@ -82,6 +91,9 @@ namespace Bubbles
 
             this.MouseDown += Move_Stick;
             panelBoxes.MouseDown += Move_Stick;
+
+            // Context menu for multiple sticks for button
+            AddSelectMenu();
         }
 
         private void Move_Stick(object sender, MouseEventArgs e)
@@ -95,6 +107,8 @@ namespace Bubbles
             if (cm_autoclose.Tag.ToString() == "auto")
             {
                 cmsManage.Close();
+                cmsIcons.Close();
+                cmsMySources.Close();
                 this.Hide();
             }
         }
@@ -219,7 +233,22 @@ namespace Bubbles
 
         private void BoxBookmarks_Click(object sender, EventArgs e)
         {
+            if (StixButton.m_BookmarkList == null)
+                StixButton.m_BookmarkList = new BookmarkListDlg();
 
+            StixButton.m_BookmarkList.Init();
+
+            if (StixButton.m_BookmarkList.Visible)
+                StixButton.m_BookmarkList.WindowState = FormWindowState.Normal;
+            else
+            {
+                if (StixButton.m_BookmarkList.Location.IsEmpty)
+                {
+                    StixButton.m_BookmarkList.Location =
+                        new Point(StixButton.OmniSticksButton.Location.X, this.Bottom);
+                }
+                StixButton.m_BookmarkList.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            }
         }
 
         private void BoxResources_Click(object sender, EventArgs e)
@@ -465,7 +494,7 @@ namespace Bubbles
                     if (tag[0] == id)
                     {
                         item.Text = newname;
-                        item.Tag = id + ":" + newname;
+                        item.Tag = id + ":" + type;
                         return;
                     }
                 }
@@ -475,7 +504,7 @@ namespace Bubbles
         /// <summary>
         /// Create Context Menu for multiple sticks per button
         /// </summary>
-        /// <param name="type">Icons, TaskInfo or MySources. If "", then all</param>
+        /// <param name="type">Icons or MySources. If "", then all</param>
         public void AddSelectMenu(string type = "")
         {
             if (type == "" || type == StixUtils.typeicons)
@@ -484,7 +513,8 @@ namespace Bubbles
                 cmsIcons = GetSticks(StixUtils.typeicons, cmsIcons);
                 if (cmsIcons.Items.Count > 0)
                 {
-                    //pIcons.ContextMenuStrip = cmsIcons;
+                    stxIcons.ContextMenuStrip = cmsIcons;
+                    cmsIcons.ItemClicked += cms_ItemClicked;
                 }
             }
             if (type == "" || type == StixUtils.typesources)
@@ -493,8 +523,26 @@ namespace Bubbles
                 cmsMySources = GetSticks(StixUtils.typesources, cmsMySources);
                 if (cmsMySources.Items.Count > 0)
                 {
-                    //MySources.ContextMenuStrip = cmsMySources;
+                    stxSources.ContextMenuStrip = cmsMySources;
+                    cmsMySources.ItemClicked += cms_ItemClicked;
                 }
+            }
+        }
+
+        private void cms_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            var tsi = e.ClickedItem; if (tsi == null) return;
+
+            string[] parts = tsi.Tag.ToString().Split(':');
+            string type = parts[1];
+            startId = Convert.ToInt32(parts[0]);
+
+            switch (type)
+            {
+                case StixUtils.typeicons:
+                    StxIcon_MouseClick(stxIcons, null); break;
+                case StixUtils.typesources:
+                    StxIcon_MouseClick(stxSources, null); break;
             }
         }
 

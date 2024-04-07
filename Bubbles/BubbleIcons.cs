@@ -7,7 +7,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Forms;
 using Clipboard = System.Windows.Forms.Clipboard;
 using Color = System.Drawing.Color;
@@ -144,18 +143,21 @@ namespace Bubbles
             if (toScale < 100 || toScale > 267) return;
 
             float scale = 100F / fromScale;
+            scaleFactor = toScale;
+
             if (scale != 1)
             {
                 this.Scale(new SizeF(scale, scale)); // reset to 100%
                 StixUtils.icondist = (int)(StixUtils.icondist * scale);
-                MinLength = (int)(MinLength * (toScale / 100));
+                MinLength = (int)(MinLength * scale);
             }
 
-            this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
-            scaleFactor = toScale;
-
-            StixUtils.icondist = (int)(StixUtils.icondist * (toScale / 100));
-            MinLength = (int)(MinLength * (toScale / 100));
+            if (toScale != 100)
+            {
+                this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
+                StixUtils.icondist = (int)(StixUtils.icondist * (toScale / 100));
+                MinLength = (int)(MinLength * (toScale / 100));
+            }
         }
 
 
@@ -576,6 +578,9 @@ namespace Bubbles
                         {
                             if (!t.AllIcons.ContainsCustomIcon(signature))
                             {
+                                MapMarkers.GetIcon(0, signature, item.IconName, item.Path,
+                                addtomap:true);
+
                                 t.AllIcons.AddCustomIconFromMap(signature);
                             }
                         }

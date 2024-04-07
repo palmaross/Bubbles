@@ -181,20 +181,6 @@ namespace Bubbles
                     t.UserIcons.RemoveAll();
         }
 
-        private void pBookmarkList_Click(object sender, EventArgs e)
-        {
-            var stick = panelH.Tag as Form;
-            (stick as BubbleBookmarks).BookmarkList_Click(null, null);
-        }
-
-        private void pNewBookmark_Click(object sender, EventArgs e)
-        {
-            if (MMUtils.ActiveDocument == null) return;
-
-            var stick = panelH.Tag as Form;
-            (stick as BubbleBookmarks).AddBookmark();
-        }
-
         private void pFontItalic_Click(object sender, EventArgs e)
         {
             var stick = panelH.Tag as Form;

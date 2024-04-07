@@ -264,7 +264,7 @@
             this.pTopicStartDate.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pTopicStartDate.Location = new System.Drawing.Point(0, 16);
             this.pTopicStartDate.Name = "pTopicStartDate";
-            this.pTopicStartDate.Size = new System.Drawing.Size(32, 15);
+            this.pTopicStartDate.Size = new System.Drawing.Size(32, 13);
             this.pTopicStartDate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pTopicStartDate.TabIndex = 94;
             this.pTopicStartDate.TabStop = false;
@@ -275,7 +275,7 @@
             this.pTopicDueDate.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pTopicDueDate.Location = new System.Drawing.Point(0, 16);
             this.pTopicDueDate.Name = "pTopicDueDate";
-            this.pTopicDueDate.Size = new System.Drawing.Size(32, 15);
+            this.pTopicDueDate.Size = new System.Drawing.Size(32, 13);
             this.pTopicDueDate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pTopicDueDate.TabIndex = 96;
             this.pTopicDueDate.TabStop = false;
@@ -287,7 +287,7 @@
             this.panelStartDate.Controls.Add(this.pStartDate);
             this.panelStartDate.Location = new System.Drawing.Point(113, 0);
             this.panelStartDate.Name = "panelStartDate";
-            this.panelStartDate.Size = new System.Drawing.Size(32, 32);
+            this.panelStartDate.Size = new System.Drawing.Size(32, 29);
             this.panelStartDate.TabIndex = 98;
             // 
             // pStartDate
@@ -368,7 +368,7 @@
             this.panelDueDate.Controls.Add(this.pDueDate);
             this.panelDueDate.Location = new System.Drawing.Point(187, 0);
             this.panelDueDate.Name = "panelDueDate";
-            this.panelDueDate.Size = new System.Drawing.Size(32, 32);
+            this.panelDueDate.Size = new System.Drawing.Size(32, 29);
             this.panelDueDate.TabIndex = 99;
             // 
             // pDueDate
@@ -393,7 +393,7 @@
             this.panelDuration.Controls.Add(this.linkDurationUnit);
             this.panelDuration.Location = new System.Drawing.Point(150, 0);
             this.panelDuration.Name = "panelDuration";
-            this.panelDuration.Size = new System.Drawing.Size(32, 32);
+            this.panelDuration.Size = new System.Drawing.Size(32, 30);
             this.panelDuration.TabIndex = 100;
             // 
             // cmsTaskTemplates
@@ -412,7 +412,7 @@
             // 
             this.cmsResources.Name = "cmsResources";
             this.cmsResources.ShowImageMargin = false;
-            this.cmsResources.Size = new System.Drawing.Size(156, 26);
+            this.cmsResources.Size = new System.Drawing.Size(36, 4);
             // 
             // BubbleTaskInfo
             // 

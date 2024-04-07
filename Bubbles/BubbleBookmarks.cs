@@ -22,10 +22,9 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "BookmarksStick.htm.htm");
+            helpProvider1.SetHelpKeyword(this, "BookmarksStick.htm");
 
-            //toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
-            toolTip1.SetToolTip(BookmarkList, Utils.getString("bookmarks.contextmenu.list"));
+            toolTip1.SetToolTip(pAddBookmark, Utils.getString("bookmarks.contextmenu.add.tooltip"));
             toolTip1.SetToolTip(pictureHandle, stickname);
 
             MinLength = this.Width; RealLength = this.Width;
@@ -41,18 +40,15 @@ namespace Bubbles
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
             cmsDelete.ItemClicked += ContextMenuStrip1_ItemClicked;
 
-            contextMenuStrip1.Items["BI_addbookmark"].Text = Utils.getString("bookmarks.contextmenu.add");
-            StixUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_addbookmark"], "book_add.png");
+            BI_delete.Text = Utils.getString("bookmarks.contextmenu.delete");
 
-            cmsDelete.Items["BI_delete"].Text = Utils.getString("bookmarks.contextmenu.delete");
-
-            contextMenuStrip1.Items["BI_main"].Text = Utils.getString("bookmarks.contextmenu.maintopics");
+            BI_main.Text = Utils.getString("bookmarks.contextmenu.maintopics");
             StixUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_main"], "bookmarkMain.png");
 
-            contextMenuStrip1.Items["BI_deletemain"].Text = Utils.getString("bookmarks.contextmenu.deletemaintopics");
+            BI_deletemain.Text = Utils.getString("bookmarks.contextmenu.deletemaintopics");
             StixUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_deletemain"], "deletemain.png");
 
-            contextMenuStrip1.Items["BI_bookmarklist"].Text = Utils.getString("bookmarks.contextmenu.list");
+            BI_bookmarklist.Text = Utils.getString("bookmarks.contextmenu.list");
             StixUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_bookmarklist"], "list.png");
 
             StixUtils.SetCommonContextMenu(contextMenuStrip1, StixUtils.typebookmarks);
@@ -76,11 +72,21 @@ namespace Bubbles
             if (toScale < 100 || toScale > 267) return;
 
             float scale = 100F / fromScale;
-            if (scale != 1)
-                this.Scale(new SizeF(scale, scale)); // reset to 100%
-
-            this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
             scaleFactor = toScale;
+
+            if (scale != 1)
+            {
+                this.Scale(new SizeF(scale, scale)); // reset to 100%
+                StixUtils.icondist = (int)(StixUtils.icondist * scale);
+                MinLength = (int)(MinLength * scale);
+            }
+
+            if (toScale != 100)
+            {
+                this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
+                StixUtils.icondist = (int)(StixUtils.icondist * (toScale / 100));
+                MinLength = (int)(MinLength * (toScale / 100));
+            }
         }
 
         private void this_Paint(object sender, PaintEventArgs e)
@@ -116,7 +122,7 @@ namespace Bubbles
             else
             {
                 Topic cTopic = MMUtils.ActiveDocument.CentralTopic;
-                pCentral.Tag = new BookmarkItem(cTopic.Text, cTopic.Guid, false);
+                pCentral.Tag = new BookmarkItem(cTopic.Text, cTopic.Guid, Central);
                 toolTip1.SetToolTip(pCentral, cTopic.Text);
                 pCentral.MouseClick += Icon_Click;
                 cTopic = null;
@@ -132,7 +138,7 @@ namespace Bubbles
             if (BookmarkedDocuments.Keys.Contains(MMUtils.ActiveDocument))
             {
                 foreach (BookmarkItem item in BookmarkedDocuments[MMUtils.ActiveDocument])
-                    AddIcon(item.TopicName, item.TopicGuid, item.MainTopic, item.FloatTopic);
+                    AddIcon(item.TopicName, item.TopicGuid, item.TopicType);
             }
             else
             {
@@ -165,7 +171,14 @@ namespace Bubbles
         {
             if (_t.GetAttributes(ATTR_NAMESPACE).HasAttribute(ATTR_BOOKMARKED))
             {
-                AddIcon(_t.Text.Trim(), _t.Guid, _t.IsMainTopic, _t.IsFloatingTopic);
+                string ttext = _t.Text;
+                if (ttext.Length > 90) ttext = _t.Text.Substring(0, 90);
+
+                string topictype =
+                    _t.IsCentralTopic ? Central :
+                    _t.IsMainTopic ? Main :
+                    _t.IsFloatingTopic ? Float : Normal;
+                AddIcon(ttext, _t.Guid, topictype);
             }
             foreach (Topic t in _t.AllSubTopics)
                 LoadFromMapRecursive(t);
@@ -189,12 +202,7 @@ namespace Bubbles
 
         private void ContextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Name == "BI_addbookmark")
-            {
-                if (MMUtils.ActiveDocument == null) return;
-                AddBookmark();
-            }
-            else if (e.ClickedItem.Name == "BI_delete")
+            if (e.ClickedItem.Name == "BI_delete")
             {
                 BookmarkItem _item = (BookmarkItem)selectedIcon.Tag;
                 if (_item != null)
@@ -237,7 +245,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_bookmarklist")
             {
-                BookmarkList_Click(null, null);
+                BookmarkList_Click();
             }
             else if (e.ClickedItem.Name == "BI_deleteall")
             {
@@ -294,19 +302,19 @@ namespace Bubbles
 
         public void Rotate()
         {
-            orientation = StixUtils.RotateStick(this, Manage, orientation, BookmarkList);
+            orientation = StixUtils.RotateStick(this, Manage, orientation, pAddBookmark);
         }
 
-        void AddIcon(string tooltip, string guid, bool maintopic = false, bool floattopic = false)
+        void AddIcon(string tooltip, string guid, string topictype)
         {
             PictureBox pBox = new PictureBox();
             pBox.Size = p1.Size;
             pBox.SizeMode = PictureBoxSizeMode.Zoom;
             pBox.MouseClick += Icon_Click;
 
-            if (maintopic)
+            if (topictype == Main)
                 pBox.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "bookmarkMain.png");
-            else if (floattopic)
+            else if (topictype == Float)
                 pBox.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "bookmarkFloat.png");
             else
             {
@@ -319,7 +327,7 @@ namespace Bubbles
             toolTip1.SetToolTip(pBox, tooltip);
             pBox.BringToFront();
 
-            pBox.Tag = new BookmarkItem(tooltip, guid, maintopic, floattopic);
+            pBox.Tag = new BookmarkItem(tooltip, guid, topictype);
             Bookmarks.Add((BookmarkItem)pBox.Tag);
 
             if (orientation == "H")
@@ -330,7 +338,7 @@ namespace Bubbles
                 else
                     locX = prev.Location.X + prev.Width + p3.Height;
 
-                if (maintopic || floattopic)
+                if (topictype == Main || topictype == Float)
                     pBox.Location = new Point(locX, p1.Location.Y);
                 else
                     pBox.Location = new Point(locX, p2.Location.Y);
@@ -346,7 +354,7 @@ namespace Bubbles
                 else
                     locY = prev.Location.Y + prev.Width + p3.Height;
 
-                if (maintopic || floattopic)
+                if (topictype == Main || topictype == Float)
                     pBox.Location = new Point(p1.Location.X, locY);
                 else
                     pBox.Location = new Point(p2.Location.X, locY);
@@ -367,8 +375,24 @@ namespace Bubbles
             if (e.Button == MouseButtons.Left)
             {
                 BookmarkItem item = selectedIcon.Tag as BookmarkItem;
+                if (item == null) return;
+
                 Topic t = MMUtils.ActiveDocument.FindByGuid(item.TopicGuid) as Topic;
-                if (t != null)
+                if (t == null)
+                {
+                    MessageBox.Show(Utils.getString("bookmarks.topic.noexists"), "", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    var _item = Bookmarks.Find(x => x.TopicGuid == item.TopicGuid);
+                    if (_item != null)
+                    {
+                        Bookmarks.Remove(_item);
+                        BookmarkedDocuments[MMUtils.ActiveDocument].Clear();
+                        BookmarkedDocuments[MMUtils.ActiveDocument].AddRange(Bookmarks);
+                        Init(false);
+                    }
+                }
+                else
                 {
                     t.SelectOnly();
                     t.SnapIntoView();
@@ -381,6 +405,12 @@ namespace Bubbles
                 cmsDelete.Items["BI_delete"].Visible = true;
                 cmsDelete.Show(Cursor.Position);
             }
+        }
+
+        private void pAddBookmark_Click(object sender, EventArgs e)
+        {
+            if (MMUtils.ActiveDocument == null) return;
+            AddBookmark();
         }
 
         public void AddBookmark()
@@ -406,7 +436,7 @@ namespace Bubbles
             Init();
         }
 
-        public void BookmarkList_Click(object sender, EventArgs e)
+        public void BookmarkList_Click()
         {
             if (StixButton.m_BookmarkList == null)
             {
@@ -431,6 +461,8 @@ namespace Bubbles
 
         int MinLength, RealLength;
 
+        const string Central = "central", Float = "float", Main = "main", Normal = "normal";
+
         // For MouseDown event
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
@@ -446,16 +478,14 @@ namespace Bubbles
 
     internal class BookmarkItem
     {
-        public BookmarkItem(string topicName, string topicGuid, bool maintopic = false, bool floattopic = false)
+        public BookmarkItem(string topicName, string topicGuid, string topicType)
         {
             TopicName = topicName;
             TopicGuid = topicGuid;
-            MainTopic = maintopic;
-            FloatTopic = floattopic;
+            TopicType = topicType;
         }
         public string TopicName = "";
         public string TopicGuid = "";
-        public bool MainTopic;
-        public bool FloatTopic;
+        public string TopicType;
     }
 }

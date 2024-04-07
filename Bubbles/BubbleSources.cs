@@ -109,6 +109,8 @@ namespace Bubbles
             if (toScale < 100 || toScale > 267) return;
 
             float scale = 100F / fromScale;
+            scaleFactor = toScale;
+
             if (scale != 1)
             {
                 this.Scale(new SizeF(scale, scale)); // reset to 100%
@@ -116,11 +118,12 @@ namespace Bubbles
                 MinLength = (int)(MinLength * scale);
             }
 
-            this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
-            scaleFactor = toScale;
-
-            StixUtils.icondist = (int)(StixUtils.icondist * (toScale / 100));
-            MinLength = (int)(MinLength * (toScale / 100));
+            if (toScale != 100)
+            {
+                this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
+                StixUtils.icondist = (int)(StixUtils.icondist * (toScale / 100));
+                MinLength = (int)(MinLength * (toScale / 100));
+            }
         }
 
         private void this_Paint(object sender, PaintEventArgs e)

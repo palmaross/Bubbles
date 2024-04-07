@@ -125,20 +125,23 @@ namespace Bubbles
             }
 
             // Start the OmniStix button (the first time only)
-            if (start)
+            //if (start)
             {
                 start = false;
+                Radius.Visible = false;
+                Color c = ColorTranslator.FromHtml("#69a642");
+                Radius.BackColor = c;
 
                 using (Bitmap backImage = new Bitmap(this.Width, this.Height))
                 {
                     using (Graphics graphics = Graphics.FromImage(backImage))
                     {
                         Rectangle gradientRectangle = new Rectangle(0, 0, this.Width - 1, this.Height - 1);
-                        using (Brush b = new SolidBrush(Color.LightSeaGreen))
+                        using (Brush b = new SolidBrush(c))
                         {
                             graphics.SmoothingMode = SmoothingMode.HighQuality;
 
-                            RoundedRectangle.FillRoundedRectangle(graphics, b, gradientRectangle, 20);
+                            RoundedRectangle.FillRoundedRectangle(graphics, b, gradientRectangle, Radius.Width);
 
                             foreach (Control ctrl in this.Controls)
                             {

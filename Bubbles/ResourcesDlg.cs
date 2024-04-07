@@ -1246,6 +1246,11 @@ namespace Bubbles
             cmsMore.Show(Cursor.Position);
             return;
         }
+
+        private void p11_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
     public class ResourceItem

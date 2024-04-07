@@ -133,11 +133,13 @@ namespace Bubbles
             if (toScale < 100 || toScale > 300) return;
 
             float scale = 100F / fromScale;
+            scaleFactor = toScale;
+
             if (scale != 1)
                 this.Scale(new SizeF(scale, scale)); // reset to 100%
 
-            this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
-            scaleFactor = toScale;
+            if (toScale != 100)
+                this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
 
             float _fsize = fsize * (toScale / 100);
             float _ffsize = ffsize * (toScale / 100);

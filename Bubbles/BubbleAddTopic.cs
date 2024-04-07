@@ -71,11 +71,13 @@ namespace Bubbles
             if (toScale < 100 || toScale > 267) return;
 
             float scale = 100F / fromScale;
+            scaleFactor = toScale;
+
             if (scale != 1)
                 this.Scale(new SizeF(scale, scale)); // reset to 100%
 
-            this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
-            scaleFactor = toScale;
+            if (toScale != 100)
+                this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
         }
 
         private void this_Paint(object sender, PaintEventArgs e)

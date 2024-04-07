@@ -147,9 +147,12 @@ namespace Bubbles
 
             foreach (var _filename in FileNames) // проверим, есть ли в пузыре этот значок
             {
+                string signature = MMUtils.MindManager.Utilities.GetCustomIconSignature(iconPath);
+
                 if (_filename == filename || // Priority or Progress
                     _filename == filename + ".ico" || // custom icon
-                    _filename == "stock" + filename) // stock icon
+                    _filename == "stock" + filename || // stock icon
+                    _filename == signature) // custom icon
                 {
                     MessageBox.Show(Utils.getString("float_icons.iconexists"));
                     return;

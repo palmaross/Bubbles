@@ -106,6 +106,7 @@
             // 
             // panel1
             // 
+            this.panel1.BackColor = System.Drawing.SystemColors.Control;
             this.panel1.Controls.Add(this.pHelp);
             this.panel1.Controls.Add(this.pClose);
             this.panel1.Location = new System.Drawing.Point(1, 1);
@@ -249,6 +250,7 @@
             this.p11.TabIndex = 11;
             this.p11.TabStop = false;
             this.p11.Visible = false;
+            this.p11.Click += new System.EventHandler(this.p11_Click);
             // 
             // btnClose
             // 
@@ -430,12 +432,13 @@
             // 
             // btnRemoveResources
             // 
-            this.btnRemoveResources.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.btnRemoveResources.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnRemoveResources.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnRemoveResources.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRemoveResources.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnRemoveResources.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.btnRemoveResources.Location = new System.Drawing.Point(2, 18);
             this.btnRemoveResources.Name = "btnRemoveResources";
-            this.btnRemoveResources.Size = new System.Drawing.Size(163, 23);
+            this.btnRemoveResources.Size = new System.Drawing.Size(163, 21);
             this.btnRemoveResources.TabIndex = 13;
             this.btnRemoveResources.Text = "Remove Resources";
             this.btnRemoveResources.TextAlign = System.Drawing.ContentAlignment.TopLeft;

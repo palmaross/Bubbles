@@ -72,6 +72,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.stxBookmarks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxResources)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxBookmarks)).BeginInit();
+            this.panelBoxes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Stickers)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
@@ -151,7 +152,7 @@
             this.boxSources.BackColor = System.Drawing.Color.Moccasin;
             this.boxSources.Cursor = System.Windows.Forms.Cursors.Hand;
             this.boxSources.Image = ((System.Drawing.Image)(resources.GetObject("boxSources.Image")));
-            this.boxSources.Location = new System.Drawing.Point(74, 39);
+            this.boxSources.Location = new System.Drawing.Point(76, 6);
             this.boxSources.Name = "boxSources";
             this.boxSources.Size = new System.Drawing.Size(24, 24);
             this.boxSources.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -165,7 +166,7 @@
             this.Manage.BackColor = System.Drawing.Color.Moccasin;
             this.Manage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Manage.Image = ((System.Drawing.Image)(resources.GetObject("Manage.Image")));
-            this.Manage.Location = new System.Drawing.Point(211, 39);
+            this.Manage.Location = new System.Drawing.Point(212, 6);
             this.Manage.Name = "Manage";
             this.Manage.Size = new System.Drawing.Size(24, 24);
             this.Manage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -285,7 +286,7 @@
             this.boxResources.BackColor = System.Drawing.Color.Moccasin;
             this.boxResources.Cursor = System.Windows.Forms.Cursors.Hand;
             this.boxResources.Image = ((System.Drawing.Image)(resources.GetObject("boxResources.Image")));
-            this.boxResources.Location = new System.Drawing.Point(8, 39);
+            this.boxResources.Location = new System.Drawing.Point(8, 6);
             this.boxResources.Name = "boxResources";
             this.boxResources.Size = new System.Drawing.Size(24, 24);
             this.boxResources.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -299,7 +300,7 @@
             this.boxBookmarks.BackColor = System.Drawing.Color.Moccasin;
             this.boxBookmarks.Cursor = System.Windows.Forms.Cursors.Hand;
             this.boxBookmarks.Image = ((System.Drawing.Image)(resources.GetObject("boxBookmarks.Image")));
-            this.boxBookmarks.Location = new System.Drawing.Point(41, 39);
+            this.boxBookmarks.Location = new System.Drawing.Point(42, 6);
             this.boxBookmarks.Name = "boxBookmarks";
             this.boxBookmarks.Size = new System.Drawing.Size(24, 24);
             this.boxBookmarks.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -321,6 +322,11 @@
             // panelBoxes
             // 
             this.panelBoxes.BackColor = System.Drawing.Color.Moccasin;
+            this.panelBoxes.Controls.Add(this.boxResources);
+            this.panelBoxes.Controls.Add(this.boxBookmarks);
+            this.panelBoxes.Controls.Add(this.boxSources);
+            this.panelBoxes.Controls.Add(this.Stickers);
+            this.panelBoxes.Controls.Add(this.Manage);
             this.panelBoxes.Location = new System.Drawing.Point(-1, 33);
             this.panelBoxes.Name = "panelBoxes";
             this.panelBoxes.Size = new System.Drawing.Size(245, 37);
@@ -331,7 +337,7 @@
             this.Stickers.BackColor = System.Drawing.Color.Moccasin;
             this.Stickers.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Stickers.Image = ((System.Drawing.Image)(resources.GetObject("Stickers.Image")));
-            this.Stickers.Location = new System.Drawing.Point(144, 39);
+            this.Stickers.Location = new System.Drawing.Point(144, 6);
             this.Stickers.Name = "Stickers";
             this.Stickers.Size = new System.Drawing.Size(24, 24);
             this.Stickers.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -369,14 +375,9 @@
             this.ControlBox = false;
             this.Controls.Add(this.pIconDist);
             this.Controls.Add(this.p2);
-            this.Controls.Add(this.Stickers);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.boxBookmarks);
-            this.Controls.Add(this.boxResources);
             this.Controls.Add(this.stxBookmarks);
             this.Controls.Add(this.stxSources);
-            this.Controls.Add(this.Manage);
-            this.Controls.Add(this.boxSources);
             this.Controls.Add(this.stxIcons);
             this.Controls.Add(this.stxTaskInfo);
             this.Controls.Add(this.stxFormat);
@@ -399,6 +400,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.stxBookmarks)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxResources)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxBookmarks)).EndInit();
+            this.panelBoxes.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Stickers)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();

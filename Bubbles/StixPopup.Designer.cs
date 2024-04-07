@@ -274,7 +274,6 @@
             this.pBookmarkList.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pBookmarkList.TabIndex = 11;
             this.pBookmarkList.TabStop = false;
-            this.pBookmarkList.Click += new System.EventHandler(this.pBookmarkList_Click);
             // 
             // pNewBookmark
             // 
@@ -286,7 +285,6 @@
             this.pNewBookmark.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pNewBookmark.TabIndex = 10;
             this.pNewBookmark.TabStop = false;
-            this.pNewBookmark.Click += new System.EventHandler(this.pNewBookmark_Click);
             // 
             // pNewIcon
             // 
