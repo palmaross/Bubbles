@@ -44,11 +44,13 @@
             this.BI_rename = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.p1 = new System.Windows.Forms.PictureBox();
+            this.pIconDist = new System.Windows.Forms.PictureBox();
             this.cmsManage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
             this.cmsIcon.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -155,6 +157,16 @@
             this.p1.TabStop = false;
             this.p1.Visible = false;
             // 
+            // pIconDist
+            // 
+            this.pIconDist.Location = new System.Drawing.Point(58, 7);
+            this.pIconDist.Name = "pIconDist";
+            this.pIconDist.Size = new System.Drawing.Size(22, 16);
+            this.pIconDist.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pIconDist.TabIndex = 101;
+            this.pIconDist.TabStop = false;
+            this.pIconDist.Visible = false;
+            // 
             // BubbleIcons
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -162,6 +174,7 @@
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(138, 30);
             this.ControlBox = false;
+            this.Controls.Add(this.pIconDist);
             this.Controls.Add(this.p1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureHandle);
@@ -175,6 +188,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
             this.cmsIcon.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -195,5 +209,6 @@
         public System.Windows.Forms.PictureBox Manage;
         private System.Windows.Forms.PictureBox p1;
         private System.Windows.Forms.ToolStripMenuItem BI_addtomap;
+        private System.Windows.Forms.PictureBox pIconDist;
     }
 }

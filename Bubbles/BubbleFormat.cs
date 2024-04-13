@@ -72,6 +72,8 @@ namespace Bubbles
 
             // Apply scale factor
             this.Paint += this_Paint; // paint the border depending on scale factor
+
+            fsize = lblTextColor.Font.Size;
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
             ScaleStick(100F, scaleFactor);
         }
@@ -89,7 +91,13 @@ namespace Bubbles
 
             if (toScale != 100)
                 this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
+
+            float _fsize = fsize * (toScale / 100);
+
+            lblTextColor.Font = new Font(lblTextColor.Font.FontFamily, _fsize);
+            lblFillColor.Font = new Font(lblFillColor.Font.FontFamily, _fsize);
         }
+        float fsize;
 
         private void this_Paint(object sender, PaintEventArgs e)
         {

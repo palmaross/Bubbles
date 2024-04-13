@@ -261,7 +261,7 @@ namespace Bubbles
             return pBox;
         }
 
-        public static PictureBox AddSource(PictureBox p1, MySourcesItem item, string path, 
+        public static PictureBox AddSource(PictureBox p1, SourceItem item, string path, 
             string orientation, int k)
         {
             PictureBox pBox = AddPitureBox(p1, orientation, path, k, typesources, item.Type);
@@ -333,7 +333,7 @@ namespace Bubbles
             }
             else if (type == typesources)
             {
-                MySourcesItem _item = (MySourcesItem)selectedIcon.Tag;
+                SourceItem _item = (SourceItem)selectedIcon.Tag;
                 string filename = _item.Path;
 
                 if (_item == null) return;
@@ -743,7 +743,7 @@ namespace Bubbles
         }
 
         public static string Handle_DragDrop(ref string path, string[] draggedFiles, 
-            List<IconItem> aIcons, List<MySourcesItem> aSources)
+            List<IconItem> aIcons, List<SourceItem> aSources)
         {
             string title = "";
             if (!String.IsNullOrEmpty(path)) // possible url
@@ -784,7 +784,7 @@ namespace Bubbles
                         { MessageBox.Show(Utils.getString("float_icons.iconexists")); return ""; }
                 }
                 path = draggedFiles[0];
-                title = Path.GetFileName(path);
+                title = Path.GetFileNameWithoutExtension(path);
             }
             return title;
         }
@@ -1009,7 +1009,7 @@ namespace Bubbles
 
         public static List<IconItem> Icons = new List<IconItem>();
         public static List<BookmarkItem> Bookmarks = new List<BookmarkItem>();
-        public static List<MySourcesItem> Sources = new List<MySourcesItem>();
+        public static List<SourceItem> Sources = new List<SourceItem>();
 
         // types must match Stix names!
         public const string typestick = "stick", typebase = "StixBase",

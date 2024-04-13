@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -21,19 +20,22 @@ namespace Bubbles
 
             Text = Utils.getString("TaskTemplateDlg.title");
             chPrimary.Text = Utils.getString("TaskTemplateDlg.chPrimary");
-            chProgress.Text = Utils.getString("TaskTemplateDlg.chProgress");
-            chPriority.Text = Utils.getString("TaskTemplateDlg.chPriority");
-            chStartDate.Text = Utils.getString("TaskTemplateDlg.chStartDate");
-            chDueDate.Text = Utils.getString("TaskTemplateDlg.chDueDate");
-            chResources.Text = Utils.getString("TaskTemplateDlg.chResources");
-            chIcon.Text = Utils.getString("TaskTemplateDlg.chIcon");
-            chTags.Text = Utils.getString("TaskTemplateDlg.chTags");
+            lblTopicText.Text = Utils.getString("TopicTemplateDlg.lblTopicText");
+            lblProgress.Text = Utils.getString("TaskTemplateDlg.chProgress");
+            lblPriority.Text = Utils.getString("TaskTemplateDlg.chPriority");
+            lblStartDate.Text = Utils.getString("TaskTemplateDlg.chStartDate");
+            lblDueDate.Text = Utils.getString("TaskTemplateDlg.chDueDate");
+            lblDuration.Text = Utils.getString("TaskTemplateDlg.lblDuration");
+            lblEffort.Text = Utils.getString("TaskTemplateDlg.lblEffort");
+            lblResources.Text = Utils.getString("TaskTemplateDlg.chResources");
+            lblIcon.Text = Utils.getString("TaskTemplateDlg.chIcon");
+            lblTags.Text = Utils.getString("TaskTemplateDlg.chTags");
 
             lblChangeValue.Text = Utils.getString("TaskTemplateDlg.lblChangeValue");
             lblChangeIcon.Text = Utils.getString("TaskTemplateDlg.lblChangeIcon");
             lblTagGroup.Text = Utils.getString("TaskTemplateDlg.lblTagGroup");
             lblTag.Text = Utils.getString("TaskTemplateDlg.lblTag");
-            btnApply.Text = Utils.getString("button.apply");
+            btnSave.Text = Utils.getString("button.save");
             btnClose.Text = Utils.getString("button.close");
 
             btnCancel.Text = Utils.getString("button.cancel");
@@ -69,20 +71,90 @@ namespace Bubbles
 
             cbStartDatePeriod.SelectedIndex = 0; cbDueDatePeriod.SelectedIndex = 0;
 
+            cbDurationUnits.Items.Add(Utils.getString("task.durationunits.minute"));
+            cbDurationUnits.Items.Add(Utils.getString("task.durationunits.hour"));
+            cbDurationUnits.Items.Add(Utils.getString("task.durationunits.day"));
+            cbDurationUnits.Items.Add(Utils.getString("task.durationunits.week"));
+            cbDurationUnits.Items.Add(Utils.getString("task.durationunits.month"));
+            cbDurationUnits.SelectedIndex = 2;
+
+            cbEffortUnits.Items.Add(Utils.getString("task.durationunits.minute"));
+            cbEffortUnits.Items.Add(Utils.getString("task.durationunits.hour"));
+            cbEffortUnits.Items.Add(Utils.getString("task.durationunits.day"));
+            cbEffortUnits.Items.Add(Utils.getString("task.durationunits.week"));
+            cbEffortUnits.Items.Add(Utils.getString("task.durationunits.month"));
+            cbEffortUnits.SelectedIndex = 1;
+
             db = new StixDB();
 
             DataTable dt = db.ExecuteQuery("select * from TASKTEMPLATES order by name");
             foreach (DataRow row in dt.Rows)
             {
+                string topictextState = "", progressState = "", priorityState = "", startdateState = "",
+                    duedateState = "", durationState = "", effortState = "", resourcesState = "", iconState = "", tagsState = "";
+
+                string topictext = row["topictext"].ToString();
+                string[] parts = topictext.Split(new string[] { "$$$" }, StringSplitOptions.None);
+                if (parts.Length > 1)
+                {
+                    topictextState = parts[0]; topictext = parts[1]; mutTopicText.Tag = topictextState;
+                }
+
+                string progress = row["progress"].ToString(); int _progress = -1;
+                parts = progress.Split(':');
+                if (parts.Length > 1)
+                {
+                    progressState = parts[0]; _progress = Convert.ToInt32(parts[1]); mutProgress.Tag = progressState;
+                }
+
+                string priority = row["priority"].ToString(); int _priority = 0;
+                parts = priority.Split(':');
+                if (parts.Length > 1)
+                {
+                    priorityState = parts[0]; _priority = Convert.ToInt32(parts[1]); mutPriority.Tag = priorityState;
+                }
+
+                string dates = row["dates"].ToString();
+                parts = dates.Split(new string[] { "$$$" }, StringSplitOptions.None);
+                if (parts.Length > 1)
+                {
+                    string[] states = parts[0].Split(':');
+                    startdateState = states[0]; duedateState = states[1]; dates = parts[1];
+                    mutStartDate.Tag = startdateState; mutDueDate.Tag = duedateState;
+                }
+
+                string duration = row["duration"].ToString();
+                if (duration != "")
+                {
+                    parts = duration.Split(':');
+                    if (parts.Length == 3) { 
+                        durationState = parts[0]; duration = parts[1] + ":" + parts[2]; }
+                }
+
+                string effort = row["effort"].ToString();
+                if (effort != "")
+                {
+                    parts = effort.Split(':');
+                    if (parts.Length == 3) { 
+                        effortState = parts[0]; effort = parts[1] + ":" + parts[2]; }
+                }
+
+                string icon = row["icon"].ToString(); parts = icon.Split(':');
+                if (parts.Length > 1) { iconState = parts[0]; icon = parts[1]; chIcon.Tag = iconState; }
+
+                string resources = row["resources"].ToString(); parts = resources.Split(':');
+                if (parts.Length > 1) { resourcesState = parts[0]; resources = parts[1]; chResources.Tag = resourcesState; }
+
+                string tags = row["tags"].ToString(); parts = tags.Split(':');
+                if (parts.Length > 1) { tagsState = parts[0]; tags = parts[1]; chTags.Tag = tagsState; }
+
                 TaskTemplateItem item = new TaskTemplateItem(Convert.ToInt32(row["prime"]), row["name"].ToString(),
-                    Convert.ToInt32(row["progress"]), Convert.ToInt32(row["priority"]), row["dates"].ToString(), 
-                    row["icon"].ToString(), row["resources"].ToString(), row["tags"].ToString());
+                    topictext, _progress, _priority, dates, duration, effort, icon, resources, tags,
+                    topictextState, progressState, priorityState, startdateState, duedateState,
+                    durationState, effortState, iconState, resourcesState, tagsState);
 
                 cbTaskTemplates.Items.Add(item);
             }
-
-            pIcon.Tag = "stockquestion-mark";
-            pPriority.Tag = 1; pProgress.Tag = 0;
 
             dt = db.ExecuteQuery("select * from RESOURCES order by name");
             foreach (DataRow row in dt.Rows)
@@ -226,8 +298,8 @@ namespace Bubbles
 
             if ((string)panelTemplateName.Tag == "new") // add new template
             {
-                db.AddTaskTemplate(0, newName, 0, 0, "rel:today:1;rel:today:1", "", "", "");
-                TaskTemplateItem item = new TaskTemplateItem(0, newName, 0, 0, "rel:today:1;rel:today:1", "", "", "");
+                db.AddTaskTemplate(0, newName, "", "", "", "rel:today:1;rel:today:1", "", "", "", "", "");
+                TaskTemplateItem item = new TaskTemplateItem(0, newName, "", 0, 0, "rel:today:1;rel:today:1", "", "", "", "", "");
                 int i = cbTaskTemplates.Items.Add(item);
                 cbTaskTemplates.SelectedIndex = i;
             }
@@ -269,45 +341,82 @@ namespace Bubbles
 
                 chPrimary.Checked = item.Primary == 1;
                 if (chPrimary.Checked) chPrimary.Enabled = false; else chPrimary.Enabled = true;
-                chProgress.Checked = item.Progress >= 0;
-                chPriority.Checked = item.Priority > 0;
-                chStartDate.Checked = startdate != "";
-                chDueDate.Checked = duedate != "";
-                chResources.Checked = item.Resources != "";
-                chIcon.Checked = item.aIcon != "";
-                chTags.Checked = item.Tags != "";
 
-                if (chProgress.Checked)
+                mutTopicText.Image =
+                    item.TopicTextState == "" ? pUnchecked.Image :
+                    item.TopicTextState == "checked" ? pChecked.Image :
+                    item.TopicTextState == "uncheckedred" ? pUncheckedRed.Image : pCheckedRed.Image;
+                mutTopicText.Tag = item.TopicTextState;
+
+                mutProgress.Image =
+                    item.ProgressState == "" ? pUnchecked.Image :
+                    item.ProgressState == "checked" ? pChecked.Image :
+                    item.ProgressState == "uncheckedred" ? pUncheckedRed.Image : pCheckedRed.Image;
+                mutProgress.Tag = item.ProgressState;
+
+                mutPriority.Image =
+                    item.PriorityState == "" ? pUnchecked.Image :
+                    item.PriorityState == "checked" ? pChecked.Image :
+                    item.PriorityState == "uncheckedred" ? pUncheckedRed.Image : pCheckedRed.Image;
+                mutPriority.Tag = item.PriorityState;
+
+                mutStartDate.Image =
+                    item.StartDateState == "" ? pUnchecked.Image :
+                    item.StartDateState == "checked" ? pChecked.Image :
+                    item.StartDateState == "uncheckedred" ? pUncheckedRed.Image : pCheckedRed.Image;
+                mutStartDate.Tag = item.StartDateState;
+
+                mutDueDate.Image =
+                    item.DueDateState == "" ? pUnchecked.Image :
+                    item.DueDateState == "checked" ? pChecked.Image :
+                    item.DueDateState == "uncheckedred" ? pUncheckedRed.Image : pCheckedRed.Image;
+                mutDueDate.Tag = item.DueDateState;
+
+                mutDuration.Image = item.DurationState == "" ? pUnchecked.Image : pChecked.Image;
+                mutDuration.Tag = item.DurationState;
+
+                mutEffort.Image = item.EffortState == "" ? pUnchecked.Image : pChecked.Image;
+                mutEffort.Tag = item.EffortState;
+
+                chResources.Image =
+                    item.ResourcesState == "" ? pUnchecked.Image :
+                    item.ResourcesState == "checked" ? pChecked.Image :
+                    item.ResourcesState == "uncheckedred" ? pUncheckedRed.Image : pCheckedRed.Image;
+                chResources.Tag = item.ResourcesState;
+
+                chIcon.Image =
+                    item.IconState == "" ? pUnchecked.Image :
+                    item.IconState == "checked" ? pChecked.Image :
+                    item.IconState == "uncheckedred" ? pUncheckedRed.Image : pCheckedRed.Image;
+                chIcon.Tag = item.IconState;
+
+                chTags.Image =
+                    item.TagsState == "" ? pUnchecked.Image :
+                    item.TagsState == "checked" ? pChecked.Image :
+                    item.TagsState == "uncheckedred" ? pUncheckedRed.Image : pCheckedRed.Image;
+                chTags.Tag = item.TagsState;
+
+                txtTopicText.Text = item.TopicText;
+
+                switch (item.Progress)
                 {
-                    switch (item.Progress)
-                    {
-                        case 0: pProgress.Image = p0.Image; pProgress.Tag = 0; break;
-                        case 25: pProgress.Image = p25.Image; pProgress.Tag = 25; break;
-                        case 50: pProgress.Image = p50.Image; pProgress.Tag = 50; break;
-                        case 75: pProgress.Image = p75.Image; pProgress.Tag = 75; break;
-                        case 100: pProgress.Image = p100.Image; pProgress.Tag = 100; break;
-                    }
+                    case 0: pProgress.Image = p0.Image; pProgress.Tag = 0; break;
+                    case 25: pProgress.Image = p25.Image; pProgress.Tag = 25; break;
+                    case 50: pProgress.Image = p50.Image; pProgress.Tag = 50; break;
+                    case 75: pProgress.Image = p75.Image; pProgress.Tag = 75; break;
+                    case 100: pProgress.Image = p100.Image; pProgress.Tag = 100; break;
                 }
-                else 
+
+                switch (item.Priority)
                 {
-                    pProgress.Image = p0.Image; pProgress.Tag = 0;
+                    case 1: pPriority.Image = pPR1.Image; pPriority.Tag = 1; break;
+                    case 2: pPriority.Image = pPR2.Image; pPriority.Tag = 2; break;
+                    case 3: pPriority.Image = pPR3.Image; pPriority.Tag = 3; break;
+                    case 4: pPriority.Image = pPR4.Image; pPriority.Tag = 4; break;
+                    case 5: pPriority.Image = pPR5.Image; pPriority.Tag = 5; break;
                 }
-                if (chPriority.Checked)
-                {
-                    switch (item.Priority)
-                    {
-                        case 1: pPriority.Image = pPR1.Image; pPriority.Tag = 1; break;
-                        case 2: pPriority.Image = pPR2.Image; pPriority.Tag = 2; break;
-                        case 3: pPriority.Image = pPR3.Image; pPriority.Tag = 3; break;
-                        case 4: pPriority.Image = pPR4.Image; pPriority.Tag = 4; break;
-                        case 5: pPriority.Image = pPR5.Image; pPriority.Tag = 5; break;
-                    }
-                }
-                else
-                {
-                    pPriority.Image = pPR1.Image; pPriority.Tag = 1;
-                }
-                if (chStartDate.Checked)
+
+                if (startdate != "")
                 {
                     string[] parts = startdate.Split(':');
                     if (parts[0] == "abs") // absolute date
@@ -319,6 +428,8 @@ namespace Bubbles
                     }
                     else // relative date
                     {
+                        dtpStartDate.Visible = false;
+                        numStartDate.Enabled = true;
                         SetPeriod(parts[1], cbStartDatePeriod);
                         numStartDate.Value = int.Parse(parts[2]);
                         pStartPlace.Image = pCalendar.Image; pStartPlace.Tag = "calendar";
@@ -326,13 +437,14 @@ namespace Bubbles
                 }
                 else
                 {
-                    dtpStartDate.Visible = true;
-                    cbStartDatePeriod.SelectedIndex = 0;
-                    numStartDate.Enabled = false;
-                    pStartPlace.Image = pPeriod.Image; pStartPlace.Tag = "period";
-                    toolTip1.SetToolTip(pStartPlace, Utils.getString("TaskTemplateDlg.relativedate.tooltip"));
+                    dtpStartDate.Visible = false;
+                    numStartDate.Enabled = true;
+                    SetPeriod("today", cbStartDatePeriod);
+                    numStartDate.Value = 1;
+                    pStartPlace.Image = pCalendar.Image; pStartPlace.Tag = "calendar";
+                    toolTip1.SetToolTip(pDuePlace, Utils.getString("TaskTemplateDlg.calendar.tooltip"));
                 }
-                if (chDueDate.Checked)
+                if (duedate != "")
                 {
                     string[] parts = duedate.Split(':');
                     if (parts[0] == "abs") // absolute date
@@ -344,6 +456,8 @@ namespace Bubbles
                     }
                     else // relative date
                     {
+                        dtpDueDate.Visible = false;
+                        numDueDate.Enabled = true;
                         SetPeriod(parts[1], cbDueDatePeriod);
                         numDueDate.Value = int.Parse(parts[2]);
                         pDuePlace.Image = pCalendar.Image; pDuePlace.Tag = "calendar";
@@ -351,34 +465,65 @@ namespace Bubbles
                 }
                 else
                 {
-                    dtpDueDate.Visible = true;
-                    cbDueDatePeriod.SelectedIndex = 0;
-                    pDuePlace.Image = pPeriod.Image; pDuePlace.Tag = "period";
-                    toolTip1.SetToolTip(pDuePlace, Utils.getString("TaskTemplateDlg.relativedate.tooltip"));
-
+                    dtpDueDate.Visible = false;
+                    numDueDate.Enabled = true;
+                    SetPeriod("today", cbDueDatePeriod);
+                    numDueDate.Value = 1;
+                    pDuePlace.Image = pCalendar.Image; pDuePlace.Tag = "calendar";
+                    toolTip1.SetToolTip(pDuePlace, Utils.getString("TaskTemplateDlg.calendar.tooltip"));
                 }
-                if (chResources.Checked)
+
+                // Duration
+                int dValue = 1, dUnits = 2;
+                if (item.Duration != "")
                 {
-                    txtResources.Text = item.Resources;
+                    string[] parts = item.Duration.Split(':');
+                    if (parts.Length == 2)
+                    {
+                        dValue = Convert.ToInt32(parts[0]);
+                        dUnits = Convert.ToInt32(parts[1]);
+                    }
                 }
-                else
-                    txtResources.Text = "";
 
-                if (chIcon.Checked)
+                numDuration.Value = dValue;
+                cbDurationUnits.SelectedIndex = dUnits;
+
+                // Effort
+                dValue = 1; dUnits = 2;
+                if (item.Effort != "")
+                {
+                    string[] parts = item.Effort.Split(':');
+                    if (parts.Length == 2)
+                    {
+                        dValue = Convert.ToInt32(parts[0]);
+                        dUnits = Convert.ToInt32(parts[1]);
+                    }
+                }
+
+                numEffort.Value = dValue;
+                cbEffortUnits.SelectedIndex = dUnits;
+
+                txtResources.Text = item.Resources;
+
+                if (item.aIcon != "")
                 {
                     string filename = item.aIcon;
-                    string _filename = filename;
-                    string rootPath = Utils.m_dataPath + "IconDB\\";
+                    string path = "";
 
                     if (filename.StartsWith("stock"))
                     {
-                        rootPath = MMUtils.MindManager.GetPath(Mindjet.MindManager.Interop.MmDirectory.mmDirectoryIcons);
-                        _filename = filename.Substring(5) + ".ico"; // stockemail -> email.ico
+                        path = MMUtils.MindManager.GetPath(Mindjet.MindManager.Interop.MmDirectory.mmDirectoryIcons);
+                        path += filename.Substring(5) + ".ico"; // stockemail -> email.ico
+                    }
+                    else
+                    {
+                        if (Utils.CustomIcons.ContainsKey(filename))
+                            path = Utils.CustomIcons[filename];
                     }
 
-                    if (File.Exists(rootPath + _filename))
+                    if (File.Exists(path))
                     {
-                        pIcon.Image = Image.FromFile(rootPath + _filename);
+                        pIcon.Image = System.Drawing.Image.FromFile(path);
                         pIcon.Tag = filename;
                     }
                 }
@@ -386,7 +531,7 @@ namespace Bubbles
                 {
                     pIcon.Image = pIconDefault.Image; pIcon.Tag = "stockquestion-mark";
                 }
-                if (chTags.Checked)
+                if (item.Tags != "")
                 {
                     string[] tags = item.Tags.Split(';');
                     string[] parts1 = tags[0].Split(':');
@@ -419,7 +564,7 @@ namespace Bubbles
             }
         }
 
-        private void btnApply_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
             // First, check if template was renamed!
             RenameTemplate();
@@ -442,96 +587,104 @@ namespace Bubbles
                 item.Primary = 1;
             }
 
-            if (chProgress.Checked) { item.Progress = (int)pProgress.Tag; }
-            else { item.Progress = -1; pProgress.Image = p0.Image; pProgress.Tag = 0; }
-            if (chPriority.Checked) { item.Priority = (int)pPriority.Tag; }
-            else { item.Priority = 0; pPriority.Image = pPR1.Image; pPriority.Tag = 1; }
-            if (chResources.Checked) { item.Resources = txtResources.Text.Trim(); }
-            else { item.Resources = ""; txtResources.Text = ""; }
-            if (chIcon.Checked) { item.aIcon = (string)pIcon.Tag; }
-            else { item.aIcon = ""; pIcon.Image = pIconDefault.Image; pIcon.Tag = "stockquestion-mark"; }
+            item.TopicText = txtTopicText.Text.Trim();
+            item.Progress = Convert.ToInt32(pProgress.Tag);
+            item.Priority = Convert.ToInt32(pPriority.Tag);
+            item.Resources = txtResources.Text.Trim();
+            item.aIcon = (string)pIcon.Tag;
 
-            if (chStartDate.Checked || chDueDate.Checked)
+            item.Duration = numDuration.Value + ":" + cbDurationUnits.SelectedIndex;
+            string duration = mutDuration.Tag.ToString() == "" ? "" : "checked:";
+            duration += item.Duration;
+
+            item.Effort = numEffort.Value + ":" + cbEffortUnits.SelectedIndex;
+            string effort = mutEffort.Tag.ToString() == "" ? "" : "checked:";
+            effort += item.Effort;
+
+            string startdate = "", duedate = "";
+
+            if ((string)pStartPlace.Tag == "period") // calendar is shown
             {
-                string startdate = "", duedate = "";
-                if (chStartDate.Checked)
-                {
-                    if ((string)pStartPlace.Tag == "period") // calendar is shown
-                    {
-                        startdate = "abs:" + dtpStartDate.Value.ToShortDateString();
-                    }
-                    else // period is shown
-                    {
-                        DateItem _item = cbStartDatePeriod.SelectedItem as DateItem;
-                        startdate = "rel:" + _item.Period + ":" + numStartDate.Value.ToString();
-                    }
-                }
-                else
-                {
-                    dtpStartDate.Visible = false; cbStartDatePeriod.SelectedIndex = 0; numStartDate.Value = 1;
-                }
-                if (chDueDate.Checked)
-                {
-                    if ((string)pDuePlace.Tag == "period") // calendar is shown
-                    {
-                        duedate = "abs:" + dtpDueDate.Value.ToShortDateString();
-                    }
-                    else // period is shown
-                    {
-                        DateItem _item = cbDueDatePeriod.SelectedItem as DateItem;
-                        duedate = "rel:" + _item.Period + ":" + numDueDate.Value.ToString();
-                    }
-                }
-                else
-                {
-                    dtpDueDate.Visible = false; cbDueDatePeriod.SelectedIndex = 0; numDueDate.Value = 1;
-                }
-
-                item.Dates = startdate + ";" + duedate;
+                startdate = "abs:" + dtpStartDate.Value.ToShortDateString();
             }
-            else
+            else // period is shown
             {
-                dtpStartDate.Visible = false; cbStartDatePeriod.SelectedIndex = 0; numStartDate.Value = 1;
-                dtpDueDate.Visible = false; cbDueDatePeriod.SelectedIndex = 0; numDueDate.Value = 1;
-                item.Dates = "";
-            }
-            if (chTags.Checked)
-            {
-                string tag1 = "", tag2 = "", tags = "";
-                if (txtTagGroup1.Text != "" && txtTag1.Text != "")
-                    tag1 = txtTagGroup1.Text.Trim() + ":" + txtTag1.Text.Trim();
-                else { 
-                    txtTagGroup1.Text = ""; txtTag1.Text = ""; }
-
-                if (txtTagGroup2.Text != "" && txtTag2.Text != "")
-                    tag2 = txtTagGroup2.Text.Trim() + ":" + txtTag2.Text.Trim();
-                else {
-                    txtTagGroup2.Text = ""; txtTag2.Text = ""; }
-
-                if (tag1 != "") tags = tag1;
-                if (tag2 != "")
-                {
-                    if (tags != "") tags += ";" + tag2;
-                    else tags = tag2;
-                }
-
-                item.Tags = tags;
-            }
-            else
-            {
-                txtTagGroup1.Text = ""; txtTagGroup2.Text = "";
-                txtTag1.Text = ""; txtTag2.Text = ""; item.Tags = "";
+                DateItem _item = cbStartDatePeriod.SelectedItem as DateItem;
+                startdate = "rel:" + _item.Period + ":" + numStartDate.Value.ToString();
             }
 
-            cbTaskTemplates.SelectedItem = item;
+            if ((string)pDuePlace.Tag == "period") // calendar is shown
+            {
+                duedate = "abs:" + dtpDueDate.Value.ToShortDateString();
+            }
+            else // period is shown
+            {
+                DateItem _item = cbDueDatePeriod.SelectedItem as DateItem;
+                duedate = "rel:" + _item.Period + ":" + numDueDate.Value.ToString();
+            }
+
+            item.Dates = startdate + ";" + duedate;
+
+            string tag1 = "", tag2 = "", tags = "";
+            if (txtTagGroup1.Text != "" && txtTag1.Text != "")
+                tag1 = txtTagGroup1.Text.Trim() + ":" + txtTag1.Text.Trim();
+            else { 
+                txtTagGroup1.Text = ""; txtTag1.Text = ""; }
+
+            if (txtTagGroup2.Text != "" && txtTag2.Text != "")
+                tag2 = txtTagGroup2.Text.Trim() + ":" + txtTag2.Text.Trim();
+            else {
+                txtTagGroup2.Text = ""; txtTag2.Text = ""; }
+
+            if (tag1 != "") tags = tag1;
+            if (tag2 != "")
+            {
+                if (tags != "") tags += ";" + tag2;
+                else tags = tag2;
+            }
+
+            item.Tags = tags;
+
+            item.TopicTextState = (string)mutTopicText.Tag;
+            item.ProgressState = (string)mutProgress.Tag;
+            item.PriorityState = (string)mutPriority.Tag;
+            item.StartDateState = (string)mutStartDate.Tag;
+            item.DueDateState = (string)mutDueDate.Tag;
+            item.DurationState = (string)mutDuration.Tag;
+            item.EffortState = (string)mutEffort.Tag;
+            item.ResourcesState = (string)chResources.Tag;
+            item.IconState = (string)chIcon.Tag;
+            item.TagsState = (string)chTags.Tag;
+
+            string topictext = item.TopicText; if (item.TopicTextState != "") 
+                topictext = (string)mutTopicText.Tag + "$$$" + topictext;
+            string progress = item.Progress.ToString(); if ((string)mutProgress.Tag != "")
+                progress = (string)mutProgress.Tag + ":" + progress;
+            string priority = item.Priority.ToString(); if ((string)mutPriority.Tag != "")
+                priority = (string)mutPriority.Tag + ":" + priority;
+
+            string state = (string)mutStartDate.Tag + ":" + (string)mutDueDate.Tag;
+            if (state == ":") state = "";
+            string dates = item.Dates.ToString(); 
+            if (state != "") dates = state + "$$$" + dates;
+
+            string resources = item.Resources.ToString(); if ((string)chResources.Tag != "")
+                resources = (string)chResources.Tag + ":" + resources;
+            string _tags = item.Tags.ToString(); if ((string)chTags.Tag != "")
+                _tags = (string)chTags.Tag + ";" + _tags;
+            string icon = item.aIcon.ToString(); if (item.IconState != "")
+                icon = item.IconState + ":" + icon;
 
             db.ExecuteNonQuery("update TASKTEMPLATES set " +
-                "progress=" + item.Progress + ", " +
-                "priority=" + item.Priority + ", " +
-                "dates=`" + item.Dates + "`, " +
-                "resources=`" + item.Resources + "`, " +
-                "icon=`" + item.aIcon + "`, " +
-                "tags=`" + item.Tags + "` " +
+                "topictext=`" + topictext + "`, " +
+                "progress=`" + progress + "`, " +
+                "priority=`" + priority + "`, " +
+                "dates=`" + dates + "`, " +
+                "duration=`" + duration + "`, " +
+                "effort=`" + effort + "`, " +
+                "resources=`" + resources + "`, " +
+                "icon=`" + icon + "`, " +
+                "tags=`" + _tags + "` " +
                 "where name=`" + item.Name + "`");
         }
 
@@ -543,7 +696,7 @@ namespace Bubbles
 
         private void pProgress_Click(object sender, EventArgs e)
         {
-            switch (pProgress.Tag)
+            switch (Convert.ToInt32(pProgress.Tag))
             {
                 case 0: pProgress.Image = p25.Image; pProgress.Tag = 25; break;
                 case 25: pProgress.Image = p50.Image; pProgress.Tag = 50; break;
@@ -555,7 +708,7 @@ namespace Bubbles
 
         private void pPriority_Click(object sender, EventArgs e)
         {
-            switch (pPriority.Tag)
+            switch (Convert.ToInt32(pPriority.Tag))
             {
                 case 1: pPriority.Image = pPR2.Image; pPriority.Tag = 2; break;
                 case 2: pPriority.Image = pPR3.Image; pPriority.Tag = 3; break;
@@ -576,9 +729,9 @@ namespace Bubbles
                 string fileName = "stock" + Path.GetFileNameWithoutExtension(iconPath);
 
                 if (BubbleIcons.StockIconFromString(fileName) == 0) // custom icon
-                    fileName = Path.GetFileName(iconPath);
+                    fileName = MMUtils.MindManager.Utilities.GetCustomIconSignature(iconPath);
 
-                pIcon.Image = Image.FromFile(iconPath);
+                pIcon.Image = System.Drawing.Image.FromFile(iconPath);
                 pIcon.Tag = fileName;
             }
         }
@@ -646,6 +799,80 @@ namespace Bubbles
 
         StixDB db = null;
         TaskTemplateItem selectedItem = null;
+
+        private void FourStateCB_MouseClick(object sender, MouseEventArgs e)
+        {
+            PictureBox pb = null;
+
+            if (sender is Label lbl)
+            {
+                switch (lbl.Name)
+                {
+                    case "lblTopicText": pb = mutTopicText; break;
+                    case "lblProgress": pb = mutProgress; break;
+                    case "lblPriority": pb = mutPriority; break;
+                    case "lblStartDate": pb = mutStartDate; break;
+                    case "lblDueDate": pb = mutDueDate; break;
+                    case "lblResources": pb = chResources; break;
+                    case "lblIcon": pb = chIcon; break;
+                    case "lblTags": pb = chTags; break;
+                }
+            }
+            else
+                pb = sender as PictureBox;
+
+            if (pb == null) return;
+
+            string state = pb.Tag.ToString();
+
+            if (state == "")
+            {
+                pb.Tag = "checked"; pb.Image = pChecked.Image;
+            }
+            else if (state == "checked")
+            {
+                pb.Tag = "uncheckedred"; pb.Image = pUncheckedRed.Image;
+            }
+            else if (state == "uncheckedred")
+            {
+                if (pb.Name.StartsWith("mut")) {
+                    pb.Tag = ""; pb.Image = pUnchecked.Image; }
+                else {
+                    pb.Tag = "checkedred"; pb.Image = pCheckedRed.Image; }
+            }
+            else if (state == "checkedred")
+            {
+                pb.Tag = ""; pb.Image = pUnchecked.Image;
+            }
+        }
+
+        private void mutDuration_Click(object sender, EventArgs e)
+        {
+            if (mutDuration.Tag.ToString() == "")
+            {
+                mutDuration.Image = pChecked.Image;
+                mutDuration.Tag = "checked";
+            }
+            else
+            {
+                mutDuration.Image = pUnchecked.Image;
+                mutDuration.Tag = "";
+            }
+        }
+
+        private void mutEffort_Click(object sender, EventArgs e)
+        {
+            if (mutEffort.Tag.ToString() == "")
+            {
+                mutEffort.Image = pChecked.Image;
+                mutEffort.Tag = "checked";
+            }
+            else
+            {
+                mutEffort.Image = pUnchecked.Image;
+                mutEffort.Tag = "";
+            }
+        }
     }
 
     public class DateItem

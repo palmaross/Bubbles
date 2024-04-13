@@ -8,7 +8,7 @@ using System.Globalization;
 using Mindjet.MindManager.Interop;
 using System.IO;
 using System.Linq;
-using PRMapCompanion;
+using System.Xml;
 
 namespace Bubbles
 {
@@ -82,7 +82,7 @@ namespace Bubbles
             di = new DirectoryInfo(m_dataPath + "IconDB");
             foreach (FileInfo fi in di.GetFiles())
             {
-                string signature = Path.GetFileNameWithoutExtension(fi.FullName);
+                string signature = MMUtils.MindManager.Utilities.GetCustomIconSignature(fi.FullName);
                 if (!CustomIcons.Keys.Contains(signature))
                     CustomIcons.Add(signature, fi.FullName);
             }
@@ -214,21 +214,6 @@ namespace Bubbles
             return true;
         }
 
-        /// <summary>
-        /// Check if file exists, unknowing its extension
-        /// </summary>
-        /// <param name="fileName">Basically, icon signature)</param>
-        public static string GetIconFile(string fileName)
-        {
-            DirectoryInfo dir = new DirectoryInfo(m_dataPath + "IconDB");
-            FileInfo[] files = dir.GetFiles(fileName + ".*");
-
-            if (files.Length > 0)
-                return files[0].FullName;
-            else
-                return "";
-        }
-
         #region DateTime
 
         public static DateTime NULLDATE = new DateTime(1899, 12, 30, 0, 0, 0);
@@ -296,6 +281,44 @@ namespace Bubbles
         #endregion
 
         /// <summary>
+        /// Delete Effort from topic replacing topic's XML
+        /// </summary>
+        /// <param name="t">Topic to delete effort from</param>
+        public static void DeleteEffort(Topic t)
+        {
+            InitMarkersList(t);
+
+            foreach (XmlNode node in topicXML)
+            {
+
+                foreach (XmlNode _node in node.ChildNodes)
+                {
+                    if (_node.Name == "ap:Task")
+                    {
+                        try
+                        {
+                            _node.Attributes.RemoveNamedItem("EffortMinutes");
+                            _node.Attributes.RemoveNamedItem("EffortUnit");
+                        }
+                        catch { return; }
+                    }
+                }
+            }
+
+            t.Xml = topicXML.InnerXml;
+        }
+
+        public static void InitMarkersList(Topic t)
+        {
+            topicXML = new XmlDocument();
+            topicXML.LoadXml(t.Xml);
+            NSManager = new XmlNamespaceManager(topicXML.NameTable);
+            NSManager.AddNamespace("ap", "http://schemas.mindjet.com/MindManager/Application/2003");
+        }
+        protected static XmlNamespaceManager NSManager;
+        protected static XmlDocument topicXML;
+
+        /// <summary>
         /// Hashtable of localization file (I18n.ini)
         /// </summary>
         public static System.Collections.Hashtable I18n;
@@ -319,6 +342,9 @@ namespace Bubbles
 
         public static Dictionary<string, string> StockIconsDupes = new Dictionary<string, string>();
         public static Dictionary<string, MmStockIcon> StockIcons = new Dictionary<string, MmStockIcon>();
+        /// <summary>
+        /// signature, path
+        /// </summary>
         public static Dictionary<string, string> CustomIcons = new Dictionary<string, string>();
     }
 

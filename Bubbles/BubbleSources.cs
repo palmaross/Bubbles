@@ -37,6 +37,8 @@ namespace Bubbles
             this.DoubleBuffered = true;
             this.ResizeRedraw = true;
 
+            StixUtils.icondist = pIconDist.Width;
+
             // Context menu
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
 
@@ -80,7 +82,7 @@ namespace Bubbles
                     string type = row["type"].ToString();
                     int order = Convert.ToInt32(row["_order"].ToString());
 
-                    Sources.Add(new MySourcesItem(title, path, type, order));
+                    Sources.Add(new SourceItem(title, path, type, order));
                 }
             }
 
@@ -114,14 +116,14 @@ namespace Bubbles
             if (scale != 1)
             {
                 this.Scale(new SizeF(scale, scale)); // reset to 100%
-                StixUtils.icondist = (int)(StixUtils.icondist * scale);
+                StixUtils.icondist = pIconDist.Width;
                 MinLength = (int)(MinLength * scale);
             }
 
             if (toScale != 100)
             {
                 this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
-                StixUtils.icondist = (int)(StixUtils.icondist * (toScale / 100));
+                StixUtils.icondist = pIconDist.Width;
                 MinLength = (int)(MinLength * (toScale / 100));
             }
         }
@@ -198,7 +200,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_rename")
             {
-                MySourcesItem item = (MySourcesItem)selectedIcon.Tag;
+                SourceItem item = (SourceItem)selectedIcon.Tag;
                 if (item == null) return;
 
                 // Get new source's name
@@ -206,7 +208,7 @@ namespace Bubbles
                 if (name != "")
                 {
                     // Change title in the picture box tag
-                    ((MySourcesItem)selectedIcon.Tag).Title = name;
+                    ((SourceItem)selectedIcon.Tag).Title = name;
                     // Change title in the Source list item
                     Sources.Find(p => p.Path == item.Path).Title = name;
                     toolTip1.SetToolTip(selectedIcon, name);
@@ -303,7 +305,7 @@ namespace Bubbles
                 order = 1;
             if (position == "left" || position == "right")
             {
-                MySourcesItem _item = (MySourcesItem)selectedIcon.Tag;
+                SourceItem _item = (SourceItem)selectedIcon.Tag;
                 if (position == "left")
                     order = _item.Order == 1 ? 1 : _item.Order;
                 else
@@ -312,9 +314,9 @@ namespace Bubbles
 
             string type = GetFileType(sourcePath);
 
-            MySourcesItem item = new MySourcesItem(sourceTitle, sourcePath, type, order);
+            SourceItem item = new SourceItem(sourceTitle, sourcePath, type, order);
             using (StixDB db = new StixDB())
-                db.AddSource(sourceTitle, sourcePath, type, order, (int)this.Tag);
+                db.AddSource(sourceTitle, sourcePath, type, order, (int)this.Tag, 0);
 
             Sources.Insert(order - 1, item);
             for (int i = 0; i < Sources.Count; i++)
@@ -323,7 +325,7 @@ namespace Bubbles
             RefreshStick();
         }
 
-        public string GetFileType(string path)
+        public static string GetFileType(string path)
         {
             string ext = Path.GetExtension(path).ToLower();
 
@@ -359,37 +361,46 @@ namespace Bubbles
                 return "file";
         }
 
+        SourceListDlg aSourceList = null;
         private void SourceList_Click(object sender, EventArgs e)
         {
             if (Sources.Count == 0) return;
 
-            using (SourceListDlg dlg = new SourceListDlg())
+            if (aSourceList == null || !aSourceList.Visible)
             {
-                foreach (var item in Sources)
-                {
-                    if (item.Type == "exe")
-                    {
-                        try
-                        {
-                            Icon appIcon = Icon.ExtractAssociatedIcon(item.Path);
-                            dlg.imageList1.Images.Add(item.Title, appIcon.ToBitmap());
-                            dlg.listView1.Items.Add(item.Title, item.Title).Tag = item.Path;
-                        }
-                        catch { dlg.listView1.Items.Add(item.Title, item.Type).Tag = item.Path; }
-                    }
-                    else
-                        dlg.listView1.Items.Add(item.Title, item.Type).Tag = item.Path;
-                }
-
-                if (Sources.Count < 8) // If not a big amount, change height to adjust items count 
-                    dlg.Height = Sources.Count * (int)(dlg.itemHeight.Height * 1.3);
-
-                // Get source list location
-                Rectangle child = dlg.RectangleToScreen(dlg.ClientRectangle);
-                dlg.Location = StixUtils.GetChildLocation(this, child, orientation, "sources");
-                
-                dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                aSourceList = null;
+                aSourceList = new SourceListDlg();
             }
+            else return;
+
+            foreach (var item in Sources)
+            {
+                if (item.Type == "exe")
+                {
+                    try
+                    {
+                        Icon appIcon = Icon.ExtractAssociatedIcon(item.Path);
+                        aSourceList.imageList1.Images.Add(item.Title, appIcon.ToBitmap());
+                        aSourceList.listView1.Items.Add(" " + item.Title, item.Title).Tag = item.Path;
+                    }
+                    catch { aSourceList.listView1.Items.Add(" " + item.Title, item.Type).Tag = item.Path; }
+                }
+                else
+                    aSourceList.listView1.Items.Add(" " + item.Title, item.Type).Tag = item.Path;
+            }
+
+            int itemheight = aSourceList.listView1.GetItemRect(0).Height;
+            if (Sources.Count <= 10) // If not a big amount, change height to adjust items count 
+            {
+                aSourceList.thisHeight = Sources.Count * itemheight + aSourceList.itemHeight.Width;
+                aSourceList.listView1.Scrollable = false;
+            }
+
+            // Get source list location
+            Rectangle child = aSourceList.RectangleToScreen(aSourceList.ClientRectangle);
+            aSourceList.Location = StixUtils.GetChildLocation(this, child, orientation, "sources");
+
+            aSourceList.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
         void RefreshStick(bool deleteall = false)
@@ -418,7 +429,7 @@ namespace Bubbles
 
             if (e.Button == MouseButtons.Left)
             {
-                MySourcesItem item = selectedIcon.Tag as MySourcesItem;
+                SourceItem item = selectedIcon.Tag as SourceItem;
                 Process.Start(item.Path);
             }
             else if (e.Button == MouseButtons.Right)
@@ -443,7 +454,7 @@ namespace Bubbles
             if (e.Data.GetDataPresent(typeof(PictureBox))) // Move the picture box
             {
                 var source = (PictureBox)e.Data.GetData(typeof(PictureBox)); // moving PB
-                int sourceIndex = (source.Tag as MySourcesItem).Order; // moving PB order
+                int sourceIndex = (source.Tag as SourceItem).Order; // moving PB order
                 int targetIndex = 0;
 
                 if (sender is PictureBox) // also, can be this form
@@ -455,7 +466,7 @@ namespace Bubbles
                     else
                     {
                         // or after the target PB
-                        try{ targetIndex = (target.Tag as MySourcesItem).Order; }
+                        try{ targetIndex = (target.Tag as SourceItem).Order; }
                         catch { }
                     }
                 }
@@ -467,7 +478,7 @@ namespace Bubbles
                     // Reorder Sources list
                     Sources.RemoveAt(sourceIndex - 1);
                     if (sourceIndex < targetIndex) { targetIndex--; }
-                    Sources.Insert(targetIndex, source.Tag as MySourcesItem);
+                    Sources.Insert(targetIndex, source.Tag as SourceItem);
                     for (int i = 0; i < Sources.Count; i++)
                         Sources[i].Order = i + 1;
 
@@ -537,7 +548,7 @@ namespace Bubbles
         }
         #endregion
 
-        public List<MySourcesItem> Sources = new List<MySourcesItem>();
+        public List<SourceItem> Sources = new List<SourceItem>();
         PictureBox selectedIcon = null;
         string orientation = "H";
         bool manage = false;
@@ -558,16 +569,16 @@ namespace Bubbles
         [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
 
-        public readonly List<string> Images = new List<string> { ".jpg", ".jpeg", ".jpe", ".bmp", ".gif", ".png", ".ico" };
-        public readonly List<string> Audio = new List<string> { ".aiff", ".au", ".midi", ".mp3", ".m4a", ".wav", ".wma" };
-        public readonly List<string> Video = new List<string> { ".asf", ".avi", ".mp4", ".mov", ".m4v", ".mpg", ".mpeg", ".wmv" };
-        public readonly List<string> Word = new List<string> { ".doc", ".docm", ".docx", ".rtf" };
-        public readonly List<string> Excel = new List<string> { ".xls", ".xlsx", ".xlsm" };
+        public static readonly List<string> Images = new List<string> { ".jpg", ".jpeg", ".jpe", ".bmp", ".gif", ".png", ".ico" };
+        public static readonly List<string> Audio = new List<string> { ".aiff", ".au", ".midi", ".mp3", ".m4a", ".wav", ".wma" };
+        public static readonly List<string> Video = new List<string> { ".asf", ".avi", ".mp4", ".mov", ".m4v", ".mpg", ".mpeg", ".wmv" };
+        public static readonly List<string> Word = new List<string> { ".doc", ".docm", ".docx", ".rtf" };
+        public static readonly List<string> Excel = new List<string> { ".xls", ".xlsx", ".xlsm" };
     }
 
-    public class MySourcesItem
+    public class SourceItem
     {
-        public MySourcesItem(string title, string path, string type, int order)
+        public SourceItem(string title, string path, string type, int order)
         {
             Order = order;
             Path = path;

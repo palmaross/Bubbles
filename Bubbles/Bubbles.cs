@@ -220,6 +220,8 @@ namespace Bubbles
 
             if (m_TaskInfo != null && m_TaskInfo.Visible)
             {
+                if (m_TaskInfo.stickDuration) return;
+
                 if (aArgs.what.Contains("selection"))
                 {
                     // If map selection changed, change the dates in the TaskInfo stick with selected topic dates
@@ -255,6 +257,8 @@ namespace Bubbles
         {
             Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
             if (t == null) return;
+
+            m_TaskInfo.MMDuration = true;
 
             DateTime startdate = t.Task.StartDate, duedate = t.Task.DueDate;
             bool startequal = true, dueequal = true;
@@ -319,6 +323,8 @@ namespace Bubbles
                 tt.SetToolTip(m_TaskInfo.pTopicDueDate, Utils.getString("taskinfo.pTopicDueDate.remove.tooltip"));
             }
 
+            // Duration and Effort
+
             if (!m_TaskInfo.stickDuration)
             {
                 SetTaskInfoDurationUnit(t);
@@ -326,10 +332,9 @@ namespace Bubbles
                 int duration = t.Task.GetDuration(t.Task.DurationUnit);
 
                 if (m_TaskInfo.numDuration.Value != duration)
-                {
-                    m_TaskInfo.MMDuration = true;
                     m_TaskInfo.numDuration.Value = duration;
-                }
+
+                m_TaskInfo.MMDuration = false;
             }
         }
 
@@ -349,6 +354,25 @@ namespace Bubbles
                     m_TaskInfo.ST_DurationUnits.SelectedIndex = 3; break;
                 case MmDurationUnit.mmDurationUnitMonth:
                     m_TaskInfo.ST_DurationUnits.SelectedIndex = 4; break;
+            }
+        }
+
+        public static void SetTaskInfoEffortUnit(Topic t)
+        {
+            MmDurationUnit unit = t.Task.EffortUnit;
+
+            switch (unit)
+            {
+                case MmDurationUnit.mmDurationUnitMinute:
+                    m_TaskInfo.ST_EffortUnits.SelectedIndex = 0; break;
+                case MmDurationUnit.mmDurationUnitHour:
+                    m_TaskInfo.ST_EffortUnits.SelectedIndex = 1; break;
+                case MmDurationUnit.mmDurationUnitDay:
+                    m_TaskInfo.ST_EffortUnits.SelectedIndex = 2; break;
+                case MmDurationUnit.mmDurationUnitWeek:
+                    m_TaskInfo.ST_EffortUnits.SelectedIndex = 3; break;
+                case MmDurationUnit.mmDurationUnitMonth:
+                    m_TaskInfo.ST_EffortUnits.SelectedIndex = 4; break;
             }
         }
 
@@ -500,7 +524,14 @@ namespace Bubbles
                 m_Resources.Dispose();
                 m_Resources = null;
             }
-            
+
+            if (m_AllSources != null)
+            {
+                m_AllSources.Hide();
+                m_AllSources.Dispose();
+                m_AllSources = null;
+            }
+
             if (m_topicNotes != null)
             {
                 m_topicNotes.listTopics.Items.Clear();
@@ -577,6 +608,7 @@ namespace Bubbles
         public static BookmarkListDlg m_BookmarkList;
 
         public static ResourcesDlg m_Resources;
+        public static AllSourcesDlg m_AllSources;
 
         public static BubbleTaskInfo m_TaskInfo;
 

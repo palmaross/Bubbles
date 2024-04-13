@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using BubblesAppManager;
-using static Community.CsharpSqlite.Sqlite3;
 
 namespace Bubbles
 {
@@ -29,7 +28,16 @@ namespace Bubbles
                 );
         }
 
-        public void AddSource(string title, string path, string type, int order, int stickID)
+        public void AddSourceGroup(string name)
+        {
+            m_db.ExecuteNonQuery("insert into SOURCEGROUPS values(NULL, `"
+                + name + "`, "
+                + "'', 0"
+                + ");"
+            );
+        }
+
+        public void AddSource(string title, string path, string type, int order, int stickID, int groupID)
         {
             m_db.ExecuteNonQuery("insert into SOURCES values(`"
                 + title + "`, `"
@@ -37,6 +45,7 @@ namespace Bubbles
                 + type + "`, "
                 + order + ", "
                 + stickID + ", "
+                + groupID + ", "
                 + "'', '', 0, 0"
                 + ");"
             );
@@ -98,15 +107,18 @@ namespace Bubbles
             );
         }
 
-        public void AddTaskTemplate(int primary, string name, int progress, int priority, string dates,
-            string icon, string resources, string tags)
+        public void AddTaskTemplate(int primary, string name, string topictext, string progress, string priority, 
+            string dates, string duration, string effort, string icon, string resources, string tags)
         {
             m_db.ExecuteNonQuery("insert into TASKTEMPLATES values("
                 + primary + ", `"
-                + name + "`, "
-                + progress + ", "
-                + priority + ", `"
+                + name + "`, `"
+                + topictext + "`, `"
+                + progress + "`, `"
+                + priority + "`, `"
                 + dates + "`, `"
+                + duration + "`, `"
+                + effort + "`, `"
                 + icon + "`, `"
                 + resources + "`, `"
                 + tags + "`, "
@@ -144,7 +156,6 @@ namespace Bubbles
             //// Stix ////
             m_db.ExecuteNonQuery("CREATE TABLE ICONS(name text, filename text, _order integer, " +
                 "stickID int, reserved1 text, reserved2 integer);");
-            // group: 0 - no group, 1 - no mutually exclusive group, 2 - mutually exclusive group
             // filename: file name for stock icons, signature for custom icons
 
             m_db.ExecuteNonQuery("CREATE TABLE RESOURCES(name text, color string, groupID int, " +
@@ -156,18 +167,29 @@ namespace Bubbles
             m_db.ExecuteNonQuery("CREATE TABLE TAGGROUPS(id INTEGER PRIMARY KEY, name text, mutexclusive int, " +
                 "reserved1 text, reserved2 integer);");
 
-            m_db.ExecuteNonQuery("CREATE TABLE SOURCES(title text, path text, type text, _order integer, stickID int, " +
+            m_db.ExecuteNonQuery("CREATE TABLE SOURCEGROUPS(id INTEGER PRIMARY KEY, name text, " +
+                "reserved1 text, reserved2 integer);");
+
+            m_db.ExecuteNonQuery("CREATE TABLE SOURCES(title text, path text, type text, " +
+                "_order integer, stickID int, groupID int, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
 
             // Quick tasks
-            m_db.ExecuteNonQuery("CREATE TABLE TASKTEMPLATES(prime int, name text, progress int, " +
-                "priority int, dates text, icon text, resources text, tags text, properties text, " +
+            m_db.ExecuteNonQuery("CREATE TABLE TASKTEMPLATES(prime int, name text, topictext text, " +
+                "progress text, priority text, dates text, duration text, effort text, " +
+                "icon text, resources text, tags text, properties text, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
-            // dates - "abs:16/12/2024;rel:today:N"
-            // abs - calendar date; rel - period, N - day of week or month
-            // icon - same as in ICONS
-            // tags - group:tag;group:tag
-            // properties - name:value:type;name:value:type;name:value:type
+            // topictext - "state$$$topictext"
+            // progress - "state:int
+            // priority - "state:int"
+            // dates - "statestart:statedue$$$abs:16/12/2024;rel:today:N"
+            //          abs - calendar date; rel - period, N - day of week or month
+            // duration - "state:1:2" (0 - minutes, 1 - hours, 2 - days, 3 - weeks, 4 - months)
+            // effort - "state:4:1"
+            // icon - same as in ICONS (file name for stock icons, signature for custom icons)
+            // resources - "state:resources"
+            // tags - "state;group:tag;group:tag"
+            // properties - "state;name:value:type;name:value:type;name:value:type"
 
             // Add Topic templates
             m_db.ExecuteNonQuery("CREATE TABLE ADDTOPIC_TEMPLATES(id INTEGER PRIMARY KEY, " +
@@ -202,9 +224,15 @@ namespace Bubbles
             id = r.Next();
             AddStick(id, Utils.getString("BubbleMySources.bubble.tooltip"), StixUtils.typesources, 0, "H", "");
 
-            AddSource(Utils.getString("mysources.first1.text"), "https://palmaross.com/", "http", 1, id);
-            AddSource(Utils.getString("mysources.first2.text"), Utils.dllPath + "OmniStix.chm", "file", 2, id);
-            AddSource(Utils.getString("mysources.first3.text"), "c:\\Windows\\System32\\notepad.exe", "exe", 3, id);
+            AddSourceGroup(Utils.getString("BubbleMySources.bubble.tooltip"));
+            // Get created group id
+            int groupID = 0;
+            DataTable dt = ExecuteQuery("SELECT last_insert_rowid()");
+            if (dt.Rows.Count > 0) groupID = Convert.ToInt32(dt.Rows[0][0]);
+
+            AddSource(Utils.getString("mysources.first1.text"), "https://palmaross.com/", "http", 1, id, groupID);
+            AddSource(Utils.getString("mysources.first2.text"), Utils.dllPath + "OmniStix.chm", "chm", 2, id, groupID);
+            AddSource(Utils.getString("mysources.first3.text"), "c:\\Windows\\System32\\notepad.exe", "exe", 3, id, groupID);
 
             // Add Bookmarks stick
             id = r.Next();
@@ -233,8 +261,8 @@ namespace Bubbles
             int _id = 0;
             AddResourceGroup(Utils.getString("taskinfo.database.resourcegroup1"));
             // Get created group id
-            DataTable dt = ExecuteQuery("SELECT last_insert_rowid()");
-            if (dt.Rows.Count > 0) _id = Convert.ToInt32(dt.Rows[0][0]);
+            DataTable _dt = ExecuteQuery("SELECT last_insert_rowid()");
+            if (dt.Rows.Count > 0) _id = Convert.ToInt32(_dt.Rows[0][0]);
             // Add Resources to group
             AddResource(Utils.getString("taskinfo.database.resources.res1"), "", _id);
             AddResource(Utils.getString("taskinfo.database.resources.res2"), "", _id);
@@ -248,9 +276,9 @@ namespace Bubbles
             AddResource(Utils.getString("taskinfo.database.resources.res4"), "#ffffff80", _id);
 
             // Add Task Templates
-            AddTaskTemplate(1, Utils.getString("quicktask.template.default"), 0, 0, "rel:today:1;rel:today:1", "", "", "");
-            AddTaskTemplate(0, Utils.getString("quicktask.template.important"), 0, 1, "rel:today:1;rel:today:1", "", "", "");
-            AddTaskTemplate(0, Utils.getString("quicktask.template.completed"), 100, 0, ";rel:today:1", "", "", "");
+            AddTaskTemplate(1, Utils.getString("quicktask.template.default"), "", "checked:0", "", "checked:checked$$$rel:today:1;rel:today:1", "", "", "", "", "");
+            AddTaskTemplate(0, Utils.getString("quicktask.template.important"), "", "", "checked:1", "checked:checked$$$rel:today:1;rel:today:1", "", "", "", "", "");
+            AddTaskTemplate(0, Utils.getString("quicktask.template.completed"), "", "checked:100", "", ":checked$$$;rel:today:1", "", "", "", "", "");
 
             // Add values for Topic Width dialog
             AddTopicWidth("numMainWidth", 0, 64, 1);

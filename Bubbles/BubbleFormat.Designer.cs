@@ -110,7 +110,7 @@
             this.Manage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Manage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Manage.Image = ((System.Drawing.Image)(resources.GetObject("Manage.Image")));
-            this.Manage.Location = new System.Drawing.Point(380, 5);
+            this.Manage.Location = new System.Drawing.Point(365, 5);
             this.Manage.Name = "Manage";
             this.Manage.Size = new System.Drawing.Size(20, 20);
             this.Manage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -132,9 +132,9 @@
             // pBold
             // 
             this.pBold.Image = ((System.Drawing.Image)(resources.GetObject("pBold.Image")));
-            this.pBold.Location = new System.Drawing.Point(28, 7);
+            this.pBold.Location = new System.Drawing.Point(28, 8);
             this.pBold.Name = "pBold";
-            this.pBold.Size = new System.Drawing.Size(16, 16);
+            this.pBold.Size = new System.Drawing.Size(14, 14);
             this.pBold.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pBold.TabIndex = 75;
             this.pBold.TabStop = false;
@@ -144,7 +144,7 @@
             // pFontDecrease
             // 
             this.pFontDecrease.Image = ((System.Drawing.Image)(resources.GetObject("pFontDecrease.Image")));
-            this.pFontDecrease.Location = new System.Drawing.Point(145, 7);
+            this.pFontDecrease.Location = new System.Drawing.Point(133, 7);
             this.pFontDecrease.Name = "pFontDecrease";
             this.pFontDecrease.Size = new System.Drawing.Size(16, 16);
             this.pFontDecrease.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -156,9 +156,9 @@
             // pItalic
             // 
             this.pItalic.Image = ((System.Drawing.Image)(resources.GetObject("pItalic.Image")));
-            this.pItalic.Location = new System.Drawing.Point(50, 7);
+            this.pItalic.Location = new System.Drawing.Point(47, 8);
             this.pItalic.Name = "pItalic";
-            this.pItalic.Size = new System.Drawing.Size(16, 16);
+            this.pItalic.Size = new System.Drawing.Size(14, 14);
             this.pItalic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pItalic.TabIndex = 81;
             this.pItalic.TabStop = false;
@@ -168,9 +168,9 @@
             // pUnder
             // 
             this.pUnder.Image = ((System.Drawing.Image)(resources.GetObject("pUnder.Image")));
-            this.pUnder.Location = new System.Drawing.Point(72, 7);
+            this.pUnder.Location = new System.Drawing.Point(66, 8);
             this.pUnder.Name = "pUnder";
-            this.pUnder.Size = new System.Drawing.Size(16, 16);
+            this.pUnder.Size = new System.Drawing.Size(14, 14);
             this.pUnder.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pUnder.TabIndex = 80;
             this.pUnder.TabStop = false;
@@ -180,7 +180,7 @@
             // pFontIncrease
             // 
             this.pFontIncrease.Image = ((System.Drawing.Image)(resources.GetObject("pFontIncrease.Image")));
-            this.pFontIncrease.Location = new System.Drawing.Point(123, 7);
+            this.pFontIncrease.Location = new System.Drawing.Point(108, 7);
             this.pFontIncrease.Name = "pFontIncrease";
             this.pFontIncrease.Size = new System.Drawing.Size(16, 16);
             this.pFontIncrease.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -192,9 +192,9 @@
             // pClearFormat
             // 
             this.pClearFormat.Image = ((System.Drawing.Image)(resources.GetObject("pClearFormat.Image")));
-            this.pClearFormat.Location = new System.Drawing.Point(356, 7);
+            this.pClearFormat.Location = new System.Drawing.Point(340, 6);
             this.pClearFormat.Name = "pClearFormat";
-            this.pClearFormat.Size = new System.Drawing.Size(16, 16);
+            this.pClearFormat.Size = new System.Drawing.Size(18, 18);
             this.pClearFormat.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pClearFormat.TabIndex = 82;
             this.pClearFormat.TabStop = false;
@@ -203,7 +203,7 @@
             // 
             // fontcolor2
             // 
-            this.fontcolor2.Location = new System.Drawing.Point(197, 15);
+            this.fontcolor2.Location = new System.Drawing.Point(182, 15);
             this.fontcolor2.Name = "fontcolor2";
             this.fontcolor2.Size = new System.Drawing.Size(16, 12);
             this.fontcolor2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -213,7 +213,7 @@
             // 
             // fontcolor1
             // 
-            this.fontcolor1.Location = new System.Drawing.Point(175, 15);
+            this.fontcolor1.Location = new System.Drawing.Point(160, 15);
             this.fontcolor1.Name = "fontcolor1";
             this.fontcolor1.Size = new System.Drawing.Size(16, 12);
             this.fontcolor1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -223,7 +223,7 @@
             // 
             // fontcolor3
             // 
-            this.fontcolor3.Location = new System.Drawing.Point(219, 15);
+            this.fontcolor3.Location = new System.Drawing.Point(204, 15);
             this.fontcolor3.Name = "fontcolor3";
             this.fontcolor3.Size = new System.Drawing.Size(16, 12);
             this.fontcolor3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -233,7 +233,7 @@
             // 
             // fillcolor2
             // 
-            this.fillcolor2.Location = new System.Drawing.Point(288, 15);
+            this.fillcolor2.Location = new System.Drawing.Point(273, 15);
             this.fillcolor2.Name = "fillcolor2";
             this.fillcolor2.Size = new System.Drawing.Size(16, 12);
             this.fillcolor2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -243,7 +243,7 @@
             // 
             // fillcolor1
             // 
-            this.fillcolor1.Location = new System.Drawing.Point(267, 15);
+            this.fillcolor1.Location = new System.Drawing.Point(252, 15);
             this.fillcolor1.Name = "fillcolor1";
             this.fillcolor1.Size = new System.Drawing.Size(16, 12);
             this.fillcolor1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -253,7 +253,7 @@
             // 
             // fillcolor3
             // 
-            this.fillcolor3.Location = new System.Drawing.Point(309, 15);
+            this.fillcolor3.Location = new System.Drawing.Point(294, 15);
             this.fillcolor3.Name = "fillcolor3";
             this.fillcolor3.Size = new System.Drawing.Size(16, 12);
             this.fillcolor3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -263,7 +263,7 @@
             // 
             // lblTextColor
             // 
-            this.lblTextColor.Location = new System.Drawing.Point(162, 0);
+            this.lblTextColor.Location = new System.Drawing.Point(147, 0);
             this.lblTextColor.Name = "lblTextColor";
             this.lblTextColor.Size = new System.Drawing.Size(85, 13);
             this.lblTextColor.TabIndex = 89;
@@ -272,7 +272,7 @@
             // 
             // lblFillColor
             // 
-            this.lblFillColor.Location = new System.Drawing.Point(255, 0);
+            this.lblFillColor.Location = new System.Drawing.Point(240, 0);
             this.lblFillColor.Name = "lblFillColor";
             this.lblFillColor.Size = new System.Drawing.Size(82, 13);
             this.lblFillColor.TabIndex = 90;
@@ -282,7 +282,7 @@
             // pClearTextColor
             // 
             this.pClearTextColor.Image = ((System.Drawing.Image)(resources.GetObject("pClearTextColor.Image")));
-            this.pClearTextColor.Location = new System.Drawing.Point(241, 7);
+            this.pClearTextColor.Location = new System.Drawing.Point(226, 7);
             this.pClearTextColor.Name = "pClearTextColor";
             this.pClearTextColor.Size = new System.Drawing.Size(16, 16);
             this.pClearTextColor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -294,7 +294,7 @@
             // pClearFillColor
             // 
             this.pClearFillColor.Image = ((System.Drawing.Image)(resources.GetObject("pClearFillColor.Image")));
-            this.pClearFillColor.Location = new System.Drawing.Point(331, 7);
+            this.pClearFillColor.Location = new System.Drawing.Point(316, 7);
             this.pClearFillColor.Name = "pClearFillColor";
             this.pClearFillColor.Size = new System.Drawing.Size(16, 16);
             this.pClearFillColor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -306,9 +306,9 @@
             // pStrike
             // 
             this.pStrike.Image = ((System.Drawing.Image)(resources.GetObject("pStrike.Image")));
-            this.pStrike.Location = new System.Drawing.Point(94, 7);
+            this.pStrike.Location = new System.Drawing.Point(85, 8);
             this.pStrike.Name = "pStrike";
-            this.pStrike.Size = new System.Drawing.Size(16, 16);
+            this.pStrike.Size = new System.Drawing.Size(14, 14);
             this.pStrike.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pStrike.TabIndex = 93;
             this.pStrike.TabStop = false;
@@ -320,7 +320,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(405, 30);
+            this.ClientSize = new System.Drawing.Size(390, 30);
             this.ControlBox = false;
             this.Controls.Add(this.pictureHandle);
             this.Controls.Add(this.pBold);

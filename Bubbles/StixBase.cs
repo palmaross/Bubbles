@@ -47,7 +47,6 @@ namespace Bubbles
             cm_autoclose.Text = Utils.getString("stixbase.contextmenu.autohide");
             cm_closemenu.Text = Utils.getString("button.close");
 
-            StixUtils.icondist = pIconDist.Width;
             StixUtils.cmiSize = p2.Size;
 
             Color c = ColorTranslator.FromHtml("#e0e5ed");
@@ -273,7 +272,9 @@ namespace Bubbles
 
         private void BoxSources_Click(object sender, EventArgs e)
         {
-
+            StixButton.m_AllSources = null;
+            StixButton.m_AllSources = new AllSourcesDlg();
+            StixButton.m_AllSources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
         private void Stickers_MouseClick(object sender, MouseEventArgs e)

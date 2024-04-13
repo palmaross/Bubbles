@@ -46,7 +46,6 @@
             this.pro100 = new System.Windows.Forms.PictureBox();
             this.pSpace = new System.Windows.Forms.PictureBox();
             this.pBox = new System.Windows.Forms.PictureBox();
-            this.txtIconName = new System.Windows.Forms.TextBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
@@ -72,7 +71,7 @@
             this.treeView1.Location = new System.Drawing.Point(12, 13);
             this.treeView1.Name = "treeView1";
             this.treeView1.SelectedImageIndex = 0;
-            this.treeView1.Size = new System.Drawing.Size(173, 310);
+            this.treeView1.Size = new System.Drawing.Size(173, 326);
             this.treeView1.TabIndex = 0;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
@@ -90,7 +89,7 @@
             this.panel1.Controls.Add(this.pBox);
             this.panel1.Location = new System.Drawing.Point(196, 13);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(151, 310);
+            this.panel1.Size = new System.Drawing.Size(151, 326);
             this.panel1.TabIndex = 1;
             // 
             // panelPP
@@ -249,20 +248,11 @@
             this.pBox.TabStop = false;
             this.pBox.Visible = false;
             // 
-            // txtIconName
-            // 
-            this.txtIconName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtIconName.Location = new System.Drawing.Point(12, 330);
-            this.txtIconName.Name = "txtIconName";
-            this.txtIconName.Size = new System.Drawing.Size(102, 20);
-            this.txtIconName.TabIndex = 2;
-            this.txtIconName.Visible = false;
-            // 
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(277, 334);
+            this.btnCancel.Location = new System.Drawing.Point(277, 343);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(70, 23);
             this.btnCancel.TabIndex = 2;
@@ -273,7 +263,7 @@
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(194, 334);
+            this.btnOK.Location = new System.Drawing.Point(194, 343);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(70, 23);
             this.btnOK.TabIndex = 3;
@@ -287,8 +277,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(359, 365);
-            this.Controls.Add(this.txtIconName);
+            this.ClientSize = new System.Drawing.Size(359, 377);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.panel1);
@@ -316,7 +305,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pSpace)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBox)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -327,7 +315,6 @@
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.PictureBox pSpace;
         private System.Windows.Forms.PictureBox pBox;
-        private System.Windows.Forms.TextBox txtIconName;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.PictureBox pro100;

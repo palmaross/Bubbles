@@ -30,40 +30,40 @@ namespace Bubbles
 
             string path = MMUtils.MindManager.GetPath(MmDirectory.mmDirectoryIcons);
             ListDirectory(treeView1, path);
-
-            txtIconName.KeyUp += TxtIconName_KeyUp;
-        }
-
-        private void TxtIconName_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                btnOK_Click(null, null);
-                this.DialogResult = DialogResult.OK;
-            }
-            else if (e.KeyCode == Keys.Escape)
-                txtIconName.Visible = false;
         }
 
         private void ListDirectory(TreeView treeView, string path)
         {
+            // Priority/Progress
             if (!taskTemplate)
             {
-                var directoryNode = new TreeNode()
+                var priproNode = new TreeNode()
                 {
                     ImageIndex = 0,
                     SelectedImageIndex = 0,
                     Tag = "PP",
                     Text = Utils.getString("SelectIconDlg.PriPro")
                 };
-                treeView.Nodes.Add(directoryNode);
+                treeView.Nodes.Add(priproNode);
             }
+
+            // Custom icons
+            var customiconsNode = new TreeNode()
+            {
+                ImageIndex = 0,
+                SelectedImageIndex = 0,
+                Tag = Utils.m_dataPath + "IconDB",
+                Text = Utils.getString("SelectIconDlg.CustomIcons")
+            };
+            treeView.Nodes.Add(customiconsNode);
 
             var rootDirectoryInfo = new DirectoryInfo(path);
             treeView.Nodes.Add(CreateDirectoryNode(rootDirectoryInfo));
 
-            if (!taskTemplate)
+            if (taskTemplate)
                 treeView.SelectedNode = treeView.Nodes[1];
+            else
+                treeView.SelectedNode = treeView.Nodes[2];
         }
 
         private TreeNode CreateDirectoryNode(DirectoryInfo directoryInfo)
@@ -89,7 +89,6 @@ namespace Bubbles
         void treeView1_AfterSelect(object o, TreeViewEventArgs e)
         {
             panel1.Controls.Clear();
-            txtIconName.Visible = false;
             string path = e.Node.Tag.ToString();
 
             if (path == "PP")
@@ -150,7 +149,6 @@ namespace Bubbles
                 string signature = MMUtils.MindManager.Utilities.GetCustomIconSignature(iconPath);
 
                 if (_filename == filename || // Priority or Progress
-                    _filename == filename + ".ico" || // custom icon
                     _filename == "stock" + filename || // stock icon
                     _filename == signature) // custom icon
                 {
@@ -185,21 +183,6 @@ namespace Bubbles
                     icon.BackColor = SystemColors.Highlight;
                     SelectedIcons.Add(icon, iconPath);
                 }
-
-                //txtIconName.Visible = true;
-                //txtIconName.BringToFront();
-
-                //// Get name textbox location
-                //int locx = panel1.Location.X + icon.Location.X;
-                //int locy = panel1.Location.Y + icon.Location.Y + icon.Height;
-                //if (locx > panel1.Location.X + panel1.Width - txtIconName.Width)
-                //    locx = panel1.Location.X + panel1.Width - txtIconName.Width;
-
-                //// Show name textbox
-                //txtIconName.Text = Path.GetFileNameWithoutExtension(icon.Name);
-                //txtIconName.Location = new Point(locx, locy);
-                //txtIconName.Focus();
-                //txtIconName.SelectAll();
             }
             else // This dialog is called from TaskTemplate dialog
                 DialogResult = DialogResult.OK;
@@ -207,7 +190,7 @@ namespace Bubbles
 
         private void btnOK_Click(object sender, System.EventArgs e)
         {
-            iconName = txtIconName.Text.Trim();
+            
         }
 
         bool topdir = true;

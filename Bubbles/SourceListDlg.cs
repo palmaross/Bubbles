@@ -18,8 +18,9 @@ namespace Bubbles
             this.ResizeRedraw = true;
 
             // Add a dummy column
-            var ch = listView1.Columns.Add("My Sources", -1, HorizontalAlignment.Center);
-            listView1.GridLines = true;
+            listView1.Columns.Add("", 0, HorizontalAlignment.Left);
+            listView1.HeaderStyle = ColumnHeaderStyle.None;
+            listView1.Columns[0].Width = listView1.Width - 4 - SystemInformation.VerticalScrollBarWidth;
 
             // Context menu
             contextMenuStrip1.ItemClicked += ContextMenuStrip_ItemClicked;
@@ -30,7 +31,7 @@ namespace Bubbles
             MS_rename.Text = Utils.getString("button.rename");
             StixUtils.SetContextMenuImage(MS_delete, "edit.png");
 
-            imageList1.ImageSize = p2.Size;
+            imageList1.ImageSize = imageSize.Size;
             listView1.SmallImageList = imageList1;
 
             imageList1.Images.Add("audio", Image.FromFile(Utils.ImagesPath + "ms_audio.png"));
@@ -49,37 +50,41 @@ namespace Bubbles
             imageList1.Images.Add("chm", Image.FromFile(Utils.ImagesPath + "chm.png"));
 
             this.Paint += MySourcesListDlg_Paint; // paint the border
-            listView1.SelectedIndexChanged += ListView1_SelectedIndexChanged;
-
             this.MaximumSize = new Size(this.Width * 2, this.Height * 3);
+
+            this.Deactivate += SourceListDlg_Deactivate;
+        }
+
+        private void SourceListDlg_Deactivate(object sender, EventArgs e)
+        {
+            this.Close(); this.Dispose();
+        }
+
+        public int thisHeight;
+
+        private void SourceListDlg_Load(object sender, EventArgs e)
+        {
+            this.Height = thisHeight;
         }
 
         private void ContextMenuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             if (e.ClickedItem.Name == "MS_delete")
             {
-                
+                var selected = listView1.SelectedItems[0];
+                string path = (string)selected.Tag;
+
+                using (StixDB db = new StixDB())
+                {
+                    //db.ExecuteNonQuery("delete from SOURCES where name=")
+                }
+
+                listView1.SelectedItems[0].Remove();
             }
             if (e.ClickedItem.Name == "MS_rename")
             {
 
             }
-        }
-
-        private void ListView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //if (listView1.SelectedItems.Count == 0)
-            //    return;
-
-            //var selectedItem = listView1.SelectedItems[0];
-            //if (selectedItem != null)
-            //{
-            //    try {
-            //        Process.Start(selectedItem.Tag.ToString());
-            //    } catch { }
-            //}
-
-            //DialogResult = DialogResult.OK;
         }
 
         private void listView1_MouseClick(object sender, MouseEventArgs e)

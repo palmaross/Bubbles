@@ -30,6 +30,7 @@ namespace Bubbles
             StickName = stickname;
 
             MinLength = this.Width;
+            StixUtils.icondist = pIconDist.Width;
 
             if (orientation == "V") {
                 orientation = "H"; Rotate(); }
@@ -79,29 +80,21 @@ namespace Bubbles
                         string filename = row["filename"].ToString();
                         string _filename = filename;
                         string iconPath = "";
-                        string rootPath = Utils.m_dataPath + "IconDB\\";
 
                         if (filename.StartsWith("stock"))
                         {
-                            rootPath = MMUtils.MindManager.GetPath(MmDirectory.mmDirectoryIcons);
+                            string rootPath = MMUtils.MindManager.GetPath(MmDirectory.mmDirectoryIcons);
                             _filename = filename.Substring(5) + ".ico"; // stockemail -> email.ico
                             iconPath = rootPath + _filename;
                         }
                         else if (filename.StartsWith("pripro"))
                         {
-                            rootPath = Utils.dllPath + "Images\\";
-                            iconPath = rootPath + filename.Substring(6) + ".png";
+                            iconPath = Utils.dllPath + "Images\\" + filename.Substring(6) + ".png";
                         }
                         else // custom icon
                         {
                             if (Utils.CustomIcons.ContainsKey(filename))
                                 iconPath = Utils.CustomIcons[filename];
-                            else
-                            {
-                                string path = Utils.GetIconFile(filename);
-                                if (path == "") continue;
-                                iconPath = path;
-                            }
                         }
 
                         if (File.Exists(iconPath))
@@ -148,14 +141,14 @@ namespace Bubbles
             if (scale != 1)
             {
                 this.Scale(new SizeF(scale, scale)); // reset to 100%
-                StixUtils.icondist = (int)(StixUtils.icondist * scale);
+                StixUtils.icondist = pIconDist.Width;
                 MinLength = (int)(MinLength * scale);
             }
 
             if (toScale != 100)
             {
                 this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
-                StixUtils.icondist = (int)(StixUtils.icondist * (toScale / 100));
+                StixUtils.icondist = pIconDist.Width;
                 MinLength = (int)(MinLength * (toScale / 100));
             }
         }
@@ -411,13 +404,9 @@ namespace Bubbles
                     }
                     else // user added icon dragging it from windows explorer. Save icon to our path.
                     {
-                        //fileName = Path.GetFileName(iconPath);
-                        string newPath = Utils.m_dataPath + "IconDB\\" + fileName;
-                        string extension = Path.GetExtension(iconPath);
-                        newPath += extension;
+                        string newPath = Utils.m_dataPath + "IconDB\\" + Path.GetFileName(iconPath);
 
-                        if (Utils.GetIconFile(fileName) == "")
-                            File.Copy(iconPath, newPath);
+                        if (!File.Exists(newPath)) File.Copy(iconPath, newPath);
 
                         Utils.CustomIcons.Add(fileName, newPath);
                     }

@@ -58,7 +58,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panelBoxes = new System.Windows.Forms.Panel();
             this.Stickers = new System.Windows.Forms.PictureBox();
-            this.pIconDist = new System.Windows.Forms.PictureBox();
             this.p2 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.stxAddTopics)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxTextOps)).BeginInit();
@@ -74,7 +73,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.boxBookmarks)).BeginInit();
             this.panelBoxes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Stickers)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
             this.SuspendLayout();
             // 
@@ -346,16 +344,6 @@
             this.Stickers.Tag = "1";
             this.Stickers.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Stickers_MouseClick);
             // 
-            // pIconDist
-            // 
-            this.pIconDist.Location = new System.Drawing.Point(108, 52);
-            this.pIconDist.Name = "pIconDist";
-            this.pIconDist.Size = new System.Drawing.Size(22, 16);
-            this.pIconDist.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pIconDist.TabIndex = 99;
-            this.pIconDist.TabStop = false;
-            this.pIconDist.Visible = false;
-            // 
             // p2
             // 
             this.p2.Location = new System.Drawing.Point(123, 34);
@@ -373,7 +361,6 @@
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(243, 68);
             this.ControlBox = false;
-            this.Controls.Add(this.pIconDist);
             this.Controls.Add(this.p2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.stxBookmarks);
@@ -402,7 +389,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.boxBookmarks)).EndInit();
             this.panelBoxes.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Stickers)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -435,7 +421,6 @@
         public System.Windows.Forms.PictureBox stxBookmarks;
         public System.Windows.Forms.PictureBox stxFormat;
         public System.Windows.Forms.PictureBox stxSources;
-        private System.Windows.Forms.PictureBox pIconDist;
         private System.Windows.Forms.PictureBox p2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem cm_autoclose;

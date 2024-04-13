@@ -33,6 +33,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.cmsDuration = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ST_DurationUnits = new System.Windows.Forms.ToolStripComboBox();
+            this.ST_EffortUnits = new System.Windows.Forms.ToolStripComboBox();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.p1 = new System.Windows.Forms.PictureBox();
             this.Manage = new System.Windows.Forms.PictureBox();
@@ -62,9 +63,14 @@
             this.panelDueDate = new System.Windows.Forms.Panel();
             this.pDueDate = new System.Windows.Forms.MaskedTextBox();
             this.panelDuration = new System.Windows.Forms.Panel();
+            this.btnSetDuration = new System.Windows.Forms.PictureBox();
             this.cmsTaskTemplates = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsRemoveTaskInfo = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsResources = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.panelEffort = new System.Windows.Forms.Panel();
+            this.linkEffortUnit = new System.Windows.Forms.LinkLabel();
+            this.btnSetEffort = new System.Windows.Forms.PictureBox();
+            this.numEffort = new System.Windows.Forms.NumericUpDown();
             this.cmsDuration.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
@@ -83,6 +89,10 @@
             this.cmsDates.SuspendLayout();
             this.panelDueDate.SuspendLayout();
             this.panelDuration.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.btnSetDuration)).BeginInit();
+            this.panelEffort.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.btnSetEffort)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numEffort)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -93,7 +103,8 @@
             // 
             this.cmsDuration.AutoSize = false;
             this.cmsDuration.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ST_DurationUnits});
+            this.ST_DurationUnits,
+            this.ST_EffortUnits});
             this.cmsDuration.Name = "contextMenuStrip1";
             this.cmsDuration.ShowImageMargin = false;
             this.cmsDuration.Size = new System.Drawing.Size(135, 48);
@@ -104,8 +115,14 @@
             this.ST_DurationUnits.Name = "ST_DurationUnits";
             this.ST_DurationUnits.Size = new System.Drawing.Size(125, 23);
             this.ST_DurationUnits.SelectedIndexChanged += new System.EventHandler(this.ST_DurationUnits_SelectedIndexChanged);
-            this.ST_DurationUnits.Enter += new System.EventHandler(this.ST_DurationUnits_Enter);
             this.ST_DurationUnits.MouseEnter += new System.EventHandler(this.ST_DurationUnits_MouseEnter);
+            // 
+            // ST_EffortUnits
+            // 
+            this.ST_EffortUnits.Name = "ST_EffortUnits";
+            this.ST_EffortUnits.Size = new System.Drawing.Size(121, 23);
+            this.ST_EffortUnits.SelectedIndexChanged += new System.EventHandler(this.ST_DurationUnits_SelectedIndexChanged);
+            this.ST_EffortUnits.MouseEnter += new System.EventHandler(this.ST_DurationUnits_MouseEnter);
             // 
             // p1
             // 
@@ -122,7 +139,7 @@
             this.Manage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Manage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Manage.Image = ((System.Drawing.Image)(resources.GetObject("Manage.Image")));
-            this.Manage.Location = new System.Drawing.Point(276, 5);
+            this.Manage.Location = new System.Drawing.Point(314, 5);
             this.Manage.Name = "Manage";
             this.Manage.Size = new System.Drawing.Size(20, 20);
             this.Manage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -213,7 +230,7 @@
             // 
             this.pQuickTask.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pQuickTask.Image = ((System.Drawing.Image)(resources.GetObject("pQuickTask.Image")));
-            this.pQuickTask.Location = new System.Drawing.Point(226, 5);
+            this.pQuickTask.Location = new System.Drawing.Point(263, 5);
             this.pQuickTask.Name = "pQuickTask";
             this.pQuickTask.Size = new System.Drawing.Size(20, 20);
             this.pQuickTask.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -226,7 +243,7 @@
             // 
             this.pRemoveTaskInfo.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pRemoveTaskInfo.Image = ((System.Drawing.Image)(resources.GetObject("pRemoveTaskInfo.Image")));
-            this.pRemoveTaskInfo.Location = new System.Drawing.Point(251, 5);
+            this.pRemoveTaskInfo.Location = new System.Drawing.Point(288, 5);
             this.pRemoveTaskInfo.Name = "pRemoveTaskInfo";
             this.pRemoveTaskInfo.Size = new System.Drawing.Size(20, 20);
             this.pRemoveTaskInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -250,9 +267,9 @@
             this.linkDurationUnit.BackColor = System.Drawing.Color.Moccasin;
             this.linkDurationUnit.Cursor = System.Windows.Forms.Cursors.Hand;
             this.linkDurationUnit.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.linkDurationUnit.Location = new System.Drawing.Point(-4, 16);
+            this.linkDurationUnit.Location = new System.Drawing.Point(-4, 15);
             this.linkDurationUnit.Name = "linkDurationUnit";
-            this.linkDurationUnit.Size = new System.Drawing.Size(36, 13);
+            this.linkDurationUnit.Size = new System.Drawing.Size(36, 14);
             this.linkDurationUnit.TabIndex = 90;
             this.linkDurationUnit.TabStop = true;
             this.linkDurationUnit.Text = "month";
@@ -366,7 +383,7 @@
             // 
             this.panelDueDate.Controls.Add(this.pTopicDueDate);
             this.panelDueDate.Controls.Add(this.pDueDate);
-            this.panelDueDate.Location = new System.Drawing.Point(187, 0);
+            this.panelDueDate.Location = new System.Drawing.Point(149, 0);
             this.panelDueDate.Name = "panelDueDate";
             this.panelDueDate.Size = new System.Drawing.Size(32, 29);
             this.panelDueDate.TabIndex = 99;
@@ -389,12 +406,27 @@
             // 
             this.panelDuration.BackColor = System.Drawing.Color.AntiqueWhite;
             this.panelDuration.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelDuration.Controls.Add(this.numDuration);
             this.panelDuration.Controls.Add(this.linkDurationUnit);
-            this.panelDuration.Location = new System.Drawing.Point(150, 0);
+            this.panelDuration.Controls.Add(this.btnSetDuration);
+            this.panelDuration.Controls.Add(this.numDuration);
+            this.panelDuration.Location = new System.Drawing.Point(188, 0);
             this.panelDuration.Name = "panelDuration";
-            this.panelDuration.Size = new System.Drawing.Size(32, 30);
+            this.panelDuration.Size = new System.Drawing.Size(32, 31);
             this.panelDuration.TabIndex = 100;
+            // 
+            // btnSetDuration
+            // 
+            this.btnSetDuration.BackColor = System.Drawing.SystemColors.Window;
+            this.btnSetDuration.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSetDuration.Image = ((System.Drawing.Image)(resources.GetObject("btnSetDuration.Image")));
+            this.btnSetDuration.Location = new System.Drawing.Point(16, 0);
+            this.btnSetDuration.Name = "btnSetDuration";
+            this.btnSetDuration.Size = new System.Drawing.Size(14, 14);
+            this.btnSetDuration.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.btnSetDuration.TabIndex = 103;
+            this.btnSetDuration.TabStop = false;
+            this.btnSetDuration.Tag = "1";
+            this.btnSetDuration.Click += new System.EventHandler(this.btnSetDuration_Click);
             // 
             // cmsTaskTemplates
             // 
@@ -414,13 +446,70 @@
             this.cmsResources.ShowImageMargin = false;
             this.cmsResources.Size = new System.Drawing.Size(36, 4);
             // 
+            // panelEffort
+            // 
+            this.panelEffort.BackColor = System.Drawing.SystemColors.Window;
+            this.panelEffort.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelEffort.Controls.Add(this.linkEffortUnit);
+            this.panelEffort.Controls.Add(this.btnSetEffort);
+            this.panelEffort.Controls.Add(this.numEffort);
+            this.panelEffort.Location = new System.Drawing.Point(224, 0);
+            this.panelEffort.Name = "panelEffort";
+            this.panelEffort.Size = new System.Drawing.Size(32, 31);
+            this.panelEffort.TabIndex = 101;
+            // 
+            // linkEffortUnit
+            // 
+            this.linkEffortUnit.BackColor = System.Drawing.Color.GreenYellow;
+            this.linkEffortUnit.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkEffortUnit.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.linkEffortUnit.Location = new System.Drawing.Point(-4, 15);
+            this.linkEffortUnit.Name = "linkEffortUnit";
+            this.linkEffortUnit.Size = new System.Drawing.Size(36, 14);
+            this.linkEffortUnit.TabIndex = 90;
+            this.linkEffortUnit.TabStop = true;
+            this.linkEffortUnit.Text = "month";
+            this.linkEffortUnit.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.linkEffortUnit.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkEffortUnit_LinkClicked);
+            // 
+            // btnSetEffort
+            // 
+            this.btnSetEffort.BackColor = System.Drawing.SystemColors.Window;
+            this.btnSetEffort.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSetEffort.Image = ((System.Drawing.Image)(resources.GetObject("btnSetEffort.Image")));
+            this.btnSetEffort.Location = new System.Drawing.Point(16, 0);
+            this.btnSetEffort.Name = "btnSetEffort";
+            this.btnSetEffort.Size = new System.Drawing.Size(14, 14);
+            this.btnSetEffort.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.btnSetEffort.TabIndex = 102;
+            this.btnSetEffort.TabStop = false;
+            this.btnSetEffort.Tag = "1";
+            this.btnSetEffort.Click += new System.EventHandler(this.btnSetDuration_Click);
+            // 
+            // numEffort
+            // 
+            this.numEffort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.numEffort.Location = new System.Drawing.Point(0, 0);
+            this.numEffort.Name = "numEffort";
+            this.numEffort.Size = new System.Drawing.Size(30, 20);
+            this.numEffort.TabIndex = 104;
+            this.numEffort.Tag = "1";
+            this.numEffort.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numEffort.ValueChanged += new System.EventHandler(this.numDuration_ValueChanged);
+            this.numEffort.KeyDown += new System.Windows.Forms.KeyEventHandler(this.numDuration_KeyDown);
+            // 
             // BubbleTaskInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(300, 30);
+            this.ClientSize = new System.Drawing.Size(338, 30);
             this.ControlBox = false;
+            this.Controls.Add(this.panelEffort);
             this.Controls.Add(this.panelDuration);
             this.Controls.Add(this.panelDueDate);
             this.Controls.Add(this.panelStartDate);
@@ -458,6 +547,10 @@
             this.panelDueDate.ResumeLayout(false);
             this.panelDueDate.PerformLayout();
             this.panelDuration.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.btnSetDuration)).EndInit();
+            this.panelEffort.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.btnSetEffort)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numEffort)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -498,5 +591,11 @@
         private System.Windows.Forms.ToolStripMenuItem Dates_thisweek;
         private System.Windows.Forms.ContextMenuStrip cmsRemoveTaskInfo;
         private System.Windows.Forms.ContextMenuStrip cmsResources;
+        private System.Windows.Forms.Panel panelEffort;
+        public System.Windows.Forms.LinkLabel linkEffortUnit;
+        public System.Windows.Forms.ToolStripComboBox ST_EffortUnits;
+        public System.Windows.Forms.PictureBox btnSetEffort;
+        public System.Windows.Forms.PictureBox btnSetDuration;
+        public System.Windows.Forms.NumericUpDown numEffort;
     }
 }

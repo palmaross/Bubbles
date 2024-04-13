@@ -43,11 +43,13 @@
             this.Manage = new System.Windows.Forms.PictureBox();
             this.pictureHandle = new System.Windows.Forms.PictureBox();
             this.SourceList = new System.Windows.Forms.PictureBox();
+            this.pIconDist = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SourceList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -151,9 +153,19 @@
             this.SourceList.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.SourceList.TabIndex = 79;
             this.SourceList.TabStop = false;
-            this.SourceList.Click += new System.EventHandler(this.SourceList_Click);
+            this.SourceList.MouseHover += new System.EventHandler(this.SourceList_Click);
             // 
-            // BubbleMySources
+            // pIconDist
+            // 
+            this.pIconDist.Location = new System.Drawing.Point(60, 7);
+            this.pIconDist.Name = "pIconDist";
+            this.pIconDist.Size = new System.Drawing.Size(22, 16);
+            this.pIconDist.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pIconDist.TabIndex = 100;
+            this.pIconDist.TabStop = false;
+            this.pIconDist.Visible = false;
+            // 
+            // BubbleSources
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -161,13 +173,14 @@
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(142, 30);
             this.ControlBox = false;
+            this.Controls.Add(this.pIconDist);
             this.Controls.Add(this.p1);
             this.Controls.Add(this.Manage);
             this.Controls.Add(this.SourceList);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureHandle);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "BubbleMySources";
+            this.Name = "BubbleSources";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.contextMenuStrip1.ResumeLayout(false);
@@ -175,6 +188,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SourceList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -194,5 +208,6 @@
         private System.Windows.Forms.ToolStripMenuItem BI_rename;
         private System.Windows.Forms.ToolStripMenuItem BI_paste;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.PictureBox pIconDist;
     }
 }

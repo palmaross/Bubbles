@@ -7,7 +7,7 @@ namespace Bubbles
 {
     public partial class NewSourceDlg : Form
     {
-        public NewSourceDlg(List<MySourcesItem> sources, bool manage)
+        public NewSourceDlg(List<SourceItem> sources, bool manage)
         {
             InitializeComponent();
 
@@ -52,6 +52,6 @@ namespace Bubbles
             catch { }
         }
 
-        private List<MySourcesItem> Sources = new List<MySourcesItem>();
+        private List<SourceItem> Sources = new List<SourceItem>();
     }
 }

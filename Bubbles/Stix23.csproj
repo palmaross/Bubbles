@@ -82,6 +82,12 @@
     <Compile Include="AddTopicTemplateDlg.Designer.cs">
       <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="AllSourcesDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AllSourcesDlg.Designer.cs">
+      <DependentUpon>AllSourcesDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="AppManager\AlfaChanges.cs" />
     <Compile Include="AppManager\StixDB.cs" />
     <Compile Include="AppManager\SticksMoreDB.cs" />
@@ -802,6 +808,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AddTopicTemplateDlg.resx">
       <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AllSourcesDlg.resx">
+      <DependentUpon>AllSourcesDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BubbleAddTopic.resx">
       <DependentUpon>BubbleAddTopic.cs</DependentUpon>
