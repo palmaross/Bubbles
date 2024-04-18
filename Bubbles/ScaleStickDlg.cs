@@ -101,7 +101,7 @@ namespace Bubbles
                     (stix as BubbleFormat).ScaleStick(ScaleFactor, SF_Stix);
                     break;
                 case StixUtils.typesources:
-                    (stix as BubbleSources).ScaleStick(ScaleFactor, SF_Stix);
+                    (stix as BubbleTools).ScaleStick(ScaleFactor, SF_Stix);
                     break;
                 case StixUtils.typebookmarks:
                     (stix as BubbleBookmarks).ScaleStick(ScaleFactor, SF_Stix);

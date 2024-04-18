@@ -76,7 +76,7 @@ namespace Bubbles
 
                 using (StixDB db = new StixDB())
                 {
-                    //db.ExecuteNonQuery("delete from SOURCES where name=")
+                    //db.ExecuteNonQuery("delete from TOOLS where name=")
                 }
 
                 listView1.SelectedItems[0].Remove();

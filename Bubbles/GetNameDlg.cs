@@ -76,7 +76,7 @@ namespace Bubbles
                 }
                 else if (stickType == StixUtils.typesources)
                 {
-                    DataTable dt = db.ExecuteQuery("SELECT from SOURCES where title=`" + newName + "` and id=" + stickID + "");
+                    DataTable dt = db.ExecuteQuery("SELECT from TOOLS where title=`" + newName + "` and id=" + stickID + "");
                     if (dt.Rows.Count > 0)
                     {
                         MessageBox.Show(Utils.getString("sticks.nameexists.source"), "",

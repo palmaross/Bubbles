@@ -57,7 +57,7 @@ namespace Bubbles
                             db.ExecuteNonQuery("update ICONS set name=`" + name +
                                 "` where stickID=" + stickID + " and name =`" + oldname + "`");
                         else if (type == typesources)
-                            db.ExecuteNonQuery("update SOURCES set title=`" + name +
+                            db.ExecuteNonQuery("update TOOLS set title=`" + name +
                                 "` where stickID=" + stickID + " and title =`" + oldname + "`");
                     }
                 }
@@ -216,7 +216,7 @@ namespace Bubbles
                     if (sticktype == typeicons)
                         db.ExecuteNonQuery("delete from ICONS where stickID =" + (int)form.Tag + "");
                     else if (sticktype == typesources)
-                        db.ExecuteNonQuery("delete from SOURCES where stickID =" + (int)form.Tag + "");
+                        db.ExecuteNonQuery("delete from TOOLS where stickID =" + (int)form.Tag + "");
                 }
                 else // Add icons to stick
                 {
@@ -236,7 +236,7 @@ namespace Bubbles
                         {
                             PictureBox pb = AddSource(p1, item, item.Path, orientation, k++);
                             lpb.Add(pb); form.Controls.Add(pb);
-                            db.ExecuteNonQuery("update SOURCES set _order=" + item.Order + " where stickID=" + (int)form.Tag + " and path =`" + item.Path + "`");
+                            db.ExecuteNonQuery("update TOOLS set _order=" + item.Order + " where stickID=" + (int)form.Tag + " and path =`" + item.Path + "`");
                         }
                     }
                 }
@@ -345,7 +345,7 @@ namespace Bubbles
                     Sources[i].Order = i + 1;
 
                 using (StixDB db = new StixDB())
-                    db.ExecuteNonQuery("delete from SOURCES where path=`" + filename + "`");
+                    db.ExecuteNonQuery("delete from TOOLS where path=`" + filename + "`");
             }
         }
 
@@ -368,7 +368,7 @@ namespace Bubbles
                 }
                 else if (type == typesources)
                 {
-                    db.ExecuteNonQuery("delete from SOURCES where stickID=" + id + "");
+                    db.ExecuteNonQuery("delete from TOOLS where stickID=" + id + "");
                     if (StixButton.m_StixBase.cmsMySources.Items.Count > 0)
                         StixButton.m_StixBase.cmsMySources.Items.Clear();
                 }
@@ -793,21 +793,21 @@ namespace Bubbles
         {
             switch (type)
             {
-                case "audio": return BubbleSources.audio;
-                case "excel": return BubbleSources.excel;
-                case "exe": return BubbleSources.exe;
-                case "image": return BubbleSources.image;
-                case "macros": return BubbleSources.macros;
-                case "map": return BubbleSources.map;
-                case "pdf": return BubbleSources.pdf;
-                case "txt": return BubbleSources.txt;
-                case "video": return BubbleSources.video;
-                case "http": return BubbleSources.http;
-                case "word": return BubbleSources.word;
-                case "youtube": return BubbleSources.youtube;
-                case "chm": return BubbleSources.chm;
+                case "audio": return BubbleTools.audio;
+                case "excel": return BubbleTools.excel;
+                case "exe": return BubbleTools.exe;
+                case "image": return BubbleTools.image;
+                case "macros": return BubbleTools.macros;
+                case "map": return BubbleTools.map;
+                case "pdf": return BubbleTools.pdf;
+                case "txt": return BubbleTools.txt;
+                case "video": return BubbleTools.video;
+                case "http": return BubbleTools.http;
+                case "word": return BubbleTools.word;
+                case "youtube": return BubbleTools.youtube;
+                case "chm": return BubbleTools.chm;
             }
-            return BubbleSources.file;
+            return BubbleTools.file;
         }
 
         public static void SetCommonContextMenu(ContextMenuStrip cms, string stickType = "")
@@ -889,7 +889,7 @@ namespace Bubbles
         /// </summary>
         /// <param name="parent">Parent form rectangle</param>
         /// <param name="child">Child form rectangle</param>
-        /// <param name="orientation">Parent form orientation</param>
+        /// <param name="orientation">Parent form orientation</param>  
         /// <param name="popup"></param>
         public static Point GetChildLocation(Form parent, Rectangle child, string orientation, string popup = "")
         {

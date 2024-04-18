@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Bubbles
 {
-    internal partial class BubbleSources : Form
+    internal partial class BubbleTools : Form
     {
-        public BubbleSources(int ID, string _orientation, string stickname)
+        public BubbleTools(int ID, string _orientation, string stickname)
         {
             InitializeComponent();
 
@@ -42,18 +42,21 @@ namespace Bubbles
             // Context menu
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
 
-            contextMenuStrip1.Items["BI_new"].Text =Utils.getString("mysources.contextmenu.new");
-            StixUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_new"], "newsticker.png");
+            BI_new.Text =Utils.getString("mysources.contextmenu.new");
+            StixUtils.SetContextMenuImage(BI_new, "newsticker.png");
 
-            contextMenuStrip1.Items["BI_rename"].Text = Utils.getString("button.rename");
-            StixUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_rename"], "edit.png");
+            BI_currentmap.Text = Utils.getString("mysources.contextmenu.currentmap");
+            StixUtils.SetContextMenuImage(BI_currentmap, "ql_map.png");
 
-            contextMenuStrip1.Items["BI_paste"].Text = Utils.getString("float_icons.contextmenu.paste");
-            StixUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_paste"], "paste.png");
-            contextMenuStrip1.Items["BI_paste"].ToolTipText = Utils.getString("contextmenu.paste.source.tooltip");
+            BI_rename.Text = Utils.getString("button.rename");
+            StixUtils.SetContextMenuImage(BI_rename, "edit.png");
 
-            contextMenuStrip1.Items["BI_delete"].Text = Utils.getString("float_icons.contextmenu.delete");
-            StixUtils.SetContextMenuImage(contextMenuStrip1.Items["BI_delete"], "deleteall.png");
+            BI_paste.Text = Utils.getString("float_icons.contextmenu.paste");
+            StixUtils.SetContextMenuImage(BI_paste, "paste.png");
+            BI_paste.ToolTipText = Utils.getString("contextmenu.paste.source.tooltip");
+
+            BI_delete.Text = Utils.getString("float_icons.contextmenu.delete");
+            StixUtils.SetContextMenuImage(BI_delete, "deleteall.png");
 
             StixUtils.SetCommonContextMenu(contextMenuStrip1, StixUtils.typesources);
 
@@ -74,7 +77,7 @@ namespace Bubbles
 
             using (StixDB db = new StixDB())
             {
-                DataTable dt = db.ExecuteQuery("select * from SOURCES where stickID=" + ID + " order by _order");
+                DataTable dt = db.ExecuteQuery("select * from TOOLS where stickID=" + ID + " order by _order");
                 foreach (DataRow row in dt.Rows)
                 {
                     string title = row["title"].ToString();
@@ -181,9 +184,15 @@ namespace Bubbles
                 {
                     if (_dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
                         return;
-                    sourcePath = _dlg.txtPath.Text;
-                    sourceTitle = _dlg.txtTitle.Text;
+                    sourcePath = _dlg.txtPath.Text.Trim();
+                    sourceTitle = _dlg.txtTitle.Text.Trim();
                 }
+                NewIcon(sourcePath, sourceTitle, "end");
+            }
+            else if (e.ClickedItem.Name == "BI_currentmap")
+            {
+                sourcePath = MMUtils.ActiveDocument.FullName;
+                sourceTitle = MMUtils.ActiveDocument.CentralTopic.Text.Trim();
                 NewIcon(sourcePath, sourceTitle, "end");
             }
             else if (e.ClickedItem.Name == "BI_delete")
@@ -215,7 +224,7 @@ namespace Bubbles
 
                     // Change title in the database
                     using (StixDB db = new StixDB())
-                        db.ExecuteNonQuery("update SOURCES set title=`" + name + "` where path=`" + 
+                        db.ExecuteNonQuery("update TOOLS set title=`" + name + "` where path=`" + 
                             item.Path + "` and stickID=" + (int)this.Tag + "");
                 }
             }
@@ -268,7 +277,7 @@ namespace Bubbles
                 string name = StixUtils.GetName(this, orientation, StixUtils.typestick, "");
                 if (name != "")
                 {
-                    BubbleSources form = new BubbleSources(0, orientation, name);
+                    BubbleTools form = new BubbleTools(0, orientation, name);
                     StixUtils.CreateStick(form, name, StixUtils.typesources);
                 }
             }
@@ -316,7 +325,7 @@ namespace Bubbles
 
             SourceItem item = new SourceItem(sourceTitle, sourcePath, type, order);
             using (StixDB db = new StixDB())
-                db.AddSource(sourceTitle, sourcePath, type, order, (int)this.Tag, 0);
+                db.AddTool(sourceTitle, sourcePath, type, order, (int)this.Tag);
 
             Sources.Insert(order - 1, item);
             for (int i = 0; i < Sources.Count; i++)

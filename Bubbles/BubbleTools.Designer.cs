@@ -1,6 +1,6 @@
 ﻿namespace Bubbles
 {
-    partial class BubbleSources
+    partial class BubbleTools
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BubbleSources));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BubbleTools));
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.BI_new = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,6 +44,7 @@
             this.pictureHandle = new System.Windows.Forms.PictureBox();
             this.SourceList = new System.Windows.Forms.PictureBox();
             this.pIconDist = new System.Windows.Forms.PictureBox();
+            this.BI_currentmap = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
@@ -61,40 +62,41 @@
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.BI_new,
+            this.BI_currentmap,
             this.BI_rename,
             this.toolStripSeparator1,
             this.BI_paste,
             this.BI_delete});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(162, 98);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 142);
             // 
             // BI_new
             // 
             this.BI_new.Name = "BI_new";
-            this.BI_new.Size = new System.Drawing.Size(161, 22);
+            this.BI_new.Size = new System.Drawing.Size(180, 22);
             this.BI_new.Text = "Новый";
             // 
             // BI_rename
             // 
             this.BI_rename.Name = "BI_rename";
-            this.BI_rename.Size = new System.Drawing.Size(161, 22);
+            this.BI_rename.Size = new System.Drawing.Size(180, 22);
             this.BI_rename.Text = "Переименовать";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // BI_paste
             // 
             this.BI_paste.Name = "BI_paste";
-            this.BI_paste.Size = new System.Drawing.Size(161, 22);
+            this.BI_paste.Size = new System.Drawing.Size(180, 22);
             this.BI_paste.Text = "Вставить";
             // 
             // BI_delete
             // 
             this.BI_delete.Name = "BI_delete";
-            this.BI_delete.Size = new System.Drawing.Size(161, 22);
+            this.BI_delete.Size = new System.Drawing.Size(180, 22);
             this.BI_delete.Text = "Удалить";
             // 
             // label1
@@ -165,7 +167,13 @@
             this.pIconDist.TabStop = false;
             this.pIconDist.Visible = false;
             // 
-            // BubbleSources
+            // BI_currentmap
+            // 
+            this.BI_currentmap.Name = "BI_currentmap";
+            this.BI_currentmap.Size = new System.Drawing.Size(180, 22);
+            this.BI_currentmap.Text = "Current Map";
+            // 
+            // BubbleTools
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -180,7 +188,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureHandle);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "BubbleSources";
+            this.Name = "BubbleTools";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.contextMenuStrip1.ResumeLayout(false);
@@ -209,5 +217,6 @@
         private System.Windows.Forms.ToolStripMenuItem BI_paste;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.PictureBox pIconDist;
+        private System.Windows.Forms.ToolStripMenuItem BI_currentmap;
     }
 }

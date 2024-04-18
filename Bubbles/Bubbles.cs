@@ -608,7 +608,7 @@ namespace Bubbles
         public static BookmarkListDlg m_BookmarkList;
 
         public static ResourcesDlg m_Resources;
-        public static AllSourcesDlg m_AllSources;
+        public static LinksDlg m_AllSources;
 
         public static BubbleTaskInfo m_TaskInfo;
 

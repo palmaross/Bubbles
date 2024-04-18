@@ -273,7 +273,7 @@ namespace Bubbles
         private void BoxSources_Click(object sender, EventArgs e)
         {
             StixButton.m_AllSources = null;
-            StixButton.m_AllSources = new AllSourcesDlg();
+            StixButton.m_AllSources = new LinksDlg();
             StixButton.m_AllSources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
@@ -360,7 +360,7 @@ namespace Bubbles
                 case StixUtils.typetaskinfo:
                     form = new BubbleTaskInfo(id, orientation, name); break;
                 case StixUtils.typesources:
-                    form = new BubbleSources(id, orientation, name); break;
+                    form = new BubbleTools(id, orientation, name); break;
                 case StixUtils.typebookmarks:
                     form = new BubbleBookmarks(id, orientation, name); break;
                 case StixUtils.typeformat:

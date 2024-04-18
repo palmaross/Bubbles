@@ -27,7 +27,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;MINDJET22</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -35,6 +35,10 @@
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-OL|AnyCPU'">
+    <OutputPath>bin\Release-OL\</OutputPath>
+    <DefineConstants>MINDJET22, VENDOR-OL</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Community.CsharpSqlite4, Version=3.7.7.1, Culture=neutral, PublicKeyToken=c3dfbcf789af31c4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -43,6 +47,14 @@
     </Reference>
     <Reference Include="extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.1722.45, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.1722.45\lib\net45\Microsoft.Web.WebView2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.WinForms, Version=1.0.1722.45, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.1722.45\lib\net45\Microsoft.Web.WebView2.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="PalmaRossCommon22, Version=1.0.0.0, Culture=neutral, PublicKeyToken=057dcba4e358e84f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -79,15 +91,18 @@
     <Compile Include="AddTopicTemplateDlg.Designer.cs">
       <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="AllSourcesDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AllSourcesDlg.Designer.cs">
-      <DependentUpon>AllSourcesDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="AppManager\StickersDB.cs" />
     <Compile Include="AppManager\StixDB.cs" />
     <Compile Include="AppManager\TransactionWrapper.cs" />
+    <Compile Include="BrowserDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BrowserDlg.Designer.cs">
+      <DependentUpon>BrowserDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BrowserTab.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="BubbleAddTopic.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,11 +115,11 @@
     <Compile Include="BubbleOrganizer.Designer.cs">
       <DependentUpon>BubbleOrganizer.cs</DependentUpon>
     </Compile>
-    <Compile Include="BubbleSources.cs">
+    <Compile Include="BubbleTools.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BubbleSources.Designer.cs">
-      <DependentUpon>BubbleSources.cs</DependentUpon>
+    <Compile Include="BubbleTools.Designer.cs">
+      <DependentUpon>BubbleTools.cs</DependentUpon>
     </Compile>
     <Compile Include="BubbleTextOps.cs">
       <SubType>Form</SubType>
@@ -123,6 +138,12 @@
     </Compile>
     <Compile Include="BookmarkListDlg.Designer.cs">
       <DependentUpon>BookmarkListDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LinksDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LinksDlg.Designer.cs">
+      <DependentUpon>LinksDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="MapMarkers.cs" />
     <Compile Include="MyDateTimePicker.cs">
@@ -676,6 +697,45 @@
     <Content Include="images\pro90.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\ql_audio.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ql_excel.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ql_exe.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ql_file.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ql_img.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ql_macros.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ql_map.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ql_pdf.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ql_txt.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ql_video.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ql_web.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ql_word.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ql_youtube.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\remember.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -761,8 +821,8 @@
     <EmbeddedResource Include="AddTopicTemplateDlg.resx">
       <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AllSourcesDlg.resx">
-      <DependentUpon>AllSourcesDlg.cs</DependentUpon>
+    <EmbeddedResource Include="BrowserDlg.resx">
+      <DependentUpon>BrowserDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BubbleAddTopic.resx">
       <DependentUpon>BubbleAddTopic.cs</DependentUpon>
@@ -770,8 +830,8 @@
     <EmbeddedResource Include="BubbleOrganizer.resx">
       <DependentUpon>BubbleOrganizer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BubbleSources.resx">
-      <DependentUpon>BubbleSources.cs</DependentUpon>
+    <EmbeddedResource Include="BubbleTools.resx">
+      <DependentUpon>BubbleTools.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BubbleTextOps.resx">
       <DependentUpon>BubbleTextOps.cs</DependentUpon>
@@ -781,6 +841,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="BookmarkListDlg.resx">
       <DependentUpon>BookmarkListDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LinksDlg.resx">
+      <DependentUpon>LinksDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MyDateTimePicker.resx">
       <DependentUpon>MyDateTimePicker.cs</DependentUpon>

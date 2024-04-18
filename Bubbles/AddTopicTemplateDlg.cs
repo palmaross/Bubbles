@@ -298,8 +298,8 @@ namespace Bubbles
 
                 db.ExecuteNonQuery("update ADDTOPIC_TEMPLATES set " +
                     "topicName=`" + topicName + "`, " +
-                    "pattern =`" + pattern_data + "`, " +
-                    "reserved1 =`" + topicType + "` " +
+                    "pattern=`" + pattern_data + "`, " +
+                    "topicType=`" + topicType + "` " +
                     "where id=" + template.ID + "");
 
                 template.TopicName = topicName;

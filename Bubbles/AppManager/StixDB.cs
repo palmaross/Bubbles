@@ -28,24 +28,37 @@ namespace Bubbles
                 );
         }
 
-        public void AddSourceGroup(string name)
+        public void AddLinkGroup(string name, int parentID, int order)
         {
-            m_db.ExecuteNonQuery("insert into SOURCEGROUPS values(NULL, `"
+            m_db.ExecuteNonQuery("insert into LINKGROUPS values(NULL, `"
                 + name + "`, "
+                + parentID + ", "
+                + order + ", "
                 + "'', 0"
                 + ");"
             );
         }
 
-        public void AddSource(string title, string path, string type, int order, int stickID, int groupID)
+        public void AddLink(string title, string path, string type, int groupID)
         {
-            m_db.ExecuteNonQuery("insert into SOURCES values(`"
+            m_db.ExecuteNonQuery("insert into LINKS values(`"
+                + title + "`, `"
+                + path + "`, `"
+                + type + "`, "
+                + groupID + ", "
+                + "'', '', 0, 0"
+                + ");"
+            );
+        }
+
+        public void AddTool(string title, string path, string type, int order, int stickID)
+        {
+            m_db.ExecuteNonQuery("insert into TOOLS values(`"
                 + title + "`, `"
                 + path + "`, `"
                 + type + "`, "
                 + order + ", "
                 + stickID + ", "
-                + groupID + ", "
                 + "'', '', 0, 0"
                 + ");"
             );
@@ -167,11 +180,15 @@ namespace Bubbles
             m_db.ExecuteNonQuery("CREATE TABLE TAGGROUPS(id INTEGER PRIMARY KEY, name text, mutexclusive int, " +
                 "reserved1 text, reserved2 integer);");
 
-            m_db.ExecuteNonQuery("CREATE TABLE SOURCEGROUPS(id INTEGER PRIMARY KEY, name text, " +
+            m_db.ExecuteNonQuery("CREATE TABLE LINKGROUPS(id INTEGER PRIMARY KEY, " +
+                "name text, parentID int, _order int, " +
                 "reserved1 text, reserved2 integer);");
 
-            m_db.ExecuteNonQuery("CREATE TABLE SOURCES(title text, path text, type text, " +
-                "_order integer, stickID int, groupID int, " +
+            m_db.ExecuteNonQuery("CREATE TABLE LINKS(title text, path text, type text, groupID int, " +
+                "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
+
+            m_db.ExecuteNonQuery("CREATE TABLE TOOLS(title text, path text, type text, " +
+                "_order integer, stickID int, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
 
             // Quick tasks
@@ -220,19 +237,42 @@ namespace Bubbles
             id = r.Next();
             AddStick(id, Utils.getString("BubbleTaskInfo.bubble.tooltip"), StixUtils.typetaskinfo, 0, "H", "");
 
-            // Add first My Sources stick
+            // Add first Tools stick
             id = r.Next();
             AddStick(id, Utils.getString("BubbleMySources.bubble.tooltip"), StixUtils.typesources, 0, "H", "");
 
-            AddSourceGroup(Utils.getString("BubbleMySources.bubble.tooltip"));
+            AddLinkGroup(Utils.getString("AllSourcesDlg.commongroup"), 0, 1);
             // Get created group id
-            int groupID = 0;
+            int groupID = 1;
             DataTable dt = ExecuteQuery("SELECT last_insert_rowid()");
             if (dt.Rows.Count > 0) groupID = Convert.ToInt32(dt.Rows[0][0]);
 
-            AddSource(Utils.getString("mysources.first1.text"), "https://palmaross.com/", "http", 1, id, groupID);
-            AddSource(Utils.getString("mysources.first2.text"), Utils.dllPath + "OmniStix.chm", "chm", 2, id, groupID);
-            AddSource(Utils.getString("mysources.first3.text"), "c:\\Windows\\System32\\notepad.exe", "exe", 3, id, groupID);
+#if VENDOR_OL
+            {
+            AddLink(Utils.getString("mysources.first1.text"), "http://www.olympic-limited.co.uk/", "http", groupID);
+            AddTool(Utils.getString("mysources.first1.text"), "http://www.olympic-limited.co.uk/", "http", 1, id);
+
+            }
+#else
+            {
+            AddLink(Utils.getString("mysources.first1.text"), "https://palmaross.com/", "http", groupID);
+            AddTool(Utils.getString("mysources.first1.text"), "https://palmaross.com/", "http", 1, id);
+            }
+#endif
+
+            AddLink(Utils.getString("mysources.first2.text"), Utils.dllPath + "OmniStix.chm", "chm", groupID);
+            AddTool(Utils.getString("mysources.first2.text"), Utils.dllPath + "OmniStix.chm", "chm", 2, id);
+            AddTool(Utils.getString("mysources.first3.text"), "c:\\Windows\\System32\\notepad.exe", "exe", 3, id);
+            AddLinkGroup("Group 1", 0, 2);
+            // Get created group id
+            groupID = 1;
+            dt = ExecuteQuery("SELECT last_insert_rowid()");
+            if (dt.Rows.Count > 0) groupID = Convert.ToInt32(dt.Rows[0][0]);
+
+            AddLinkGroup("Group 1.1", groupID, 1);
+            AddLinkGroup("Group 1.2", groupID, 2);
+
+            AddLink(Utils.getString("mysources.first2.text"), "https://www.youtube.com/watch?v=Z1i9pS-0xbc", "youtube", groupID);
 
             // Add Bookmarks stick
             id = r.Next();
