@@ -31,73 +31,35 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BubbleTools));
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.BI_new = new System.Windows.Forms.ToolStripMenuItem();
-            this.BI_rename = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.BI_paste = new System.Windows.Forms.ToolStripMenuItem();
-            this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsManage = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.label1 = new System.Windows.Forms.Label();
             this.p1 = new System.Windows.Forms.PictureBox();
             this.Manage = new System.Windows.Forms.PictureBox();
             this.pictureHandle = new System.Windows.Forms.PictureBox();
-            this.SourceList = new System.Windows.Forms.PictureBox();
+            this.ToolList = new System.Windows.Forms.PictureBox();
             this.pIconDist = new System.Windows.Forms.PictureBox();
-            this.BI_currentmap = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextMenuStrip1.SuspendLayout();
+            this.cmsTool = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.TM_rename = new System.Windows.Forms.ToolStripMenuItem();
+            this.TM_changeicon = new System.Windows.Forms.ToolStripMenuItem();
+            this.TM_delete = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.SourceList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ToolList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).BeginInit();
+            this.cmsTool.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip1
             // 
             this.toolTip1.ShowAlways = true;
             // 
-            // contextMenuStrip1
+            // cmsManage
             // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.BI_new,
-            this.BI_currentmap,
-            this.BI_rename,
-            this.toolStripSeparator1,
-            this.BI_paste,
-            this.BI_delete});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 142);
-            // 
-            // BI_new
-            // 
-            this.BI_new.Name = "BI_new";
-            this.BI_new.Size = new System.Drawing.Size(180, 22);
-            this.BI_new.Text = "Новый";
-            // 
-            // BI_rename
-            // 
-            this.BI_rename.Name = "BI_rename";
-            this.BI_rename.Size = new System.Drawing.Size(180, 22);
-            this.BI_rename.Text = "Переименовать";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
-            // 
-            // BI_paste
-            // 
-            this.BI_paste.Name = "BI_paste";
-            this.BI_paste.Size = new System.Drawing.Size(180, 22);
-            this.BI_paste.Text = "Вставить";
-            // 
-            // BI_delete
-            // 
-            this.BI_delete.Name = "BI_delete";
-            this.BI_delete.Size = new System.Drawing.Size(180, 22);
-            this.BI_delete.Text = "Удалить";
+            this.cmsManage.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.cmsManage.Name = "contextMenuStrip1";
+            this.cmsManage.Size = new System.Drawing.Size(181, 26);
             // 
             // label1
             // 
@@ -144,18 +106,18 @@
             this.pictureHandle.TabIndex = 77;
             this.pictureHandle.TabStop = false;
             // 
-            // SourceList
+            // ToolList
             // 
-            this.SourceList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.SourceList.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.SourceList.Image = ((System.Drawing.Image)(resources.GetObject("SourceList.Image")));
-            this.SourceList.Location = new System.Drawing.Point(93, 5);
-            this.SourceList.Name = "SourceList";
-            this.SourceList.Size = new System.Drawing.Size(20, 20);
-            this.SourceList.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.SourceList.TabIndex = 79;
-            this.SourceList.TabStop = false;
-            this.SourceList.MouseHover += new System.EventHandler(this.SourceList_Click);
+            this.ToolList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ToolList.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ToolList.Image = ((System.Drawing.Image)(resources.GetObject("ToolList.Image")));
+            this.ToolList.Location = new System.Drawing.Point(93, 5);
+            this.ToolList.Name = "ToolList";
+            this.ToolList.Size = new System.Drawing.Size(20, 20);
+            this.ToolList.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ToolList.TabIndex = 79;
+            this.ToolList.TabStop = false;
+            this.ToolList.MouseHover += new System.EventHandler(this.ToolList_Click);
             // 
             // pIconDist
             // 
@@ -167,11 +129,32 @@
             this.pIconDist.TabStop = false;
             this.pIconDist.Visible = false;
             // 
-            // BI_currentmap
+            // cmsTool
             // 
-            this.BI_currentmap.Name = "BI_currentmap";
-            this.BI_currentmap.Size = new System.Drawing.Size(180, 22);
-            this.BI_currentmap.Text = "Current Map";
+            this.cmsTool.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.TM_rename,
+            this.TM_changeicon,
+            this.TM_delete});
+            this.cmsTool.Name = "cmsManage";
+            this.cmsTool.Size = new System.Drawing.Size(162, 70);
+            // 
+            // TM_rename
+            // 
+            this.TM_rename.Name = "TM_rename";
+            this.TM_rename.Size = new System.Drawing.Size(161, 22);
+            this.TM_rename.Text = "Переименовать";
+            // 
+            // TM_changeicon
+            // 
+            this.TM_changeicon.Name = "TM_changeicon";
+            this.TM_changeicon.Size = new System.Drawing.Size(161, 22);
+            this.TM_changeicon.Text = "Change Icon";
+            // 
+            // TM_delete
+            // 
+            this.TM_delete.Name = "TM_delete";
+            this.TM_delete.Size = new System.Drawing.Size(161, 22);
+            this.TM_delete.Text = "Удалить";
             // 
             // BubbleTools
             // 
@@ -184,19 +167,19 @@
             this.Controls.Add(this.pIconDist);
             this.Controls.Add(this.p1);
             this.Controls.Add(this.Manage);
-            this.Controls.Add(this.SourceList);
+            this.Controls.Add(this.ToolList);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureHandle);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "BubbleTools";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.SourceList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ToolList)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).EndInit();
+            this.cmsTool.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -204,19 +187,17 @@
 
         #endregion
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip cmsManage;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox p1;
         private System.Windows.Forms.PictureBox Manage;
-        private System.Windows.Forms.ToolStripMenuItem BI_new;
-        private System.Windows.Forms.ToolStripMenuItem BI_delete;
         private System.Windows.Forms.PictureBox pictureHandle;
-        private System.Windows.Forms.PictureBox SourceList;
-        private System.Windows.Forms.ToolStripMenuItem BI_rename;
-        private System.Windows.Forms.ToolStripMenuItem BI_paste;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.PictureBox ToolList;
         private System.Windows.Forms.PictureBox pIconDist;
-        private System.Windows.Forms.ToolStripMenuItem BI_currentmap;
+        private System.Windows.Forms.ContextMenuStrip cmsTool;
+        private System.Windows.Forms.ToolStripMenuItem TM_rename;
+        private System.Windows.Forms.ToolStripMenuItem TM_changeicon;
+        private System.Windows.Forms.ToolStripMenuItem TM_delete;
     }
 }

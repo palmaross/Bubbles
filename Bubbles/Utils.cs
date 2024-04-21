@@ -73,9 +73,19 @@ namespace Bubbles
                     Directory.CreateDirectory(m_dataPath + "IconDB");
                 if (!Directory.Exists(m_dataPath + "ImageDB"))
                     Directory.CreateDirectory(m_dataPath + "ImageDB");
+                if (!Directory.Exists(m_dataPath + "Demos"))
+                    Directory.CreateDirectory(m_dataPath + "Demos");
 
                 File.Copy(dllPath + "\\Images\\" + "hello1.png", m_dataPath + "ImageDB\\" + "hello1.png");
                 File.Copy(dllPath + "\\Images\\" + "pato.gif", m_dataPath + "ImageDB\\" + "pato.gif");
+
+                string from = dllPath + "\\Images\\", to = m_dataPath + "IconDB\\";
+                File.Copy(from + "tool-calculator.png", to + "tool-calculator.png");
+                File.Copy(from + "tool-clock.png", to + "tool-clock.png");
+                File.Copy(from + "tool-navigation.png", to + "tool-navigation.png");
+                File.Copy(from + "tool-notepad.png", to + "tool-notepad.png");
+                File.Copy(from + "tool-saveall.png", to + "tool-saveall.png");
+                File.Copy(from + "tool-snipping.png", to + "tool-snipping.png");
             }
             catch { };
 

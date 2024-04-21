@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -191,6 +192,13 @@ namespace Bubbles
         private void btnOK_Click(object sender, System.EventArgs e)
         {
             
+        }
+
+        private void btnBrowse_Click(object sender, System.EventArgs e)
+        {
+            openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (openFileDialog1.ShowDialog(this) == DialogResult.OK)
+                txtPath.Text = openFileDialog1.FileName;
         }
 
         bool topdir = true;

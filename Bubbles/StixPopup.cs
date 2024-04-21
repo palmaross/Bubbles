@@ -120,7 +120,7 @@ namespace Bubbles
                 case StixUtils.typeformat:
                     (stick as BubbleFormat).Rotate();
                     break;
-                case StixUtils.typesources:
+                case StixUtils.typetools:
                     (stick as BubbleTools).Rotate();
                     break;
                 case StixUtils.typebookmarks:

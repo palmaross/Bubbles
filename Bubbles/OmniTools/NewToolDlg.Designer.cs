@@ -1,6 +1,6 @@
 ﻿namespace Bubbles
 {
-    partial class NewSourceDlg
+    partial class NewToolDlg
     {
         /// <summary>
         /// Required designer variable.

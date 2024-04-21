@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace Bubbles
 {
-    public partial class SourceListDlg : Form
+    public partial class ToolListDlg : Form
     {
-        public SourceListDlg()
+        public ToolListDlg(List<ToolItem> Tools)
         {
             InitializeComponent();
 
-            btnClose.Text = Utils.getString("button.close");
+            toolTip1.SetToolTip(btnClose, Utils.getString("button.close"));
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
@@ -22,17 +23,7 @@ namespace Bubbles
             listView1.HeaderStyle = ColumnHeaderStyle.None;
             listView1.Columns[0].Width = listView1.Width - 4 - SystemInformation.VerticalScrollBarWidth;
 
-            // Context menu
-            contextMenuStrip1.ItemClicked += ContextMenuStrip_ItemClicked;
-
-            MS_delete.Text = Utils.getString("button.delete");
-            StixUtils.SetContextMenuImage(MS_delete, "deleteall.png");
-
-            MS_rename.Text = Utils.getString("button.rename");
-            StixUtils.SetContextMenuImage(MS_delete, "edit.png");
-
             imageList1.ImageSize = imageSize.Size;
-            listView1.SmallImageList = imageList1;
 
             imageList1.Images.Add("audio", Image.FromFile(Utils.ImagesPath + "ms_audio.png"));
             imageList1.Images.Add("exe", Image.FromFile(Utils.ImagesPath + "ms_exe.png"));
@@ -49,76 +40,62 @@ namespace Bubbles
             imageList1.Images.Add("video", Image.FromFile(Utils.ImagesPath + "ms_video.png"));
             imageList1.Images.Add("chm", Image.FromFile(Utils.ImagesPath + "chm.png"));
 
-            this.Paint += MySourcesListDlg_Paint; // paint the border
+            string ipath = Utils.m_dataPath + "IconDB\\";
+            foreach (var item in Tools)
+            {
+                if (item.Type == "exe")
+                {
+                    try
+                    {
+                        Icon appIcon = Icon.ExtractAssociatedIcon(item.Path);
+                        imageList1.Images.Add(item.Type, appIcon.ToBitmap());
+                        listView1.Items.Add(" " + item.Title, item.Type).Tag = item.Path;
+                    }
+                    catch { listView1.Items.Add(" " + item.Title, item.Type).Tag = item; }
+                }
+                else if (item.Type.StartsWith("tool")) // custom image
+                {
+                    imageList1.Images.Add(item.Type, Image.FromFile(ipath + item.Type));
+                    listView1.Items.Add(" " + item.Title, item.Type).Tag = item;
+                }
+                else
+                    listView1.Items.Add(" " + item.Title, item.Type).Tag = item;
+            }
+
+            this.Paint += ToolListDlg_Paint; // paint the border
             this.MaximumSize = new Size(this.Width * 2, this.Height * 3);
 
-            this.Deactivate += SourceListDlg_Deactivate;
+            this.Deactivate += ToolListDlg_Deactivate;
         }
 
-        private void SourceListDlg_Deactivate(object sender, EventArgs e)
+        private void ToolListDlg_Deactivate(object sender, EventArgs e)
         {
             this.Close(); this.Dispose();
         }
 
         public int thisHeight;
 
-        private void SourceListDlg_Load(object sender, EventArgs e)
+        private void ToolListDlg_Load(object sender, EventArgs e)
         {
             this.Height = thisHeight;
-        }
-
-        private void ContextMenuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-            if (e.ClickedItem.Name == "MS_delete")
-            {
-                var selected = listView1.SelectedItems[0];
-                string path = (string)selected.Tag;
-
-                using (StixDB db = new StixDB())
-                {
-                    //db.ExecuteNonQuery("delete from TOOLS where name=")
-                }
-
-                listView1.SelectedItems[0].Remove();
-            }
-            if (e.ClickedItem.Name == "MS_rename")
-            {
-
-            }
         }
 
         private void listView1_MouseClick(object sender, MouseEventArgs e)
         {
             if (listView1.SelectedItems.Count == 0) return;
 
-            if (e.Button == MouseButtons.Left)
+            var selectedItem = listView1.SelectedItems[0];
+            if (selectedItem != null)
             {
-                if (listView1.SelectedItems.Count == 0)
-                    return;
-
-                var selectedItem = listView1.SelectedItems[0];
-                if (selectedItem != null)
-                {
-                    try
-                    {
-                        Process.Start(selectedItem.Tag.ToString());
-                    }
-                    catch { }
-                }
-
-                DialogResult = DialogResult.OK;
+                try {
+                    (ToolStix as BubbleTools).RunTool(selectedItem.Tag as ToolItem);
+                } catch { }
             }
-            else if (e.Button == MouseButtons.Right)
-            {
-                // Show context menu
-                foreach (ToolStripItem item in contextMenuStrip1.Items)
-                    item.Visible = true;
 
-                contextMenuStrip1.Show(Cursor.Position);
-            }
+            DialogResult = DialogResult.OK;
         }
 
-        private void MySourcesListDlg_Paint(object sender, PaintEventArgs e)
+        private void ToolListDlg_Paint(object sender, PaintEventArgs e)
         {
             ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle, Color.Black, ButtonBorderStyle.Solid);
         }
@@ -184,6 +161,8 @@ namespace Bubbles
                 return cp;
             }
         }
-        #endregion
+        #endregion}
+
+        public Form ToolStix;
     }
 }

@@ -20,10 +20,10 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "MySourcesStick.htm");
+            helpProvider1.SetHelpKeyword(this, "MyToolsStick.htm");
 
             //toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
-            toolTip1.SetToolTip(SourceList, Utils.getString("mysources.sourceview.list"));
+            toolTip1.SetToolTip(ToolList, Utils.getString("mysources.sourceview.list"));
             toolTip1.SetToolTip(pictureHandle, stickname);
 
             orientation = _orientation; // "H" or "V"
@@ -39,27 +39,24 @@ namespace Bubbles
 
             StixUtils.icondist = pIconDist.Width;
 
-            // Context menu
-            contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
+            //// Context menu ////
 
-            BI_new.Text =Utils.getString("mysources.contextmenu.new");
-            StixUtils.SetContextMenuImage(BI_new, "newsticker.png");
+            TM_rename.Text = Utils.getString("button.rename");
+            StixUtils.SetContextMenuImage(TM_rename, "edit.png");
 
-            BI_currentmap.Text = Utils.getString("mysources.contextmenu.currentmap");
-            StixUtils.SetContextMenuImage(BI_currentmap, "ql_map.png");
+            TM_changeicon.Text = Utils.getString("mysources.contextmenu.changeicon");
+            StixUtils.SetContextMenuImage(TM_changeicon, "mm_project.ico");
 
-            BI_rename.Text = Utils.getString("button.rename");
-            StixUtils.SetContextMenuImage(BI_rename, "edit.png");
+            TM_delete.Text = Utils.getString("float_icons.contextmenu.delete");
+            StixUtils.SetContextMenuImage(TM_delete, "deleteall.png");
 
-            BI_paste.Text = Utils.getString("float_icons.contextmenu.paste");
-            StixUtils.SetContextMenuImage(BI_paste, "paste.png");
-            BI_paste.ToolTipText = Utils.getString("contextmenu.paste.source.tooltip");
+            PopulateManageCMS();
+            StixUtils.SetCommonContextMenu(cmsManage, StixUtils.typetools);
 
-            BI_delete.Text = Utils.getString("float_icons.contextmenu.delete");
-            StixUtils.SetContextMenuImage(BI_delete, "deleteall.png");
-
-            StixUtils.SetCommonContextMenu(contextMenuStrip1, StixUtils.typesources);
-
+            cmsTool.ItemClicked += ContextMenuTool_ItemClicked;
+            cmsManage.ItemClicked += ContextMenuManage_ItemClicked;
+            ////////////////// end Context menu
+            
             audio = Image.FromFile(Utils.ImagesPath + "ms_audio.png");
             excel = Image.FromFile(Utils.ImagesPath + "ms_excel.png");
             exe = Image.FromFile(Utils.ImagesPath + "ms_exe.png");
@@ -85,7 +82,7 @@ namespace Bubbles
                     string type = row["type"].ToString();
                     int order = Convert.ToInt32(row["_order"].ToString());
 
-                    Sources.Add(new SourceItem(title, path, type, order));
+                    Tools.Add(new ToolItem(title, path, type, order));
                 }
             }
 
@@ -94,7 +91,6 @@ namespace Bubbles
             this.MouseDown += Move_Stick;
             pictureHandle.MouseDown += Move_Stick;
             Manage.Click += Manage_Click;
-            pictureHandle.Click += PictureHandle_Click;
 
             // Handle drag drop to place icon to the begin
             pictureHandle.AllowDrop = true;
@@ -143,27 +139,11 @@ namespace Bubbles
 
         private void Manage_Click(object sender, EventArgs e)
         {
-            foreach (ToolStripItem item in contextMenuStrip1.Items)
+            foreach (ToolStripItem item in cmsManage.Items)
                 item.Visible = true;
 
-            contextMenuStrip1.Items["BI_delete"].Visible = false;
-            contextMenuStrip1.Items["BI_rename"].Visible = false;
-            toolStripSeparator1.Visible = false;
-
             manage = true;
-            contextMenuStrip1.Show(Cursor.Position);
-        }
-
-        private void PictureHandle_Click(object sender, EventArgs e)
-        {
-            foreach (ToolStripItem item in contextMenuStrip1.Items)
-                item.Visible = false;
-
-            contextMenuStrip1.Items["BI_paste"].Visible = true;
-
-            selectedIcon = pictureHandle;
-            manage = false;
-            contextMenuStrip1.Show(Cursor.Position);
+            cmsManage.Show(Cursor.Position);
         }
 
         private void Move_Stick(object sender, MouseEventArgs e)
@@ -175,85 +155,147 @@ namespace Bubbles
             }
         }
 
-        private void ContextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        void PopulateManageCMS()
         {
-            string sourcePath, sourceTitle, position;
-            if (e.ClickedItem.Name == "BI_new")
+            ToolStripItem tsi = new ToolStripLabel(Utils.getString("mytools.addtool.label"));
+            tsi.Font = new Font(tsi.Font, FontStyle.Bold); cmsManage.Items.Add(tsi);
+
+            tsi = cmsManage.Items.Add(Utils.getString("mytools.addtool.file"));
+            tsi.Name = "MM_file";
+
+            tsi = cmsManage.Items.Add(Utils.getString("mytools.addtool.windows"));
+            tsi.Name = "MM_windows";
+
+            ToolStripItem tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("tools.notepad"));
+            tsm.Name = "notepad_tool";
+            StixUtils.SetContextMenuImage(tsm, "tool-notepad.png");
+            tsm.Click += SubmenuItem_Click;
+
+            tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("tools.snippng"));
+            tsm.Name = "snipping_tool";
+            StixUtils.SetContextMenuImage(tsm, "tool-snipping.png");
+            tsm.Click += SubmenuItem_Click;
+
+            tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("tools.calculator"));
+            tsm.Name = "calc_tool";
+            StixUtils.SetContextMenuImage(tsm, "tool-calculator.png");
+            tsm.Click += SubmenuItem_Click;
+
+            tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("tools.clock"));
+            tsm.Name = "clock_tool";
+            StixUtils.SetContextMenuImage(tsm, "tool-clock.png");
+            tsm.Click += SubmenuItem_Click;
+
+            tsi = cmsManage.Items.Add(Utils.getString("mytools.addtool.omni"));
+            tsi.Name = "MM_omni";
+
+            tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("mysources.contextmenu.currentmap"));
+            tsm.Name = "currentmap_tool";
+            StixUtils.SetContextMenuImage(tsm, "ql_map.png");
+            tsm.Click += SubmenuItem_Click;
+
+            tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("tools.saveall"));
+            tsm.ToolTipText = Utils.getString("tools.saveall.tooltip");
+            tsm.Name = "saveall_tool";
+            StixUtils.SetContextMenuImage(tsm, "tool-saveall.png");
+            tsm.Click += SubmenuItem_Click;
+
+            tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("tools.fastnavigation"));
+            tsm.ToolTipText = Utils.getString("tools.fastnavigation.tooltip");
+            tsm.Name = "fastnavig_tool";
+            StixUtils.SetContextMenuImage(tsm, "tool-navigation.png");
+            tsm.Click += SubmenuItem_Click;
+        }
+
+        private void SubmenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripItem tsi = sender as ToolStripItem; // submenu item
+
+            switch (tsi.Name)
             {
-                using (NewSourceDlg _dlg = new NewSourceDlg(Sources, manage))
-                {
-                    if (_dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
-                        return;
-                    sourcePath = _dlg.txtPath.Text.Trim();
-                    sourceTitle = _dlg.txtTitle.Text.Trim();
-                }
-                NewIcon(sourcePath, sourceTitle, "end");
+                case "notepad_tool":
+                    string toolPath = "c:\\Windows\\System32\\notepad.exe";
+                    string toolTitle = Utils.getString("tools.notepad");
+                    NewIcon(toolPath, toolTitle, "end", "tool-notepad.png");
+                    break;
+                case "snipping_tool":
+                    NewIcon("SnippingTool.exe", Utils.getString("tools.snippng"), "end", "tool-snipping.png");
+                    break;
+                case "calc_tool":
+                    string path = "C:\\Program Files\\WindowsApps\\Microsoft.WindowsCalculator_11.2401.0.0_x64__8wekyb3d8bbwe\\CalculatorApp.exe";
+                    NewIcon(path, Utils.getString("tools.calculator"), "end", "tool-calculator.png");
+                    break;
+                case "clock_tool":
+                    NewIcon("OT_clock", Utils.getString("tools.clock"), "end", "tool-clock.png");
+                    break;
+                case "currentmap_tool":
+                    toolPath = MMUtils.ActiveDocument.FullName;
+                    toolTitle = MMUtils.ActiveDocument.CentralTopic.Text.Trim();
+                    NewIcon(toolPath, toolTitle, "end", "");
+                    break;
+                case "saveall_tool":
+                    NewIcon("OT_saveall", Utils.getString("tools.saveall"), "end", "tool-saveall.png");
+                    break;
+                case "fastnavig_tool":
+                    NewIcon("OT_navigation", Utils.getString("tools.fastnavigation"), "end", "tool-navigation.png");
+                    break;
             }
-            else if (e.ClickedItem.Name == "BI_currentmap")
+        }
+
+        private void ContextMenuTool_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem.Name == "TM_changeicon")
             {
-                sourcePath = MMUtils.ActiveDocument.FullName;
-                sourceTitle = MMUtils.ActiveDocument.CentralTopic.Text.Trim();
-                NewIcon(sourcePath, sourceTitle, "end");
+
             }
-            else if (e.ClickedItem.Name == "BI_delete")
+            else if (e.ClickedItem.Name == "TM_rename")
             {
-                StixUtils.Sources.Clear(); StixUtils.Sources.AddRange(Sources);
-                StixUtils.DeleteIcon(selectedIcon, (int)this.Tag, StixUtils.typesources);
-                Sources.Clear(); Sources.AddRange(StixUtils.Sources);
-                RefreshStick();
-            }
-            else if (e.ClickedItem.Name == "BI_deleteall")
-            {
-                Sources.Clear();
-                RefreshStick(true);
-            }
-            else if (e.ClickedItem.Name == "BI_rename")
-            {
-                SourceItem item = (SourceItem)selectedIcon.Tag;
+                ToolItem item = (ToolItem)selectedIcon.Tag;
                 if (item == null) return;
 
-                // Get new source's name
-                string name = StixUtils.GetName(this, orientation, StixUtils.typesources, item.Title);
+                // Get new tool's name
+                string name = StixUtils.GetName(this, orientation, StixUtils.typetools, item.Title);
                 if (name != "")
                 {
                     // Change title in the picture box tag
-                    ((SourceItem)selectedIcon.Tag).Title = name;
-                    // Change title in the Source list item
-                    Sources.Find(p => p.Path == item.Path).Title = name;
+                    ((ToolItem)selectedIcon.Tag).Title = name;
+                    // Change title in the Tool list item
+                    Tools.Find(p => p.Path == item.Path).Title = name;
                     toolTip1.SetToolTip(selectedIcon, name);
 
                     // Change title in the database
                     using (StixDB db = new StixDB())
-                        db.ExecuteNonQuery("update TOOLS set title=`" + name + "` where path=`" + 
+                        db.ExecuteNonQuery("update TOOLS set title=`" + name + "` where path=`" +
                             item.Path + "` and stickID=" + (int)this.Tag + "");
                 }
             }
-            else if (e.ClickedItem.Name == "BI_paste")
+            else if (e.ClickedItem.Name == "TM_delete")
             {
-                string path = (string)Clipboard.GetData(DataFormats.UnicodeText);
-                string[] copiedFiles = (string[])Clipboard.GetData(DataFormats.FileDrop);
-                if (path == null && copiedFiles == null)
-                    return;
+                StixUtils.Tools.Clear(); StixUtils.Tools.AddRange(Tools);
+                StixUtils.DeleteIcon(selectedIcon, (int)this.Tag, StixUtils.typetools);
+                Tools.Clear(); Tools.AddRange(StixUtils.Tools);
+                RefreshStick();
+            }
+        }
 
-                string title = StixUtils.Handle_DragDrop(ref path, copiedFiles, null, Sources);
-                if (title == "") return;
-
-                if (path == "" || title == "")
-                    return;
-
-                position = "end";
-                if (!manage) // if manage - paste at the end
+        private void ContextMenuManage_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            string toolPath, toolTitle, position;
+            if (e.ClickedItem.Name == "MM_file")
+            {
+                using (NewToolDlg _dlg = new NewToolDlg(Tools, manage))
                 {
-                    if (selectedIcon.Name == "pictureHandle")
-                        position = "begin";
-                    else
-                        position = "right";
+                    if (_dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
+                        return;
+                    toolPath = _dlg.txtPath.Text.Trim();
+                    toolTitle = _dlg.txtTitle.Text.Trim();
                 }
-
-                // Get source name
-                string name = StixUtils.GetName(this, orientation, StixUtils.typesources, title);
-                if (name != "")
-                    NewIcon(path, name, position);
+                NewIcon(toolPath, toolTitle, "end");
+            }
+            else if (e.ClickedItem.Name == "BI_deleteall")
+            {
+                Tools.Clear();
+                RefreshStick(true);
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
@@ -266,7 +308,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_help")
             {
-                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "MySourcesStick.htm");
+                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "MyToolsStick.htm");
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
@@ -278,23 +320,23 @@ namespace Bubbles
                 if (name != "")
                 {
                     BubbleTools form = new BubbleTools(0, orientation, name);
-                    StixUtils.CreateStick(form, name, StixUtils.typesources);
+                    StixUtils.CreateStick(form, name, StixUtils.typetools);
                 }
             }
             else if (e.ClickedItem.Name == "BI_renamestick")
             {
-                string newName = StixUtils.GetName(this, orientation, StixUtils.typesources, 
+                string newName = StixUtils.GetName(this, orientation, StixUtils.typetools, 
                     toolTip1.GetToolTip(pictureHandle), true);
                 if (newName != "") toolTip1.SetToolTip(pictureHandle, newName);
             }
             else if (e.ClickedItem.Name == "BI_delete_stick")
             {
-                if (StixUtils.DeleteStick((int)this.Tag, StixUtils.typesources))
+                if (StixUtils.DeleteStick((int)this.Tag, StixUtils.typetools))
                     this.Close();
             }
             else if (e.ClickedItem.Name == "BI_scale")
             {
-                ScaleStickDlg dlg = new ScaleStickDlg(this, StixUtils.typesources, scaleFactor);
+                ScaleStickDlg dlg = new ScaleStickDlg(this, StixUtils.typetools, scaleFactor);
                 dlg.Location =
                     StixUtils.GetChildLocation(this, dlg.Bounds, orientation, "scale");
                 dlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
@@ -303,33 +345,34 @@ namespace Bubbles
 
         public void Rotate()
         {
-            orientation = StixUtils.RotateStick(this, Manage, orientation, SourceList);
+            orientation = StixUtils.RotateStick(this, Manage, orientation, ToolList);
         }
 
-        private void NewIcon(string sourcePath, string sourceTitle, string position)
+        private void NewIcon(string toolPath, string toolTitle, string position, string type = "")
         {
-            // Add icon to Sources list
-            int order = Sources.Count + 1; // at the end
+            // Add icon to Tools list
+            int order = Tools.Count + 1; // at the end
             if (position == "begin")
                 order = 1;
             if (position == "left" || position == "right")
             {
-                SourceItem _item = (SourceItem)selectedIcon.Tag;
+                ToolItem _item = (ToolItem)selectedIcon.Tag;
                 if (position == "left")
                     order = _item.Order == 1 ? 1 : _item.Order;
                 else
-                    order = _item.Order == Sources.Count ? Sources.Count + 1 : _item.Order + 1;
+                    order = _item.Order == Tools.Count ? Tools.Count + 1 : _item.Order + 1;
             }
 
-            string type = GetFileType(sourcePath);
+            if (type == "")
+                type = GetFileType(toolPath);
 
-            SourceItem item = new SourceItem(sourceTitle, sourcePath, type, order);
+            ToolItem item = new ToolItem(toolTitle, toolPath, type, order);
             using (StixDB db = new StixDB())
-                db.AddTool(sourceTitle, sourcePath, type, order, (int)this.Tag);
+                db.AddTool(toolTitle, toolPath, type, order, (int)this.Tag);
 
-            Sources.Insert(order - 1, item);
-            for (int i = 0; i < Sources.Count; i++)
-                Sources[i].Order = i + 1;
+            Tools.Insert(order - 1, item);
+            for (int i = 0; i < Tools.Count; i++)
+                Tools[i].Order = i + 1;
 
             RefreshStick();
         }
@@ -370,53 +413,37 @@ namespace Bubbles
                 return "file";
         }
 
-        SourceListDlg aSourceList = null;
-        private void SourceList_Click(object sender, EventArgs e)
+        private void ToolList_Click(object sender, EventArgs e)
         {
-            if (Sources.Count == 0) return;
+            if (Tools.Count == 0) return;
 
-            if (aSourceList == null || !aSourceList.Visible)
+            if (aToolList == null || aToolList.IsDisposed || !aToolList.Visible)
             {
-                aSourceList = null;
-                aSourceList = new SourceListDlg();
+                aToolList = null;
+                aToolList = new ToolListDlg(Tools);
+                aToolList.ToolStix = this;
             }
             else return;
 
-            foreach (var item in Sources)
+            int itemheight = aToolList.listView1.GetItemRect(0).Height;
+            if (Tools.Count <= 12) // If not a big amount, change ListView height to adjust items count 
             {
-                if (item.Type == "exe")
-                {
-                    try
-                    {
-                        Icon appIcon = Icon.ExtractAssociatedIcon(item.Path);
-                        aSourceList.imageList1.Images.Add(item.Title, appIcon.ToBitmap());
-                        aSourceList.listView1.Items.Add(" " + item.Title, item.Title).Tag = item.Path;
-                    }
-                    catch { aSourceList.listView1.Items.Add(" " + item.Title, item.Type).Tag = item.Path; }
-                }
-                else
-                    aSourceList.listView1.Items.Add(" " + item.Title, item.Type).Tag = item.Path;
+                aToolList.thisHeight = Tools.Count * itemheight + aToolList.itemHeight.Width;
+                aToolList.listView1.Scrollable = false;
             }
 
-            int itemheight = aSourceList.listView1.GetItemRect(0).Height;
-            if (Sources.Count <= 10) // If not a big amount, change height to adjust items count 
-            {
-                aSourceList.thisHeight = Sources.Count * itemheight + aSourceList.itemHeight.Width;
-                aSourceList.listView1.Scrollable = false;
-            }
+            // Get tools list location
+            Rectangle child = aToolList.RectangleToScreen(aToolList.ClientRectangle);
+            aToolList.Location = StixUtils.GetChildLocation(this, child, orientation, "tools");
 
-            // Get source list location
-            Rectangle child = aSourceList.RectangleToScreen(aSourceList.ClientRectangle);
-            aSourceList.Location = StixUtils.GetChildLocation(this, child, orientation, "sources");
-
-            aSourceList.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            aToolList.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
         void RefreshStick(bool deleteall = false)
         {
-            StixUtils.Sources.Clear(); StixUtils.Sources.AddRange(Sources);
+            StixUtils.Tools.Clear(); StixUtils.Tools.AddRange(Tools);
             List<PictureBox> pBoxs = StixUtils.RefreshStick(this, p1, orientation, MinLength, 
-                StixUtils.typesources, deleteall);
+                StixUtils.typetools, deleteall);
 
             int i = 0;
             foreach (PictureBox pBox in pBoxs)
@@ -429,32 +456,61 @@ namespace Bubbles
             }
         }
 
-        /// <summary>
-        /// Open source
-        /// </summary>
         private void Icon_Click(object sender, MouseEventArgs e)
         {
             selectedIcon = sender as PictureBox;
 
             if (e.Button == MouseButtons.Left)
             {
-                SourceItem item = selectedIcon.Tag as SourceItem;
-                Process.Start(item.Path);
+                ToolItem item = selectedIcon.Tag as ToolItem;
+                RunTool(item);
             }
             else if (e.Button == MouseButtons.Right)
             {
-                foreach (ToolStripItem item in contextMenuStrip1.Items)
-                    item.Visible = false;
-
-                contextMenuStrip1.Items["BI_new"].Visible = true;
-                contextMenuStrip1.Items["BI_rename"].Visible = true;
-                toolStripSeparator1.Visible = true;
-                contextMenuStrip1.Items["BI_paste"].Visible = true;
-                contextMenuStrip1.Items["BI_delete"].Visible = true;
+                foreach (ToolStripItem item in cmsTool.Items)
+                    item.Visible = true;
 
                 manage = false;
-                contextMenuStrip1.Show(Cursor.Position);
+                cmsTool.Show(Cursor.Position);
             }
+        }
+
+        /// <summary>Run tool</summary>
+        public void RunTool(ToolItem item)
+        {
+            if (item.Path == "OT_navigation")
+            {
+                if (MMUtils.ActiveDocument == null) return;
+
+                if (aNavigationDlg == null || aNavigationDlg.IsDisposed || !aNavigationDlg.Visible)
+                {
+                    aNavigationDlg = null;
+                    aNavigationDlg = new NavigationDlg();
+                }
+                else return;
+
+                int topicCount = MMUtils.ActiveDocument.CentralTopic.SubTopics.Count + 1;
+                int itemheight = aNavigationDlg.listView1.GetItemRect(0).Height;
+
+                if (topicCount <= 10) // If not a big amount, change height to adjust items count 
+                {
+                    aNavigationDlg.thisHeight = topicCount * itemheight + aNavigationDlg.itemHeight.Width;
+                    aNavigationDlg.listView1.Scrollable = false;
+                }
+
+                // Get tools list location
+                Rectangle child = aNavigationDlg.RectangleToScreen(aNavigationDlg.ClientRectangle);
+                aNavigationDlg.Location = StixUtils.GetChildLocation(this, child, orientation, "tools");
+
+                aNavigationDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            }
+            if (item.Path.StartsWith("OT"))
+                OmniTools.RunTool(item.Path);
+            else
+            {
+                try { Process.Start(item.Path); }
+                catch { } // todo message to user
+            }    
         }
 
         #region DragDrop
@@ -462,8 +518,8 @@ namespace Bubbles
         {
             if (e.Data.GetDataPresent(typeof(PictureBox))) // Move the picture box
             {
-                var source = (PictureBox)e.Data.GetData(typeof(PictureBox)); // moving PB
-                int sourceIndex = (source.Tag as SourceItem).Order; // moving PB order
+                var tool = (PictureBox)e.Data.GetData(typeof(PictureBox)); // moving PB
+                int toolIndex = (tool.Tag as ToolItem).Order; // moving PB order
                 int targetIndex = 0;
 
                 if (sender is PictureBox) // also, can be this form
@@ -475,21 +531,21 @@ namespace Bubbles
                     else
                     {
                         // or after the target PB
-                        try{ targetIndex = (target.Tag as SourceItem).Order; }
+                        try{ targetIndex = (target.Tag as ToolItem).Order; }
                         catch { }
                     }
                 }
                 else // sender is this form or something else (moving PB to the end)
                     targetIndex = this.Controls.OfType<PictureBox>().Count() - 2; // minus pictureHandle and p1
 
-                if (sourceIndex != targetIndex)
+                if (toolIndex != targetIndex)
                 {
-                    // Reorder Sources list
-                    Sources.RemoveAt(sourceIndex - 1);
-                    if (sourceIndex < targetIndex) { targetIndex--; }
-                    Sources.Insert(targetIndex, source.Tag as SourceItem);
-                    for (int i = 0; i < Sources.Count; i++)
-                        Sources[i].Order = i + 1;
+                    // Reorder Tools list
+                    Tools.RemoveAt(toolIndex - 1);
+                    if (toolIndex < targetIndex) { targetIndex--; }
+                    Tools.Insert(targetIndex, tool.Tag as ToolItem);
+                    for (int i = 0; i < Tools.Count; i++)
+                        Tools[i].Order = i + 1;
 
                     RefreshStick();
                 }
@@ -498,7 +554,7 @@ namespace Bubbles
             {
                 string path = (string)e.Data.GetData(DataFormats.UnicodeText, false);
                 string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop, false);
-                string title = StixUtils.Handle_DragDrop(ref path, draggedFiles, null, Sources);
+                string title = StixUtils.Handle_DragDrop(ref path, draggedFiles, null, Tools);
                 if (title == "") return;
 
                 if (path != "")
@@ -517,8 +573,8 @@ namespace Bubbles
                         }
                     }
 
-                    // Get source name
-                    string name = StixUtils.GetName(this, orientation, StixUtils.typesources, title);
+                    // Get tool name
+                    string name = StixUtils.GetName(this, orientation, StixUtils.typetools, title);
                     if (name != "")
                         NewIcon(path, name, position);
                 }
@@ -557,10 +613,13 @@ namespace Bubbles
         }
         #endregion
 
-        public List<SourceItem> Sources = new List<SourceItem>();
+        public List<ToolItem> Tools = new List<ToolItem>();
         PictureBox selectedIcon = null;
         string orientation = "H";
         bool manage = false;
+
+        ToolListDlg aToolList = null;
+        NavigationDlg aNavigationDlg = null;
 
         int MinLength;
         public float scaleFactor = 100;
@@ -585,9 +644,9 @@ namespace Bubbles
         public static readonly List<string> Excel = new List<string> { ".xls", ".xlsx", ".xlsm" };
     }
 
-    public class SourceItem
+    public class ToolItem
     {
-        public SourceItem(string title, string path, string type, int order)
+        public ToolItem(string title, string path, string type, int order)
         {
             Order = order;
             Path = path;

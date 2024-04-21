@@ -29,19 +29,19 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.txtEditNode = new System.Windows.Forms.TextBox();
             this.pSize = new System.Windows.Forms.PictureBox();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.SourceImage = new System.Windows.Forms.DataGridViewImageColumn();
-            this.SourceTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LinkImage = new System.Windows.Forms.DataGridViewImageColumn();
+            this.LinkTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LinkGroup = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.SourcePath = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.SourceType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LinkPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LinkType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GroupID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SortByImage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -57,13 +57,11 @@
             this.lblLink = new System.Windows.Forms.Label();
             this.txtTitle = new System.Windows.Forms.TextBox();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.cmsSource = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsLink = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.m_OpenLink = new System.Windows.Forms.ToolStripMenuItem();
             this.m_OpenInOmniBrowser = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.m_AddToGroup = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_MoveToGroup = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_NewLink = new System.Windows.Forms.ToolStripMenuItem();
             this.m_Modify = new System.Windows.Forms.ToolStripMenuItem();
             this.m_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -82,7 +80,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panelModify.SuspendLayout();
-            this.cmsSource.SuspendLayout();
+            this.cmsLink.SuspendLayout();
             this.cmsGroup.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -147,29 +145,29 @@
             this.dataGridView1.AllowUserToResizeColumns = false;
             this.dataGridView1.AllowUserToResizeRows = false;
             this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightCyan;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.LightCyan;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.SourceImage,
-            this.SourceTitle,
+            this.LinkImage,
+            this.LinkTitle,
             this.LinkGroup,
-            this.SourcePath,
-            this.SourceType,
+            this.LinkPath,
+            this.LinkType,
             this.GroupID,
             this.SortByImage});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 23);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersVisible = false;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle6;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(482, 282);
             this.dataGridView1.TabIndex = 21;
@@ -178,38 +176,38 @@
             this.dataGridView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseDown);
             this.dataGridView1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseMove);
             // 
-            // SourceImage
+            // LinkImage
             // 
-            this.SourceImage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.SourceImage.FillWeight = 10.61452F;
-            this.SourceImage.HeaderText = "";
-            this.SourceImage.Name = "SourceImage";
-            this.SourceImage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.LinkImage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.LinkImage.FillWeight = 10.61452F;
+            this.LinkImage.HeaderText = "";
+            this.LinkImage.Name = "LinkImage";
+            this.LinkImage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             // 
-            // SourceTitle
+            // LinkTitle
             // 
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.SourceTitle.DefaultCellStyle = dataGridViewCellStyle2;
-            this.SourceTitle.FillWeight = 101.7739F;
-            this.SourceTitle.HeaderText = "Title";
-            this.SourceTitle.Name = "SourceTitle";
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.LinkTitle.DefaultCellStyle = dataGridViewCellStyle5;
+            this.LinkTitle.FillWeight = 101.7739F;
+            this.LinkTitle.HeaderText = "Title";
+            this.LinkTitle.Name = "LinkTitle";
             // 
             // LinkGroup
             // 
             this.LinkGroup.HeaderText = "Group";
             this.LinkGroup.Name = "LinkGroup";
             // 
-            // SourcePath
+            // LinkPath
             // 
-            this.SourcePath.HeaderText = "Path";
-            this.SourcePath.Name = "SourcePath";
-            this.SourcePath.Visible = false;
+            this.LinkPath.HeaderText = "Path";
+            this.LinkPath.Name = "LinkPath";
+            this.LinkPath.Visible = false;
             // 
-            // SourceType
+            // LinkType
             // 
-            this.SourceType.HeaderText = "Type";
-            this.SourceType.Name = "SourceType";
-            this.SourceType.Visible = false;
+            this.LinkType.HeaderText = "Type";
+            this.LinkType.Name = "LinkType";
+            this.LinkType.Visible = false;
             // 
             // GroupID
             // 
@@ -360,19 +358,17 @@
             this.lblTitle.TabIndex = 10;
             this.lblTitle.Text = "Title:";
             // 
-            // cmsSource
+            // cmsLink
             // 
-            this.cmsSource.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsLink.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_OpenLink,
             this.m_OpenInOmniBrowser,
             this.toolStripSeparator1,
-            this.m_AddToGroup,
-            this.m_MoveToGroup,
-            this.toolStripSeparator2,
+            this.m_NewLink,
             this.m_Modify,
             this.m_Delete});
-            this.cmsSource.Name = "contextMenu";
-            this.cmsSource.Size = new System.Drawing.Size(214, 148);
+            this.cmsLink.Name = "contextMenu";
+            this.cmsLink.Size = new System.Drawing.Size(214, 142);
             // 
             // m_OpenLink
             // 
@@ -391,22 +387,11 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(210, 6);
             // 
-            // m_AddToGroup
+            // m_NewLink
             // 
-            this.m_AddToGroup.Name = "m_AddToGroup";
-            this.m_AddToGroup.Size = new System.Drawing.Size(213, 22);
-            this.m_AddToGroup.Text = "Add to Group";
-            // 
-            // m_MoveToGroup
-            // 
-            this.m_MoveToGroup.Name = "m_MoveToGroup";
-            this.m_MoveToGroup.Size = new System.Drawing.Size(213, 22);
-            this.m_MoveToGroup.Text = "Move to Group";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(210, 6);
+            this.m_NewLink.Name = "m_NewLink";
+            this.m_NewLink.Size = new System.Drawing.Size(213, 22);
+            this.m_NewLink.Text = "New Link";
             // 
             // m_Modify
             // 
@@ -467,6 +452,9 @@
             this.ClientSize = new System.Drawing.Size(645, 325);
             this.Controls.Add(this.panelModify);
             this.Controls.Add(this.splitContainer1);
+            this.HelpButton = true;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "LinksDlg";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -483,7 +471,7 @@
             this.panel1.PerformLayout();
             this.panelModify.ResumeLayout(false);
             this.panelModify.PerformLayout();
-            this.cmsSource.ResumeLayout(false);
+            this.cmsLink.ResumeLayout(false);
             this.cmsGroup.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -506,13 +494,10 @@
         private System.Windows.Forms.Label lblLink;
         private System.Windows.Forms.TextBox txtTitle;
         private System.Windows.Forms.Label lblTitle;
-        private System.Windows.Forms.ContextMenuStrip cmsSource;
+        private System.Windows.Forms.ContextMenuStrip cmsLink;
         private System.Windows.Forms.ToolStripMenuItem m_OpenLink;
         private System.Windows.Forms.ToolStripMenuItem m_OpenInOmniBrowser;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem m_AddToGroup;
-        private System.Windows.Forms.ToolStripMenuItem m_MoveToGroup;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem m_Modify;
         private System.Windows.Forms.ToolStripMenuItem m_Delete;
         private System.Windows.Forms.PictureBox pSize;
@@ -524,14 +509,15 @@
         private System.Windows.Forms.ToolStripMenuItem g_AddLink;
         private System.Windows.Forms.ToolStripMenuItem g_AddGroup;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.DataGridViewImageColumn SourceImage;
-        private System.Windows.Forms.DataGridViewTextBoxColumn SourceTitle;
-        private System.Windows.Forms.DataGridViewTextBoxColumn LinkGroup;
-        private System.Windows.Forms.DataGridViewTextBoxColumn SourcePath;
-        private System.Windows.Forms.DataGridViewTextBoxColumn SourceType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn GroupID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn SortByImage;
         private System.Windows.Forms.TextBox txtEditNode;
         private System.Windows.Forms.LinkLabel btnGetTitle;
+        private System.Windows.Forms.DataGridViewImageColumn LinkImage;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LinkTitle;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LinkGroup;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LinkPath;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LinkType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GroupID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SortByImage;
+        private System.Windows.Forms.ToolStripMenuItem m_NewLink;
     }
 }

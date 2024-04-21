@@ -190,6 +190,10 @@ namespace Bubbles
             m_db.ExecuteNonQuery("CREATE TABLE TOOLS(title text, path text, type text, " +
                 "_order integer, stickID int, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
+            // path - file path
+            // type - file type (.exe, .docx, .txt, etc.) or OmniTool type, starting with "OT"
+            //        ex.: if (type.StartsWith("OT")) ... else it's a file
+            //        or filename, ex.: "tool-calculator.png" (stored in the IconDB)
 
             // Quick tasks
             m_db.ExecuteNonQuery("CREATE TABLE TASKTEMPLATES(prime int, name text, topictext text, " +
@@ -239,9 +243,9 @@ namespace Bubbles
 
             // Add first Tools stick
             id = r.Next();
-            AddStick(id, Utils.getString("BubbleMySources.bubble.tooltip"), StixUtils.typesources, 0, "H", "");
+            AddStick(id, Utils.getString("BubbleTools.bubble.tooltip"), StixUtils.typetools, 0, "H", "");
 
-            AddLinkGroup(Utils.getString("AllSourcesDlg.commongroup"), 0, 1);
+            AddLinkGroup(Utils.getString("LinksDlg.commongroup"), 0, 1);
             // Get created group id
             int groupID = 1;
             DataTable dt = ExecuteQuery("SELECT last_insert_rowid()");
@@ -262,7 +266,7 @@ namespace Bubbles
 
             AddLink(Utils.getString("mysources.first2.text"), Utils.dllPath + "OmniStix.chm", "chm", groupID);
             AddTool(Utils.getString("mysources.first2.text"), Utils.dllPath + "OmniStix.chm", "chm", 2, id);
-            AddTool(Utils.getString("mysources.first3.text"), "c:\\Windows\\System32\\notepad.exe", "exe", 3, id);
+            AddTool(Utils.getString("mysources.first3.text"), "c:\\Windows\\System32\\notepad.exe", "tool-notepad.png", 3, id);
             AddLinkGroup("Group 1", 0, 2);
             // Get created group id
             groupID = 1;

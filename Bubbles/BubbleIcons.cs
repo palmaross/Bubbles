@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using Clipboard = System.Windows.Forms.Clipboard;
 using Color = System.Drawing.Color;
 
@@ -341,6 +342,13 @@ namespace Bubbles
                     string name = Path.GetFileNameWithoutExtension(pair.Value);
                     if (name.StartsWith("pripro")) name = "";
                     NewIcon(pair.Value, name, "end");
+                }
+
+                string path = _dlg.txtPath.Text.Trim();
+                if (!String.IsNullOrEmpty(path))
+                {
+                    string name = Path.GetFileNameWithoutExtension(path);
+                    NewIcon(path, name, "end");
                 }
             }
         }

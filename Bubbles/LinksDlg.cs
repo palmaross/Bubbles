@@ -5,12 +5,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Bubbles
@@ -21,25 +18,38 @@ namespace Bubbles
         {
             InitializeComponent();
 
-            Text = Utils.getString("AllSourcesDlg.title");
-            lblLink.Text = Utils.getString("AllSourcesDlg.lblLink");
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
+            helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
+            helpProvider1.SetHelpKeyword(this, "LinksDlg.htm");
 
-            lblTitle.Text = Utils.getString("AllSourcesDlg.SourceTitle");
-            lblLink.Text = Utils.getString("AllSourcesDlg.lblLink");
+            Text = Utils.getString("LinksDlg.title");
+            lblOpenIn.Text = Utils.getString("LinksDlg.lblOpenIn");
+            rbtnOmniBrowser.Text = Utils.getString("LinksDlg.rbtnOmniBrowser");
+            rbtnExternalApp.Text = Utils.getString("LinksDlg.rbtnExternalApp");
+
+            // New Link panel
+            lblTitle.Text = Utils.getString("LinksDlg.LinkTitle");
+            lblLink.Text = Utils.getString("LinksDlg.lblLink");
             btnCancel.Text = Utils.getString("button.cancel");
 
-            m_OpenLink.Text = Utils.getString("AllSourcesDlg.btnOpen");
-            m_OpenInOmniBrowser.Text = Utils.getString("AllSourcesDlg.omnibrowser");
-            m_AddToGroup.Text = Utils.getString("AllSourcesDlg.m_AddToGroup");
-            m_MoveToGroup.Text = Utils.getString("AllSourcesDlg.m_MoveToGroup");
+            m_OpenLink.Text = Utils.getString("LinksDlg.btnOpen");
+            m_OpenInOmniBrowser.Text = Utils.getString("LinksDlg.omnibrowser");
+            m_NewLink.Text = Utils.getString("LinksDlg.addlink");
             m_Modify.Text = Utils.getString("button.modify");
             m_Delete.Text = Utils.getString("button.delete");
 
-            SourceTitle.HeaderText = Utils.getString("AllSourcesDlg.SourceTitle");
-            cmsSource.ItemClicked += ContextMenu_ItemClicked;
+            g_AddLink.Text = Utils.getString("LinksDlg.addlink");
+            g_AddGroup.Text = Utils.getString("LinksDlg.NewGroup");
+            g_RenameGroup.Text = Utils.getString("LinksDlg.RenameGroup");
+            g_DeleteGroup.Text = Utils.getString("LinksDlg.DeleteGroup");
+
+            LinkTitle.HeaderText = Utils.getString("LinksDlg.LinkTitle");
+            LinkGroup.HeaderText = Utils.getString("LinksDlg.LinkGroup");
+
+            cmsLink.ItemClicked += ContextMenu_ItemClicked;
             cmsGroup.ItemClicked += ContextMenu_ItemClicked;
 
-            SourceImage.Width = (int)(pSize.Width * 1.5); // link type icon
+            LinkImage.Width = (int)(pSize.Width * 1.5); // link type icon
 
             this.MinimumSize = new Size(panelModify.Width, panelModify.Height);
 
@@ -57,8 +67,8 @@ namespace Bubbles
 
         private void AllSourcesDlg_ResizeEnd(object sender, EventArgs e)
         {
-            SourceImage.Width = (int)(pSize.Width * 1.5); // map type icon
-            SourceTitle.Width = (int)(dataGridView1.Width / 1.85);
+            LinkImage.Width = (int)(pSize.Width * 1.5); // map type icon
+            LinkTitle.Width = (int)(dataGridView1.Width / 1.85);
         }
 
         void Init()
@@ -69,7 +79,7 @@ namespace Bubbles
         void PopulateGroups()
         {
             treeView1.Nodes.Clear();
-            TreeNode root = new TreeNode(Utils.getString("AllSourcesDlg.AllGroups")); root.Tag = 0;
+            TreeNode root = new TreeNode(Utils.getString("LinksDlg.AllGroups")); root.Tag = 0;
             treeView1.Nodes.Add(root);
             db = new StixDB();
 
@@ -127,10 +137,10 @@ namespace Bubbles
             int rowId = dataGridView1.Rows.Add();
             DataGridViewRow row = dataGridView1.Rows[rowId];
 
-            row.Cells["SourceImage"].Value = img;
-            row.Cells["SourceTitle"].Value = title;
+            row.Cells["LinkImage"].Value = img;
+            row.Cells["LinkTitle"].Value = title;
             row.Cells["LinkGroup"].Value = groupName;
-            row.Cells["SourcePath"].Value = path;
+            row.Cells["LinkPath"].Value = path;
             row.Cells["GroupID"].Value = groupID;
             row.Cells["SortByImage"].Value = imageType;
         }
@@ -173,7 +183,7 @@ namespace Bubbles
                 txtEditNode.Location = new Point(m_editNode.Bounds.X, m_editNode.Bounds.Y);
                 txtEditNode.Size = new Size(treeView1.Width - m_editNode.Bounds.X - pSize.Width, txtEditNode.Height);
                 txtEditNode.Visible = true; txtEditNode.Focus();
-                txtEditNode.Text = Utils.getString("AllSourcesDlg.btnNewGroup"); 
+                txtEditNode.Text = Utils.getString("LinksDlg.btnNewGroup"); 
                 txtEditNode.SelectAll();
                 m_editMode = false; // "new group" mode
             }
@@ -189,7 +199,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "g_DeleteGroup")
             {
-                if (MessageBox.Show(Utils.getString("AllSourcesDlg.deletegroup"), "", 
+                if (MessageBox.Show(Utils.getString("LinksDlg.deletegroup"), "", 
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     int groupID = (int)treeView1.SelectedNode.Tag;
@@ -217,6 +227,15 @@ namespace Bubbles
                 panelModify.Visible = true;
                 panelModify.Tag = "new";
             }
+            else if (e.ClickedItem.Name == "m_NewLink")
+            {
+                panelModify.Location = new Point(
+                    (this.Width - panelModify.Width) / 2,
+                    (this.Height - panelModify.Height) / 2);
+
+                panelModify.Visible = true;
+                panelModify.Tag = "new";
+            }
             else if(e.ClickedItem.Name == "m_OpenLink")
             {
                 OpenLink(false);
@@ -236,6 +255,24 @@ namespace Bubbles
             {
                 selectedRows = dataGridView1.SelectedRows;
 
+                if (MessageBox.Show(Utils.getString("LinksDlg.deletesources"), "",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                {
+                    using (StixDB _db = new StixDB())
+                    {
+                        foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+                        {
+                            int groupID = (int)row.Cells["GroupID"].Value;
+                            string path = (string)row.Cells["LinkPath"].Value;
+
+                            _db.ExecuteNonQuery("delete from LINKS " +
+                                "where path=`" + path + "` and groupID=" + groupID + "");
+
+                            dataGridView1.Rows.Remove(row);
+                        }
+                    }
+                }
+
                 panelModify.Visible = false;
             }
         }
@@ -250,7 +287,7 @@ namespace Bubbles
                 foreach (DataGridViewRow row in dataGridView1.SelectedRows)
                 {
                     try {
-                        System.Diagnostics.Process.Start(row.Cells["SourcePath"].Value.ToString());
+                        System.Diagnostics.Process.Start(row.Cells["LinkPath"].Value.ToString());
                     } catch { }
                 }
                 return;
@@ -258,7 +295,7 @@ namespace Bubbles
 
             foreach (DataGridViewRow row in dataGridView1.SelectedRows)
             {
-                string path = row.Cells["SourcePath"].Value.ToString();
+                string path = row.Cells["LinkPath"].Value.ToString();
                 string lpath = path.ToLower();
 
                 if (!lpath.StartsWith("http") && !lpath.StartsWith("www") && !lpath.EndsWith(".pdf") && 
@@ -284,17 +321,7 @@ namespace Bubbles
                     OmniBrowser.txtAddressBar.Text = path;
                     OmniBrowser.Navigate(true);
                 }
-
-                //if (OmniBrowser.Visible && OmniBrowser.browserReady)
-                //    OmniBrowser.webView.Source = new Uri(path);
-                //else
-                //{
-                //    OmniBrowser.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-                //    LinksForOB.Add(path);
-                //}
             }
-            //if (LinksForOB.Count > 0)
-            //    timerOmniBrowser.Start();
         }
 
         List<string> LinksForOB = new List<string>();
@@ -382,28 +409,38 @@ namespace Bubbles
             string link = txtLink2.Text.Trim();
             string title = txtTitle.Text.Trim();
 
-            if (link == "" || title == "") return;
+            if (link == "" || title == "") return; // to do message to user
+
+            int groupID = (int)selectedNode.Tag;
+            string type = BubbleTools.GetFileType(link);
 
             using (StixDB _db = new StixDB())
             {
+                DataTable dt = _db.ExecuteQuery("select * from LINKS " +
+                    "where groupID=" + groupID + " and path=`" + link + "`");
+
+                if (dt.Rows.Count > 0) return; // to do message to user
+
                 if (panelModify.Tag.ToString() == "new")
                 {
-                    int groupID = (int)selectedNode.Tag;
                     if (groupID == 0) return;
 
-                    DataTable dt = _db.ExecuteQuery("select * from LINKS where groupID=" + groupID + 
-                        " and path=`" + link + "`");
-
-                    if (dt.Rows.Count > 0) return;
-
-                    string type = BubbleTools.GetFileType(link);
                     AddToTable(title, link, selectedNode.Text, groupID);
-
                     _db.AddLink(title, link, type, groupID);
                 }
                 else if (panelModify.Tag.ToString() == "edit")
                 {
+                    if (groupID == 0) // "All Links" group selected. Get link group id from link itself
+                        groupID = (int)dataGridView1.SelectedRows[0].Cells["GroupID"].Value;
 
+                    // Modify in the table
+                    dataGridView1.SelectedRows[0].Cells["LinkTitle"].Value = title;
+                    dataGridView1.SelectedRows[0].Cells["LinkPath"].Value = link;
+                    txtLink.Text = link;
+
+                    // Update in the database
+                    _db.ExecuteNonQuery("update LINKS set" +
+                        "title=`" + title + "`, path=`" + link + "`");
                 }
             }
         }
@@ -495,7 +532,7 @@ namespace Bubbles
             if (e.RowIndex < 0 && e.ColumnIndex == 0)
             {
                 sortby = "SortByImage";
-                thenby = "SourceTitle";
+                thenby = "LinkTitle";
                 SortByType();
             }
         }
@@ -526,7 +563,7 @@ namespace Bubbles
             {
                 var item = dataGridView1.SelectedRows[0];
 
-                txtLink.Text = item.Cells["SourcePath"].Value.ToString();
+                txtLink.Text = item.Cells["LinkPath"].Value.ToString();
             }
         }
 
@@ -568,13 +605,15 @@ namespace Bubbles
                     }
                 }
 
-                foreach (ToolStripItem item in cmsSource.Items)
+                foreach (ToolStripItem item in cmsLink.Items)
                     item.Visible = true;
 
                 if (dataGridView1.SelectedRows.Count > 1)
-                    cmsSource.Items["m_Modify"].Visible = false; // we can modify one row only
+                    cmsLink.Items["m_Modify"].Visible = false; // we can modify one row only
+                if ((int)treeView1.SelectedNode.Tag == 0)
+                    cmsLink.Items["m_NewLink"].Visible = false; // we can't add link to "All Groups"
 
-                cmsSource.Show(Cursor.Position);
+                cmsLink.Show(Cursor.Position);
             }
         }
 
@@ -616,13 +655,13 @@ namespace Bubbles
             if (groupID == 0)
             {
                 LinkGroup.Visible = true;
-                SourceTitle.Width = (int)(dataGridView1.Width * 0.6);
+                LinkTitle.Width = (int)(dataGridView1.Width * 0.6);
                 LinkGroup.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
             else
             {
                 LinkGroup.Visible = false;
-                SourceTitle.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                LinkTitle.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
 
             using (StixDB _db = new StixDB())
@@ -647,7 +686,7 @@ namespace Bubbles
             }
         }
 
-        Dictionary<int, string> SourceGroups = new Dictionary<int, string>();
+        Dictionary<int, string> LinkGroups = new Dictionary<int, string>();
 
         public static string sortby;
         public static string thenby;
@@ -705,7 +744,7 @@ namespace Bubbles
             {
                 foreach (DataGridViewRow row in selectedRows)
                 {
-                    string path = (string)row.Cells["SourcePath"].Value;
+                    string path = (string)row.Cells["LinkPath"].Value;
 
                     DataTable dt = _db.ExecuteQuery("select * from LINKS where " +
                         "path=`" + path + "` and groupID=" + groupID + "");
@@ -718,8 +757,8 @@ namespace Bubbles
                     // Copy 
                     if (e.Effect == DragDropEffects.Copy)
                     {
-                        _db.AddLink((string)row.Cells["SourceTitle"].Value, path,
-                            (string)row.Cells["SourceType"].Value, groupID);
+                        _db.AddLink((string)row.Cells["LinkTitle"].Value, path,
+                            (string)row.Cells["LinkType"].Value, groupID);
                     }
                     // MOVE selected node to selected group.
                     if (e.Effect == DragDropEffects.Move)

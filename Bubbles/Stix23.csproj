@@ -150,11 +150,17 @@
     <Compile Include="MyDateTimePicker.Designer.cs">
       <DependentUpon>MyDateTimePicker.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewSourceDlg.cs">
+    <Compile Include="OmniTools\NavigationDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewSourceDlg.Designer.cs">
-      <DependentUpon>NewSourceDlg.cs</DependentUpon>
+    <Compile Include="OmniTools\NavigationDlg.Designer.cs">
+      <DependentUpon>NavigationDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OmniTools\NewToolDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OmniTools\NewToolDlg.Designer.cs">
+      <DependentUpon>NewToolDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="AppManager\StickersDB.cs" />
     <Compile Include="AppManager\DatabaseWrapper.cs" />
@@ -177,6 +183,7 @@
     <Compile Include="OmniButton.Designer.cs">
       <DependentUpon>OmniButton.cs</DependentUpon>
     </Compile>
+    <Compile Include="OmniTools\OmniTools.cs" />
     <Compile Include="ScaleStickDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -203,17 +210,17 @@
     <Compile Include="BubbleTaskInfo.Designer.cs">
       <DependentUpon>BubbleTaskInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="BubbleTools.cs">
+    <Compile Include="OmniTools\BubbleTools.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BubbleTools.Designer.cs">
+    <Compile Include="OmniTools\BubbleTools.Designer.cs">
       <DependentUpon>BubbleTools.cs</DependentUpon>
     </Compile>
-    <Compile Include="SourceListDlg.cs">
+    <Compile Include="OmniTools\ToolListDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SourceListDlg.Designer.cs">
-      <DependentUpon>SourceListDlg.cs</DependentUpon>
+    <Compile Include="OmniTools\ToolListDlg.Designer.cs">
+      <DependentUpon>ToolListDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="BubbleTextOps.cs">
       <SubType>Form</SubType>
@@ -829,6 +836,24 @@
     <Content Include="images\tag_s.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\tool-calculator.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\tool-clock.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\tool-navigation.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\tool-notepad.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\tool-saveall.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\tool-snipping.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\topic_setdate_active.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -896,8 +921,11 @@
     <EmbeddedResource Include="MyDateTimePicker.resx">
       <DependentUpon>MyDateTimePicker.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewSourceDlg.resx">
-      <DependentUpon>NewSourceDlg.cs</DependentUpon>
+    <EmbeddedResource Include="OmniTools\NavigationDlg.resx">
+      <DependentUpon>NavigationDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OmniTools\NewToolDlg.resx">
+      <DependentUpon>NewToolDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BubbleFormat.resx">
       <DependentUpon>BubbleFormat.cs</DependentUpon>
@@ -911,7 +939,7 @@
     <EmbeddedResource Include="BubbleTaskInfo.resx">
       <DependentUpon>BubbleTaskInfo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BubbleTools.resx">
+    <EmbeddedResource Include="OmniTools\BubbleTools.resx">
       <DependentUpon>BubbleTools.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OmniButton.resx">
@@ -920,8 +948,8 @@
     <EmbeddedResource Include="ScaleStickDlg.resx">
       <DependentUpon>ScaleStickDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SourceListDlg.resx">
-      <DependentUpon>SourceListDlg.cs</DependentUpon>
+    <EmbeddedResource Include="OmniTools\ToolListDlg.resx">
+      <DependentUpon>ToolListDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BubbleTextOps.resx">
       <DependentUpon>BubbleTextOps.cs</DependentUpon>

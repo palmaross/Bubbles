@@ -96,9 +96,6 @@ namespace Bubbles
             
             ToolStripItem tsi = null;
 
-            //tsi.Name = "ManageTemplates";
-            //StickUtils.SetContextMenuImage(cmsAddMultiple.Items["ManageTaskTemplates"], "manage.png");
-
             using (StixDB db = new StixDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from ADDTOPIC_TEMPLATES order by templateName");

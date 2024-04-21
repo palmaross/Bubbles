@@ -69,7 +69,7 @@ namespace Bubbles
                     case StixUtils.typeformat:
                         m_StixBase.BaseIcon_MouseClick(m_StixBase.stxFormat, null);
                         break;
-                    case StixUtils.typesources:
+                    case StixUtils.typetools:
                         m_StixBase.BaseIcon_MouseClick(m_StixBase.stxSources, null);
                         break;
                     case StixUtils.typebookmarks:

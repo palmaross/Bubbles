@@ -48,6 +48,10 @@
             this.pBox = new System.Windows.Forms.PictureBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
+            this.lblFromFile = new System.Windows.Forms.Label();
+            this.txtPath = new System.Windows.Forms.TextBox();
+            this.btnBrowse = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.panel1.SuspendLayout();
             this.panelPP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pr1)).BeginInit();
@@ -252,7 +256,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(277, 343);
+            this.btnCancel.Location = new System.Drawing.Point(277, 377);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(70, 23);
             this.btnCancel.TabIndex = 2;
@@ -263,7 +267,7 @@
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(194, 343);
+            this.btnOK.Location = new System.Drawing.Point(194, 377);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(70, 23);
             this.btnOK.TabIndex = 3;
@@ -271,13 +275,48 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
+            // lblFromFile
+            // 
+            this.lblFromFile.AutoSize = true;
+            this.lblFromFile.Location = new System.Drawing.Point(12, 352);
+            this.lblFromFile.Name = "lblFromFile";
+            this.lblFromFile.Size = new System.Drawing.Size(49, 13);
+            this.lblFromFile.TabIndex = 4;
+            this.lblFromFile.Text = "From file:";
+            // 
+            // txtPath
+            // 
+            this.txtPath.Location = new System.Drawing.Point(64, 348);
+            this.txtPath.Name = "txtPath";
+            this.txtPath.Size = new System.Drawing.Size(250, 20);
+            this.txtPath.TabIndex = 5;
+            // 
+            // btnBrowse
+            // 
+            this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBrowse.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnBrowse.Location = new System.Drawing.Point(317, 347);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(30, 23);
+            this.btnBrowse.TabIndex = 6;
+            this.btnBrowse.Text = "...";
+            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
             // SelectIconDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(359, 377);
+            this.ClientSize = new System.Drawing.Size(359, 409);
+            this.Controls.Add(this.btnBrowse);
+            this.Controls.Add(this.txtPath);
+            this.Controls.Add(this.lblFromFile);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.panel1);
@@ -305,6 +344,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pSpace)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBox)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -328,5 +368,9 @@
         public System.Windows.Forms.PictureBox pr2;
         public System.Windows.Forms.PictureBox pr4;
         private System.Windows.Forms.Panel panelPP;
+        private System.Windows.Forms.Label lblFromFile;
+        private System.Windows.Forms.Button btnBrowse;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        public System.Windows.Forms.TextBox txtPath;
     }
 }

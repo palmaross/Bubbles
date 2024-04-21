@@ -56,7 +56,7 @@ namespace Bubbles
                         else if (type == typeicons)
                             db.ExecuteNonQuery("update ICONS set name=`" + name +
                                 "` where stickID=" + stickID + " and name =`" + oldname + "`");
-                        else if (type == typesources)
+                        else if (type == typetools)
                             db.ExecuteNonQuery("update TOOLS set title=`" + name +
                                 "` where stickID=" + stickID + " and title =`" + oldname + "`");
                     }
@@ -207,7 +207,7 @@ namespace Bubbles
             else
                 stickLength = MinLength;
 
-            if (sticktype == typesources) stickLength += icondist;
+            if (sticktype == typetools) stickLength += icondist;
 
             using (StixDB db = new StixDB())
             {
@@ -215,7 +215,7 @@ namespace Bubbles
                 {
                     if (sticktype == typeicons)
                         db.ExecuteNonQuery("delete from ICONS where stickID =" + (int)form.Tag + "");
-                    else if (sticktype == typesources)
+                    else if (sticktype == typetools)
                         db.ExecuteNonQuery("delete from TOOLS where stickID =" + (int)form.Tag + "");
                 }
                 else // Add icons to stick
@@ -230,11 +230,11 @@ namespace Bubbles
                             db.ExecuteNonQuery("update ICONS set _order=" + item.Order + " where stickID=" + (int)form.Tag + " and filename =`" + item.FileName + "`");
                         }
                     }
-                    else if (sticktype == typesources)
+                    else if (sticktype == typetools)
                     {
-                        foreach (var item in Sources)
+                        foreach (var item in Tools)
                         {
-                            PictureBox pb = AddSource(p1, item, item.Path, orientation, k++);
+                            PictureBox pb = AddTool(p1, item, item.Path, orientation, k++);
                             lpb.Add(pb); form.Controls.Add(pb);
                             db.ExecuteNonQuery("update TOOLS set _order=" + item.Order + " where stickID=" + (int)form.Tag + " and path =`" + item.Path + "`");
                         }
@@ -261,10 +261,10 @@ namespace Bubbles
             return pBox;
         }
 
-        public static PictureBox AddSource(PictureBox p1, SourceItem item, string path, 
+        public static PictureBox AddTool(PictureBox p1, ToolItem item, string path, 
             string orientation, int k)
         {
-            PictureBox pBox = AddPitureBox(p1, orientation, path, k, typesources, item.Type);
+            PictureBox pBox = AddPitureBox(p1, orientation, path, k, typetools, item.Type);
             ToolTip tt = new ToolTip();
             tt.ShowAlways = true;
             tt.SetToolTip(pBox, item.Title);
@@ -273,7 +273,7 @@ namespace Bubbles
         }
 
         static PictureBox AddPitureBox(PictureBox p1, string orientation, string path, int k, 
-            string stickType, string imageType = "", int prirproValue = 0)
+            string stickType, string imageType = "")
         {
             PictureBox pBox = new PictureBox();
             pBox.Size = p1.Size;
@@ -281,7 +281,7 @@ namespace Bubbles
             pBox.AllowDrop = true;
             if (stickType == typeicons)
                 pBox.Image = Image.FromFile(path);
-            else if (stickType == typesources)
+            else if (stickType == typetools)
             {
                 if (imageType == "exe")
                 {
@@ -292,6 +292,8 @@ namespace Bubbles
                     }
                     catch { pBox.Image = GetImage(imageType); }
                 }
+                else if (imageType.Contains("."))
+                    pBox.Image = Image.FromFile(Utils.m_dataPath + "IconDB\\" + imageType);
                 else
                     pBox.Image = GetImage(imageType);
             }
@@ -331,18 +333,18 @@ namespace Bubbles
                 using (StixDB db = new StixDB())
                     db.ExecuteNonQuery("delete from ICONS where stickID=" + id + " and filename=`" + filename + "`");
             }
-            else if (type == typesources)
+            else if (type == typetools)
             {
-                SourceItem _item = (SourceItem)selectedIcon.Tag;
+                ToolItem _item = (ToolItem)selectedIcon.Tag;
                 string filename = _item.Path;
 
                 if (_item == null) return;
 
-                _item = Sources.Find(x => x.Path == filename);
-                Sources.Remove(_item);
+                _item = Tools.Find(x => x.Path == filename);
+                Tools.Remove(_item);
 
-                for (int i = 0; i < Sources.Count; i++)
-                    Sources[i].Order = i + 1;
+                for (int i = 0; i < Tools.Count; i++)
+                    Tools[i].Order = i + 1;
 
                 using (StixDB db = new StixDB())
                     db.ExecuteNonQuery("delete from TOOLS where path=`" + filename + "`");
@@ -366,7 +368,7 @@ namespace Bubbles
                     if (StixButton.m_StixBase.cmsIcons.Items.Count > 0)
                         StixButton.m_StixBase.cmsIcons.Items.Clear();
                 }
-                else if (type == typesources)
+                else if (type == typetools)
                 {
                     db.ExecuteNonQuery("delete from TOOLS where stickID=" + id + "");
                     if (StixButton.m_StixBase.cmsMySources.Items.Count > 0)
@@ -743,7 +745,7 @@ namespace Bubbles
         }
 
         public static string Handle_DragDrop(ref string path, string[] draggedFiles, 
-            List<IconItem> aIcons, List<SourceItem> aSources)
+            List<IconItem> aIcons, List<ToolItem> aSources)
         {
             string title = "";
             if (!String.IsNullOrEmpty(path)) // possible url
@@ -814,7 +816,7 @@ namespace Bubbles
         {
             ToolStripItem tsi = null;
 
-            if (stickType == typeicons || stickType == typesources || stickType == typebookmarks)
+            if (stickType == typeicons || stickType == typetools || stickType == typebookmarks)
             {
                 tsi = new ToolStripLabel(Utils.getString("contextmenu.stickoperations"));
                 tsi.Font = new Font(tsi.Font, FontStyle.Bold); cms.Items.Add(tsi);
@@ -825,7 +827,7 @@ namespace Bubbles
                 tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "deleteall.png"), cmiSize);
 
                 string deleteall = Utils.getString("contextmenu.clearstick.tooltip");
-                if (stickType == typesources) deleteall = Utils.getString("mysources.contextmenu.deleteall");
+                if (stickType == typetools) deleteall = Utils.getString("mysources.contextmenu.deleteall");
                 if (stickType == typebookmarks) deleteall = Utils.getString("bookmarks.contextmenu.deleteall");
 
                 tsi.ToolTipText = deleteall;
@@ -841,7 +843,7 @@ namespace Bubbles
             tsi.ImageScaling = ToolStripItemImageScaling.None;
             tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "remember.png"), cmiSize);
 
-            if (stickType == typeicons || stickType == typesources)
+            if (stickType == typeicons || stickType == typetools)
             {
                 tsi = cms.Items.Add(Utils.getString("button.rename"));
                 tsi.Name = "BI_renamestick";
@@ -899,7 +901,7 @@ namespace Bubbles
                 // common comands popup
                 X = parent.Right - child.Width; // child right = parent right
                 if (popup == "getname" || popup == "resources" || popup == "bookmarks" || 
-                    popup == "sources" || popup == "icons")
+                    popup == "tools" || popup == "icons")
                     X = parent.Left; // child right = parent left
                 Y = parent.Bottom; // child top = parent bottom
 
@@ -940,7 +942,7 @@ namespace Bubbles
                 X = parent.Right; // child left = parent right
                 Y = parent.Bottom - child.Height; // child bottom = parent bottom
                 if (popup == "getname" || popup == "resources" || popup == "bookmarks" || 
-                    popup == "sources" || popup == "icons")
+                    popup == "tools" || popup == "icons")
                     Y = parent.Top; // child top = parent top
 
                 //if (popup == "add")
@@ -1009,12 +1011,12 @@ namespace Bubbles
 
         public static List<IconItem> Icons = new List<IconItem>();
         public static List<BookmarkItem> Bookmarks = new List<BookmarkItem>();
-        public static List<SourceItem> Sources = new List<SourceItem>();
+        public static List<ToolItem> Tools = new List<ToolItem>();
 
         // types must match Stix names!
         public const string typestick = "stick", typebase = "StixBase",
             typeicons = "BubbleIcons", typetaskinfo = "BubbleTaskInfo", 
-            typeformat = "BubbleFormat", typesources = "BubbleMySources", typebookmarks = "BubbleBookmarks",
+            typeformat = "BubbleFormat", typetools = "BubbleMyTools", typebookmarks = "BubbleBookmarks",
             typeaddtopic = "BubbleAddTopic", typetextops = "BubbleTextOps", typeorganizer = "BubbleOrganizer";
 
         public static int stickLength;

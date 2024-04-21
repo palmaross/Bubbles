@@ -22,7 +22,7 @@ namespace Bubbles
                 label1.Text = Utils.getString("NewStickDlg.label.title") + ":"; // stick name
             else if (stickType == StixUtils.typeicons)
                 label1.Text = Utils.getString("NewStickDlg.icon.title") + ":"; // icon name
-            else if (stickType == StixUtils.typesources)
+            else if (stickType == StixUtils.typetools)
                 label1.Text = Utils.getString("NewStickDlg.source.title") + ":"; // source name
             btnCancel.Text = Utils.getString("button.cancel");
 
@@ -74,7 +74,7 @@ namespace Bubbles
                         return;
                     }
                 }
-                else if (stickType == StixUtils.typesources)
+                else if (stickType == StixUtils.typetools)
                 {
                     DataTable dt = db.ExecuteQuery("SELECT from TOOLS where title=`" + newName + "` and id=" + stickID + "");
                     if (dt.Rows.Count > 0)

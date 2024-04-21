@@ -5,9 +5,9 @@ using System.Windows.Forms;
 
 namespace Bubbles
 {
-    public partial class NewSourceDlg : Form
+    public partial class NewToolDlg : Form
     {
-        public NewSourceDlg(List<SourceItem> sources, bool manage)
+        public NewToolDlg(List<ToolItem> sources, bool manage)
         {
             InitializeComponent();
 
@@ -23,7 +23,6 @@ namespace Bubbles
         private void btnBrowse_Click(object sender, EventArgs e)
         {
             openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            openFileDialog1.Title = Utils.getString("commonoptions.path.settings.browse.dialog_desc");
             if (openFileDialog1.ShowDialog(this) == DialogResult.OK)
                 txtPath.Text = openFileDialog1.FileName;
         }
@@ -52,6 +51,6 @@ namespace Bubbles
             catch { }
         }
 
-        private List<SourceItem> Sources = new List<SourceItem>();
+        private List<ToolItem> Sources = new List<ToolItem>();
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Bubbles
 {
-    partial class SourceListDlg
+    partial class ToolListDlg
     {
         /// <summary>
         /// Required designer variable.
@@ -29,19 +29,16 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SourceListDlg));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ToolListDlg));
             this.listView1 = new System.Windows.Forms.ListView();
-            this.btnClose = new System.Windows.Forms.PictureBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.btnClose = new System.Windows.Forms.PictureBox();
             this.imageSize = new System.Windows.Forms.PictureBox();
             this.itemHeight = new System.Windows.Forms.PictureBox();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.MS_delete = new System.Windows.Forms.ToolStripMenuItem();
-            this.MS_rename = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.btnClose)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.itemHeight)).BeginInit();
-            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // listView1
@@ -58,10 +55,17 @@
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(212, 104);
+            this.listView1.SmallImageList = this.imageList1;
             this.listView1.TabIndex = 6;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
             this.listView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
+            // 
+            // imageList1
+            // 
+            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // btnClose
             // 
@@ -75,17 +79,11 @@
             this.btnClose.TabStop = false;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
-            // imageList1
-            // 
-            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            // 
             // imageSize
             // 
             this.imageSize.Location = new System.Drawing.Point(169, 37);
             this.imageSize.Name = "imageSize";
-            this.imageSize.Size = new System.Drawing.Size(16, 16);
+            this.imageSize.Size = new System.Drawing.Size(14, 14);
             this.imageSize.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imageSize.TabIndex = 9;
             this.imageSize.TabStop = false;
@@ -101,27 +99,7 @@
             this.itemHeight.TabStop = false;
             this.itemHeight.Visible = false;
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MS_delete,
-            this.MS_rename});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(118, 48);
-            // 
-            // MS_delete
-            // 
-            this.MS_delete.Name = "MS_delete";
-            this.MS_delete.Size = new System.Drawing.Size(117, 22);
-            this.MS_delete.Text = "Delete";
-            // 
-            // MS_rename
-            // 
-            this.MS_rename.Name = "MS_rename";
-            this.MS_rename.Size = new System.Drawing.Size(117, 22);
-            this.MS_rename.Text = "Rename";
-            // 
-            // SourceListDlg
+            // ToolListDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -132,14 +110,12 @@
             this.Controls.Add(this.imageSize);
             this.Controls.Add(this.listView1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "SourceListDlg";
+            this.Name = "ToolListDlg";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "FloatManual1";
-            this.Load += new System.EventHandler(this.SourceListDlg_Load);
+            this.Load += new System.EventHandler(this.ToolListDlg_Load);
             ((System.ComponentModel.ISupportInitialize)(this.btnClose)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.itemHeight)).EndInit();
-            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -150,8 +126,6 @@
         public System.Windows.Forms.ImageList imageList1;
         public System.Windows.Forms.PictureBox itemHeight;
         private System.Windows.Forms.PictureBox imageSize;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem MS_delete;
-        private System.Windows.Forms.ToolStripMenuItem MS_rename;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

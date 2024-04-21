@@ -22,7 +22,7 @@ namespace Bubbles
             toolTip1.SetToolTip(stxIcons, Utils.getString("BubbleIcons.bubble.tooltip"));
             toolTip1.SetToolTip(stxTaskInfo, Utils.getString("BubbleTaskInfo.bubble.tooltip"));
             toolTip1.SetToolTip(stxBookmarks, Utils.getString("BubbleBookmarks.bubble.tooltip"));
-            toolTip1.SetToolTip(stxSources, Utils.getString("BubbleMySources.bubble.tooltip"));
+            toolTip1.SetToolTip(stxSources, Utils.getString("BubbleTools.bubble.tooltip"));
             toolTip1.SetToolTip(stxAddTopics, Utils.getString("BubbleAddTopic.bubble.tooltip"));
             toolTip1.SetToolTip(stxTextOps, Utils.getString("BubbleTextOps.bubble.tooltip"));
             toolTip1.SetToolTip(stxFormat, Utils.getString("BubbleFormat.bubble.tooltip"));
@@ -309,8 +309,8 @@ namespace Bubbles
             }
             else if (pb.Name == "stxSources")
             {
-                stickType = StixUtils.typesources;
-                defaultName = Utils.getString("BubbleMySources.bubble.tooltip");
+                stickType = StixUtils.typetools;
+                defaultName = Utils.getString("BubbleTools.bubble.tooltip");
                 if (cmsMySources.Items.Count > 0 && startId == 0)
                 {
                     cmsMySources.Show(Cursor.Position); return;
@@ -359,7 +359,7 @@ namespace Bubbles
                     form = new BubbleIcons(id, orientation, name); break;
                 case StixUtils.typetaskinfo:
                     form = new BubbleTaskInfo(id, orientation, name); break;
-                case StixUtils.typesources:
+                case StixUtils.typetools:
                     form = new BubbleTools(id, orientation, name); break;
                 case StixUtils.typebookmarks:
                     form = new BubbleBookmarks(id, orientation, name); break;
@@ -518,10 +518,10 @@ namespace Bubbles
                     cmsIcons.ItemClicked += cms_ItemClicked;
                 }
             }
-            if (type == "" || type == StixUtils.typesources)
+            if (type == "" || type == StixUtils.typetools)
             {
                 if (cmsMySources.Items.Count > 0) cmsMySources.Items.Clear();
-                cmsMySources = GetSticks(StixUtils.typesources, cmsMySources);
+                cmsMySources = GetSticks(StixUtils.typetools, cmsMySources);
                 if (cmsMySources.Items.Count > 0)
                 {
                     stxSources.ContextMenuStrip = cmsMySources;
@@ -542,7 +542,7 @@ namespace Bubbles
             {
                 case StixUtils.typeicons:
                     StxIcon_MouseClick(stxIcons, null); break;
-                case StixUtils.typesources:
+                case StixUtils.typetools:
                     StxIcon_MouseClick(stxSources, null); break;
             }
         }
