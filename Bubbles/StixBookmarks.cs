@@ -9,9 +9,9 @@ using Color = System.Drawing.Color;
 
 namespace Bubbles
 {
-    internal partial class BubbleBookmarks : Form
+    internal partial class StixBookmarks : Form
     {
-        public BubbleBookmarks(int ID, string _orientation, string stickname)
+        public StixBookmarks(int ID, string _orientation, string stickname)
         {
             InitializeComponent();
 

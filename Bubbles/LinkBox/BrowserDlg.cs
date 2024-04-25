@@ -2,9 +2,7 @@
 using PRAManager;
 using System;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 using Color = System.Drawing.Color;
 
@@ -35,27 +33,24 @@ namespace Bubbles
 
             tabControl1.MouseClick += TabControl1_MouseClick;
 
+            // There is a "New" tab preinstalled. Save it.
             tabControl1.TabPages[0].Text = Utils.getString("BrowserDlg.NewPage");
             NewPage = tabControl1.TabPages[0];
 
+            // New page is a blank page. 
             string uriAdd = "about:blank";
             BrowserTab bt = new BrowserTab(tabControl1, uriAdd) 
                 { Source = new Uri(uriAdd), NewPage = NewPage, path = uriAdd };
 
+            // Add New page to the tab.
             NewPage.Controls.Add(bt);
             NewPage.Tag = bt;
 
-            uriAdd = path;
-            tabControl1.TabPages.Add(Utils.getString("BrowserDlg.NoTitle"));
-
-            bt = new BrowserTab(tabControl1, uriAdd)
-                { Source = new Uri(uriAdd), NewPage = NewPage, path = uriAdd };
-
-            tabControl1.TabPages[1].Controls.Add(bt);
-            tabControl1.TabPages[1].Tag = bt;
-
-            tabControl1.TabPages.Remove(NewPage);
-            tabControl1.TabPages.Add(NewPage);
+            if (path != "")
+            {
+                txtAddressBar.Text = path;
+                Navigate(true);
+            }
         }
 
         /// <summary>
@@ -86,6 +81,30 @@ namespace Bubbles
             }
         }
 
+        public void Preview(string url)
+        {
+            if (PreviewPage == null)
+            {
+                string uriAdd = url;
+                PreviewPage = new TabPage("Preview");
+                PreviewPage.Name = "PreviewPage";
+
+                BrowserTab bt = new BrowserTab(tabControl1, uriAdd)
+                { Source = new Uri(uriAdd), NewPage = NewPage, path = uriAdd };
+                PreviewPage.Tag = bt; PreviewPage.Controls.Add(bt);
+            }
+
+            if (!tabControl1.Contains(PreviewPage))
+            {
+                tabControl1.TabPages.Add(PreviewPage);
+                tabControl1.TabPages.Remove(NewPage);
+                tabControl1.TabPages.Add(NewPage);
+            }
+
+            tabControl1.SelectedTab = PreviewPage;
+            Navigate(false, url);
+        }
+
         private void txtAddressBar_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             txtAddressBar.SelectAll();
@@ -101,9 +120,18 @@ namespace Bubbles
             }
         }
 
-        public void Navigate(bool newTab)
+        /// <summary>
+        /// Navigate url presented in the address bar.
+        /// </summary>
+        /// <param name="newTab">If true, open page in the new tab.</param>
+        public void Navigate(bool newTab, string previewPath = "")
         {
             string uriAdd = txtAddressBar.Text;
+            if (previewPath != "")
+            {
+                txtAddressBar.Text = "Preview";
+                uriAdd = previewPath;
+            }
 
             if (!newTab && tabControl1.SelectedTab != NewPage) // Open in the selected tab
             {
@@ -125,10 +153,9 @@ namespace Bubbles
                 tabControl1.TabPages.Add(NewPage);
 
                 tabControl1.SelectedTab = page;
-
             }
 
-            txtAddressBar.Text = uriAdd;
+            //txtAddressBar.Text = uriAdd;
         }
 
         /// <summary>
@@ -138,8 +165,12 @@ namespace Bubbles
         {
             if (ClickedTab >= 0 && ClickedTab < tabControl1.TabCount - 1)
             {
+                BrowserTab bt = tabControl1.TabPages[ClickedTab].Tag as BrowserTab;
+                //bt.Source = new Uri("about:blank");
+                bt.CoreWebView2.NavigateToString("<html>Unloaded.</html>");
                 tabControl1.TabPages.RemoveAt(ClickedTab);
                 ClickedTab = -1;
+                tabControl1.Tag = "tab_removed";
             }
         }
 
@@ -159,7 +190,7 @@ namespace Bubbles
             this.Close();
         }
 
-        private void btnAddSubtopic_Click(object sender, EventArgs e)
+        private void btnAddAsSubtopic_Click(object sender, EventArgs e)
         {
             if (MMUtils.ActiveDocument.Selection.PrimaryTopic == null)
                 return;
@@ -168,7 +199,7 @@ namespace Bubbles
             InitializeWebView3Async();
         }
 
-        private void btnAddNotes_Click(object sender, EventArgs e)
+        private void btnAddToTopicNotes_Click(object sender, EventArgs e)
         {
             if (MMUtils.ActiveDocument.Selection.PrimaryTopic == null)
                 return;
@@ -233,19 +264,8 @@ namespace Bubbles
                 // Draw the background of the control for each item.
                 //e.DrawBackground();
 
-                if (e.Index == this.tabControl1.SelectedIndex)
-                {
-                    Brush _BackBrush = new SolidBrush(SystemColors.GradientInactiveCaption);
-
-                    Rectangle rect = e.Bounds;
-                    e.Graphics.FillRectangle(_BackBrush, (rect.X) + w, rect.Y, (rect.Width) - w, rect.Height);
-
-                    SizeF sz = e.Graphics.MeasureString(tabControl1.TabPages[e.Index].Text, e.Font);
-                    e.Graphics.DrawString(tabControl1.TabPages[e.Index].Text, e.Font, Brushes.Black,
-                               e.Bounds.Left + (e.Bounds.Width - sz.Width) / 2,
-                               e.Bounds.Top + (e.Bounds.Height - sz.Height) / 2 + h);
-                }
-                else if (e.Index == this.tabControl1.TabCount - 1) // New Page
+                
+                if (tabControl1.TabPages[e.Index] == NewPage) // New Page tab
                 {
                     Brush _BackBrush = new SolidBrush(Color.White);
 
@@ -257,7 +277,32 @@ namespace Bubbles
                                e.Bounds.Left + (e.Bounds.Width - sz.Width) / 2,
                                e.Bounds.Top + (e.Bounds.Height - sz.Height) / 2 + h);
                 }
-                else
+                else if (tabControl1.TabPages[e.Index] == PreviewPage) // Preview Page tab
+                {
+                    Brush _BackBrush = new SolidBrush(Color.Yellow);
+
+                    Rectangle rect = e.Bounds;
+                    e.Graphics.FillRectangle(_BackBrush, (rect.X) + w, rect.Y, (rect.Width) - w, rect.Height);
+
+                    SizeF sz = e.Graphics.MeasureString(tabControl1.TabPages[e.Index].Text, e.Font);
+                    e.Graphics.DrawString(tabControl1.TabPages[e.Index].Text, e.Font, Brushes.Black,
+                               e.Bounds.Left + (e.Bounds.Width - sz.Width) / 2,
+                               e.Bounds.Top + (e.Bounds.Height - sz.Height) / 2 + h);
+                }
+                // Active tab exept the New Page and Preview Page
+                else if (e.Index == this.tabControl1.SelectedIndex) // Active tab.
+                {
+                    Brush _BackBrush = new SolidBrush(SystemColors.GradientInactiveCaption);
+
+                    Rectangle rect = e.Bounds;
+                    e.Graphics.FillRectangle(_BackBrush, (rect.X) + w, rect.Y, (rect.Width) - w, rect.Height);
+
+                    SizeF sz = e.Graphics.MeasureString(tabControl1.TabPages[e.Index].Text, e.Font);
+                    e.Graphics.DrawString(tabControl1.TabPages[e.Index].Text, e.Font, Brushes.Black,
+                               e.Bounds.Left + (e.Bounds.Width - sz.Width) / 2,
+                               e.Bounds.Top + (e.Bounds.Height - sz.Height) / 2 + h);
+                }
+                else // All the rest tabs
                 {
                     Brush _BackBrush = new SolidBrush(Color.WhiteSmoke);
 
@@ -268,19 +313,18 @@ namespace Bubbles
                     e.Graphics.DrawString(tabControl1.TabPages[e.Index].Text, e.Font, Brushes.Black,
                     e.Bounds.Left + (e.Bounds.Width - sz.Width) / 2,
                               e.Bounds.Top + w);
-
                 }
 
             }
             catch (Exception Ex)
             {
                 MessageBox.Show(Ex.Message, "Error Occured", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
             }
         }
 
         int ClickedTab = -1;
         TabPage NewPage = null;
+        TabPage PreviewPage = null;
         string selectedText = "";
     }
 }

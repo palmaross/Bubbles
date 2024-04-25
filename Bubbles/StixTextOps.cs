@@ -16,9 +16,9 @@ using Timer = System.Windows.Forms.Timer;
 
 namespace Bubbles
 {
-    internal partial class BubbleTextOps : Form
+    internal partial class StixTextOps : Form
     {
-        public BubbleTextOps(int ID, string _orientation, string stickname)
+        public StixTextOps(int ID, string _orientation, string stickname)
         {
             InitializeComponent();
 
@@ -681,7 +681,7 @@ namespace Bubbles
 
             if (onetopic) // Merge text from pasted topics
             {
-                foreach (Topic t in BubbleTextOps.PastedTopics)
+                foreach (Topic t in StixTextOps.PastedTopics)
                 {
                     //move cursor to the end
                     rtb.Select(rtb.TextLength, 0);
@@ -691,12 +691,12 @@ namespace Bubbles
             }
 
             if (onetopic) // Delete pasted topics
-                foreach (Topic t in BubbleTextOps.PastedTopics.Reverse<Topic>())
+                foreach (Topic t in StixTextOps.PastedTopics.Reverse<Topic>())
                     t.Delete();
 
             // Paste resulting (above) text to the selected topics
             int p = 0, i = 0; // selected topics count
-            foreach (Topic t in BubbleTextOps.SelectedTopics)
+            foreach (Topic t in StixTextOps.SelectedTopics)
             {
                 p++; i++;
                 Topic frameTopic = null;
@@ -709,7 +709,7 @@ namespace Bubbles
                     }
                     else // Multiple topics to paste. Subtopic, Next Topic or Topic before
                     {
-                        foreach (Topic _t in BubbleTextOps.PastedTopics)
+                        foreach (Topic _t in StixTextOps.PastedTopics)
                         {
                             if (!StixUtils.TopicWidthList.Contains(_t))
                                 StixUtils.TopicWidthList.Add(_t);

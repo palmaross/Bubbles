@@ -12,9 +12,9 @@ using System.Collections.Generic;
 
 namespace Bubbles
 {
-    internal partial class BubbleTaskInfo : Form
+    internal partial class StixTaskInfo : Form
     {
-        public BubbleTaskInfo(int ID, string _orientation, string stickname = "")
+        public StixTaskInfo(int ID, string _orientation, string stickname = "")
         {
             InitializeComponent();
 
@@ -63,20 +63,22 @@ namespace Bubbles
             tsi.Font = new Font(tsi.Font, FontStyle.Bold);
             cmsRemoveTaskInfo.Items.Add(tsi);
 
-            tsi = cmsRemoveTaskInfo.Items.Add(Utils.getString("taskinfo.Dates"));
-            tsi.Name = "TaskInfoDates"; cmsRemoveTaskInfo.Items.Add(tsi);
-            (tsi as ToolStripMenuItem).CheckOnClick = true;
-            (tsi as ToolStripMenuItem).Checked = true;
-            tsi = cmsRemoveTaskInfo.Items.Add(Utils.getString("taskinfo.Progress"));
-            tsi.Name = "TaskInfoProgress"; cmsRemoveTaskInfo.Items.Add(tsi);
-            (tsi as ToolStripMenuItem).CheckOnClick = true;
-            (tsi as ToolStripMenuItem).Checked = true;
-            tsi = cmsRemoveTaskInfo.Items.Add(Utils.getString("taskinfo.Priority"));
-            tsi.Name = "TaskInfoPriority"; cmsRemoveTaskInfo.Items.Add(tsi);
-            (tsi as ToolStripMenuItem).CheckOnClick = true;
-            tsi = cmsRemoveTaskInfo.Items.Add(Utils.getString("taskinfo.Resources"));
-            tsi.Name = "TaskInfoResources"; cmsRemoveTaskInfo.Items.Add(tsi);
-            (tsi as ToolStripMenuItem).CheckOnClick = true;
+            TaskInfoDates = cmsRemoveTaskInfo.Items.Add(Utils.getString("taskinfo.Dates"));
+            (TaskInfoDates as ToolStripMenuItem).CheckOnClick = true;
+
+            TaskInfoProgress = cmsRemoveTaskInfo.Items.Add(Utils.getString("taskinfo.Progress"));
+            (TaskInfoProgress as ToolStripMenuItem).CheckOnClick = true;
+
+            TaskInfoPriority = cmsRemoveTaskInfo.Items.Add(Utils.getString("taskinfo.Priority"));
+            (TaskInfoPriority as ToolStripMenuItem).CheckOnClick = true;
+
+            TaskInfoResources = cmsRemoveTaskInfo.Items.Add(Utils.getString("taskinfo.Resources"));
+            (TaskInfoResources as ToolStripMenuItem).CheckOnClick = true;
+
+            TaskInfoEffort = cmsRemoveTaskInfo.Items.Add(Utils.getString("taskinfo.numEffort.tooltip"));
+            (TaskInfoEffort as ToolStripMenuItem).CheckOnClick = true;
+
+            SetQuickTaskDefault();
 
             cmsRemoveTaskInfo.ItemClicked += ContextMenu_ItemClicked;
             cmsRemoveTaskInfo.Closing += CmsRemoveTaskInfo_Closing;
@@ -135,12 +137,45 @@ namespace Bubbles
             cmsResources.ItemClicked += ContextMenu_ItemClicked;
             PopulateResources();
 
+            // Check Quick Task Remove Defaults
+
+
             fsize = pStartDate.Font.Size; ffsize = linkDurationUnit.Font.Size;
 
             // Apply scale factor
             this.Paint += this_Paint; // paint the border depending on scale factor
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
             ScaleStick(100F, scaleFactor);
+        }
+
+        ToolStripItem TaskInfoDates, TaskInfoProgress, TaskInfoPriority, TaskInfoResources, TaskInfoEffort;
+
+        public void SetQuickTaskDefault()
+        {
+            bool dates = true, progress = true, priority = false, resources = false, effort = false;
+            string qtr_defaults = Utils.getRegistry("QuickTaskRemoveDefaults", "");
+            if (qtr_defaults != "")
+            {
+                string[] parts = qtr_defaults.Split(';');
+                foreach (string part in parts)
+                {
+                    string[] parts2 = part.Split(':');
+                    switch (parts2[0])
+                    {
+                        case "dates": dates = parts2[1] == "1" ? true : false; break;
+                        case "progress": progress = parts2[1] == "1" ? true : false; break;
+                        case "priority": priority = parts2[1] == "1" ? true : false; break;
+                        case "resources": resources = parts2[1] == "1" ? true : false; break;
+                        case "effort": effort = parts2[1] == "1" ? true : false; break;
+                    }
+                }
+            }
+
+            (TaskInfoDates as ToolStripMenuItem).Checked = dates;
+            (TaskInfoProgress as ToolStripMenuItem).Checked = progress;
+            (TaskInfoPriority as ToolStripMenuItem).Checked = priority;
+            (TaskInfoResources as ToolStripMenuItem).Checked = resources;
+            (TaskInfoEffort as ToolStripMenuItem).Checked = effort;
         }
 
         public void ScaleStick(float fromScale, float toScale)
@@ -901,17 +936,20 @@ namespace Bubbles
                 {
                     foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                     {
-                        if ((cmsRemoveTaskInfo.Items["TaskInfoDates"] as ToolStripMenuItem).Checked) {
+                        if ((TaskInfoDates as ToolStripMenuItem).Checked) {
                             t.Task.StartDate = MMUtils.NULLDATE; t.Task.DueDate = MMUtils.NULLDATE; }
 
-                        if ((cmsRemoveTaskInfo.Items["TaskInfoProgress"] as ToolStripMenuItem).Checked)
+                        if ((TaskInfoProgress as ToolStripMenuItem).Checked)
                             t.Task.Complete = -1;
 
-                        if ((cmsRemoveTaskInfo.Items["TaskInfoPriority"] as ToolStripMenuItem).Checked)
+                        if ((TaskInfoPriority as ToolStripMenuItem).Checked)
                             t.Task.Priority = 0;
 
-                        if ((cmsRemoveTaskInfo.Items["TaskInfoResources"] as ToolStripMenuItem).Checked)
+                        if ((TaskInfoResources as ToolStripMenuItem).Checked)
                             t.Task.Resources = "";
+
+                        if ((TaskInfoEffort as ToolStripMenuItem).Checked &&
+                            t.Task.HasEffort) Utils.DeleteEffort(t);
                     }
                 }
             }
@@ -1042,7 +1080,7 @@ namespace Bubbles
         {
             if (fileName.StartsWith("stock"))
             {
-                MmStockIcon icon = BubbleIcons.StockIconFromString(fileName);
+                MmStockIcon icon = StixIcons.StockIconFromString(fileName);
                 if (icon != 0)
                 {
                     MapMarkers.GetIcon(icon, "", "", "");

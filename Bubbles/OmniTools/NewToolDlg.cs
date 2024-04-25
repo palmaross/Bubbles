@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
@@ -7,17 +8,22 @@ namespace Bubbles
 {
     public partial class NewToolDlg : Form
     {
-        public NewToolDlg(List<ToolItem> sources, bool manage)
+        public NewToolDlg(List<ToolItem> tools, bool manage)
         {
             InitializeComponent();
 
-            Sources = sources;
+            Tools = tools;
 
-            Text = Utils.getString("mysources.contextmenu.new");
-            lblSpecifyPath.Text = Utils.getString("NewSourceDlg.lblSpecifyPath");
+            Text = Utils.getString("tools.contextmenu.new");
+            lblSpecifyPath.Text = Utils.getString("NewToolDlg.lblSpecifyPath");
             toolTip1.SetToolTip(btnBrowse, Utils.getString("button.browse"));
-            lblTitle.Text = Utils.getString("NewSourceDlg.lblTitle");
+            lblTitle.Text = Utils.getString("NewToolDlg.lblTitle");
+            lblWait.Text = Utils.getString("LinksDlg.lblWait");
             btnCancel.Text = Utils.getString("button.cancel");
+
+            int x = lblTitle.Location.X + lblTitle.Width + label1.Height;
+            txtTitle.Location = new Point(x, txtTitle.Location.Y);
+            txtTitle.Width = label1.Width - x;
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)
@@ -36,21 +42,38 @@ namespace Bubbles
             }
         }
 
-        private void txtPath_TextChanged(object sender, EventArgs e)
+        private List<ToolItem> Tools = new List<ToolItem>();
+
+        private void txtPath_KeyUp(object sender, KeyEventArgs e)
         {
-            try
+            string path = txtPath.Text.Trim();
+            if (path == "") return;
+            string title = "";
+
+            if (path.StartsWith("http"))
             {
-                if (txtPath.Text.ToLower().StartsWith("http"))
-                {
-                    Uri myUri = new Uri(txtPath.Text);
-                    txtTitle.Text = myUri.Host;
-                }
-                else
-                    txtTitle.Text = Path.GetFileName(txtPath.Text);
-            } 
-            catch { }
+                lblWait.Visible = true;
+                title = Utils.GetWebPageTitle(path);
+                lblWait.Visible = false;
+            }
+            else // file
+            {
+                try { title = Path.GetFileName(path); }
+                catch { }
+            }
+
+            if (!String.IsNullOrEmpty(title))
+                txtTitle.Text = title;
+
+            this.Refresh();
+
+            e.Handled = true; // to avoid the "ding" sound
+            e.SuppressKeyPress = true;
         }
 
-        private List<ToolItem> Sources = new List<ToolItem>();
+        private void txtPath_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            txtPath.SelectAll();
+        }
     }
 }

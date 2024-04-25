@@ -5,10 +5,10 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
+using System.Net.Http;
 using System.Windows.Forms;
+using System.Xml;
+using HtmlAgilityPack;
 
 namespace Bubbles
 {
@@ -30,7 +30,9 @@ namespace Bubbles
             // New Link panel
             lblTitle.Text = Utils.getString("LinksDlg.LinkTitle");
             lblLink.Text = Utils.getString("LinksDlg.lblLink");
-            btnCancel.Text = Utils.getString("button.cancel");
+            lblWait.Text = Utils.getString("LinksDlg.lblWait");
+            cbDownload.Text = Utils.getString("LinksDlg.cbDownload");
+            btnClose.Text = Utils.getString("button.close");
 
             m_OpenLink.Text = Utils.getString("LinksDlg.btnOpen");
             m_OpenInOmniBrowser.Text = Utils.getString("LinksDlg.omnibrowser");
@@ -62,6 +64,7 @@ namespace Bubbles
             dataGridView1.CellMouseClick += DataGridView1_CellMouseClick;
             //this.ResizeEnd += AllSourcesDlg_ResizeEnd;
 
+            Utils.InitIcons();
             Init();
         }
 
@@ -79,8 +82,8 @@ namespace Bubbles
         void PopulateGroups()
         {
             treeView1.Nodes.Clear();
-            TreeNode root = new TreeNode(Utils.getString("LinksDlg.AllGroups")); root.Tag = 0;
-            treeView1.Nodes.Add(root);
+            TreeNode root = new TreeNode(Utils.getString("LinksDlg.AllGroups")); 
+            root.Tag = 0; treeView1.Nodes.Add(root);
             db = new StixDB();
 
             DataTable dt = db.ExecuteQuery("select * from LINKGROUPS where parentID = 0 order by _order");
@@ -117,8 +120,8 @@ namespace Bubbles
 
         private void AddToTable(string title, string path, string groupName, int groupID)
         {
-            string imageType = BubbleTools.GetFileType(path);
-            Image img;
+            string imageType = Utils.GetFileType(path);
+            Image img = null;
 
             if (imageType == "exe")
             {
@@ -127,10 +130,17 @@ namespace Bubbles
                     Icon appIcon = Icon.ExtractAssociatedIcon(path);
                     img = appIcon.ToBitmap();
                 }
-                catch { img = GetImage(imageType); }
+                catch { img = Utils.GetImage(imageType); }
+            }
+            else if (imageType == "http")
+            {
+                if (Utils.getRegistry("FaviconsLinksWindow", "1") == "1")
+                    img = Utils.GetFavicon(path);
+                else
+                    img = Utils.GetImage(imageType);
             }
             else
-                img = GetImage(imageType);
+                img = Utils.GetImage(imageType);
 
             img = new Bitmap(img, new Size(pSize.Width, pSize.Height));
 
@@ -143,28 +153,7 @@ namespace Bubbles
             row.Cells["LinkPath"].Value = path;
             row.Cells["GroupID"].Value = groupID;
             row.Cells["SortByImage"].Value = imageType;
-        }
-
-        public static Image GetImage(string type)
-        {
-            switch (type)
-            {
-                case "audio": return Image.FromFile(Utils.ImagesPath + "ms_audio.png");
-                case "excel": return Image.FromFile(Utils.ImagesPath + "ms_excel.png");
-                case "exe": return Image.FromFile(Utils.ImagesPath + "ms_exe.png");
-                case "image": return Image.FromFile(Utils.ImagesPath + "ms_img.png");
-                case "macros": return Image.FromFile(Utils.ImagesPath + "ms_macros.png");
-                case "map": return Image.FromFile(Utils.ImagesPath + "ms_map.png");
-                case "pdf": return Image.FromFile(Utils.ImagesPath + "ms_pdf.png");
-                case "txt": return Image.FromFile(Utils.ImagesPath + "ms_txt.png");
-                case "video": return Image.FromFile(Utils.ImagesPath + "ms_video.png");
-                case "http": return Image.FromFile(Utils.ImagesPath + "ms_web.png");
-                case "word": return Image.FromFile(Utils.ImagesPath + "ms_word.png");
-                case "youtube": return Image.FromFile(Utils.ImagesPath + "ms_youtube.png");
-                case "chm": return Image.FromFile(Utils.ImagesPath + "chm.png");
-            }
-            return BubbleTools.file;
-        }
+        }        
 
         private void ContextMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
@@ -180,10 +169,16 @@ namespace Bubbles
                     selectedNode.Expand();
                 }
 
+                m_editNode.Tag = -1;
+                treeView1.SelectedNode = m_editNode;
+                selectedNode = m_editNode;
+                SelectedNodeChanged();
+                txtLink.Text = "";
+
                 txtEditNode.Location = new Point(m_editNode.Bounds.X, m_editNode.Bounds.Y);
                 txtEditNode.Size = new Size(treeView1.Width - m_editNode.Bounds.X - pSize.Width, txtEditNode.Height);
                 txtEditNode.Visible = true; txtEditNode.Focus();
-                txtEditNode.Text = Utils.getString("LinksDlg.btnNewGroup"); 
+                txtEditNode.Text = Utils.getString("LinksDlg.NewGroup"); 
                 txtEditNode.SelectAll();
                 m_editMode = false; // "new group" mode
             }
@@ -224,6 +219,7 @@ namespace Bubbles
                     (this.Width - panelModify.Width) / 2,
                     (this.Height - panelModify.Height) / 2);
 
+                txtLink2.Text = ""; txtTitle.Text = "";
                 panelModify.Visible = true;
                 panelModify.Tag = "new";
             }
@@ -233,6 +229,7 @@ namespace Bubbles
                     (this.Width - panelModify.Width) / 2,
                     (this.Height - panelModify.Height) / 2);
 
+                txtLink2.Text = ""; txtTitle.Text = "";
                 panelModify.Visible = true;
                 panelModify.Tag = "new";
             }
@@ -255,7 +252,7 @@ namespace Bubbles
             {
                 selectedRows = dataGridView1.SelectedRows;
 
-                if (MessageBox.Show(Utils.getString("LinksDlg.deletesources"), "",
+                if (MessageBox.Show(Utils.getString("LinksDlg.deletelinks"), "",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     using (StixDB _db = new StixDB())
@@ -403,7 +400,30 @@ namespace Bubbles
             }     
         }
 
-        /// <summary>Modify source.</summary>
+        private void btnPreview_Click(object sender, EventArgs e)
+        {
+            if (htmlDoc == null) return;
+
+            string link = txtLink2.Text.Trim();
+            string title = txtTitle.Text.Trim();
+
+            Random r = new Random(); 
+            string filename = r.Next().ToString() + ".html";
+
+            string filepath = Utils.m_localDataPath + filename;
+            htmlDoc.Save(filepath);
+
+            if (OmniBrowser == null || OmniBrowser.IsDisposed)
+            {
+                OmniBrowser = new BrowserDlg("");
+                //OmniBrowser.txtAddressBar.Text = filepath;
+                OmniBrowser.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            }
+
+            OmniBrowser.Preview(filepath);
+        }
+
+        /// <summary>Create/Modify link.</summary>
         private void btnOK_Click(object sender, EventArgs e)
         {
             string link = txtLink2.Text.Trim();
@@ -411,8 +431,29 @@ namespace Bubbles
 
             if (link == "" || title == "") return; // to do message to user
 
+            // Download webpage.
+            if (cbDownload.Checked)
+            {
+                string titlevalid = string.Concat(title.Split(Path.GetInvalidFileNameChars()));
+                if (titlevalid.Length > 50) titlevalid = titlevalid.Substring(0, 50);
+
+                saveFileDialog1.DefaultExt = "html";
+                saveFileDialog1.AddExtension = true;
+                saveFileDialog1.FileName = titlevalid + ".html";
+                saveFileDialog1.Filter = "Webpage | *.html";
+                if (saveFileDialog1.ShowDialog() == DialogResult.Cancel)
+                    return;
+
+                InitializeWebView3Async(title, link, saveFileDialog1.FileName);
+            }
+            else
+                SaveNewLink(title, link);
+        }
+
+        void SaveNewLink(string title, string link)
+        {
             int groupID = (int)selectedNode.Tag;
-            string type = BubbleTools.GetFileType(link);
+            string type = Utils.GetFileType(link);
 
             using (StixDB _db = new StixDB())
             {
@@ -445,25 +486,90 @@ namespace Bubbles
             }
         }
 
-        private void btnGetTitle_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private async void InitializeWebView3Async(string title, string url, string file)
         {
-            txtTitle.Text = "";
+            if (true)
+            {
+                HtmlWeb web = new HtmlWeb();
+
+                var htmlDoc = web.Load(url);
+                htmlDoc.Save(file);
+
+                //title = htmlDoc.DocumentNode.SelectSingleNode("//head/title").InnerText;
+            }
+            else
+            {
+                HttpClient client = new HttpClient();
+                string webpage = await client.GetStringAsync(url);
+
+                // Add source url.
+                string body = "<body>";
+                int i = webpage.IndexOf(body);
+                if (i == -1)
+                {
+                    i = webpage.IndexOf("<BODY>");
+                    body = "<BODY>";
+                }
+                if (i > 0)
+                {
+                    string source = "<body><p><a href='" + url + "'>Source</a></p>";
+                    webpage = webpage.Replace(body, source);
+                }
+
+                File.WriteAllText(file, webpage);
+            }
+
+            SaveNewLink(title, file);
+        }
+
+        private void txtLink2_KeyUp(object sender, KeyEventArgs e)
+        {
             string link = txtLink2.Text.Trim();
             if (link == "") return;
             string title = "";
 
             if (link.StartsWith("http"))
             {
-                title = GetWebPageTitle(link);
+                lblWait.Visible = true;
+                HtmlWeb web = new HtmlWeb();
+                htmlDoc = web.Load(link);
+
+                title = htmlDoc.DocumentNode.SelectSingleNode("//head/title").InnerText;
+                lblWait.Visible = false;
+
+                // Add source url.
+                HtmlNode bodyNode = htmlDoc.DocumentNode.SelectSingleNode("//html/body");
+
+                string html = bodyNode.InnerHtml;
+                html = "<div style='border: 2px double blue; padding: 6px 6px 0 6px;'><p>Source: <a href='" + link + "' target='_blank'>" + title + "</a></p></div>" + html;
+                bodyNode.InnerHtml = html;
+
+                //string body = "<body>";
+
+                //int i = html.IndexOf(body);
+                //if (i == -1) { i = html.IndexOf("<body >"); body = "<BODY>"; }
+                //if (i == -1) { i = html.IndexOf("<BODY>"); body = "<BODY>"; }
+                //if (i > 0)
+                //{
+                //    string source = "<body><p><a href='" + link + "'>Source</a></p>";
+                //    htmlDoc.Text = html.Replace(body, source);
+                //}
+
+                grBoxDownload.Visible = true;
+
+                //htmlDoc.Save(file);
+            }
+            else // file
+            {
+                grBoxDownload.Visible = false;
+
+                try { title = Path.GetFileName(link); }
+                catch { }
             }
 
             if (!String.IsNullOrEmpty(title))
                 txtTitle.Text = title;
-        }
 
-        private void txtLink2_KeyUp(object sender, KeyEventArgs e)
-        {
-            btnGetTitle_LinkClicked(sender, null);
             e.Handled = true; // to avoid the "ding" sound
             e.SuppressKeyPress = true;
         }
@@ -473,53 +579,8 @@ namespace Bubbles
             txtLink2.SelectAll();
         }
 
-        string GetWebPageTitle(string url)
-        {
-            string title = "";
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest.Create(url) as HttpWebRequest);
-                HttpWebResponse response = (request.GetResponse() as HttpWebResponse);
-
-                using (Stream stream = response.GetResponseStream())
-                {
-                    // compiled regex to check for <title></title> block
-                    Regex titleCheck = new Regex(@"<title>\s*(.+?)\s*</title>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-                    int bytesToRead = 8092;
-                    byte[] buffer = new byte[bytesToRead];
-                    string contents = "";
-                    int length = 0;
-                    while ((length = stream.Read(buffer, 0, bytesToRead)) > 0)
-                    {
-                        // convert the byte-array to a string and add it to the rest of the
-                        // contents that have been downloaded so far
-                        contents += Encoding.UTF8.GetString(buffer, 0, length);
-
-                        Match m = titleCheck.Match(contents);
-                        if (m.Success)
-                        {
-                            // we found a <title></title> match =]
-                            title = m.Groups[1].Value.ToString();
-                            break;
-                        }
-                        else if (contents.Contains("</head>"))
-                        {
-                            // reached end of head-block; no title found =[
-                            break;
-                        }
-                    }
-                }
-            }
-            catch (Exception _e)
-            {
-                Console.WriteLine(_e);
-            }
-
-            return title;
-        }
-
         /// <summary>Cancel modify source</summary>
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void btnClose_Click(object sender, EventArgs e)
         {
             panelModify.Visible = false;
         }
@@ -552,18 +613,16 @@ namespace Bubbles
         }
         private ListSortDirection Direction = ListSortDirection.Descending;
 
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
+            if (dataGridView1.Rows.Count == 0) return;
+
             if (dataGridView1.SelectedRows.Count > 0)
             {
                 var item = dataGridView1.SelectedRows[0];
 
-                txtLink.Text = item.Cells["LinkPath"].Value.ToString();
+                if (item.Cells["LinkPath"].Value != null)
+                    txtLink.Text = item.Cells["LinkPath"].Value.ToString();
             }
         }
 
@@ -619,15 +678,22 @@ namespace Bubbles
 
         private void GroupsTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
+            if (txtEditNode.Visible)
+            {
+                txtEditNode.Visible = false;
+                if (!m_editMode) m_editNode.Remove();
+            }
+
             if (e.Button == MouseButtons.Right)
             {
                 treeView1.SelectedNode = e.Node;
                 selectedNode = e.Node;
+                SelectedNodeChanged();
 
                 foreach (ToolStripItem item in cmsGroup.Items)
                     item.Visible = true;
 
-                if (selectedNode.Index == 0)
+                if ((int)selectedNode.Tag == 0)
                 {
                     g_AddLink.Visible = false;
                     g_DeleteGroup.Visible = false;
@@ -684,6 +750,11 @@ namespace Bubbles
                         linkGroup);
                 }
             }
+            if (dataGridView1.Rows.Count > 0) 
+            { 
+                dataGridView1.Rows[0].Selected = true;
+                dataGridView1_SelectionChanged(null, null);
+            }
         }
 
         Dictionary<int, string> LinkGroups = new Dictionary<int, string>();
@@ -699,82 +770,352 @@ namespace Bubbles
         bool m_editMode = false;
         TreeNode m_editNode = null;
 
-        List<GroupItem> Groups = new List<GroupItem>();
+        HtmlAgilityPack.HtmlDocument htmlDoc = null;
 
-        private void GroupsTree_DragOver(object sender, DragEventArgs e)
-        {          
-            treeView1.Select();
-            // The mouse locations are relative to the screen, so they must be 
-            // converted to client coordinates.
-            Point clientPoint = treeView1.PointToClient(new Point(e.X, e.Y));
+        #region DragDrop
+        TreeNode m_dragNode, m_tempDropNode, m_timerNode;
+        private void treeView1_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            // Get drag node and select it
+            m_dragNode = (TreeNode)e.Item;
 
-            var hittest = treeView1.HitTest(clientPoint.X, clientPoint.Y);
-            TreeNode node = hittest.Node;
+            imageListDrag.Images.Clear();
+            int _width = m_dragNode.Bounds.Size.Width + treeView1.Indent <= 256 ? m_dragNode.Bounds.Size.Width + treeView1.Indent : 256;
+            int _height = m_dragNode.Bounds.Height;
+            imageListDrag.ImageSize = new Size(_width, _height);
 
-            if (node != null && (int)node.Tag != 0)
+            // Create new bitmap
+            // This bitmap will contain the tree node image to be dragged
+            Bitmap _bmp = new Bitmap(_width, _height);
+
+            // Get graphics from bitmap
+            Graphics _gfx = Graphics.FromImage(_bmp);
+
+            // Draw node icon into the bitmap
+            // Draw node label into bitmap
+            _gfx.DrawString(m_dragNode.Text,
+                treeView1.Font,
+                new SolidBrush(treeView1.ForeColor),
+                (float)this.treeView1.Indent, 1.0f);
+
+            // Add bitmap to imagelist
+            imageListDrag.Images.Add(_bmp);
+
+            // Get mouse position in client coordinates
+            Point _p = treeView1.PointToClient(MousePosition);
+
+            // Compute delta between mouse position and node bounds
+            int _dx = _p.X + treeView1.Indent - m_dragNode.Bounds.Left;
+            int _dy = _p.Y - m_dragNode.Bounds.Top;
+
+            // Begin dragging image
+            if (DragHelper.ImageList_BeginDrag(imageListDrag.Handle, 0, _dx, _dy))
             {
-                treeView1.SelectedNode = node; // Indicate node to drop on.
-
-                if (ModifierKeys == Keys.Control)
-                    e.Effect = DragDropEffects.Copy;
-                else if ((int)node.Tag == 0 || node == null)
-                    e.Effect = DragDropEffects.None;
-                else
-                    e.Effect = DragDropEffects.Move;
+                // Begin dragging
+                try
+                {
+                    treeView1.DoDragDrop(_bmp, DragDropEffects.Move);
+                    // End dragging image
+                    DragHelper.ImageList_EndDrag();
+                }
+                catch { }
             }
         }
 
-        private void GroupsTree_DragDrop(object sender, DragEventArgs e)
+        private void treeView1_DragEnter(object sender, DragEventArgs e)
         {
+            if (e.Data.GetDataPresent(typeof(Bitmap)))
+            {
+                DragHelper.ImageList_DragEnter(this.treeView1.Handle, e.X - this.treeView1.Left, e.Y - this.treeView1.Top);
+
+                // Enable timer for scrolling dragged item
+                this.timer.Enabled = true;
+                this.timer1.Enabled = true;
+            }
+        }
+
+        private void treeView1_DragLeave(object sender, EventArgs e)
+        {
+            DragHelper.ImageList_DragLeave(this.treeView1.Handle);
+
+            // Disable timer for scrolling dragged item
+            this.timer.Enabled = false;
+            this.timer1.Enabled = false;
+        }
+
+        private void GroupsTree_DragOver(object sender, DragEventArgs e)
+        {
+            //Cursor.Clip = treeView1.RectangleToScreen(treeView1.ClientRectangle);
+
+            // Compute drag position and move image
+            Point clientPoint = this.PointToClient(new Point(e.X, e.Y));
+
+            if (e.Data.GetDataPresent(typeof(Bitmap)))
+            {
+                DragHelper.ImageList_DragMove(clientPoint.X - this.treeView1.Left, clientPoint.Y - this.treeView1.Top);
+
+                // Get actual drop node
+                TreeNode _dropNode = this.treeView1.GetNodeAt(this.treeView1.PointToClient(new Point(e.X, e.Y)));
+                if (_dropNode == null)
+                {
+                    e.Effect = DragDropEffects.None;
+                    return;
+                }
+
+                e.Effect = DragDropEffects.Move;
+
+                // if mouse is on a new node select it
+                if (m_tempDropNode != _dropNode)
+                {
+                    DragHelper.ImageList_DragShowNolock(false);
+                    this.treeView1.SelectedNode = _dropNode;
+                    if (_dropNode.Nodes.Count > 0)
+                    {
+                        timer1.Start();
+                        m_timerNode = _dropNode;
+                    }
+                    DragHelper.ImageList_DragShowNolock(true);
+                    m_tempDropNode = _dropNode;
+                }
+
+                // Avoid that drop node is child of drag node 
+                TreeNode _tmpNode = _dropNode;
+                while (_tmpNode.Parent != null)
+                {
+                    if (_tmpNode.Parent == m_dragNode) e.Effect = DragDropEffects.None;
+                    _tmpNode = _tmpNode.Parent;
+                }
+            }
+            else
+            {
+                treeView1.Select();
+
+                var hittest = treeView1.HitTest(clientPoint.X, clientPoint.Y);
+                TreeNode node = hittest.Node;
+
+                if (node != null && (int)node.Tag != 0)
+                {
+                    treeView1.SelectedNode = node; // Indicate node to drop on.
+
+                    if (ModifierKeys == Keys.Control)
+                        e.Effect = DragDropEffects.Copy;
+                    else if ((int)node.Tag == 0 || node == null)
+                        e.Effect = DragDropEffects.None;
+                    else
+                        e.Effect = DragDropEffects.Move;
+                }
+            }
+        }
+
+        private void treeView1_GiveFeedback(object sender, GiveFeedbackEventArgs e)
+        {
+            if (e.Effect == DragDropEffects.Move)
+            {
+                // Show pointer cursor while dragging
+                e.UseDefaultCursors = false;
+                this.treeView1.Cursor = Cursors.Default;
+            }
+            else e.UseDefaultCursors = true;
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            // get node at mouse position
+            Point _pt = treeView1.PointToClient(MousePosition);
+            TreeNode _node = this.treeView1.GetNodeAt(_pt);
+
+            if (_node == null) return;
+
+            // if mouse is near to the top, scroll up
+            if (_pt.Y < 30)
+            {
+                // set actual node to the upper one
+                if (_node.PrevVisibleNode != null)
+                {
+                    _node = _node.PrevVisibleNode;
+
+                    // hide drag image
+                    DragHelper.ImageList_DragShowNolock(false);
+                    // scroll and refresh
+                    _node.EnsureVisible();
+                    this.treeView1.Refresh();
+                    // show drag image
+                    DragHelper.ImageList_DragShowNolock(true);
+
+                }
+            }
+            // if mouse is near to the bottom, scroll down
+            else if (_pt.Y > this.treeView1.Size.Height - 30)
+            {
+                if (_node.NextVisibleNode != null)
+                {
+                    _node = _node.NextVisibleNode;
+
+                    DragHelper.ImageList_DragShowNolock(false);
+                    _node.EnsureVisible();
+                    this.treeView1.Refresh();
+                    DragHelper.ImageList_DragShowNolock(true);
+                }
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            timer1.Stop();
+            if (m_timerNode == this.treeView1.SelectedNode)
+                m_timerNode.Expand();
+        }
+
+        private void treeView1_DragDrop(object sender, DragEventArgs e)
+        {
+            bool addAsChildNode = false; // if right mouse button is pressed, drop the child node
+
+            if (ModifierKeys == Keys.Control)
+                addAsChildNode = true;
+
             // The mouse locations are relative to the screen, so they must be 
             // converted to client coordinates.
             Point clientPoint = treeView1.PointToClient(new Point(e.X, e.Y));
 
             var hittest = treeView1.HitTest(clientPoint.X, clientPoint.Y);
-            TreeNode node = hittest.Node;
+            TreeNode targetNode = hittest.Node;
 
-            if (node == null) return;
-            if (selectedRows.Count == 0) return;
-            if (e.Effect != DragDropEffects.Copy && e.Effect != DragDropEffects.Move) return;
+            // We can't add subgroup to the "All Links" node
+            if (addAsChildNode && (int)targetNode.Tag == 0)
+                return;
 
-            int groupID = (int)node.Tag;
-            if (groupID == 0) return; // "All Links" group. to do
-
-            using (StixDB _db = new StixDB())
+            if (e.Data.GetDataPresent(typeof(Bitmap))) // TreeView Node is dropped
             {
-                foreach (DataGridViewRow row in selectedRows)
+                // Unlock updates
+                DragHelper.ImageList_DragLeave(this.treeView1.Handle);
+
+                // Get drop node
+                TreeNode _dropNode = this.treeView1.GetNodeAt(this.treeView1.PointToClient(new Point(e.X, e.Y)));
+                if (m_dragNode == _dropNode)
+                    return; // Nothing changed
+
+                // Confirm that the node at the drop location is not the dragged node
+                // or a descendant of the dragged node.  
+                if (!m_dragNode.Equals(targetNode) && !ContainsNode(m_dragNode, targetNode))
                 {
-                    string path = (string)row.Cells["LinkPath"].Value;
+                    TreeNode exParent = null; // dragged node ex-parent
+                    int parentID = 0;
 
-                    DataTable dt = _db.ExecuteQuery("select * from LINKS where " +
-                        "path=`" + path + "` and groupID=" + groupID + "");
+                    if (m_dragNode.Parent != null)
+                        exParent = m_dragNode.Parent;
 
-                    if (dt.Rows.Count > 0) continue; // link exists already
+                    // Remove the node from its current location and add it to the node at the drop location.  
+                    m_dragNode.Remove();
+                    int i = targetNode.Index + 1;
 
-                    int copiedLinksGroup = (int)row.Cells["GroupID"].Value;
-                    if (copiedLinksGroup == groupID) continue; // row is copied to its group
-
-                    // Copy 
-                    if (e.Effect == DragDropEffects.Copy)
+                    if (addAsChildNode)
                     {
-                        _db.AddLink((string)row.Cells["LinkTitle"].Value, path,
-                            (string)row.Cells["LinkType"].Value, groupID);
+                        targetNode.Nodes.Add(m_dragNode);
+                        parentID = (int)targetNode.Tag;
                     }
-                    // MOVE selected node to selected group.
-                    if (e.Effect == DragDropEffects.Move)
+                    else
                     {
-                        _db.ExecuteNonQuery("update LINKS set groupID=" + groupID +
-                            " where path =`" + path + "` and groupID =" + copiedLinksGroup + "");
+                        if (targetNode.Parent == null) // root node
+                            treeView1.Nodes.Insert(i, m_dragNode);
+                        else
+                        {
+                            targetNode.Parent.Nodes.Insert(i, m_dragNode);
+                            parentID = (int)targetNode.Parent.Tag;
+                        }
+                    }
 
-                        if (selectedLinksGroup != 0)
-                            dataGridView1.Rows.Remove(row);
+                    treeView1.SelectedNode = m_dragNode;
+
+                    using (StixDB _db = new StixDB())
+                    {
+                        // Update parentID of dragged node.
+                        _db.ExecuteNonQuery("update LINKGROUPS set parentID=" + parentID + " where id=" + (int)m_dragNode.Tag + "");
+                        
+                        TreeNodeCollection tnc = treeView1.Nodes;
+
+                        if (exParent != null)
+                        {
+                            parentID = (int)exParent.Tag;
+                            tnc = exParent.Nodes;
+                        }
+
+                        // Update order of siblings where dragged node lived.
+                        int o = 1; if (parentID == 0) o = 0;
+                        foreach (TreeNode node in tnc)
+                            _db.ExecuteNonQuery("update LINKGROUPS set _order=" + o++ + " where id=" + (int)node.Tag + "");
+
+                        parentID = 0;
+                        tnc = treeView1.Nodes;
+
+                        if (m_dragNode.Parent != null)
+                        {
+                            parentID = (int)m_dragNode.Parent.Tag;
+                            tnc = m_dragNode.Parent.Nodes;
+                        }
+
+                        // Update order of siblings where dragged node live now.
+                        o = 1; if (parentID == 0) o = 0;
+                        foreach (TreeNode node in tnc)
+                            _db.ExecuteNonQuery("update LINKGROUPS set _order=" + o++ + " where id=" + (int)node.Tag + "");
                     }
                 }
             }
+            else // Link from table is dropped
+            {
+                if (targetNode == null) return;
+                if (selectedRows.Count == 0) return;
+                if (e.Effect != DragDropEffects.Copy && e.Effect != DragDropEffects.Move) return;
 
+                int groupID = (int)targetNode.Tag;
+                if (groupID == 0) return; // "All Links" group. to do
+
+                using (StixDB _db = new StixDB())
+                {
+                    foreach (DataGridViewRow row in selectedRows)
+                    {
+                        string path = (string)row.Cells["LinkPath"].Value;
+
+                        DataTable dt = _db.ExecuteQuery("select * from LINKS where " +
+                            "path=`" + path + "` and groupID=" + groupID + "");
+
+                        if (dt.Rows.Count > 0) continue; // link exists already
+
+                        int copiedLinksGroup = (int)row.Cells["GroupID"].Value;
+                        if (copiedLinksGroup == groupID) continue; // row is copied to its group
+
+                        // Copy 
+                        if (e.Effect == DragDropEffects.Copy)
+                        {
+                            _db.AddLink((string)row.Cells["LinkTitle"].Value, path,
+                                (string)row.Cells["LinkType"].Value, groupID);
+                        }
+                        // MOVE selected node to selected group.
+                        if (e.Effect == DragDropEffects.Move)
+                        {
+                            _db.ExecuteNonQuery("update LINKS set groupID=" + groupID +
+                                " where path =`" + path + "` and groupID =" + copiedLinksGroup + "");
+
+                            if (selectedLinksGroup != 0)
+                                dataGridView1.Rows.Remove(row);
+                        }
+                    }
+                }
+            }
             SelectedNodeChanged();
         }
         int selectedLinksGroup = 0;
+        private bool ContainsNode(TreeNode node1, TreeNode node2)
+        {
+            // Check the parent node of the second node.  
+            if (node2.Parent == null) return false;
+            if (node2.Parent.Equals(node1)) return true;
+
+            // If the parent node is not null or equal to the first node,   
+            // call the ContainsNode method recursively using the parent of   
+            // the second node.  
+            return ContainsNode(node1, node2.Parent);
+        }
+        #endregion
 
         private void dataGridView1_MouseMove(object sender, MouseEventArgs e)
         {
@@ -807,25 +1148,6 @@ namespace Bubbles
         {
             selectedRows = dataGridView1.SelectedRows;
             selectedLinksGroup = (int)treeView1.SelectedNode.Tag;
-
-            ////// Get the index of the item the mouse is below.
-            ////int rowIndexFromMouseDown = dataGridView1.HitTest(e.X, e.Y).RowIndex;
-
-            //////if shift key is not pressed
-            ////if (Control.ModifierKeys != Keys.Shift && Control.ModifierKeys != Keys.Control)
-            ////{
-            ////    //if row under the mouse is not selected
-            ////    if (rowIndexFromMouseDown > 0)
-            ////    {
-            ////        //if there only one row selected
-            ////        if (dataGridView1.SelectedRows.Count == 1)
-            ////        {
-            ////            //select the row below the mouse
-            ////            dataGridView1.ClearSelection();
-            ////            dataGridView1.Rows[rowIndexFromMouseDown].Selected = true;
-            ////        }
-            ////    }
-            ////}
         }
     }
 

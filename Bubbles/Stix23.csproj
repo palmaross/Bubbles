@@ -53,6 +53,9 @@
     <Reference Include="extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.60.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.60\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.1722.45, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.WebView2.1.0.1722.45\lib\net45\Microsoft.Web.WebView2.Core.dll</HintPath>
     </Reference>
@@ -100,36 +103,43 @@
     <Compile Include="AddTopicTemplateDlg.Designer.cs">
       <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="BrowserDlg.cs">
+    <Compile Include="AppManager\DragHelper.cs" />
+    <Compile Include="LinkBox\BrowserDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BrowserDlg.Designer.cs">
+    <Compile Include="LinkBox\BrowserDlg.Designer.cs">
       <DependentUpon>BrowserDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="BrowserTab.cs">
+    <Compile Include="LinkBox\BrowserTab.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="LinksDlg.cs">
+    <Compile Include="LinkBox\LinksDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LinksDlg.Designer.cs">
+    <Compile Include="LinkBox\LinksDlg.Designer.cs">
       <DependentUpon>LinksDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="AppManager\AlfaChanges.cs" />
     <Compile Include="AppManager\StixDB.cs" />
     <Compile Include="AppManager\SticksMoreDB.cs" />
     <Compile Include="AppManager\TransactionWrapper.cs" />
-    <Compile Include="BubbleAddTopic.cs">
+    <Compile Include="LinkBox\NewLinkDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BubbleAddTopic.Designer.cs">
-      <DependentUpon>BubbleAddTopic.cs</DependentUpon>
+    <Compile Include="LinkBox\NewLinkDlg.Designer.cs">
+      <DependentUpon>NewLinkDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="BubbleOrganizer.cs">
+    <Compile Include="StixAddTopic.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BubbleOrganizer.Designer.cs">
-      <DependentUpon>BubbleOrganizer.cs</DependentUpon>
+    <Compile Include="StixAddTopic.Designer.cs">
+      <DependentUpon>StixAddTopic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StixOrganizer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StixOrganizer.Designer.cs">
+      <DependentUpon>StixOrganizer.cs</DependentUpon>
     </Compile>
     <Compile Include="DragDropTest.cs">
       <SubType>Form</SubType>
@@ -164,11 +174,11 @@
     </Compile>
     <Compile Include="AppManager\StickersDB.cs" />
     <Compile Include="AppManager\DatabaseWrapper.cs" />
-    <Compile Include="BubbleFormat.cs">
+    <Compile Include="StixFormat.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BubbleFormat.Designer.cs">
-      <DependentUpon>BubbleFormat.cs</DependentUpon>
+    <Compile Include="StixFormat.Designer.cs">
+      <DependentUpon>StixFormat.cs</DependentUpon>
     </Compile>
     <Compile Include="GetNameDlg.cs">
       <SubType>Form</SubType>
@@ -198,23 +208,23 @@
     </Compile>
     <Compile Include="OmniStix23.cs" />
     <Compile Include="AssemblyInfo23.cs" />
-    <Compile Include="BubbleBookmarks.cs">
+    <Compile Include="StixBookmarks.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BubbleBookmarks.Designer.cs">
-      <DependentUpon>BubbleBookmarks.cs</DependentUpon>
+    <Compile Include="StixBookmarks.Designer.cs">
+      <DependentUpon>StixBookmarks.cs</DependentUpon>
     </Compile>
-    <Compile Include="BubbleTaskInfo.cs">
+    <Compile Include="StixTaskInfo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BubbleTaskInfo.Designer.cs">
-      <DependentUpon>BubbleTaskInfo.cs</DependentUpon>
+    <Compile Include="StixTaskInfo.Designer.cs">
+      <DependentUpon>StixTaskInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="OmniTools\BubbleTools.cs">
+    <Compile Include="OmniTools\StixTools.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OmniTools\BubbleTools.Designer.cs">
-      <DependentUpon>BubbleTools.cs</DependentUpon>
+    <Compile Include="OmniTools\StixTools.Designer.cs">
+      <DependentUpon>StixTools.cs</DependentUpon>
     </Compile>
     <Compile Include="OmniTools\ToolListDlg.cs">
       <SubType>Form</SubType>
@@ -222,17 +232,17 @@
     <Compile Include="OmniTools\ToolListDlg.Designer.cs">
       <DependentUpon>ToolListDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="BubbleTextOps.cs">
+    <Compile Include="StixTextOps.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BubbleTextOps.Designer.cs">
-      <DependentUpon>BubbleTextOps.cs</DependentUpon>
+    <Compile Include="StixTextOps.Designer.cs">
+      <DependentUpon>StixTextOps.cs</DependentUpon>
     </Compile>
-    <Compile Include="BubbleIcons.cs">
+    <Compile Include="StixIcons.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BubbleIcons.Designer.cs">
-      <DependentUpon>BubbleIcons.cs</DependentUpon>
+    <Compile Include="StixIcons.Designer.cs">
+      <DependentUpon>StixIcons.cs</DependentUpon>
     </Compile>
     <Compile Include="Organizer\ManageNoteGroups.cs">
       <SubType>UserControl</SubType>
@@ -299,10 +309,10 @@
     <Compile Include="SelectStickDlg.Designer.cs">
       <DependentUpon>SelectStickDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingsDlg.cs">
+    <Compile Include="AppManager\SettingsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingsDlg.Designer.cs">
+    <Compile Include="AppManager\SettingsDlg.Designer.cs">
       <DependentUpon>SettingsDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="SizeablePictureBox.cs">
@@ -402,9 +412,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\check.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\chm.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\close.png">
@@ -569,6 +576,9 @@
     <Content Include="images\ms_audio.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\ms_chm.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\ms_excel.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -576,6 +586,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\ms_file.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\ms_html.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\ms_img.png">
@@ -900,17 +913,20 @@
     <EmbeddedResource Include="AddTopicTemplateDlg.resx">
       <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BrowserDlg.resx">
+    <EmbeddedResource Include="LinkBox\BrowserDlg.resx">
       <DependentUpon>BrowserDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LinksDlg.resx">
+    <EmbeddedResource Include="LinkBox\LinksDlg.resx">
       <DependentUpon>LinksDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BubbleAddTopic.resx">
-      <DependentUpon>BubbleAddTopic.cs</DependentUpon>
+    <EmbeddedResource Include="LinkBox\NewLinkDlg.resx">
+      <DependentUpon>NewLinkDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BubbleOrganizer.resx">
-      <DependentUpon>BubbleOrganizer.cs</DependentUpon>
+    <EmbeddedResource Include="StixAddTopic.resx">
+      <DependentUpon>StixAddTopic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StixOrganizer.resx">
+      <DependentUpon>StixOrganizer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DragDropTest.resx">
       <DependentUpon>DragDropTest.cs</DependentUpon>
@@ -927,20 +943,20 @@
     <EmbeddedResource Include="OmniTools\NewToolDlg.resx">
       <DependentUpon>NewToolDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BubbleFormat.resx">
-      <DependentUpon>BubbleFormat.cs</DependentUpon>
+    <EmbeddedResource Include="StixFormat.resx">
+      <DependentUpon>StixFormat.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GetNameDlg.resx">
       <DependentUpon>GetNameDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BubbleBookmarks.resx">
-      <DependentUpon>BubbleBookmarks.cs</DependentUpon>
+    <EmbeddedResource Include="StixBookmarks.resx">
+      <DependentUpon>StixBookmarks.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BubbleTaskInfo.resx">
-      <DependentUpon>BubbleTaskInfo.cs</DependentUpon>
+    <EmbeddedResource Include="StixTaskInfo.resx">
+      <DependentUpon>StixTaskInfo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OmniTools\BubbleTools.resx">
-      <DependentUpon>BubbleTools.cs</DependentUpon>
+    <EmbeddedResource Include="OmniTools\StixTools.resx">
+      <DependentUpon>StixTools.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OmniButton.resx">
       <DependentUpon>OmniButton.cs</DependentUpon>
@@ -951,11 +967,11 @@
     <EmbeddedResource Include="OmniTools\ToolListDlg.resx">
       <DependentUpon>ToolListDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BubbleTextOps.resx">
-      <DependentUpon>BubbleTextOps.cs</DependentUpon>
+    <EmbeddedResource Include="StixTextOps.resx">
+      <DependentUpon>StixTextOps.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BubbleIcons.resx">
-      <DependentUpon>BubbleIcons.cs</DependentUpon>
+    <EmbeddedResource Include="StixIcons.resx">
+      <DependentUpon>StixIcons.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Organizer\ManageNoteGroups.resx">
       <DependentUpon>ManageNoteGroups.cs</DependentUpon>
@@ -992,7 +1008,7 @@
     <EmbeddedResource Include="SelectStickDlg.resx">
       <DependentUpon>SelectStickDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingsDlg.resx">
+    <EmbeddedResource Include="AppManager\SettingsDlg.resx">
       <DependentUpon>SettingsDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SnippetsDlg.resx">
@@ -1020,6 +1036,7 @@
       <DependentUpon>TopicWidthDlg.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"%25WINDIR%25\Microsoft.NET\Framework64\v4.0.30319\regasm" "/codebase" "$(TargetPath)"</PostBuildEvent>

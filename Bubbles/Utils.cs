@@ -9,6 +9,10 @@ using Mindjet.MindManager.Interop;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using System.Net;
+using Image = System.Drawing.Image;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace Bubbles
 {
@@ -61,7 +65,7 @@ namespace Bubbles
                     StockIconsDupes.Add(signature, _path);
 
                 string stockicon = "stock" + Path.GetFileNameWithoutExtension(_path);
-                MmStockIcon MMstockicon = BubbleIcons.StockIconFromString(stockicon);
+                MmStockIcon MMstockicon = StixIcons.StockIconFromString(stockicon);
                 StockIcons.Add(stockicon, MMstockicon);
             }
 
@@ -75,6 +79,8 @@ namespace Bubbles
                     Directory.CreateDirectory(m_dataPath + "ImageDB");
                 if (!Directory.Exists(m_dataPath + "Demos"))
                     Directory.CreateDirectory(m_dataPath + "Demos");
+
+                m_iconDB = m_dataPath + "IconDB\\";
 
                 File.Copy(dllPath + "\\Images\\" + "hello1.png", m_dataPath + "ImageDB\\" + "hello1.png");
                 File.Copy(dllPath + "\\Images\\" + "pato.gif", m_dataPath + "ImageDB\\" + "pato.gif");
@@ -99,6 +105,27 @@ namespace Bubbles
             StockIconsDupes.Clear();
         }
 
+        public static void InitIcons()
+        {
+            if (audio != null) return; // Icons are initialized already.
+
+            audio = Image.FromFile(ImagesPath + "ms_audio.png");
+            excel = Image.FromFile(ImagesPath + "ms_excel.png");
+            exe = Image.FromFile(ImagesPath + "ms_exe.png");
+            file = Image.FromFile(ImagesPath + "ms_file.png");
+            image = Image.FromFile(ImagesPath + "ms_img.png");
+            macros = Image.FromFile(ImagesPath + "ms_macros.png");
+            map = Image.FromFile(ImagesPath + "ms_map.png");
+            pdf = Image.FromFile(ImagesPath + "ms_pdf.png");
+            txt = Image.FromFile(ImagesPath + "ms_txt.png");
+            video = Image.FromFile(ImagesPath + "ms_video.png");
+            http = Image.FromFile(ImagesPath + "ms_web.png");
+            word = Image.FromFile(ImagesPath + "ms_word.png");
+            youtube = Image.FromFile(ImagesPath + "ms_youtube.png");
+            chm = Image.FromFile(ImagesPath + "ms_chm.png");
+            html = Image.FromFile(ImagesPath + "ms_html.png");
+        }
+
         static void GetCustomIcons(DirectoryInfo directoryInfo)
         {
             foreach (var directory in directoryInfo.GetDirectories())
@@ -111,7 +138,7 @@ namespace Bubbles
                     if (StockIconsDupes.Keys.Contains(signature))
                     {
                         string stockicon = "stock" + Path.GetFileNameWithoutExtension(path);
-                        MmStockIcon MMstockicon = BubbleIcons.StockIconFromString(stockicon);
+                        MmStockIcon MMstockicon = StixIcons.StockIconFromString(stockicon);
                         if (!StockIcons.Keys.Contains(stockicon))
                             StockIcons.Add(stockicon, MMstockicon);
                     }
@@ -318,6 +345,137 @@ namespace Bubbles
             t.Xml = topicXML.InnerXml;
         }
 
+        public static string GetWebPageTitle(string url)
+        {
+            string title = "";
+            try
+            {
+                HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+
+                using (Stream stream = response.GetResponseStream())
+                {
+                    // compiled regex to check for <title></title> block
+                    Regex titleCheck = new Regex(@"<title>\s*(.+?)\s*</title>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                    int bytesToRead = 8092;
+                    byte[] buffer = new byte[bytesToRead];
+                    string contents = "";
+                    int length = 0;
+                    while ((length = stream.Read(buffer, 0, bytesToRead)) > 0)
+                    {
+                        // convert the byte-array to a string and add it to the rest of the
+                        // contents that have been downloaded so far
+                        contents += Encoding.UTF8.GetString(buffer, 0, length);
+
+                        Match m = titleCheck.Match(contents);
+                        if (m.Success)
+                        {
+                            // we found a <title></title> match =]
+                            title = m.Groups[1].Value.ToString();
+                            break;
+                        }
+                        else if (contents.Contains("</head>"))
+                        {
+                            // reached end of head-block; no title found =[
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception _e)
+            {
+                Console.WriteLine(_e);
+            }
+
+            return title;
+        }
+
+        public static Image GetFavicon(string url)
+        {
+            Image img = null; Image ico = null;
+
+            HttpWebRequest w = (HttpWebRequest)WebRequest
+                    .Create("https://www.google.com/s2/favicons?sz=32&domain_url=" + url);
+
+            if (w != null)
+            {
+                w.AllowAutoRedirect = true;
+
+                HttpWebResponse r = (HttpWebResponse)w.GetResponse();
+
+                using (Stream s = r.GetResponseStream())
+                {
+                    try { ico = Image.FromStream(s); }
+                    catch { img = http; }
+                }
+            }
+
+            if (ico == null) img = http;
+            else img = ico;
+
+            return img;
+        }
+
+        public static Image GetImage(string type)
+        {
+            switch (type)
+            {
+                case "html": return html;
+                case "audio": return audio;
+                case "excel": return excel;
+                case "exe": return exe;
+                case "image": return image;
+                case "macros": return macros;
+                case "map": return map;
+                case "pdf": return pdf;
+                case "txt": return txt;
+                case "video": return video;
+                case "http": return http;
+                case "word": return word;
+                case "youtube": return youtube;
+                case "chm": return chm;
+            }
+            return file;
+        }
+
+        public static string GetFileType(string path)
+        {
+            string ext = Path.GetExtension(path).ToLower();
+
+            if (path.ToLower().StartsWith("http"))
+            {
+                if (path.ToLower().Contains("youtube.com"))
+                    return "youtube";
+                return "http";
+            }
+            else if (Audio.Contains(ext))
+                return "audio";
+            else if (Video.Contains(ext))
+                return "video";
+            else if (Word.Contains(ext))
+                return "word";
+            else if (Excel.Contains(ext))
+                return "excel";
+            else if (Images.Contains(ext))
+                return "image";
+            else if (ext == ".html" || ext == ".htm" || ext == ".xhtml")
+                return "html";
+            else if (ext == ".exe")
+                return "exe";
+            else if (ext == ".mmbas")
+                return "macros";
+            else if (ext == ".mmap" || ext == ".mmat")
+                return "map";
+            else if (ext == ".pdf")
+                return "pdf";
+            else if (ext == ".txt")
+                return "txt";
+            else if (ext == ".chm")
+                return "chm";
+            else
+                return "file";
+        }
+
         public static void InitMarkersList(Topic t)
         {
             topicXML = new XmlDocument();
@@ -348,7 +506,7 @@ namespace Bubbles
         public static string licenseStatus = "";
 
         /// <summary>Path with last backslash!</summary>
-		public static string m_defaultDataPath, m_dataPath, m_localDataPath;
+		public static string m_defaultDataPath, m_dataPath, m_localDataPath, m_iconDB;
 
         public static Dictionary<string, string> StockIconsDupes = new Dictionary<string, string>();
         public static Dictionary<string, MmStockIcon> StockIcons = new Dictionary<string, MmStockIcon>();
@@ -356,6 +514,14 @@ namespace Bubbles
         /// signature, path
         /// </summary>
         public static Dictionary<string, string> CustomIcons = new Dictionary<string, string>();
+
+        public static Image audio, excel, exe, file, image, macros, map, pdf, txt, video, http, word, youtube, chm, html;
+
+        public static readonly List<string> Images = new List<string> { ".jpg", ".jpeg", ".jpe", ".bmp", ".gif", ".png", ".ico" };
+        public static readonly List<string> Audio = new List<string> { ".aiff", ".au", ".midi", ".mp3", ".m4a", ".wav", ".wma" };
+        public static readonly List<string> Video = new List<string> { ".asf", ".avi", ".mp4", ".mov", ".m4v", ".mpg", ".mpeg", ".wmv" };
+        public static readonly List<string> Word = new List<string> { ".doc", ".docm", ".docx", ".rtf" };
+        public static readonly List<string> Excel = new List<string> { ".xls", ".xlsx", ".xlsm" };
     }
 
     class ScalingFactor

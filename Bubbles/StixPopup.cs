@@ -22,15 +22,15 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "IconStick.htm");
 
-            pRotate.Tag = Utils.getString("float_icons.contextmenu.rotate");
-            pRemember.Tag = Utils.getString("float_icons.contextmenu.settings");
-            pClose.Tag = Utils.getString("float_icons.contextmenu.close");
+            pRotate.Tag = Utils.getString("stix.contextmenu.rotate");
+            pRemember.Tag = Utils.getString("stix.contextmenu.remember");
+            pClose.Tag = Utils.getString("button.close");
 
             foreach (PictureBox pb in panelH.Controls) {
                 pb.MouseHover += pb_MouseHover; pb.MouseLeave += pb_MouseLeave; }
 
-            pNewIcon.Tag = Utils.getString("float_icons.contextmenu.new");
-            pDeleteAllIcons.Tag = Utils.getString("float_icons.contextmenu.deletealltopic");
+            pNewIcon.Tag = Utils.getString("icons.contextmenu.new");
+            pDeleteAllIcons.Tag = Utils.getString("icons.contextmenu.deletealltopic");
             pNewBookmark.Tag = Utils.getString("bookmarks.contextmenu.add.tooltip");
             pBookmarkList.Tag = Utils.getString("mysources.sourceview.list");
             pFontItalic.Tag = "Italic";
@@ -112,28 +112,28 @@ namespace Bubbles
             switch (stick.Name)
             {
                 case StixUtils.typeicons:
-                    (stick as BubbleIcons).Rotate();
+                    (stick as StixIcons).Rotate();
                     break;
                 case StixUtils.typetaskinfo:
-                    (stick as BubbleTaskInfo).Rotate();
+                    (stick as StixTaskInfo).Rotate();
                     break;
                 case StixUtils.typeformat:
-                    (stick as BubbleFormat).Rotate();
+                    (stick as StixFormat).Rotate();
                     break;
                 case StixUtils.typetools:
-                    (stick as BubbleTools).Rotate();
+                    (stick as StixTools).Rotate();
                     break;
                 case StixUtils.typebookmarks:
-                    (stick as BubbleBookmarks).Rotate();
+                    (stick as StixBookmarks).Rotate();
                     break;
                 case StixUtils.typeaddtopic:
-                    (stick as BubbleAddTopic).Rotate();
+                    (stick as StixAddTopic).Rotate();
                     break;
                 case StixUtils.typetextops:
-                    (stick as BubbleTextOps).Rotate();
+                    (stick as StixTextOps).Rotate();
                     break;
                 case StixUtils.typeorganizer:
-                    (stick as BubbleOrganizer).Rotate();
+                    (stick as StixOrganizer).Rotate();
                     break;
             }
         }
@@ -168,7 +168,7 @@ namespace Bubbles
         private void pNewIcon_Click(object sender, EventArgs e)
         {
             var stick = panelH.Tag as Form;
-            (stick as BubbleIcons).NewIcon();
+            (stick as StixIcons).NewIcon();
         }
 
         private void pDeleteAllIcons_Click(object sender, EventArgs e)
@@ -184,13 +184,13 @@ namespace Bubbles
         private void pFontItalic_Click(object sender, EventArgs e)
         {
             var stick = panelH.Tag as Form;
-            (stick as BubbleFormat).pItalic_Click(null, null);
+            (stick as StixFormat).pItalic_Click(null, null);
         }
 
         private void pCleanFormat_Click(object sender, EventArgs e)
         {
             var stick = panelH.Tag as Form;
-            (stick as BubbleFormat).pClearFormat_Click(null, null);
+            (stick as StixFormat).pClearFormat_Click(null, null);
         }
         #endregion
 
@@ -199,7 +199,7 @@ namespace Bubbles
             if (e.Button == MouseButtons.Left)
             {
                 if (panelPasteTopic.Tag is Form ff)
-                    (ff as BubbleTextOps).PasteTopic((sender as PictureBox).Name.ToLower());
+                    (ff as StixTextOps).PasteTopic((sender as PictureBox).Name.ToLower());
             }
         }
 

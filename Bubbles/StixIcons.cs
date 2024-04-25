@@ -14,9 +14,9 @@ using Color = System.Drawing.Color;
 
 namespace Bubbles
 {
-    internal partial class BubbleIcons : Form
+    internal partial class StixIcons : Form
     {
-        public BubbleIcons(int ID, string _orientation, string stickname)
+        public StixIcons(int ID, string _orientation, string stickname)
         {
             InitializeComponent();
 
@@ -44,20 +44,20 @@ namespace Bubbles
             cmsManage.ItemClicked += ContextMenuStrip1_ItemClicked;
             cmsIcon.ItemClicked += ContextMenuStrip1_ItemClicked;
 
-            cmsIcon.Items["BI_newicon"].Text = Utils.getString("float_icons.contextmenu.new");
+            cmsIcon.Items["BI_newicon"].Text = Utils.getString("icons.contextmenu.new");
             StixUtils.SetContextMenuImage(cmsIcon.Items["BI_newicon"], "addicon.png");
 
             cmsIcon.Items["BI_rename"].Text = Utils.getString("button.rename");
             StixUtils.SetContextMenuImage(cmsIcon.Items["BI_rename"], "edit.png");
 
-            BI_delete.Text = Utils.getString("float_icons.contextmenu.delete");
-            BI_delete.ToolTipText = Utils.getString("float_icons.contextmenu.delete.tooltip");
+            BI_delete.Text = Utils.getString("button.delete");
+            BI_delete.ToolTipText = Utils.getString("icons.contextmenu.delete.tooltip");
             StixUtils.SetContextMenuImage(cmsIcon.Items["BI_delete"], "deleteall.png");
 
-            BI_new.Text = Utils.getString("float_icons.contextmenu.new");
+            BI_new.Text = Utils.getString("icons.contextmenu.new");
             StixUtils.SetContextMenuImage(BI_new, "addicon.png");
 
-            BI_removeallfromtopic.Text = Utils.getString("float_icons.contextmenu.deletealltopic");
+            BI_removeallfromtopic.Text = Utils.getString("icons.contextmenu.deletealltopic");
             StixUtils.SetContextMenuImage(BI_removeallfromtopic, "removeallicons.png");
 
             BI_addtomap.Text = Utils.getString("icons.contextmenu.addtomap");
@@ -300,7 +300,7 @@ namespace Bubbles
                 string name = StixUtils.GetName(this, orientation, StixUtils.typestick, "");
                 if (name != "")
                 {
-                    BubbleIcons form = new BubbleIcons(0, orientation, name);
+                    StixIcons form = new StixIcons(0, orientation, name);
                     StixUtils.CreateStick(form, name, StixUtils.typeicons);
                 }
             }
@@ -344,38 +344,12 @@ namespace Bubbles
                     NewIcon(pair.Value, name, "end");
                 }
 
-                string path = _dlg.txtPath.Text.Trim();
-                if (!String.IsNullOrEmpty(path))
+                if (!String.IsNullOrEmpty(_dlg.iconPath))
                 {
-                    string name = Path.GetFileNameWithoutExtension(path);
-                    NewIcon(path, name, "end");
+                    string name = Path.GetFileNameWithoutExtension(_dlg.iconPath);
+                    NewIcon(_dlg.iconPath, name, "end");
                 }
             }
-        }
-
-        public void PasteIcon()
-        {
-            string path = null;
-            string[] copiedFiles = (string[])Clipboard.GetData(DataFormats.FileDrop);
-            if (path == null && copiedFiles == null)
-                return;
-
-            string title = StixUtils.Handle_DragDrop(ref path, copiedFiles, Icons, null);
-            if (title == "") return;
-
-            if (path == "" || title == "")
-                return;
-
-            position = "end";
-            if (selectedIcon != null)
-            {
-                if (selectedIcon.Name == "pictureHandle")
-                    position = "begin";
-            }
-
-            // Get source name
-            string name = StixUtils.GetName(this, orientation, StixUtils.typeicons, title);
-            if (name != "") NewIcon(path, name, position);
         }
 
         public void Rotate()
@@ -508,7 +482,7 @@ namespace Bubbles
 
                         foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                         {
-                            if (t.Task.Priority != BubbleTaskInfo.GetPriority(value))
+                            if (t.Task.Priority != StixTaskInfo.GetPriority(value))
                             { alltopicshaveicon = false; break; }
                         }
 
@@ -518,8 +492,8 @@ namespace Bubbles
                                 t.Task.Priority = MmTaskPriority.mmTaskPriorityNone;
                             else
                             {
-                                if (t.Task.Priority != BubbleTaskInfo.GetPriority(value))
-                                    t.Task.Priority = BubbleTaskInfo.GetPriority(value);
+                                if (t.Task.Priority != StixTaskInfo.GetPriority(value))
+                                    t.Task.Priority = StixTaskInfo.GetPriority(value);
                             }
                         }
                     }

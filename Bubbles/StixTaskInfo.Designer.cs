@@ -1,6 +1,6 @@
 ﻿namespace Bubbles
 {
-    partial class BubbleTaskInfo
+    partial class StixTaskInfo
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BubbleTaskInfo));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StixTaskInfo));
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.cmsDuration = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ST_DurationUnits = new System.Windows.Forms.ToolStripComboBox();

@@ -10,7 +10,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Image = System.Drawing.Image;
 using Icon = System.Drawing.Icon;
-using Color = System.Drawing.Color;
 using Control = System.Windows.Forms.Control;
 using WindowsInput.Native;
 using WindowsInput;
@@ -290,12 +289,19 @@ namespace Bubbles
                         Icon appIcon = Icon.ExtractAssociatedIcon(path);
                         pBox.Image = appIcon.ToBitmap();
                     }
-                    catch { pBox.Image = GetImage(imageType); }
+                    catch { pBox.Image = Utils.GetImage(imageType); }
                 }
                 else if (imageType.Contains("."))
                     pBox.Image = Image.FromFile(Utils.m_dataPath + "IconDB\\" + imageType);
+                else if (imageType == "http")
+                {
+                    if (Utils.getRegistry("FaviconsToolStix", "1") == "1")
+                        pBox.Image = Utils.GetFavicon(path);
+                    else
+                        pBox.Image = Utils.GetImage(imageType);
+                }
                 else
-                    pBox.Image = GetImage(imageType);
+                    pBox.Image = Utils.GetImage(imageType);
             }
             pBox.Visible = true;
             pBox.BringToFront();
@@ -353,8 +359,8 @@ namespace Bubbles
 
         public static bool DeleteStick(int id, string type)
         {
-            if (MessageBox.Show(Utils.getString("sticks.deletestick.warning"), 
-                Utils.getString("float_icons.contextmenu.deletestick"), 
+            if (MessageBox.Show(Utils.getString("stix.deletestick.warning"), 
+                Utils.getString("stix.contextmenu.deletestick"), 
                 MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
                 return false;
 
@@ -759,13 +765,13 @@ namespace Bubbles
                         {
                             foreach (var item in aSources) // проверим, есть ли в стике значок с этим путем
                             if (item.Path == path) // yes, exists
-                            { MessageBox.Show(Utils.getString("float_icons.iconexists")); return ""; }
+                            { MessageBox.Show(Utils.getString("stix.iconexists")); return ""; }
                         }
                         else if (aIcons != null)
                         {
                             foreach (var item in aIcons) // проверим, есть ли в стике значок с этим путем
                                 if (item.Path == path) // yes, exists
-                                { MessageBox.Show(Utils.getString("float_icons.iconexists")); return ""; }
+                                { MessageBox.Show(Utils.getString("stix.iconexists")); return ""; }
                         }
                         title = myUri.Host;
                     }
@@ -777,39 +783,18 @@ namespace Bubbles
                 {
                     foreach (var item in aSources) // проверим, есть ли в стике значок с этим путем
                     if (item.Path == draggedFiles[0]) // yes, exists
-                    { MessageBox.Show(Utils.getString("float_icons.iconexists")); return ""; }
+                    { MessageBox.Show(Utils.getString("stix.iconexists")); return ""; }
                 }
                 if (aIcons != null)
                 {
                     foreach (var item in aIcons) // проверим, есть ли в стике значок с этим путем
                         if (item.Path == draggedFiles[0]) // yes, exists
-                        { MessageBox.Show(Utils.getString("float_icons.iconexists")); return ""; }
+                        { MessageBox.Show(Utils.getString("stix.iconexists")); return ""; }
                 }
                 path = draggedFiles[0];
                 title = Path.GetFileNameWithoutExtension(path);
             }
             return title;
-        }
-
-        public static Image GetImage(string type)
-        {
-            switch (type)
-            {
-                case "audio": return BubbleTools.audio;
-                case "excel": return BubbleTools.excel;
-                case "exe": return BubbleTools.exe;
-                case "image": return BubbleTools.image;
-                case "macros": return BubbleTools.macros;
-                case "map": return BubbleTools.map;
-                case "pdf": return BubbleTools.pdf;
-                case "txt": return BubbleTools.txt;
-                case "video": return BubbleTools.video;
-                case "http": return BubbleTools.http;
-                case "word": return BubbleTools.word;
-                case "youtube": return BubbleTools.youtube;
-                case "chm": return BubbleTools.chm;
-            }
-            return BubbleTools.file;
         }
 
         public static void SetCommonContextMenu(ContextMenuStrip cms, string stickType = "")
@@ -833,12 +818,12 @@ namespace Bubbles
                 tsi.ToolTipText = deleteall;
             }
 
-            tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.rotate"));
+            tsi = cms.Items.Add(Utils.getString("stix.contextmenu.rotate"));
             tsi.Name = "BI_rotate";
             tsi.ImageScaling = ToolStripItemImageScaling.None;
             tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "rotate.png"), cmiSize);
 
-            tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.settings"));
+            tsi = cms.Items.Add(Utils.getString("stix.contextmenu.remember"));
             tsi.Name = "BI_store";
             tsi.ImageScaling = ToolStripItemImageScaling.None;
             tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "remember.png"), cmiSize);
@@ -850,30 +835,30 @@ namespace Bubbles
                 tsi.ImageScaling = ToolStripItemImageScaling.None;
                 tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "edit.png"), cmiSize);
 
-                tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.deletestick"));
+                tsi = cms.Items.Add(Utils.getString("stix.contextmenu.deletestick"));
                 tsi.Name = "BI_delete_stick";
                 tsi.ImageScaling = ToolStripItemImageScaling.None;
                 tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "deleteStick.png"), cmiSize);
 
-                tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.newstick"));
+                tsi = cms.Items.Add(Utils.getString("stix.contextmenu.newstick"));
                 tsi.Name = "BI_newstick";
                 tsi.ImageScaling = ToolStripItemImageScaling.None;
                 tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "newStick.png"), cmiSize);
             }
 
-            tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.scale"));
+            tsi = cms.Items.Add(Utils.getString("stix.contextmenu.scale"));
             tsi.Name = "BI_scale";
             tsi.ImageScaling = ToolStripItemImageScaling.None;
             tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "remember.png"), cmiSize);
 
             cms.Items.Add(new ToolStripSeparator());
 
-            tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.help"));
+            tsi = cms.Items.Add(Utils.getString("button.help"));
             tsi.Name = "BI_help";
             tsi.ImageScaling = ToolStripItemImageScaling.None;
             tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "help.png"), cmiSize);
 
-            tsi = cms.Items.Add(Utils.getString("float_icons.contextmenu.close"));
+            tsi = cms.Items.Add(Utils.getString("button.close"));
             tsi.Name = "BI_close";
             tsi.ImageScaling = ToolStripItemImageScaling.None;
             tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "close_sticker.png"), cmiSize);
@@ -912,27 +897,27 @@ namespace Bubbles
                 //}
                 if (popup == "paste")
                 {
-                    X = parent.Left + (parent as BubbleTextOps).PasteLink.Left;
-                    Y = parent.Top + ((parent as BubbleTextOps).subtopic.Top / 2);
+                    X = parent.Left + (parent as StixTextOps).PasteLink.Left;
+                    Y = parent.Top + ((parent as StixTextOps).subtopic.Top / 2);
                 }
                 else if (popup == "progress")
                 {
-                    X = parent.Left + (parent as BubbleTaskInfo).pPriority.Left;
-                    Y = parent.Top + ((parent as BubbleTaskInfo).pPriority.Width / 4);
+                    X = parent.Left + (parent as StixTaskInfo).pPriority.Left;
+                    Y = parent.Top + ((parent as StixTaskInfo).pPriority.Width / 4);
                 }
                 else if (popup == "priority")
                 {
-                    X = parent.Left + (parent as BubbleTaskInfo).pResources.Left;
-                    Y = parent.Top + ((parent as BubbleTaskInfo).pPriority.Width / 4);
+                    X = parent.Left + (parent as StixTaskInfo).pResources.Left;
+                    Y = parent.Top + ((parent as StixTaskInfo).pPriority.Width / 4);
                 }
                 else if (popup == "calendar_startdate")
                 {
-                    X = parent.Left + (parent as BubbleTaskInfo).panelStartDate.Left;
+                    X = parent.Left + (parent as StixTaskInfo).panelStartDate.Left;
                     Y = parent.Top;
                 }
                 else if (popup == "calendar_duedate")
                 {
-                    X = parent.Left + (parent as BubbleTaskInfo).panelDueDate.Left;
+                    X = parent.Left + (parent as StixTaskInfo).panelDueDate.Left;
                     Y = parent.Top;
                 }
             }
@@ -952,28 +937,28 @@ namespace Bubbles
                 //}
                 if (popup == "paste")
                 {
-                    X = parent.Left + ((parent as BubbleTextOps).subtopic.Left / 2);
-                    Y = parent.Top + (parent as BubbleTextOps).PasteLink.Top;
+                    X = parent.Left + ((parent as StixTextOps).subtopic.Left / 2);
+                    Y = parent.Top + (parent as StixTextOps).PasteLink.Top;
                 }
                 else if (popup == "progress")
                 {
-                    X = parent.Left + (parent as BubbleTaskInfo).pPriority.Width / 4;
-                    Y = parent.Top + (parent as BubbleTaskInfo).pPriority.Top;
+                    X = parent.Left + (parent as StixTaskInfo).pPriority.Width / 4;
+                    Y = parent.Top + (parent as StixTaskInfo).pPriority.Top;
                 }
                 else if (popup == "priority")
                 {
-                    X = parent.Left + (parent as BubbleTaskInfo).pPriority.Width / 4;
-                    Y = parent.Top + (parent as BubbleTaskInfo).panelStartDate.Top;
+                    X = parent.Left + (parent as StixTaskInfo).pPriority.Width / 4;
+                    Y = parent.Top + (parent as StixTaskInfo).panelStartDate.Top;
                 }
                 else if (popup == "calendar_startdate")
                 {
                     X = parent.Left;
-                    Y = parent.Top + (parent as BubbleTaskInfo).panelStartDate.Top;
+                    Y = parent.Top + (parent as StixTaskInfo).panelStartDate.Top;
                 }
                 else if (popup == "calendar_duedate")
                 {
                     X = parent.Left;
-                    Y = parent.Top + (parent as BubbleTaskInfo).panelDueDate.Top;
+                    Y = parent.Top + (parent as StixTaskInfo).panelDueDate.Top;
                 }
             }
 

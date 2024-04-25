@@ -71,8 +71,8 @@ namespace Bubbles
                 foreach (Topic t in MMUtils.ActiveDocument.CentralTopic.AllSubTopics)
                     t.GetAttributes(ATTR_NAMESPACE).SetAttributeValue(ATTR_BOOKMARKED, "1");
 
-                if (BubbleBookmarks.BookmarkedDocuments.ContainsKey(MMUtils.ActiveDocument))
-                    BubbleBookmarks.BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
+                if (StixBookmarks.BookmarkedDocuments.ContainsKey(MMUtils.ActiveDocument))
+                    StixBookmarks.BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
 
                 Init(false);
             }
@@ -82,7 +82,7 @@ namespace Bubbles
 
                 foreach (Topic t in MMUtils.ActiveDocument.CentralTopic.AllSubTopics)
                     t.GetAttributes(ATTR_NAMESPACE).DeleteAll();
-                BubbleBookmarks.BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
+                StixBookmarks.BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
 
                 Init(false);
             }
@@ -94,17 +94,17 @@ namespace Bubbles
             {
                 if (MMUtils.ActiveDocument == null) return;
 
-                if (BubbleBookmarks.BookmarkedDocuments.Keys.Contains(MMUtils.ActiveDocument))
+                if (StixBookmarks.BookmarkedDocuments.Keys.Contains(MMUtils.ActiveDocument))
                 {
                     Topic t;
-                    foreach (BookmarkItem item in BubbleBookmarks.BookmarkedDocuments[MMUtils.ActiveDocument])
+                    foreach (BookmarkItem item in StixBookmarks.BookmarkedDocuments[MMUtils.ActiveDocument])
                     {
                         t = MMUtils.ActiveDocument.FindByGuid(item.TopicGuid) as Topic;
                         if (t != null)
                             t.GetAttributes(ATTR_NAMESPACE).DeleteAll();
                     }
                     t = null;
-                    BubbleBookmarks.BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
+                    StixBookmarks.BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
                 }
                 else
                 {
@@ -126,7 +126,7 @@ namespace Bubbles
         public void Init(bool fromStick = false, bool deleteall = false)
         {
             listBookmarks.Items.Clear();
-            BubbleBookmarks.Bookmarks.Clear();
+            StixBookmarks.Bookmarks.Clear();
 
             if (MMUtils.ActiveDocument == null) return;
 
@@ -141,12 +141,12 @@ namespace Bubbles
                 return;
             }
 
-            if (BubbleBookmarks.BookmarkedDocuments.Keys.Contains(MMUtils.ActiveDocument))
+            if (StixBookmarks.BookmarkedDocuments.Keys.Contains(MMUtils.ActiveDocument))
             {
-                foreach (BookmarkItem item in BubbleBookmarks.BookmarkedDocuments[MMUtils.ActiveDocument])
+                foreach (BookmarkItem item in StixBookmarks.BookmarkedDocuments[MMUtils.ActiveDocument])
                 {
                     listBookmarks.Items.Add(item);
-                    BubbleBookmarks.Bookmarks.Add(item);
+                    StixBookmarks.Bookmarks.Add(item);
                 }
             }
             else
@@ -158,11 +158,11 @@ namespace Bubbles
                 foreach (Topic _t in MMUtils.ActiveDocument.AllFloatingTopics)
                     LoadFromMapRecursive(_t);
 
-                if (BubbleBookmarks.Bookmarks.Count > 0)
+                if (StixBookmarks.Bookmarks.Count > 0)
                 {
                     List<BookmarkItem> list = new List<BookmarkItem>();
-                    list.AddRange(BubbleBookmarks.Bookmarks);
-                    BubbleBookmarks.BookmarkedDocuments.Add(MMUtils.ActiveDocument, list);
+                    list.AddRange(StixBookmarks.Bookmarks);
+                    StixBookmarks.BookmarkedDocuments.Add(MMUtils.ActiveDocument, list);
                 }
             }
             // Refresh BubbleBookmarks stick
@@ -180,7 +180,7 @@ namespace Bubbles
                     _t.IsFloatingTopic ? Float : Normal;
 
                 BookmarkItem item = new BookmarkItem(_t.Text.Trim(), _t.Guid, topictype);
-                BubbleBookmarks.Bookmarks.Add(item);
+                StixBookmarks.Bookmarks.Add(item);
                 listBookmarks.Items.Add(item);
             }
             foreach (Topic t in _t.AllSubTopics)
@@ -266,8 +266,8 @@ namespace Bubbles
 
             t.GetAttributes(ATTR_NAMESPACE).SetAttributeValue(ATTR_BOOKMARKED, "1");
 
-            if (BubbleBookmarks.BookmarkedDocuments.ContainsKey(MMUtils.ActiveDocument))
-                BubbleBookmarks.BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
+            if (StixBookmarks.BookmarkedDocuments.ContainsKey(MMUtils.ActiveDocument))
+                StixBookmarks.BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
 
             Init();
         }
@@ -284,12 +284,12 @@ namespace Bubbles
                 if (t != null)
                     t.GetAttributes(ATTR_NAMESPACE).DeleteAll();
 
-                var item = BubbleBookmarks.Bookmarks.Find(x => x.TopicGuid == _item.TopicGuid);
+                var item = StixBookmarks.Bookmarks.Find(x => x.TopicGuid == _item.TopicGuid);
                 if (item != null)
                 {
-                    BubbleBookmarks.Bookmarks.Remove(item);
-                    BubbleBookmarks.BookmarkedDocuments[MMUtils.ActiveDocument].Clear();
-                    BubbleBookmarks.BookmarkedDocuments[MMUtils.ActiveDocument].AddRange(BubbleBookmarks.Bookmarks);
+                    StixBookmarks.Bookmarks.Remove(item);
+                    StixBookmarks.BookmarkedDocuments[MMUtils.ActiveDocument].Clear();
+                    StixBookmarks.BookmarkedDocuments[MMUtils.ActiveDocument].AddRange(StixBookmarks.Bookmarks);
                     Init(false);
                 }
             }
@@ -299,17 +299,17 @@ namespace Bubbles
         {
             if (MMUtils.ActiveDocument == null) return;
 
-            if (BubbleBookmarks.BookmarkedDocuments.Keys.Contains(MMUtils.ActiveDocument))
+            if (StixBookmarks.BookmarkedDocuments.Keys.Contains(MMUtils.ActiveDocument))
             {
                 Topic t;
-                foreach (BookmarkItem item in BubbleBookmarks.BookmarkedDocuments[MMUtils.ActiveDocument])
+                foreach (BookmarkItem item in StixBookmarks.BookmarkedDocuments[MMUtils.ActiveDocument])
                 {
                     t = MMUtils.ActiveDocument.FindByGuid(item.TopicGuid) as Topic;
                     if (t != null)
                         t.GetAttributes(ATTR_NAMESPACE).DeleteAll();
                 }
                 t = null;
-                BubbleBookmarks.BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
+                StixBookmarks.BookmarkedDocuments.Remove(MMUtils.ActiveDocument);
             }
             else
             {

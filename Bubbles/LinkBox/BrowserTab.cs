@@ -51,6 +51,12 @@ namespace Bubbles
         //Just cosmetic code
         private void CoreWebView2_DocumentTitleChanged(object sender, object e)
         {
+            if (tabCtrl.Tag != null && tabCtrl.Tag.ToString() == "tab_removed")
+            {
+                tabCtrl.Tag = "";
+                return;
+            }
+
             string pageTitle = CoreWebView2.DocumentTitle;
             if (pageTitle.Length > 30) { pageTitle = pageTitle.Substring(0, 30) + "..."; }
 

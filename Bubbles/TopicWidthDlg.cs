@@ -128,7 +128,7 @@ namespace Bubbles
             StixUtils.AutoTopicWidths = awidths.OrderByDescending(key => key.Key).ToDictionary(pair => pair.Key, pair => pair.Value);
             StixUtils.MinAutoTopicWidth = StixUtils.AutoTopicWidths.Keys.Last();
 
-            (form as BubbleTextOps).PopulateTopicWidth();
+            (form as StixTextOps).PopulateTopicWidth();
         }
 
         private void lblMoreAuto_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

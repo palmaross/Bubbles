@@ -187,8 +187,7 @@ namespace Bubbles
             m_db.ExecuteNonQuery("CREATE TABLE LINKS(title text, path text, type text, groupID int, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
 
-            m_db.ExecuteNonQuery("CREATE TABLE TOOLS(title text, path text, type text, " +
-                "_order integer, stickID int, " +
+            m_db.ExecuteNonQuery("CREATE TABLE TOOLS(title text, path text, type text, _order integer, stickID int, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
             // path - file path
             // type - file type (.exe, .docx, .txt, etc.) or OmniTool type, starting with "OT"
@@ -232,18 +231,18 @@ namespace Bubbles
 
             int id = r.Next();
             // Add first Icons stick
-            AddStick(id, Utils.getString("BubbleIcons.bubble.tooltip"), StixUtils.typeicons, 0, "H", "");
+            AddStick(id, Utils.getString("StixIcons.tooltip"), StixUtils.typeicons, 0, "H", "");
 
             AddIcon(Utils.getString("icons.firststick.icon1"), "stockexclamation-mark", 1, id);
             AddIcon(Utils.getString("icons.firststick.icon2"), "stockquestion-mark", 2, id);
 
             // Add TaskInfo stick
             id = r.Next();
-            AddStick(id, Utils.getString("BubbleTaskInfo.bubble.tooltip"), StixUtils.typetaskinfo, 0, "H", "");
+            AddStick(id, Utils.getString("StixTaskInfo.tooltip"), StixUtils.typetaskinfo, 0, "H", "");
 
             // Add first Tools stick
             id = r.Next();
-            AddStick(id, Utils.getString("BubbleTools.bubble.tooltip"), StixUtils.typetools, 0, "H", "");
+            AddStick(id, Utils.getString("StixTools.tooltip"), StixUtils.typetools, 0, "H", "");
 
             AddLinkGroup(Utils.getString("LinksDlg.commongroup"), 0, 1);
             // Get created group id
@@ -253,22 +252,22 @@ namespace Bubbles
 
 #if VENDOR_OL
             {
-            AddLink(Utils.getString("mysources.first1.text"), "http://www.olympic-limited.co.uk/", "http", groupID);
-            AddTool(Utils.getString("mysources.first1.text"), "http://www.olympic-limited.co.uk/", "http", 1, id);
+            AddLink(Utils.getString("links.first1.text"), "http://www.olympic-limited.co.uk/", "http", groupID);
+            AddTool(Utils.getString("links.first1.text"), "http://www.olympic-limited.co.uk/", "http", 1, id);
 
             }
 #else
             {
-            AddLink(Utils.getString("mysources.first1.text"), "https://palmaross.com/", "http", groupID);
-            AddTool(Utils.getString("mysources.first1.text"), "https://palmaross.com/", "http", 1, id);
+                AddLink(Utils.getString("links.first1.text"), "https://palmaross.com/", "http", groupID);
+            AddTool(Utils.getString("links.first1.text"), "https://palmaross.com/", "http", 1, id);
             }
 #endif
 
-            AddLink(Utils.getString("mysources.first2.text"), Utils.dllPath + "OmniStix.chm", "chm", groupID);
-            AddTool(Utils.getString("mysources.first2.text"), Utils.dllPath + "OmniStix.chm", "chm", 2, id);
-            AddTool(Utils.getString("mysources.first3.text"), "c:\\Windows\\System32\\notepad.exe", "tool-notepad.png", 3, id);
+            AddLink(Utils.getString("links.first2.text"), Utils.dllPath + "OmniStix.chm", "chm", groupID);
+            AddTool(Utils.getString("links.first2.text"), Utils.dllPath + "OmniStix.chm", "chm", 2, id);
+            AddTool(Utils.getString("links.first3.text"), "c:\\Windows\\System32\\notepad.exe", "tool-notepad.png", 3, id);
+            
             AddLinkGroup("Group 1", 0, 2);
-            // Get created group id
             groupID = 1;
             dt = ExecuteQuery("SELECT last_insert_rowid()");
             if (dt.Rows.Count > 0) groupID = Convert.ToInt32(dt.Rows[0][0]);
@@ -280,19 +279,19 @@ namespace Bubbles
 
             // Add Bookmarks stick
             id = r.Next();
-            AddStick(id, Utils.getString("BubbleBookmarks.bubble.tooltip"), StixUtils.typebookmarks, 0, "H", "");
+            AddStick(id, Utils.getString("StixBookmarks.tooltip"), StixUtils.typebookmarks, 0, "H", "");
 
             // Add <Add Topic> stick
             id = r.Next();
-            AddStick(id, Utils.getString("BubbleAddTopic.bubble.tooltip"), StixUtils.typeaddtopic, 0, "H", "");
+            AddStick(id, Utils.getString("StixAddTopic.tooltip"), StixUtils.typeaddtopic, 0, "H", "");
 
             // Add Text Operations stick
             id = r.Next();
-            AddStick(id, Utils.getString("BubbleTextOps.bubble.tooltip"), StixUtils.typetextops, 0, "H", "");
+            AddStick(id, Utils.getString("StixTextOps.tooltip"), StixUtils.typetextops, 0, "H", "");
 
             // Add Format stick
             id = r.Next();
-            AddStick(id, Utils.getString("BubbleFormat.bubble.tooltip"), StixUtils.typeformat, 0, "H", "");
+            AddStick(id, Utils.getString("StixFormat.tooltip"), StixUtils.typeformat, 0, "H", "");
 
             // Add ADDTOPIC_TEMPLATES
             AddPattern(Utils.getString("Template.Day"), Utils.getString("Template.Day") + " ", "increment###1,10,1,end", "subtopic");

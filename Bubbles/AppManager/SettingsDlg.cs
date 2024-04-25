@@ -20,6 +20,12 @@ namespace Bubbles
             lblBoxes.Text = Utils.getString("SettingsDlg.lblBoxes");
             btnTestScale.Text = Utils.getString("SettingsDlg.btnTestScale");
 
+            QTR_Dates.Text = Utils.getString("taskinfo.Dates");
+            QTR_Progress.Text = Utils.getString("SettingsDlg.QTR_Progress");
+            QTR_Priority.Text = Utils.getString("SettingsDlg.QTR_Priority");
+            QTR_Resources.Text = Utils.getString("taskinfo.Resources");
+            QTR_Effort.Text = Utils.getString("taskinfo.numEffort.tooltip");
+
             btnSave.Text = Utils.getString("button.save");
             btnClose.Text = Utils.getString("button.close");
 
@@ -39,10 +45,32 @@ namespace Bubbles
                     cbSelectAll.Checked = true;
             }
 
+            // Fill Quick Task Remove Defaults
+            string qtr_defaults = Utils.getRegistry("QuickTaskRemoveDefaults", "");
+            if (qtr_defaults != "")
+            {
+                bool taskinfostix = StixButton.m_TaskInfo != null;
+                string[] parts = qtr_defaults.Split(';');
+                foreach (string part in parts)
+                {
+                    string[] parts2 = part.Split(':');
+                    switch (parts2[0])
+                    {
+                        case "dates": QTR_Dates.Checked = parts2[1] == "1"; break;
+                        case "progress": QTR_Progress.Checked = parts2[1] == "1"; break;
+                        case "priority": QTR_Priority.Checked = parts2[1] == "1"; break;
+                        case "resources": QTR_Resources.Checked = parts2[1] == "1"; break;
+                        case "effort": QTR_Effort.Checked = parts2[1] == "1"; break;
+                    }
+                }
+            }
+
             // Fill Scale Factor
             numStix.Text = stixScaleFactor.ToString() + "%";
             numStixBase.Text = stixbaseScaleFactor.ToString() + "%";
-            //numBoxes.Text = boxesScaleFactor.ToString() + "%";
+            
+            FaviconsToolStix.Checked = Utils.getRegistry("FaviconsToolStix", "1") == "1";
+            FaviconsLinksWindow.Checked = Utils.getRegistry("FaviconsLinksWindow", "1") == "1";
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -62,7 +90,20 @@ namespace Bubbles
             btnTestScale_Click(null, null);
             Utils.setRegistry("ScaleFactor_Stix", stixScaleFactor.ToString());
             Utils.setRegistry("ScaleFactor_StixBase", stixbaseScaleFactor.ToString());
-            Utils.setRegistry("ScaleFactor_Boxes", boxesScaleFactor.ToString());
+
+            // Save Quick Task Remove Defaults
+            string defaults = "dates:" + (QTR_Dates.Checked ? "1" : "0") + ";";
+            defaults += "priority:" + (QTR_Priority.Checked ? "1" : "0") + ";";
+            defaults += "progress:" + (QTR_Progress.Checked ? "1" : "0") + ";";
+            defaults += "resources:" + (QTR_Resources.Checked ? "1" : "0") + ";";
+            defaults += "effort:" + (QTR_Effort.Checked ? "1" : "0");
+            Utils.setRegistry("QuickTaskRemoveDefaults", defaults);
+
+            if (StixButton.m_TaskInfo != null)
+                StixButton.m_TaskInfo.SetQuickTaskDefault();
+
+            Utils.setRegistry("FaviconsToolStix", FaviconsToolStix.Checked ? "1" : "0");
+            Utils.setRegistry("FaviconsLinksWindow", FaviconsLinksWindow.Checked ? "1" : "0");
         }
 
         private void cbSelectAll_CheckedChanged(object sender, EventArgs e)
@@ -113,25 +154,25 @@ namespace Bubbles
                         (stick as StixBase).ScaleStick((stick as StixBase).scaleFactor, SF_StixBase);
                         break;
                     case StixUtils.typeicons:
-                        (stick as BubbleIcons).ScaleStick((stick as BubbleIcons).scaleFactor, SF_Stix);
+                        (stick as StixIcons).ScaleStick((stick as StixIcons).scaleFactor, SF_Stix);
                         break;
                     case StixUtils.typetaskinfo:
-                        (stick as BubbleTaskInfo).ScaleStick((stick as BubbleTaskInfo).scaleFactor, SF_Stix);
+                        (stick as StixTaskInfo).ScaleStick((stick as StixTaskInfo).scaleFactor, SF_Stix);
                         break;
                     case StixUtils.typeaddtopic:
-                        (stick as BubbleAddTopic).ScaleStick((stick as BubbleAddTopic).scaleFactor, SF_Stix);
+                        (stick as StixAddTopic).ScaleStick((stick as StixAddTopic).scaleFactor, SF_Stix);
                         break;
                     case StixUtils.typeformat:
-                        (stick as BubbleFormat).ScaleStick((stick as BubbleFormat).scaleFactor, SF_Stix);
+                        (stick as StixFormat).ScaleStick((stick as StixFormat).scaleFactor, SF_Stix);
                         break;
                     case StixUtils.typetools:
-                        (stick as BubbleTools).ScaleStick((stick as BubbleTools).scaleFactor, SF_Stix);
+                        (stick as StixTools).ScaleStick((stick as StixTools).scaleFactor, SF_Stix);
                         break;
                     case StixUtils.typebookmarks:
-                        (stick as BubbleBookmarks).ScaleStick((stick as BubbleBookmarks).scaleFactor, SF_Stix);
+                        (stick as StixBookmarks).ScaleStick((stick as StixBookmarks).scaleFactor, SF_Stix);
                         break;
                     case StixUtils.typetextops:
-                        (stick as BubbleTextOps).ScaleStick((stick as BubbleTextOps).scaleFactor, SF_Stix);
+                        (stick as StixTextOps).ScaleStick((stick as StixTextOps).scaleFactor, SF_Stix);
                         break;
                 }
             }

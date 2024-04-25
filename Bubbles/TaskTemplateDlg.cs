@@ -728,8 +728,16 @@ namespace Bubbles
                 string iconPath = _dlg.iconPath;
                 string fileName = "stock" + Path.GetFileNameWithoutExtension(iconPath);
 
-                if (BubbleIcons.StockIconFromString(fileName) == 0) // custom icon
+                if (StixIcons.StockIconFromString(fileName) == 0) // custom icon
+                {
                     fileName = MMUtils.MindManager.Utilities.GetCustomIconSignature(iconPath);
+
+                    if (!Utils.CustomIcons.ContainsKey(fileName))
+                    {
+                        Utils.CustomIcons.Add(fileName, iconPath);
+                        File.Copy(iconPath, Utils.m_iconDB + Path.GetFileName(iconPath));
+                    }
+                }
 
                 pIcon.Image = System.Drawing.Image.FromFile(iconPath);
                 pIcon.Tag = fileName;

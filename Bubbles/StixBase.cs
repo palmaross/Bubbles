@@ -19,13 +19,13 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "stixbase.htm");
 
-            toolTip1.SetToolTip(stxIcons, Utils.getString("BubbleIcons.bubble.tooltip"));
-            toolTip1.SetToolTip(stxTaskInfo, Utils.getString("BubbleTaskInfo.bubble.tooltip"));
-            toolTip1.SetToolTip(stxBookmarks, Utils.getString("BubbleBookmarks.bubble.tooltip"));
-            toolTip1.SetToolTip(stxSources, Utils.getString("BubbleTools.bubble.tooltip"));
-            toolTip1.SetToolTip(stxAddTopics, Utils.getString("BubbleAddTopic.bubble.tooltip"));
-            toolTip1.SetToolTip(stxTextOps, Utils.getString("BubbleTextOps.bubble.tooltip"));
-            toolTip1.SetToolTip(stxFormat, Utils.getString("BubbleFormat.bubble.tooltip"));
+            toolTip1.SetToolTip(stxIcons, Utils.getString("StixIcons.tooltip"));
+            toolTip1.SetToolTip(stxTaskInfo, Utils.getString("StixTaskInfo.tooltip"));
+            toolTip1.SetToolTip(stxBookmarks, Utils.getString("StixBookmarks.tooltip"));
+            toolTip1.SetToolTip(stxSources, Utils.getString("StixTools.tooltip"));
+            toolTip1.SetToolTip(stxAddTopics, Utils.getString("StixAddTopic.tooltip"));
+            toolTip1.SetToolTip(stxTextOps, Utils.getString("StixTextOps.tooltip"));
+            toolTip1.SetToolTip(stxFormat, Utils.getString("StixFormat.tooltip"));
             toolTip1.SetToolTip(boxResources, Utils.getString("Box.Resources"));
             toolTip1.SetToolTip(boxBookmarks, Utils.getString("Box.Bookmarks"));
             toolTip1.SetToolTip(boxSources, Utils.getString("Box.Sources"));
@@ -62,7 +62,7 @@ namespace Bubbles
             StixUtils.SetContextMenuImage(cm_close, "deleteall.png");
             StixUtils.SetContextMenuImage(cm_remember, "remember.png");
             StixUtils.SetContextMenuImage(cm_settings, "manage.png");
-            StixUtils.SetContextMenuImage(cm_help, "chm.png");
+            StixUtils.SetContextMenuImage(cm_help, "ms_chm.png");
             StixUtils.SetContextMenuImage(cm_about, "help.png");
             StixUtils.SetContextMenuImage(cm_autoclose, "check.png");
             StixUtils.SetContextMenuImage(cm_closemenu, "deleteStick.png");
@@ -296,7 +296,7 @@ namespace Bubbles
             if (pb.Name == "stxIcons")
             {
                 stickType = StixUtils.typeicons;
-                defaultName = Utils.getString("BubbleIcons.bubble.tooltip");
+                defaultName = Utils.getString("StixIcons.tooltip");
                 if (cmsIcons.Items.Count > 0 && startId == 0)
                 {
                     cmsIcons.Show(Cursor.Position); return;
@@ -305,12 +305,12 @@ namespace Bubbles
             else if (pb.Name == "stxTaskInfo")
             {
                 stickType = StixUtils.typetaskinfo;
-                defaultName = Utils.getString("BubbleTaskInfo.bubble.tooltip");
+                defaultName = Utils.getString("StixTaskInfo.tooltip");
             }
             else if (pb.Name == "stxSources")
             {
                 stickType = StixUtils.typetools;
-                defaultName = Utils.getString("BubbleTools.bubble.tooltip");
+                defaultName = Utils.getString("StixTools.tooltip");
                 if (cmsMySources.Items.Count > 0 && startId == 0)
                 {
                     cmsMySources.Show(Cursor.Position); return;
@@ -319,27 +319,27 @@ namespace Bubbles
             else if (pb.Name == "stxBookmarks")
             {
                 stickType = StixUtils.typebookmarks;
-                defaultName = Utils.getString("BubbleBookmarks.bubble.tooltip");
+                defaultName = Utils.getString("StixBookmarks.tooltip");
             }
             else if (pb.Name == "stxFormat")
             {
                 stickType = StixUtils.typeformat;
-                defaultName = Utils.getString("BubbleFormat.bubble.tooltip");
+                defaultName = Utils.getString("StixFormat.tooltip");
             }
             else if (pb.Name == "stxAddTopics")
             {
                 stickType = StixUtils.typeaddtopic;
-                defaultName = Utils.getString("BubbleAddTopic.bubble.tooltip");
+                defaultName = Utils.getString("StixAddTopic.tooltip");
             }
             else if (pb.Name == "stxTextOps")
             {
                 stickType = StixUtils.typetextops;
-                defaultName = Utils.getString("BubbleTextOps.bubble.tooltip");
+                defaultName = Utils.getString("StixTextOps.tooltip");
             }
             else if (pb.Name == "Organizer")
             {
                 stickType = StixUtils.typeorganizer;
-                defaultName = Utils.getString("BubbleOrganizer.bubble.tooltip");
+                defaultName = Utils.getString("StixOrganizer.tooltip");
             }
             else return;
 
@@ -356,21 +356,21 @@ namespace Bubbles
             switch (stickType)
             {
                 case StixUtils.typeicons:
-                    form = new BubbleIcons(id, orientation, name); break;
+                    form = new StixIcons(id, orientation, name); break;
                 case StixUtils.typetaskinfo:
-                    form = new BubbleTaskInfo(id, orientation, name); break;
+                    form = new StixTaskInfo(id, orientation, name); break;
                 case StixUtils.typetools:
-                    form = new BubbleTools(id, orientation, name); break;
+                    form = new StixTools(id, orientation, name); break;
                 case StixUtils.typebookmarks:
-                    form = new BubbleBookmarks(id, orientation, name); break;
+                    form = new StixBookmarks(id, orientation, name); break;
                 case StixUtils.typeformat:
-                    form = new BubbleFormat(id, orientation, name); break;
+                    form = new StixFormat(id, orientation, name); break;
                 case StixUtils.typeaddtopic:
-                    form = new BubbleAddTopic(id, orientation, name); break;
+                    form = new StixAddTopic(id, orientation, name); break;
                 case StixUtils.typetextops:
-                    form = new BubbleTextOps(id, orientation, name); break;
+                    form = new StixTextOps(id, orientation, name); break;
                 case StixUtils.typeorganizer:
-                    form = new BubbleOrganizer(id, orientation, name); break;
+                    form = new StixOrganizer(id, orientation, name); break;
             }
 
             form.Location = GetStickLocation(location, form.Size);

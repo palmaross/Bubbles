@@ -153,7 +153,7 @@ namespace Bubbles
                     _filename == "stock" + filename || // stock icon
                     _filename == signature) // custom icon
                 {
-                    MessageBox.Show(Utils.getString("float_icons.iconexists"));
+                    MessageBox.Show(Utils.getString("stix.iconexists"));
                     return;
                 }
             }
@@ -191,7 +191,9 @@ namespace Bubbles
 
         private void btnOK_Click(object sender, System.EventArgs e)
         {
-            
+            string path = txtPath.Text.Trim();
+            if (path != "" && File.Exists(path))
+                iconPath = path;
         }
 
         private void btnBrowse_Click(object sender, System.EventArgs e)

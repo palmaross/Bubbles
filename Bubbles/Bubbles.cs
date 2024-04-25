@@ -163,10 +163,10 @@ namespace Bubbles
             if (aArgs.target is Topic t)
             {
                 // Paste operation from stick
-                if (BubbleTextOps.pastetext)
+                if (StixTextOps.pastetext)
                 {
-                    if (!BubbleTextOps.PastedTopics.Contains(t))
-                        BubbleTextOps.PastedTopics.Add(t);
+                    if (!StixTextOps.PastedTopics.Contains(t))
+                        StixTextOps.PastedTopics.Add(t);
                 }
                 // Paste operation from MindManager.
                 else if (StixUtils.TopicAutoWidth) // Topic autowidth enabled
@@ -186,7 +186,7 @@ namespace Bubbles
 
         public override void onDocumentClipboardPasteOrDrop(MMEventArgs aArgs)
         {
-            if (BubbleTextOps.pastetext) return;
+            if (StixTextOps.pastetext) return;
             MMPaste = true;
         }
         bool MMPaste = false;
@@ -197,7 +197,7 @@ namespace Bubbles
             if (aArgs.target is Topic _t && aArgs.what == "text" && // topic text changed
                 StixUtils.TopicAutoWidth && // Topic AutoWidth enabled
                 MMPaste && // Text is pasted into topic via MindManager
-                !BubbleTextOps.pastetext) // to insure: it's not a BubblePaste stick operation
+                !StixTextOps.pastetext) // to insure: it's not a BubblePaste stick operation
             {
                 // Set topic width
                 StixUtils.TopicWidthList.Add(_t);
@@ -209,12 +209,12 @@ namespace Bubbles
 
             if (aArgs.what.Contains("notesxhtmldata"))
             {
-                if (aArgs.target is Topic t && BubbleTextOps.UserActionNotes)
+                if (aArgs.target is Topic t && StixTextOps.UserActionNotes)
                 {
-                    if (!BubbleTextOps.TopicsWithNotes.Contains(t.Guid))
-                        BubbleTextOps.TopicsWithNotes.Add(t.Guid);
+                    if (!StixTextOps.TopicsWithNotes.Contains(t.Guid))
+                        StixTextOps.TopicsWithNotes.Add(t.Guid);
                 }
-                BubbleTextOps.UserActionNotes = true;
+                StixTextOps.UserActionNotes = true;
                 return;
             }
 
@@ -491,10 +491,10 @@ namespace Bubbles
             m_bubbleSnippets.Dispose();
             m_bubbleSnippets = null;
 
-            if (BubbleBookmarks.BookmarkedDocuments != null && BubbleBookmarks.BookmarkedDocuments.Count > 0)
+            if (StixBookmarks.BookmarkedDocuments != null && StixBookmarks.BookmarkedDocuments.Count > 0)
             {
-                BubbleBookmarks.BookmarkedDocuments.Clear();
-                BubbleBookmarks.BookmarkedDocuments = null;
+                StixBookmarks.BookmarkedDocuments.Clear();
+                StixBookmarks.BookmarkedDocuments = null;
             }
 
             if (m_BookmarkList != null)
@@ -583,11 +583,11 @@ namespace Bubbles
             HidePopup.Tick -= HidePopup_Tick;
             HidePopup.Dispose(); HidePopup = null;
 
-            BubbleTextOps.PasteOperations.Stop();
+            StixTextOps.PasteOperations.Stop();
             //BubblePaste.PasteOperations.Tick -= BubblePaste.PasteOperations_Tick;
-            BubbleTextOps.PasteOperations.Dispose(); BubbleTextOps.PasteOperations = null;
+            StixTextOps.PasteOperations.Dispose(); StixTextOps.PasteOperations = null;
 
-            BubbleTextOps.PastedTopics.Clear(); BubbleTextOps.SelectedTopics.Clear();
+            StixTextOps.PastedTopics.Clear(); StixTextOps.SelectedTopics.Clear();
 
             DocumentStorage.Unsubscribe(this);
 
@@ -604,13 +604,13 @@ namespace Bubbles
 
         public static BubbleSnippets m_bubbleSnippets = null;
 
-        public static BubbleBookmarks m_Bookmarks;
+        public static StixBookmarks m_Bookmarks;
         public static BookmarkListDlg m_BookmarkList;
 
         public static ResourcesDlg m_Resources;
         public static LinksDlg m_AllSources;
 
-        public static BubbleTaskInfo m_TaskInfo;
+        public static StixTaskInfo m_TaskInfo;
 
         public static Organizer.NotesDlg m_Notes;
 

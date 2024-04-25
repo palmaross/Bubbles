@@ -38,7 +38,7 @@ namespace Bubbles
             imageList1.Images.Add("excel", Image.FromFile(Utils.ImagesPath + "ms_excel.png"));
             imageList1.Images.Add("youtube", Image.FromFile(Utils.ImagesPath + "ms_youtube.png"));
             imageList1.Images.Add("video", Image.FromFile(Utils.ImagesPath + "ms_video.png"));
-            imageList1.Images.Add("chm", Image.FromFile(Utils.ImagesPath + "chm.png"));
+            imageList1.Images.Add("chm", Image.FromFile(Utils.ImagesPath + "ms_chm.png"));
 
             string ipath = Utils.m_dataPath + "IconDB\\";
             foreach (var item in Tools)
@@ -88,7 +88,7 @@ namespace Bubbles
             if (selectedItem != null)
             {
                 try {
-                    (ToolStix as BubbleTools).RunTool(selectedItem.Tag as ToolItem);
+                    (ToolStix as StixTools).RunTool(selectedItem.Tag as ToolItem);
                 } catch { }
             }
 

@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Bubbles
 {
-    internal partial class BubbleTools : Form
+    internal partial class StixTools : Form
     {
-        public BubbleTools(int ID, string _orientation, string stickname)
+        public StixTools(int ID, string _orientation, string stickname)
         {
             InitializeComponent();
 
@@ -44,10 +44,10 @@ namespace Bubbles
             TM_rename.Text = Utils.getString("button.rename");
             StixUtils.SetContextMenuImage(TM_rename, "edit.png");
 
-            TM_changeicon.Text = Utils.getString("mysources.contextmenu.changeicon");
+            TM_changeicon.Text = Utils.getString("tools.contextmenu.changeicon");
             StixUtils.SetContextMenuImage(TM_changeicon, "mm_project.ico");
 
-            TM_delete.Text = Utils.getString("float_icons.contextmenu.delete");
+            TM_delete.Text = Utils.getString("button.delete");
             StixUtils.SetContextMenuImage(TM_delete, "deleteall.png");
 
             PopulateManageCMS();
@@ -56,21 +56,8 @@ namespace Bubbles
             cmsTool.ItemClicked += ContextMenuTool_ItemClicked;
             cmsManage.ItemClicked += ContextMenuManage_ItemClicked;
             ////////////////// end Context menu
-            
-            audio = Image.FromFile(Utils.ImagesPath + "ms_audio.png");
-            excel = Image.FromFile(Utils.ImagesPath + "ms_excel.png");
-            exe = Image.FromFile(Utils.ImagesPath + "ms_exe.png");
-            file = Image.FromFile(Utils.ImagesPath + "ms_file.png");
-            image = Image.FromFile(Utils.ImagesPath + "ms_img.png");
-            macros = Image.FromFile(Utils.ImagesPath + "ms_macros.png");
-            map = Image.FromFile(Utils.ImagesPath + "ms_map.png");
-            pdf = Image.FromFile(Utils.ImagesPath + "ms_pdf.png");
-            txt = Image.FromFile(Utils.ImagesPath + "ms_txt.png");
-            video = Image.FromFile(Utils.ImagesPath + "ms_video.png");
-            http = Image.FromFile(Utils.ImagesPath + "ms_web.png");
-            word = Image.FromFile(Utils.ImagesPath + "ms_word.png");
-            youtube = Image.FromFile(Utils.ImagesPath + "ms_youtube.png");
-            chm = Image.FromFile(Utils.ImagesPath + "chm.png");
+
+            Utils.InitIcons();
 
             using (StixDB db = new StixDB())
             {
@@ -319,7 +306,7 @@ namespace Bubbles
                 string name = StixUtils.GetName(this, orientation, StixUtils.typestick, "");
                 if (name != "")
                 {
-                    BubbleTools form = new BubbleTools(0, orientation, name);
+                    StixTools form = new StixTools(0, orientation, name);
                     StixUtils.CreateStick(form, name, StixUtils.typetools);
                 }
             }
@@ -364,7 +351,7 @@ namespace Bubbles
             }
 
             if (type == "")
-                type = GetFileType(toolPath);
+                type = Utils.GetFileType(toolPath);
 
             ToolItem item = new ToolItem(toolTitle, toolPath, type, order);
             using (StixDB db = new StixDB())
@@ -375,42 +362,6 @@ namespace Bubbles
                 Tools[i].Order = i + 1;
 
             RefreshStick();
-        }
-
-        public static string GetFileType(string path)
-        {
-            string ext = Path.GetExtension(path).ToLower();
-
-            if (path.ToLower().StartsWith("http"))
-            {
-                if (path.ToLower().Contains("youtube.com"))
-                    return "youtube";
-                return "http";
-            }
-            else if (Audio.Contains(ext))
-                return "audio";
-            else if (Video.Contains(ext))
-                return "video";
-            else if (Word.Contains(ext))
-                return "word";
-            else if (Excel.Contains(ext))
-                return "excel";
-            else if (Images.Contains(ext))
-                return "image";
-            else if (ext == ".exe")
-                return "exe";
-            else if (ext == ".mmbas")
-                return "macros";
-            else if (ext == ".mmap" || ext == ".mmat")
-                return "map";
-            else if (ext == ".pdf")
-                return "pdf";
-            else if (ext == ".txt")
-                return "txt";
-            else if (ext == ".chm")
-                return "chm";
-            else
-                return "file";
         }
 
         private void ToolList_Click(object sender, EventArgs e)
@@ -626,8 +577,6 @@ namespace Bubbles
 
         string position; 
 
-        public static Image audio, excel, exe, file, image, macros, map, pdf, txt, video, http, word, youtube, chm;
-
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
@@ -636,12 +585,6 @@ namespace Bubbles
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
-
-        public static readonly List<string> Images = new List<string> { ".jpg", ".jpeg", ".jpe", ".bmp", ".gif", ".png", ".ico" };
-        public static readonly List<string> Audio = new List<string> { ".aiff", ".au", ".midi", ".mp3", ".m4a", ".wav", ".wma" };
-        public static readonly List<string> Video = new List<string> { ".asf", ".avi", ".mp4", ".mov", ".m4v", ".mpg", ".mpeg", ".wmv" };
-        public static readonly List<string> Word = new List<string> { ".doc", ".docm", ".docx", ".rtf" };
-        public static readonly List<string> Excel = new List<string> { ".xls", ".xlsx", ".xlsm" };
     }
 
     public class ToolItem

@@ -13,9 +13,9 @@ using System.Runtime.InteropServices;
 
 namespace Bubbles
 {
-    internal partial class BubbleFormat : Form
+    internal partial class StixFormat : Form
     {
-        public BubbleFormat(int ID, string _orientation, string stickname)
+        public StixFormat(int ID, string _orientation, string stickname)
         {
             InitializeComponent();
 

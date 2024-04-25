@@ -89,25 +89,25 @@ namespace Bubbles
                     (stix as StixBase).ScaleStick(ScaleFactor, SF_Stix);
                     break;
                 case StixUtils.typeicons:
-                    (stix as BubbleIcons).ScaleStick(ScaleFactor, SF_Stix);
+                    (stix as StixIcons).ScaleStick(ScaleFactor, SF_Stix);
                     break;
                 case StixUtils.typetaskinfo:
-                    (stix as BubbleTaskInfo).ScaleStick(ScaleFactor, SF_Stix);
+                    (stix as StixTaskInfo).ScaleStick(ScaleFactor, SF_Stix);
                     break;
                 case StixUtils.typeaddtopic:
-                    (stix as BubbleAddTopic).ScaleStick(ScaleFactor, SF_Stix);
+                    (stix as StixAddTopic).ScaleStick(ScaleFactor, SF_Stix);
                     break;
                 case StixUtils.typeformat:
-                    (stix as BubbleFormat).ScaleStick(ScaleFactor, SF_Stix);
+                    (stix as StixFormat).ScaleStick(ScaleFactor, SF_Stix);
                     break;
                 case StixUtils.typetools:
-                    (stix as BubbleTools).ScaleStick(ScaleFactor, SF_Stix);
+                    (stix as StixTools).ScaleStick(ScaleFactor, SF_Stix);
                     break;
                 case StixUtils.typebookmarks:
-                    (stix as BubbleBookmarks).ScaleStick(ScaleFactor, SF_Stix);
+                    (stix as StixBookmarks).ScaleStick(ScaleFactor, SF_Stix);
                     break;
                 case StixUtils.typetextops:
-                    (stix as BubbleTextOps).ScaleStick(ScaleFactor, SF_Stix);
+                    (stix as StixTextOps).ScaleStick(ScaleFactor, SF_Stix);
                     break;
             }
 

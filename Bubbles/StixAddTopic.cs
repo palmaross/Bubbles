@@ -12,9 +12,9 @@ using Color = System.Drawing.Color;
 
 namespace Bubbles
 {
-    internal partial class BubbleAddTopic : Form
+    internal partial class StixAddTopic : Form
     {
-        public BubbleAddTopic(int ID, string _orientation, string stickname)
+        public StixAddTopic(int ID, string _orientation, string stickname)
         {
             InitializeComponent();
 

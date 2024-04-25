@@ -154,7 +154,7 @@ namespace Organizer
 
             string fileName = "stock" + Path.GetFileNameWithoutExtension(iconPath);
 
-            if (BubbleIcons.StockIconFromString(fileName) == 0) // кастомная иконка, сохраним файл в нашей базе
+            if (StixIcons.StockIconFromString(fileName) == 0) // кастомная иконка, сохраним файл в нашей базе
             {
                 fileName = Path.GetFileName(iconPath);
                 if (!File.Exists(Utils.m_dataPath + "IconDB\\" + fileName))
@@ -228,7 +228,7 @@ namespace Organizer
                 string fileName = "stock" + Path.GetFileNameWithoutExtension(path);
                 string name = fileName;
 
-                if (BubbleIcons.StockIconFromString(fileName) == 0) // кастомная иконка, сохраним файл в нашей базе
+                if (StixIcons.StockIconFromString(fileName) == 0) // кастомная иконка, сохраним файл в нашей базе
                 {
                     fileName = Path.GetFileName(path);
                     if (!File.Exists(Utils.m_dataPath + "IconDB\\" + fileName))
@@ -236,7 +236,7 @@ namespace Organizer
                 }
 
                 if (filenames.Contains(fileName))
-                { MessageBox.Show(Utils.getString("float_icons.iconexists")); return; }
+                { MessageBox.Show(Utils.getString("stix.iconexists")); return; }
 
                 target.Image = Image.FromFile(path);
                 filenames.Add(fileName);

@@ -294,7 +294,6 @@
             // btnBrowse
             // 
             this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowse.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnBrowse.Location = new System.Drawing.Point(317, 347);
             this.btnBrowse.Name = "btnBrowse";
             this.btnBrowse.Size = new System.Drawing.Size(30, 23);

@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace Bubbles
 {
-    internal partial class BubbleOrganizer : Form
+    internal partial class StixOrganizer : Form
     {
-        public BubbleOrganizer(int ID, string _orientation, string stickname)
+        public StixOrganizer(int ID, string _orientation, string stickname)
         {
             InitializeComponent();
 
