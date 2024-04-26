@@ -131,6 +131,9 @@
     <Compile Include="LinkBox\LinksDlg.Designer.cs">
       <DependentUpon>LinksDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="LinkBox\MyDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="LinkBox\NewLinkDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -400,9 +403,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\check.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\chm.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\close.png">

@@ -39,12 +39,14 @@ namespace Bubbles
             );
         }
 
-        public void AddLink(string title, string path, string type, int groupID)
+        public void AddLink(string title, string path, string type, string state, string comment, int groupID)
         {
             m_db.ExecuteNonQuery("insert into LINKS values(`"
                 + title + "`, `"
                 + path + "`, `"
-                + type + "`, "
+                + type + "`, `"
+                + state + "`, `"
+                + comment + "`, "
                 + groupID + ", "
                 + "'', '', 0, 0"
                 + ");"
@@ -184,7 +186,8 @@ namespace Bubbles
                 "name text, parentID int, _order int, " +
                 "reserved1 text, reserved2 integer);");
 
-            m_db.ExecuteNonQuery("CREATE TABLE LINKS(title text, path text, type text, groupID int, " +
+            m_db.ExecuteNonQuery("CREATE TABLE LINKS(title text, path text, type text, " +
+                "state text, comment text, groupID int, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
 
             m_db.ExecuteNonQuery("CREATE TABLE TOOLS(title text, path text, type text, _order integer, stickID int, " +
@@ -258,12 +261,12 @@ namespace Bubbles
             }
 #else
             {
-                AddLink(Utils.getString("links.first1.text"), "https://palmaross.com/", "http", groupID);
+            AddLink(Utils.getString("links.first1.text"), "https://palmaross.com/", "http", "", "", groupID);
             AddTool(Utils.getString("links.first1.text"), "https://palmaross.com/", "http", 1, id);
             }
 #endif
 
-            AddLink(Utils.getString("links.first2.text"), Utils.dllPath + "OmniStix.chm", "chm", groupID);
+            AddLink(Utils.getString("links.first2.text"), Utils.dllPath + "OmniStix.chm", "chm", "", "", groupID);
             AddTool(Utils.getString("links.first2.text"), Utils.dllPath + "OmniStix.chm", "chm", 2, id);
             AddTool(Utils.getString("links.first3.text"), "c:\\Windows\\System32\\notepad.exe", "tool-notepad.png", 3, id);
             
@@ -275,7 +278,7 @@ namespace Bubbles
             AddLinkGroup("Group 1.1", groupID, 1);
             AddLinkGroup("Group 1.2", groupID, 2);
 
-            AddLink(Utils.getString("mysources.first2.text"), "https://www.youtube.com/watch?v=Z1i9pS-0xbc", "youtube", groupID);
+            AddLink(Utils.getString("links.first4.text"), "https://www.youtube.com/watch?v=U92A8H2rK2I", "youtube", "", "", groupID);
 
             // Add Bookmarks stick
             id = r.Next();

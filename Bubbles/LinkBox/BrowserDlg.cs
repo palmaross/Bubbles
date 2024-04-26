@@ -185,6 +185,22 @@ namespace Bubbles
                 txtAddressBar.Text = ((BrowserTab)tabControl1.SelectedTab.Tag).path;
         }
 
+        private void btnSaveLink_Click(object sender, EventArgs e)
+        {
+            if (StixButton.m_NewLink == null || StixButton.m_NewLink.IsDisposed)
+            {
+                StixButton.m_NewLink = new NewLinkDlg();
+                StixButton.m_NewLink.OmniBrowser = this;
+                StixButton.m_NewLink.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            }
+
+            StixButton.m_NewLink.from = "OmniBrowser";
+            StixButton.m_NewLink.newLink = true;
+            StixButton.m_NewLink.txtLink.Text = txtAddressBar.Text;
+            StixButton.m_NewLink.txtTitle.Text = tabControl1.SelectedTab.Text;
+            StixButton.m_NewLink.txtLink_KeyUp(null, null);
+        }
+
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();

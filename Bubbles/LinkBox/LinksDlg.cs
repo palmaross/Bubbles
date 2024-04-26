@@ -4,11 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.IO;
-using System.Net.Http;
 using System.Windows.Forms;
-using System.Xml;
-using HtmlAgilityPack;
 
 namespace Bubbles
 {
@@ -26,13 +22,6 @@ namespace Bubbles
             lblOpenIn.Text = Utils.getString("LinksDlg.lblOpenIn");
             rbtnOmniBrowser.Text = Utils.getString("LinksDlg.rbtnOmniBrowser");
             rbtnExternalApp.Text = Utils.getString("LinksDlg.rbtnExternalApp");
-
-            // New Link panel
-            lblTitle.Text = Utils.getString("LinksDlg.LinkTitle");
-            lblLink.Text = Utils.getString("LinksDlg.lblLink");
-            lblWait.Text = Utils.getString("LinksDlg.lblWait");
-            cbDownload.Text = Utils.getString("LinksDlg.cbDownload");
-            btnClose.Text = Utils.getString("button.close");
 
             m_OpenLink.Text = Utils.getString("LinksDlg.btnOpen");
             m_OpenInOmniBrowser.Text = Utils.getString("LinksDlg.omnibrowser");
@@ -52,26 +41,19 @@ namespace Bubbles
             cmsGroup.ItemClicked += ContextMenu_ItemClicked;
 
             LinkImage.Width = (int)(pSize.Width * 1.5); // link type icon
+            //Processed.Width = (int)(pSize.Width * 1.5); // processed checkbox
 
-            this.MinimumSize = new Size(panelModify.Width, panelModify.Height);
-
-            //panelModify.Location = new Point(panelModify.Location.X, panelModify.Location.Y);
+            this.MinimumSize = new Size(this.Width / 2, this.Height / 2);
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
             this.ResizeRedraw = true;
 
             dataGridView1.CellMouseClick += DataGridView1_CellMouseClick;
-            //this.ResizeEnd += AllSourcesDlg_ResizeEnd;
+            //dataGridView1.Columns[0].CellTemplate = new MyDataGridViewImageCell();
 
             Utils.InitIcons();
             Init();
-        }
-
-        private void AllSourcesDlg_ResizeEnd(object sender, EventArgs e)
-        {
-            LinkImage.Width = (int)(pSize.Width * 1.5); // map type icon
-            LinkTitle.Width = (int)(dataGridView1.Width / 1.85);
         }
 
         void Init()
@@ -82,7 +64,7 @@ namespace Bubbles
         void PopulateGroups()
         {
             treeView1.Nodes.Clear();
-            TreeNode root = new TreeNode(Utils.getString("LinksDlg.AllGroups")); 
+            TreeNode root = new TreeNode(Utils.getString("LinksDlg.AllGroups"));
             root.Tag = 0; treeView1.Nodes.Add(root);
             db = new StixDB();
 
@@ -107,7 +89,7 @@ namespace Bubbles
         {
             int parent = Convert.ToInt32(node.Tag); // Tag = link id
 
-            DataTable dt = db.ExecuteQuery("select * from LINKGROUPS where parentID=" + parent + 
+            DataTable dt = db.ExecuteQuery("select * from LINKGROUPS where parentID=" + parent +
                 " order by _order");
 
             foreach (DataRow dr in dt.Rows)
@@ -118,7 +100,7 @@ namespace Bubbles
             }
         }
 
-        private void AddToTable(string title, string path, string groupName, int groupID)
+        public void AddToTable(string title, string path, string groupName, int groupID)
         {
             string imageType = Utils.GetFileType(path);
             Image img = null;
@@ -153,7 +135,7 @@ namespace Bubbles
             row.Cells["LinkPath"].Value = path;
             row.Cells["GroupID"].Value = groupID;
             row.Cells["SortByImage"].Value = imageType;
-        }        
+        }
 
         private void ContextMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
@@ -178,7 +160,7 @@ namespace Bubbles
                 txtEditNode.Location = new Point(m_editNode.Bounds.X, m_editNode.Bounds.Y);
                 txtEditNode.Size = new Size(treeView1.Width - m_editNode.Bounds.X - pSize.Width, txtEditNode.Height);
                 txtEditNode.Visible = true; txtEditNode.Focus();
-                txtEditNode.Text = Utils.getString("LinksDlg.NewGroup"); 
+                txtEditNode.Text = Utils.getString("LinksDlg.NewGroup");
                 txtEditNode.SelectAll();
                 m_editMode = false; // "new group" mode
             }
@@ -194,7 +176,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "g_DeleteGroup")
             {
-                if (MessageBox.Show(Utils.getString("LinksDlg.deletegroup"), "", 
+                if (MessageBox.Show(Utils.getString("LinksDlg.deletegroup"), "",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     int groupID = (int)treeView1.SelectedNode.Tag;
@@ -211,42 +193,50 @@ namespace Bubbles
                     }
 
                     treeView1.SelectedNode.Remove();
+
+                    if (StixButton.m_NewLink != null && !StixButton.m_NewLink.IsDisposed)
+                        StixButton.m_NewLink.FillGroups();
                 }
             }
-            else if (e.ClickedItem.Name == "g_AddLink")
+            else if (e.ClickedItem.Name == "g_AddLink" || e.ClickedItem.Name == "m_NewLink" || e.ClickedItem.Name == "m_Modify")
             {
-                panelModify.Location = new Point(
-                    (this.Width - panelModify.Width) / 2,
-                    (this.Height - panelModify.Height) / 2);
+                if (StixButton.m_NewLink == null || StixButton.m_NewLink.IsDisposed)
+                {
+                    StixButton.m_NewLink = new NewLinkDlg();
+                    StixButton.m_NewLink.LinksDialog = this;
+                    StixButton.m_NewLink.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                }
 
-                txtLink2.Text = ""; txtTitle.Text = "";
-                panelModify.Visible = true;
-                panelModify.Tag = "new";
-            }
-            else if (e.ClickedItem.Name == "m_NewLink")
-            {
-                panelModify.Location = new Point(
-                    (this.Width - panelModify.Width) / 2,
-                    (this.Height - panelModify.Height) / 2);
+                StixButton.m_NewLink.from = "LinksDlg";
+                StixButton.m_NewLink.newLink = true;
 
-                txtLink2.Text = ""; txtTitle.Text = "";
-                panelModify.Visible = true;
-                panelModify.Tag = "new";
+                int groupID = 1;
+                if (e.ClickedItem.Name == "g_AddLink")
+                    groupID = (int)selectedNode.Tag;
+                else if (dataGridView1.Rows.Count > 0)
+                    groupID = (int)dataGridView1.Rows[0].Cells["GroupID"].Value;
+
+                StixButton.m_NewLink.SelectGroup(groupID);
+
+                if (e.ClickedItem.Name != "g_AddLink")
+                {
+                    selectedRow = dataGridView1.SelectedRows[0];
+
+                    if (e.ClickedItem.Name == "m_Modify")
+                    {
+                        StixButton.m_NewLink.newLink = false;
+                        StixButton.m_NewLink.txtLink.Text = (string)selectedRow.Cells["LinkPath"].Value;
+                        StixButton.m_NewLink.txtTitle.Text = (string)selectedRow.Cells["LinkTitle"].Value;
+                    }
+                }
             }
-            else if(e.ClickedItem.Name == "m_OpenLink")
+            else if (e.ClickedItem.Name == "m_OpenLink")
             {
                 OpenLink(false);
             }
             else if (e.ClickedItem.Name == "m_OpenInOmniBrowser")
             {
                 OpenLink(true);
-            }
-            else if (e.ClickedItem.Name == "m_Modify")
-            {
-                selectedRow = dataGridView1.SelectedRows[0];
-
-                panelModify.Visible = true;
-                panelModify.Tag = "edit";
             }
             else if (e.ClickedItem.Name == "m_Delete")
             {
@@ -269,8 +259,6 @@ namespace Bubbles
                         }
                     }
                 }
-
-                panelModify.Visible = false;
             }
         }
 
@@ -283,9 +271,11 @@ namespace Bubbles
             {
                 foreach (DataGridViewRow row in dataGridView1.SelectedRows)
                 {
-                    try {
+                    try
+                    {
                         System.Diagnostics.Process.Start(row.Cells["LinkPath"].Value.ToString());
-                    } catch { }
+                    }
+                    catch { }
                 }
                 return;
             }
@@ -295,12 +285,14 @@ namespace Bubbles
                 string path = row.Cells["LinkPath"].Value.ToString();
                 string lpath = path.ToLower();
 
-                if (!lpath.StartsWith("http") && !lpath.StartsWith("www") && !lpath.EndsWith(".pdf") && 
+                if (!lpath.StartsWith("http") && !lpath.StartsWith("www") && !lpath.EndsWith(".pdf") &&
                     !lpath.EndsWith(".htm") && !lpath.EndsWith(".html"))
                 {
-                    try {
+                    try
+                    {
                         System.Diagnostics.Process.Start(path);
-                    } catch { }
+                    }
+                    catch { }
 
                     continue;
                 }
@@ -343,6 +335,9 @@ namespace Bubbles
                 e.SuppressKeyPress = true;
 
                 AcceptAddEditNode();
+
+                if (StixButton.m_NewLink != null && !StixButton.m_NewLink.IsDisposed)
+                    StixButton.m_NewLink.FillGroups();
             }
             else if (e.KeyCode == Keys.Escape)
             {
@@ -371,7 +366,7 @@ namespace Bubbles
                 }
                 else if (m_editMode) // edit group
                 {
-                    _db.ExecuteNonQuery("update LINKGROUPS set name=`" + name + 
+                    _db.ExecuteNonQuery("update LINKGROUPS set name=`" + name +
                         "` where name = `" + m_editNode.Text + "`");
 
                     txtEditNode.Visible = false;
@@ -397,192 +392,7 @@ namespace Bubbles
                     txtEditNode.Visible = false;
                     m_editNode.Text = name;
                 }
-            }     
-        }
-
-        private void btnPreview_Click(object sender, EventArgs e)
-        {
-            if (htmlDoc == null) return;
-
-            string link = txtLink2.Text.Trim();
-            string title = txtTitle.Text.Trim();
-
-            Random r = new Random(); 
-            string filename = r.Next().ToString() + ".html";
-
-            string filepath = Utils.m_localDataPath + filename;
-            htmlDoc.Save(filepath);
-
-            if (OmniBrowser == null || OmniBrowser.IsDisposed)
-            {
-                OmniBrowser = new BrowserDlg("");
-                //OmniBrowser.txtAddressBar.Text = filepath;
-                OmniBrowser.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
-
-            OmniBrowser.Preview(filepath);
-        }
-
-        /// <summary>Create/Modify link.</summary>
-        private void btnOK_Click(object sender, EventArgs e)
-        {
-            string link = txtLink2.Text.Trim();
-            string title = txtTitle.Text.Trim();
-
-            if (link == "" || title == "") return; // to do message to user
-
-            // Download webpage.
-            if (cbDownload.Checked)
-            {
-                string titlevalid = string.Concat(title.Split(Path.GetInvalidFileNameChars()));
-                if (titlevalid.Length > 50) titlevalid = titlevalid.Substring(0, 50);
-
-                saveFileDialog1.DefaultExt = "html";
-                saveFileDialog1.AddExtension = true;
-                saveFileDialog1.FileName = titlevalid + ".html";
-                saveFileDialog1.Filter = "Webpage | *.html";
-                if (saveFileDialog1.ShowDialog() == DialogResult.Cancel)
-                    return;
-
-                InitializeWebView3Async(title, link, saveFileDialog1.FileName);
-            }
-            else
-                SaveNewLink(title, link);
-        }
-
-        void SaveNewLink(string title, string link)
-        {
-            int groupID = (int)selectedNode.Tag;
-            string type = Utils.GetFileType(link);
-
-            using (StixDB _db = new StixDB())
-            {
-                DataTable dt = _db.ExecuteQuery("select * from LINKS " +
-                    "where groupID=" + groupID + " and path=`" + link + "`");
-
-                if (dt.Rows.Count > 0) return; // to do message to user
-
-                if (panelModify.Tag.ToString() == "new")
-                {
-                    if (groupID == 0) return;
-
-                    AddToTable(title, link, selectedNode.Text, groupID);
-                    _db.AddLink(title, link, type, groupID);
-                }
-                else if (panelModify.Tag.ToString() == "edit")
-                {
-                    if (groupID == 0) // "All Links" group selected. Get link group id from link itself
-                        groupID = (int)dataGridView1.SelectedRows[0].Cells["GroupID"].Value;
-
-                    // Modify in the table
-                    dataGridView1.SelectedRows[0].Cells["LinkTitle"].Value = title;
-                    dataGridView1.SelectedRows[0].Cells["LinkPath"].Value = link;
-                    txtLink.Text = link;
-
-                    // Update in the database
-                    _db.ExecuteNonQuery("update LINKS set" +
-                        "title=`" + title + "`, path=`" + link + "`");
-                }
-            }
-        }
-
-        private async void InitializeWebView3Async(string title, string url, string file)
-        {
-            if (true)
-            {
-                HtmlWeb web = new HtmlWeb();
-
-                var htmlDoc = web.Load(url);
-                htmlDoc.Save(file);
-
-                //title = htmlDoc.DocumentNode.SelectSingleNode("//head/title").InnerText;
-            }
-            else
-            {
-                HttpClient client = new HttpClient();
-                string webpage = await client.GetStringAsync(url);
-
-                // Add source url.
-                string body = "<body>";
-                int i = webpage.IndexOf(body);
-                if (i == -1)
-                {
-                    i = webpage.IndexOf("<BODY>");
-                    body = "<BODY>";
-                }
-                if (i > 0)
-                {
-                    string source = "<body><p><a href='" + url + "'>Source</a></p>";
-                    webpage = webpage.Replace(body, source);
-                }
-
-                File.WriteAllText(file, webpage);
-            }
-
-            SaveNewLink(title, file);
-        }
-
-        private void txtLink2_KeyUp(object sender, KeyEventArgs e)
-        {
-            string link = txtLink2.Text.Trim();
-            if (link == "") return;
-            string title = "";
-
-            if (link.StartsWith("http"))
-            {
-                lblWait.Visible = true;
-                HtmlWeb web = new HtmlWeb();
-                htmlDoc = web.Load(link);
-
-                title = htmlDoc.DocumentNode.SelectSingleNode("//head/title").InnerText;
-                lblWait.Visible = false;
-
-                // Add source url.
-                HtmlNode bodyNode = htmlDoc.DocumentNode.SelectSingleNode("//html/body");
-
-                string html = bodyNode.InnerHtml;
-                html = "<div style='border: 2px double blue; padding: 6px 6px 0 6px;'><p>Source: <a href='" + link + "' target='_blank'>" + title + "</a></p></div>" + html;
-                bodyNode.InnerHtml = html;
-
-                //string body = "<body>";
-
-                //int i = html.IndexOf(body);
-                //if (i == -1) { i = html.IndexOf("<body >"); body = "<BODY>"; }
-                //if (i == -1) { i = html.IndexOf("<BODY>"); body = "<BODY>"; }
-                //if (i > 0)
-                //{
-                //    string source = "<body><p><a href='" + link + "'>Source</a></p>";
-                //    htmlDoc.Text = html.Replace(body, source);
-                //}
-
-                grBoxDownload.Visible = true;
-
-                //htmlDoc.Save(file);
-            }
-            else // file
-            {
-                grBoxDownload.Visible = false;
-
-                try { title = Path.GetFileName(link); }
-                catch { }
-            }
-
-            if (!String.IsNullOrEmpty(title))
-                txtTitle.Text = title;
-
-            e.Handled = true; // to avoid the "ding" sound
-            e.SuppressKeyPress = true;
-        }
-
-        private void txtLink2_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            txtLink2.SelectAll();
-        }
-
-        /// <summary>Cancel modify source</summary>
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            panelModify.Visible = false;
         }
 
         /// <summary>
@@ -642,7 +452,14 @@ namespace Bubbles
 
             if (e.Button == MouseButtons.Left)
             {
+                //if (selectedState != null)
+                //{
+                //    dataGridView1.Rows[i].Selected = false;
+                //    foreach (DataGridViewRow row in selectedState)
+                //        row.Selected = true;
 
+                //    selectedState = null;
+                //}
             }
             if (e.Button == MouseButtons.Right)
             {
@@ -750,8 +567,8 @@ namespace Bubbles
                         linkGroup);
                 }
             }
-            if (dataGridView1.Rows.Count > 0) 
-            { 
+            if (dataGridView1.Rows.Count > 0)
+            {
                 dataGridView1.Rows[0].Selected = true;
                 dataGridView1_SelectionChanged(null, null);
             }
@@ -1030,7 +847,7 @@ namespace Bubbles
                     {
                         // Update parentID of dragged node.
                         _db.ExecuteNonQuery("update LINKGROUPS set parentID=" + parentID + " where id=" + (int)m_dragNode.Tag + "");
-                        
+
                         TreeNodeCollection tnc = treeView1.Nodes;
 
                         if (exParent != null)
@@ -1087,7 +904,7 @@ namespace Bubbles
                         if (e.Effect == DragDropEffects.Copy)
                         {
                             _db.AddLink((string)row.Cells["LinkTitle"].Value, path,
-                                (string)row.Cells["LinkType"].Value, groupID);
+                                (string)row.Cells["LinkType"].Value, "", "", groupID);
                         }
                         // MOVE selected node to selected group.
                         if (e.Effect == DragDropEffects.Move)
@@ -1117,6 +934,15 @@ namespace Bubbles
         }
         #endregion
 
+        private void dataGridView1_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            //if (e.ColumnIndex == 1)
+            //{
+            //    selectedState = dataGridView1.SelectedRows;
+            //}
+        }
+        DataGridViewSelectedRowCollection selectedState;
+
         private void dataGridView1_MouseMove(object sender, MouseEventArgs e)
         {
             if (selectedRows == null || selectedRows.Count == 0) return;
@@ -1124,13 +950,15 @@ namespace Bubbles
             if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
             {
                 // Rows are deselected with mousedown. But we need selected rows remain selected.
-                try {
+                try
+                {
                     foreach (DataGridViewRow row in selectedRows)
                     {
-                        if (!row.Selected) 
+                        if (!row.Selected)
                             row.Selected = true;
                     }
-                } catch { }
+                }
+                catch { }
 
                 // Proceed with the drag and drop, passing in the list item.
                 if (ModifierKeys == Keys.Control)
@@ -1205,6 +1033,19 @@ namespace Bubbles
                 CompareResult *= sortOrderModifier; // to have always ascending sort order in this column
             }
             return CompareResult * sortOrderModifier;
+        }
+    }
+
+    class MyDataGridViewImageCell : DataGridViewImageCell
+    {
+        protected override void Paint(Graphics graphics, Rectangle clipBounds, Rectangle cellBounds, int rowIndex,
+            DataGridViewElementStates cellState, object value, object formattedValue, string errorText,
+            DataGridViewCellStyle cellStyle, DataGridViewAdvancedBorderStyle advancedBorderStyle, DataGridViewPaintParts paintParts)
+        {
+            cellStyle.BackColor = Color.White;
+
+            base.Paint(graphics, clipBounds, cellBounds, rowIndex, cellState, value,
+                formattedValue, errorText, cellStyle, advancedBorderStyle, paintParts);
         }
     }
 }

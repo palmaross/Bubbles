@@ -123,6 +123,9 @@
     <Compile Include="AppManager\StixDB.cs" />
     <Compile Include="AppManager\SticksMoreDB.cs" />
     <Compile Include="AppManager\TransactionWrapper.cs" />
+    <Compile Include="LinkBox\MyDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="LinkBox\NewLinkDlg.cs">
       <SubType>Form</SubType>
     </Compile>

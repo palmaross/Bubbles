@@ -45,18 +45,6 @@
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnSaveLink = new System.Windows.Forms.Button();
-            this.panelModify = new System.Windows.Forms.Panel();
-            this.lblResult = new System.Windows.Forms.Label();
-            this.lblWait = new System.Windows.Forms.Label();
-            this.btnOK = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.txtLink2 = new System.Windows.Forms.TextBox();
-            this.lblLink = new System.Windows.Forms.Label();
-            this.txtTitle = new System.Windows.Forms.TextBox();
-            this.lblTitle = new System.Windows.Forms.Label();
-            this.grBoxDownload = new System.Windows.Forms.GroupBox();
-            this.btnPreview = new System.Windows.Forms.Button();
-            this.cbDownload = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pDraw)).BeginInit();
@@ -64,8 +52,6 @@
             this.cmsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pGoBack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pGoForward)).BeginInit();
-            this.panelModify.SuspendLayout();
-            this.grBoxDownload.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtAddressBar
@@ -100,7 +86,6 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage1.Controls.Add(this.panelModify);
             this.tabPage1.Controls.Add(this.pDraw);
             this.tabPage1.Controls.Add(this.pRemove);
             this.tabPage1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -214,133 +199,7 @@
             this.btnSaveLink.TabIndex = 13;
             this.btnSaveLink.Text = "Save Link";
             this.btnSaveLink.UseVisualStyleBackColor = true;
-            // 
-            // panelModify
-            // 
-            this.panelModify.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelModify.BackColor = System.Drawing.Color.SeaShell;
-            this.panelModify.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelModify.Controls.Add(this.lblResult);
-            this.panelModify.Controls.Add(this.lblWait);
-            this.panelModify.Controls.Add(this.btnOK);
-            this.panelModify.Controls.Add(this.button1);
-            this.panelModify.Controls.Add(this.txtLink2);
-            this.panelModify.Controls.Add(this.lblLink);
-            this.panelModify.Controls.Add(this.txtTitle);
-            this.panelModify.Controls.Add(this.lblTitle);
-            this.panelModify.Controls.Add(this.grBoxDownload);
-            this.panelModify.Location = new System.Drawing.Point(177, 74);
-            this.panelModify.Name = "panelModify";
-            this.panelModify.Size = new System.Drawing.Size(450, 202);
-            this.panelModify.TabIndex = 23;
-            this.panelModify.Visible = false;
-            // 
-            // lblResult
-            // 
-            this.lblResult.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblResult.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblResult.ForeColor = System.Drawing.Color.DarkGreen;
-            this.lblResult.Location = new System.Drawing.Point(91, 168);
-            this.lblResult.Name = "lblResult";
-            this.lblResult.Size = new System.Drawing.Size(265, 15);
-            this.lblResult.TabIndex = 23;
-            this.lblResult.Text = "Link added successfully";
-            this.lblResult.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.lblResult.Visible = false;
-            // 
-            // lblWait
-            // 
-            this.lblWait.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.lblWait.Location = new System.Drawing.Point(146, 41);
-            this.lblWait.Name = "lblWait";
-            this.lblWait.Size = new System.Drawing.Size(201, 13);
-            this.lblWait.TabIndex = 18;
-            this.lblWait.Text = "Wait...";
-            this.lblWait.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.lblWait.Visible = false;
-            // 
-            // btnOK
-            // 
-            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(10, 164);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 16;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(362, 164);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "Close";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // txtLink2
-            // 
-            this.txtLink2.Location = new System.Drawing.Point(72, 15);
-            this.txtLink2.Name = "txtLink2";
-            this.txtLink2.Size = new System.Drawing.Size(365, 20);
-            this.txtLink2.TabIndex = 13;
-            // 
-            // lblLink
-            // 
-            this.lblLink.AutoSize = true;
-            this.lblLink.Location = new System.Drawing.Point(9, 18);
-            this.lblLink.Name = "lblLink";
-            this.lblLink.Size = new System.Drawing.Size(30, 13);
-            this.lblLink.TabIndex = 12;
-            this.lblLink.Text = "Link:";
-            // 
-            // txtTitle
-            // 
-            this.txtTitle.Location = new System.Drawing.Point(72, 61);
-            this.txtTitle.Name = "txtTitle";
-            this.txtTitle.Size = new System.Drawing.Size(365, 20);
-            this.txtTitle.TabIndex = 11;
-            // 
-            // lblTitle
-            // 
-            this.lblTitle.AutoSize = true;
-            this.lblTitle.Location = new System.Drawing.Point(9, 64);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(30, 13);
-            this.lblTitle.TabIndex = 10;
-            this.lblTitle.Text = "Title:";
-            // 
-            // grBoxDownload
-            // 
-            this.grBoxDownload.Controls.Add(this.btnPreview);
-            this.grBoxDownload.Controls.Add(this.cbDownload);
-            this.grBoxDownload.Location = new System.Drawing.Point(72, 99);
-            this.grBoxDownload.Name = "grBoxDownload";
-            this.grBoxDownload.Size = new System.Drawing.Size(365, 52);
-            this.grBoxDownload.TabIndex = 24;
-            this.grBoxDownload.TabStop = false;
-            this.grBoxDownload.Text = "You can download page and add link to the downloaded file";
-            this.grBoxDownload.Visible = false;
-            // 
-            // btnPreview
-            // 
-            this.btnPreview.Location = new System.Drawing.Point(206, 20);
-            this.btnPreview.Name = "btnPreview";
-            this.btnPreview.Size = new System.Drawing.Size(108, 23);
-            this.btnPreview.TabIndex = 21;
-            this.btnPreview.Text = "Предпросмотр";
-            this.btnPreview.UseVisualStyleBackColor = true;
-            // 
-            // cbDownload
-            // 
-            this.cbDownload.AutoSize = true;
-            this.cbDownload.Location = new System.Drawing.Point(52, 23);
-            this.cbDownload.Name = "cbDownload";
-            this.cbDownload.Size = new System.Drawing.Size(116, 17);
-            this.cbDownload.TabIndex = 20;
-            this.cbDownload.Text = "Скачать страницу";
-            this.cbDownload.UseVisualStyleBackColor = true;
+            this.btnSaveLink.Click += new System.EventHandler(this.btnSaveLink_Click);
             // 
             // BrowserDlg
             // 
@@ -367,10 +226,6 @@
             this.cmsTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pGoBack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pGoForward)).EndInit();
-            this.panelModify.ResumeLayout(false);
-            this.panelModify.PerformLayout();
-            this.grBoxDownload.ResumeLayout(false);
-            this.grBoxDownload.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -392,17 +247,5 @@
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Button btnSaveLink;
-        private System.Windows.Forms.Panel panelModify;
-        private System.Windows.Forms.Label lblResult;
-        private System.Windows.Forms.Label lblWait;
-        private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox txtLink2;
-        private System.Windows.Forms.Label lblLink;
-        private System.Windows.Forms.TextBox txtTitle;
-        private System.Windows.Forms.Label lblTitle;
-        private System.Windows.Forms.GroupBox grBoxDownload;
-        private System.Windows.Forms.Button btnPreview;
-        private System.Windows.Forms.CheckBox cbDownload;
     }
 }

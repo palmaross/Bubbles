@@ -504,6 +504,13 @@ namespace Bubbles
                 m_BookmarkList = null;
             }
 
+            if (m_NewLink != null)
+            {
+                m_NewLink.Hide();
+                m_NewLink.Dispose();
+                m_NewLink = null;
+            }
+
             if (m_ReplaceDlg != null)
             {
                 m_ReplaceDlg.Hide();
@@ -606,6 +613,7 @@ namespace Bubbles
 
         public static StixBookmarks m_Bookmarks;
         public static BookmarkListDlg m_BookmarkList;
+        public static NewLinkDlg m_NewLink;
 
         public static ResourcesDlg m_Resources;
         public static LinksDlg m_AllSources;

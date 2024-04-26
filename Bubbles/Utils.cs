@@ -82,16 +82,19 @@ namespace Bubbles
 
                 m_iconDB = m_dataPath + "IconDB\\";
 
-                File.Copy(dllPath + "\\Images\\" + "hello1.png", m_dataPath + "ImageDB\\" + "hello1.png");
-                File.Copy(dllPath + "\\Images\\" + "pato.gif", m_dataPath + "ImageDB\\" + "pato.gif");
+                string from = dllPath + "\\Images\\", to = m_dataPath + "ImageDB\\";
+                if (!File.Exists(to + "hello1.png"))
+                    File.Copy(from + "hello1.png", to + "hello1.png");
+                if (!File.Exists(to + "pato.gif"))
+                    File.Copy(from + "pato.gif", to + "pato.gif");
 
-                string from = dllPath + "\\Images\\", to = m_dataPath + "IconDB\\";
-                File.Copy(from + "tool-calculator.png", to + "tool-calculator.png");
-                File.Copy(from + "tool-clock.png", to + "tool-clock.png");
-                File.Copy(from + "tool-navigation.png", to + "tool-navigation.png");
-                File.Copy(from + "tool-notepad.png", to + "tool-notepad.png");
-                File.Copy(from + "tool-saveall.png", to + "tool-saveall.png");
-                File.Copy(from + "tool-snipping.png", to + "tool-snipping.png");
+                to = m_dataPath + "IconDB\\";
+                File.Copy(from + "tool-calculator.png", to + "tool-calculator.png", true);
+                File.Copy(from + "tool-clock.png", to + "tool-clock.png", true);
+                File.Copy(from + "tool-navigation.png", to + "tool-navigation.png", true);
+                File.Copy(from + "tool-notepad.png", to + "tool-notepad.png", true);
+                File.Copy(from + "tool-saveall.png", to + "tool-saveall.png", true);
+                File.Copy(from + "tool-snipping.png", to + "tool-snipping.png", true);
             }
             catch { };
 
@@ -103,6 +106,10 @@ namespace Bubbles
                     CustomIcons.Add(signature, fi.FullName);
             }
             StockIconsDupes.Clear();
+
+            di = new DirectoryInfo(m_localDataPath);
+            foreach (FileInfo fi in di.GetFiles())
+                fi.Delete();
         }
 
         public static void InitIcons()

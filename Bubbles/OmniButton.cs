@@ -5,9 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 using Color = System.Drawing.Color;
 using Control = System.Windows.Forms.Control;
@@ -27,6 +25,7 @@ namespace Bubbles
             //this.MouseDown += Rounded_MouseDown;
             this.MouseHover += Rounded_MouseHover;
             OmniStix.MouseHover += Rounded_MouseHover;
+            OmniStix.BackColor = ColorTranslator.FromHtml("#69a642");
         }
 
         private void Rounded_MouseHover(object sender, EventArgs e)
