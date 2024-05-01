@@ -45,6 +45,7 @@
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnSaveLink = new System.Windows.Forms.Button();
+            this.pHelp = new System.Windows.Forms.PictureBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pDraw)).BeginInit();
@@ -52,6 +53,7 @@
             this.cmsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pGoBack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pGoForward)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pHelp)).BeginInit();
             this.SuspendLayout();
             // 
             // txtAddressBar
@@ -62,6 +64,7 @@
             this.txtAddressBar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.txtAddressBar.Location = new System.Drawing.Point(48, 8);
             this.txtAddressBar.Name = "txtAddressBar";
+            this.txtAddressBar.ReadOnly = true;
             this.txtAddressBar.Size = new System.Drawing.Size(761, 21);
             this.txtAddressBar.TabIndex = 6;
             this.txtAddressBar.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtAddressBar_KeyUp);
@@ -201,12 +204,25 @@
             this.btnSaveLink.UseVisualStyleBackColor = true;
             this.btnSaveLink.Click += new System.EventHandler(this.btnSaveLink_Click);
             // 
+            // pHelp
+            // 
+            this.pHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pHelp.Image = ((System.Drawing.Image)(resources.GetObject("pHelp.Image")));
+            this.pHelp.Location = new System.Drawing.Point(791, 9);
+            this.pHelp.Name = "pHelp";
+            this.pHelp.Size = new System.Drawing.Size(16, 16);
+            this.pHelp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pHelp.TabIndex = 14;
+            this.pHelp.TabStop = false;
+            this.pHelp.Click += new System.EventHandler(this.pHelp_Click);
+            // 
             // BrowserDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
             this.ClientSize = new System.Drawing.Size(813, 450);
+            this.Controls.Add(this.pHelp);
             this.Controls.Add(this.btnSaveLink);
             this.Controls.Add(this.pGoForward);
             this.Controls.Add(this.pGoBack);
@@ -215,6 +231,7 @@
             this.Controls.Add(this.btnAddSubtopic);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.txtAddressBar);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "BrowserDlg";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -226,6 +243,7 @@
             this.cmsTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pGoBack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pGoForward)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pHelp)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -247,5 +265,6 @@
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Button btnSaveLink;
+        private System.Windows.Forms.PictureBox pHelp;
     }
 }

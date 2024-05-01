@@ -22,6 +22,8 @@ namespace Bubbles
             lblOpenIn.Text = Utils.getString("LinksDlg.lblOpenIn");
             rbtnOmniBrowser.Text = Utils.getString("LinksDlg.rbtnOmniBrowser");
             rbtnExternalApp.Text = Utils.getString("LinksDlg.rbtnExternalApp");
+            btnSaveComment.Text = Utils.getString("button.save");
+            toolTip1.SetToolTip(btnSaveComment, Utils.getString("LinksDlg.btnSaveComment"));
 
             m_OpenLink.Text = Utils.getString("LinksDlg.btnOpen");
             m_OpenInOmniBrowser.Text = Utils.getString("LinksDlg.omnibrowser");
@@ -51,9 +53,15 @@ namespace Bubbles
 
             dataGridView1.CellMouseClick += DataGridView1_CellMouseClick;
             //dataGridView1.Columns[0].CellTemplate = new MyDataGridViewImageCell();
+            this.HelpButtonClicked += this_HelpButtonClicked;
 
             Utils.InitIcons();
             Init();
+        }
+
+        private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "LinksDlg.htm");
         }
 
         void Init()
@@ -100,7 +108,7 @@ namespace Bubbles
             }
         }
 
-        public void AddToTable(string title, string path, string groupName, int groupID)
+        public void AddToTable(string title, string path, string groupName, string comment, int groupID)
         {
             string imageType = Utils.GetFileType(path);
             Image img = null;
@@ -135,6 +143,7 @@ namespace Bubbles
             row.Cells["LinkPath"].Value = path;
             row.Cells["GroupID"].Value = groupID;
             row.Cells["SortByImage"].Value = imageType;
+            row.Cells["Comment"].Value = comment;
         }
 
         private void ContextMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -204,11 +213,19 @@ namespace Bubbles
                 {
                     StixButton.m_NewLink = new NewLinkDlg();
                     StixButton.m_NewLink.LinksDialog = this;
+
+                    StixButton.m_NewLink.Location = new Point(this.Right, this.Top);
+                    Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
+                    if (StixButton.m_NewLink.Right > area.Right) // close to the right
+                        StixButton.m_NewLink.Location = new Point(this.Left - StixButton.m_NewLink.Width, this.Top);
+
                     StixButton.m_NewLink.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                 }
 
                 StixButton.m_NewLink.from = "LinksDlg";
                 StixButton.m_NewLink.newLink = true;
+                StixButton.m_NewLink.txtLink.Text = "";
+                StixButton.m_NewLink.txtTitle.Text = "";
 
                 int groupID = 1;
                 if (e.ClickedItem.Name == "g_AddLink")
@@ -226,7 +243,14 @@ namespace Bubbles
                     {
                         StixButton.m_NewLink.newLink = false;
                         StixButton.m_NewLink.txtLink.Text = (string)selectedRow.Cells["LinkPath"].Value;
+                        StixButton.m_NewLink.txtLink_KeyUp(null, null);
                         StixButton.m_NewLink.txtTitle.Text = (string)selectedRow.Cells["LinkTitle"].Value;
+                        string comment = (string)selectedRow.Cells["Comment"].Value;
+                        if (!String.IsNullOrEmpty(comment))
+                        {
+                            StixButton.m_NewLink.txtComment.Text = (string)selectedRow.Cells["Comment"].Value;
+                            StixButton.m_NewLink.txtComment.ForeColor = SystemColors.WindowText;
+                        }
                     }
                 }
             }
@@ -267,53 +291,36 @@ namespace Bubbles
             if (dataGridView1.Rows.Count <= 0 || dataGridView1.SelectedRows.Count <= 0)
                 return;
 
-            if (!omniBrowser)
-            {
-                foreach (DataGridViewRow row in dataGridView1.SelectedRows)
-                {
-                    try
-                    {
-                        System.Diagnostics.Process.Start(row.Cells["LinkPath"].Value.ToString());
-                    }
-                    catch { }
-                }
-                return;
-            }
-
             foreach (DataGridViewRow row in dataGridView1.SelectedRows)
             {
                 string path = row.Cells["LinkPath"].Value.ToString();
                 string lpath = path.ToLower();
 
-                if (!lpath.StartsWith("http") && !lpath.StartsWith("www") && !lpath.EndsWith(".pdf") &&
-                    !lpath.EndsWith(".htm") && !lpath.EndsWith(".html"))
+                if (!omniBrowser || (!lpath.EndsWith(".htm") && !lpath.EndsWith(".html") &&
+                    !lpath.StartsWith("http") && !lpath.StartsWith("www") && !lpath.EndsWith(".pdf")))
                 {
                     try
                     {
                         System.Diagnostics.Process.Start(path);
                     }
                     catch { }
-
-                    continue;
                 }
-
-                // Open links in Omni Browser
-
-                if (OmniBrowser == null || OmniBrowser.IsDisposed)
+                else // Open links in Omni Browser
                 {
-                    OmniBrowser = new BrowserDlg(path);
-                    OmniBrowser.txtAddressBar.Text = path;
-                    OmniBrowser.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-                }
-                else
-                {
-                    OmniBrowser.txtAddressBar.Text = path;
-                    OmniBrowser.Navigate(true);
+                    if (OmniBrowser == null || OmniBrowser.IsDisposed)
+                    {
+                        OmniBrowser = new BrowserDlg(path);
+                        OmniBrowser.txtAddressBar.Text = path;
+                        OmniBrowser.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                    }
+                    else
+                    {
+                        OmniBrowser.txtAddressBar.Text = path;
+                        OmniBrowser.Navigate(true);
+                    }
                 }
             }
         }
-
-        List<string> LinksForOB = new List<string>();
 
         void GetGroupIds(TreeNode node, ref List<int> list)
         {
@@ -433,6 +440,8 @@ namespace Bubbles
 
                 if (item.Cells["LinkPath"].Value != null)
                     txtLink.Text = item.Cells["LinkPath"].Value.ToString();
+                if (item.Cells["Comment"].Value != null)
+                    txtComment.Text = item.Cells["Comment"].Value.ToString();
             }
         }
 
@@ -564,7 +573,7 @@ namespace Bubbles
                     int linkGroup = Convert.ToInt32(dr["groupID"]);
 
                     AddToTable(dr["title"].ToString(), dr["path"].ToString(), groups[linkGroup],
-                        linkGroup);
+                        dr["comment"].ToString(), linkGroup);
                 }
             }
             if (dataGridView1.Rows.Count > 0)
@@ -941,7 +950,25 @@ namespace Bubbles
             //    selectedState = dataGridView1.SelectedRows;
             //}
         }
-        DataGridViewSelectedRowCollection selectedState;
+
+        private void btnSaveComment_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count != 1) return;
+            var row = dataGridView1.SelectedRows[0];
+            if (row.Cells["GroupID"].Value == null || row.Cells["LinkPath"].Value == null) return;
+
+            string comment = txtComment.Text.Trim();
+            int groupID = (int)row.Cells["GroupID"].Value;
+            string path = (string)row.Cells["LinkPath"].Value;
+
+            using (StixDB _db = new StixDB())
+            {
+                _db.ExecuteNonQuery("update LINKS set comment=`" + comment +
+                    "` where path =`" + path + "` and groupID=`" + groupID + "`");
+            }
+
+            row.Cells["Comment"].Value = comment;
+        }
 
         private void dataGridView1_MouseMove(object sender, MouseEventArgs e)
         {

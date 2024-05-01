@@ -227,6 +227,9 @@ namespace Bubbles
             m_db.ExecuteNonQuery("CREATE TABLE TOPICWIDTHS(name text, chars int, _value int, _checked int," +
                 "reserved1 text, reserved2 integer);");
 
+            m_db.ExecuteNonQuery("CREATE TABLE OMNISOUNDS(filename text, mappath, topicguid text, " +
+                "reserved1 text, reserved2 integer);");
+
             m_db.ExecuteNonQuery("END");
 
             // Add Base stick

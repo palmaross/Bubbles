@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Data;
 using PopupControl;
 using System.Linq;
+using AppManager;
+using System.IO;
 
 namespace Bubbles
 {
@@ -19,14 +21,47 @@ namespace Bubbles
             if (m_bCreated)
                 return;
 
-            m_cmdDetachNotes = MMUtils.MindManager.Commands.Add(Utils.Registered_AddinName, "bubbles.detach_notes");
+            m_cmdDetachNotes = MMUtils.MindManager.Commands.Add(Utils.Registered_AddinName, "omnistix.detach_notes");
             m_cmdDetachNotes.Caption = Utils.getString("bubbles.notes.detach");
             m_cmdDetachNotes.UpdateState += new ICommandEvents_UpdateStateEventHandler(m_cmdDetachNotes_UpdateState);
             m_cmdDetachNotes.ImagePath = Utils.ImagesPath + "detach.png";
             m_cmdDetachNotes.Click += new ICommandEvents_ClickEventHandler(m_cmdDetachNotes_Click);
             m_cmdDetachNotes.SetDynamicMenu(MmDynamicMenu.mmDynamicMenuContextTopic);
 
+            m_menus = new DynamicMenus();
+
+            m_controlStrip = MMUtils.MindManager.ControlStripTypeRegistry.RegisterControlStripType(STRIP_URI, Utils.m_imagesPath + "audio.ico", false);
+            Controls _stripControls = m_controlStrip.ContextMenu;
+            m_controlStripCommand = MMUtils.MindManager.Commands.Add(Utils.Registered_AddinName, "omnistix.controlstrip.audiocommand");
+            m_controlStripCommand.UpdateState += new ICommandEvents_UpdateStateEventHandler(m_controlStripCommand_UpdateState);
+            m_controlStripCommand.Click += new ICommandEvents_ClickEventHandler(m_controlStripCommand_Click);
+            m_controlStrip.Command = m_controlStripCommand;
+
+            // Add buttons to strip context menu
+            m_menus.AddButton(_stripControls,
+                new SubMenuButtonData("omnistix.stripicon.stopplay",
+                    MMUtils.getString("omnistix.stripicon.stopplay.caption"),
+                    "",
+                    1),
+                    "", "", "",
+                    this);
+            m_menus.AddButton(_stripControls,
+                new SubMenuButtonData("omnistix.stripicon.playwithplayer",
+                    MMUtils.getString("omnistix.stripicon.playwithplayer.caption"),
+                    "",
+                    2),
+                    "", "", "",
+                    this);
+            m_menus.AddButton(_stripControls,
+                new SubMenuButtonData("omnistix.stripicon.remove",
+                    MMUtils.getString("button.remove"),
+                    "",
+                    4),
+                    "", "", "",
+                    this);
+
             m_bubbleSnippets = new BubbleSnippets();
+            m_OmniSound = new OmniSound();
             m_StixBase = new StixBase();
             STICKS.Add(0, m_StixBase);
             commandPopup.Tag = 0; // Tag is a stick ID
@@ -70,7 +105,7 @@ namespace Bubbles
                         m_StixBase.BaseIcon_MouseClick(m_StixBase.stxFormat, null);
                         break;
                     case StixUtils.typetools:
-                        m_StixBase.BaseIcon_MouseClick(m_StixBase.stxSources, null);
+                        m_StixBase.BaseIcon_MouseClick(m_StixBase.stxTools, null);
                         break;
                     case StixUtils.typebookmarks:
                         m_StixBase.BaseIcon_MouseClick(m_StixBase.stxBookmarks, null);
@@ -94,6 +129,49 @@ namespace Bubbles
             if (MMUtils.ActiveDocument != null)
                 onDocumentActivated(null);
         }
+
+        private void m_controlStripCommand_UpdateState(ref bool pEnabled, ref bool pChecked)
+        {
+            pEnabled = true;
+        }
+
+        private void m_controlStripCommand_Click()
+        {
+            Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
+            if (t == null) return;
+
+            if (m_OmniSound.play) // OmniPlayer is busy.
+            {
+                m_OmniSound.btnPlay_Click(null, null); // Stop playing.
+            }
+            else // Start playing.
+            {
+                string audioPath = t.GetAttributes(STRIP_URI).GetAttributeValue(AUDIO_PATH);
+                if (String.IsNullOrEmpty(audioPath)) return;
+
+                // Does file exist?
+                if (!File.Exists(audioPath))
+                {
+                    MessageBox.Show(String.Format(Utils.getString("OmniSound.filenotexists"), audioPath));
+                    return;
+                }
+
+                // Select topic record in OmniSound window
+                if (m_OmniSound.Visible)
+                {
+                    foreach (var item in m_OmniSound.cbRecords.Items)
+                    {
+                        if ((item as AudioItem).Path == audioPath)
+                            m_OmniSound.cbRecords.SelectedItem = item;
+                    }
+                }
+
+                m_OmniSound.FilePath = audioPath;
+                m_OmniSound.TopicGuid = t.Guid;
+                m_OmniSound.btnPlay_Click(null, null);
+            }
+        }
+        public const string AUDIO_PATH = "OMNIAUDIO_PATH";
 
         /// <summary>
         /// Hide command popup if cursor position is out of stick or popup bounds
@@ -218,20 +296,61 @@ namespace Bubbles
                 return;
             }
 
-            if (m_TaskInfo != null && m_TaskInfo.Visible)
+            if (aArgs.what.Contains("selection"))
             {
-                if (m_TaskInfo.stickDuration) return;
-
-                if (aArgs.what.Contains("selection"))
+                if (m_TaskInfo != null && m_TaskInfo.Visible && !m_TaskInfo.stickDuration)
                 {
                     // If map selection changed, change the dates in the TaskInfo stick with selected topic dates
                     SetDates();
                 }
-                else if (aArgs.what.Contains("task")) // it's possible that user changed task dates
+
+                foreach (var form in STICKS.Values)
                 {
-                    SetDates2();
+                    // Set font state in the FormatStix
+                    if (form.Name == "StixFormat" && form.Visible)
+                    {
+                        var stix = form as StixFormat;
+
+                        ClearFontButtons(stix);
+
+                        if (MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
+                            return;
+
+                        bool bold = true, italic = true, underline = true, strikethrough = true;
+                        float size = 0; bool sizeequal = true;
+                        foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                        {
+                            if (size == 0) size = t.Font.Size;
+                            if (t.Font.Size != size) sizeequal = false;
+
+                            if (!t.Font.Bold) bold = false; if (!t.Font.Italic) italic = false;
+                            if (!t.Font.Underline) underline = false; if (!t.Font.Strikethrough) strikethrough = false;
+                        }
+
+                        if (sizeequal) { 
+                            stix.numFontSize.Value = (int)size; 
+                            stix.numFontSize.Text = size.ToString(); 
+                        }
+                        if (bold) stix.pBold.Image = stix.BoldA;
+                        if (italic) stix.pItalic.Image = stix.ItalicA;
+                        if (underline) stix.pUnder.Image = stix.UnderlineA;
+                        if (strikethrough) stix.pStrike.Image = stix.StrikethroughA;
+                    }
                 }
             }
+
+            if (m_TaskInfo != null && m_TaskInfo.Visible)
+            {
+                if (aArgs.what.Contains("task")) // it's possible that user changed task dates
+                    SetDates2();
+            }
+        }
+
+        void ClearFontButtons(StixFormat stix)
+        {
+            stix.pBold.Image = stix.Bold; stix.pItalic.Image = stix.Italic;
+            stix.pUnder.Image = stix.Underline; stix.pStrike.Image = stix.Strikethrough;
+            stix.numFontSize.Text = "";
         }
 
         public static void SetDates()
@@ -479,6 +598,69 @@ namespace Bubbles
             StixUtils.TopicAutoWidth = Utils.getRegistry("MMAutoWidth", "0") == "1";
         }
 
+        public override void SubMenuButtonCallbackUpdateState(ref bool pEnabled, ref bool pChecked, SubMenuButtonData aData)
+        {
+            Topic _selectedTopic = MMUtils.SelectedTopic();
+            base.SubMenuButtonCallbackUpdateState(ref pEnabled, ref pChecked, aData);
+        }
+
+        public override void SubMenuButtonCallbackClick(SubMenuButtonData aData, Command aCommand)
+        {
+            switch (aData.intdata)
+            {
+                case 1: // Stop playing.
+                    if (m_OmniSound.play == true)
+                        m_OmniSound.btnPlay_Click(null, null);
+                    return;
+                case 2: // Show Omni Player.
+                    Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
+
+                    if (m_OmniSound.Visible)
+                        m_OmniSound.WindowState = FormWindowState.Normal;
+                    else
+                    {
+                        m_OmniSound.Location = new Point(Cursor.Position.X, Cursor.Position.Y);   
+                        m_OmniSound.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                    }
+
+                    string audioPath = t.GetAttributes(STRIP_URI).GetAttributeValue(AUDIO_PATH);
+
+                    // Does file exist?
+                    if (!File.Exists(audioPath))
+                    {
+                        MessageBox.Show(String.Format(Utils.getString("OmniSound.filenotexists"), audioPath));
+                        return;
+                    }
+
+                    // Select topic record in OmniSound window
+                    if (m_OmniSound.Visible)
+                    {
+                        foreach (var item in m_OmniSound.cbRecords.Items)
+                        {
+                            if ((item as AudioItem).Path == audioPath)
+                                m_OmniSound.cbRecords.SelectedItem = item;
+                        }
+                    }
+                    return;
+                case 4: // Remove strip icon.
+                    if (!(MMUtils.SelectedTopic() is Topic _t))
+                        return;
+
+                    // Remove path attribute.
+                    if (_t.ContainsControlStripType(STRIP_URI))
+                        _t.GetAttributes(STRIP_URI).DeleteAll();
+
+                    // Remove strip icon.
+                    TransactionWrapper _w = new TransactionWrapper(_t,
+                        TransactionWrapper.TransactionType.REMOVE_STRIP_ICON, "");
+                    _w.controlStripURI = STRIP_URI;
+                    _w.Execute();
+                    return;
+            }
+
+            base.SubMenuButtonCallbackClick(aData, aCommand);
+        }
+
         public void Destroy()
         {
             if (!m_bCreated)
@@ -486,10 +668,24 @@ namespace Bubbles
 
             Marshal.ReleaseComObject(m_cmdDetachNotes); m_cmdDetachNotes = null;
 
+            try
+            {
+                m_menus.DeleteDynamicMenu(m_controlStrip.ContextMenu);
+                MMUtils.MindManager.ControlStripTypeRegistry.UnRegisterControlStripType(STRIP_URI);
+                Marshal.ReleaseComObject(m_controlStrip); m_controlStrip = null;
+                Marshal.ReleaseComObject(m_controlStripCommand); m_controlStripCommand = null;
+            }
+            catch { }
+
             if (m_bubbleSnippets.Visible)
                 m_bubbleSnippets.Hide();
             m_bubbleSnippets.Dispose();
             m_bubbleSnippets = null;
+
+            if (m_OmniSound.Visible)
+                m_OmniSound.Hide();
+            m_OmniSound.Dispose();
+            m_OmniSound = null;
 
             if (StixBookmarks.BookmarkedDocuments != null && StixBookmarks.BookmarkedDocuments.Count > 0)
             {
@@ -614,6 +810,7 @@ namespace Bubbles
         public static StixBookmarks m_Bookmarks;
         public static BookmarkListDlg m_BookmarkList;
         public static NewLinkDlg m_NewLink;
+        public static OmniSound m_OmniSound;
 
         public static ResourcesDlg m_Resources;
         public static LinksDlg m_AllSources;
@@ -639,5 +836,15 @@ namespace Bubbles
         static ToolTip tt = new ToolTip() { ShowAlways = true, AutoPopDelay = 3000 };
 
         public static TopicWidthDlg topicWidthDlg = new TopicWidthDlg();
+
+        private DynamicMenus m_menus;
+
+        private ControlStripType m_controlStrip = null;
+        private Command m_controlStripCommand = null;
+        public const string STRIP_URI = "OMNISTIX_STRIPICON_OMNIAUDIO";
+
+        private Command m_cmdPlayAudio = null;
+        private Command m_cmdPlayAudioplayer = null;
+        private Command m_cmdDeleteAudio = null;
     }
 }

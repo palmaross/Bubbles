@@ -3,7 +3,6 @@ using System;
 using System.IO;
 using System.Data;
 using PRAManager;
-using static Community.CsharpSqlite.Sqlite3;
 
 namespace BubblesAppManager
 {

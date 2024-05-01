@@ -18,13 +18,13 @@ namespace Bubbles
             base.SetSelectedRowCore(rowIndex, selected);
         }
 
-        protected virtual void SetSelectedCellCore(int columnIndex, int rowIndex, bool selected)
-        {
-            if (selected && WantRowSelection(rowIndex))
-            {
-                base.SetSelectedRowCore(rowIndex, selected);
-            }
-        }
+        //protected virtual void SetSelectedCellCore(int columnIndex, int rowIndex, bool selected)
+        //{
+        //    if (selected && WantRowSelection(rowIndex))
+        //    {
+        //        base.SetSelectedRowCore(rowIndex, selected);
+        //    }
+        //}
 
         bool WantRowSelection(int rowIndex)
         {

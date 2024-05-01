@@ -34,7 +34,6 @@ namespace Bubbles
             pNewBookmark.Tag = Utils.getString("bookmarks.contextmenu.add.tooltip");
             pBookmarkList.Tag = Utils.getString("mysources.sourceview.list");
             pFontItalic.Tag = "Italic";
-            pCleanFormat.Tag = Utils.getString("bubbleformat.clearformat");
 
             foreach (PictureBox pb in panelOther.Controls) {
                 pb.MouseHover += pb_MouseHover; pb.MouseLeave += pb_MouseLeave; }
@@ -187,11 +186,6 @@ namespace Bubbles
             (stick as StixFormat).pItalic_Click(null, null);
         }
 
-        private void pCleanFormat_Click(object sender, EventArgs e)
-        {
-            var stick = panelH.Tag as Form;
-            (stick as StixFormat).pClearFormat_Click(null, null);
-        }
         #endregion
 
         private void pPasteTopic_MouseClick(object sender, MouseEventArgs e)

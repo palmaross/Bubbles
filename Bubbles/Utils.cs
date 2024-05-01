@@ -43,6 +43,7 @@ namespace Bubbles
             m_defaultDataPath = MMUtils.m_defaultDataPath;
             m_dataPath = MMUtils.m_dataPath;
             m_localDataPath = MMUtils.m_localDataPath;
+            m_imagesPath = MMUtils.m_imagesPath;
 
             m_dataPath = getRegistry("DataPath");
 
@@ -51,7 +52,7 @@ namespace Bubbles
             else
             {
 
-            }
+            }            
 
             string path = MMUtils.MindManager.GetPath(MmDirectory.mmDirectoryIcons);
             DirectoryInfo di = new DirectoryInfo(path);
@@ -95,6 +96,7 @@ namespace Bubbles
                 File.Copy(from + "tool-notepad.png", to + "tool-notepad.png", true);
                 File.Copy(from + "tool-saveall.png", to + "tool-saveall.png", true);
                 File.Copy(from + "tool-snipping.png", to + "tool-snipping.png", true);
+                File.Copy(from + "tool-snotes.png", to + "tool-snotes.png", true);
             }
             catch { };
 
@@ -513,7 +515,7 @@ namespace Bubbles
         public static string licenseStatus = "";
 
         /// <summary>Path with last backslash!</summary>
-		public static string m_defaultDataPath, m_dataPath, m_localDataPath, m_iconDB;
+		public static string m_defaultDataPath, m_dataPath, m_localDataPath, m_iconDB, m_imagesPath;
 
         public static Dictionary<string, string> StockIconsDupes = new Dictionary<string, string>();
         public static Dictionary<string, MmStockIcon> StockIcons = new Dictionary<string, MmStockIcon>();

@@ -36,6 +36,7 @@
             this.txtEditNode = new System.Windows.Forms.TextBox();
             this.pSize = new System.Windows.Forms.PictureBox();
             this.treeView1 = new System.Windows.Forms.TreeView();
+            this.btnSaveComment = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.LinkImage = new System.Windows.Forms.DataGridViewImageColumn();
             this.LinkTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -44,6 +45,7 @@
             this.LinkType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GroupID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SortByImage = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtLink = new System.Windows.Forms.TextBox();
             this.txtComment = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -69,6 +71,7 @@
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -94,6 +97,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.btnSaveComment);
             this.splitContainer1.Panel2.Controls.Add(this.dataGridView1);
             this.splitContainer1.Panel2.Controls.Add(this.txtLink);
             this.splitContainer1.Panel2.Controls.Add(this.txtComment);
@@ -137,6 +141,16 @@
             this.treeView1.DragOver += new System.Windows.Forms.DragEventHandler(this.GroupsTree_DragOver);
             this.treeView1.DragLeave += new System.EventHandler(this.treeView1_DragLeave);
             // 
+            // btnSaveComment
+            // 
+            this.btnSaveComment.Location = new System.Drawing.Point(406, 300);
+            this.btnSaveComment.Name = "btnSaveComment";
+            this.btnSaveComment.Size = new System.Drawing.Size(76, 21);
+            this.btnSaveComment.TabIndex = 23;
+            this.btnSaveComment.Text = "Сохранить";
+            this.btnSaveComment.UseVisualStyleBackColor = true;
+            this.btnSaveComment.Click += new System.EventHandler(this.btnSaveComment_Click);
+            // 
             // dataGridView1
             // 
             this.dataGridView1.AllowDrop = true;
@@ -161,10 +175,12 @@
             this.LinkPath,
             this.LinkType,
             this.GroupID,
-            this.SortByImage});
+            this.SortByImage,
+            this.Comment});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 23);
             this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
             dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle6;
@@ -184,6 +200,7 @@
             this.LinkImage.FillWeight = 10.61452F;
             this.LinkImage.HeaderText = "";
             this.LinkImage.Name = "LinkImage";
+            this.LinkImage.ReadOnly = true;
             this.LinkImage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             // 
             // LinkTitle
@@ -193,41 +210,56 @@
             this.LinkTitle.FillWeight = 101.7739F;
             this.LinkTitle.HeaderText = "Title";
             this.LinkTitle.Name = "LinkTitle";
+            this.LinkTitle.ReadOnly = true;
             // 
             // LinkGroup
             // 
             this.LinkGroup.HeaderText = "Group";
             this.LinkGroup.Name = "LinkGroup";
+            this.LinkGroup.ReadOnly = true;
             // 
             // LinkPath
             // 
             this.LinkPath.HeaderText = "Path";
             this.LinkPath.Name = "LinkPath";
+            this.LinkPath.ReadOnly = true;
             this.LinkPath.Visible = false;
             // 
             // LinkType
             // 
             this.LinkType.HeaderText = "Type";
             this.LinkType.Name = "LinkType";
+            this.LinkType.ReadOnly = true;
             this.LinkType.Visible = false;
             // 
             // GroupID
             // 
             this.GroupID.HeaderText = "GroupID";
             this.GroupID.Name = "GroupID";
+            this.GroupID.ReadOnly = true;
             this.GroupID.Visible = false;
             // 
             // SortByImage
             // 
             this.SortByImage.HeaderText = "SortByImage";
             this.SortByImage.Name = "SortByImage";
+            this.SortByImage.ReadOnly = true;
             this.SortByImage.Visible = false;
+            // 
+            // Comment
+            // 
+            this.Comment.HeaderText = "Comment";
+            this.Comment.Name = "Comment";
+            this.Comment.ReadOnly = true;
+            this.Comment.Visible = false;
             // 
             // txtLink
             // 
+            this.txtLink.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.txtLink.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.txtLink.Location = new System.Drawing.Point(0, 257);
             this.txtLink.Name = "txtLink";
+            this.txtLink.ReadOnly = true;
             this.txtLink.Size = new System.Drawing.Size(482, 20);
             this.txtLink.TabIndex = 4;
             // 
@@ -256,23 +288,23 @@
             // rbtnOmniBrowser
             // 
             this.rbtnOmniBrowser.AutoSize = true;
-            this.rbtnOmniBrowser.Location = new System.Drawing.Point(231, 3);
+            this.rbtnOmniBrowser.Location = new System.Drawing.Point(273, 3);
             this.rbtnOmniBrowser.Name = "rbtnOmniBrowser";
-            this.rbtnOmniBrowser.Size = new System.Drawing.Size(107, 17);
+            this.rbtnOmniBrowser.Size = new System.Drawing.Size(90, 17);
             this.rbtnOmniBrowser.TabIndex = 20;
-            this.rbtnOmniBrowser.Text = "OmniStix Browser";
+            this.rbtnOmniBrowser.Text = "Omni Browser";
             this.rbtnOmniBrowser.UseVisualStyleBackColor = true;
             // 
             // rbtnExternalApp
             // 
             this.rbtnExternalApp.AutoSize = true;
             this.rbtnExternalApp.Checked = true;
-            this.rbtnExternalApp.Location = new System.Drawing.Point(97, 3);
+            this.rbtnExternalApp.Location = new System.Drawing.Point(112, 3);
             this.rbtnExternalApp.Name = "rbtnExternalApp";
-            this.rbtnExternalApp.Size = new System.Drawing.Size(85, 17);
+            this.rbtnExternalApp.Size = new System.Drawing.Size(135, 17);
             this.rbtnExternalApp.TabIndex = 19;
             this.rbtnExternalApp.TabStop = true;
-            this.rbtnExternalApp.Text = "External App";
+            this.rbtnExternalApp.Text = "Внешнее приложение";
             this.rbtnExternalApp.UseVisualStyleBackColor = true;
             // 
             // lblOpenIn
@@ -281,9 +313,9 @@
             this.lblOpenIn.AutoSize = true;
             this.lblOpenIn.Location = new System.Drawing.Point(3, 5);
             this.lblOpenIn.Name = "lblOpenIn";
-            this.lblOpenIn.Size = new System.Drawing.Size(47, 13);
+            this.lblOpenIn.Size = new System.Drawing.Size(75, 13);
             this.lblOpenIn.TabIndex = 18;
-            this.lblOpenIn.Text = "Open in:";
+            this.lblOpenIn.Text = "Открывать в:";
             // 
             // cmsLink
             // 
@@ -388,6 +420,14 @@
             this.timer1.Interval = 1500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // dataGridViewImageColumn1
+            // 
+            this.dataGridViewImageColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dataGridViewImageColumn1.FillWeight = 10.61452F;
+            this.dataGridViewImageColumn1.HeaderText = "";
+            this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
+            this.dataGridViewImageColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            // 
             // LinksDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -448,6 +488,9 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         public System.Windows.Forms.DataGridView dataGridView1;
+        public System.Windows.Forms.TextBox txtComment;
+        private System.Windows.Forms.Button btnSaveComment;
+        private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn1;
         private System.Windows.Forms.DataGridViewImageColumn LinkImage;
         private System.Windows.Forms.DataGridViewTextBoxColumn LinkTitle;
         private System.Windows.Forms.DataGridViewTextBoxColumn LinkGroup;
@@ -455,6 +498,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn LinkType;
         private System.Windows.Forms.DataGridViewTextBoxColumn GroupID;
         private System.Windows.Forms.DataGridViewTextBoxColumn SortByImage;
-        public System.Windows.Forms.TextBox txtComment;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Comment;
     }
 }

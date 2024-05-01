@@ -22,13 +22,14 @@ namespace Bubbles
             toolTip1.SetToolTip(stxIcons, Utils.getString("StixIcons.tooltip"));
             toolTip1.SetToolTip(stxTaskInfo, Utils.getString("StixTaskInfo.tooltip"));
             toolTip1.SetToolTip(stxBookmarks, Utils.getString("StixBookmarks.tooltip"));
-            toolTip1.SetToolTip(stxSources, Utils.getString("StixTools.tooltip"));
+            toolTip1.SetToolTip(stxTools, Utils.getString("StixTools.tooltip"));
             toolTip1.SetToolTip(stxAddTopics, Utils.getString("StixAddTopic.tooltip"));
             toolTip1.SetToolTip(stxTextOps, Utils.getString("StixTextOps.tooltip"));
             toolTip1.SetToolTip(stxFormat, Utils.getString("StixFormat.tooltip"));
             toolTip1.SetToolTip(boxResources, Utils.getString("Box.Resources"));
             toolTip1.SetToolTip(boxBookmarks, Utils.getString("Box.Bookmarks"));
-            toolTip1.SetToolTip(boxSources, Utils.getString("Box.Sources"));
+            toolTip1.SetToolTip(boxSources, Utils.getString("Box.Links"));
+            toolTip1.SetToolTip(OmniRec, Utils.getString("Box.OmniSound"));
             toolTip1.SetToolTip(Stickers, Utils.getString("stickers.contextmenu.stickers"));
 
             cm_show.Text = Utils.getString("bulkoperations.contextmenu.show");
@@ -210,9 +211,9 @@ namespace Bubbles
             BaseIcon_MouseClick(stxBookmarks, null);
         }
 
-        private void StxSources_Click(object sender, EventArgs e)
+        private void StxTools_Click(object sender, EventArgs e)
         {
-            BaseIcon_MouseClick(stxSources, null);
+            BaseIcon_MouseClick(stxTools, null);
         }
 
         private void StxAddTopic_Click(object sender, EventArgs e)
@@ -270,6 +271,21 @@ namespace Bubbles
             }
         }
 
+        private void OmniRec_Click(object sender, EventArgs e)
+        {
+            if (StixButton.m_OmniSound.Visible)
+                StixButton.m_OmniSound.WindowState = FormWindowState.Normal;
+            else
+            {
+                if (StixButton.m_OmniSound.Location.IsEmpty)
+                {
+                    StixButton.m_OmniSound.Location =
+                        new Point(StixButton.OmniSticksButton.Location.X, this.Bottom);
+                }
+                StixButton.m_OmniSound.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            }
+        }
+
         private void BoxSources_Click(object sender, EventArgs e)
         {
             StixButton.m_AllSources = null;
@@ -307,7 +323,7 @@ namespace Bubbles
                 stickType = StixUtils.typetaskinfo;
                 defaultName = Utils.getString("StixTaskInfo.tooltip");
             }
-            else if (pb.Name == "stxSources")
+            else if (pb.Name == "stxTools")
             {
                 stickType = StixUtils.typetools;
                 defaultName = Utils.getString("StixTools.tooltip");
@@ -524,7 +540,7 @@ namespace Bubbles
                 cmsMySources = GetSticks(StixUtils.typetools, cmsMySources);
                 if (cmsMySources.Items.Count > 0)
                 {
-                    stxSources.ContextMenuStrip = cmsMySources;
+                    stxTools.ContextMenuStrip = cmsMySources;
                     cmsMySources.ItemClicked += cms_ItemClicked;
                 }
             }
@@ -543,7 +559,7 @@ namespace Bubbles
                 case StixUtils.typeicons:
                     StxIcon_MouseClick(stxIcons, null); break;
                 case StixUtils.typetools:
-                    StxIcon_MouseClick(stxSources, null); break;
+                    StxIcon_MouseClick(stxTools, null); break;
             }
         }
 

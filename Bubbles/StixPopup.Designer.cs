@@ -42,7 +42,6 @@
             this.p25 = new System.Windows.Forms.PictureBox();
             this.pPR3 = new System.Windows.Forms.PictureBox();
             this.panelCommonMin = new System.Windows.Forms.Panel();
-            this.pCleanFormat = new System.Windows.Forms.PictureBox();
             this.pFontItalic = new System.Windows.Forms.PictureBox();
             this.pBookmarkList = new System.Windows.Forms.PictureBox();
             this.pNewBookmark = new System.Windows.Forms.PictureBox();
@@ -79,7 +78,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pDeleteAllIcons)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p25)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pPR3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pCleanFormat)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pFontItalic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBookmarkList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pNewBookmark)).BeginInit();
@@ -240,18 +238,6 @@
             this.panelCommonMin.Size = new System.Drawing.Size(88, 20);
             this.panelCommonMin.TabIndex = 1;
             // 
-            // pCleanFormat
-            // 
-            this.pCleanFormat.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pCleanFormat.Image = ((System.Drawing.Image)(resources.GetObject("pCleanFormat.Image")));
-            this.pCleanFormat.Location = new System.Drawing.Point(91, 2);
-            this.pCleanFormat.Name = "pCleanFormat";
-            this.pCleanFormat.Size = new System.Drawing.Size(16, 16);
-            this.pCleanFormat.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pCleanFormat.TabIndex = 13;
-            this.pCleanFormat.TabStop = false;
-            this.pCleanFormat.Click += new System.EventHandler(this.pCleanFormat_Click);
-            // 
             // pFontItalic
             // 
             this.pFontItalic.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -304,7 +290,6 @@
             this.panelOther.Controls.Add(this.pictureBox1);
             this.panelOther.Controls.Add(this.pNewIcon);
             this.panelOther.Controls.Add(this.pDeleteAllIcons);
-            this.panelOther.Controls.Add(this.pCleanFormat);
             this.panelOther.Controls.Add(this.pNewBookmark);
             this.panelOther.Controls.Add(this.pFontItalic);
             this.panelOther.Controls.Add(this.pBookmarkList);
@@ -566,7 +551,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pDeleteAllIcons)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p25)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pPR3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pCleanFormat)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pFontItalic)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBookmarkList)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pNewBookmark)).EndInit();
@@ -603,7 +587,6 @@
         private System.Windows.Forms.PictureBox pRotate;
         public System.Windows.Forms.ToolTip toolTip1;
         public System.Windows.Forms.Panel panelCommonMin;
-        public System.Windows.Forms.PictureBox pCleanFormat;
         public System.Windows.Forms.PictureBox pFontItalic;
         public System.Windows.Forms.PictureBox pBookmarkList;
         public System.Windows.Forms.PictureBox pNewBookmark;

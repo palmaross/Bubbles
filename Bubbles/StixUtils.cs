@@ -439,12 +439,6 @@ namespace Bubbles
                         sp.pBookmarkList.Location = sp.p2.Location;
                         ff.Controls.Add(sp.pNewBookmark); ff.Controls.Add(sp.pBookmarkList);
                     }
-                    else if (type == typeformat)
-                    {
-                        sp.pFontItalic.Location = sp.p1.Location;
-                        sp.pCleanFormat.Location = sp.p2.Location;
-                        ff.Controls.Add(sp.pFontItalic); ff.Controls.Add(sp.pCleanFormat);
-                    }
                 }
 
                 if (orientation == "V" && !popup.StartsWith("calendar")) // Rotate control and its elements

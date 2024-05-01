@@ -22,7 +22,6 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "MyToolsStick.htm");
 
-            //toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
             toolTip1.SetToolTip(ToolList, Utils.getString("mysources.sourceview.list"));
             toolTip1.SetToolTip(pictureHandle, stickname);
 
@@ -173,6 +172,11 @@ namespace Bubbles
             StixUtils.SetContextMenuImage(tsm, "tool-clock.png");
             tsm.Click += SubmenuItem_Click;
 
+            tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("tools.stickynotes"));
+            tsm.Name = "snotes_tool";
+            StixUtils.SetContextMenuImage(tsm, "tool-snotes.png");
+            tsm.Click += SubmenuItem_Click;
+
             tsi = cmsManage.Items.Add(Utils.getString("mytools.addtool.omni"));
             tsi.Name = "MM_omni";
 
@@ -214,6 +218,10 @@ namespace Bubbles
                     break;
                 case "clock_tool":
                     NewIcon("OT_clock", Utils.getString("tools.clock"), "end", "tool-clock.png");
+                    break;
+                case "snotes_tool":
+                    path = "C:\\Program Files\\WindowsApps\\Microsoft.MicrosoftStickyNotes_6.0.2.0_x64__8wekyb3d8bbwe\\Microsoft.Notes.exe";
+                    NewIcon(path, Utils.getString("tools.stickynotes"), "end", "tool-snotes.png");
                     break;
                 case "currentmap_tool":
                     toolPath = MMUtils.ActiveDocument.FullName;

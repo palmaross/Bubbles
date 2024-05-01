@@ -10,6 +10,7 @@ using WindowsInput.Native;
 using WindowsInput;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Image = System.Drawing.Image;
 
 namespace Bubbles
 {
@@ -26,23 +27,29 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "StickFormat.htm");
 
-            lblTextColor.Text = Utils.getString("BubbleFormat.lblTextColor");
-            lblFillColor.Text = Utils.getString("BubbleFormat.lblFillColor");
+            lblTextColor.Text = Utils.getString("stixformat.lblTextColor");
+            lblFillColor.Text = Utils.getString("stixformat.lblFillColor");
 
-            //toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
             toolTip1.SetToolTip(pictureHandle, stickname);
-            toolTip1.SetToolTip(pClearFormat, Utils.getString("bubbleformat.clearformat"));
+            toolTip1.SetToolTip(pClearFormat, Utils.getString("stixformat.clearformat"));
+            toolTip1.SetToolTip(pCloseFontSize, Utils.getString("stixformat.pCloseFontSize"));
+            toolTip1.SetToolTip(numFontSize, Utils.getString("stixformat.numFontSize"));
 
             if (orientation == "V") {
                 orientation = "H"; Rotate(); }
 
             // Resizing window causes black strips...
-            //this.DoubleBuffered = true;
-            //this.ResizeRedraw = true;
+            this.DoubleBuffered = true;
+            this.ResizeRedraw = true;
 
             // Context menu
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
-            contextMenuStrip1.Items["BI_color"].Text = Utils.getString("bubbleformat.contextmenu.color");
+            BI_color.Text = Utils.getString("stixformat.contextmenu.color");
+            clear_all.Text = Utils.getString("stixformat.contextmenu.clear_all");
+            clear_textformat.Text = Utils.getString("stixformat.contextmenu.clear_textformat");
+            clear_textcolor.Text = Utils.getString("stixformat.contextmenu.clear_textcolor");
+            clear_fillcolor.Text = Utils.getString("stixformat.contextmenu.clear_fillcolor");
+
             StixUtils.SetCommonContextMenu(contextMenuStrip1, StixUtils.typeformat);
 
             fontcolor1.MouseClick += Icon_Click;
@@ -74,10 +81,17 @@ namespace Bubbles
             this.Paint += this_Paint; // paint the border depending on scale factor
 
             fsize = lblTextColor.Font.Size;
+            ffsize = numFontSize.Font.Size;
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
             ScaleStick(100F, scaleFactor);
-        }
 
+            Bold = pBold.Image; Italic = pItalic.Image; Underline = pUnder.Image; Strikethrough = pStrike.Image;
+            BoldA = Image.FromFile(Utils.m_imagesPath + "f_boldActive.png");
+            ItalicA = Image.FromFile(Utils.m_imagesPath + "f_italicActive.png");
+            UnderlineA = Image.FromFile(Utils.m_imagesPath + "f_underActive.png");
+            StrikethroughA = Image.FromFile(Utils.m_imagesPath + "f_strikeActive.png");
+        }
+        
         public void ScaleStick(float fromScale, float toScale)
         {
             if (fromScale == toScale) return;
@@ -93,11 +107,14 @@ namespace Bubbles
                 this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
 
             float _fsize = fsize * (toScale / 100);
+            float _ffsize = ffsize * (toScale / 100);
+            if (scaleFactor > 140) _ffsize = (float)(_ffsize * 1.05);
 
             lblTextColor.Font = new Font(lblTextColor.Font.FontFamily, _fsize);
             lblFillColor.Font = new Font(lblFillColor.Font.FontFamily, _fsize);
+            numFontSize.Font = new Font(numFontSize.Font.FontFamily, _ffsize);
         }
-        float fsize;
+        float fsize, ffsize;
 
         private void this_Paint(object sender, PaintEventArgs e)
         {
@@ -127,7 +144,12 @@ namespace Bubbles
             foreach (ToolStripItem item in contextMenuStrip1.Items)
                 item.Visible = true;
 
-            contextMenuStrip1.Items["BI_color"].Visible = false;
+            BI_color.Visible = false;
+            clear_all.Visible = false;
+            clear_textformat.Visible = false;
+            clear_textcolor.Visible = false;
+            clear_fillcolor.Visible = false;
+
             contextMenuStrip1.Show(Cursor.Position);
         }
 
@@ -161,6 +183,47 @@ namespace Bubbles
                 StixButton.STICKS.Remove((int)this.Tag);
                 this.Close();
             }
+            else if (e.ClickedItem == clear_all)
+            {
+                if (MMUtils.ActiveDocument == null || !ActivateMindManager())
+                    return;
+
+                sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.SPACE);
+            }
+            else if (e.ClickedItem == clear_textformat)
+            {
+                if (MMUtils.ActiveDocument != null)
+                {
+                    foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                    {
+                        t.Font.Bold = false; t.Font.Italic = false;
+                        t.Font.Underline = false; t.Font.Strikethrough = false;
+                        t.Font.SetAttributeAutomatic((int)MmFontAttributeFlags.mmFontAttributeFlagSize);
+                        t.Font.SetAttributeAutomatic((int)MmFontAttributeFlags.mmFontAttributeFlagName);
+                    }
+                }
+            }
+            else if (e.ClickedItem == clear_textcolor)
+            {
+                if (MMUtils.ActiveDocument != null)
+                {
+                    foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                        t.TextColor.SetAutomatic();
+                }
+            }
+            else if (e.ClickedItem == clear_fillcolor)
+            {
+                if (MMUtils.ActiveDocument != null)
+                {
+                    foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                        t.FillColor.SetAutomatic();
+                }
+            }
+            else if (e.ClickedItem.Name == "BI_close")
+            {
+                StixButton.STICKS.Remove((int)this.Tag);
+                this.Close();
+            }
             else if (e.ClickedItem.Name == "BI_rotate")
             {
                 Rotate();
@@ -185,6 +248,15 @@ namespace Bubbles
         public void Rotate()
         {
             orientation = StixUtils.RotateStick(this, Manage, orientation);
+
+            if (orientation == "H")
+            {
+                panelFontSize.Location = new Point(panelFontSize.Location.Y, pClearFormat.Location.Y);
+            }
+            else
+            {
+                panelFontSize.Location = new Point(0, panelFontSize.Location.X);
+            }
         }
 
         /// <summary>
@@ -222,78 +294,125 @@ namespace Bubbles
             }
         }
 
-        private void p1_Click(object sender, EventArgs e)
+        private void pBold_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument == null || !ActivateMindManager())
+            if (MMUtils.ActiveDocument == null || !ActivateMindManager() ||
+                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
                 return;
 
             sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_B);
+
+            if (pBold.Image == Bold) pBold.Image = BoldA;
+            else pBold.Image = Bold;
         }
 
         public void pItalic_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument == null || !ActivateMindManager())
+            if (MMUtils.ActiveDocument == null || !ActivateMindManager() ||
+                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
                 return;
 
             sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_I);
+
+            if (pItalic.Image == Italic) pItalic.Image = ItalicA;
+            else pItalic.Image = Italic;
         }
 
         private void pUnder_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument == null || !ActivateMindManager())
+            if (MMUtils.ActiveDocument == null || !ActivateMindManager() ||
+                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
                 return;
 
             sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_U);
+
+            if (pUnder.Image == Underline) pUnder.Image = UnderlineA;
+            else pUnder.Image = Underline;
         }
 
         private void pStrike_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument == null || !ActivateMindManager())
+            if (MMUtils.ActiveDocument == null || !ActivateMindManager() ||
+                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
                 return;
 
             sim.Keyboard.ModifiedKeyStroke(new[] { VirtualKeyCode.CONTROL, VirtualKeyCode.SHIFT }, VirtualKeyCode.VK_S);
+            
+            if (pStrike.Image == Strikethrough) pStrike.Image = StrikethroughA;
+            else pStrike.Image = Strikethrough;
         }
 
-        private void pFontIncrease_Click(object sender, EventArgs e)
+        private void pFontIncrease_MouseClick(object sender, MouseEventArgs e)
         {
-            if (MMUtils.ActiveDocument == null || !ActivateMindManager())
-                return;
-
-            sim.Keyboard.ModifiedKeyStroke(new[] { VirtualKeyCode.CONTROL, VirtualKeyCode.SHIFT }, VirtualKeyCode.OEM_PERIOD);
-        }
-
-        private void pFontDecrease_Click(object sender, EventArgs e)
-        {
-            if (MMUtils.ActiveDocument == null || !ActivateMindManager())
-                return;
-
-            sim.Keyboard.ModifiedKeyStroke(new[] { VirtualKeyCode.CONTROL, VirtualKeyCode.SHIFT }, VirtualKeyCode.OEM_COMMA);
-        }
-
-        private void pClearTextColor_Click(object sender, EventArgs e)
-        {
-            if (MMUtils.ActiveDocument != null)
+            if (e.Button == MouseButtons.Left)
             {
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                    t.TextColor.SetAutomatic();
+                if (MMUtils.ActiveDocument == null || !ActivateMindManager()) return;
+                sim.Keyboard.ModifiedKeyStroke(new[] { VirtualKeyCode.CONTROL, VirtualKeyCode.SHIFT }, VirtualKeyCode.OEM_PERIOD);
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                panelFontSize.Visible = true;
             }
         }
 
-        private void pClearFillColor_Click(object sender, EventArgs e)
+        private void pFontDecrease_MouseClick(object sender, MouseEventArgs e)
         {
-            if (MMUtils.ActiveDocument != null)
+            if (e.Button == MouseButtons.Left)
             {
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                    t.FillColor.SetAutomatic();
+                if (MMUtils.ActiveDocument == null || !ActivateMindManager()) return;
+                sim.Keyboard.ModifiedKeyStroke(new[] { VirtualKeyCode.CONTROL, VirtualKeyCode.SHIFT }, VirtualKeyCode.OEM_COMMA);
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                panelFontSize.Visible = true;
             }
         }
 
-        public void pClearFormat_Click(object sender, EventArgs e)
+        private void pCloseFontSize_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument == null || !ActivateMindManager())
-                return;
+            panelFontSize.Visible = false;
+        }
 
-            sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.SPACE);
+        private void numFontSize_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+                pCloseFontSize_Click(null, null);
+            else if (e.KeyCode == Keys.Enter)
+            {
+                if (MMUtils.ActiveDocument == null || !ActivateMindManager()) return;
+
+                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                {
+                    t.Font.Size = (int)numFontSize.Value;
+                    e.Handled = true; // to avoid the "ding" sound
+                    e.SuppressKeyPress = true;
+                    //e.KeyChar = (char)Keys.D2;
+                    //button1.PerformClick();
+                }
+            }
+        }
+
+        private void pClearFormat_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (MMUtils.ActiveDocument == null || !ActivateMindManager())
+                    return;
+
+                sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.SPACE);
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                foreach (ToolStripItem item in contextMenuStrip1.Items)
+                    item.Visible = false;
+
+                clear_all.Visible = true;
+                clear_textformat.Visible = true;
+                clear_textcolor.Visible = true;
+                clear_fillcolor.Visible = true;
+
+                contextMenuStrip1.Show(Cursor.Position);
+            }
         }
 
         bool ActivateMindManager()
@@ -313,6 +432,8 @@ namespace Bubbles
         string orientation = "H";
 
         public float scaleFactor = 100;
+
+        public Image Bold, Italic, Underline, Strikethrough, BoldA, ItalicA, UnderlineA, StrikethroughA;
 
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;

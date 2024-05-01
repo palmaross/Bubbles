@@ -45,6 +45,10 @@
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.btnBrowse = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.txtComment = new System.Windows.Forms.TextBox();
             this.grBoxDownload.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,10 +57,10 @@
             this.lblResult.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblResult.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lblResult.ForeColor = System.Drawing.Color.DarkGreen;
-            this.lblResult.Location = new System.Drawing.Point(94, 208);
+            this.lblResult.Location = new System.Drawing.Point(92, 256);
             this.lblResult.Name = "lblResult";
-            this.lblResult.Size = new System.Drawing.Size(230, 15);
-            this.lblResult.TabIndex = 32;
+            this.lblResult.Size = new System.Drawing.Size(232, 15);
+            this.lblResult.TabIndex = 38;
             this.lblResult.Text = "Link added successfully";
             this.lblResult.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.lblResult.Visible = false;
@@ -75,7 +79,7 @@
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(14, 204);
+            this.btnOK.Location = new System.Drawing.Point(14, 252);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 30;
@@ -87,7 +91,7 @@
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(329, 204);
+            this.btnClose.Location = new System.Drawing.Point(329, 252);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 25;
@@ -99,7 +103,7 @@
             // 
             this.txtLink.Location = new System.Drawing.Point(16, 25);
             this.txtLink.Name = "txtLink";
-            this.txtLink.Size = new System.Drawing.Size(388, 20);
+            this.txtLink.Size = new System.Drawing.Size(356, 20);
             this.txtLink.TabIndex = 29;
             this.txtLink.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtLink_KeyUp);
             this.txtLink.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.txtLink_MouseDoubleClick);
@@ -119,6 +123,7 @@
             this.txtTitle.Name = "txtTitle";
             this.txtTitle.Size = new System.Drawing.Size(388, 20);
             this.txtTitle.TabIndex = 27;
+            this.txtTitle.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.txtTitle_MouseDoubleClick);
             // 
             // lblTitle
             // 
@@ -133,7 +138,7 @@
             // 
             this.grBoxDownload.Controls.Add(this.btnPreview);
             this.grBoxDownload.Controls.Add(this.cbDownload);
-            this.grBoxDownload.Location = new System.Drawing.Point(16, 142);
+            this.grBoxDownload.Location = new System.Drawing.Point(16, 189);
             this.grBoxDownload.Name = "grBoxDownload";
             this.grBoxDownload.Size = new System.Drawing.Size(387, 52);
             this.grBoxDownload.TabIndex = 33;
@@ -164,7 +169,7 @@
             // lblLinkGroup
             // 
             this.lblLinkGroup.AutoSize = true;
-            this.lblLinkGroup.Location = new System.Drawing.Point(13, 111);
+            this.lblLinkGroup.Location = new System.Drawing.Point(13, 107);
             this.lblLinkGroup.Name = "lblLinkGroup";
             this.lblLinkGroup.Size = new System.Drawing.Size(62, 13);
             this.lblLinkGroup.TabIndex = 34;
@@ -173,17 +178,51 @@
             // cbLinkGroup
             // 
             this.cbLinkGroup.FormattingEnabled = true;
-            this.cbLinkGroup.Location = new System.Drawing.Point(93, 107);
+            this.cbLinkGroup.Location = new System.Drawing.Point(93, 103);
             this.cbLinkGroup.Name = "cbLinkGroup";
             this.cbLinkGroup.Size = new System.Drawing.Size(310, 21);
             this.cbLinkGroup.TabIndex = 35;
+            // 
+            // btnBrowse
+            // 
+            this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBrowse.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnBrowse.Location = new System.Drawing.Point(373, 24);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(30, 22);
+            this.btnBrowse.TabIndex = 36;
+            this.btnBrowse.Text = "...";
+            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 3000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // txtComment
+            // 
+            this.txtComment.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.txtComment.Location = new System.Drawing.Point(16, 136);
+            this.txtComment.Multiline = true;
+            this.txtComment.Name = "txtComment";
+            this.txtComment.Size = new System.Drawing.Size(387, 44);
+            this.txtComment.TabIndex = 37;
+            this.txtComment.Enter += new System.EventHandler(this.txtComment_Enter);
+            this.txtComment.Leave += new System.EventHandler(this.txtComment_Leave);
             // 
             // NewLinkDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(420, 245);
+            this.ClientSize = new System.Drawing.Size(420, 288);
+            this.Controls.Add(this.txtComment);
+            this.Controls.Add(this.btnBrowse);
             this.Controls.Add(this.cbLinkGroup);
             this.Controls.Add(this.lblLinkGroup);
             this.Controls.Add(this.lblResult);
@@ -202,7 +241,7 @@
             this.Name = "NewLinkDlg";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "NewLinkDlg";
             this.grBoxDownload.ResumeLayout(false);
             this.grBoxDownload.PerformLayout();
@@ -229,5 +268,9 @@
         public System.Windows.Forms.TextBox txtTitle;
         public System.Windows.Forms.ComboBox cbLinkGroup;
         public System.Windows.Forms.GroupBox grBoxDownload;
+        private System.Windows.Forms.Button btnBrowse;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Timer timer1;
+        public System.Windows.Forms.TextBox txtComment;
     }
 }

@@ -16,7 +16,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "BrowserDlg.htm");
+            helpProvider1.SetHelpKeyword(this, "OmniBrowser.htm");
 
             Text = Utils.getString("BrowserDlg.title");
             btnAddSubtopic.Text = Utils.getString("BrowserDlg.btnAddSubtopic");
@@ -51,6 +51,11 @@ namespace Bubbles
                 txtAddressBar.Text = path;
                 Navigate(true);
             }
+        }
+
+        private void pHelp_Click(object sender, EventArgs e)
+        {
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "OmniBrowser.htm");
         }
 
         /// <summary>
@@ -191,6 +196,15 @@ namespace Bubbles
             {
                 StixButton.m_NewLink = new NewLinkDlg();
                 StixButton.m_NewLink.OmniBrowser = this;
+
+                StixButton.m_NewLink.Location = new Point(this.Right, this.Top);
+                Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
+                if (StixButton.m_NewLink.Right > area.Right) // close to the right
+                    StixButton.m_NewLink.Location = new Point(this.Left - StixButton.m_NewLink.Width, this.Top);
+                if (StixButton.m_NewLink.Left < area.Left) // close to the left
+                    StixButton.m_NewLink.Location = new Point(this.Left, this.Top);
+
+
                 StixButton.m_NewLink.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
 
@@ -199,6 +213,7 @@ namespace Bubbles
             StixButton.m_NewLink.txtLink.Text = txtAddressBar.Text;
             StixButton.m_NewLink.txtTitle.Text = tabControl1.SelectedTab.Text;
             StixButton.m_NewLink.txtLink_KeyUp(null, null);
+            StixButton.m_NewLink.cbLinkGroup.SelectedIndex = 0;
         }
 
         private void btnClose_Click(object sender, EventArgs e)
