@@ -25,7 +25,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "IconStick.htm");
+            helpProvider1.SetHelpKeyword(this, "IconStix.htm");
 
             toolTip1.SetToolTip(pictureHandle, stickname);
             StickName = stickname;
@@ -262,13 +262,13 @@ namespace Bubbles
                 IconItem item = (IconItem)selectedIcon.Tag;
                 if (item == null) return;
 
-                // Get new source's name
+                // Get new icon name
                 string name = StixUtils.GetName(this, orientation, StixUtils.typeicons, item.IconName);
                 if (name != "")
                 {
                     // Change title in the picture box tag
                     ((IconItem)selectedIcon.Tag).IconName = name;
-                    // Change title in the Source list item
+                    // Change title in the Icon list item
                     Icons.Find(p => p.Path == item.Path).IconName = name;
                     toolTip1.SetToolTip(selectedIcon, name);
 
@@ -280,7 +280,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
-                StixButton.STICKS.Remove((int)this.Tag);
+                StixMain.STICKS.Remove((int)this.Tag);
                 this.Close();
             }
             else if (e.ClickedItem.Name == "BI_rotate")
@@ -289,7 +289,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_help")
             {
-                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "IconStick.htm");
+                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "IconStix.htm");
             }
             else if (e.ClickedItem.Name == "BI_store")
             {

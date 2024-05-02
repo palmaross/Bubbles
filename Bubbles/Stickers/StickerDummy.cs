@@ -15,8 +15,11 @@ namespace Bubbles
         {
             InitializeComponent();
 
-            if (item == null)
-                return;
+            if (item == null) return;
+
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
+            helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
+            helpProvider1.SetHelpKeyword(this, "OmniStickers.htm");
 
             toolTip1.SetToolTip(btnNew, Utils.getString("stickers.btnNew.tooltip"));
             toolTip1.SetToolTip(pSave, Utils.getString("stickers.pSave.tooltip"));
@@ -157,6 +160,11 @@ namespace Bubbles
             this.DragDrop += StickerDummy_DragDrop;
             Editor.AllowDrop = true;
             HookChildrenEvents();
+        }
+
+        private void pHelp_Click(object sender, EventArgs e)
+        {
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "OmniStickers.htm");
         }
 
         private void HookChildrenEvents()
@@ -729,11 +737,6 @@ namespace Bubbles
 
             contextMenuOther.Items["CM_DeleteImage"].Visible = true;
             contextMenuOther.Show(Cursor.Position);
-        }
-
-        private void pHelp_Click(object sender, EventArgs e)
-        {
-
         }
 
         #region resize dialog

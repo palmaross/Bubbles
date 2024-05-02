@@ -7,11 +7,11 @@ namespace Bubbles
 {
     public partial class GetNameDlg : Form
     {
-        /// <summary>New stick name or new source/icon name or rename stick/source/icon</summary>
+        /// <summary>New stick name or new tool/icon name or rename stick/tool/icon</summary>
         /// <param name="rec">Parent stick rectangle</param>
         /// <param name="orientation">stick orientation (Horizontal or Vertical)</param>
-        /// <param name="stickType">Stick, source or icon</param>
-        /// <param name="name">Name of stick/source/icon in case of rename</param>
+        /// <param name="stickType">Stick, tool or icon</param>
+        /// <param name="name">Name of stick/tool/icon in case of rename</param>
         public GetNameDlg(Form form, string orientation, string name, string type, bool aStick)
         {
             InitializeComponent();
@@ -23,7 +23,7 @@ namespace Bubbles
             else if (stickType == StixUtils.typeicons)
                 label1.Text = Utils.getString("NewStickDlg.icon.title") + ":"; // icon name
             else if (stickType == StixUtils.typetools)
-                label1.Text = Utils.getString("NewStickDlg.source.title") + ":"; // source name
+                label1.Text = Utils.getString("NewStickDlg.tool.title") + ":"; // tool name
             btnCancel.Text = Utils.getString("button.cancel");
 
             // Get location
@@ -79,7 +79,7 @@ namespace Bubbles
                     DataTable dt = db.ExecuteQuery("SELECT from TOOLS where title=`" + newName + "` and id=" + stickID + "");
                     if (dt.Rows.Count > 0)
                     {
-                        MessageBox.Show(Utils.getString("sticks.nameexists.source"), "",
+                        MessageBox.Show(Utils.getString("sticks.nameexists.tool"), "",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }

@@ -80,6 +80,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.pImageLibrary = new System.Windows.Forms.PictureBox();
             this.pStickerImage = new Bubbles.SizeablePictureBox();
+            this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.panelControlBottom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pAddImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pAlign)).BeginInit();
@@ -675,5 +676,6 @@
         private System.Windows.Forms.ToolStripMenuItem CM_FromFile;
         public System.Windows.Forms.PictureBox pImageLibrary;
         public SizeablePictureBox pStickerImage;
+        private System.Windows.Forms.HelpProvider helpProvider1;
     }
 }

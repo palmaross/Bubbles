@@ -16,7 +16,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "BookmarksStick.htm");
+            helpProvider1.SetHelpKeyword(this, "BookmarksStix.htm");
 
             toolTip1.SetToolTip(btnAdd, Utils.getString("bookmarks.contextmenu.add.tooltip"));
             toolTip1.SetToolTip(btnClose, Utils.getString("button.close"));
@@ -136,8 +136,8 @@ namespace Bubbles
 
             if (deleteall)
             {
-                if (StixButton.m_Bookmarks != null && !fromStick)
-                    StixButton.m_Bookmarks.Init(true, true);
+                if (StixMain.m_Bookmarks != null && !fromStick)
+                    StixMain.m_Bookmarks.Init(true, true);
                 return;
             }
 
@@ -166,8 +166,8 @@ namespace Bubbles
                 }
             }
             // Refresh BubbleBookmarks stick
-            if (StixButton.m_Bookmarks != null && !fromStick)
-                StixButton.m_Bookmarks.Init(true);
+            if (StixMain.m_Bookmarks != null && !fromStick)
+                StixMain.m_Bookmarks.Init(true);
         }
 
         void LoadFromMapRecursive(Topic _t)
@@ -324,7 +324,7 @@ namespace Bubbles
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            StixButton.m_BookmarkList = null;
+            StixMain.m_BookmarkList = null;
             this.Close();
         }
 
@@ -366,7 +366,7 @@ namespace Bubbles
 
         private void btnHelp_Click(object sender, EventArgs e)
         {
-            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "BookmarksStick.htm");
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "BookmarksStix.htm");
         }
 
         private void listBox_MouseMove(object sender, MouseEventArgs e)

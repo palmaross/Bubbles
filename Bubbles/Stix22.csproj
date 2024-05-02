@@ -203,9 +203,7 @@
     <Compile Include="StixAddTopic.Designer.cs">
       <DependentUpon>StixAddTopic.cs</DependentUpon>
     </Compile>
-    <Compile Include="StixBase.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="StixBase.cs" />
     <Compile Include="StixBase.Designer.cs">
       <DependentUpon>StixBase.cs</DependentUpon>
     </Compile>
@@ -323,9 +321,7 @@
     <Compile Include="SnippetsDlg.Designer.cs">
       <DependentUpon>SnippetsDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="StickerDummy.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="StickerDummy.cs" />
     <Compile Include="StickerDummy.Designer.cs">
       <DependentUpon>StickerDummy.cs</DependentUpon>
     </Compile>

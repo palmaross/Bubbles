@@ -32,18 +32,18 @@ namespace Bubbles
             pNewIcon.Tag = Utils.getString("icons.contextmenu.new");
             pDeleteAllIcons.Tag = Utils.getString("icons.contextmenu.deletealltopic");
             pNewBookmark.Tag = Utils.getString("bookmarks.contextmenu.add.tooltip");
-            pBookmarkList.Tag = Utils.getString("mysources.sourceview.list");
+            pBookmarkList.Tag = Utils.getString("tools.toolview.list");
             pFontItalic.Tag = "Italic";
 
             foreach (PictureBox pb in panelOther.Controls) {
                 pb.MouseHover += pb_MouseHover; pb.MouseLeave += pb_MouseLeave; }
 
-            //Subtopic.Tag = Utils.getString("BubblesPaste.addsubtopic");
-            NextTopic.Tag = Utils.getString("BubblesPaste.addtopic");
-            TopicBefore.Tag = Utils.getString("BubblesPaste.addbefore");
-            ParentTopic.Tag = Utils.getString("BubblesPaste.addparent");
-            Callout.Tag = Utils.getString("BubblesPaste.addcallout");
-            //ToggleTextFormat.Tag = Utils.getString("BubblesPaste.workwith.unformatted");
+            //Subtopic.Tag = Utils.getString("AddTopicStix.addsubtopic");
+            NextTopic.Tag = Utils.getString("AddTopicStix.addtopic");
+            TopicBefore.Tag = Utils.getString("AddTopicStix.addbefore");
+            ParentTopic.Tag = Utils.getString("AddTopicStix.addparent");
+            Callout.Tag = Utils.getString("AddTopicStix.addcallout");
+            //ToggleTextFormat.Tag = Utils.getString("TextOpsStix.workwith.unformatted");
             //ToggleTextFormat.AccessibleName = "unformatted";
 
             foreach (Control pb in panelPasteTopic.Controls) {
@@ -61,33 +61,33 @@ namespace Bubbles
             {
                 case "Subtopic":
                     if (add)
-                        tooltip = Utils.getString("BubblesPaste.addsubtopic");
+                        tooltip = Utils.getString("AddTopicStix.addsubtopic");
                     else
-                        tooltip = Utils.getString("BubblesPaste.pastesubtopic");
+                        tooltip = Utils.getString("TextOpsStix.pastesubtopic");
                     break;
                 case "NextTopic":
                     if (add)
-                        tooltip = Utils.getString("BubblesPaste.addtopic");
+                        tooltip = Utils.getString("AddTopicStix.addtopic");
                     else
-                        tooltip = Utils.getString("BubblesPaste.pastetopic");
+                        tooltip = Utils.getString("TextOpsStix.pastetopic");
                     break;
                 case "TopicBefore":
                     if (add)
-                        tooltip = Utils.getString("BubblesPaste.addbefore");
+                        tooltip = Utils.getString("AddTopicStix.addbefore");
                     else
-                        tooltip = Utils.getString("BubblesPaste.pastebefore");
+                        tooltip = Utils.getString("TextOpsStix.pastebefore");
                     break;
                 case "ParentTopic":
                     if (add)
-                        tooltip = Utils.getString("BubblesPaste.addparent");
+                        tooltip = Utils.getString("AddTopicStix.addparent");
                     else
-                        tooltip = Utils.getString("BubblesPaste.pasteparent");
+                        tooltip = Utils.getString("TextOpsStix.pasteparent");
                     break;
                 case "Callout":
                     if (add)
-                        tooltip = Utils.getString("BubblesPaste.addcallout");
+                        tooltip = Utils.getString("AddTopicStix.addcallout");
                     else
-                        tooltip = Utils.getString("BubblesPaste.pastecallout");
+                        tooltip = Utils.getString("TextOpsStix.pastecallout");
                     break;
             }
 
@@ -142,12 +142,12 @@ namespace Bubbles
             var stick = panelH.Tag as Form;
             StixUtils.ActivateMindManager(); // In order to hide Popup
 
-            StixButton.STICKS.Remove((int)stick.Tag);
+            StixMain.STICKS.Remove((int)stick.Tag);
             stick.Close();
 
             if (stick.Name == "BubbleTaskInfo")
             {
-                StixButton.m_TaskInfo = null;
+                StixMain.m_TaskInfo = null;
             }
         }
 

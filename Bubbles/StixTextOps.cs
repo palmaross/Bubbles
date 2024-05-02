@@ -27,25 +27,25 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "PasteStick.htm");
+            helpProvider1.SetHelpKeyword(this, "TextOpsStix.htm");
 
             if (orientation == "V") {
                 orientation = "H"; Rotate(); }
 
-            toolTip1.SetToolTip(subtopic, Utils.getString("BubblesPaste.pastesubtopic"));
-            toolTip1.SetToolTip(pPasteToTopic, Utils.getString("BubblesPaste.pPaste.tooltip"));
-            toolTip1.SetToolTip(pCopyTopicText, Utils.getString("BubblesPaste.pCopy.tooltip"));
-            toolTip1.SetToolTip(PasteLink, Utils.getString("BubblesPaste.PasteLink.tooltip"));
-            toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.PasteNotes.tooltip"));
-            toolTip1.SetToolTip(UnformatText, Utils.getString("BubblesPaste.unformate.tooltip"));
-            toolTip1.SetToolTip(pReplace, Utils.getString("BubblesPaste.pReplace.tooltip"));
-            toolTip1.SetToolTip(pTopicWidth, Utils.getString("BubblesPaste.pTopicWidth.tooltip"));
+            toolTip1.SetToolTip(subtopic, Utils.getString("TextOpsStix.pastesubtopic"));
+            toolTip1.SetToolTip(pPasteToTopic, Utils.getString("TextOpsStix.pPaste.tooltip"));
+            toolTip1.SetToolTip(pCopyTopicText, Utils.getString("TextOpsStix.pCopy.tooltip"));
+            toolTip1.SetToolTip(PasteLink, Utils.getString("TextOpsStix.PasteLink.tooltip"));
+            toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.PasteNotes.tooltip"));
+            toolTip1.SetToolTip(UnformatText, Utils.getString("TextOpsStix.unformate.tooltip"));
+            toolTip1.SetToolTip(pReplace, Utils.getString("TextOpsStix.pReplace.tooltip"));
+            toolTip1.SetToolTip(pTopicWidth, Utils.getString("TextOpsStix.pTopicWidth.tooltip"));
 
-            toolTip1.SetToolTip(OptionTextFormat, Utils.getString("BubblesPaste.workwith.unformatted"));
-            toolTip1.SetToolTip(OptionReplaceInsert, Utils.getString("paste.contextmenu.insert2"));
-            toolTip1.SetToolTip(OptionMultipleTopics, Utils.getString("paste.contextmenu.multipletopics2"));
-            toolTip1.SetToolTip(OptionSourceLink, Utils.getString("BubblesPaste.sourcelink_no"));
-            toolTip1.SetToolTip(OptionInternalLinks, Utils.getString("BubblesPaste.internallinks_no"));
+            toolTip1.SetToolTip(OptionTextFormat, Utils.getString("TextOpsStix.workwith.unformatted"));
+            toolTip1.SetToolTip(OptionReplaceInsert, Utils.getString("textops.contextmenu.insert2"));
+            toolTip1.SetToolTip(OptionMultipleTopics, Utils.getString("textops.contextmenu.multipletopics2"));
+            toolTip1.SetToolTip(OptionSourceLink, Utils.getString("TextOpsStix.sourcelink_no"));
+            toolTip1.SetToolTip(OptionInternalLinks, Utils.getString("TextOpsStix.internallinks_no"));
 
             toolTip1.SetToolTip(pictureHandle, stickname);
 
@@ -53,8 +53,8 @@ namespace Bubbles
             cmsTopicWidths.ItemClicked += ContextMenu_ItemClicked;
             cmsCommon.ItemClicked += ContextMenu_ItemClicked;
 
-            OP_myrisk.Text = Utils.getString("pastenotes.contextmenu.quickinsert");
-            OP_myrisk.ToolTipText = Utils.getString("pastenotes.contextmenu.quickinsert.tooltip");
+            OP_myrisk.Text = Utils.getString("textops.notescontextmenu.insertnotes");
+            OP_myrisk.ToolTipText = Utils.getString("textops.notescontextmenu.insertnotes.tooltip");
             OP_myrisk.Tag = "myrisk";
 
             StixUtils.SetCommonContextMenu(cmsCommon, StixUtils.typetextops);
@@ -127,34 +127,34 @@ namespace Bubbles
                     PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotes.png");
 
                     if (OptionReplaceInsert.Tag.ToString() == "replace")
-                        toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.PasteNotes.tooltip"));
+                        toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.PasteNotes.tooltip"));
                     else
-                        toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.AddNotes.tooltip"));
+                        toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.AddNotes.tooltip"));
                 }
                 else // user checks _Unsafe_ Insert Notes mode
                 {
                     if (OptionReplaceInsert.Tag.ToString() == "insert")
                     {
                         PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotesRisk.png");
-                        toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.AddNotes.unsafe.tooltip"));
+                        toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.AddNotes.unsafe.tooltip"));
                     }
                     else
                     {
                         PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotes.png");
-                        toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.PasteNotes.tooltip"));
+                        toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.PasteNotes.tooltip"));
                     }
                 }
             }
             else if (e.ClickedItem.Name == "ManageTopicWidths")
             {
-                if (StixButton.topicWidthDlg.Visible)
+                if (StixMain.topicWidthDlg.Visible)
                 {
-                    StixButton.topicWidthDlg.Hide();
+                    StixMain.topicWidthDlg.Hide();
                 }
                 else
                 {
-                    StixButton.topicWidthDlg.form = this;
-                    StixButton.topicWidthDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                    StixMain.topicWidthDlg.form = this;
+                    StixMain.topicWidthDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                 }
             }
             else if (e.ClickedItem.Name == "ManualWidth")
@@ -187,12 +187,12 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
-                StixButton.STICKS.Remove((int)this.Tag);
+                StixMain.STICKS.Remove((int)this.Tag);
                 this.Close();
             }
             else if (e.ClickedItem.Name == "BI_help")
             {
-                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "PasteStick.htm");
+                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "TextOpsStix.htm");
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
@@ -350,13 +350,13 @@ namespace Bubbles
             t.Notes.CursorPosition = -1;
 
             if (StixUtils.SourceURL != "")
-                t.Notes.InsertTextHyperlink(StixUtils.SourceURL,  Utils.getString("BubblesPaste.AddNotes.Source"));
+                t.Notes.InsertTextHyperlink(StixUtils.SourceURL,  Utils.getString("TextOpsStix.AddNotes.Source"));
 
             if (StixUtils.Links.Count > 0)
             {
                 int i = 1;
                 foreach (string link in StixUtils.Links)
-                    t.Notes.InsertTextHyperlink(link, Utils.getString("BubblesPaste.AddNotes.Link") + " " + i++);
+                    t.Notes.InsertTextHyperlink(link, Utils.getString("TextOpsStix.AddNotes.Link") + " " + i++);
             }
         }
 
@@ -825,7 +825,7 @@ namespace Bubbles
                 if (single && Clipboard.ContainsData(System.Windows.DataFormats.Rtf)) // we have the rtf text already
                 {
                     TopicsToAdd.Add(Clipboard.GetText(TextDataFormat.Rtf));
-                    TrsPasteTopic(Utils.getString("addtopics.transactionname.insert"));
+                    TrsPasteTopic(Utils.getString("TextOpsStix.transactionname.insert"));
                 }
                 else // paste to format text
                 {
@@ -847,7 +847,7 @@ namespace Bubbles
                 if (single || topicType == "callout" || topicType == "parenttopic") // paste as single topic with unformatted text from clipboard
                 {
                     TopicsToAdd.Add(Clipboard.GetText(TextDataFormat.UnicodeText));
-                    TrsPasteTopic(Utils.getString("addtopics.transactionname.insert"));
+                    TrsPasteTopic(Utils.getString("TextOpsStix.transactionname.insert"));
                 }
                 else // paste as multiple topic with unformatted text from clipboard
                 {
@@ -869,7 +869,7 @@ namespace Bubbles
                         sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
                     }
                     else
-                        TrsPasteTopic(Utils.getString("addtopics.transactionname.insert"));
+                        TrsPasteTopic(Utils.getString("TextOpsStix.transactionname.insert"));
                 }
             }
         }
@@ -925,13 +925,13 @@ namespace Bubbles
                     {
                         OptionTextFormat.Tag = "unformatted";
                         OptionTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "unformattedText.png");
-                        toolTip1.SetToolTip(OptionTextFormat, Utils.getString("BubblesPaste.workwith.unformatted"));
+                        toolTip1.SetToolTip(OptionTextFormat, Utils.getString("TextOpsStix.workwith.unformatted"));
                     }
                     else
                     {
                         OptionTextFormat.Tag = "formatted";
                         OptionTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "formattedText.png");
-                        toolTip1.SetToolTip(OptionTextFormat, Utils.getString("BubblesPaste.workwith.formatted"));
+                        toolTip1.SetToolTip(OptionTextFormat, Utils.getString("TextOpsStix.workwith.formatted"));
                     }
                 }
                 else if (sender == OptionReplaceInsert)
@@ -940,27 +940,27 @@ namespace Bubbles
                     {
                         OptionReplaceInsert.Tag = "insert";
                         OptionReplaceInsert.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "inserttext.png");
-                        toolTip1.SetToolTip(OptionReplaceInsert, Utils.getString("paste.contextmenu.insert1"));
+                        toolTip1.SetToolTip(OptionReplaceInsert, Utils.getString("textops.contextmenu.insert1"));
 
                         if (OP_myrisk.Checked)
                         {
                             PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotesRisk.png");
-                            toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.AddNotes.unsafe.tooltip"));
+                            toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.AddNotes.unsafe.tooltip"));
                         }
                         else
                         {
                             PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotes.png");
-                            toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.AddNotes.tooltip"));
+                            toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.AddNotes.tooltip"));
                         }
                     }
                     else
                     {
                         OptionReplaceInsert.Tag = "replace";
                         OptionReplaceInsert.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "replacetext.png");
-                        toolTip1.SetToolTip(OptionReplaceInsert, Utils.getString("paste.contextmenu.insert2"));
+                        toolTip1.SetToolTip(OptionReplaceInsert, Utils.getString("textops.contextmenu.insert2"));
                         
                         PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotes.png");
-                        toolTip1.SetToolTip(PasteNotes, Utils.getString("BubblesPaste.PasteNotes.tooltip"));
+                        toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.PasteNotes.tooltip"));
                     }
                 }
                 else if (sender == OptionMultipleTopics)
@@ -969,13 +969,13 @@ namespace Bubbles
                     {
                         OptionMultipleTopics.Tag = "multiple";
                         OptionMultipleTopics.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "cpTopicTemplate.png");
-                        toolTip1.SetToolTip(OptionMultipleTopics, Utils.getString("paste.contextmenu.multipletopics1"));
+                        toolTip1.SetToolTip(OptionMultipleTopics, Utils.getString("textops.contextmenu.multipletopics1"));
                     }
                     else
                     {
                         OptionMultipleTopics.Tag = "single";
                         OptionMultipleTopics.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "cpAddSingle.png");
-                        toolTip1.SetToolTip(OptionMultipleTopics, Utils.getString("paste.contextmenu.multipletopics2"));
+                        toolTip1.SetToolTip(OptionMultipleTopics, Utils.getString("textops.contextmenu.multipletopics2"));
                     }
                 }
                 else if (sender == OptionSourceLink)
@@ -984,13 +984,13 @@ namespace Bubbles
                     {
                         OptionSourceLink.Tag = "yes";
                         OptionSourceLink.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "sourcelink_active.png");
-                        toolTip1.SetToolTip(OptionSourceLink, Utils.getString("BubblesPaste.sourcelink_yes"));
+                        toolTip1.SetToolTip(OptionSourceLink, Utils.getString("TextOpsStix.sourcelink_yes"));
                     }
                     else
                     {
                         OptionSourceLink.Tag = "no";
                         OptionSourceLink.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "sourcelink.png");
-                        toolTip1.SetToolTip(OptionSourceLink, Utils.getString("BubblesPaste.sourcelink_no"));
+                        toolTip1.SetToolTip(OptionSourceLink, Utils.getString("TextOpsStix.sourcelink_no"));
                     }
                 }
                 else if (sender == OptionInternalLinks)
@@ -999,13 +999,13 @@ namespace Bubbles
                     {
                         OptionInternalLinks.Tag = "yes";
                         OptionInternalLinks.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "internallinks_active.png");
-                        toolTip1.SetToolTip(OptionInternalLinks, Utils.getString("BubblesPaste.internallinks_yes"));
+                        toolTip1.SetToolTip(OptionInternalLinks, Utils.getString("TextOpsStix.internallinks_yes"));
                     }
                     else
                     {
                         OptionInternalLinks.Tag = "no";
                         OptionInternalLinks.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "internallinks.png");
-                        toolTip1.SetToolTip(OptionInternalLinks, Utils.getString("BubblesPaste.internallinks_no"));
+                        toolTip1.SetToolTip(OptionInternalLinks, Utils.getString("TextOpsStix.internallinks_no"));
                     }
                 }
             }
@@ -1020,8 +1020,8 @@ namespace Bubbles
 
         private void pReplace_Click(object sender, EventArgs e)
         {
-            if (!StixButton.m_ReplaceDlg.Visible)
-                StixButton.m_ReplaceDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            if (!StixMain.m_ReplaceDlg.Visible)
+                StixMain.m_ReplaceDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
         public void PopulateTopicWidth()
@@ -1029,10 +1029,10 @@ namespace Bubbles
             cmsTopicWidths.Items.Clear();
 
             ToolStripItem tsi = null;
-            tsi = cmsTopicWidths.Items.Add(Utils.getString("BubblesPaste.TopicWidth.Manage"));
+            tsi = cmsTopicWidths.Items.Add(Utils.getString("TextOpsStix.TopicWidth.Manage"));
             tsi.Name = "ManageTopicWidths";
 
-            tsi = new ToolStripLabel(Utils.getString("BubblesPaste.TopicWidth.Label"));
+            tsi = new ToolStripLabel(Utils.getString("TextOpsStix.TopicWidth.Label"));
             tsi.Font = new Font(tsi.Font, FontStyle.Bold);
             cmsTopicWidths.Items.Add(tsi);
 
@@ -1042,30 +1042,25 @@ namespace Bubbles
                 tsi.Name = "ManualWidth"; tsi.Tag = width.ToString();
             }
 
-            tsi = new ToolStripLabel(Utils.getString("BubblesPaste.TopicWidth.Label2"));
-            tsi.ToolTipText = Utils.getString("BubblesPaste.TopicWidth.tooltip");
+            tsi = new ToolStripLabel(Utils.getString("TextOpsStix.TopicWidth.Label2"));
+            tsi.ToolTipText = Utils.getString("TextOpsStix.TopicWidth.tooltip");
             cmsTopicWidths.Items.Add(tsi);
 
             ToolStripTextBox mtb = new ToolStripTextBox();
             mtb.Width = Manage.Width * 2;
             mtb.BorderStyle = BorderStyle.FixedSingle;
-            mtb.ToolTipText = Utils.getString("BubblesPaste.TopicWidth.tooltip");
+            mtb.ToolTipText = Utils.getString("TextOpsStix.TopicWidth.tooltip");
             mtb.KeyDown += Mtb_KeyDown;
             cmsTopicWidths.Items.Add(mtb);
 
             cmsTopicWidths.Items.Add(new ToolStripSeparator());
 
-            tsi = cmsTopicWidths.Items.Add(Utils.getString("BubblesPaste.TopicWidth.MMAutoWidth"));
+            tsi = cmsTopicWidths.Items.Add(Utils.getString("TextOpsStix.TopicWidth.MMAutoWidth"));
             tsi.Name = "MMAutoWidth";
-            tsi.ToolTipText = Utils.getString("BubblesPaste.MMAutoWidth.tooltip");
+            tsi.ToolTipText = Utils.getString("TextOpsStix.MMAutoWidth.tooltip");
             (tsi as ToolStripMenuItem).CheckOnClick = true;
             (tsi as ToolStripMenuItem).Checked = StixUtils.TopicAutoWidth;
             cmsTopicWidths.Items.Add(tsi);
-
-            //var dd = (tsi as ToolStripMenuItem).DropDown;
-            //dd.ItemClicked += ContextMenu_ItemClicked;
-            //tsi = dd.Items.Add(Utils.getString("BubblesPaste.MMAutoWidth.Out"));
-            //tsi.Name = "MMAutoWidthOut";
         }
 
         private void Mtb_KeyDown(object sender, KeyEventArgs e)

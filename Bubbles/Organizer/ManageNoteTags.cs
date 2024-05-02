@@ -58,7 +58,7 @@ namespace Organizer
             }
 
             // Add tag in the all open Note windows
-            foreach (Form note in StixButton.pNOTES.Values)
+            foreach (Form note in StixMain.pNOTES.Values)
             {
                 // Update tags combobox
                 ComboBox cbTags = (ComboBox)note.Controls.Find("cbTags", true)[0];
@@ -114,7 +114,7 @@ namespace Organizer
             cbTags.SelectedItem = newName;
 
             // Rename tag in the all open Note windows
-            foreach (Form note in StixButton.pNOTES.Values)
+            foreach (Form note in StixMain.pNOTES.Values)
             {
                 // Update combobox
                 ComboBox cbTags = (ComboBox)note.Controls.Find("cbTags", true)[0];
@@ -156,7 +156,7 @@ namespace Organizer
                 db.ExecuteNonQuery("delete from NOTETAGS where name=`" + tag + "`");
 
             // Delete tag in the all open Note windows
-            foreach (Form note in StixButton.pNOTES.Values)
+            foreach (Form note in StixMain.pNOTES.Values)
             {
                 // Update tags combobox
                 ComboBox cbTags = (ComboBox)note.Controls.Find("cbTags", true)[0];

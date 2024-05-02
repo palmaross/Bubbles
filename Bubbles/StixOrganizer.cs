@@ -24,13 +24,12 @@ namespace Bubbles
             if (orientation == "V") {
                 orientation = "H"; Rotate(); }
 
-            toolTip1.SetToolTip(pClipboard, Utils.getString("BubbleOrganizer.clipboard.tooltip"));
-            toolTip1.SetToolTip(pIdeas, Utils.getString("BubbleOrganizer.ideas.tooltip"));
-            toolTip1.SetToolTip(pLinks, Utils.getString("BubbleOrganizer.links.tooltip"));
-            toolTip1.SetToolTip(pNotes, Utils.getString("BubbleOrganizer.notes.tooltip"));
-            toolTip1.SetToolTip(pTodos, Utils.getString("BubbleOrganizer.todos.tooltip"));
+            toolTip1.SetToolTip(pClipboard, Utils.getString("StixOrganizer.clipboard.tooltip"));
+            toolTip1.SetToolTip(pIdeas, Utils.getString("StixOrganizer.ideas.tooltip"));
+            toolTip1.SetToolTip(pLinks, Utils.getString("StixOrganizer.links.tooltip"));
+            toolTip1.SetToolTip(pNotes, Utils.getString("StixOrganizer.notes.tooltip"));
+            toolTip1.SetToolTip(pTodos, Utils.getString("StixOrganizer.todos.tooltip"));
 
-            //toolTip1.SetToolTip(Manage, Utils.getString("bubble.manage.tooltip"));
             toolTip1.SetToolTip(pictureHandle, stickname);
 
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
@@ -63,7 +62,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
-                StixButton.STICKS.Remove((int)this.Tag);
+                StixMain.STICKS.Remove((int)this.Tag);
                 this.Close();
             }
             else if (e.ClickedItem.Name == "BI_help")
@@ -100,15 +99,15 @@ namespace Bubbles
 
         private void Notes_Click(object sender, EventArgs e)
         {
-            if (StixButton.m_Notes == null)
+            if (StixMain.m_Notes == null)
             {
-                StixButton.m_Notes = new Organizer.NotesDlg();
-                StixButton.m_Notes.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                StixMain.m_Notes = new Organizer.NotesDlg();
+                StixMain.m_Notes.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
             else
             {
-                if (StixButton.m_Notes.WindowState == FormWindowState.Minimized)
-                    StixButton.m_Notes.WindowState = FormWindowState.Normal;
+                if (StixMain.m_Notes.WindowState == FormWindowState.Minimized)
+                    StixMain.m_Notes.WindowState = FormWindowState.Normal;
             }
         }
 

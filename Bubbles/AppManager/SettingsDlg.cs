@@ -10,6 +10,10 @@ namespace Bubbles
         {
             InitializeComponent();
 
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
+            helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
+            helpProvider1.SetHelpKeyword(this, "Settings.htm");
+
             Text = Utils.getString("SettingsDlg.Title");
             gbRunAtStart.Text = Utils.getString("SettingsDlg.gbRunAtStart");
             cbSelectAll.Text = Utils.getString("SettingsDlg.cbSelectAll");
@@ -49,7 +53,7 @@ namespace Bubbles
             string qtr_defaults = Utils.getRegistry("QuickTaskRemoveDefaults", "");
             if (qtr_defaults != "")
             {
-                bool taskinfostix = StixButton.m_TaskInfo != null;
+                bool taskinfostix = StixMain.m_TaskInfo != null;
                 string[] parts = qtr_defaults.Split(';');
                 foreach (string part in parts)
                 {
@@ -71,6 +75,13 @@ namespace Bubbles
             
             FaviconsToolStix.Checked = Utils.getRegistry("FaviconsToolStix", "1") == "1";
             FaviconsLinksWindow.Checked = Utils.getRegistry("FaviconsLinksWindow", "1") == "1";
+
+            this.HelpButtonClicked += this_HelpButtonClicked;
+        }
+
+        private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "Settings.htm");
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -99,8 +110,8 @@ namespace Bubbles
             defaults += "effort:" + (QTR_Effort.Checked ? "1" : "0");
             Utils.setRegistry("QuickTaskRemoveDefaults", defaults);
 
-            if (StixButton.m_TaskInfo != null)
-                StixButton.m_TaskInfo.SetQuickTaskDefault();
+            if (StixMain.m_TaskInfo != null)
+                StixMain.m_TaskInfo.SetQuickTaskDefault();
 
             Utils.setRegistry("FaviconsToolStix", FaviconsToolStix.Checked ? "1" : "0");
             Utils.setRegistry("FaviconsLinksWindow", FaviconsLinksWindow.Checked ? "1" : "0");
@@ -143,7 +154,7 @@ namespace Bubbles
             try { SF_Boxes = Convert.ToInt32(numBoxes.Text.Trim('%').Trim());
             } catch { SF_Boxes = 100; }
 
-            foreach (var pair in StixButton.STICKS)
+            foreach (var pair in StixMain.STICKS)
             {
                 Form stick = pair.Value;
                 if (stick == null) continue;
@@ -151,7 +162,7 @@ namespace Bubbles
                 switch (stick.Name)
                 {
                     case StixUtils.typebase:
-                        (stick as StixBase).ScaleStick((stick as StixBase).scaleFactor, SF_StixBase);
+                        (stick as StartMenu).ScaleStick((stick as StartMenu).scaleFactor, SF_StixBase);
                         break;
                     case StixUtils.typeicons:
                         (stick as StixIcons).ScaleStick((stick as StixIcons).scaleFactor, SF_Stix);

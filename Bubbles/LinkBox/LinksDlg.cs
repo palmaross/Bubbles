@@ -16,7 +16,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "LinksDlg.htm");
+            helpProvider1.SetHelpKeyword(this, "LinksWindow.htm");
 
             Text = Utils.getString("LinksDlg.title");
             lblOpenIn.Text = Utils.getString("LinksDlg.lblOpenIn");
@@ -61,7 +61,7 @@ namespace Bubbles
 
         private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "LinksDlg.htm");
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "LinksWindow.htm");
         }
 
         void Init()
@@ -203,29 +203,29 @@ namespace Bubbles
 
                     treeView1.SelectedNode.Remove();
 
-                    if (StixButton.m_NewLink != null && !StixButton.m_NewLink.IsDisposed)
-                        StixButton.m_NewLink.FillGroups();
+                    if (StixMain.m_NewLink != null && !StixMain.m_NewLink.IsDisposed)
+                        StixMain.m_NewLink.FillGroups();
                 }
             }
             else if (e.ClickedItem.Name == "g_AddLink" || e.ClickedItem.Name == "m_NewLink" || e.ClickedItem.Name == "m_Modify")
             {
-                if (StixButton.m_NewLink == null || StixButton.m_NewLink.IsDisposed)
+                if (StixMain.m_NewLink == null || StixMain.m_NewLink.IsDisposed)
                 {
-                    StixButton.m_NewLink = new NewLinkDlg();
-                    StixButton.m_NewLink.LinksDialog = this;
+                    StixMain.m_NewLink = new NewLinkDlg();
+                    StixMain.m_NewLink.LinksDialog = this;
 
-                    StixButton.m_NewLink.Location = new Point(this.Right, this.Top);
+                    StixMain.m_NewLink.Location = new Point(this.Right, this.Top);
                     Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
-                    if (StixButton.m_NewLink.Right > area.Right) // close to the right
-                        StixButton.m_NewLink.Location = new Point(this.Left - StixButton.m_NewLink.Width, this.Top);
+                    if (StixMain.m_NewLink.Right > area.Right) // close to the right
+                        StixMain.m_NewLink.Location = new Point(this.Left - StixMain.m_NewLink.Width, this.Top);
 
-                    StixButton.m_NewLink.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                    StixMain.m_NewLink.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                 }
 
-                StixButton.m_NewLink.from = "LinksDlg";
-                StixButton.m_NewLink.newLink = true;
-                StixButton.m_NewLink.txtLink.Text = "";
-                StixButton.m_NewLink.txtTitle.Text = "";
+                StixMain.m_NewLink.from = "LinksDlg";
+                StixMain.m_NewLink.newLink = true;
+                StixMain.m_NewLink.txtLink.Text = "";
+                StixMain.m_NewLink.txtTitle.Text = "";
 
                 int groupID = 1;
                 if (e.ClickedItem.Name == "g_AddLink")
@@ -233,7 +233,7 @@ namespace Bubbles
                 else if (dataGridView1.Rows.Count > 0)
                     groupID = (int)dataGridView1.Rows[0].Cells["GroupID"].Value;
 
-                StixButton.m_NewLink.SelectGroup(groupID);
+                StixMain.m_NewLink.SelectGroup(groupID);
 
                 if (e.ClickedItem.Name != "g_AddLink")
                 {
@@ -241,15 +241,15 @@ namespace Bubbles
 
                     if (e.ClickedItem.Name == "m_Modify")
                     {
-                        StixButton.m_NewLink.newLink = false;
-                        StixButton.m_NewLink.txtLink.Text = (string)selectedRow.Cells["LinkPath"].Value;
-                        StixButton.m_NewLink.txtLink_KeyUp(null, null);
-                        StixButton.m_NewLink.txtTitle.Text = (string)selectedRow.Cells["LinkTitle"].Value;
+                        StixMain.m_NewLink.newLink = false;
+                        StixMain.m_NewLink.txtLink.Text = (string)selectedRow.Cells["LinkPath"].Value;
+                        StixMain.m_NewLink.txtLink_KeyUp(null, null);
+                        StixMain.m_NewLink.txtTitle.Text = (string)selectedRow.Cells["LinkTitle"].Value;
                         string comment = (string)selectedRow.Cells["Comment"].Value;
                         if (!String.IsNullOrEmpty(comment))
                         {
-                            StixButton.m_NewLink.txtComment.Text = (string)selectedRow.Cells["Comment"].Value;
-                            StixButton.m_NewLink.txtComment.ForeColor = SystemColors.WindowText;
+                            StixMain.m_NewLink.txtComment.Text = (string)selectedRow.Cells["Comment"].Value;
+                            StixMain.m_NewLink.txtComment.ForeColor = SystemColors.WindowText;
                         }
                     }
                 }
@@ -343,8 +343,8 @@ namespace Bubbles
 
                 AcceptAddEditNode();
 
-                if (StixButton.m_NewLink != null && !StixButton.m_NewLink.IsDisposed)
-                    StixButton.m_NewLink.FillGroups();
+                if (StixMain.m_NewLink != null && !StixMain.m_NewLink.IsDisposed)
+                    StixMain.m_NewLink.FillGroups();
             }
             else if (e.KeyCode == Keys.Escape)
             {

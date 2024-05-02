@@ -227,8 +227,8 @@ namespace Bubbles
             m_db.ExecuteNonQuery("CREATE TABLE TOPICWIDTHS(name text, chars int, _value int, _checked int," +
                 "reserved1 text, reserved2 integer);");
 
-            m_db.ExecuteNonQuery("CREATE TABLE OMNISOUNDS(filename text, mappath, topicguid text, " +
-                "reserved1 text, reserved2 integer);");
+            ////m_db.ExecuteNonQuery("CREATE TABLE OMNISOUNDS(filename text, mappath, topicguid text, " +
+            ////    "reserved1 text, reserved2 integer);");
 
             m_db.ExecuteNonQuery("END");
 
@@ -258,20 +258,20 @@ namespace Bubbles
 
 #if VENDOR_OL
             {
-            AddLink(Utils.getString("links.first1.text"), "http://www.olympic-limited.co.uk/", "http", groupID);
-            AddTool(Utils.getString("links.first1.text"), "http://www.olympic-limited.co.uk/", "http", 1, id);
+            AddLink(Utils.getString("tools.demo1.title"), "http://www.olympic-limited.co.uk/", "http", groupID);
+            AddTool(Utils.getString("tools.demo1.title"), "http://www.olympic-limited.co.uk/", "http", 1, id);
 
             }
 #else
             {
-            AddLink(Utils.getString("links.first1.text"), "https://palmaross.com/", "http", "", "", groupID);
-            AddTool(Utils.getString("links.first1.text"), "https://palmaross.com/", "http", 1, id);
+                AddLink(Utils.getString("tools.demo1.title"), "https://palmaross.com/", "http", "", "", groupID);
+            AddTool(Utils.getString("tools.demo1.title"), "https://palmaross.com/", "http", 1, id);
             }
 #endif
 
-            AddLink(Utils.getString("links.first2.text"), Utils.dllPath + "OmniStix.chm", "chm", "", "", groupID);
-            AddTool(Utils.getString("links.first2.text"), Utils.dllPath + "OmniStix.chm", "chm", 2, id);
-            AddTool(Utils.getString("links.first3.text"), "c:\\Windows\\System32\\notepad.exe", "tool-notepad.png", 3, id);
+            AddLink(Utils.getString("tools.demo2.title"), Utils.dllPath + "OmniStix.chm", "chm", "", "", groupID);
+            AddTool(Utils.getString("tools.demo2.title"), Utils.dllPath + "OmniStix.chm", "chm", 2, id);
+            AddTool(Utils.getString("tools.demo3.title"), "c:\\Windows\\System32\\notepad.exe", "tool-notepad.png", 3, id);
             
             AddLinkGroup("Group 1", 0, 2);
             groupID = 1;
@@ -281,7 +281,7 @@ namespace Bubbles
             AddLinkGroup("Group 1.1", groupID, 1);
             AddLinkGroup("Group 1.2", groupID, 2);
 
-            AddLink(Utils.getString("links.first4.text"), "https://www.youtube.com/watch?v=U92A8H2rK2I", "youtube", "", "", groupID);
+            AddLink(Utils.getString("tools.demo4.title"), "https://www.youtube.com/watch?v=U92A8H2rK2I", "youtube", "", "", groupID);
 
             // Add Bookmarks stick
             id = r.Next();

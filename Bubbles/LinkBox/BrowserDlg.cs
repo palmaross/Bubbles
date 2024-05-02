@@ -192,28 +192,28 @@ namespace Bubbles
 
         private void btnSaveLink_Click(object sender, EventArgs e)
         {
-            if (StixButton.m_NewLink == null || StixButton.m_NewLink.IsDisposed)
+            if (StixMain.m_NewLink == null || StixMain.m_NewLink.IsDisposed)
             {
-                StixButton.m_NewLink = new NewLinkDlg();
-                StixButton.m_NewLink.OmniBrowser = this;
+                StixMain.m_NewLink = new NewLinkDlg();
+                StixMain.m_NewLink.OmniBrowser = this;
 
-                StixButton.m_NewLink.Location = new Point(this.Right, this.Top);
+                StixMain.m_NewLink.Location = new Point(this.Right, this.Top);
                 Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
-                if (StixButton.m_NewLink.Right > area.Right) // close to the right
-                    StixButton.m_NewLink.Location = new Point(this.Left - StixButton.m_NewLink.Width, this.Top);
-                if (StixButton.m_NewLink.Left < area.Left) // close to the left
-                    StixButton.m_NewLink.Location = new Point(this.Left, this.Top);
+                if (StixMain.m_NewLink.Right > area.Right) // close to the right
+                    StixMain.m_NewLink.Location = new Point(this.Left - StixMain.m_NewLink.Width, this.Top);
+                if (StixMain.m_NewLink.Left < area.Left) // close to the left
+                    StixMain.m_NewLink.Location = new Point(this.Left, this.Top);
 
 
-                StixButton.m_NewLink.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                StixMain.m_NewLink.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
 
-            StixButton.m_NewLink.from = "OmniBrowser";
-            StixButton.m_NewLink.newLink = true;
-            StixButton.m_NewLink.txtLink.Text = txtAddressBar.Text;
-            StixButton.m_NewLink.txtTitle.Text = tabControl1.SelectedTab.Text;
-            StixButton.m_NewLink.txtLink_KeyUp(null, null);
-            StixButton.m_NewLink.cbLinkGroup.SelectedIndex = 0;
+            StixMain.m_NewLink.from = "OmniBrowser";
+            StixMain.m_NewLink.newLink = true;
+            StixMain.m_NewLink.txtLink.Text = txtAddressBar.Text;
+            StixMain.m_NewLink.txtTitle.Text = tabControl1.SelectedTab.Text;
+            StixMain.m_NewLink.txtLink_KeyUp(null, null);
+            StixMain.m_NewLink.cbLinkGroup.SelectedIndex = 0;
         }
 
         private void btnClose_Click(object sender, EventArgs e)

@@ -20,6 +20,10 @@ namespace Bubbles
         {
             InitializeComponent();
 
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
+            helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
+            helpProvider1.SetHelpKeyword(this, "OmniRecorder.htm");
+
             btnAddToTopic.Text = Utils.getString("OmniSound.btnAddToTopic");
             lblRecordName.Text = Utils.getString("OmniSound.lblRecordName");
             btnSaveRecord.Text = Utils.getString("button.save");
@@ -289,14 +293,14 @@ namespace Bubbles
             if (!(MMUtils.SelectedTopic() is Topic _t))
                 return;
 
-            if (_t.ContainsControlStripType(StixButton.STRIP_URI))
+            if (_t.ContainsControlStripType(StixMain.STRIP_URI))
                 return;
 
             // Add strip icon.
             TransactionWrapper _w = new TransactionWrapper(_t, 
                 TransactionWrapper.TransactionType.ADD_STRIP_ICON,
                 (cbRecords.SelectedItem as AudioItem).Path);
-            _w.controlStripURI = StixButton.STRIP_URI;
+            _w.controlStripURI = StixMain.STRIP_URI;
             _w.Execute();
         }
 
@@ -307,7 +311,7 @@ namespace Bubbles
 
         private void pHelp_Click(object sender, EventArgs e)
         {
-
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "OmniRecorder.htm");
         }
 
         System.Drawing.Image StartRecord, StopRecord, StartPlay, StopPlay;

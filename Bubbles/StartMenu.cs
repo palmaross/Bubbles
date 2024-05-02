@@ -9,15 +9,15 @@ using System.Windows.Forms;
 
 namespace Bubbles
 {
-    internal partial class StixBase : Form
+    internal partial class StartMenu : Form
     {
-        public StixBase()
+        public StartMenu()
         {
             InitializeComponent();
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "stixbase.htm");
+            helpProvider1.SetHelpKeyword(this, "stixstartmenu.htm");
 
             toolTip1.SetToolTip(stxIcons, Utils.getString("StixIcons.tooltip"));
             toolTip1.SetToolTip(stxTaskInfo, Utils.getString("StixTaskInfo.tooltip"));
@@ -32,20 +32,19 @@ namespace Bubbles
             toolTip1.SetToolTip(OmniRec, Utils.getString("Box.OmniSound"));
             toolTip1.SetToolTip(Stickers, Utils.getString("stickers.contextmenu.stickers"));
 
-            cm_show.Text = Utils.getString("bulkoperations.contextmenu.show");
-            cm_hide.Text = Utils.getString("bulkoperations.contextmenu.hide");
-            cm_close.Text = Utils.getString("bulkoperations.contextmenu.close");
-            cm_remember.Text = Utils.getString("bulkoperations.contextmenu.remember");
+            cm_show.Text = Utils.getString("startmenu.contextmenu.show");
+            cm_hide.Text = Utils.getString("startmenu.contextmenu.hide");
+            cm_close.Text = Utils.getString("startmenu.contextmenu.close");
+            cm_remember.Text = Utils.getString("startmenu.contextmenu.remember");
 
-            cm_show.ToolTipText = Utils.getString("contextmenu.show.tooltip");
-            cm_hide.ToolTipText = Utils.getString("contextmenu.hide.tooltip");
-            cm_close.ToolTipText = Utils.getString("bulkoperations.contextmenu.close");
-            cm_remember.ToolTipText = Utils.getString("contextmenu.remember.tooltip");
+            cm_show.ToolTipText = Utils.getString("startmenu.contextmenu.show.tooltip");
+            cm_hide.ToolTipText = Utils.getString("startmenu.contextmenu.hide.tooltip");
+            cm_remember.ToolTipText = Utils.getString("startmenu.contextmenu.remember.tooltip");
 
             cm_settings.Text = Utils.getString("SettingsDlg.Title");
             cm_help.Text = Utils.getString("button.help");
-            cm_about.Text = Utils.getString("stixbase.contextmenu.about");
-            cm_autoclose.Text = Utils.getString("stixbase.contextmenu.autohide");
+            cm_about.Text = Utils.getString("startmenu.contextmenu.about");
+            cm_autoclose.Text = Utils.getString("startmenu.contextmenu.autohide");
             cm_closemenu.Text = Utils.getString("button.close");
 
             StixUtils.cmiSize = p2.Size;
@@ -108,7 +107,7 @@ namespace Bubbles
             {
                 cmsManage.Close();
                 cmsIcons.Close();
-                cmsMySources.Close();
+                cmsTools.Close();
                 this.Hide();
             }
         }
@@ -131,36 +130,36 @@ namespace Bubbles
             switch (e.ClickedItem.Name)
             {
                 case "cm_help":
-                    Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "stixbase.htm");
+                    Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "stixstartmenu.htm");
                     break;
                 case "cm_settings":
                     using (SettingsDlg dlg = new SettingsDlg())
                         dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                     break;
                 case "cm_about":
-
+                    Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "About.htm");
                     break;
 
                 //Bulk operations
                 case "cm_show":
-                    foreach (var stick in StixButton.STICKS.Values)
+                    foreach (var stick in StixMain.STICKS.Values)
                     {
                         if (!stick.Visible) stick.Show();
                     }
                     break;
                 case "cm_hide":
-                    foreach (var stick in StixButton.STICKS.Values)
+                    foreach (var stick in StixMain.STICKS.Values)
                         stick.Hide();
                     break;
                 case "cm_close":
-                    foreach (var stick in StixButton.STICKS.Values)
+                    foreach (var stick in StixMain.STICKS.Values)
                     {
                         stick.Close(); stick.Dispose();
                     }
-                    StixButton.STICKS.Clear();
+                    StixMain.STICKS.Clear();
                     break;
                 case "cm_remember":
-                    foreach (var stick in StixButton.STICKS)
+                    foreach (var stick in StixMain.STICKS)
                     {
                         string orientation = "H";
 
@@ -233,64 +232,64 @@ namespace Bubbles
 
         private void BoxBookmarks_Click(object sender, EventArgs e)
         {
-            if (StixButton.m_BookmarkList == null)
-                StixButton.m_BookmarkList = new BookmarkListDlg();
+            if (StixMain.m_BookmarkList == null)
+                StixMain.m_BookmarkList = new BookmarkListDlg();
 
-            StixButton.m_BookmarkList.Init();
+            StixMain.m_BookmarkList.Init();
 
-            if (StixButton.m_BookmarkList.Visible)
-                StixButton.m_BookmarkList.WindowState = FormWindowState.Normal;
+            if (StixMain.m_BookmarkList.Visible)
+                StixMain.m_BookmarkList.WindowState = FormWindowState.Normal;
             else
             {
-                if (StixButton.m_BookmarkList.Location.IsEmpty)
+                if (StixMain.m_BookmarkList.Location.IsEmpty)
                 {
-                    StixButton.m_BookmarkList.Location =
-                        new Point(StixButton.OmniSticksButton.Location.X, this.Bottom);
+                    StixMain.m_BookmarkList.Location =
+                        new Point(StixMain.OmniSticksButton.Location.X, this.Bottom);
                 }
-                StixButton.m_BookmarkList.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                StixMain.m_BookmarkList.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
         }
 
         private void BoxResources_Click(object sender, EventArgs e)
         {
-            if (StixButton.m_Resources == null)
-                StixButton.m_Resources = new ResourcesDlg();
+            if (StixMain.m_Resources == null)
+                StixMain.m_Resources = new ResourcesDlg();
 
-            StixButton.m_Resources.InitCurrentMapResources();
+            StixMain.m_Resources.InitCurrentMapResources();
 
-            if (StixButton.m_Resources.Visible)
-                StixButton.m_Resources.WindowState = FormWindowState.Normal;
+            if (StixMain.m_Resources.Visible)
+                StixMain.m_Resources.WindowState = FormWindowState.Normal;
             else
             {
-                if (StixButton.m_Resources.Location.IsEmpty)
+                if (StixMain.m_Resources.Location.IsEmpty)
                 {
-                    StixButton.m_Resources.Location =
-                        new Point(StixButton.OmniSticksButton.Location.X, this.Bottom);
+                    StixMain.m_Resources.Location =
+                        new Point(StixMain.OmniSticksButton.Location.X, this.Bottom);
                 }
-                StixButton.m_Resources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                StixMain.m_Resources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
         }
 
         private void OmniRec_Click(object sender, EventArgs e)
         {
-            if (StixButton.m_OmniSound.Visible)
-                StixButton.m_OmniSound.WindowState = FormWindowState.Normal;
+            if (StixMain.m_OmniSound.Visible)
+                StixMain.m_OmniSound.WindowState = FormWindowState.Normal;
             else
             {
-                if (StixButton.m_OmniSound.Location.IsEmpty)
+                if (StixMain.m_OmniSound.Location.IsEmpty)
                 {
-                    StixButton.m_OmniSound.Location =
-                        new Point(StixButton.OmniSticksButton.Location.X, this.Bottom);
+                    StixMain.m_OmniSound.Location =
+                        new Point(StixMain.OmniSticksButton.Location.X, this.Bottom);
                 }
-                StixButton.m_OmniSound.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                StixMain.m_OmniSound.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
         }
 
         private void BoxSources_Click(object sender, EventArgs e)
         {
-            StixButton.m_AllSources = null;
-            StixButton.m_AllSources = new LinksDlg();
-            StixButton.m_AllSources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            StixMain.m_AllSources = null;
+            StixMain.m_AllSources = new LinksDlg();
+            StixMain.m_AllSources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
         private void Stickers_MouseClick(object sender, MouseEventArgs e)
@@ -306,7 +305,7 @@ namespace Bubbles
 
         public void BaseIcon_MouseClick(object sender, MouseEventArgs e)
         {
-            string stickType = ""; string defaultName = "";
+            string stickType; string defaultName;
             PictureBox pb = sender as PictureBox;
 
             if (pb.Name == "stxIcons")
@@ -327,9 +326,9 @@ namespace Bubbles
             {
                 stickType = StixUtils.typetools;
                 defaultName = Utils.getString("StixTools.tooltip");
-                if (cmsMySources.Items.Count > 0 && startId == 0)
+                if (cmsTools.Items.Count > 0 && startId == 0)
                 {
-                    cmsMySources.Show(Cursor.Position); return;
+                    cmsTools.Show(Cursor.Position); return;
                 }
             }
             else if (pb.Name == "stxBookmarks")
@@ -390,7 +389,7 @@ namespace Bubbles
             }
 
             form.Location = GetStickLocation(location, form.Size);
-            StixButton.STICKS.Add(id, form);
+            StixMain.STICKS.Add(id, form);
             form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
 
             StixUtils.ActivateMindManager();
@@ -405,7 +404,7 @@ namespace Bubbles
             // 0,0 - screen2.Location, 2,358 - this.Location on the screen2
 
             if (String.IsNullOrEmpty(location))
-                thisLocation = new Point(StixButton.OmniSticksButton.Location.X, this.Bottom);
+                thisLocation = new Point(StixMain.OmniSticksButton.Location.X, this.Bottom);
             else
             {
                 // Location of the screen where center of MindManager is located
@@ -440,7 +439,7 @@ namespace Bubbles
             id = GetStick(type, id, ref location, ref orientation, ref name);
 
             // If stick is running, show it (if it is hidden) or tell user that it is already running
-            foreach (var stick in StixButton.STICKS)
+            foreach (var stick in StixMain.STICKS)
             {
                 if (stick.Key == id)
                 {
@@ -536,12 +535,12 @@ namespace Bubbles
             }
             if (type == "" || type == StixUtils.typetools)
             {
-                if (cmsMySources.Items.Count > 0) cmsMySources.Items.Clear();
-                cmsMySources = GetSticks(StixUtils.typetools, cmsMySources);
-                if (cmsMySources.Items.Count > 0)
+                if (cmsTools.Items.Count > 0) cmsTools.Items.Clear();
+                cmsTools = GetSticks(StixUtils.typetools, cmsTools);
+                if (cmsTools.Items.Count > 0)
                 {
-                    stxTools.ContextMenuStrip = cmsMySources;
-                    cmsMySources.ItemClicked += cms_ItemClicked;
+                    stxTools.ContextMenuStrip = cmsTools;
+                    cmsTools.ItemClicked += cms_ItemClicked;
                 }
             }
         }
@@ -585,7 +584,7 @@ namespace Bubbles
         public int startId = 0;
 
         public ContextMenuStrip cmsIcons = new ContextMenuStrip() { ShowImageMargin = false };
-        public ContextMenuStrip cmsMySources = new ContextMenuStrip() { ShowImageMargin = false };
+        public ContextMenuStrip cmsTools = new ContextMenuStrip() { ShowImageMargin = false };
 
         public float scaleFactor = 100;
 

@@ -30,18 +30,18 @@ namespace Bubbles
 
         private void Rounded_MouseHover(object sender, EventArgs e)
         {
-            if (StixButton.m_StixBase.Visible) { return; }
+            if (StixMain.m_StixBase.Visible) { return; }
 
-            StixButton.m_StixBase.Location = new Point(this.Location.X, this.Location.Y - StixButton.m_StixBase.Height);
-            StixButton.m_StixBase.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-            int X = StixButton.m_StixBase.Location.X;
-            int Y = StixButton.m_StixBase.Location.Y;
+            StixMain.m_StixBase.Location = new Point(this.Location.X, this.Location.Y - StixMain.m_StixBase.Height);
+            StixMain.m_StixBase.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            int X = StixMain.m_StixBase.Location.X;
+            int Y = StixMain.m_StixBase.Location.Y;
 
             do
             {
                 Y += 4;
-                StixButton.m_StixBase.Location = new Point(X, Y);
-                StixButton.m_StixBase.Refresh();
+                StixMain.m_StixBase.Location = new Point(X, Y);
+                StixMain.m_StixBase.Refresh();
             }
             while (Y < this.Location.Y);
         }
@@ -93,11 +93,11 @@ namespace Bubbles
                 this.Location = new Point(X, Y);
 
             // Check if the Resource group is changed
-            if (StixButton.m_Resources != null && StixButton.m_Resources.Visible)
+            if (StixMain.m_Resources != null && StixMain.m_Resources.Visible)
             {
                 MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
                 List<string> MapResources = new List<string>();
-                MapResources.AddRange(StixButton.m_Resources.MapResources.Keys);
+                MapResources.AddRange(StixMain.m_Resources.MapResources.Keys);
 
                 foreach (MapMarker mm in mg)
                 {
@@ -107,20 +107,20 @@ namespace Bubbles
                         string color = "#" + mm.Color.Value.ToString("X");
                         if (color == "#0") color = "";
 
-                        if (color == StixButton.m_Resources.MapResources[mm.Label])
+                        if (color == StixMain.m_Resources.MapResources[mm.Label])
                         {
                             MapResources.Remove(mm.Label); continue;
                         }
 
-                        StixButton.m_Resources.InitCurrentMapResources(); break;
+                        StixMain.m_Resources.InitCurrentMapResources(); break;
                     }
                     else // Add resource to StixButton.m_Resources
                     {
-                        StixButton.m_Resources.InitCurrentMapResources(); break;
+                        StixMain.m_Resources.InitCurrentMapResources(); break;
                     }
                 }
 
-                if (MapResources.Count > 0) { StixButton.m_Resources.InitCurrentMapResources(); }
+                if (MapResources.Count > 0) { StixMain.m_Resources.InitCurrentMapResources(); }
             }
 
             // Start the OmniStix button (the first time only)

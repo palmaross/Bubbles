@@ -209,11 +209,11 @@
     <Compile Include="ScaleStickDlg.Designer.cs">
       <DependentUpon>ScaleStickDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="StixBase.cs">
+    <Compile Include="StartMenu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StixBase.Designer.cs">
-      <DependentUpon>StixBase.cs</DependentUpon>
+    <Compile Include="StartMenu.Designer.cs">
+      <DependentUpon>StartMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="OmniStix23.cs" />
     <Compile Include="AssemblyInfo23.cs" />
@@ -333,10 +333,10 @@
     <Compile Include="SnippetsDlg.Designer.cs">
       <DependentUpon>SnippetsDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="StickerDummy.cs">
+    <Compile Include="Stickers\StickerDummy.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StickerDummy.Designer.cs">
+    <Compile Include="Stickers\StickerDummy.Designer.cs">
       <DependentUpon>StickerDummy.cs</DependentUpon>
     </Compile>
     <Compile Include="StixUtils.cs" />
@@ -1032,14 +1032,14 @@
     <EmbeddedResource Include="SnippetsDlg.resx">
       <DependentUpon>SnippetsDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StickerDummy.resx">
+    <EmbeddedResource Include="Stickers\StickerDummy.resx">
       <DependentUpon>StickerDummy.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Organizer\NotesDlg.resx">
       <DependentUpon>NotesDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StixBase.resx">
-      <DependentUpon>StixBase.cs</DependentUpon>
+    <EmbeddedResource Include="StartMenu.resx">
+      <DependentUpon>StartMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TaskTemplateDlg.resx">
       <DependentUpon>TaskTemplateDlg.cs</DependentUpon>

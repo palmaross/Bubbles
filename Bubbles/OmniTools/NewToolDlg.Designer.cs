@@ -129,7 +129,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(357, 13);
             this.label1.TabIndex = 20;
-            this.label1.Text = "Имя инструмента:";
+            this.label1.Text = "AuxLabel";
             this.label1.Visible = false;
             // 
             // NewToolDlg

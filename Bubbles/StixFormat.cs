@@ -25,7 +25,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "StickFormat.htm");
+            helpProvider1.SetHelpKeyword(this, "FormatStix.htm");
 
             lblTextColor.Text = Utils.getString("stixformat.lblTextColor");
             lblFillColor.Text = Utils.getString("stixformat.lblFillColor");
@@ -180,7 +180,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
-                StixButton.STICKS.Remove((int)this.Tag);
+                StixMain.STICKS.Remove((int)this.Tag);
                 this.Close();
             }
             else if (e.ClickedItem == clear_all)
@@ -221,7 +221,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
-                StixButton.STICKS.Remove((int)this.Tag);
+                StixMain.STICKS.Remove((int)this.Tag);
                 this.Close();
             }
             else if (e.ClickedItem.Name == "BI_rotate")
@@ -230,7 +230,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_help")
             {
-                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "StickFormat.htm");
+                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "FormatStix.htm");
             }
             else if (e.ClickedItem.Name == "BI_store")
             {

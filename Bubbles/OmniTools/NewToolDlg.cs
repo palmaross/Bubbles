@@ -14,7 +14,7 @@ namespace Bubbles
 
             Tools = tools;
 
-            Text = Utils.getString("tools.contextmenu.new");
+            Text = Utils.getString("NewToolDlg.contextmenu.new");
             lblSpecifyPath.Text = Utils.getString("NewToolDlg.lblSpecifyPath");
             toolTip1.SetToolTip(btnBrowse, Utils.getString("button.browse"));
             lblTitle.Text = Utils.getString("NewToolDlg.lblTitle");

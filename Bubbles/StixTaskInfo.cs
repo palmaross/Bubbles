@@ -18,14 +18,14 @@ namespace Bubbles
         {
             InitializeComponent();
 
-            StixButton.m_TaskInfo = this;
+            StixMain.m_TaskInfo = this;
 
             this.Tag = ID;
             orientation = _orientation;
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "TaskInfoStick.htm");
+            helpProvider1.SetHelpKeyword(this, "TaskInfoStix.htm");
 
             toolTip1.SetToolTip(pictureHandle, stickname);
             toolTip1.SetToolTip(pProgress, Utils.getString("taskinfo.pProgress.tooltip"));
@@ -127,7 +127,7 @@ namespace Bubbles
             numDuration.Size = new Size(numDuration.Width, p2.Width);
             linkDurationUnit.BringToFront();
 
-            StixButton.SetDates();
+            StixMain.SetDates();
 
             // Quick Task button context menu
             cmsTaskTemplates.ItemClicked += ContextMenu_ItemClicked;
@@ -430,21 +430,21 @@ namespace Bubbles
         {
             if (e.ClickedItem.Name == "ResourceBox")
             {
-                if (StixButton.m_Resources == null)
-                    StixButton.m_Resources = new ResourcesDlg();
+                if (StixMain.m_Resources == null)
+                    StixMain.m_Resources = new ResourcesDlg();
 
-                if (StixButton.m_Resources.Visible)
-                    StixButton.m_Resources.Hide();
+                if (StixMain.m_Resources.Visible)
+                    StixMain.m_Resources.Hide();
                 else
                 {
-                    StixButton.m_Resources.InitCurrentMapResources();
+                    StixMain.m_Resources.InitCurrentMapResources();
 
-                    if (StixButton.m_Resources.Location.IsEmpty)
+                    if (StixMain.m_Resources.Location.IsEmpty)
                     {
-                        StixButton.m_Resources.Location =
-                        StixUtils.GetChildLocation(this, StixButton.m_Resources.Bounds, orientation, "resources");
+                        StixMain.m_Resources.Location =
+                        StixUtils.GetChildLocation(this, StixMain.m_Resources.Bounds, orientation, "resources");
                     }
-                    StixButton.m_Resources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                    StixMain.m_Resources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                 }
             }
             else if (e.ClickedItem.Name == "RemoveResources")
@@ -571,8 +571,8 @@ namespace Bubbles
         {
             if (e.ClickedItem.Name == "BI_close")
             {
-                StixButton.STICKS.Remove((int)this.Tag);
-                StixButton.m_TaskInfo = null;
+                StixMain.STICKS.Remove((int)this.Tag);
+                StixMain.m_TaskInfo = null;
                 this.Close();
             }
             else if (e.ClickedItem.Name == "BI_rotate")
@@ -581,7 +581,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_help")
             {
-                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "TaskInfoStick.htm");
+                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "TaskInfoStix.htm");
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
@@ -882,7 +882,7 @@ namespace Bubbles
                             t.Task.SetEffort(unit, (int)numDuration.Value);
 
                             haha = true;
-                            StixButton.SetTaskInfoEffortUnit(t);
+                            StixMain.SetTaskInfoEffortUnit(t);
                             numEffort.Value = (int)numDuration.Value;
                             haha = false;
                         }

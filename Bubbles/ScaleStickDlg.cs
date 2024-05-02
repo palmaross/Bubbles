@@ -86,7 +86,7 @@ namespace Bubbles
             switch (StixType)
             {
                 case StixUtils.typebase:
-                    (stix as StixBase).ScaleStick(ScaleFactor, SF_Stix);
+                    (stix as StartMenu).ScaleStick(ScaleFactor, SF_Stix);
                     break;
                 case StixUtils.typeicons:
                     (stix as StixIcons).ScaleStick(ScaleFactor, SF_Stix);

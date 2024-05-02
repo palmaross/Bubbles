@@ -23,7 +23,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "AddTopicStick.htm");
+            helpProvider1.SetHelpKeyword(this, "AddTopicStix.htm");
 
             RealLength = this.Width;
             HL1 = numUpDown.Location.X;
@@ -31,19 +31,17 @@ namespace Bubbles
             HL3 = pAddMultiple.Location.X;
 
             if (orientation == "V")
-            {
                 orientation = "H"; Rotate();
-            }
 
-            toolTip1.SetToolTip(subtopic, Utils.getString("BubblesPaste.addsubtopic"));
-            toolTip1.SetToolTip(nexttopic, Utils.getString("BubblesPaste.addtopic"));
-            toolTip1.SetToolTip(topicbefore, Utils.getString("BubblesPaste.addbefore"));
-            toolTip1.SetToolTip(ParentTopic, Utils.getString("BubblesPaste.addparent"));
-            toolTip1.SetToolTip(Callout, Utils.getString("BubblesPaste.addcallout"));
-            toolTip1.SetToolTip(TopicText, Utils.getString("BubbleAddTopic.TopicText"));
-            toolTip1.SetToolTip(numUpDown, Utils.getString("BubbleAddTopic.numUpDown"));
-            toolTip1.SetToolTip(chIncrement, Utils.getString("BubbleAddTopic.pIncrement"));
-            toolTip1.SetToolTip(pAddMultiple, Utils.getString("BubblesPaste.pAddMultiple"));
+            toolTip1.SetToolTip(subtopic, Utils.getString("AddTopicStix.addsubtopic"));
+            toolTip1.SetToolTip(nexttopic, Utils.getString("AddTopicStix.addtopic"));
+            toolTip1.SetToolTip(topicbefore, Utils.getString("AddTopicStix.addbefore"));
+            toolTip1.SetToolTip(ParentTopic, Utils.getString("AddTopicStix.addparent"));
+            toolTip1.SetToolTip(Callout, Utils.getString("AddTopicStix.addcallout"));
+            toolTip1.SetToolTip(TopicText, Utils.getString("AddTopicStix.TopicText"));
+            toolTip1.SetToolTip(numUpDown, Utils.getString("AddTopicStix.numUpDown"));
+            toolTip1.SetToolTip(chIncrement, Utils.getString("AddTopicStix.pIncrement"));
+            toolTip1.SetToolTip(pAddMultiple, Utils.getString("AddTopicStix.pAddMultiple"));
 
             toolTip1.SetToolTip(pictureHandle, stickname);
 
@@ -128,7 +126,7 @@ namespace Bubbles
                     }
 
                     // Label "Topic Type"
-                    tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("BubbleAddTopic_AddAs"));
+                    tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("AddTopicStix_AddAs"));
                     tsm.Font = new Font(tsi.Font, FontStyle.Bold);
                     //(tsi as ToolStripMenuItem).DropDownItems.Add(new ToolStripSeparator());
 
@@ -160,7 +158,7 @@ namespace Bubbles
             }
 
             cmsAddMultiple.Items.Add(new ToolStripSeparator());
-            tsi = cmsAddMultiple.Items.Add(Utils.getString("BubbleAddTopic.ManageTemplates"));
+            tsi = cmsAddMultiple.Items.Add(Utils.getString("AddTopicStix.ManageTemplates"));
             tsi.Name = "ManageTemplates";
         }
 
@@ -243,12 +241,12 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
-                StixButton.STICKS.Remove((int)this.Tag);
+                StixMain.STICKS.Remove((int)this.Tag);
                 this.Close();
             }
             else if (e.ClickedItem.Name == "BI_help")
             {
-                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "PasteStick.htm");
+                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "AddTopicStix.htm");
             }
             else if (e.ClickedItem.Name == "BI_store")
             {

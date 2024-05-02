@@ -20,9 +20,9 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "MyToolsStick.htm");
+            helpProvider1.SetHelpKeyword(this, "ToolStix.htm");
 
-            toolTip1.SetToolTip(ToolList, Utils.getString("mysources.sourceview.list"));
+            toolTip1.SetToolTip(ToolList, Utils.getString("tools.toolview.list"));
             toolTip1.SetToolTip(pictureHandle, stickname);
 
             orientation = _orientation; // "H" or "V"
@@ -143,13 +143,13 @@ namespace Bubbles
 
         void PopulateManageCMS()
         {
-            ToolStripItem tsi = new ToolStripLabel(Utils.getString("mytools.addtool.label"));
+            ToolStripItem tsi = new ToolStripLabel(Utils.getString("tools.addtool.label"));
             tsi.Font = new Font(tsi.Font, FontStyle.Bold); cmsManage.Items.Add(tsi);
 
-            tsi = cmsManage.Items.Add(Utils.getString("mytools.addtool.file"));
+            tsi = cmsManage.Items.Add(Utils.getString("tools.addtool.file"));
             tsi.Name = "MM_file";
 
-            tsi = cmsManage.Items.Add(Utils.getString("mytools.addtool.windows"));
+            tsi = cmsManage.Items.Add(Utils.getString("tools.addtool.windows"));
             tsi.Name = "MM_windows";
 
             ToolStripItem tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("tools.notepad"));
@@ -177,10 +177,10 @@ namespace Bubbles
             StixUtils.SetContextMenuImage(tsm, "tool-snotes.png");
             tsm.Click += SubmenuItem_Click;
 
-            tsi = cmsManage.Items.Add(Utils.getString("mytools.addtool.omni"));
+            tsi = cmsManage.Items.Add(Utils.getString("tools.addtool.omni"));
             tsi.Name = "MM_omni";
 
-            tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("mysources.contextmenu.currentmap"));
+            tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("tools.contextmenu.currentmap"));
             tsm.Name = "currentmap_tool";
             StixUtils.SetContextMenuImage(tsm, "ql_map.png");
             tsm.Click += SubmenuItem_Click;
@@ -294,7 +294,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
-                StixButton.STICKS.Remove((int)this.Tag);
+                StixMain.STICKS.Remove((int)this.Tag);
                 this.Close();
             }
             else if (e.ClickedItem.Name == "BI_rotate")
@@ -303,7 +303,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_help")
             {
-                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "MyToolsStick.htm");
+                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "ToolStix.htm");
             }
             else if (e.ClickedItem.Name == "BI_store")
             {

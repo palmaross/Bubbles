@@ -14,7 +14,7 @@ using System.IO;
 
 namespace Bubbles
 {
-    class StixButton : MMBase
+    class StixMain : MMBase
     {
         public void Create()
         {
@@ -22,7 +22,7 @@ namespace Bubbles
                 return;
 
             m_cmdDetachNotes = MMUtils.MindManager.Commands.Add(Utils.Registered_AddinName, "omnistix.detach_notes");
-            m_cmdDetachNotes.Caption = Utils.getString("bubbles.notes.detach");
+            m_cmdDetachNotes.Caption = Utils.getString("topiccontextmenu.notes.detach");
             m_cmdDetachNotes.UpdateState += new ICommandEvents_UpdateStateEventHandler(m_cmdDetachNotes_UpdateState);
             m_cmdDetachNotes.ImagePath = Utils.ImagesPath + "detach.png";
             m_cmdDetachNotes.Click += new ICommandEvents_ClickEventHandler(m_cmdDetachNotes_Click);
@@ -62,7 +62,7 @@ namespace Bubbles
 
             m_bubbleSnippets = new BubbleSnippets();
             m_OmniSound = new OmniSound();
-            m_StixBase = new StixBase();
+            m_StixBase = new StartMenu();
             STICKS.Add(0, m_StixBase);
             commandPopup.Tag = 0; // Tag is a stick ID
 
@@ -821,7 +821,7 @@ namespace Bubbles
 
         public static ReplaceDlg m_ReplaceDlg;
 
-        public static StixBase m_StixBase = null;
+        public static StartMenu m_StixBase = null;
 
         private Command m_cmdDetachNotes;
         public static TopicNotesDlg m_topicNotes;

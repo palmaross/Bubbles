@@ -147,7 +147,7 @@
             this.pTodos.Tag = "1";
             this.pTodos.Click += new System.EventHandler(this.addsubtopic_Click);
             // 
-            // BubbleOrganizer
+            // StixOrganizer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -162,7 +162,7 @@
             this.Controls.Add(this.pIdeas);
             this.Controls.Add(this.pClipboard);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "BubbleOrganizer";
+            this.Name = "StixOrganizer";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             ((System.ComponentModel.ISupportInitialize)(this.pClipboard)).EndInit();

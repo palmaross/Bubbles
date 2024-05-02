@@ -52,6 +52,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.pClose = new System.Windows.Forms.PictureBox();
             this.pHelp = new System.Windows.Forms.PictureBox();
+            this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             ((System.ComponentModel.ISupportInitialize)(this.btnRecord)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnPlay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnPause)).BeginInit();
@@ -344,5 +345,6 @@
         private System.Windows.Forms.PictureBox pClose;
         private System.Windows.Forms.PictureBox pHelp;
         public System.Windows.Forms.ComboBox cbRecords;
+        private System.Windows.Forms.HelpProvider helpProvider1;
     }
 }

@@ -73,7 +73,7 @@
                 PRMapCompanion.DocumentStorage.Init();
 
                 // Start interface
-                m_Bubbles = new StixButton();
+                m_Bubbles = new StixMain();
                 m_Bubbles.Create();
             }
             catch (Exception e)
@@ -142,6 +142,6 @@
         {
         }
 
-        private StixButton m_Bubbles;
+        private StixMain m_Bubbles;
     }
 }

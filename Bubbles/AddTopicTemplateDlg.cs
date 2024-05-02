@@ -135,7 +135,7 @@ namespace Bubbles
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                 {
                     transTopic = t; transTopicType = topictype;
-                    AddTopicTransaction(Utils.getString("addtopics.transactionname.insert"));
+                    AddTopicTransaction(Utils.getString("addtopics.transactionname.addtopics"));
                 }
             }
 

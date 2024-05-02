@@ -15,14 +15,14 @@ namespace Bubbles
         {
             InitializeComponent();
 
-            StixButton.m_Bookmarks = this;
+            StixMain.m_Bookmarks = this;
 
             this.Tag = ID;
             orientation = _orientation; // "H" or "V"
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "BookmarksStick.htm");
+            helpProvider1.SetHelpKeyword(this, "BookmarksStix.htm");
 
             toolTip1.SetToolTip(pAddBookmark, Utils.getString("bookmarks.contextmenu.add.tooltip"));
             toolTip1.SetToolTip(pictureHandle, stickname);
@@ -129,8 +129,8 @@ namespace Bubbles
 
                 if (deleteall)
                 {
-                    if (StixButton.m_BookmarkList != null && !fromList)
-                        StixButton.m_BookmarkList.Init(true, true);
+                    if (StixMain.m_BookmarkList != null && !fromList)
+                        StixMain.m_BookmarkList.Init(true, true);
                     return;
                 }
             }
@@ -163,8 +163,8 @@ namespace Bubbles
                 this.Height = RealLength;
 
             // Refresh Bookmarks list
-            if (StixButton.m_BookmarkList != null && !fromList)
-                StixButton.m_BookmarkList.Init(true);
+            if (StixMain.m_BookmarkList != null && !fromList)
+                StixMain.m_BookmarkList.Init(true);
         }
 
         void LoadFromMapRecursive(Topic _t)
@@ -275,8 +275,8 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
-                StixButton.STICKS.Remove((int)this.Tag);
-                StixButton.m_Bookmarks = null;
+                StixMain.STICKS.Remove((int)this.Tag);
+                StixMain.m_Bookmarks = null;
                 this.Close();
             }
             else if (e.ClickedItem.Name == "BI_rotate")
@@ -285,7 +285,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_help")
             {
-                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "BookmarksStick.htm");
+                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "BookmarksStix.htm");
             }
             else if (e.ClickedItem.Name == "BI_store")
             {
@@ -438,17 +438,17 @@ namespace Bubbles
 
         public void BookmarkList_Click()
         {
-            if (StixButton.m_BookmarkList == null)
+            if (StixMain.m_BookmarkList == null)
             {
-                StixButton.m_BookmarkList = new BookmarkListDlg();
+                StixMain.m_BookmarkList = new BookmarkListDlg();
 
                 // Get bookmark list location
-                Rectangle child = StixButton.m_BookmarkList.RectangleToScreen(StixButton.m_BookmarkList.ClientRectangle);
-                StixButton.m_BookmarkList.Location = StixUtils.GetChildLocation(this, child, orientation, "bookmarks");
+                Rectangle child = StixMain.m_BookmarkList.RectangleToScreen(StixMain.m_BookmarkList.ClientRectangle);
+                StixMain.m_BookmarkList.Location = StixUtils.GetChildLocation(this, child, orientation, "bookmarks");
                 
-                StixButton.m_BookmarkList.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                StixMain.m_BookmarkList.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
-            StixButton.m_BookmarkList.Init(true);
+            StixMain.m_BookmarkList.Init(true);
         }
 
         public static Dictionary<Document, List<BookmarkItem>> BookmarkedDocuments = new Dictionary<Document, List<BookmarkItem>>();

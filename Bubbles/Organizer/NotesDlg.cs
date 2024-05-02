@@ -508,9 +508,9 @@ namespace Organizer
             NoteItem item = note.Tag as NoteItem;
 
             // Check if note window is open already
-            if (StixButton.pNOTES.Keys.Contains(item.ID))
+            if (StixMain.pNOTES.Keys.Contains(item.ID))
             {
-                StixButton.pNOTES[item.ID].WindowState = FormWindowState.Normal;
+                StixMain.pNOTES[item.ID].WindowState = FormWindowState.Normal;
                 return;
             }
 
@@ -596,7 +596,7 @@ namespace Organizer
         private void pClose_Click(object sender, EventArgs e)
         {
             this.Close();
-            StixButton.m_Notes = null;
+            StixMain.m_Notes = null;
         }
 
         private void pMore_Click(object sender, EventArgs e)

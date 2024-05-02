@@ -249,7 +249,7 @@
             this.V3.TabStop = false;
             this.V3.Visible = false;
             // 
-            // BubbleAddTopic
+            // AddTopicStix
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -271,7 +271,7 @@
             this.Controls.Add(this.Manage);
             this.Controls.Add(this.pictureHandle);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "BubbleAddTopic";
+            this.Name = "AddTopicStix";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();

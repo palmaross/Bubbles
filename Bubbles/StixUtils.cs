@@ -42,7 +42,7 @@ namespace Bubbles
 
                 string name = dlg.textBox1.Text.Trim();
 
-                if (oldname != "") // rename stick or icon or source
+                if (oldname != "") // rename stick or icon or tool
                 {
                     using (StixDB db = new StixDB())
                     {
@@ -50,7 +50,7 @@ namespace Bubbles
                         if (stick) // rename stick
                         {
                             db.ExecuteNonQuery("update STICKS set name=`" + name + "` where id=" + stickID + "");
-                            StixButton.m_StixBase.RenameContextMenuItem(type, stickID.ToString(), name);
+                            StixMain.m_StixBase.RenameContextMenuItem(type, stickID.ToString(), name);
                         }
                         else if (type == typeicons)
                             db.ExecuteNonQuery("update ICONS set name=`" + name +
@@ -72,9 +72,9 @@ namespace Bubbles
                 id = Utils.StickID();
                 db.AddStick(id, stickname, sticktype, 0, "H", "");
 
-                newForm.Location = StixButton.m_StixBase.GetStickLocation("", newForm.Size);
+                newForm.Location = StixMain.m_StixBase.GetStickLocation("", newForm.Size);
                 newForm.Tag = id;
-                StixButton.STICKS.Add(id, newForm);
+                StixMain.STICKS.Add(id, newForm);
                 newForm.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
 
                 // Create context menu for stick button in the main menu if there are more than one sticks of this type
@@ -82,7 +82,7 @@ namespace Bubbles
                 if (dt.Rows.Count > 1) contextmenu = true;
             }
             if (contextmenu == true)
-                StixButton.m_StixBase.AddSelectMenu(sticktype);
+                StixMain.m_StixBase.AddSelectMenu(sticktype);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Bubbles
         /// <param name="p1">First dynamic icon</param>
         /// <param name="Manage">Manage icon</param>
         /// <param name="orientation"></param>
-        /// <param name="pb">Add Bookmark or Source List icon</param>
+        /// <param name="pb">Add Bookmark or Tool List icon</param>
         /// <returns>orientation</returns>
         public static string RotateStick(Form form, PictureBox Manage, string orientation, PictureBox pb = null)
         {
@@ -371,19 +371,19 @@ namespace Bubbles
                 if (type == typeicons)
                 {
                     db.ExecuteNonQuery("delete from ICONS where stickID=" + id + "");
-                    if (StixButton.m_StixBase.cmsIcons.Items.Count > 0)
-                        StixButton.m_StixBase.cmsIcons.Items.Clear();
+                    if (StixMain.m_StixBase.cmsIcons.Items.Count > 0)
+                        StixMain.m_StixBase.cmsIcons.Items.Clear();
                 }
                 else if (type == typetools)
                 {
                     db.ExecuteNonQuery("delete from TOOLS where stickID=" + id + "");
-                    if (StixButton.m_StixBase.cmsMySources.Items.Count > 0)
-                        StixButton.m_StixBase.cmsMySources.Items.Clear();
+                    if (StixMain.m_StixBase.cmsTools.Items.Count > 0)
+                        StixMain.m_StixBase.cmsTools.Items.Clear();
                 }
 
                 // Delete the stick
                 db.ExecuteNonQuery("delete from STICKS where id=" + id + "");
-                StixButton.STICKS.Remove(id);
+                StixMain.STICKS.Remove(id);
 
                 DataTable dt = db.ExecuteQuery("select * from STICKS where type=`" + type + "`");
                 if (dt.Rows.Count > 1) contextmenu = true;
@@ -391,7 +391,7 @@ namespace Bubbles
 
             // Create context menu for the main menu button if there are more than one stick of this type
             if (contextmenu == true)
-                StixButton.m_StixBase.AddSelectMenu(type);
+                StixMain.m_StixBase.AddSelectMenu(type);
 
             return true;
         }
@@ -404,7 +404,7 @@ namespace Bubbles
                 manage_clicked = false; return;
             }
 
-            if (StixButton.commandPopup.Tag != form.Tag || StixButton.commandPopup.Name != popup || !StixButton.commandPopup.Visible)
+            if (StixMain.commandPopup.Tag != form.Tag || StixMain.commandPopup.Name != popup || !StixMain.commandPopup.Visible)
             {
                 // Hide previous popup
                 ActivateMindManager(); // In order to hide previous Popup
@@ -453,15 +453,15 @@ namespace Bubbles
                 }
 
                 ff.Tag = form; ff.AccessibleName = popup;
-                StixButton.commandPopup = new Popup(ff);
-                StixButton.commandPopup.Tag = form.Tag; // stick id
-                StixButton.commandPopup.Name = popup;
-                StixButton.commandPopup.ShowingAnimation = PopupAnimations.Center;
-                StixButton.commandPopup.AnimationDuration = 300;
+                StixMain.commandPopup = new Popup(ff);
+                StixMain.commandPopup.Tag = form.Tag; // stick id
+                StixMain.commandPopup.Name = popup;
+                StixMain.commandPopup.ShowingAnimation = PopupAnimations.Center;
+                StixMain.commandPopup.AnimationDuration = 300;
 
                 Rectangle child = ff.RectangleToScreen(ff.ClientRectangle);
                 Point loc = GetChildLocation(form, child, orientation, popup);
-                StixButton.commandPopup.Show(loc);
+                StixMain.commandPopup.Show(loc);
             }
         }
 
@@ -745,7 +745,7 @@ namespace Bubbles
         }
 
         public static string Handle_DragDrop(ref string path, string[] draggedFiles, 
-            List<IconItem> aIcons, List<ToolItem> aSources)
+            List<IconItem> aIcons, List<ToolItem> aTools)
         {
             string title = "";
             if (!String.IsNullOrEmpty(path)) // possible url
@@ -755,9 +755,9 @@ namespace Bubbles
                     Uri myUri = new Uri(path);
                     if (myUri != null)
                     {
-                        if (aSources != null)
+                        if (aTools != null)
                         {
-                            foreach (var item in aSources) // проверим, есть ли в стике значок с этим путем
+                            foreach (var item in aTools) // проверим, есть ли в стике значок с этим путем
                             if (item.Path == path) // yes, exists
                             { MessageBox.Show(Utils.getString("stix.iconexists")); return ""; }
                         }
@@ -773,9 +773,9 @@ namespace Bubbles
             }
             else if (draggedFiles != null)
             {
-                if (aSources != null)
+                if (aTools != null)
                 {
-                    foreach (var item in aSources) // проверим, есть ли в стике значок с этим путем
+                    foreach (var item in aTools) // проверим, есть ли в стике значок с этим путем
                     if (item.Path == draggedFiles[0]) // yes, exists
                     { MessageBox.Show(Utils.getString("stix.iconexists")); return ""; }
                 }
@@ -805,8 +805,8 @@ namespace Bubbles
                 tsi.ImageScaling = ToolStripItemImageScaling.None;
                 tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "deleteall.png"), cmiSize);
 
-                string deleteall = Utils.getString("contextmenu.clearstick.tooltip");
-                if (stickType == typetools) deleteall = Utils.getString("mysources.contextmenu.deleteall");
+                string deleteall = Utils.getString("icons.contextmenu.clearstick.tooltip");
+                if (stickType == typetools) deleteall = Utils.getString("tools.contextmenu.deleteall");
                 if (stickType == typebookmarks) deleteall = Utils.getString("bookmarks.contextmenu.deleteall");
 
                 tsi.ToolTipText = deleteall;
@@ -994,9 +994,9 @@ namespace Bubbles
 
         // types must match Stix names!
         public const string typestick = "stick", typebase = "StixBase",
-            typeicons = "BubbleIcons", typetaskinfo = "BubbleTaskInfo", 
-            typeformat = "BubbleFormat", typetools = "BubbleMyTools", typebookmarks = "BubbleBookmarks",
-            typeaddtopic = "BubbleAddTopic", typetextops = "BubbleTextOps", typeorganizer = "BubbleOrganizer";
+            typeicons = "StixIcons", typetaskinfo = "StixTaskInfo", 
+            typeformat = "StixFormat", typetools = "StixTools", typebookmarks = "StixBookmarks",
+            typeaddtopic = "StixAddTopic", typetextops = "StixTextOps", typeorganizer = "StixOrganizer";
 
         public static int stickLength;
         public static int icondist;
