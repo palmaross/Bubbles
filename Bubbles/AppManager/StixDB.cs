@@ -154,6 +154,27 @@ namespace Bubbles
                 );
         }
 
+        public void AddBookmarkGroup(string name)
+        {
+            m_db.ExecuteNonQuery("insert into BOOKMARKGROUPS values(NULL, `"
+                + name + "`, "
+                + "'', 0"
+                + ");"
+            );
+        }
+
+        public void AddBookmark(string name, string mapPath, string topicGuid, int groupID)
+        {
+            m_db.ExecuteNonQuery("insert into BOOKMARKS values(`"
+                + name + "`, `"
+                + mapPath + "`, `"
+                + topicGuid + "`, "
+                + groupID + ", "
+                + "'', 0"
+                + ");"
+                );
+        }
+
         public override void CreateDatabase()
         {
             base.CreateDatabase();
@@ -172,6 +193,13 @@ namespace Bubbles
             m_db.ExecuteNonQuery("CREATE TABLE ICONS(name text, filename text, _order integer, " +
                 "stickID int, reserved1 text, reserved2 integer);");
             // filename: file name for stock icons, signature for custom icons
+
+            m_db.ExecuteNonQuery("CREATE TABLE BOOKMARKGROUPS(id INTEGER PRIMARY KEY, name text, " +
+                "reserved1 text, reserved2 integer);");
+
+            m_db.ExecuteNonQuery("CREATE TABLE BOOKMARKS(name text, mappath text, topicguid text, groupID integer, " +
+                "reserved1 text, reserved2 integer);");
+            // mappath and topic guid are the unique id for bookmark
 
             m_db.ExecuteNonQuery("CREATE TABLE RESOURCES(name text, color string, groupID int, " +
                 "reserved1 text, reserved2 integer);");

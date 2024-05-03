@@ -334,7 +334,7 @@ namespace Bubbles
         //private static extern int record(string lpstrCommand, string lpstrReturnString, int uReturnLength, int hwndCallback);
 
         [DllImport("winmm.dll", EntryPoint = "mciSendStringA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        private static extern long mciSendString(string lpstrCommand, StringBuilder returnValue, int uReturnLength, IntPtr winHandle);
+        private static extern int mciSendString(string lpstrCommand, StringBuilder returnValue, int uReturnLength, IntPtr winHandle);
         public const int MM_MCINOTIFY = 0x3B9;
 
         ////[STAThread]

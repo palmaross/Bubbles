@@ -91,16 +91,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddIconGroupDlg.cs">
+    <Compile Include="AppManager\AlfaChanges.cs" />
+    <Compile Include="StixIcons\AddIconGroupDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddIconGroupDlg.Designer.cs">
+    <Compile Include="StixIcons\AddIconGroupDlg.Designer.cs">
       <DependentUpon>AddIconGroupDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddTopicTemplateDlg.cs">
+    <Compile Include="StixAddTopic\AddTopicTemplateDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddTopicTemplateDlg.Designer.cs">
+    <Compile Include="StixAddTopic\AddTopicTemplateDlg.Designer.cs">
       <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="AppManager\DragHelper.cs" />
@@ -119,7 +120,6 @@
     <Compile Include="LinkBox\LinksDlg.Designer.cs">
       <DependentUpon>LinksDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppManager\AlfaChanges.cs" />
     <Compile Include="AppManager\StixDB.cs" />
     <Compile Include="AppManager\SticksMoreDB.cs" />
     <Compile Include="AppManager\TransactionWrapper.cs" />
@@ -132,67 +132,61 @@
     <Compile Include="LinkBox\NewLinkDlg.Designer.cs">
       <DependentUpon>NewLinkDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="OmniTools\OmniSound.cs">
+    <Compile Include="StixTools\OmniSound.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OmniTools\OmniSound.Designer.cs">
+    <Compile Include="StixTools\OmniSound.Designer.cs">
       <DependentUpon>OmniSound.cs</DependentUpon>
     </Compile>
-    <Compile Include="StixAddTopic.cs">
+    <Compile Include="StixAddTopic\StixAddTopic.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StixAddTopic.Designer.cs">
+    <Compile Include="StixAddTopic\StixAddTopic.Designer.cs">
       <DependentUpon>StixAddTopic.cs</DependentUpon>
     </Compile>
-    <Compile Include="StixOrganizer.cs">
+    <Compile Include="Organizer\StixOrganizer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StixOrganizer.Designer.cs">
+    <Compile Include="Organizer\StixOrganizer.Designer.cs">
       <DependentUpon>StixOrganizer.cs</DependentUpon>
     </Compile>
-    <Compile Include="DragDropTest.cs">
+    <Compile Include="StixBookmarks\BookmarkListDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DragDropTest.Designer.cs">
-      <DependentUpon>DragDropTest.cs</DependentUpon>
-    </Compile>
-    <Compile Include="BookmarkListDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BookmarkListDlg.Designer.cs">
+    <Compile Include="StixBookmarks\BookmarkListDlg.Designer.cs">
       <DependentUpon>BookmarkListDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="MapMarkers.cs" />
-    <Compile Include="MyDateTimePicker.cs">
+    <Compile Include="AppManager\MapMarkers.cs" />
+    <Compile Include="StixTaskInfo\MyDateTimePicker.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MyDateTimePicker.Designer.cs">
+    <Compile Include="StixTaskInfo\MyDateTimePicker.Designer.cs">
       <DependentUpon>MyDateTimePicker.cs</DependentUpon>
     </Compile>
-    <Compile Include="OmniTools\NavigationDlg.cs">
+    <Compile Include="StixTools\NavigationDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OmniTools\NavigationDlg.Designer.cs">
+    <Compile Include="StixTools\NavigationDlg.Designer.cs">
       <DependentUpon>NavigationDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="OmniTools\NewToolDlg.cs">
+    <Compile Include="StixTools\NewToolDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OmniTools\NewToolDlg.Designer.cs">
+    <Compile Include="StixTools\NewToolDlg.Designer.cs">
       <DependentUpon>NewToolDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="AppManager\StickersDB.cs" />
     <Compile Include="AppManager\DatabaseWrapper.cs" />
-    <Compile Include="StixFormat.cs">
+    <Compile Include="StixFormat\StixFormat.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StixFormat.Designer.cs">
+    <Compile Include="StixFormat\StixFormat.Designer.cs">
       <DependentUpon>StixFormat.cs</DependentUpon>
     </Compile>
-    <Compile Include="GetNameDlg.cs">
+    <Compile Include="StixCommon\GetNameDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GetNameDlg.Designer.cs">
+    <Compile Include="StixCommon\GetNameDlg.Designer.cs">
       <DependentUpon>GetNameDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Bubbles.cs" />
@@ -202,11 +196,11 @@
     <Compile Include="OmniButton.Designer.cs">
       <DependentUpon>OmniButton.cs</DependentUpon>
     </Compile>
-    <Compile Include="OmniTools\OmniTools.cs" />
-    <Compile Include="ScaleStickDlg.cs">
+    <Compile Include="StixTools\OmniTools.cs" />
+    <Compile Include="StixCommon\ScaleStickDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ScaleStickDlg.Designer.cs">
+    <Compile Include="StixCommon\ScaleStickDlg.Designer.cs">
       <DependentUpon>ScaleStickDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="StartMenu.cs">
@@ -217,40 +211,40 @@
     </Compile>
     <Compile Include="OmniStix23.cs" />
     <Compile Include="AssemblyInfo23.cs" />
-    <Compile Include="StixBookmarks.cs">
+    <Compile Include="StixBookmarks\StixBookmarks.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StixBookmarks.Designer.cs">
+    <Compile Include="StixBookmarks\StixBookmarks.Designer.cs">
       <DependentUpon>StixBookmarks.cs</DependentUpon>
     </Compile>
-    <Compile Include="StixTaskInfo.cs">
+    <Compile Include="StixTaskInfo\StixTaskInfo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StixTaskInfo.Designer.cs">
+    <Compile Include="StixTaskInfo\StixTaskInfo.Designer.cs">
       <DependentUpon>StixTaskInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="OmniTools\StixTools.cs">
+    <Compile Include="StixTools\StixTools.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OmniTools\StixTools.Designer.cs">
+    <Compile Include="StixTools\StixTools.Designer.cs">
       <DependentUpon>StixTools.cs</DependentUpon>
     </Compile>
-    <Compile Include="OmniTools\ToolListDlg.cs">
+    <Compile Include="StixTools\ToolListDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OmniTools\ToolListDlg.Designer.cs">
+    <Compile Include="StixTools\ToolListDlg.Designer.cs">
       <DependentUpon>ToolListDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="StixTextOps.cs">
+    <Compile Include="StixTextOps\StixTextOps.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StixTextOps.Designer.cs">
+    <Compile Include="StixTextOps\StixTextOps.Designer.cs">
       <DependentUpon>StixTextOps.cs</DependentUpon>
     </Compile>
-    <Compile Include="StixIcons.cs">
+    <Compile Include="StixIcons\StixIcons.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StixIcons.Designer.cs">
+    <Compile Include="StixIcons\StixIcons.Designer.cs">
       <DependentUpon>StixIcons.cs</DependentUpon>
     </Compile>
     <Compile Include="Organizer\ManageNoteGroups.cs">
@@ -277,22 +271,22 @@
     <Compile Include="Organizer\NoteDlg.Designer.cs">
       <DependentUpon>NoteDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="ReplaceDlg.cs">
+    <Compile Include="StixTextOps\ReplaceDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ReplaceDlg.Designer.cs">
+    <Compile Include="StixTextOps\ReplaceDlg.Designer.cs">
       <DependentUpon>ReplaceDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="ResourcesDlg.cs">
+    <Compile Include="StixTaskInfo\ResourcesDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ResourcesDlg.Designer.cs">
+    <Compile Include="StixTaskInfo\ResourcesDlg.Designer.cs">
       <DependentUpon>ResourcesDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="StixPopup.cs">
+    <Compile Include="StixCommon\StixPopup.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="StixPopup.Designer.cs">
+    <Compile Include="StixCommon\StixPopup.Designer.cs">
       <DependentUpon>StixPopup.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
@@ -300,23 +294,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SelectIconDlg.cs">
+    <Compile Include="StixIcons\SelectIconDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SelectIconDlg.Designer.cs">
+    <Compile Include="StixIcons\SelectIconDlg.Designer.cs">
       <DependentUpon>SelectIconDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="SelectImageDlg.cs">
+    <Compile Include="Stickers\SelectImageDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SelectImageDlg.Designer.cs">
+    <Compile Include="Stickers\SelectImageDlg.Designer.cs">
       <DependentUpon>SelectImageDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SelectStickDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SelectStickDlg.Designer.cs">
-      <DependentUpon>SelectStickDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="AppManager\SettingsDlg.cs">
       <SubType>Form</SubType>
@@ -324,13 +312,13 @@
     <Compile Include="AppManager\SettingsDlg.Designer.cs">
       <DependentUpon>SettingsDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="SizeablePictureBox.cs">
+    <Compile Include="Stickers\SizeablePictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="SnippetsDlg.cs">
+    <Compile Include="Organizer\SnippetsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SnippetsDlg.Designer.cs">
+    <Compile Include="Organizer\SnippetsDlg.Designer.cs">
       <DependentUpon>SnippetsDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Stickers\StickerDummy.cs">
@@ -339,17 +327,17 @@
     <Compile Include="Stickers\StickerDummy.Designer.cs">
       <DependentUpon>StickerDummy.cs</DependentUpon>
     </Compile>
-    <Compile Include="StixUtils.cs" />
+    <Compile Include="StixCommon\StixUtils.cs" />
     <Compile Include="Organizer\NotesDlg.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Organizer\NotesDlg.Designer.cs">
       <DependentUpon>NotesDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="TaskTemplateDlg.cs">
+    <Compile Include="StixTaskInfo\TaskTemplateDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TaskTemplateDlg.Designer.cs">
+    <Compile Include="StixTaskInfo\TaskTemplateDlg.Designer.cs">
       <DependentUpon>TaskTemplateDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="TopicNotesDlg.cs">
@@ -358,19 +346,19 @@
     <Compile Include="TopicNotesDlg.Designer.cs">
       <DependentUpon>TopicNotesDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="TopicTemplatePreview.cs">
+    <Compile Include="StixAddTopic\TopicTemplatePreview.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TopicTemplatePreview.Designer.cs">
+    <Compile Include="StixAddTopic\TopicTemplatePreview.Designer.cs">
       <DependentUpon>TopicTemplatePreview.cs</DependentUpon>
     </Compile>
-    <Compile Include="TopicWidthDlg.cs">
+    <Compile Include="StixTextOps\TopicWidthDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TopicWidthDlg.Designer.cs">
+    <Compile Include="StixTextOps\TopicWidthDlg.Designer.cs">
       <DependentUpon>TopicWidthDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utils.cs" />
+    <Compile Include="AppManager\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app21.config" />
@@ -384,6 +372,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="StixCommon\Cursor1.cur" />
     <Content Include="images\addicon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -922,10 +911,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AddIconGroupDlg.resx">
+    <EmbeddedResource Include="StixIcons\AddIconGroupDlg.resx">
       <DependentUpon>AddIconGroupDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddTopicTemplateDlg.resx">
+    <EmbeddedResource Include="StixAddTopic\AddTopicTemplateDlg.resx">
       <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LinkBox\BrowserDlg.resx">
@@ -937,58 +926,55 @@
     <EmbeddedResource Include="LinkBox\NewLinkDlg.resx">
       <DependentUpon>NewLinkDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OmniTools\OmniSound.resx">
+    <EmbeddedResource Include="StixTools\OmniSound.resx">
       <DependentUpon>OmniSound.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StixAddTopic.resx">
+    <EmbeddedResource Include="StixAddTopic\StixAddTopic.resx">
       <DependentUpon>StixAddTopic.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StixOrganizer.resx">
+    <EmbeddedResource Include="Organizer\StixOrganizer.resx">
       <DependentUpon>StixOrganizer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DragDropTest.resx">
-      <DependentUpon>DragDropTest.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="BookmarkListDlg.resx">
+    <EmbeddedResource Include="StixBookmarks\BookmarkListDlg.resx">
       <DependentUpon>BookmarkListDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MyDateTimePicker.resx">
+    <EmbeddedResource Include="StixTaskInfo\MyDateTimePicker.resx">
       <DependentUpon>MyDateTimePicker.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OmniTools\NavigationDlg.resx">
+    <EmbeddedResource Include="StixTools\NavigationDlg.resx">
       <DependentUpon>NavigationDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OmniTools\NewToolDlg.resx">
+    <EmbeddedResource Include="StixTools\NewToolDlg.resx">
       <DependentUpon>NewToolDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StixFormat.resx">
+    <EmbeddedResource Include="StixFormat\StixFormat.resx">
       <DependentUpon>StixFormat.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GetNameDlg.resx">
+    <EmbeddedResource Include="StixCommon\GetNameDlg.resx">
       <DependentUpon>GetNameDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StixBookmarks.resx">
+    <EmbeddedResource Include="StixBookmarks\StixBookmarks.resx">
       <DependentUpon>StixBookmarks.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StixTaskInfo.resx">
+    <EmbeddedResource Include="StixTaskInfo\StixTaskInfo.resx">
       <DependentUpon>StixTaskInfo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OmniTools\StixTools.resx">
+    <EmbeddedResource Include="StixTools\StixTools.resx">
       <DependentUpon>StixTools.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OmniButton.resx">
       <DependentUpon>OmniButton.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ScaleStickDlg.resx">
+    <EmbeddedResource Include="StixCommon\ScaleStickDlg.resx">
       <DependentUpon>ScaleStickDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OmniTools\ToolListDlg.resx">
+    <EmbeddedResource Include="StixTools\ToolListDlg.resx">
       <DependentUpon>ToolListDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StixTextOps.resx">
+    <EmbeddedResource Include="StixTextOps\StixTextOps.resx">
       <DependentUpon>StixTextOps.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StixIcons.resx">
+    <EmbeddedResource Include="StixIcons\StixIcons.resx">
       <DependentUpon>StixIcons.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Organizer\ManageNoteGroups.resx">
@@ -1003,13 +989,13 @@
     <EmbeddedResource Include="Organizer\NoteDlg.resx">
       <DependentUpon>NoteDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ReplaceDlg.resx">
+    <EmbeddedResource Include="StixTextOps\ReplaceDlg.resx">
       <DependentUpon>ReplaceDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ResourcesDlg.resx">
+    <EmbeddedResource Include="StixTaskInfo\ResourcesDlg.resx">
       <DependentUpon>ResourcesDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StixPopup.resx">
+    <EmbeddedResource Include="StixCommon\StixPopup.resx">
       <DependentUpon>StixPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -1017,19 +1003,16 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="SelectIconDlg.resx">
+    <EmbeddedResource Include="StixIcons\SelectIconDlg.resx">
       <DependentUpon>SelectIconDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SelectImageDlg.resx">
+    <EmbeddedResource Include="Stickers\SelectImageDlg.resx">
       <DependentUpon>SelectImageDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SelectStickDlg.resx">
-      <DependentUpon>SelectStickDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AppManager\SettingsDlg.resx">
       <DependentUpon>SettingsDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SnippetsDlg.resx">
+    <EmbeddedResource Include="Organizer\SnippetsDlg.resx">
       <DependentUpon>SnippetsDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stickers\StickerDummy.resx">
@@ -1041,16 +1024,16 @@
     <EmbeddedResource Include="StartMenu.resx">
       <DependentUpon>StartMenu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TaskTemplateDlg.resx">
+    <EmbeddedResource Include="StixTaskInfo\TaskTemplateDlg.resx">
       <DependentUpon>TaskTemplateDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TopicNotesDlg.resx">
       <DependentUpon>TopicNotesDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TopicTemplatePreview.resx">
+    <EmbeddedResource Include="StixAddTopic\TopicTemplatePreview.resx">
       <DependentUpon>TopicTemplatePreview.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TopicWidthDlg.resx">
+    <EmbeddedResource Include="StixTextOps\TopicWidthDlg.resx">
       <DependentUpon>TopicWidthDlg.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

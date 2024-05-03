@@ -16,6 +16,10 @@ namespace Bubbles
         {
             InitializeComponent();
 
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
+            helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
+            helpProvider1.SetHelpKeyword(this, "TextOpsStix.htm#replace");
+
             Text = Utils.getString("ReplaceDlg.Title");
             rbtnWholeMap.Text = Utils.getString("ReplaceDlg.rbtnWholeMap");
             rbtnSelectedTopics.Text = Utils.getString("ReplaceDlg.rbtnSelectedTopics");
@@ -31,6 +35,12 @@ namespace Bubbles
             linkMore_LinkClicked(null, null);
 
             this.FormClosing += ReplaceDlg_FormClosing;
+            this.HelpButtonClicked += this_HelpButtonClicked;
+        }
+
+        private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "TextOpsStix.htm#replace");
         }
 
         private void ReplaceDlg_FormClosing(object sender, FormClosingEventArgs e)

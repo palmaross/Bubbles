@@ -14,7 +14,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "PasteStick.htm#TopicWidths");
+            helpProvider1.SetHelpKeyword(this, "TextOpsStix.htm#topicwidth");
 
             Text = Utils.getString("TopicWidthDlg.Title");
             lblManual.Text = Utils.getString("TopicWidthDlg.lblManual");
@@ -42,7 +42,7 @@ namespace Bubbles
 
         private void this_HelpButtonClicked(object sender, CancelEventArgs e)
         {
-            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "PasteStick.htm#TopicWidths");
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "TextOpsStix.htm#topicwidth");
         }
 
         private void btnOK_Click(object sender, EventArgs e)

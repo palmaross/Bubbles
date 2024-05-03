@@ -16,7 +16,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "NewLinkDlg.htm");
+            helpProvider1.SetHelpKeyword(this, "LinksWindow.htm#addlink");
 
             Text = Utils.getString("NewLinkDlg.title");
             lblTitle.Text = Utils.getString("NewLinkDlg.lblTitle");
@@ -40,7 +40,7 @@ namespace Bubbles
 
         private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "NewLinkDlg.htm");
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "LinksWindow.htm#addlink");
         }
 
         public void FillGroups()

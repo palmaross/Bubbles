@@ -52,6 +52,7 @@
             this.txtPath = new System.Windows.Forms.TextBox();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.panel1.SuspendLayout();
             this.panelPP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pr1)).BeginInit();
@@ -321,6 +322,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.treeView1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.HelpButton = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SelectIconDlg";
@@ -371,5 +373,6 @@
         private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         public System.Windows.Forms.TextBox txtPath;
+        private System.Windows.Forms.HelpProvider helpProvider1;
     }
 }

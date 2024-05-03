@@ -21,6 +21,10 @@ namespace Bubbles
         {
             InitializeComponent();
 
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
+            helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
+            helpProvider1.SetHelpKeyword(this, "IconStix.htm#addicon");
+
             Text = Utils.getString("SelectIconDlg.caption");
 
             FileNames = filenames;
@@ -31,6 +35,13 @@ namespace Bubbles
 
             string path = MMUtils.MindManager.GetPath(MmDirectory.mmDirectoryIcons);
             ListDirectory(treeView1, path);
+
+            this.HelpButtonClicked += this_HelpButtonClicked;
+        }
+
+        private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "IconStix.htm#addicon");
         }
 
         private void ListDirectory(TreeView treeView, string path)

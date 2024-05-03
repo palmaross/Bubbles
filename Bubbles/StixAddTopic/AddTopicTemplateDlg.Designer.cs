@@ -58,6 +58,7 @@
             this.Delete = new System.Windows.Forms.PictureBox();
             this.New = new System.Windows.Forms.PictureBox();
             this.btnSave = new System.Windows.Forms.Button();
+            this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.panelNewTemplate.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTopics)).BeginInit();
             this.grAdd.SuspendLayout();
@@ -443,5 +444,6 @@
         private System.Windows.Forms.PictureBox Delete;
         private System.Windows.Forms.PictureBox New;
         private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.HelpProvider helpProvider1;
     }
 }

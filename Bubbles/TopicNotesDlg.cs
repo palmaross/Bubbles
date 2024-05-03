@@ -16,7 +16,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "IconStick.htm");
+            helpProvider1.SetHelpKeyword(this, "Detach_Topic_Notes.htm");
 
             Text = Utils.getString("TopicNotesDlg.title");
             lblTopics.Text = Utils.getString("TopicNotesDlg.lblTopics");
@@ -172,7 +172,7 @@ namespace Bubbles
 
         private void pHelp_Click(object sender, EventArgs e)
         {
-            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "GetTopicNotes.htm");
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "Detach_Topic_Notes.htm");
         }
 
         private void fontUp_Click(object sender, EventArgs e)

@@ -45,6 +45,7 @@
             this.linkReset = new System.Windows.Forms.LinkLabel();
             this.cbKeepFormatting = new System.Windows.Forms.CheckBox();
             this.lblReplace = new System.Windows.Forms.Label();
+            this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.SuspendLayout();
             // 
             // rbtnSelectedTopics
@@ -239,6 +240,7 @@
             this.Controls.Add(this.rbtnWholeMap);
             this.Controls.Add(this.rbtnSelectedTopics);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.HelpButton = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ReplaceDlg";
@@ -269,5 +271,6 @@
         private System.Windows.Forms.LinkLabel linkReset;
         private System.Windows.Forms.CheckBox cbKeepFormatting;
         private System.Windows.Forms.Label lblReplace;
+        private System.Windows.Forms.HelpProvider helpProvider1;
     }
 }

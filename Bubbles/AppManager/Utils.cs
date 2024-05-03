@@ -80,6 +80,8 @@ namespace Bubbles
                     Directory.CreateDirectory(m_dataPath + "ImageDB");
                 if (!Directory.Exists(m_dataPath + "Demos"))
                     Directory.CreateDirectory(m_dataPath + "Demos");
+                if (!Directory.Exists(m_dataPath + "SoundDB"))
+                    Directory.CreateDirectory(m_dataPath + "SoundDB");
 
                 m_iconDB = m_dataPath + "IconDB\\";
 

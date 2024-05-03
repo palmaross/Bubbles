@@ -30,8 +30,7 @@ namespace Bubbles
             HL2 = chIncrement.Location.X;
             HL3 = pAddMultiple.Location.X;
 
-            if (orientation == "V")
-                orientation = "H"; Rotate();
+            if (orientation == "V") { orientation = "H"; Rotate(); }
 
             toolTip1.SetToolTip(subtopic, Utils.getString("AddTopicStix.addsubtopic"));
             toolTip1.SetToolTip(nexttopic, Utils.getString("AddTopicStix.addtopic"));

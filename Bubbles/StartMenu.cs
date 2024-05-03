@@ -1,5 +1,4 @@
-﻿using Bubbles.Properties;
-using PRAManager;
+﻿using PRAManager;
 using System;
 using System.Data;
 using System.Drawing;

@@ -53,6 +53,7 @@
             this.pHelp = new System.Windows.Forms.PictureBox();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.helpProvider2 = new System.Windows.Forms.HelpProvider();
             this.panelEditButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pStrikeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pUnderline)).BeginInit();
@@ -359,5 +360,6 @@
         private System.Windows.Forms.PictureBox pStrikeout;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.PictureBox pictOK;
+        private System.Windows.Forms.HelpProvider helpProvider2;
     }
 }
