@@ -53,6 +53,7 @@
             this.pClose = new System.Windows.Forms.PictureBox();
             this.pHelp = new System.Windows.Forms.PictureBox();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.chAttachment = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.btnRecord)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnPlay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnPause)).BeginInit();
@@ -74,7 +75,7 @@
             // 
             this.lblmin.AutoSize = true;
             this.lblmin.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblmin.Location = new System.Drawing.Point(4, 1);
+            this.lblmin.Location = new System.Drawing.Point(5, 1);
             this.lblmin.Name = "lblmin";
             this.lblmin.Size = new System.Drawing.Size(24, 17);
             this.lblmin.TabIndex = 4;
@@ -84,7 +85,7 @@
             // 
             this.lblsecond.AutoSize = true;
             this.lblsecond.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblsecond.Location = new System.Drawing.Point(36, 1);
+            this.lblsecond.Location = new System.Drawing.Point(33, 1);
             this.lblsecond.Name = "lblsecond";
             this.lblsecond.Size = new System.Drawing.Size(24, 17);
             this.lblsecond.TabIndex = 5;
@@ -94,7 +95,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(26, 1);
+            this.label1.Location = new System.Drawing.Point(25, 1);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(12, 17);
             this.label1.TabIndex = 6;
@@ -110,9 +111,9 @@
             // 
             // btnAddToTopic
             // 
-            this.btnAddToTopic.Location = new System.Drawing.Point(31, 104);
+            this.btnAddToTopic.Location = new System.Drawing.Point(14, 103);
             this.btnAddToTopic.Name = "btnAddToTopic";
-            this.btnAddToTopic.Size = new System.Drawing.Size(143, 23);
+            this.btnAddToTopic.Size = new System.Drawing.Size(84, 23);
             this.btnAddToTopic.TabIndex = 9;
             this.btnAddToTopic.Text = "Add to Topic";
             this.btnAddToTopic.UseVisualStyleBackColor = true;
@@ -121,7 +122,7 @@
             // cbRecords
             // 
             this.cbRecords.FormattingEnabled = true;
-            this.cbRecords.Location = new System.Drawing.Point(12, 72);
+            this.cbRecords.Location = new System.Drawing.Point(14, 72);
             this.cbRecords.Name = "cbRecords";
             this.cbRecords.Size = new System.Drawing.Size(178, 21);
             this.cbRecords.Sorted = true;
@@ -170,7 +171,6 @@
             this.btnStopRecord.TabIndex = 17;
             this.btnStopRecord.TabStop = false;
             this.btnStopRecord.Visible = false;
-            this.btnStopRecord.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // panel1
             // 
@@ -180,18 +180,18 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(71, 45);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(120, 19);
+            this.panel1.Size = new System.Drawing.Size(110, 19);
             this.panel1.TabIndex = 18;
             // 
             // lblDuration
             // 
             this.lblDuration.AutoSize = true;
             this.lblDuration.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDuration.Location = new System.Drawing.Point(63, 1);
+            this.lblDuration.Location = new System.Drawing.Point(53, 1);
             this.lblDuration.Name = "lblDuration";
-            this.lblDuration.Size = new System.Drawing.Size(54, 17);
+            this.lblDuration.Size = new System.Drawing.Size(52, 17);
             this.lblDuration.TabIndex = 7;
-            this.lblDuration.Text = "(00:00)";
+            this.lblDuration.Text = "/ 00:00";
             this.lblDuration.Visible = false;
             // 
             // btnStopPlay
@@ -283,11 +283,23 @@
             this.pHelp.TabStop = false;
             this.pHelp.Click += new System.EventHandler(this.pHelp_Click);
             // 
+            // chAttachment
+            // 
+            this.chAttachment.AutoSize = true;
+            this.chAttachment.Location = new System.Drawing.Point(103, 107);
+            this.chAttachment.Name = "chAttachment";
+            this.chAttachment.Size = new System.Drawing.Size(95, 17);
+            this.chAttachment.TabIndex = 24;
+            this.chAttachment.Text = "As Attachment";
+            this.chAttachment.UseVisualStyleBackColor = true;
+            // 
             // OmniSound
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(202, 138);
+            this.Controls.Add(this.chAttachment);
             this.Controls.Add(this.pHelp);
             this.Controls.Add(this.pClose);
             this.Controls.Add(this.pRecord);
@@ -319,6 +331,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pClose)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHelp)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -346,5 +359,6 @@
         private System.Windows.Forms.PictureBox pHelp;
         public System.Windows.Forms.ComboBox cbRecords;
         private System.Windows.Forms.HelpProvider helpProvider1;
+        private System.Windows.Forms.CheckBox chAttachment;
     }
 }

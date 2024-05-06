@@ -82,7 +82,7 @@
             this.Manage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Manage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Manage.Image = ((System.Drawing.Image)(resources.GetObject("Manage.Image")));
-            this.Manage.Location = new System.Drawing.Point(322, 5);
+            this.Manage.Location = new System.Drawing.Point(318, 5);
             this.Manage.Name = "Manage";
             this.Manage.Size = new System.Drawing.Size(20, 20);
             this.Manage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -116,7 +116,7 @@
             // 
             this.pAddMultiple.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pAddMultiple.Image = ((System.Drawing.Image)(resources.GetObject("pAddMultiple.Image")));
-            this.pAddMultiple.Location = new System.Drawing.Point(296, 5);
+            this.pAddMultiple.Location = new System.Drawing.Point(292, 5);
             this.pAddMultiple.Name = "pAddMultiple";
             this.pAddMultiple.Size = new System.Drawing.Size(20, 20);
             this.pAddMultiple.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -192,14 +192,15 @@
             // 
             // numUpDown
             // 
-            this.numUpDown.Location = new System.Drawing.Point(225, 7);
+            this.numUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numUpDown.Location = new System.Drawing.Point(225, 5);
             this.numUpDown.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.numUpDown.Name = "numUpDown";
-            this.numUpDown.Size = new System.Drawing.Size(30, 20);
+            this.numUpDown.Size = new System.Drawing.Size(30, 21);
             this.numUpDown.TabIndex = 101;
             this.numUpDown.Tag = "1";
             this.numUpDown.Value = new decimal(new int[] {
@@ -210,22 +211,27 @@
             // 
             // TopicText
             // 
-            this.TopicText.Location = new System.Drawing.Point(158, 7);
+            this.TopicText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TopicText.Location = new System.Drawing.Point(158, 5);
+            this.TopicText.Multiline = true;
             this.TopicText.Name = "TopicText";
-            this.TopicText.Size = new System.Drawing.Size(64, 20);
+            this.TopicText.Size = new System.Drawing.Size(64, 21);
             this.TopicText.TabIndex = 102;
             this.TopicText.Tag = "1";
             // 
             // chIncrement
             // 
-            this.chIncrement.AutoSize = true;
-            this.chIncrement.Location = new System.Drawing.Point(261, 7);
+            this.chIncrement.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chIncrement.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chIncrement.Location = new System.Drawing.Point(260, 5);
             this.chIncrement.Name = "chIncrement";
-            this.chIncrement.Size = new System.Drawing.Size(38, 17);
+            this.chIncrement.Size = new System.Drawing.Size(26, 19);
             this.chIncrement.TabIndex = 104;
             this.chIncrement.Tag = "1";
             this.chIncrement.Text = "+1";
+            this.chIncrement.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.chIncrement.UseVisualStyleBackColor = true;
+            this.chIncrement.CheckedChanged += new System.EventHandler(this.chIncrement_CheckedChanged);
             // 
             // V2
             // 
@@ -241,7 +247,7 @@
             // V3
             // 
             this.V3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.V3.Location = new System.Drawing.Point(235, 0);
+            this.V3.Location = new System.Drawing.Point(236, 0);
             this.V3.Name = "V3";
             this.V3.Size = new System.Drawing.Size(16, 16);
             this.V3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -249,12 +255,12 @@
             this.V3.TabStop = false;
             this.V3.Visible = false;
             // 
-            // AddTopicStix
+            // StixAddTopic
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(344, 30);
+            this.ClientSize = new System.Drawing.Size(340, 30);
             this.ControlBox = false;
             this.Controls.Add(this.V3);
             this.Controls.Add(this.V2);
@@ -271,7 +277,7 @@
             this.Controls.Add(this.Manage);
             this.Controls.Add(this.pictureHandle);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "AddTopicStix";
+            this.Name = "StixAddTopic";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();

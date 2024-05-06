@@ -25,10 +25,13 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "AddTopicStix.htm");
 
-            RealLength = this.Width;
+            RealLength = this.Width; InitialLength = this.Width;
             HL1 = numUpDown.Location.X;
             HL2 = chIncrement.Location.X;
             HL3 = pAddMultiple.Location.X;
+            VL1 = V1.Location.X;
+            VL2 = V2.Location.X;
+            VL3 = V3.Location.X;
 
             if (orientation == "V") { orientation = "H"; Rotate(); }
 
@@ -55,9 +58,10 @@ namespace Bubbles
 
             pictureHandle.MouseDown += PictureHandle_MouseDown;
             pictureHandle.MouseDoubleClick += (sender, e) => this.Hide();
+            this.Paint += this_Paint; // paint the border depending on scale factor
 
             // Apply scale factor
-            this.Paint += this_Paint; // paint the border depending on scale factor
+            fsize = TopicText.Font.Size; ffsize = chIncrement.Font.Size;
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
             ScaleStick(100F, scaleFactor);
         }
@@ -75,7 +79,18 @@ namespace Bubbles
 
             if (toScale != 100)
                 this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
+
+            float _fsize = fsize * (toScale / 100);
+            float _ffsize = ffsize * (toScale / 100);
+
+            numUpDown.Font = new Font(numUpDown.Font.FontFamily, _fsize);
+            TopicText.Font = new Font(numUpDown.Font.FontFamily, _fsize);
+            chIncrement.Font = new Font(numUpDown.Font.FontFamily, _fsize);
+
+            if (orientation == "H") { RealLength = this.Width; }
+            else RealLength = (int)(InitialLength * (toScale / 100));
         }
+        float fsize, ffsize;
 
         private void this_Paint(object sender, PaintEventArgs e)
         {
@@ -332,21 +347,22 @@ namespace Bubbles
 
             if (orientation == "H")
             {
-                TopicText.Location = new Point(TopicText.Location.Y, V1.Location.Y);
+                TopicText.Location = new Point(TopicText.Location.Y, Manage.Location.Y);
                 TopicText.Width = this.Height * 2;
-                numUpDown.Location = new Point(HL1, V1.Location.Y);
-                chIncrement.Location = new Point(HL2, V1.Location.Y);
-                pAddMultiple.Location = new Point(HL3, V1.Location.Y);
+                numUpDown.Location = new Point((int)(HL1 * (scaleFactor / 100)), Manage.Location.Y);
+                chIncrement.Location = new Point((int)(HL2 * (scaleFactor / 100)), Manage.Location.Y);
+                pAddMultiple.Location = new Point((int)(HL3 * (scaleFactor / 100)), Manage.Location.Y);
                 this.Width = RealLength;
             }
             else
             {
                 TopicText.Location = new Point(0, TopicText.Location.X);
                 TopicText.Width = this.Width;
-                numUpDown.Location = new Point(0, V1.Location.X);
-                chIncrement.Location = new Point(0, V2.Location.X);
-                pAddMultiple.Location = new Point(pAddMultiple.Location.X, V3.Location.X);
-                this.Height -= TopicText.Width * 2;
+                numUpDown.Location = new Point(0, (int)(VL1 * (scaleFactor / 100)));
+                int chLocX = ((this.Width - chIncrement.Width) / 2) - 1;
+                chIncrement.Location = new Point(chLocX, (int)(VL2 * (scaleFactor / 100)));
+                pAddMultiple.Location = new Point(Manage.Location.X, (int)(VL3 * (scaleFactor / 100)));
+                this.Height -= (int)(this.Width * 1.8);
             }
         }
 
@@ -455,7 +471,7 @@ namespace Bubbles
         }
 
         string orientation = "H";
-        int RealLength;
+        int RealLength, InitialLength;
         public float scaleFactor = 100;
 
         // For this_MouseDown
@@ -469,7 +485,15 @@ namespace Bubbles
 
         InputSimulator sim = new InputSimulator();
 
-        int HL1, HL2, HL3;
+        private void chIncrement_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chIncrement.Checked)
+                chIncrement.Font = new Font(chIncrement.Font, FontStyle.Bold);
+            else
+                chIncrement.Font = new Font(chIncrement.Font, FontStyle.Regular);
+        }
+
+        int HL1, HL2, HL3, VL1, VL2, VL3;
     }
 
     public class MT_TemplateItem

@@ -792,16 +792,13 @@ namespace Bubbles
 
         public void PasteTopic_MouseClick(object sender, MouseEventArgs e)
         {
-            if (MMUtils.ActiveDocument == null || 
-                MMUtils.ActiveDocument.Selection.PrimaryTopic == null) return;
-
             if (e.Button == MouseButtons.Left)
             {
                 PasteTopic("subtopic");
             }
             else if (e.Button == MouseButtons.Right)
             {
-                StixUtils.ShowCommandPopup(this, orientation, StixUtils.typetextops, "paste");
+                StixUtils.ShowCommandPopup(this, orientation, StixUtils.typetextops, "paste", scaleFactor);
             }
         }
 

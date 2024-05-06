@@ -121,7 +121,7 @@
             // 
             this.UnformatText.Cursor = System.Windows.Forms.Cursors.Hand;
             this.UnformatText.Image = ((System.Drawing.Image)(resources.GetObject("UnformatText.Image")));
-            this.UnformatText.Location = new System.Drawing.Point(287, 7);
+            this.UnformatText.Location = new System.Drawing.Point(285, 7);
             this.UnformatText.Name = "UnformatText";
             this.UnformatText.Size = new System.Drawing.Size(16, 16);
             this.UnformatText.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -146,7 +146,7 @@
             this.Manage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Manage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Manage.Image = ((System.Drawing.Image)(resources.GetObject("Manage.Image")));
-            this.Manage.Location = new System.Drawing.Point(330, 5);
+            this.Manage.Location = new System.Drawing.Point(328, 5);
             this.Manage.Name = "Manage";
             this.Manage.Size = new System.Drawing.Size(20, 20);
             this.Manage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -156,6 +156,7 @@
             // 
             // cmsOptions
             // 
+            this.cmsOptions.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.cmsOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.OP_myrisk,
             this.OP_SourceLink});
@@ -179,6 +180,7 @@
             // 
             // cmsCommon
             // 
+            this.cmsCommon.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.cmsCommon.Name = "cmsCommon";
             this.cmsCommon.Size = new System.Drawing.Size(61, 4);
             // 
@@ -238,7 +240,7 @@
             // 
             this.pReplace.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pReplace.Image = ((System.Drawing.Image)(resources.GetObject("pReplace.Image")));
-            this.pReplace.Location = new System.Drawing.Point(267, 7);
+            this.pReplace.Location = new System.Drawing.Point(265, 7);
             this.pReplace.Name = "pReplace";
             this.pReplace.Size = new System.Drawing.Size(16, 16);
             this.pReplace.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -290,7 +292,7 @@
             this.panelOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelOptions.Location = new System.Drawing.Point(159, 4);
             this.panelOptions.Name = "panelOptions";
-            this.panelOptions.Size = new System.Drawing.Size(100, 23);
+            this.panelOptions.Size = new System.Drawing.Size(98, 23);
             this.panelOptions.TabIndex = 98;
             // 
             // OptionSourceLink
@@ -312,7 +314,7 @@
             this.OptionInternalLinks.BackColor = System.Drawing.Color.OldLace;
             this.OptionInternalLinks.Cursor = System.Windows.Forms.Cursors.Hand;
             this.OptionInternalLinks.Image = ((System.Drawing.Image)(resources.GetObject("OptionInternalLinks.Image")));
-            this.OptionInternalLinks.Location = new System.Drawing.Point(240, 8);
+            this.OptionInternalLinks.Location = new System.Drawing.Point(238, 8);
             this.OptionInternalLinks.Name = "OptionInternalLinks";
             this.OptionInternalLinks.Size = new System.Drawing.Size(16, 16);
             this.OptionInternalLinks.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -325,7 +327,7 @@
             // 
             this.pTopicWidth.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pTopicWidth.Image = ((System.Drawing.Image)(resources.GetObject("pTopicWidth.Image")));
-            this.pTopicWidth.Location = new System.Drawing.Point(307, 6);
+            this.pTopicWidth.Location = new System.Drawing.Point(305, 6);
             this.pTopicWidth.Name = "pTopicWidth";
             this.pTopicWidth.Size = new System.Drawing.Size(18, 18);
             this.pTopicWidth.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -336,16 +338,17 @@
             // 
             // cmsTopicWidths
             // 
+            this.cmsTopicWidths.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.cmsTopicWidths.Name = "cmsTopicWidths";
             this.cmsTopicWidths.ShowCheckMargin = true;
             this.cmsTopicWidths.Size = new System.Drawing.Size(83, 4);
             // 
-            // BubbleTextOps
+            // StixTextOps
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(352, 30);
+            this.ClientSize = new System.Drawing.Size(350, 30);
             this.ControlBox = false;
             this.Controls.Add(this.pTopicWidth);
             this.Controls.Add(this.OptionInternalLinks);
@@ -366,7 +369,7 @@
             this.Controls.Add(this.PasteNotes);
             this.Controls.Add(this.PasteLink);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "BubbleTextOps";
+            this.Name = "StixTextOps";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             ((System.ComponentModel.ISupportInitialize)(this.PasteLink)).EndInit();

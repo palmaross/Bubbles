@@ -6,11 +6,12 @@ using System.Runtime.InteropServices;
 using System.Text;
 using PRAManager;
 using System.IO;
-using System.Media;
 using Color = System.Drawing.Color;
 using Mindjet.MindManager.Interop;
 using AppManager;
 using System.Linq;
+using System.IO.Compression;
+using System.Net.Mail;
 
 namespace Bubbles
 {
@@ -30,10 +31,12 @@ namespace Bubbles
             btnCancelRecord.Text = Utils.getString("button.cancel");
             pClose.Text = Utils.getString("button.close");
             pHelp.Text = Utils.getString("button.help");
+            chAttachment.Text = Utils.getString("OmniSound.chAttachment");
 
             toolTip1.SetToolTip(btnRecord, Utils.getString("OmniSound.btnRecord.tooltip"));
             toolTip1.SetToolTip(btnPause, Utils.getString("OmniSound.btnPause.tooltip"));
             toolTip1.SetToolTip(btnPlay, Utils.getString("OmniSound.btnPlay.tooltip"));
+            toolTip1.SetToolTip(chAttachment, Utils.getString("OmniSound.chAttachment.tooltip"));
 
             this.Paint += This_Paint; // paint the border
 
@@ -83,7 +86,7 @@ namespace Bubbles
                 record = false;
                 btnRecord.Image = StartRecord;
                 pRecord.Visible = false;
-                btnSave_Click(null, null);
+                Stop_Click();
                 return;
             }
 
@@ -97,7 +100,7 @@ namespace Bubbles
 
             timer1.Enabled = true;
             timer1.Start();
-            mciSendString("open new Type waveaudio Alias omnisound", null, 0, IntPtr.Zero);
+            mciSendString("open new Type waveaudio alias omnisound", null, 0, IntPtr.Zero);
             mciSendString("set omnisound time format ms bitspersample 16 samplespersec 8000 channels 1", null, 0, IntPtr.Zero);
             mciSendString("record omnisound", null, 0, IntPtr.Zero);
 
@@ -105,23 +108,27 @@ namespace Bubbles
             toolTip1.SetToolTip(btnRecord, Utils.getString("OmniSound.btnRecord.stop.tooltip"));
         }
 
-        private void btnPause_Click(object sender, EventArgs e)
+        public void btnPause_Click(object sender, EventArgs e)
         {
             if (pause)
             {
                 pause = false;
                 mciSendString("resume omnisound", null, 0, IntPtr.Zero);
                 timer1.Start();
+                if (StixMain.m_playBox != null && StixMain.m_playBox.Visible)
+                    StixMain.m_playBox.timer1.Start();
             }
             else
             {
                 pause = true;
                 mciSendString("pause omnisound", null, 0, IntPtr.Zero);
                 timer1.Stop();
+                if (StixMain.m_playBox != null && StixMain.m_playBox.Visible)
+                    StixMain.m_playBox.timer1.Stop();
             }
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private void Stop_Click()
         {
             mciSendString("stop omnisound", null, 0, IntPtr.Zero);
 
@@ -170,10 +177,10 @@ namespace Bubbles
             }
 
             string filename = Utils.m_dataPath + "SoundDB\\" + recordName + ".wav";
-            mciSendString("save omnisound " + filename, null, 0, IntPtr.Zero);
+            mciSendString("save omnisound \"" + filename + "\"", null, 0, IntPtr.Zero);
             mciSendString("close omnisound", null, 0, IntPtr.Zero);
 
-            int i = cbRecords.Items.Add(recordName);
+            int i = cbRecords.Items.Add(new AudioItem(recordName, filename));
             cbRecords.SelectedIndex = i;
             panelRecordName.Visible = false;
         }
@@ -198,6 +205,8 @@ namespace Bubbles
                 mciSendString("stop omnisound", null, 0, IntPtr.Zero);
                 mciSendString("close omnisound", null, 0, IntPtr.Zero);
                 timer1.Stop();
+                if (StixMain.m_playBox != null && StixMain.m_playBox.Visible) 
+                    StixMain.m_playBox.timer1.Stop();
                 lblDuration.Visible = false;
                 // Remove playing topic indices.
                 FilePath = "";
@@ -210,9 +219,16 @@ namespace Bubbles
             play = true; btnPlay.Image = StopPlay;
             toolTip1.SetToolTip(btnPlay, Utils.getString("OmniSound.btnPlay.stop.tooltip"));
 
-            string filename = FilePath;
-            if (FilePath == "") // not from topic
-                filename = (cbRecords.SelectedItem as AudioItem).Path;
+            string filename = "";
+            if (FilePath == "")
+            {
+                if (cbRecords.Items.Count > 0 && cbRecords.SelectedIndex >= 0) // not from topic
+                    filename = (cbRecords.SelectedItem as AudioItem).Path;
+                else
+                    return;
+            }
+            else
+                filename = FilePath;
 
             StringBuilder lengthBuf = new StringBuilder(32);
 
@@ -234,16 +250,20 @@ namespace Bubbles
                 int min = length / 60;
                 int sec = length % 60;
 
-                string duration = "(";
+                string duration = "/  ";
                 if (min < 10) duration += "0" + min; else duration += min;
                 duration += ":";
                 if (sec < 10) duration += "0" + sec; else duration += sec;
-                duration += ")";
+                //duration += ")";
 
                 lblDuration.Text = duration;
+                if (StixMain.m_playBox != null && StixMain.m_playBox.Visible)
+                    StixMain.m_playBox.lblDuration.Text = duration;
             }
 
             timer1.Start();
+            if (StixMain.m_playBox != null && StixMain.m_playBox.Visible)
+                StixMain.m_playBox.timer1.Start();
         }
 
         /// <summary>Audio clock.</summary>
@@ -296,13 +316,21 @@ namespace Bubbles
             if (_t.ContainsControlStripType(StixMain.STRIP_URI))
                 return;
 
-            // Add strip icon.
-            TransactionWrapper _w = new TransactionWrapper(_t, 
-                TransactionWrapper.TransactionType.ADD_STRIP_ICON,
-                (cbRecords.SelectedItem as AudioItem).Path);
-            _w.controlStripURI = StixMain.STRIP_URI;
-            _w.Execute();
+            if (chAttachment.Checked) // Add as attachment
+            {
+                _t.Attachments.Add((cbRecords.SelectedItem as AudioItem).Path);
+            }
+            else // Add strip icon.
+            {
+                TransactionWrapper _w = new TransactionWrapper(_t,
+                    TransactionWrapper.TransactionType.ADD_STRIP_ICON,
+                    (cbRecords.SelectedItem as AudioItem).Path);
+                _w.controlStripURI = StixMain.STRIP_URI;
+                _w.Execute();
+            }
         }
+
+
 
         private void pClose_Click(object sender, EventArgs e)
         {
@@ -346,12 +374,18 @@ namespace Bubbles
         {
             if (m.Msg == MM_MCINOTIFY)
             {
+                if (StixMain.m_playBox != null && StixMain.m_playBox.Visible)
+                {
+                    StixMain.m_playBox.timer1.Stop();
+                    StixMain.m_playBox.Close();
+                }
                 timer1.Stop();
                 lblDuration.Visible = false;
                 play = false;
                 btnPlay.Image = StartPlay;
                 lblmin.Text = "00";
                 lblsecond.Text = "00";
+
                 mciSendString("close omnisound", null, 0, IntPtr.Zero);
 
                 FilePath = "";

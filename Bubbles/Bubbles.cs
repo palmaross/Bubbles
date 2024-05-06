@@ -30,7 +30,8 @@ namespace Bubbles
 
             m_menus = new DynamicMenus();
 
-            m_controlStrip = MMUtils.MindManager.ControlStripTypeRegistry.RegisterControlStripType(STRIP_URI, Utils.m_imagesPath + "audio.ico", false);
+            m_controlStrip = MMUtils.MindManager.ControlStripTypeRegistry.RegisterControlStripType(STRIP_URI, Utils.m_imagesPath + "audio.ico", true);
+            m_controlStrip.FriendlyName = "Playback";
             Controls _stripControls = m_controlStrip.ContextMenu;
             m_controlStripCommand = MMUtils.MindManager.Commands.Add(Utils.Registered_AddinName, "omnistix.controlstrip.audiocommand");
             m_controlStripCommand.UpdateState += new ICommandEvents_UpdateStateEventHandler(m_controlStripCommand_UpdateState);
@@ -46,13 +47,6 @@ namespace Bubbles
                     "", "", "",
                     this);
             m_menus.AddButton(_stripControls,
-                new SubMenuButtonData("omnistix.stripicon.playwithplayer",
-                    MMUtils.getString("omnistix.stripicon.playwithplayer.caption"),
-                    "",
-                    2),
-                    "", "", "",
-                    this);
-            m_menus.AddButton(_stripControls,
                 new SubMenuButtonData("omnistix.stripicon.remove",
                     MMUtils.getString("button.remove"),
                     "",
@@ -63,7 +57,6 @@ namespace Bubbles
             m_bubbleSnippets = new BubbleSnippets();
             m_OmniSound = new OmniSound();
             m_StixBase = new StartMenu();
-            STICKS.Add(0, m_StixBase);
             commandPopup.Tag = 0; // Tag is a stick ID
 
             DocumentStorage.Subscribe(this);
@@ -135,6 +128,9 @@ namespace Bubbles
             pEnabled = true;
         }
 
+        /// <summary>
+        /// Click on the audio icon
+        /// </summary>
         private void m_controlStripCommand_Click()
         {
             Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
@@ -143,6 +139,8 @@ namespace Bubbles
             if (m_OmniSound.play) // OmniPlayer is busy.
             {
                 m_OmniSound.btnPlay_Click(null, null); // Stop playing.
+                if (m_playBox != null && m_playBox.Visible)
+                    m_playBox.Close();
             }
             else // Start playing.
             {
@@ -156,6 +154,8 @@ namespace Bubbles
                     return;
                 }
 
+                string trackName = Path.GetFileNameWithoutExtension(audioPath);
+
                 // Select topic record in OmniSound window
                 if (m_OmniSound.Visible)
                 {
@@ -163,6 +163,18 @@ namespace Bubbles
                     {
                         if ((item as AudioItem).Path == audioPath)
                             m_OmniSound.cbRecords.SelectedItem = item;
+                    }
+                }
+                else
+                {
+                    if (m_playBox == null || m_playBox.IsDisposed)
+                    {
+                        m_playBox = new PlayBox(OmniSticksButton.Bounds, trackName, t.Guid);
+                        m_playBox.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                    }
+                    else
+                    {
+                        m_playBox.lblTrack.Text = trackName; m_playBox.lblTrack.Tag = t.Guid;
                     }
                 }
 
@@ -611,38 +623,10 @@ namespace Bubbles
                 case 1: // Stop playing.
                     if (m_OmniSound.play == true)
                         m_OmniSound.btnPlay_Click(null, null);
+                    if (m_playBox != null && m_playBox.Visible)
+                        m_playBox.Close();
                     return;
-                case 2: // Show Omni Player.
-                    Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
-
-                    if (m_OmniSound.Visible)
-                        m_OmniSound.WindowState = FormWindowState.Normal;
-                    else
-                    {
-                        m_OmniSound.Location = new Point(Cursor.Position.X, Cursor.Position.Y);   
-                        m_OmniSound.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-                    }
-
-                    string audioPath = t.GetAttributes(STRIP_URI).GetAttributeValue(AUDIO_PATH);
-
-                    // Does file exist?
-                    if (!File.Exists(audioPath))
-                    {
-                        MessageBox.Show(String.Format(Utils.getString("OmniSound.filenotexists"), audioPath));
-                        return;
-                    }
-
-                    // Select topic record in OmniSound window
-                    if (m_OmniSound.Visible)
-                    {
-                        foreach (var item in m_OmniSound.cbRecords.Items)
-                        {
-                            if ((item as AudioItem).Path == audioPath)
-                                m_OmniSound.cbRecords.SelectedItem = item;
-                        }
-                    }
-                    return;
-                case 4: // Remove strip icon.
+                case 4: // Remove audio strip icon.
                     if (!(MMUtils.SelectedTopic() is Topic _t))
                         return;
 
@@ -846,5 +830,7 @@ namespace Bubbles
         private Command m_cmdPlayAudio = null;
         private Command m_cmdPlayAudioplayer = null;
         private Command m_cmdDeleteAudio = null;
+
+        public static PlayBox m_playBox;
     }
 }

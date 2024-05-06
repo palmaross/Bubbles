@@ -293,6 +293,12 @@
       <DependentUpon>OmniSound.cs</DependentUpon>
     </Compile>
     <Compile Include="StixTools\OmniTools.cs" />
+    <Compile Include="StixTools\PlayBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StixTools\PlayBox.Designer.cs">
+      <DependentUpon>PlayBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="StixTools\StixTools.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -941,6 +947,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StixTools\OmniSound.resx">
       <DependentUpon>OmniSound.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StixTools\PlayBox.resx">
+      <DependentUpon>PlayBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StixTools\StixTools.resx">
       <DependentUpon>StixTools.cs</DependentUpon>

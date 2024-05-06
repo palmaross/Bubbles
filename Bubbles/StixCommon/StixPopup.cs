@@ -2,13 +2,10 @@
 using System.Windows.Forms;
 using System.Drawing;
 using PRAManager;
-using WindowsInput.Native;
 using WindowsInput;
 using System.Linq;
 using Mindjet.MindManager.Interop;
 using Control = System.Windows.Forms.Control;
-using System.Collections.Generic;
-using PRMapCompanion;
 
 namespace Bubbles
 {
