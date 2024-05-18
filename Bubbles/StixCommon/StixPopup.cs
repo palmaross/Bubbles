@@ -119,8 +119,8 @@ namespace Bubbles
                 case StixUtils.typetools:
                     (stick as StixTools).Rotate();
                     break;
-                case StixUtils.typebookmarks:
-                    (stick as StixBookmarks).Rotate();
+                case StixUtils.typemapnavigator:
+                    (stick as StixMapNavigator).Rotate();
                     break;
                 case StixUtils.typeaddtopic:
                     (stick as StixAddTopic).Rotate();

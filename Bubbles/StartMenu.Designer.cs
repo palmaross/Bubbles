@@ -52,14 +52,14 @@
             this.cm_autoclose = new System.Windows.Forms.ToolStripMenuItem();
             this.cm_closemenu = new System.Windows.Forms.ToolStripMenuItem();
             this.stxTools = new System.Windows.Forms.PictureBox();
-            this.stxBookmarks = new System.Windows.Forms.PictureBox();
+            this.stxMapNavigator = new System.Windows.Forms.PictureBox();
             this.boxResources = new System.Windows.Forms.PictureBox();
             this.boxBookmarks = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panelBoxes = new System.Windows.Forms.Panel();
+            this.OmniRec = new System.Windows.Forms.PictureBox();
             this.Stickers = new System.Windows.Forms.PictureBox();
             this.p2 = new System.Windows.Forms.PictureBox();
-            this.OmniRec = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.stxAddTopics)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxTextOps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxFormat)).BeginInit();
@@ -69,13 +69,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             this.cmsManage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.stxTools)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.stxBookmarks)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.stxMapNavigator)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxResources)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxBookmarks)).BeginInit();
             this.panelBoxes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.OmniRec)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Stickers)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.OmniRec)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -268,18 +268,18 @@
             this.stxTools.Tag = "1";
             this.stxTools.Click += new System.EventHandler(this.StxTools_Click);
             // 
-            // stxBookmarks
+            // stxMapNavigator
             // 
-            this.stxBookmarks.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.stxBookmarks.Image = ((System.Drawing.Image)(resources.GetObject("stxBookmarks.Image")));
-            this.stxBookmarks.Location = new System.Drawing.Point(75, 4);
-            this.stxBookmarks.Name = "stxBookmarks";
-            this.stxBookmarks.Size = new System.Drawing.Size(24, 24);
-            this.stxBookmarks.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.stxBookmarks.TabIndex = 92;
-            this.stxBookmarks.TabStop = false;
-            this.stxBookmarks.Tag = "1";
-            this.stxBookmarks.MouseClick += new System.Windows.Forms.MouseEventHandler(this.StxBookmarks_MouseClick);
+            this.stxMapNavigator.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.stxMapNavigator.Image = ((System.Drawing.Image)(resources.GetObject("stxMapNavigator.Image")));
+            this.stxMapNavigator.Location = new System.Drawing.Point(75, 4);
+            this.stxMapNavigator.Name = "stxMapNavigator";
+            this.stxMapNavigator.Size = new System.Drawing.Size(24, 24);
+            this.stxMapNavigator.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.stxMapNavigator.TabIndex = 92;
+            this.stxMapNavigator.TabStop = false;
+            this.stxMapNavigator.Tag = "1";
+            this.stxMapNavigator.MouseClick += new System.Windows.Forms.MouseEventHandler(this.StxBookmarks_MouseClick);
             // 
             // boxResources
             // 
@@ -333,12 +333,26 @@
             this.panelBoxes.Size = new System.Drawing.Size(245, 37);
             this.panelBoxes.TabIndex = 96;
             // 
+            // OmniRec
+            // 
+            this.OmniRec.BackColor = System.Drawing.Color.Moccasin;
+            this.OmniRec.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.OmniRec.Image = ((System.Drawing.Image)(resources.GetObject("OmniRec.Image")));
+            this.OmniRec.Location = new System.Drawing.Point(124, 6);
+            this.OmniRec.Name = "OmniRec";
+            this.OmniRec.Size = new System.Drawing.Size(24, 24);
+            this.OmniRec.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.OmniRec.TabIndex = 98;
+            this.OmniRec.TabStop = false;
+            this.OmniRec.Tag = "1";
+            this.OmniRec.Click += new System.EventHandler(this.OmniRec_Click);
+            // 
             // Stickers
             // 
             this.Stickers.BackColor = System.Drawing.Color.Moccasin;
             this.Stickers.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Stickers.Image = ((System.Drawing.Image)(resources.GetObject("Stickers.Image")));
-            this.Stickers.Location = new System.Drawing.Point(162, 6);
+            this.Stickers.Location = new System.Drawing.Point(158, 6);
             this.Stickers.Name = "Stickers";
             this.Stickers.Size = new System.Drawing.Size(24, 24);
             this.Stickers.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -357,21 +371,7 @@
             this.p2.TabStop = false;
             this.p2.Visible = false;
             // 
-            // OmniRec
-            // 
-            this.OmniRec.BackColor = System.Drawing.Color.Moccasin;
-            this.OmniRec.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.OmniRec.Image = ((System.Drawing.Image)(resources.GetObject("OmniRec.Image")));
-            this.OmniRec.Location = new System.Drawing.Point(128, 6);
-            this.OmniRec.Name = "OmniRec";
-            this.OmniRec.Size = new System.Drawing.Size(24, 24);
-            this.OmniRec.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.OmniRec.TabIndex = 98;
-            this.OmniRec.TabStop = false;
-            this.OmniRec.Tag = "1";
-            this.OmniRec.Click += new System.EventHandler(this.OmniRec_Click);
-            // 
-            // StixBase
+            // StartMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -380,7 +380,7 @@
             this.ControlBox = false;
             this.Controls.Add(this.p2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.stxBookmarks);
+            this.Controls.Add(this.stxMapNavigator);
             this.Controls.Add(this.stxTools);
             this.Controls.Add(this.stxIcons);
             this.Controls.Add(this.stxTaskInfo);
@@ -389,7 +389,7 @@
             this.Controls.Add(this.stxAddTopics);
             this.Controls.Add(this.panelBoxes);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "StixBase";
+            this.Name = "StartMenu";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             ((System.ComponentModel.ISupportInitialize)(this.stxAddTopics)).EndInit();
@@ -401,13 +401,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
             this.cmsManage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.stxTools)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.stxBookmarks)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.stxMapNavigator)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxResources)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxBookmarks)).EndInit();
             this.panelBoxes.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.OmniRec)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Stickers)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.OmniRec)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -436,7 +436,7 @@
         public System.Windows.Forms.PictureBox stxTextOps;
         public System.Windows.Forms.PictureBox stxTaskInfo;
         public System.Windows.Forms.PictureBox stxIcons;
-        public System.Windows.Forms.PictureBox stxBookmarks;
+        public System.Windows.Forms.PictureBox stxMapNavigator;
         public System.Windows.Forms.PictureBox stxFormat;
         public System.Windows.Forms.PictureBox stxTools;
         private System.Windows.Forms.PictureBox p2;

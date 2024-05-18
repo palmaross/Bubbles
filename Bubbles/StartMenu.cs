@@ -20,7 +20,8 @@ namespace Bubbles
 
             toolTip1.SetToolTip(stxIcons, Utils.getString("StixIcons.tooltip"));
             toolTip1.SetToolTip(stxTaskInfo, Utils.getString("StixTaskInfo.tooltip"));
-            toolTip1.SetToolTip(stxBookmarks, Utils.getString("StixBookmarks.tooltip"));
+            toolTip1.SetToolTip(stxMapNavigator, Utils.getString("StixMapNavigator.tooltip") + 
+                Utils.getString("StixMapNavigator.tooltip2"));
             toolTip1.SetToolTip(stxTools, Utils.getString("StixTools.tooltip"));
             toolTip1.SetToolTip(stxAddTopics, Utils.getString("StixAddTopic.tooltip"));
             toolTip1.SetToolTip(stxTextOps, Utils.getString("StixTextOps.tooltip"));
@@ -206,7 +207,27 @@ namespace Bubbles
 
         private void StxBookmarks_MouseClick(object sender, MouseEventArgs e)
         {
-            BaseIcon_MouseClick(stxBookmarks, null);
+            if (sender == null || e.Button == MouseButtons.Left)
+            {
+                BaseIcon_MouseClick(stxMapNavigator, null);
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                if (StixMain.m_MapNavigatorDlg == null)
+                {
+                    StixMain.m_MapNavigatorDlg = new MapNavigatorDlg();
+
+                    // Get navigation window location
+                    if (StixMain.m_MapNavigatorDlg.Location.IsEmpty)
+                    {
+                        StixMain.m_MapNavigatorDlg.Location =
+                            new Point(StixMain.OmniSticksButton.Location.X, this.Bottom);
+                    }
+
+                    StixMain.m_MapNavigatorDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                }
+                StixMain.m_MapNavigatorDlg.Init();
+            }
         }
 
         private void StxTools_Click(object sender, EventArgs e)
@@ -231,21 +252,21 @@ namespace Bubbles
 
         private void BoxBookmarks_Click(object sender, EventArgs e)
         {
-            if (StixMain.m_BookmarkList == null)
-                StixMain.m_BookmarkList = new BookmarkListDlg();
+            if (StixMain.m_MapNavigatorDlg == null)
+                StixMain.m_MapNavigatorDlg = new MapNavigatorDlg();
 
-            StixMain.m_BookmarkList.Init();
+            StixMain.m_MapNavigatorDlg.Init();
 
-            if (StixMain.m_BookmarkList.Visible)
-                StixMain.m_BookmarkList.WindowState = FormWindowState.Normal;
+            if (StixMain.m_MapNavigatorDlg.Visible)
+                StixMain.m_MapNavigatorDlg.WindowState = FormWindowState.Normal;
             else
             {
-                if (StixMain.m_BookmarkList.Location.IsEmpty)
+                if (StixMain.m_MapNavigatorDlg.Location.IsEmpty)
                 {
-                    StixMain.m_BookmarkList.Location =
+                    StixMain.m_MapNavigatorDlg.Location =
                         new Point(StixMain.OmniSticksButton.Location.X, this.Bottom);
                 }
-                StixMain.m_BookmarkList.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                StixMain.m_MapNavigatorDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
         }
 
@@ -307,7 +328,7 @@ namespace Bubbles
             string stickType; string defaultName;
             PictureBox pb = sender as PictureBox;
 
-            if (pb.Name == "stxIcons")
+            if (pb == stxIcons)
             {
                 stickType = StixUtils.typeicons;
                 defaultName = Utils.getString("StixIcons.tooltip");
@@ -316,12 +337,12 @@ namespace Bubbles
                     cmsIcons.Show(Cursor.Position); return;
                 }
             }
-            else if (pb.Name == "stxTaskInfo")
+            else if (pb == stxTaskInfo)
             {
                 stickType = StixUtils.typetaskinfo;
                 defaultName = Utils.getString("StixTaskInfo.tooltip");
             }
-            else if (pb.Name == "stxTools")
+            else if (pb == stxTools)
             {
                 stickType = StixUtils.typetools;
                 defaultName = Utils.getString("StixTools.tooltip");
@@ -330,22 +351,22 @@ namespace Bubbles
                     cmsTools.Show(Cursor.Position); return;
                 }
             }
-            else if (pb.Name == "stxBookmarks")
+            else if (pb == stxMapNavigator)
             {
-                stickType = StixUtils.typebookmarks;
-                defaultName = Utils.getString("StixBookmarks.tooltip");
+                stickType = StixUtils.typemapnavigator;
+                defaultName = Utils.getString("StixMapNavigator.tooltip");
             }
-            else if (pb.Name == "stxFormat")
+            else if (pb == stxFormat)
             {
                 stickType = StixUtils.typeformat;
                 defaultName = Utils.getString("StixFormat.tooltip");
             }
-            else if (pb.Name == "stxAddTopics")
+            else if (pb == stxAddTopics)
             {
                 stickType = StixUtils.typeaddtopic;
                 defaultName = Utils.getString("StixAddTopic.tooltip");
             }
-            else if (pb.Name == "stxTextOps")
+            else if (pb == stxTextOps)
             {
                 stickType = StixUtils.typetextops;
                 defaultName = Utils.getString("StixTextOps.tooltip");
@@ -375,8 +396,8 @@ namespace Bubbles
                     form = new StixTaskInfo(id, orientation, name); break;
                 case StixUtils.typetools:
                     form = new StixTools(id, orientation, name); break;
-                case StixUtils.typebookmarks:
-                    form = new StixBookmarks(id, orientation, name); break;
+                case StixUtils.typemapnavigator:
+                    form = new StixMapNavigator(id, orientation, name); break;
                 case StixUtils.typeformat:
                     form = new StixFormat(id, orientation, name); break;
                 case StixUtils.typeaddtopic:

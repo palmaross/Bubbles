@@ -313,7 +313,7 @@ namespace Bubbles
 
             // Add Bookmarks stick
             id = r.Next();
-            AddStick(id, Utils.getString("StixBookmarks.tooltip"), StixUtils.typebookmarks, 0, "H", "");
+            AddStick(id, Utils.getString("StixMapNavigator.tooltip"), StixUtils.typemapnavigator, 0, "H", "");
 
             // Add <Add Topic> stick
             id = r.Next();

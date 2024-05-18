@@ -6,86 +6,80 @@ using System.Windows.Forms;
 
 namespace Bubbles
 {
-    public partial class NavigationDlg : Form
+    public partial class SearchTextDlg : Form
     {
-        public NavigationDlg()
+        public SearchTextDlg()
         {
             InitializeComponent();
 
-            toolTip1.SetToolTip(btnClose, Utils.getString("button.close"));
+            rbtnContains.Text = Utils.getString("SearchTextDlg.rbtnContains");
+            rbtnStartsWith.Text = Utils.getString("SearchTextDlg.rbtnStartsWith");
+            pClose.Text = Utils.getString("button.close");
+
+            this.Paint += This_Paint; // paint the border
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
             this.ResizeRedraw = true;
 
-            // Add a dummy column
-            listView1.Columns.Add("", 0, HorizontalAlignment.Left);
-            listView1.HeaderStyle = ColumnHeaderStyle.None;
-            listView1.Columns[0].Width = listView1.Width - 4 - SystemInformation.VerticalScrollBarWidth;
-
-            ListViewItem item = listView1.Items.Add("Central Topic");
-            item.Tag = "0"; item.Font = new Font(item.Font, FontStyle.Bold);
-
-            foreach (Topic t in MMUtils.ActiveDocument.CentralTopic.SubTopics)
-                listView1.Items.Add(t.Text).Tag = t.Guid;
-
-            this.Paint += NavigationDlg_Paint; // paint the border
-            this.MaximumSize = new Size(this.Width * 2, this.Height * 3);
-
-            this.Deactivate += NavigationDlg_Deactivate;
+            this.MouseDown += SearchTextDlg_MouseDown;
         }
 
-        private void NavigationDlg_Deactivate(object sender, EventArgs e)
+        private void SearchTextDlg_MouseDown(object sender, MouseEventArgs e)
         {
-            this.Close(); this.Dispose();
+            ReleaseCapture();
+            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
         }
 
-        public int thisHeight;
-
-        private void NavigationDlg_Load(object sender, EventArgs e)
-        {
-            this.Height = thisHeight;
-        }
-
-        private void NavigationDlg_Paint(object sender, PaintEventArgs e)
+        private void This_Paint(object sender, PaintEventArgs e)
         {
             ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle, System.Drawing.Color.Black, ButtonBorderStyle.Solid);
         }
 
-        private void btnClose_Click(object sender, System.EventArgs e)
+        private void pClose_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void listView1_MouseClick(object sender, MouseEventArgs e)
+        private void listTopics_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count == 0)
-                return;
+            TopicItem item = listTopics.SelectedItem as TopicItem;
 
-            var selectedItem = listView1.SelectedItems[0];
-            if (selectedItem != null)
+            Topic t = MMUtils.ActiveDocument.FindByGuid(item.TopicGuid) as Topic;
+            if (t != null)
             {
-                try
-                {
-                    string guid = (string)selectedItem.Tag;
-                    Topic t = MMUtils.ActiveDocument.CentralTopic;
-
-                    if (guid != "0")
-                        t = MMUtils.ActiveDocument.FindByGuid(guid) as Topic; 
-
-                    if (t != null)
-                    {
-                        t.SelectOnly();
-                        t.SnapIntoView();
-                    }
-                }
-                catch { }
+                t.SelectOnly(); t.SnapIntoView(); StixUtils.ActivateMindManager();
             }
-
-            DialogResult = DialogResult.OK;
         }
 
-        #region Resize window
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            listTopics.Items.Clear();
+
+            if (txtSearch.Text.Trim().Length > 1)
+            {
+                string search = txtSearch.Text.ToLower();
+
+                if (topics == null)
+                    topics = MMUtils.ActiveDocument.Range(MmRange.mmRangeAllTopics);
+
+                foreach (Topic t in topics)
+                {
+                    if (rbtnContains.Checked)
+                    {
+                        if (t.Text.ToLower().Contains(search))
+                            listTopics.Items.Add(new TopicItem(t.Text, t.Guid));
+                    }
+                    else if (rbtnStartsWith.Checked)
+                    {
+                        if (t.Text.ToLower().StartsWith(search))
+                            listTopics.Items.Add(new TopicItem(t.Text, t.Guid));
+                    }
+                }
+            }
+        }
+
+        #region resize dialog
         protected override void WndProc(ref Message m)
         {
             const int RESIZE_HANDLE_SIZE = 10;
@@ -142,5 +136,32 @@ namespace Bubbles
             }
         }
         #endregion
+
+        Range topics;
+
+        // For this_MouseDown
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
+
+        [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
+        public static extern bool ReleaseCapture();
+    }
+
+    internal class TopicItem
+    {
+        public TopicItem(string topicName, string topicGuid)
+        {
+            TopicName = topicName;
+            TopicGuid = topicGuid;
+        }
+        public string TopicName = "";
+        public string TopicGuid = "";
+
+        public override string ToString()
+        {
+            return TopicName;
+        }
     }
 }

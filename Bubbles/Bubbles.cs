@@ -100,8 +100,8 @@ namespace Bubbles
                     case StixUtils.typetools:
                         m_StixBase.BaseIcon_MouseClick(m_StixBase.stxTools, null);
                         break;
-                    case StixUtils.typebookmarks:
-                        m_StixBase.BaseIcon_MouseClick(m_StixBase.stxBookmarks, null);
+                    case StixUtils.typemapnavigator:
+                        m_StixBase.BaseIcon_MouseClick(m_StixBase.stxMapNavigator, null);
                         break;
                     case StixUtils.typeaddtopic:
                         m_StixBase.BaseIcon_MouseClick(m_StixBase.stxAddTopics, null);
@@ -241,7 +241,7 @@ namespace Bubbles
 
         public override void onDocumentActivated(MMEventArgs aArgs)
         {
-            if (m_Bookmarks != null) m_Bookmarks.Init();
+            if (m_MapNavigator != null) m_MapNavigator.Init();
             if (m_Resources != null && m_Resources.Visible) m_Resources.InitCurrentMapResources();
             if (m_TaskInfo != null && m_TaskInfo.Visible) m_TaskInfo.PopulateResources();
 
@@ -270,8 +270,9 @@ namespace Bubbles
 
         public override void onDocumentDeactivated(MMEventArgs aArgs)
         {
-            if (MMUtils.ActiveDocument == null && m_Bookmarks != null)
-                m_Bookmarks.Init();
+            // last visible document is closing
+            if (MMUtils.MindManager.VisibleDocuments.Count == 1 && m_MapNavigator != null)
+                m_MapNavigator.Init();
         }
 
         public override void onDocumentClipboardPasteOrDrop(MMEventArgs aArgs)
@@ -284,22 +285,30 @@ namespace Bubbles
         // For Task Info stick. For topic notes.
         public override void onObjectChanged(MMEventArgs aArgs)
         {
-            if (aArgs.target is Topic _t && aArgs.what == "text" && // topic text changed
-                StixUtils.TopicAutoWidth && // Topic AutoWidth enabled
-                MMPaste && // Text is pasted into topic via MindManager
-                !StixTextOps.pastetext) // to insure: it's not a BubblePaste stick operation
-            {
-                // Set topic width
-                StixUtils.TopicWidthList.Add(_t);
-                StixUtils.SetTopicWidth();
-                StixUtils.TopicWidthList.Clear();
-            }
+            if (!(aArgs.target is Topic t)) return;
 
-            MMPaste = false;
+            if (aArgs.what == "text") // topic text changed
+            { 
+                if (StixUtils.TopicAutoWidth && // Topic AutoWidth enabled
+                    MMPaste && // Text is pasted into topic via MindManager
+                    !StixTextOps.pastetext) // to insure: it's not a BubblePaste stick operation)
+                {
+                    // Set topic width
+                    StixUtils.TopicWidthList.Add(t);
+                    StixUtils.SetTopicWidth();
+                    StixUtils.TopicWidthList.Clear();
+                    MMPaste = false;
+                }
+
+                if (m_MapNavigator != null && !m_MapNavigator.IsDisposed)
+                    m_MapNavigator.TopicTextChanged(MMUtils.ActiveDocument.Guid, t);
+                else if (m_MapNavigatorDlg != null && !m_MapNavigatorDlg.IsDisposed)
+                    m_MapNavigatorDlg.TopicTextChanged(MMUtils.ActiveDocument.Guid, t);
+            }
 
             if (aArgs.what.Contains("notesxhtmldata"))
             {
-                if (aArgs.target is Topic t && StixTextOps.UserActionNotes)
+                if (StixTextOps.UserActionNotes)
                 {
                     if (!StixTextOps.TopicsWithNotes.Contains(t.Guid))
                         StixTextOps.TopicsWithNotes.Add(t.Guid);
@@ -330,13 +339,13 @@ namespace Bubbles
 
                         bool bold = true, italic = true, underline = true, strikethrough = true;
                         float size = 0; bool sizeequal = true;
-                        foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                        foreach (Topic _t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                         {
-                            if (size == 0) size = t.Font.Size;
-                            if (t.Font.Size != size) sizeequal = false;
+                            if (size == 0) size = _t.Font.Size;
+                            if (_t.Font.Size != size) sizeequal = false;
 
-                            if (!t.Font.Bold) bold = false; if (!t.Font.Italic) italic = false;
-                            if (!t.Font.Underline) underline = false; if (!t.Font.Strikethrough) strikethrough = false;
+                            if (!_t.Font.Bold) bold = false; if (!_t.Font.Italic) italic = false;
+                            if (!_t.Font.Underline) underline = false; if (!_t.Font.Strikethrough) strikethrough = false;
                         }
 
                         if (sizeequal) { 
@@ -671,17 +680,17 @@ namespace Bubbles
             m_OmniSound.Dispose();
             m_OmniSound = null;
 
-            if (StixBookmarks.BookmarkedDocuments != null && StixBookmarks.BookmarkedDocuments.Count > 0)
+            if (StixMapNavigator.DocumentBookmarks != null && StixMapNavigator.DocumentBookmarks.Count > 0)
             {
-                StixBookmarks.BookmarkedDocuments.Clear();
-                StixBookmarks.BookmarkedDocuments = null;
+                StixMapNavigator.DocumentBookmarks.Clear();
+                StixMapNavigator.DocumentBookmarks = null;
             }
 
-            if (m_BookmarkList != null)
+            if (m_MapNavigatorDlg != null)
             {
-                m_BookmarkList.Hide();
-                m_BookmarkList.Dispose();
-                m_BookmarkList = null;
+                m_MapNavigatorDlg.Hide();
+                m_MapNavigatorDlg.Dispose();
+                m_MapNavigatorDlg = null;
             }
 
             if (m_NewLink != null)
@@ -791,8 +800,9 @@ namespace Bubbles
 
         public static BubbleSnippets m_bubbleSnippets = null;
 
-        public static StixBookmarks m_Bookmarks;
-        public static BookmarkListDlg m_BookmarkList;
+        public static StixMapNavigator m_MapNavigator;
+        public static MapNavigatorDlg m_MapNavigatorDlg;
+        public static SearchTextDlg m_SearchText;
         public static NewLinkDlg m_NewLink;
         public static OmniSound m_OmniSound;
 

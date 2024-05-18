@@ -132,7 +132,7 @@ namespace Bubbles
                     else
                         p.Location = new Point(p.Location.Y - p.Width / 2, p.Location.X);
                 }
-                else if (p.Tag != null || p.Name == "pCentral" || p.Name == "p2" || p.Name == "p1")
+                else if (p.Tag != null || p.Name == "p2" || p.Name == "p1")
                     p.Location = new Point(p.Location.Y, p.Location.X);
             }
 
@@ -421,7 +421,7 @@ namespace Bubbles
                 if (popup != "" && scaleFactor != 100)
                     ff.Scale(new SizeF(scaleFactor / 100, scaleFactor / 100)); // scale popup
 
-                if (type != typeicons && type != typebookmarks && type != typeformat && popup == "")
+                if (type != typeicons && type != typemapnavigator && type != typeformat && popup == "")
                 {
                     ff.Size = new Size(sp.panelCommonMin.Width, ff.Height);
                 }
@@ -433,7 +433,7 @@ namespace Bubbles
                         sp.pDeleteAllIcons.Location = sp.p2.Location;
                         ff.Controls.Add(sp.pNewIcon); ff.Controls.Add(sp.pDeleteAllIcons);
                     }
-                    else if (type == typebookmarks)
+                    else if (type == typemapnavigator)
                     {
                         sp.pNewBookmark.Location = sp.p1.Location;
                         sp.pBookmarkList.Location = sp.p2.Location;
@@ -793,13 +793,11 @@ namespace Bubbles
 
         public static void SetCommonContextMenu(ContextMenuStrip cms, string stickType = "")
         {
-            ToolStripItem tsi = null;
+            ToolStripItem tsi = new ToolStripLabel(Utils.getString("contextmenu.stickoperations"));
+            tsi.Font = new Font(tsi.Font, FontStyle.Bold); cms.Items.Add(tsi);
 
-            if (stickType == typeicons || stickType == typetools || stickType == typebookmarks)
+            if (stickType == typeicons || stickType == typetools)// || stickType == typebookmarks)
             {
-                tsi = new ToolStripLabel(Utils.getString("contextmenu.stickoperations"));
-                tsi.Font = new Font(tsi.Font, FontStyle.Bold); cms.Items.Add(tsi);
-
                 tsi = cms.Items.Add(Utils.getString("contextmenu.clearstick"));
                 tsi.Name = "BI_deleteall";
                 tsi.ImageScaling = ToolStripItemImageScaling.None;
@@ -807,7 +805,7 @@ namespace Bubbles
 
                 string deleteall = Utils.getString("icons.contextmenu.clearstick.tooltip");
                 if (stickType == typetools) deleteall = Utils.getString("tools.contextmenu.deleteall");
-                if (stickType == typebookmarks) deleteall = Utils.getString("bookmarks.contextmenu.deleteall");
+                if (stickType == typemapnavigator) deleteall = Utils.getString("bookmarks.contextmenu.deleteall");
 
                 tsi.ToolTipText = deleteall;
             }
@@ -995,7 +993,7 @@ namespace Bubbles
         // types must match Stix names!
         public const string typestick = "stick", typebase = "StixBase",
             typeicons = "StixIcons", typetaskinfo = "StixTaskInfo", 
-            typeformat = "StixFormat", typetools = "StixTools", typebookmarks = "StixBookmarks",
+            typeformat = "StixFormat", typetools = "StixTools", typemapnavigator = "StixMapNavigator",
             typeaddtopic = "StixAddTopic", typetextops = "StixTextOps", typeorganizer = "StixOrganizer";
 
         public static int stickLength;

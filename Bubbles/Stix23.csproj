@@ -94,6 +94,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppManager\AlfaChanges.cs" />
+    <Compile Include="StixMapNavigator\SearchTextDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StixMapNavigator\SearchTextDlg.Designer.cs">
+      <DependentUpon>SearchTextDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="StixIcons\AddIconGroupDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,11 +158,11 @@
     <Compile Include="Organizer\StixOrganizer.Designer.cs">
       <DependentUpon>StixOrganizer.cs</DependentUpon>
     </Compile>
-    <Compile Include="StixBookmarks\BookmarkListDlg.cs">
+    <Compile Include="StixMapNavigator\MapNavigatorDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StixBookmarks\BookmarkListDlg.Designer.cs">
-      <DependentUpon>BookmarkListDlg.cs</DependentUpon>
+    <Compile Include="StixMapNavigator\MapNavigatorDlg.Designer.cs">
+      <DependentUpon>MapNavigatorDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="AppManager\MapMarkers.cs" />
     <Compile Include="StixTaskInfo\MyDateTimePicker.cs">
@@ -213,11 +219,11 @@
     </Compile>
     <Compile Include="OmniStix23.cs" />
     <Compile Include="AssemblyInfo23.cs" />
-    <Compile Include="StixBookmarks\StixBookmarks.cs">
+    <Compile Include="StixMapNavigator\StixMapNavigator.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StixBookmarks\StixBookmarks.Designer.cs">
-      <DependentUpon>StixBookmarks.cs</DependentUpon>
+    <Compile Include="StixMapNavigator\StixMapNavigator.Designer.cs">
+      <DependentUpon>StixMapNavigator.cs</DependentUpon>
     </Compile>
     <Compile Include="StixTaskInfo\StixTaskInfo.cs">
       <SubType>Form</SubType>
@@ -380,6 +386,51 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="images\bookmarks.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\Bookmarks\B1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\Bookmarks\B2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\Bookmarks\B3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\Bookmarks\B4.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\Bookmarks\B5.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\Bookmarks\bookmarks.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\Bookmarks\bookmarks_active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\Bookmarks\b_more.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\Bookmarks\b_more_active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\Bookmarks\b_plus.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\bookmarks_active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\position.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\position_empty.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\refresh.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="StixCommon\Cursor1.cur" />
     <Content Include="images\addicon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -919,6 +970,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="StixMapNavigator\SearchTextDlg.resx">
+      <DependentUpon>SearchTextDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StixIcons\AddIconGroupDlg.resx">
       <DependentUpon>AddIconGroupDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -943,8 +997,8 @@
     <EmbeddedResource Include="Organizer\StixOrganizer.resx">
       <DependentUpon>StixOrganizer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StixBookmarks\BookmarkListDlg.resx">
-      <DependentUpon>BookmarkListDlg.cs</DependentUpon>
+    <EmbeddedResource Include="StixMapNavigator\MapNavigatorDlg.resx">
+      <DependentUpon>MapNavigatorDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StixTaskInfo\MyDateTimePicker.resx">
       <DependentUpon>MyDateTimePicker.cs</DependentUpon>
@@ -961,8 +1015,8 @@
     <EmbeddedResource Include="StixCommon\GetNameDlg.resx">
       <DependentUpon>GetNameDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StixBookmarks\StixBookmarks.resx">
-      <DependentUpon>StixBookmarks.cs</DependentUpon>
+    <EmbeddedResource Include="StixMapNavigator\StixMapNavigator.resx">
+      <DependentUpon>StixMapNavigator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StixTaskInfo\StixTaskInfo.resx">
       <DependentUpon>StixTaskInfo.cs</DependentUpon>

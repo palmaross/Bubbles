@@ -103,8 +103,8 @@ namespace Bubbles
                 case StixUtils.typetools:
                     (stix as StixTools).ScaleStick(ScaleFactor, SF_Stix);
                     break;
-                case StixUtils.typebookmarks:
-                    (stix as StixBookmarks).ScaleStick(ScaleFactor, SF_Stix);
+                case StixUtils.typemapnavigator:
+                    (stix as StixMapNavigator).ScaleStick(ScaleFactor, SF_Stix);
                     break;
                 case StixUtils.typetextops:
                     (stix as StixTextOps).ScaleStick(ScaleFactor, SF_Stix);
