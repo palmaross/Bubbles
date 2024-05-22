@@ -524,7 +524,7 @@
             this.Controls.Add(this.pictureHandle);
             this.Controls.Add(this.Manage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "BubbleTaskInfo";
+            this.Name = "StixTaskInfo";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.cmsDuration.ResumeLayout(false);

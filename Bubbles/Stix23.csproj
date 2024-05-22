@@ -94,6 +94,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppManager\AlfaChanges.cs" />
+    <Compile Include="StixMapNavigator\BookmarksDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StixMapNavigator\BookmarksDlg.Designer.cs">
+      <DependentUpon>BookmarksDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="StixMapNavigator\SearchTextDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -420,6 +426,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\bookmarks_active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\bookmark_s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\empty.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\folder_opened.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\position.png">
@@ -970,6 +985,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="StixMapNavigator\BookmarksDlg.resx">
+      <DependentUpon>BookmarksDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StixMapNavigator\SearchTextDlg.resx">
       <DependentUpon>SearchTextDlg.cs</DependentUpon>
     </EmbeddedResource>

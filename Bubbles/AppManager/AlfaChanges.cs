@@ -4,7 +4,7 @@ using System.IO;
 using System.Data;
 using PRAManager;
 
-namespace BubblesAppManager
+namespace StixAppManager
 {
     internal class V7Changes
     {

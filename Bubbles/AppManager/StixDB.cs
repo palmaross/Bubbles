@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Data;
-using BubblesAppManager;
+using StixAppManager;
 
 namespace Bubbles
 {
     internal class StixDB : DatabaseWrapper
     {
-        public override string ToString() => "Bubbles Database";
+        public override string ToString() => "Stix Database";
 
         protected static string _getDatabaseName()
         {
@@ -365,6 +365,8 @@ namespace Bubbles
             AddTopicWidth("numAuto1", 500, 200, 1); AddTopicWidth("numAuto2", 200, 160, 1);
             AddTopicWidth("numAuto3", 150, 120, 1); AddTopicWidth("numAuto4", 150, 120, 1);
             AddTopicWidth("numAuto5", 150, 120, 1); AddTopicWidth("numAuto6", 150, 120, 1);
+
+            AddBookmarkGroup(Utils.getString("BookmarksDlg.defaultgroup"));
         }
     }
 }

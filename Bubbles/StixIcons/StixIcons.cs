@@ -123,7 +123,7 @@ namespace Bubbles
             pictureHandle.MouseDoubleClick += (sender, e) => this.Hide();
 
             this.MouseDown += Move_Stick; // move the stick
-            this.MouseClick += BubbleIcons_MouseClick;
+            this.MouseClick += This_MouseClick;
             Manage.Click += Manage_Click; // "Manage" icon's context menu
 
             // Apply scale factor
@@ -165,7 +165,7 @@ namespace Bubbles
                 Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid);
         }
 
-        private void BubbleIcons_MouseClick(object sender, MouseEventArgs e)
+        private void This_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {

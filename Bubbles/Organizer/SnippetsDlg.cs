@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace Bubbles
 {
-    internal partial class BubbleSnippets : Form
+    internal partial class StixSnippets : Form
     {
-        public BubbleSnippets()
+        public StixSnippets()
         {
             InitializeComponent();
 

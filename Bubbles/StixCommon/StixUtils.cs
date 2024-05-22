@@ -200,7 +200,7 @@ namespace Bubbles
                 p.Dispose();
             }
 
-            // Reset bubble size to minimum
+            // Reset stix size to minimum
             if (orientation == "H")
                 stickLength = MinLength;
             else
@@ -210,7 +210,7 @@ namespace Bubbles
 
             using (StixDB db = new StixDB())
             {
-                if (deleteall) // Clean bubble and database
+                if (deleteall) // Clean stix and database
                 {
                     if (sticktype == typeicons)
                         db.ExecuteNonQuery("delete from ICONS where stickID =" + (int)form.Tag + "");
@@ -882,11 +882,6 @@ namespace Bubbles
                     X = parent.Left; // child right = parent left
                 Y = parent.Bottom; // child top = parent bottom
 
-                //if (popup == "add")
-                //{
-                //    X = parent.Left + (parent as BubblePaste).pAddTopic.Left;
-                //    Y = parent.Top + ((parent as BubblePaste).pAddTopic.Top / 2);
-                //}
                 if (popup == "paste")
                 {
                     X = parent.Left + (parent as StixTextOps).PasteLink.Left;
@@ -922,11 +917,6 @@ namespace Bubbles
                     popup == "tools" || popup == "icons")
                     Y = parent.Top; // child top = parent top
 
-                //if (popup == "add")
-                //{
-                //    X = parent.Left + ((parent as BubblePaste).pAddTopic.Left / 2);
-                //    Y = parent.Top + (parent as BubblePaste).pAddTopic.Top;
-                //}
                 if (popup == "paste")
                 {
                     X = parent.Left + ((parent as StixTextOps).subtopic.Left / 2);

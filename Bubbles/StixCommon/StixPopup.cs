@@ -142,7 +142,7 @@ namespace Bubbles
             StixMain.STICKS.Remove((int)stick.Tag);
             stick.Close();
 
-            if (stick.Name == "BubbleTaskInfo")
+            if (stick.Name == "StixTaskInfo")
             {
                 StixMain.m_TaskInfo = null;
             }

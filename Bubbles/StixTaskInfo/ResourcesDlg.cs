@@ -60,7 +60,7 @@ namespace Bubbles
             mi_addtomap.ToolTipText = Utils.getString("ResourcesDlg.menuAddToMap.tooltip");
             mi_rename.Text = Utils.getString("button.rename");
             mi_delete.Text = Utils.getString("button.delete");
-            mi_color.Text = Utils.getString("bubbleformat.contextmenu.color");
+            mi_color.Text = Utils.getString("stixformat.contextmenu.color");
             mi_copy.Text = Utils.getString("ResourcesDlg.Copy");
             mi_cut.Text = Utils.getString("ResourcesDlg.Cut");
 

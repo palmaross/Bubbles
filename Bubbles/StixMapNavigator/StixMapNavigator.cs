@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using Color = System.Drawing.Color;
 using Image = System.Drawing.Image;
 
@@ -45,6 +44,10 @@ namespace Bubbles
             this.ResizeRedraw = true;
 
             // Context menu
+            ToolStripItem tsi = cmsCommon.Items.Add(Utils.getString("bookmarks.contextmenu.navwindow"));
+            tsi.Name = "MNWindow";
+            StixUtils.SetContextMenuImage(tsi, "position.png");
+
             cmsCommon.ItemClicked += ContextMenuStrip1_ItemClicked;
             cmsPositions.ItemClicked += ContextMenuStrip1_ItemClicked;
 
@@ -128,7 +131,7 @@ namespace Bubbles
             }
         }
 
-        public void InitMainTopicsContextMenu(bool fromList = false, bool deleteall = false)
+        public void InitMainTopicsContextMenu(bool fromList = false)
         {
             cmsMainTopics.Items.Clear();
 
@@ -151,7 +154,7 @@ namespace Bubbles
 
             // Update main topics in the Map Navigator window
             if (!fromList && StixMain.m_MapNavigatorDlg != null && StixMain.m_MapNavigatorDlg.Visible)
-                StixMain.m_MapNavigatorDlg.InitMainTopics();
+                StixMain.m_MapNavigatorDlg.InitMainTopics(true);
         }
 
         private void RefreshMainTopics(object sender, EventArgs e)
@@ -184,8 +187,10 @@ namespace Bubbles
                 StixUtils.SetContextMenuImage(tsi, "refresh.png");
                 tsi.Click += RefreshBookmarks;
 
-                int i = cmsBookmarks.Items.Add(new ToolStripLabel(Utils.getString("BookmarkListDlg.tabBookmarks") + ":"));
-                cmsBookmarks.Items[i].Font = new Font(cmsBookmarks.Font, FontStyle.Bold);
+                cmsBookmarks.Items.Add(new ToolStripSeparator());
+
+                //int i = cmsBookmarks.Items.Add(new ToolStripLabel(Utils.getString("BookmarkListDlg.tabBookmarks") + ":"));
+                //cmsBookmarks.Items[i].Font = new Font(cmsBookmarks.Font, FontStyle.Bold);
 
                 // Fill bookmarks from dictionary
                 bool bookmarks = false;
@@ -194,7 +199,7 @@ namespace Bubbles
                     foreach (BookmarkItem item in DocumentBookmarks[MMUtils.ActiveDocument.Guid])
                     {
                         bookmarks = true;
-                        AddBookmark(item.TopicName, item.TopicGuid);
+                        AddBookmarkToList(item.TopicName, item.TopicGuid);
                     }
                 }
                 else // First time seeing the map. Load bookmarks from map.
@@ -216,7 +221,7 @@ namespace Bubbles
                         bookmarks = true;
 
                         foreach (var bookmark in Bookmarks)
-                            AddBookmark(bookmark.TopicName, bookmark.TopicGuid);
+                            AddBookmarkToList(bookmark.TopicName, bookmark.TopicGuid);
                     }
                     DocumentBookmarks.Add(MMUtils.ActiveDocument.Guid, list);
                 }
@@ -271,6 +276,9 @@ namespace Bubbles
                         toolTip1.SetToolTip(pb, text);
                     }
                 }
+                else
+                    DocumentPositions.Add(MMUtils.ActiveDocument.Guid, new List<PositionItem>());
+
             }
             if (StixMain.m_MapNavigatorDlg != null && !fromList)
                 StixMain.m_MapNavigatorDlg.Init(true, deleteall);
@@ -279,7 +287,7 @@ namespace Bubbles
         /// <summary>
         /// Fill Bookmarks icon context menu
         /// </summary>
-        void AddBookmark(string topicText, string topicGuid)
+        void AddBookmarkToList(string topicText, string topicGuid)
         {
             string text = topicText;
             if (text.Length > 60) text = text.Substring(0, 60);
@@ -337,12 +345,15 @@ namespace Bubbles
                     MessageBox.Show(Utils.getString("bookmarks.addbookmark.exists"));
                     return;
                 }
-
+                // Add bookmark bookmark to topic
                 t.GetAttributes(ATTR_NAMESPACE).SetAttributeValue(ATTR_BOOKMARKED, "1");
+                // Reinit bookmark list (menu)
                 DocumentBookmarks.Remove(MMUtils.ActiveDocument.Guid);
                 InitBookmarksContextMenu();
+                // Show menu
                 cmsBookmarks.Show(this.Left + pBookmarkList.Location.X, this.Bottom);
 
+                // Select added bookmark
                 int i = 0; bool found = false;
                 foreach (ToolStripItem item in cmsBookmarks.Items)
                 {
@@ -361,17 +372,19 @@ namespace Bubbles
         private void DeleteBookmark_Click(object sender, EventArgs e)
         {
             string topicGuid = (sender as ToolStripItem).Tag.ToString();
-
-            Topic t = MMUtils.ActiveDocument.FindByGuid(topicGuid) as Topic;
-            if (t != null)
+            if (!String.IsNullOrEmpty(topicGuid))
             {
-                t.GetAttributes(ATTR_NAMESPACE).DeleteAttribute(ATTR_BOOKMARKED);
-                var item = DocumentBookmarks[MMUtils.ActiveDocument.Guid].Find(x => x.TopicGuid == topicGuid);
-                if (item != null)
+                Topic t = MMUtils.ActiveDocument.FindByGuid(topicGuid) as Topic;
+                if (t != null)
                 {
-                    DocumentBookmarks[MMUtils.ActiveDocument.Guid].Remove(item);
-                    InitBookmarksContextMenu();
-                    cmsBookmarks.Show(this.Left + pBookmarkList.Location.X, this.Bottom);
+                    t.GetAttributes(ATTR_NAMESPACE).DeleteAttribute(ATTR_BOOKMARKED);
+                    var item = DocumentBookmarks[MMUtils.ActiveDocument.Guid].Find(x => x.TopicGuid == topicGuid);
+                    if (item != null)
+                    {
+                        DocumentBookmarks[MMUtils.ActiveDocument.Guid].Remove(item);
+                        InitBookmarksContextMenu();
+                        cmsBookmarks.Show(this.Left + pBookmarkList.Location.X, this.Bottom);
+                    }
                 }
             }
         }
@@ -405,7 +418,7 @@ namespace Bubbles
                 string topictype =
                     _t.IsCentralTopic ? Central :
                     _t.IsMainTopic ? Main :
-                    _t.IsFloatingTopic ? Float : Normal;
+                    _t.IsFloatingTopic ? Floating : Normal;
 
                 Bookmarks.Add(new BookmarkItem(ttext, _t.Guid, topictype));
             }
@@ -427,49 +440,61 @@ namespace Bubbles
             return null;
         }
 
-        public void TopicTextChanged(string docGuid, Topic t)
+        public void TopicAffected(string docGuid, Topic t, string reason)
         {
-            if (t.GetAttributes(ATTR_NAMESPACE).HasAttribute(ATTR_BOOKMARKED))
+            bool isBookmark = t.GetAttributes(ATTR_NAMESPACE).HasAttribute(ATTR_BOOKMARKED);
+            string topicGuid = t.Guid;
+
+            string topicText = t.Text;
+            string text = topicText;
+            if (text.Length > 100) text = text.Substring(0, 100);
+
+            var position = DocumentPositions[docGuid].Find(x => x.TopicGuid == topicGuid);
+            var bookmark = DocumentBookmarks[docGuid].Find(x => x.TopicGuid == topicGuid);
+
+            string topicType = t.IsCentralTopic ? Central : t.IsMainTopic ? Main : t.IsFloatingTopic ? Floating : Normal;
+
+            if (topicType == Central)
             {
-                string text = t.Text;
-                if (text.Length > 100) text = text.Substring(0, 100);
+                toolTip1.SetToolTip(pCentral, text);
 
-                if (t.IsCentralTopic)
+                if (StixMain.m_MapNavigatorDlg != null && StixMain.m_MapNavigatorDlg.Visible)
+                    StixMain.m_MapNavigatorDlg.lblCentralTopic.Text = topicText;
+            }
+            else if (topicType == Main)
+                InitMainTopicsContextMenu();
+            else if (topicType == Floating)
+                topicType = Floating;
+
+            if (position != null) // Position affected
+            {
+                if (reason == "text")
+                    position.TopicName = topicText;
+                else if (reason == "deleted")
+                    DocumentPositions[docGuid].Remove(position);
+
+                InitPositions();
+            }
+
+            if (isBookmark)
+            {
+                if (bookmark != null) // Bookmark affected
                 {
-                    toolTip1.SetToolTip(pCentral, text);
+                    if (reason == "text")
+                        bookmark.TopicName = topicText;
+                    else if (reason == "deleted")
+                        DocumentBookmarks[docGuid].Remove(bookmark);
+
+                    InitBookmarksContextMenu();
                 }
-                else if (t.IsMainTopic)
-                {
-                    
-                }
-                
-                var item = DocumentPositions[docGuid].Find(x => x.TopicGuid == t.Guid);
-                if (item != null)
-                {
-                    item.TopicName = t.Text;
 
-                    PictureBox pb = GetPosition(item.Number);
-                    if (pb != null)                       
-                        toolTip1.SetToolTip(pb, text);
-                }
-
-                var _item = DocumentBookmarks[docGuid].Find(x => x.TopicGuid == t.Guid);
-                if (_item != null)
+                if (reason == "added")
                 {
-                    _item.TopicName = t.Text;
-
-                    
+                    BookmarkItem item = new BookmarkItem(topicText, topicGuid, topicType);
+                    DocumentBookmarks[docGuid].Add(item);
+                    InitBookmarksContextMenu();
                 }
             }
-        }
-
-        PictureBox GetPosition(int i)
-        {
-            switch (i)
-            {
-                case 1: return B1; case 2: return B2; case 3: return B3; case 4: return B4; case 5: return B5;
-            }
-            return null;
         }
 
         private void Manage_Click(object sender, EventArgs e)
@@ -503,7 +528,24 @@ namespace Bubbles
             else if (e.ClickedItem.Name == "b_DeleteAllPositions")
             {
                 DocumentPositions[MMUtils.ActiveDocument.Guid].Clear();
-                InitPositions(true, true);
+                InitPositions(false, true);
+            }
+            // Open MapNavigator Window.
+            else if (e.ClickedItem.Name == "MNWindow")
+            {
+                if (StixMain.m_MapNavigatorDlg == null)
+                {
+                    StixMain.m_MapNavigatorDlg = new MapNavigatorDlg();
+
+                    // Get navigation window location
+                    if (StixMain.m_MapNavigatorDlg.Location.IsEmpty)
+                    {
+                        StixMain.m_MapNavigatorDlg.Location = 
+                            StixUtils.GetChildLocation(this, StixMain.m_MapNavigatorDlg.Bounds, orientation, "bookmarks");
+                    }
+                    StixMain.m_MapNavigatorDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                }
+                StixMain.m_MapNavigatorDlg.Init();
             }
             else if (e.ClickedItem.Name == "BI_close")
             {
@@ -568,7 +610,7 @@ namespace Bubbles
             if (MMUtils.ActiveDocument.CentralTopic.AllSubTopics.Count == 0) return;
             if (cmsMainTopics.Items.Count == 0) return;
 
-            foreach (ToolStripMenuItem item in cmsMainTopics.Items)
+            foreach (ToolStripItem item in cmsMainTopics.Items)
                 item.Visible = true;
 
             cmsMainTopics.Show(Cursor.Position);
@@ -614,7 +656,7 @@ namespace Bubbles
                 PositionItem item = pb.Tag as PositionItem;
                 if (item == null) // Empty position clicked. Add position
                 {
-                    AddPosition(item.Number); // position number
+                    AddPosition(Convert.ToInt32(pb.Name.Substring(1,1))); // position number
                 }
                 else // Select positionmarked topic
                 {
@@ -751,7 +793,7 @@ namespace Bubbles
 
         string b_path = Utils.m_imagesPath;
 
-        const string Central = "central", Float = "float", Main = "main", Normal = "normal";
+        const string Central = "central", Floating = "floating", Main = "main", Normal = "normal";
         Image pPosition, pPosition_empty, pBookmarks, pBookmarksActive;
 
         // For MouseDown event

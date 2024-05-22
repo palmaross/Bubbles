@@ -72,7 +72,7 @@
             // cmsCommon
             // 
             this.cmsCommon.Name = "contextMenuStrip1";
-            this.cmsCommon.Size = new System.Drawing.Size(181, 26);
+            this.cmsCommon.Size = new System.Drawing.Size(61, 4);
             // 
             // pCentral
             // 
@@ -292,10 +292,8 @@
         }
 
         #endregion
-        private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ContextMenuStrip cmsCommon;
         private System.Windows.Forms.HelpProvider helpProvider1;
-        private System.Windows.Forms.PictureBox pCentral;
         private System.Windows.Forms.PictureBox Manage;
         private System.Windows.Forms.PictureBox pictureHandle;
         private System.Windows.Forms.ContextMenuStrip cmsPositions;
@@ -312,5 +310,7 @@
         private System.Windows.Forms.ToolStripMenuItem b_DeleteAllPositions;
         private System.Windows.Forms.PictureBox pSearch;
         private System.Windows.Forms.ContextMenuStrip cmsBookmarks;
+        public System.Windows.Forms.ToolTip toolTip1;
+        public System.Windows.Forms.PictureBox pCentral;
     }
 }

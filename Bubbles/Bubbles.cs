@@ -54,7 +54,7 @@ namespace Bubbles
                     "", "", "",
                     this);
 
-            m_bubbleSnippets = new BubbleSnippets();
+            m_Snippets = new StixSnippets();
             m_OmniSound = new OmniSound();
             m_StixBase = new StartMenu();
             commandPopup.Tag = 0; // Tag is a stick ID
@@ -265,6 +265,26 @@ namespace Bubbles
                     StixUtils.SetTopicWidth();
                     StixUtils.TopicWidthList.Clear();
                 }
+
+                // Process MapNavigator Stix. It will also process MP window
+                if (m_MapNavigator != null && !m_MapNavigator.IsDisposed)
+                    m_MapNavigator.TopicAffected(MMUtils.ActiveDocument.Guid, t, "added");
+                // Well, there is a window only
+                else if (m_MapNavigatorDlg != null && !m_MapNavigatorDlg.IsDisposed)
+                    m_MapNavigatorDlg.TopicAffected(MMUtils.ActiveDocument.Guid, t, "added");
+            }
+        }
+
+        public override void onBeforeObjectRemoved(MMEventArgs aArgs)
+        {
+            if (aArgs.target is Topic t)
+            {
+                // Process MapNavigator Stix. It will also process MP window
+                if (m_MapNavigator != null && !m_MapNavigator.IsDisposed)
+                    m_MapNavigator.TopicAffected(MMUtils.ActiveDocument.Guid, t, "deleted");
+                // Well, there is a window only
+                else if (m_MapNavigatorDlg != null && !m_MapNavigatorDlg.IsDisposed)
+                    m_MapNavigatorDlg.TopicAffected(MMUtils.ActiveDocument.Guid, t, "deleted");
             }
         }
 
@@ -291,7 +311,7 @@ namespace Bubbles
             { 
                 if (StixUtils.TopicAutoWidth && // Topic AutoWidth enabled
                     MMPaste && // Text is pasted into topic via MindManager
-                    !StixTextOps.pastetext) // to insure: it's not a BubblePaste stick operation)
+                    !StixTextOps.pastetext) // to insure: it's not a TextOpsStix operation)
                 {
                     // Set topic width
                     StixUtils.TopicWidthList.Add(t);
@@ -300,10 +320,12 @@ namespace Bubbles
                     MMPaste = false;
                 }
 
+                // Process MapNavigator Stix. It will also process MP window
                 if (m_MapNavigator != null && !m_MapNavigator.IsDisposed)
-                    m_MapNavigator.TopicTextChanged(MMUtils.ActiveDocument.Guid, t);
+                    m_MapNavigator.TopicAffected(MMUtils.ActiveDocument.Guid, t, "text");
+                // Well, there is a window only
                 else if (m_MapNavigatorDlg != null && !m_MapNavigatorDlg.IsDisposed)
-                    m_MapNavigatorDlg.TopicTextChanged(MMUtils.ActiveDocument.Guid, t);
+                    m_MapNavigatorDlg.TopicAffected(MMUtils.ActiveDocument.Guid, t, "text");
             }
 
             if (aArgs.what.Contains("notesxhtmldata"))
@@ -670,10 +692,10 @@ namespace Bubbles
             }
             catch { }
 
-            if (m_bubbleSnippets.Visible)
-                m_bubbleSnippets.Hide();
-            m_bubbleSnippets.Dispose();
-            m_bubbleSnippets = null;
+            if (m_Snippets.Visible)
+                m_Snippets.Hide();
+            m_Snippets.Dispose();
+            m_Snippets = null;
 
             if (m_OmniSound.Visible)
                 m_OmniSound.Hide();
@@ -780,7 +802,6 @@ namespace Bubbles
             HidePopup.Dispose(); HidePopup = null;
 
             StixTextOps.PasteOperations.Stop();
-            //BubblePaste.PasteOperations.Tick -= BubblePaste.PasteOperations_Tick;
             StixTextOps.PasteOperations.Dispose(); StixTextOps.PasteOperations = null;
 
             StixTextOps.PastedTopics.Clear(); StixTextOps.SelectedTopics.Clear();
@@ -798,10 +819,11 @@ namespace Bubbles
 
         public static OmniButton OmniSticksButton = new OmniButton();
 
-        public static BubbleSnippets m_bubbleSnippets = null;
+        public static StixSnippets m_Snippets = null;
 
         public static StixMapNavigator m_MapNavigator;
         public static MapNavigatorDlg m_MapNavigatorDlg;
+        public static BookmarksDlg m_Bookmarks;
         public static SearchTextDlg m_SearchText;
         public static NewLinkDlg m_NewLink;
         public static OmniSound m_OmniSound;

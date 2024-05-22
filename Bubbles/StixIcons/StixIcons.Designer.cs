@@ -167,7 +167,7 @@
             this.pIconDist.TabStop = false;
             this.pIconDist.Visible = false;
             // 
-            // BubbleIcons
+            // StixIcons
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -180,7 +180,7 @@
             this.Controls.Add(this.pictureHandle);
             this.Controls.Add(this.Manage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "BubbleIcons";
+            this.Name = "StixIcons";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.cmsManage.ResumeLayout(false);

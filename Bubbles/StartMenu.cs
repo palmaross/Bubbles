@@ -252,21 +252,19 @@ namespace Bubbles
 
         private void BoxBookmarks_Click(object sender, EventArgs e)
         {
-            if (StixMain.m_MapNavigatorDlg == null)
-                StixMain.m_MapNavigatorDlg = new MapNavigatorDlg();
+            if (StixMain.m_Bookmarks == null || StixMain.m_Bookmarks.IsDisposed)
+                StixMain.m_Bookmarks = new BookmarksDlg();
 
-            StixMain.m_MapNavigatorDlg.Init();
-
-            if (StixMain.m_MapNavigatorDlg.Visible)
-                StixMain.m_MapNavigatorDlg.WindowState = FormWindowState.Normal;
+            if (StixMain.m_Bookmarks.Visible)
+                StixMain.m_Bookmarks.WindowState = FormWindowState.Normal;
             else
             {
-                if (StixMain.m_MapNavigatorDlg.Location.IsEmpty)
+                if (StixMain.m_Bookmarks.Location.IsEmpty)
                 {
-                    StixMain.m_MapNavigatorDlg.Location =
+                    StixMain.m_Bookmarks.Location =
                         new Point(StixMain.OmniSticksButton.Location.X, this.Bottom);
                 }
-                StixMain.m_MapNavigatorDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                StixMain.m_Bookmarks.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
         }
 
@@ -478,7 +476,7 @@ namespace Bubbles
                 using (StixDB db = new StixDB())
                 {
                     // create "My Icons" stick
-                    name = Utils.getString(type + ".bubble.tooltip");
+                    name = Utils.getString(type + ".tooltip");
                     id = Utils.StickID();
                     db.AddStick(id, name, type, 0, "H", "");
                 }

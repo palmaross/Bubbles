@@ -1,4 +1,4 @@
-﻿using BubblesAppManager;
+﻿using StixAppManager;
 
 namespace Bubbles
 {

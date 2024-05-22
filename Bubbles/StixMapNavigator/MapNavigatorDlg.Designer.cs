@@ -47,6 +47,7 @@
             this.linkDeleteAllPositions = new System.Windows.Forms.LinkLabel();
             this.listPositions = new System.Windows.Forms.ListBox();
             this.panelControls = new System.Windows.Forms.Panel();
+            this.pRefresh = new System.Windows.Forms.PictureBox();
             this.pDraw = new System.Windows.Forms.PictureBox();
             this.p1 = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
@@ -57,6 +58,7 @@
             this.tabBookmarks.SuspendLayout();
             this.tabNavigation.SuspendLayout();
             this.panelControls.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pRefresh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pDraw)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             this.SuspendLayout();
@@ -266,6 +268,7 @@
             this.panelControls.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelControls.BackColor = System.Drawing.Color.Lavender;
+            this.panelControls.Controls.Add(this.pRefresh);
             this.panelControls.Controls.Add(this.pDraw);
             this.panelControls.Controls.Add(this.p1);
             this.panelControls.Controls.Add(this.lblTitle);
@@ -276,11 +279,23 @@
             this.panelControls.Size = new System.Drawing.Size(220, 20);
             this.panelControls.TabIndex = 83;
             // 
+            // pRefresh
+            // 
+            this.pRefresh.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pRefresh.Image = ((System.Drawing.Image)(resources.GetObject("pRefresh.Image")));
+            this.pRefresh.Location = new System.Drawing.Point(3, 2);
+            this.pRefresh.Name = "pRefresh";
+            this.pRefresh.Size = new System.Drawing.Size(16, 16);
+            this.pRefresh.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pRefresh.TabIndex = 86;
+            this.pRefresh.TabStop = false;
+            this.pRefresh.Click += new System.EventHandler(this.pRefresh_Click);
+            // 
             // pDraw
             // 
             this.pDraw.BackColor = System.Drawing.Color.Red;
             this.pDraw.Image = ((System.Drawing.Image)(resources.GetObject("pDraw.Image")));
-            this.pDraw.Location = new System.Drawing.Point(164, 16);
+            this.pDraw.Location = new System.Drawing.Point(124, 16);
             this.pDraw.Name = "pDraw";
             this.pDraw.Size = new System.Drawing.Size(4, 1);
             this.pDraw.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -292,7 +307,7 @@
             // 
             this.p1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.p1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.p1.Location = new System.Drawing.Point(177, 10);
+            this.p1.Location = new System.Drawing.Point(137, 10);
             this.p1.Name = "p1";
             this.p1.Size = new System.Drawing.Size(3, 16);
             this.p1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -302,11 +317,12 @@
             // 
             // lblTitle
             // 
-            this.lblTitle.AutoSize = true;
+            this.lblTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitle.Location = new System.Drawing.Point(4, 1);
+            this.lblTitle.Location = new System.Drawing.Point(24, 1);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(93, 15);
+            this.lblTitle.Size = new System.Drawing.Size(152, 15);
             this.lblTitle.TabIndex = 83;
             this.lblTitle.Text = "Map Navigation";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -333,7 +349,7 @@
             this.tabNavigation.ResumeLayout(false);
             this.tabNavigation.PerformLayout();
             this.panelControls.ResumeLayout(false);
-            this.panelControls.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pRefresh)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pDraw)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
             this.ResumeLayout(false);
@@ -356,11 +372,12 @@
         public System.Windows.Forms.ListBox listMainTopics;
         public System.Windows.Forms.ListBox listPositions;
         private System.Windows.Forms.Label lblTitle;
-        private System.Windows.Forms.Label lblCentralTopic;
         private System.Windows.Forms.LinkLabel linkAddBookmark;
         private System.Windows.Forms.LinkLabel linkDeleteAllBookmarks;
         private System.Windows.Forms.LinkLabel linkDeleteAllPositions;
         private System.Windows.Forms.PictureBox p1;
         private System.Windows.Forms.PictureBox pDraw;
+        public System.Windows.Forms.Label lblCentralTopic;
+        private System.Windows.Forms.PictureBox pRefresh;
     }
 }

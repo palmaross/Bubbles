@@ -1,11 +1,11 @@
-﻿using BubblesAppManager;
+﻿using StixAppManager;
 using System;
 
 namespace Bubbles
 {
     internal class SticksMoreDB : DatabaseWrapper
     {
-        public override string ToString() => "Bubbles Database";
+        public override string ToString() => "StixMore Database";
 
         protected static string _getDatabaseName()
         {

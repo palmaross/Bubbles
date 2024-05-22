@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using PRAManager;
 
-namespace BubblesAppManager
+namespace StixAppManager
 {
 	using Community.CsharpSqlite;
 

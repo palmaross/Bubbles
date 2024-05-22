@@ -220,6 +220,12 @@
     <Compile Include="StixIcons\StixIcons.Designer.cs">
       <DependentUpon>StixIcons.cs</DependentUpon>
     </Compile>
+    <Compile Include="StixMapNavigator\BookmarksDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StixMapNavigator\BookmarksDlg.Designer.cs">
+      <DependentUpon>BookmarksDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="StixMapNavigator\MapNavigatorDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -917,6 +923,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StixIcons\StixIcons.resx">
       <DependentUpon>StixIcons.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StixMapNavigator\BookmarksDlg.resx">
+      <DependentUpon>BookmarksDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StixMapNavigator\MapNavigatorDlg.resx">
       <DependentUpon>MapNavigatorDlg.cs</DependentUpon>

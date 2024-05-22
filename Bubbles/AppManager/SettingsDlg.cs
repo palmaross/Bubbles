@@ -143,16 +143,13 @@ namespace Bubbles
 
         private void btnTestScale_Click(object sender, EventArgs e)
         {
-            float SF_Stix, SF_StixBase, SF_Boxes;
+            float SF_Stix, SF_StixBase;
 
             try { SF_Stix = Convert.ToInt32(numStix.Text.Trim('%').Trim());
             } catch { SF_Stix = 100; }
 
             try { SF_StixBase = Convert.ToInt32(numStixBase.Text.Trim('%').Trim());
             } catch { SF_StixBase = 100; }
-
-            try { SF_Boxes = Convert.ToInt32(numBoxes.Text.Trim('%').Trim());
-            } catch { SF_Boxes = 100; }
 
             foreach (var pair in StixMain.STICKS)
             {

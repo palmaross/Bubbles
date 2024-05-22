@@ -73,8 +73,8 @@
                 PRMapCompanion.DocumentStorage.Init();
 
                 // Start interface
-                m_Bubbles = new StixMain();
-                m_Bubbles.Create();
+                m_Stix = new StixMain();
+                m_Stix.Create();
             }
             catch (Exception e)
             {
@@ -96,7 +96,7 @@
         /// <seealso class='IDTExtensibility2' />
         public void OnDisconnection(Extensibility.ext_DisconnectMode disconnectMode, ref System.Array custom)
         {
-            m_Bubbles.Destroy();
+            m_Stix.Destroy();
 
             MMUtils.AddinsConnected -= 1;
             if (MMUtils.AddinsConnected <= 0) // it's the last add-in, dispose all events
@@ -142,6 +142,6 @@
         {
         }
 
-        private StixMain m_Bubbles;
+        private StixMain m_Stix;
     }
 }
