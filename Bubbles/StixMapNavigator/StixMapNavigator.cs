@@ -25,7 +25,8 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "BookmarksStix.htm");
 
-            toolTip1.SetToolTip(pictureHandle, stickname);
+            toolTip1.SetToolTip(pictureHandle, stickname + Utils.getString("HeadIcon.tooltip"));
+            toolTip1.SetToolTip(Manage, Utils.getString("ManageIcon.tooltip"));
 
             foreach (PictureBox pb in this.Controls.OfType<PictureBox>())
                 if (pb.Name.StartsWith("B"))

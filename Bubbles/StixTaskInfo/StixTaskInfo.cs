@@ -27,7 +27,8 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "TaskInfoStix.htm");
 
-            toolTip1.SetToolTip(pictureHandle, stickname);
+            toolTip1.SetToolTip(pictureHandle, stickname + Utils.getString("HeadIcon.tooltip"));
+            toolTip1.SetToolTip(Manage, Utils.getString("ManageIcon.tooltip"));
             toolTip1.SetToolTip(pProgress, Utils.getString("taskinfo.pProgress.tooltip"));
             toolTip1.SetToolTip(pPriority, Utils.getString("taskinfo.pPriority.tooltip"));
             toolTip1.SetToolTip(pResources, Utils.getString("taskinfo.pResources.tooltip"));

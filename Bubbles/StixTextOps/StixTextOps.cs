@@ -47,7 +47,8 @@ namespace Bubbles
             toolTip1.SetToolTip(OptionSourceLink, Utils.getString("TextOpsStix.sourcelink_no"));
             toolTip1.SetToolTip(OptionInternalLinks, Utils.getString("TextOpsStix.internallinks_no"));
 
-            toolTip1.SetToolTip(pictureHandle, stickname);
+            toolTip1.SetToolTip(pictureHandle, stickname + Utils.getString("HeadIcon.tooltip"));
+            toolTip1.SetToolTip(Manage, Utils.getString("ManageIcon.tooltip"));
 
             cmsOptions.ItemClicked += ContextMenu_ItemClicked;
             cmsTopicWidths.ItemClicked += ContextMenu_ItemClicked;

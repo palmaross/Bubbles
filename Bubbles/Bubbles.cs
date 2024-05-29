@@ -73,11 +73,11 @@ namespace Bubbles
 
             InitializeTopicWidthDlg();
 
-            OmniSticksButton.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            OmniStixButton.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
 
             DataTable dt;
             using (StixDB db = new StixDB())
-                dt = db.ExecuteQuery("select * from STICKS order by type");
+                dt = db.ExecuteQuery("select * from STIX order by type");
 
             foreach (DataRow dr in dt.Rows)
             {
@@ -169,7 +169,7 @@ namespace Bubbles
                 {
                     if (m_playBox == null || m_playBox.IsDisposed)
                     {
-                        m_playBox = new PlayBox(OmniSticksButton.Bounds, trackName, t.Guid);
+                        m_playBox = new PlayBox(OmniStixButton.Bounds, trackName, t.Guid);
                         m_playBox.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                     }
                     else
@@ -192,8 +192,8 @@ namespace Bubbles
         {
             if (commandPopup.Visible)
             {
-                int stickid = Convert.ToInt32(commandPopup.Tag);
-                Form form = STICKS[stickid];
+                int stixID = Convert.ToInt32(commandPopup.Tag);
+                Form form = STICKS[stixID];
 
                 if (form.RectangleToScreen(form.ClientRectangle).Contains(Cursor.Position) ||
                     commandPopup.RectangleToScreen(commandPopup.ClientRectangle).Contains(Cursor.Position) ||
@@ -241,9 +241,16 @@ namespace Bubbles
 
         public override void onDocumentActivated(MMEventArgs aArgs)
         {
-            if (m_MapNavigator != null) m_MapNavigator.Init();
+            if (m_MapNavigator != null && m_MapNavigator.Visible) m_MapNavigator.Init();
+            else if (m_MapNavigatorDlg != null && m_MapNavigatorDlg.Visible) m_MapNavigatorDlg.Init();
             if (m_Resources != null && m_Resources.Visible) m_Resources.InitCurrentMapResources();
             if (m_TaskInfo != null && m_TaskInfo.Visible) m_TaskInfo.PopulateResources();
+
+            foreach (var form in STICKS.Values)
+            {
+                if (form.Name == "StixIcons")
+                    (form as StixIcons).m_updateIconsGroupMenu = true;
+            }
 
             DocumentStorage.Sync(MMUtils.ActiveDocument); // subscribe document to events
         }
@@ -758,12 +765,12 @@ namespace Bubbles
                 m_topicNotes = null;
             }
 
-            OmniSticksButton.Destroy();
+            OmniStixButton.Destroy();
 
-            if (OmniSticksButton.Visible)
-                OmniSticksButton.Hide();
-            OmniSticksButton.Dispose();
-            OmniSticksButton = null;
+            if (OmniStixButton.Visible)
+                OmniStixButton.Hide();
+            OmniStixButton.Dispose();
+            OmniStixButton = null;
 
             if (m_StixBase.Visible)
                 m_StixBase.Hide();
@@ -817,7 +824,7 @@ namespace Bubbles
 
         private bool m_bCreated;
 
-        public static OmniButton OmniSticksButton = new OmniButton();
+        public static OmniButton OmniStixButton = new OmniButton();
 
         public static StixSnippets m_Snippets = null;
 

@@ -6,9 +6,9 @@ using System.Windows.Forms;
 
 namespace Bubbles
 {
-    public partial class NavigationDlg : Form
+    public partial class MapContentDlg : Form
     {
-        public NavigationDlg()
+        public MapContentDlg()
         {
             InitializeComponent();
 

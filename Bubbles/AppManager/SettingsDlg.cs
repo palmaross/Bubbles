@@ -30,13 +30,18 @@ namespace Bubbles
             QTR_Resources.Text = Utils.getString("taskinfo.Resources");
             QTR_Effort.Text = Utils.getString("taskinfo.numEffort.tooltip");
 
+            FaviconsToolStix.Text = Utils.getString("SettingsDlg.FaviconsToolStix");
+            toolTip1.SetToolTip(FaviconsToolStix, Utils.getString("SettingsDlg.favicon.tooltip"));
+            FaviconsLinksWindow.Text = Utils.getString("SettingsDlg.FaviconsLinksWindow");
+            toolTip1.SetToolTip(FaviconsLinksWindow, Utils.getString("SettingsDlg.favicon.tooltip"));
+
             btnSave.Text = Utils.getString("button.save");
             btnClose.Text = Utils.getString("button.close");
 
-            // Fill sticks list
+            // Fill stix list
             using (StixDB db = new StixDB())
             {
-                DataTable dt = db.ExecuteQuery("select * from STICKS order by type");
+                DataTable dt = db.ExecuteQuery("select * from STIX order by type");
                 bool allselected = true;
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -88,12 +93,12 @@ namespace Bubbles
         {
             using (StixDB db = new StixDB())
             {
-                // Save to database starting sticks
+                // Save to database starting stix
                 foreach (ListViewItem item in listRunAtStart.Items)
                 {
                     int id = Convert.ToInt32(item.Tag);
                     int start = Convert.ToInt32(item.Checked);
-                    db.ExecuteNonQuery("update STICKS set start=" + start + " where id=" + id + "");
+                    db.ExecuteNonQuery("update STIX set start=" + start + " where id=" + id + "");
                 }
             }
 

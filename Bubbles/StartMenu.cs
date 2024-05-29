@@ -91,7 +91,7 @@ namespace Bubbles
             this.MouseDown += Move_Stick;
             panelBoxes.MouseDown += Move_Stick;
 
-            // Context menu for multiple sticks for button
+            // Context menu for multiple stix for button
             AddSelectMenu();
         }
 
@@ -221,7 +221,7 @@ namespace Bubbles
                     if (StixMain.m_MapNavigatorDlg.Location.IsEmpty)
                     {
                         StixMain.m_MapNavigatorDlg.Location =
-                            new Point(StixMain.OmniSticksButton.Location.X, this.Bottom);
+                            new Point(StixMain.OmniStixButton.Location.X, this.Bottom);
                     }
 
                     StixMain.m_MapNavigatorDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
@@ -262,7 +262,7 @@ namespace Bubbles
                 if (StixMain.m_Bookmarks.Location.IsEmpty)
                 {
                     StixMain.m_Bookmarks.Location =
-                        new Point(StixMain.OmniSticksButton.Location.X, this.Bottom);
+                        new Point(StixMain.OmniStixButton.Location.X, this.Bottom);
                 }
                 StixMain.m_Bookmarks.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
@@ -282,7 +282,7 @@ namespace Bubbles
                 if (StixMain.m_Resources.Location.IsEmpty)
                 {
                     StixMain.m_Resources.Location =
-                        new Point(StixMain.OmniSticksButton.Location.X, this.Bottom);
+                        new Point(StixMain.OmniStixButton.Location.X, this.Bottom);
                 }
                 StixMain.m_Resources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
@@ -297,7 +297,7 @@ namespace Bubbles
                 if (StixMain.m_OmniSound.Location.IsEmpty)
                 {
                     StixMain.m_OmniSound.Location =
-                        new Point(StixMain.OmniSticksButton.Location.X, this.Bottom);
+                        new Point(StixMain.OmniStixButton.Location.X, this.Bottom);
                 }
                 StixMain.m_OmniSound.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
@@ -422,7 +422,7 @@ namespace Bubbles
             // 0,0 - screen2.Location, 2,358 - this.Location on the screen2
 
             if (String.IsNullOrEmpty(location))
-                thisLocation = new Point(StixMain.OmniSticksButton.Location.X, this.Bottom);
+                thisLocation = new Point(StixMain.OmniStixButton.Location.X, this.Bottom);
             else
             {
                 // Location of the screen where center of MindManager is located
@@ -477,8 +477,8 @@ namespace Bubbles
                 {
                     // create "My Icons" stick
                     name = Utils.getString(type + ".tooltip");
-                    id = Utils.StickID();
-                    db.AddStick(id, name, type, 0, "H", "");
+                    id = Utils.GetRandom();
+                    db.AddStix(id, name, type, 0, "H", "");
                 }
             }
             return 1;
@@ -498,11 +498,11 @@ namespace Bubbles
             {
                 DataTable dt;
                 if (id != 0)
-                    dt = db.ExecuteQuery("select * from STICKS where id=" + id + "");
+                    dt = db.ExecuteQuery("select * from STIX where id=" + id + "");
                 else
-                    dt = db.ExecuteQuery("select * from STICKS where type=`" + type + "`");
+                    dt = db.ExecuteQuery("select * from STIX where type=`" + type + "`");
 
-                if (dt.Rows.Count == 0) // there are not sticks with this type or id
+                if (dt.Rows.Count == 0) // there are not stix with this type or id
                     return 0;
                 else if (dt.Rows.Count == 1) // only one stick, do not show SelectStickDlg
                 {
@@ -536,7 +536,7 @@ namespace Bubbles
         }
 
         /// <summary>
-        /// Create Context Menu for multiple sticks per button
+        /// Create Context Menu for multiple stix per button
         /// </summary>
         /// <param name="type">Icons or MySources. If "", then all</param>
         public void AddSelectMenu(string type = "")
@@ -544,7 +544,7 @@ namespace Bubbles
             if (type == "" || type == StixUtils.typeicons)
             {
                 if (cmsIcons.Items.Count > 0) cmsIcons.Items.Clear();
-                cmsIcons = GetSticks(StixUtils.typeicons, cmsIcons);
+                cmsIcons = GetStix(StixUtils.typeicons, cmsIcons);
                 if (cmsIcons.Items.Count > 0)
                 {
                     stxIcons.ContextMenuStrip = cmsIcons;
@@ -554,7 +554,7 @@ namespace Bubbles
             if (type == "" || type == StixUtils.typetools)
             {
                 if (cmsTools.Items.Count > 0) cmsTools.Items.Clear();
-                cmsTools = GetSticks(StixUtils.typetools, cmsTools);
+                cmsTools = GetStix(StixUtils.typetools, cmsTools);
                 if (cmsTools.Items.Count > 0)
                 {
                     stxTools.ContextMenuStrip = cmsTools;
@@ -580,11 +580,11 @@ namespace Bubbles
             }
         }
 
-        ContextMenuStrip GetSticks(string type, ContextMenuStrip cms)
+        ContextMenuStrip GetStix(string type, ContextMenuStrip cms)
         {
             using (StixDB db = new StixDB())
             {
-                DataTable dt = db.ExecuteQuery("select * from STICKS where type=`" + type + "`");
+                DataTable dt = db.ExecuteQuery("select * from STIX where type=`" + type + "`");
 
                 if (dt.Rows.Count > 1)
                 {

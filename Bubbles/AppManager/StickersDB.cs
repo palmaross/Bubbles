@@ -15,7 +15,7 @@ namespace Bubbles
         public override string getDatabaseName() => _getDatabaseName();
 
         public void AddSticker(string content, string textcolor, string fillcolor,
-            string fontfamily, int textsize, int textbold, string sticksize, string image, string alignment, string type)
+            string fontfamily, int textsize, int textbold, string stickersize, string image, string alignment, string type)
         {
             m_db.ExecuteNonQuery("insert into STICKERS values(NULL, `"
                 + content + "`, `"
@@ -24,7 +24,7 @@ namespace Bubbles
                 + fontfamily + "`, "
                 + textsize + ", "
                 + textbold + ", `"
-                + sticksize + "`, `"
+                + stickersize + "`, `"
                 + image + "`, `"
                 + alignment + "`, `"
                 + type + "`, "
@@ -43,7 +43,7 @@ namespace Bubbles
         }
 
         public void AddTemplate(string textcolor, string fillcolor, string fontfamily,
-            int textsize, int textbold, string sticksize, string alignment)
+            int textsize, int textbold, string stickersize, string alignment)
         {
             m_db.ExecuteNonQuery("insert into TEMPLATES values(`"
                 + textcolor + "`, `"
@@ -51,7 +51,7 @@ namespace Bubbles
                 + fontfamily + "`, "
                 + textsize + ", "
                 + textbold + ", `"
-                + sticksize + "`, `"
+                + stickersize + "`, `"
                 + alignment + "`, "
                 + "'', '', 0, 0"
                 + ");"
@@ -66,12 +66,12 @@ namespace Bubbles
             m_db.ExecuteNonQuery("CREATE TABLE APHORISMS(content, reserved1 text, reserved2 integer);");
             
             m_db.ExecuteNonQuery("CREATE TABLE TEMPLATES(textcolor text, fillcolor text, fontfamily text, " +
-                "textsize integer, textbold integer, sticksize text, alignment text, " +
+                "textsize integer, textbold integer, stickersize text, alignment text, " +
                 "reserved1 text, reserved2 integer);");
 
             // Stickers
             m_db.ExecuteNonQuery("CREATE TABLE STICKERS(id INTEGER PRIMARY KEY, content text, textcolor text, fillcolor text, " +
-                "fontfamily text, textsize integer, textbold integer, sticksize text, image text, alignment text, type text, " +
+                "fontfamily text, textsize integer, textbold integer, stickersize text, image text, alignment text, type text, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
             // type:
             // "sticker"
@@ -81,7 +81,7 @@ namespace Bubbles
             // "stopwatch" секундомер
             // "autoplay:interval:random"
 
-            m_db.ExecuteNonQuery("CREATE TABLE STICKERTEXTS(id INTEGER PRIMARY KEY, stickid int, " +
+            m_db.ExecuteNonQuery("CREATE TABLE STICKERTEXTS(id INTEGER PRIMARY KEY, stickerID int, " +
                 "stickertext text, reserved1 text, reserved2 integer);");
 
             m_db.ExecuteNonQuery("END");

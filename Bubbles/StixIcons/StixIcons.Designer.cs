@@ -45,6 +45,7 @@
             this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.p1 = new System.Windows.Forms.PictureBox();
             this.pIconDist = new System.Windows.Forms.PictureBox();
+            this.BI_addtostix = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsManage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
@@ -63,9 +64,10 @@
             this.cmsManage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.BI_new,
             this.BI_removeallfromtopic,
-            this.BI_addtomap});
+            this.BI_addtomap,
+            this.BI_addtostix});
             this.cmsManage.Name = "contextMenuStrip1";
-            this.cmsManage.Size = new System.Drawing.Size(226, 70);
+            this.cmsManage.Size = new System.Drawing.Size(226, 114);
             // 
             // BI_new
             // 
@@ -167,6 +169,12 @@
             this.pIconDist.TabStop = false;
             this.pIconDist.Visible = false;
             // 
+            // BI_addtostix
+            // 
+            this.BI_addtostix.Name = "BI_addtostix";
+            this.BI_addtostix.Size = new System.Drawing.Size(225, 22);
+            this.BI_addtostix.Text = "Add to Stix";
+            // 
             // StixIcons
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -210,5 +218,6 @@
         private System.Windows.Forms.PictureBox p1;
         private System.Windows.Forms.ToolStripMenuItem BI_addtomap;
         private System.Windows.Forms.PictureBox pIconDist;
+        private System.Windows.Forms.ToolStripMenuItem BI_addtostix;
     }
 }

@@ -27,8 +27,9 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "IconStix.htm");
 
-            toolTip1.SetToolTip(pictureHandle, stickname);
+            toolTip1.SetToolTip(pictureHandle, stickname + Utils.getString("HeadIcon.tooltip"));
             StickName = stickname;
+            toolTip1.SetToolTip(Manage, Utils.getString("ManageIcon.tooltip"));
 
             MinLength = this.Width;
             StixUtils.icondist = pIconDist.Width;
@@ -64,16 +65,27 @@ namespace Bubbles
             StixUtils.SetContextMenuImage(BI_addtomap, "icongroup.png");
             BI_addtomap.ToolTipText = Utils.getString("icons.contextmenu.addtomap.tooltip");
 
+            BI_addtostix.Text = Utils.getString("icons.contextmenu.addtostix");
+            StixUtils.SetContextMenuImage(BI_addtomap, "icongroup.png");
+            BI_addtostix.ToolTipText = Utils.getString("icons.contextmenu.addtostix.tooltip");
+
+            IconGroupsDropDown = BI_addtostix.DropDown;
+            (IconGroupsDropDown as ToolStripDropDownMenu).ShowImageMargin = false;
+            (IconGroupsDropDown as ToolStripDropDownMenu).ShowCheckMargin = true;
+            IconGroupsDropDown.ItemClicked += ContextMenuStrip1_ItemClicked;
+            IconGroupsDropDown.Closing += AddFromGroupMenu_Closing;
+
             StixUtils.SetCommonContextMenu(cmsManage, StixUtils.typeicons);
+            UpdateIconGroupsMenu();
 
             if (ID != 0) // if id = 0 - new stick is creating, ignore this step
             {
                 using (StixDB db = new StixDB())
                 {
                     // Check if there is a group or no
-                    DataTable dt = db.ExecuteQuery("select * from STICKS where id=" + ID + "");
+                    DataTable dt = db.ExecuteQuery("select * from STIX where id=" + ID + "");
 
-                    dt = db.ExecuteQuery("select * from ICONS where stickID=" + ID + " order by _order");
+                    dt = db.ExecuteQuery("select * from ICONS where stixID=" + ID + " order by _order");
 
                     foreach (DataRow row in dt.Rows)
                     {
@@ -131,6 +143,41 @@ namespace Bubbles
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
             ScaleStick(100F, scaleFactor);
         }
+
+        private void AddFromGroupMenu_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        {
+            if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked && donotclose)
+            {
+                donotclose = false;
+                e.Cancel = true;
+            }
+        }
+        bool donotclose = false;
+
+        private void UpdateIconGroupsMenu()
+        {
+            m_updateIconsGroupMenu = false;
+
+            IconGroupsDropDown.Items.Clear();
+
+            ReplaceIcons = IconGroupsDropDown.Items.Add(Utils.getString("icons.fromgroup.replace"));
+            ReplaceIcons.Name = "ReplaceIcons"; ReplaceIcons.Tag = false;
+            ReplaceIcons.ToolTipText = Utils.getString("icons.fromgroup.replace.tooltip");
+            (ReplaceIcons as ToolStripMenuItem).CheckOnClick = true;
+
+            IconGroupsDropDown.Items.Add(new ToolStripSeparator());
+
+            foreach (MapMarkerGroup mmg in MMUtils.ActiveDocument.MapMarkerGroups)
+            {
+                if (mmg.Type == MmMapMarkerGroupType.mmMapMarkerGroupTypeIcon)
+                {
+                    ToolStripItem tsi = IconGroupsDropDown.Items.Add(mmg.Name);
+                    tsi.Tag = mmg.GroupId;
+                    tsi.Name = "IconGroup";
+                }
+            }
+        }
+
         public void ScaleStick(float fromScale, float toScale)
         {
             if (fromScale == toScale) return;
@@ -180,6 +227,9 @@ namespace Bubbles
 
         private void Manage_Click(object sender, EventArgs e)
         {
+            if (m_updateIconsGroupMenu)
+                UpdateIconGroupsMenu();
+
             StixUtils.manage_clicked = true;
 
             foreach (ToolStripItem item in cmsManage.Items)
@@ -188,6 +238,7 @@ namespace Bubbles
             selectedIcon = pictureHandle;
             cmsManage.Show(Cursor.Position);
         }
+        public bool m_updateIconsGroupMenu = true;
 
         public void PictureHandle_Click(object sender, EventArgs e)
         {
@@ -257,6 +308,35 @@ namespace Bubbles
                     }
                 }  
             }
+            else if (e.ClickedItem.Name == "IconGroup")
+            {
+                if ((Boolean)ReplaceIcons.Tag == true) // Remove icons from Stix
+                {
+                    Icons.Clear();
+                    RefreshStick(true);
+                }
+
+                string groupID = e.ClickedItem.Tag.ToString();
+
+                foreach (MapMarkerGroup mmg in MMUtils.ActiveDocument.MapMarkerGroups)
+                {
+                    if (mmg.GroupId == groupID)
+                    {
+                        foreach (MapMarker mm in mmg)
+                            AddNewIconFromGroup(mm);
+                        break;
+                    }
+                }
+            }
+            else if (e.ClickedItem.Name == "ReplaceIcons")
+            {
+                if ((Boolean)e.ClickedItem.Tag == true)
+                    e.ClickedItem.Tag = false;
+                else
+                    e.ClickedItem.Tag = true;
+
+                donotclose = true;
+            }
             else if (e.ClickedItem.Name == "BI_rename") // rename icon
             {
                 IconItem item = (IconItem)selectedIcon.Tag;
@@ -275,7 +355,7 @@ namespace Bubbles
                     // Change title in the database
                     using (StixDB db = new StixDB())
                         db.ExecuteNonQuery("update ICONS set name=`" + name + "` where filename=`" +
-                            item.Path + "` and stickID=" + (int)this.Tag + "");
+                            item.Path + "` and stixID=" + (int)this.Tag + "");
                 }
             }
             else if (e.ClickedItem.Name == "BI_close")
@@ -355,6 +435,38 @@ namespace Bubbles
         public void Rotate()
         {
             orientation = StixUtils.RotateStick(this, Manage, orientation);
+        }
+
+        private void AddNewIconFromGroup(MapMarker icon)
+        {
+            string path; string name = icon.Label;
+            string MMpath = MMUtils.MindManager.GetPath(MmDirectory.mmDirectoryIcons);
+
+            if (icon.Icon.Type == MmIconType.mmIconTypeStock)
+            {
+                if (Utils.StockIcons.Values.Contains(icon.Icon.StockIcon))
+                {
+                    path = Utils.StockIcons.FirstOrDefault(x => x.Value == icon.Icon.StockIcon).Key;
+                    path = MMpath + path.Substring(5) + ".ico";
+                }
+                else return;
+            }
+            else // custom icon
+            {
+                if (Utils.CustomIcons.Keys.Contains(icon.Icon.CustomIconSignature))
+                    path = Utils.CustomIcons[icon.Icon.CustomIconSignature];
+                else // New icon. Add to CustomIcons.
+                {
+                    Random r = new Random(); string fname = r.Next().ToString();
+                    path = Utils.m_dataPath + "IconDB\\" + fname + ".png";
+                    icon.SaveIcon(path, MmGraphicType.mmGraphicTypePng);
+                    string signature = MMUtils.MindManager.Utilities.GetCustomIconSignature(path);
+                    Utils.CustomIcons[signature] = path;
+                }
+            }
+
+            if (Icons.Find(p => p.Path == path) == null) // check if stix has icon
+                NewIcon(path, name, "end");
         }
 
         /// <summary>
@@ -1056,6 +1168,9 @@ namespace Bubbles
 
         string StickName;
         public float scaleFactor = 100;
+
+        ToolStripItem ReplaceIcons;
+        ToolStripDropDown IconGroupsDropDown;
 
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;

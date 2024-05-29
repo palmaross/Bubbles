@@ -438,7 +438,8 @@
             // 
             this.cmsRemoveTaskInfo.Name = "cmsRemoveTskInfo";
             this.cmsRemoveTaskInfo.ShowCheckMargin = true;
-            this.cmsRemoveTaskInfo.Size = new System.Drawing.Size(83, 4);
+            this.cmsRemoveTaskInfo.ShowImageMargin = false;
+            this.cmsRemoveTaskInfo.Size = new System.Drawing.Size(181, 26);
             // 
             // cmsResources
             // 
@@ -502,7 +503,7 @@
             this.numEffort.ValueChanged += new System.EventHandler(this.numDuration_ValueChanged);
             this.numEffort.KeyDown += new System.Windows.Forms.KeyEventHandler(this.numDuration_KeyDown);
             // 
-            // BubbleTaskInfo
+            // StixTaskInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

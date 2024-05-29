@@ -26,14 +26,14 @@ namespace Bubbles
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        public static int StickID()
+        public static int GetRandom()
         {
             return new Random().Next();
         }
 
         public static void Init()
         {
-            FriendlyAddinName = "Sticks";
+            FriendlyAddinName = "OmniStix";
             I18n = MMUtils._hashtable;
             I18n_common = MMUtils._hashtableCommon;
             ImagesPath = MMUtils.m_imagesPath;
@@ -57,6 +57,7 @@ namespace Bubbles
             string path = MMUtils.MindManager.GetPath(MmDirectory.mmDirectoryIcons);
             DirectoryInfo di = new DirectoryInfo(path);
 
+            // Get stock icons.
             foreach (FileInfo fi in di.GetFiles())
             {
                 string _path = fi.FullName;
@@ -240,12 +241,12 @@ namespace Bubbles
             return new Point();
         }
 
-        public static bool _IsOnMMWindow(Point StickLocation, Size StickSize)
+        public static bool _IsOnMMWindow(Point StickLocation, Size StixSize)
         {
-            if (StickLocation.X + StickSize.Width < MMUtils.MindManager.Left || // stick is totally to the left
+            if (StickLocation.X + StixSize.Width < MMUtils.MindManager.Left || // stick is totally to the left
                 StickLocation.X > MMUtils.MindManager.Left + MMUtils.MindManager.Width) // stick is totally to the right
                 return false;
-            if (StickLocation.Y + StickSize.Height < MMUtils.MindManager.Top || // stick is totally above
+            if (StickLocation.Y + StixSize.Height < MMUtils.MindManager.Top || // stick is totally above
                 StickLocation.Y > MMUtils.MindManager.Top + MMUtils.MindManager.Height) // stick is totally below
                 return false;
             return true;
@@ -487,6 +488,31 @@ namespace Bubbles
                 return "file";
         }
 
+        public static void GetWindowsTools()
+        {
+            string path = GetTool("Microsoft.WindowsCalculator", "CalculatorApp.exe");
+            if (path != "")
+                WindowsTools.Add("Calculator", path);
+        }
+
+        static string GetTool(string windowsName, string appName)
+        {
+            DirectoryInfo root = new DirectoryInfo("C:\\Program Files\\WindowsApps\\");
+
+            foreach (DirectoryInfo di in root.GetDirectories()) 
+            { 
+                if (di.Name.StartsWith(windowsName))
+                {
+                    foreach (FileInfo fi in di.GetFiles())
+                    {
+                        if (fi.Name == appName)
+                            return fi.FullName;
+                    }
+                }
+            }
+            return "";
+        }
+
         public static void InitMarkersList(Topic t)
         {
             topicXML = new XmlDocument();
@@ -515,6 +541,11 @@ namespace Bubbles
         public static string FriendlyAddinName;
         public static string Language;
         public static string licenseStatus = "";
+
+        /// <summary>
+        /// Name, Path
+        /// </summary>
+        public static Dictionary<string, string> WindowsTools = new Dictionary<string, string>();
 
         /// <summary>Path with last backslash!</summary>
 		public static string m_defaultDataPath, m_dataPath, m_localDataPath, m_iconDB, m_imagesPath;

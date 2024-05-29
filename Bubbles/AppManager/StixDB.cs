@@ -16,13 +16,13 @@ namespace Bubbles
 
         public override string getDatabaseName() => _getDatabaseName();
 
-        public void AddIcon(string name, string filename, int order, int stickID)
+        public void AddIcon(string name, string filename, int order, int stixID)
         {
             m_db.ExecuteNonQuery("insert into ICONS values(`"
                 + name + "`, `"
                 + filename + "`, "
                 + order + ", "
-                + stickID + ", "
+                + stixID + ", "
                 + "'', 0"
                 + ");"
                 );
@@ -53,22 +53,23 @@ namespace Bubbles
             );
         }
 
-        public void AddTool(string title, string path, string type, int order, int stickID)
+        public void AddTool(string title, string tooltip, string path, string type, int order, int stixID)
         {
             m_db.ExecuteNonQuery("insert into TOOLS values(`"
                 + title + "`, `"
+                + tooltip + "`, `"
                 + path + "`, `"
                 + type + "`, "
                 + order + ", "
-                + stickID + ", "
+                + stixID + ", "
                 + "'', '', 0, 0"
                 + ");"
             );
         }
 
-        public void AddStick(int id, string name, string type, int start, string orientation, string location)
+        public void AddStix(int id, string name, string type, int start, string orientation, string location)
         {
-            m_db.ExecuteNonQuery("insert into STICKS values("
+            m_db.ExecuteNonQuery("insert into STIX values("
                 + id + ", `"
                 + name + "`, `"
                 + type + "`, "
@@ -180,18 +181,18 @@ namespace Bubbles
             base.CreateDatabase();
             m_db.ExecuteNonQuery("BEGIN EXCLUSIVE");
 
-            m_db.ExecuteNonQuery("CREATE TABLE STICKS(id integer unique, name text, " +
+            m_db.ExecuteNonQuery("CREATE TABLE STIX(id integer unique, name text, " +
                 "type text, start integer, orientation text, location text, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
             // name = stick name (by user)
             // type - icons, bookmarks, etc.
-            // start - run sticker when MM started
+            // start - run stick when MM started
             // orientation - "H" or "V"
             // location - 5120,0:5126,363;0,0:2,358 (screen1Location;screen2Location)
 
             //// Stix ////
             m_db.ExecuteNonQuery("CREATE TABLE ICONS(name text, filename text, _order integer, " +
-                "stickID int, reserved1 text, reserved2 integer);");
+                "stixID int, reserved1 text, reserved2 integer);");
             // filename: file name for stock icons, signature for custom icons
 
             m_db.ExecuteNonQuery("CREATE TABLE BOOKMARKGROUPS(id INTEGER PRIMARY KEY, name text, " +
@@ -218,12 +219,16 @@ namespace Bubbles
                 "state text, comment text, groupID int, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
 
-            m_db.ExecuteNonQuery("CREATE TABLE TOOLS(title text, path text, type text, _order integer, stickID int, " +
+            m_db.ExecuteNonQuery("CREATE TABLE TOOLS(title text, tooltip text, path text, type text, " +
+                "_order integer, stixID int, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
-            // path - file path
-            // type - file type (.exe, .docx, .txt, etc.) or OmniTool type, starting with "OT"
-            //        ex.: if (type.StartsWith("OT")) ... else it's a file
-            //        or filename, ex.: "tool-calculator.png" (stored in the IconDB)
+            // path - file path or
+            //      OmniTool type, starting with "OT_". Eg.: if (path.StartsWith("OT_")) or
+            //      WindowsTool 'appUserModelID', starting with "WT_". Eg.: WT_Microsoft.WindowsCalculator_8wekyb3d8bbwe!App
+            // type - file type (.exe, .docx, .txt, etc.)
+            //      or tool icon filename, ex.: "tool-calculator.png" (stored in the IconDB)
+            // if stixID == 0, tool appears in the ToolStix menu
+            // if stixID == -1, tool appears in the right part in the WindowsToolsDlg 
 
             // Quick tasks
             m_db.ExecuteNonQuery("CREATE TABLE TASKTEMPLATES(prime int, name text, topictext text, " +
@@ -265,18 +270,18 @@ namespace Bubbles
 
             int id = r.Next();
             // Add first Icons stick
-            AddStick(id, Utils.getString("StixIcons.tooltip"), StixUtils.typeicons, 0, "H", "");
+            AddStix(id, Utils.getString("StixIcons.tooltip"), StixUtils.typeicons, 0, "H", "");
 
             AddIcon(Utils.getString("icons.firststick.icon1"), "stockexclamation-mark", 1, id);
             AddIcon(Utils.getString("icons.firststick.icon2"), "stockquestion-mark", 2, id);
 
             // Add TaskInfo stick
             id = r.Next();
-            AddStick(id, Utils.getString("StixTaskInfo.tooltip"), StixUtils.typetaskinfo, 0, "H", "");
+            AddStix(id, Utils.getString("StixTaskInfo.tooltip"), StixUtils.typetaskinfo, 0, "H", "");
 
             // Add first Tools stick
             id = r.Next();
-            AddStick(id, Utils.getString("StixTools.tooltip"), StixUtils.typetools, 0, "H", "");
+            AddStix(id, Utils.getString("StixTools.tooltip"), StixUtils.typetools, 0, "H", "");
 
             AddLinkGroup(Utils.getString("LinksDlg.commongroup"), 0, 1);
             // Get created group id
@@ -286,21 +291,33 @@ namespace Bubbles
 
 #if VENDOR_OL
             {
-            AddLink(Utils.getString("tools.demo1.title"), "http://www.olympic-limited.co.uk/", "http", groupID);
-            AddTool(Utils.getString("tools.demo1.title"), "http://www.olympic-limited.co.uk/", "http", 1, id);
+                AddLink(Utils.getString("tools.demo1.title"), "http://www.olympic-limited.co.uk/", "http", groupID);
+                AddTool(Utils.getString("tools.demo1.title"), "", "http://www.olympic-limited.co.uk/", "http", 1, id);
 
             }
 #else
             {
                 AddLink(Utils.getString("tools.demo1.title"), "https://palmaross.com/", "http", "", "", groupID);
-            AddTool(Utils.getString("tools.demo1.title"), "https://palmaross.com/", "http", 1, id);
+                AddTool(Utils.getString("tools.demo1.title"), "", "https://palmaross.com/", "http", 1, id);
             }
 #endif
 
             AddLink(Utils.getString("tools.demo2.title"), Utils.dllPath + "OmniStix.chm", "chm", "", "", groupID);
-            AddTool(Utils.getString("tools.demo2.title"), Utils.dllPath + "OmniStix.chm", "chm", 2, id);
-            AddTool(Utils.getString("tools.demo3.title"), "c:\\Windows\\System32\\notepad.exe", "tool-notepad.png", 3, id);
-            
+            // Add tools to stix
+            AddTool(Utils.getString("tools.demo2.title"), "", Utils.dllPath + "OmniStix.chm", "chm", 2, id);
+            AddTool(Utils.getString("tools.notepad"), "", "WT_Microsoft.WindowsNotepad_8wekyb3d8bbwe!App", "tool-notepad.png", 3, id);
+
+            // Add apps to WindowsTools window (left part)
+            //AddTool(Utils.getString("tools.notepad"), "WT_Microsoft.WindowsNotepad_8wekyb3d8bbwe!App", "tool-notepad.png", 0, 0);
+            //AddTool(Utils.getString("tools.snippng"), "WT_Microsoft.ScreenSketch_8wekyb3d8bbwe!App", "tool-snipping.png", 0, 0);
+            //AddTool(Utils.getString("tools.calculator"), "WT_Microsoft.WindowsCalculator_8wekyb3d8bbwe!App", "tool-calculator.png", 0, 0);
+            //AddTool(Utils.getString("tools.todo"), "WT_Microsoft.Todos_8wekyb3d8bbwe!App", "tool-todo.png", 0, 0);
+            //AddTool(Utils.getString("tools.stickynotes"), "WT_Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe!App", "tool-snotes.png", 0, 0);
+            // Add omnitools to WindowsTools window (bottom list)
+            AddTool(Utils.getString("tools.closeall"), Utils.getString("tools.closeall.tooltip"), "OT_CloseAll", "tool-closemaps.png", 0, 0);
+            AddTool(Utils.getString("tools.saveall"), Utils.getString("tools.saveall.tooltip"), "OT_SaveAll", "tool-saveall.png", 0, 0);
+            AddTool(Utils.getString("tools.mapcontent"), Utils.getString("tools.mapcontent.tooltip"), "OT_MapContent", "tool-mapcontent.png", 0, 0);
+
             AddLinkGroup("Group 1", 0, 2);
             groupID = 1;
             dt = ExecuteQuery("SELECT last_insert_rowid()");
@@ -313,19 +330,19 @@ namespace Bubbles
 
             // Add Bookmarks stick
             id = r.Next();
-            AddStick(id, Utils.getString("StixMapNavigator.tooltip"), StixUtils.typemapnavigator, 0, "H", "");
+            AddStix(id, Utils.getString("StixMapNavigator.tooltip"), StixUtils.typemapnavigator, 0, "H", "");
 
             // Add <Add Topic> stick
             id = r.Next();
-            AddStick(id, Utils.getString("StixAddTopic.tooltip"), StixUtils.typeaddtopic, 0, "H", "");
+            AddStix(id, Utils.getString("StixAddTopic.tooltip"), StixUtils.typeaddtopic, 0, "H", "");
 
             // Add Text Operations stick
             id = r.Next();
-            AddStick(id, Utils.getString("StixTextOps.tooltip"), StixUtils.typetextops, 0, "H", "");
+            AddStix(id, Utils.getString("StixTextOps.tooltip"), StixUtils.typetextops, 0, "H", "");
 
             // Add Format stick
             id = r.Next();
-            AddStick(id, Utils.getString("StixFormat.tooltip"), StixUtils.typeformat, 0, "H", "");
+            AddStix(id, Utils.getString("StixFormat.tooltip"), StixUtils.typeformat, 0, "H", "");
 
             // Add ADDTOPIC_TEMPLATES
             AddPattern(Utils.getString("Template.Day"), Utils.getString("Template.Day") + " ", "increment###1,10,1,end", "subtopic");

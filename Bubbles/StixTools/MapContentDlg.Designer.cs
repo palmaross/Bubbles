@@ -1,6 +1,6 @@
 ﻿namespace Bubbles
 {
-    partial class NavigationDlg
+    partial class MapContentDlg
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NavigationDlg));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapContentDlg));
             this.listView1 = new System.Windows.Forms.ListView();
             this.itemHeight = new System.Windows.Forms.PictureBox();
             this.imageSize = new System.Windows.Forms.PictureBox();

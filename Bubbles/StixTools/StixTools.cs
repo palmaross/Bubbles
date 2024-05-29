@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -23,7 +22,8 @@ namespace Bubbles
             helpProvider1.SetHelpKeyword(this, "ToolStix.htm");
 
             toolTip1.SetToolTip(ToolList, Utils.getString("tools.toolview.list"));
-            toolTip1.SetToolTip(pictureHandle, stickname);
+            toolTip1.SetToolTip(pictureHandle, stickname + Utils.getString("HeadIcon.tooltip"));
+            toolTip1.SetToolTip(Manage, Utils.getString("ManageIcon.tooltip"));
 
             orientation = _orientation; // "H" or "V"
 
@@ -46,10 +46,12 @@ namespace Bubbles
             TM_changeicon.Text = Utils.getString("tools.contextmenu.changeicon");
             StixUtils.SetContextMenuImage(TM_changeicon, "mm_project.ico");
 
-            TM_delete.Text = Utils.getString("button.delete");
+            TM_delete.Text = Utils.getString("button.remove");
             StixUtils.SetContextMenuImage(TM_delete, "deleteall.png");
 
-            PopulateManageCMS();
+            ToolStripItem tsi = cmsManage.Items.Add(Utils.getString("tools.newtool"));
+            tsi.Name = "NewTool";
+            StixUtils.SetContextMenuImage(tsi, "tool.png");
             StixUtils.SetCommonContextMenu(cmsManage, StixUtils.typetools);
 
             cmsTool.ItemClicked += ContextMenuTool_ItemClicked;
@@ -60,15 +62,16 @@ namespace Bubbles
 
             using (StixDB db = new StixDB())
             {
-                DataTable dt = db.ExecuteQuery("select * from TOOLS where stickID=" + ID + " order by _order");
+                DataTable dt = db.ExecuteQuery("select * from TOOLS where stixID=" + ID + " order by _order");
                 foreach (DataRow row in dt.Rows)
                 {
                     string title = row["title"].ToString();
                     string path = row["path"].ToString();
                     string type = row["type"].ToString();
+                    string tooltip = row["tooltip"].ToString();
                     int order = Convert.ToInt32(row["_order"].ToString());
 
-                    Tools.Add(new ToolItem(title, path, type, order));
+                    Tools.Add(new ToolItem(title, path, type, order, tooltip));
                 }
             }
 
@@ -128,7 +131,6 @@ namespace Bubbles
             foreach (ToolStripItem item in cmsManage.Items)
                 item.Visible = true;
 
-            manage = true;
             cmsManage.Show(Cursor.Position);
         }
 
@@ -141,107 +143,24 @@ namespace Bubbles
             }
         }
 
-        void PopulateManageCMS()
-        {
-            ToolStripItem tsi = new ToolStripLabel(Utils.getString("tools.addtool.label"));
-            tsi.Font = new Font(tsi.Font, FontStyle.Bold); cmsManage.Items.Add(tsi);
-
-            tsi = cmsManage.Items.Add(Utils.getString("tools.addtool.file"));
-            tsi.Name = "MM_file";
-
-            tsi = cmsManage.Items.Add(Utils.getString("tools.addtool.windows"));
-            tsi.Name = "MM_windows";
-
-            ToolStripItem tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("tools.notepad"));
-            tsm.Name = "notepad_tool";
-            StixUtils.SetContextMenuImage(tsm, "tool-notepad.png");
-            tsm.Click += SubmenuItem_Click;
-
-            tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("tools.snippng"));
-            tsm.Name = "snipping_tool";
-            StixUtils.SetContextMenuImage(tsm, "tool-snipping.png");
-            tsm.Click += SubmenuItem_Click;
-
-            tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("tools.calculator"));
-            tsm.Name = "calc_tool";
-            StixUtils.SetContextMenuImage(tsm, "tool-calculator.png");
-            tsm.Click += SubmenuItem_Click;
-
-            tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("tools.clock"));
-            tsm.Name = "clock_tool";
-            StixUtils.SetContextMenuImage(tsm, "tool-clock.png");
-            tsm.Click += SubmenuItem_Click;
-
-            tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("tools.stickynotes"));
-            tsm.Name = "snotes_tool";
-            StixUtils.SetContextMenuImage(tsm, "tool-snotes.png");
-            tsm.Click += SubmenuItem_Click;
-
-            tsi = cmsManage.Items.Add(Utils.getString("tools.addtool.omni"));
-            tsi.Name = "MM_omni";
-
-            tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("tools.contextmenu.currentmap"));
-            tsm.Name = "currentmap_tool";
-            StixUtils.SetContextMenuImage(tsm, "ql_map.png");
-            tsm.Click += SubmenuItem_Click;
-
-            tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("tools.saveall"));
-            tsm.ToolTipText = Utils.getString("tools.saveall.tooltip");
-            tsm.Name = "saveall_tool";
-            StixUtils.SetContextMenuImage(tsm, "tool-saveall.png");
-            tsm.Click += SubmenuItem_Click;
-
-            tsm = (tsi as ToolStripMenuItem).DropDownItems.Add(Utils.getString("tools.fastnavigation"));
-            tsm.ToolTipText = Utils.getString("tools.fastnavigation.tooltip");
-            tsm.Name = "fastnavig_tool";
-            StixUtils.SetContextMenuImage(tsm, "tool-navigation.png");
-            tsm.Click += SubmenuItem_Click;
-        }
-
-        private void SubmenuItem_Click(object sender, EventArgs e)
-        {
-            ToolStripItem tsi = sender as ToolStripItem; // submenu item
-
-            switch (tsi.Name)
-            {
-                case "notepad_tool":
-                    string toolPath = "c:\\Windows\\System32\\notepad.exe";
-                    string toolTitle = Utils.getString("tools.notepad");
-                    NewIcon(toolPath, toolTitle, "end", "tool-notepad.png");
-                    break;
-                case "snipping_tool":
-                    NewIcon("SnippingTool.exe", Utils.getString("tools.snippng"), "end", "tool-snipping.png");
-                    break;
-                case "calc_tool":
-                    string path = "C:\\Program Files\\WindowsApps\\Microsoft.WindowsCalculator_11.2401.0.0_x64__8wekyb3d8bbwe\\CalculatorApp.exe";
-                    NewIcon(path, Utils.getString("tools.calculator"), "end", "tool-calculator.png");
-                    break;
-                case "clock_tool":
-                    NewIcon("OT_clock", Utils.getString("tools.clock"), "end", "tool-clock.png");
-                    break;
-                case "snotes_tool":
-                    path = "C:\\Program Files\\WindowsApps\\Microsoft.MicrosoftStickyNotes_6.0.2.0_x64__8wekyb3d8bbwe\\Microsoft.Notes.exe";
-                    NewIcon(path, Utils.getString("tools.stickynotes"), "end", "tool-snotes.png");
-                    break;
-                case "currentmap_tool":
-                    toolPath = MMUtils.ActiveDocument.FullName;
-                    toolTitle = MMUtils.ActiveDocument.CentralTopic.Text.Trim();
-                    NewIcon(toolPath, toolTitle, "end", "");
-                    break;
-                case "saveall_tool":
-                    NewIcon("OT_saveall", Utils.getString("tools.saveall"), "end", "tool-saveall.png");
-                    break;
-                case "fastnavig_tool":
-                    NewIcon("OT_navigation", Utils.getString("tools.fastnavigation"), "end", "tool-navigation.png");
-                    break;
-            }
-        }
-
         private void ContextMenuTool_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
+            
             if (e.ClickedItem.Name == "TM_changeicon")
             {
+                string iconPath;
+                using (SelectIconDlg dlg = new SelectIconDlg(new List<string>()))
+                {
+                    if (dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
+                        return;
 
+                    iconPath = dlg.iconPath;  
+                }
+
+                if (iconPath != "")
+                {
+                    selectedIcon.Image = Image.FromFile(iconPath);
+                }
             }
             else if (e.ClickedItem.Name == "TM_rename")
             {
@@ -261,7 +180,7 @@ namespace Bubbles
                     // Change title in the database
                     using (StixDB db = new StixDB())
                         db.ExecuteNonQuery("update TOOLS set title=`" + name + "` where path=`" +
-                            item.Path + "` and stickID=" + (int)this.Tag + "");
+                            item.Path + "` and stixID=" + (int)this.Tag + "");
                 }
             }
             else if (e.ClickedItem.Name == "TM_delete")
@@ -275,17 +194,10 @@ namespace Bubbles
 
         private void ContextMenuManage_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            string toolPath, toolTitle, position;
-            if (e.ClickedItem.Name == "MM_file")
+            if (e.ClickedItem.Name == "NewTool")
             {
-                using (NewToolDlg _dlg = new NewToolDlg(Tools, manage))
-                {
-                    if (_dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
-                        return;
-                    toolPath = _dlg.txtPath.Text.Trim();
-                    toolTitle = _dlg.txtTitle.Text.Trim();
-                }
-                NewIcon(toolPath, toolTitle, "end");
+                using (ManageToolsDlg dlg = new ManageToolsDlg(this))
+                    dlg.ShowDialog();
             }
             else if (e.ClickedItem.Name == "BI_deleteall")
             {
@@ -343,7 +255,7 @@ namespace Bubbles
             orientation = StixUtils.RotateStick(this, Manage, orientation, ToolList);
         }
 
-        private void NewIcon(string toolPath, string toolTitle, string position, string type = "")
+        public void NewIcon(string toolPath, string toolTitle, string position, string type = "", string tooltip = "")
         {
             // Add icon to Tools list
             int order = Tools.Count + 1; // at the end
@@ -361,9 +273,9 @@ namespace Bubbles
             if (type == "")
                 type = Utils.GetFileType(toolPath);
 
-            ToolItem item = new ToolItem(toolTitle, toolPath, type, order);
+            ToolItem item = new ToolItem(toolTitle, toolPath, type, order, tooltip);
             using (StixDB db = new StixDB())
-                db.AddTool(toolTitle, toolPath, type, order, (int)this.Tag);
+                db.AddTool(toolTitle, tooltip, toolPath, type, order, (int)this.Tag);
 
             Tools.Insert(order - 1, item);
             for (int i = 0; i < Tools.Count; i++)
@@ -429,7 +341,6 @@ namespace Bubbles
                 foreach (ToolStripItem item in cmsTool.Items)
                     item.Visible = true;
 
-                manage = false;
                 cmsTool.Show(Cursor.Position);
             }
         }
@@ -437,39 +348,46 @@ namespace Bubbles
         /// <summary>Run tool</summary>
         public void RunTool(ToolItem item)
         {
-            if (item.Path == "OT_navigation")
+            if (item.Path == "OT_MapOps")
             {
-                if (MMUtils.ActiveDocument == null) return;
-
-                if (aNavigationDlg == null || aNavigationDlg.IsDisposed || !aNavigationDlg.Visible)
+                using (OT_MapOpsDlg dlg = new OT_MapOpsDlg())
                 {
-                    aNavigationDlg = null;
-                    aNavigationDlg = new NavigationDlg();
+                    dlg.Location = StixUtils.GetChildLocation(this, dlg.Bounds, orientation);
+                    dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                 }
-                else return;
-
-                int topicCount = MMUtils.ActiveDocument.CentralTopic.SubTopics.Count + 1;
-                int itemheight = aNavigationDlg.listView1.GetItemRect(0).Height;
-
-                if (topicCount <= 10) // If not a big amount, change height to adjust items count 
-                {
-                    aNavigationDlg.thisHeight = topicCount * itemheight + aNavigationDlg.itemHeight.Width;
-                    aNavigationDlg.listView1.Scrollable = false;
-                }
-
-                // Get tools list location
-                Rectangle child = aNavigationDlg.RectangleToScreen(aNavigationDlg.ClientRectangle);
-                aNavigationDlg.Location = StixUtils.GetChildLocation(this, child, orientation, "tools");
-
-                aNavigationDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
-            if (item.Path.StartsWith("OT"))
+            else if (item.Path.StartsWith("OT_"))
                 OmniTools.RunTool(item.Path);
-            else
+            else if (item.Path.StartsWith("WT_"))
+                RunWindowsTool(item.Path, item.Title);
+            else // HTTP or file
             {
                 try { Process.Start(item.Path); }
                 catch { } // todo message to user
             }    
+        }
+
+        public void RunWindowsTool(string path, string title)
+        {
+            try
+            {
+                path = path.Substring(3);
+                Process.Start("explorer.exe", @" shell:appsFolder\" + path);
+            }
+            catch
+            {
+                MessageBox.Show(String.Format(Utils.getString("tools.run.error"), title),  "", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public ProcessStartInfo GetStartInfo(string app)
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            startInfo.FileName = "cmd.exe";
+            startInfo.Arguments = "/C explorer.exe shell:Appsfolder\\" + app + "_8wekyb3d8bbwe!App";
+           return startInfo;
         }
 
         #region DragDrop
@@ -575,15 +493,14 @@ namespace Bubbles
         public List<ToolItem> Tools = new List<ToolItem>();
         PictureBox selectedIcon = null;
         string orientation = "H";
-        bool manage = false;
 
         ToolListDlg aToolList = null;
-        NavigationDlg aNavigationDlg = null;
+        MapContentDlg aNavigationDlg = null;
 
         int MinLength;
         public float scaleFactor = 100;
 
-        string position; 
+        string position;
 
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;
@@ -597,17 +514,19 @@ namespace Bubbles
 
     public class ToolItem
     {
-        public ToolItem(string title, string path, string type, int order)
+        public ToolItem(string title, string path, string type, int order, string tooltip)
         {
             Order = order;
             Path = path;
             Title = title;
             Type = type;
+            Tooltip = tooltip;
         }
 
         public string Title = "";
         public int Order = 0;
         public string Path = "";
         public string Type = "";
+        public string Tooltip = "";
     }
 }

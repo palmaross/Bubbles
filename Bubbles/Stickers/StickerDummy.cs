@@ -143,9 +143,9 @@ namespace Bubbles
                 }
             }
 
-            if (item.StickSize != "0")
+            if (item.StickerSize != "0")
             {
-                string[] size = item.StickSize.Split(':');
+                string[] size = item.StickerSize.Split(':');
                 this.Size = new Size(Convert.ToInt32(size[0]), Convert.ToInt32(size[1]));
             }
 
@@ -272,7 +272,7 @@ namespace Bubbles
                     if (dt.Rows.Count > 0)
                     {
                         var row = dt.Rows[0];
-                        string _size = row["sticksize"].ToString();
+                        string _size = row["stickersize"].ToString();
                         string[] size = _size.Split(':');
                         form.Size = new Size(Convert.ToInt32(size[0]), Convert.ToInt32(size[1]));
                         form.Editor.Text = row["content"].ToString();
@@ -643,7 +643,7 @@ namespace Bubbles
                         "fontfamily=`" + Editor.Font.FontFamily.Name + "`, " +
                         "textsize=" + (int)Editor.Font.Size + ", " +
                         "textbold=" + (Editor.Font.Bold ? 1 : 0) + ", " +
-                        "sticksize=`" + this.Width + ":" + this.Height + "`, " +
+                        "stickersize=`" + this.Width + ":" + this.Height + "`, " +
                         "image=`" + image + "`, " +
                         "alignment=`" + alignment + "`, " +
                         "type=`" + pStickerType.Tag.ToString() + "`, " +
@@ -839,7 +839,7 @@ namespace Bubbles
     public class StickerItem
     {
         public StickerItem(int id, string content, string textcolor, string fillcolor, string fontfamily, 
-            int textsize, int textbold, string sticksize, string image, string alignment, string type)
+            int textsize, int textbold, string stickersize, string image, string alignment, string type)
         {
             ID = id;
             Content = content;
@@ -848,7 +848,7 @@ namespace Bubbles
             FontFamily = fontfamily;
             TextSize = textsize;
             TextBold = textbold;
-            StickSize = sticksize;
+            StickerSize = stickersize;
             aImage = image;
             Alignment = alignment;
             Type = type;
@@ -860,7 +860,7 @@ namespace Bubbles
         public string FontFamily = "";
         public int TextSize = 9;
         public int TextBold = 0;
-        public string StickSize = "";
+        public string StickerSize = "";
         public string aImage = "";
         public string Alignment = "center";
         public string Type = "sticker";

@@ -56,7 +56,7 @@ namespace Bubbles
             {
                 if (stick)
                 {
-                    DataTable dt = db.ExecuteQuery("SELECT from STICKS where name=`" + newName + "` and id=" + stickID + "");
+                    DataTable dt = db.ExecuteQuery("SELECT from STIX where name=`" + newName + "` and id=" + stixID + "");
                     if (dt.Rows.Count > 0)
                     {
                         MessageBox.Show(Utils.getString("sticks.nameexists"), "",
@@ -66,7 +66,7 @@ namespace Bubbles
                 }
                 else if (stickType == StixUtils.typeicons)
                 {
-                    DataTable dt = db.ExecuteQuery("SELECT from ICONS where name=`" + newName + "` and id=" + stickID + "");
+                    DataTable dt = db.ExecuteQuery("SELECT from ICONS where name=`" + newName + "` and id=" + stixID + "");
                     if (dt.Rows.Count > 0)
                     {
                         MessageBox.Show(Utils.getString("sticks.nameexists.icon"), "",
@@ -76,7 +76,7 @@ namespace Bubbles
                 }
                 else if (stickType == StixUtils.typetools)
                 {
-                    DataTable dt = db.ExecuteQuery("SELECT from TOOLS where title=`" + newName + "` and id=" + stickID + "");
+                    DataTable dt = db.ExecuteQuery("SELECT from TOOLS where title=`" + newName + "` and id=" + stixID + "");
                     if (dt.Rows.Count > 0)
                     {
                         MessageBox.Show(Utils.getString("sticks.nameexists.tool"), "",
@@ -89,6 +89,6 @@ namespace Bubbles
             DialogResult = DialogResult.OK;
         }
 
-        public string stickType; public int stickID; public bool stick;
+        public string stickType; public int stixID; public bool stick;
     }
 }
