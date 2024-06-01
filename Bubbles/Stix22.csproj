@@ -309,6 +309,12 @@
     <Compile Include="StixTextOps\TopicWidthDlg.Designer.cs">
       <DependentUpon>TopicWidthDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="StixTools\EditToolDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StixTools\EditToolDlg.Designer.cs">
+      <DependentUpon>EditToolDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="StixTools\ManageToolsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -973,6 +979,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StixTextOps\TopicWidthDlg.resx">
       <DependentUpon>TopicWidthDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StixTools\EditToolDlg.resx">
+      <DependentUpon>EditToolDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StixTools\ManageToolsDlg.resx">
       <DependentUpon>ManageToolsDlg.cs</DependentUpon>

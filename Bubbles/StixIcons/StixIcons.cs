@@ -8,8 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using Clipboard = System.Windows.Forms.Clipboard;
 using Color = System.Drawing.Color;
 
 namespace Bubbles
@@ -412,7 +410,7 @@ namespace Bubbles
         {
             List<string> filenames = Icons.Select(x => x.FileName).ToList();
 
-            using (SelectIconDlg _dlg = new SelectIconDlg(filenames))
+            using (SelectIconDlg _dlg = new SelectIconDlg("IconStix", filenames))
             {
                 if (_dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
                     return;

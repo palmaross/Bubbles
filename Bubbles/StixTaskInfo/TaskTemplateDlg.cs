@@ -720,7 +720,7 @@ namespace Bubbles
 
         private void pIcon_Click(object sender, EventArgs e)
         {
-            using (SelectIconDlg _dlg = new SelectIconDlg(new List<string>(), true))
+            using (SelectIconDlg _dlg = new SelectIconDlg("TaskTemplate"))
             {
                 if (_dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
                     return;

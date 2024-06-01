@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace Bubbles
 {
@@ -40,16 +42,19 @@ namespace Bubbles
 
             //// Context menu ////
 
-            TM_rename.Text = Utils.getString("button.rename");
-            StixUtils.SetContextMenuImage(TM_rename, "edit.png");
-
-            TM_changeicon.Text = Utils.getString("tools.contextmenu.changeicon");
-            StixUtils.SetContextMenuImage(TM_changeicon, "mm_project.ico");
+            TM_edit.Text = Utils.getString("button.rename");
+            StixUtils.SetContextMenuImage(TM_edit, "edit.png");
 
             TM_delete.Text = Utils.getString("button.remove");
             StixUtils.SetContextMenuImage(TM_delete, "deleteall.png");
 
-            ToolStripItem tsi = cmsManage.Items.Add(Utils.getString("tools.newtool"));
+            TM_closeoptions.Text = Utils.getString("tools.contextmenu.closeoptions");
+            StixUtils.SetContextMenuImage(TM_closeoptions, "manage.png");
+
+            c_activemap.Text = Utils.getString("tools.closeoptions.activemap");
+            c_alwayssave.Text = Utils.getString("tools.closeoptions.saveconfirm");
+
+            ToolStripItem tsi = cmsManage.Items.Add(Utils.getString("tools.managetools"));
             tsi.Name = "NewTool";
             StixUtils.SetContextMenuImage(tsi, "tool.png");
             StixUtils.SetCommonContextMenu(cmsManage, StixUtils.typetools);
@@ -91,6 +96,18 @@ namespace Bubbles
             this.Paint += this_Paint; // paint the border depending on scale factor
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
             ScaleStick(100F, scaleFactor);
+
+            TM_closeoptions.DropDown.Closing += DropDown_Closing;
+        }
+
+        private void DropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        {
+            if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
+            {
+                e.Cancel = true;
+            }
+            else
+                cmsTool.Close();
         }
 
         public void ScaleStick(float fromScale, float toScale)
@@ -145,27 +162,16 @@ namespace Bubbles
 
         private void ContextMenuTool_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            
-            if (e.ClickedItem.Name == "TM_changeicon")
-            {
-                string iconPath;
-                using (SelectIconDlg dlg = new SelectIconDlg(new List<string>()))
-                {
-                    if (dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
-                        return;
-
-                    iconPath = dlg.iconPath;  
-                }
-
-                if (iconPath != "")
-                {
-                    selectedIcon.Image = Image.FromFile(iconPath);
-                }
-            }
-            else if (e.ClickedItem.Name == "TM_rename")
+            if (e.ClickedItem.Name == "TM_edit")
             {
                 ToolItem item = (ToolItem)selectedIcon.Tag;
                 if (item == null) return;
+
+                using (EditToolDlg dlg = new EditToolDlg())
+                {
+                    if (dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
+                        return;
+                }
 
                 // Get new tool's name
                 string name = StixUtils.GetName(this, orientation, StixUtils.typetools, item.Title);
@@ -257,6 +263,12 @@ namespace Bubbles
 
         public void NewIcon(string toolPath, string toolTitle, string position, string type = "", string tooltip = "")
         {
+            if (Tools.Find(t => t.Path == toolPath) != null)
+            {
+                MessageBox.Show(Utils.getString("tools.toolexists"), "");
+                return;
+            };
+
             // Add icon to Tools list
             int order = Tools.Count + 1; // at the end
             if (position == "begin")
@@ -330,41 +342,71 @@ namespace Bubbles
         private void Icon_Click(object sender, MouseEventArgs e)
         {
             selectedIcon = sender as PictureBox;
+            ToolItem icon = selectedIcon.Tag as ToolItem;
 
             if (e.Button == MouseButtons.Left)
             {
-                ToolItem item = selectedIcon.Tag as ToolItem;
-                RunTool(item);
+                RunTool(icon);
             }
             else if (e.Button == MouseButtons.Right)
             {
                 foreach (ToolStripItem item in cmsTool.Items)
                     item.Visible = true;
 
+                if (icon.Path != "OT_CloseAll")
+                {
+                    TM_closeoptions.Visible = false;
+                    toolStripSeparator1.Visible = false;
+                }
+
                 cmsTool.Show(Cursor.Position);
             }
+        }
+
+        private void c_activemap_Click(object sender, EventArgs e)
+        {
+            if (c_activemap.Checked)
+                OmniTools.donotcloseactivemap = true;
+            else
+                OmniTools.donotcloseactivemap = false;
+        }
+
+        private void c_alwayssave_Click(object sender, EventArgs e)
+        {
+            if (c_alwayssave.Checked)
+                OmniTools.savemapsaskme = false;
+            else
+                OmniTools.savemapsaskme = true;
         }
 
         /// <summary>Run tool</summary>
         public void RunTool(ToolItem item)
         {
-            if (item.Path == "OT_MapOps")
+            string path = item.Path;
+            try
             {
-                using (OT_MapOpsDlg dlg = new OT_MapOpsDlg())
+                if (path.StartsWith("OT_")) // Omni function
+                    OmniTools.RunTool(path, this, orientation);
+                else if (path.StartsWith("WT_")) // Windows tool
+                    Process.Start("explorer.exe", @" shell:appsFolder\" + path.Substring(3));
+                else // HTTP or file
                 {
-                    dlg.Location = StixUtils.GetChildLocation(this, dlg.Bounds, orientation);
-                    dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                    if (path.EndsWith(".mmbas"))
+                        MMUtils.MindManager.RunMacro(path);
+                    else
+                        Process.Start(path);
                 }
             }
-            else if (item.Path.StartsWith("OT_"))
-                OmniTools.RunTool(item.Path);
-            else if (item.Path.StartsWith("WT_"))
-                RunWindowsTool(item.Path, item.Title);
-            else // HTTP or file
+            catch
             {
-                try { Process.Start(item.Path); }
-                catch { } // todo message to user
-            }    
+                if (!path.StartsWith("OT_") && !File.Exists(path)) // file not exists
+                {
+                    MessageBox.Show(Utils.getString("tools.run.filenotfound.1") +
+                        Utils.getString("tools.run.filenotfound.2"));
+                }
+                else // unknown reason
+                    MessageBox.Show(Utils.getString("tools.run.error"));
+            }
         }
 
         public void RunWindowsTool(string path, string title)

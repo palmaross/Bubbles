@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PRAManager;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,15 @@ namespace Bubbles
         public EditToolDlg()
         {
             InitializeComponent();
+        }
+
+        private void pIcon_Click(object sender, EventArgs e)
+        {
+            using (SelectIconDlg dlg = new SelectIconDlg("EditTool"))
+            {
+                if (dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
+                    return;
+            }
         }
     }
 }

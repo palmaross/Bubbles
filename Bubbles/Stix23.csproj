@@ -185,12 +185,6 @@
     <Compile Include="StixTaskInfo\MyDateTimePicker.Designer.cs">
       <DependentUpon>MyDateTimePicker.cs</DependentUpon>
     </Compile>
-    <Compile Include="StixTools\CloseMapsDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="StixTools\CloseMapsDlg.Designer.cs">
-      <DependentUpon>CloseMapsDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="StixTools\EditToolDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -256,12 +250,6 @@
     </Compile>
     <Compile Include="OmniSound\PlayBox.Designer.cs">
       <DependentUpon>PlayBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="StixTools\OT_MapOpsDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="StixTools\OT_MapOpsDlg.Designer.cs">
-      <DependentUpon>OT_MapOpsDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="StixTools\StixTools.cs">
       <SubType>Form</SubType>
@@ -421,36 +409,6 @@
     <Content Include="images\bookmarks.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\Bookmarks\B1.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\Bookmarks\B2.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\Bookmarks\B3.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\Bookmarks\B4.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\Bookmarks\B5.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\Bookmarks\bookmarks.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\Bookmarks\bookmarks_active.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\Bookmarks\b_more.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\Bookmarks\b_more_active.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\Bookmarks\b_plus.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="images\bookmarks_active.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -458,6 +416,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\empty.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\empty_icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\folder_opened.png">
@@ -504,9 +465,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\bookmarkMain.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\bookmarkRest.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\book_add.png">
@@ -1050,9 +1008,6 @@
     <EmbeddedResource Include="StixTaskInfo\MyDateTimePicker.resx">
       <DependentUpon>MyDateTimePicker.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StixTools\CloseMapsDlg.resx">
-      <DependentUpon>CloseMapsDlg.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="StixTools\EditToolDlg.resx">
       <DependentUpon>EditToolDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -1073,9 +1028,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OmniSound\PlayBox.resx">
       <DependentUpon>PlayBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StixTools\OT_MapOpsDlg.resx">
-      <DependentUpon>OT_MapOpsDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StixTools\StixTools.resx">
       <DependentUpon>StixTools.cs</DependentUpon>

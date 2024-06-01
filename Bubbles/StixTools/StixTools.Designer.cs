@@ -40,8 +40,11 @@
             this.ToolList = new System.Windows.Forms.PictureBox();
             this.pIconDist = new System.Windows.Forms.PictureBox();
             this.cmsTool = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.TM_rename = new System.Windows.Forms.ToolStripMenuItem();
-            this.TM_changeicon = new System.Windows.Forms.ToolStripMenuItem();
+            this.TM_closeoptions = new System.Windows.Forms.ToolStripMenuItem();
+            this.c_activemap = new System.Windows.Forms.ToolStripMenuItem();
+            this.c_alwayssave = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.TM_edit = new System.Windows.Forms.ToolStripMenuItem();
             this.TM_delete = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
@@ -59,7 +62,7 @@
             // 
             this.cmsManage.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.cmsManage.Name = "contextMenuStrip1";
-            this.cmsManage.Size = new System.Drawing.Size(181, 26);
+            this.cmsManage.Size = new System.Drawing.Size(61, 4);
             // 
             // label1
             // 
@@ -132,31 +135,60 @@
             // cmsTool
             // 
             this.cmsTool.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.TM_rename,
-            this.TM_changeicon,
+            this.TM_closeoptions,
+            this.toolStripSeparator1,
+            this.TM_edit,
             this.TM_delete});
             this.cmsTool.Name = "cmsManage";
-            this.cmsTool.Size = new System.Drawing.Size(162, 70);
+            this.cmsTool.Size = new System.Drawing.Size(181, 98);
             // 
-            // TM_rename
+            // TM_closeoptions
             // 
-            this.TM_rename.Name = "TM_rename";
-            this.TM_rename.Size = new System.Drawing.Size(161, 22);
-            this.TM_rename.Text = "Переименовать";
+            this.TM_closeoptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.c_activemap,
+            this.c_alwayssave});
+            this.TM_closeoptions.Name = "TM_closeoptions";
+            this.TM_closeoptions.Size = new System.Drawing.Size(180, 22);
+            this.TM_closeoptions.Text = "Close Options";
             // 
-            // TM_changeicon
+            // c_activemap
             // 
-            this.TM_changeicon.Name = "TM_changeicon";
-            this.TM_changeicon.Size = new System.Drawing.Size(161, 22);
-            this.TM_changeicon.Text = "Change Icon";
+            this.c_activemap.Checked = true;
+            this.c_activemap.CheckOnClick = true;
+            this.c_activemap.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.c_activemap.Name = "c_activemap";
+            this.c_activemap.Size = new System.Drawing.Size(215, 22);
+            this.c_activemap.Text = "Do not close active map";
+            this.c_activemap.Click += new System.EventHandler(this.c_activemap_Click);
+            // 
+            // c_alwayssave
+            // 
+            this.c_alwayssave.Checked = true;
+            this.c_alwayssave.CheckOnClick = true;
+            this.c_alwayssave.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.c_alwayssave.Name = "c_alwayssave";
+            this.c_alwayssave.Size = new System.Drawing.Size(215, 22);
+            this.c_alwayssave.Text = "Always save modified map";
+            this.c_alwayssave.Click += new System.EventHandler(this.c_alwayssave_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            // 
+            // TM_edit
+            // 
+            this.TM_edit.Name = "TM_edit";
+            this.TM_edit.Size = new System.Drawing.Size(180, 22);
+            this.TM_edit.Text = "Edit";
             // 
             // TM_delete
             // 
             this.TM_delete.Name = "TM_delete";
-            this.TM_delete.Size = new System.Drawing.Size(161, 22);
+            this.TM_delete.Size = new System.Drawing.Size(180, 22);
             this.TM_delete.Text = "Удалить";
             // 
-            // BubbleTools
+            // StixTools
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -196,8 +228,11 @@
         private System.Windows.Forms.PictureBox ToolList;
         private System.Windows.Forms.PictureBox pIconDist;
         private System.Windows.Forms.ContextMenuStrip cmsTool;
-        private System.Windows.Forms.ToolStripMenuItem TM_rename;
-        private System.Windows.Forms.ToolStripMenuItem TM_changeicon;
+        private System.Windows.Forms.ToolStripMenuItem TM_edit;
         private System.Windows.Forms.ToolStripMenuItem TM_delete;
+        private System.Windows.Forms.ToolStripMenuItem TM_closeoptions;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem c_activemap;
+        private System.Windows.Forms.ToolStripMenuItem c_alwayssave;
     }
 }

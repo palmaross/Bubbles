@@ -92,14 +92,6 @@ namespace Bubbles
                 if (!File.Exists(to + "pato.gif"))
                     File.Copy(from + "pato.gif", to + "pato.gif");
 
-                to = m_dataPath + "IconDB\\";
-                File.Copy(from + "tool-calculator.png", to + "tool-calculator.png", true);
-                File.Copy(from + "tool-clock.png", to + "tool-clock.png", true);
-                File.Copy(from + "tool-navigation.png", to + "tool-navigation.png", true);
-                File.Copy(from + "tool-notepad.png", to + "tool-notepad.png", true);
-                File.Copy(from + "tool-saveall.png", to + "tool-saveall.png", true);
-                File.Copy(from + "tool-snipping.png", to + "tool-snipping.png", true);
-                File.Copy(from + "tool-snotes.png", to + "tool-snotes.png", true);
             }
             catch { };
 
@@ -437,7 +429,7 @@ namespace Bubbles
                 case "excel": return excel;
                 case "exe": return exe;
                 case "image": return image;
-                case "macros": return macros;
+                case "mmbas": return macros;
                 case "map": return map;
                 case "pdf": return pdf;
                 case "txt": return txt;

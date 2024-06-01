@@ -17,7 +17,7 @@ namespace Bubbles
         /// </summary>
         /// <param name="filenames">Filenames of icons of the Icon stick</param>
         /// <param name="tasktemplate">If dialog is called from TaskTemplateDlg</param>
-        public SelectIconDlg(List<string> filenames, bool tasktemplate = false)
+        public SelectIconDlg(string from, List<string> filenames = null)
         {
             InitializeComponent();
 
@@ -27,8 +27,8 @@ namespace Bubbles
 
             Text = Utils.getString("SelectIconDlg.caption");
 
-            FileNames = filenames;
-            taskTemplate = tasktemplate;
+            if (filenames != null) FileNames = filenames;
+            From = from;
 
             imageList1.Images.Add(Image.FromFile(Utils.ImagesPath + "folder.png"));
             space = pSpace.Width;
@@ -46,8 +46,7 @@ namespace Bubbles
 
         private void ListDirectory(TreeView treeView, string path)
         {
-            // Priority/Progress
-            if (!taskTemplate)
+            if (From == "IconStix") // Show Priority/Progress node for IconStix only
             {
                 var priproNode = new TreeNode()
                 {
@@ -57,6 +56,17 @@ namespace Bubbles
                     Text = Utils.getString("SelectIconDlg.PriPro")
                 };
                 treeView.Nodes.Add(priproNode);
+            }
+            else if (From == "ManageTools")
+            {
+                var toolsNode = new TreeNode()
+                {
+                    ImageIndex = 0,
+                    SelectedImageIndex = 0,
+                    Tag = Utils.m_dataPath + "AppIconDB",
+                    Text = Utils.getString("SelectIconDlg.ToolIcons")
+                };
+                treeView.Nodes.Add(toolsNode);
             }
 
             // Custom icons
@@ -72,9 +82,10 @@ namespace Bubbles
             var rootDirectoryInfo = new DirectoryInfo(path);
             treeView.Nodes.Add(CreateDirectoryNode(rootDirectoryInfo));
 
-            if (taskTemplate)
+            // First node can be PriPro node (if from IconStix) or Custom Icons node 
+            if (From != "IconStix" && From != "ManageTools")
                 treeView.SelectedNode = treeView.Nodes[1];
-            else
+            else // if from IconStix or Manage Tools window
                 treeView.SelectedNode = treeView.Nodes[2];
         }
 
@@ -103,7 +114,7 @@ namespace Bubbles
             panel1.Controls.Clear();
             string path = e.Node.Tag.ToString();
 
-            if (path == "PP")
+            if (path == "PP") // Priority & Progress icons
             {
                 panel1.Controls.Add(panelPP);
                 panelPP.Visible = true;
@@ -169,7 +180,7 @@ namespace Bubbles
                 }
             }
 
-            if (!taskTemplate) // This dialog is called from Icon stick
+            if (From == "IconStix") // Dialog is called from IconStix
             {
                 if (ModifierKeys == Keys.Control)
                 {
@@ -223,7 +234,7 @@ namespace Bubbles
         public string iconPath = "";
         public string iconName = "";
 
-        bool taskTemplate = false;
+        string From = "";
 
         /// <summary>Filenames of stick icons. To try the icon exists in the stick</summary>
         private List<string> FileNames = new List<string>();

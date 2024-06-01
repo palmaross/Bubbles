@@ -305,18 +305,13 @@ namespace Bubbles
             AddLink(Utils.getString("tools.demo2.title"), Utils.dllPath + "OmniStix.chm", "chm", "", "", groupID);
             // Add tools to stix
             AddTool(Utils.getString("tools.demo2.title"), "", Utils.dllPath + "OmniStix.chm", "chm", 2, id);
-            AddTool(Utils.getString("tools.notepad"), "", "WT_Microsoft.WindowsNotepad_8wekyb3d8bbwe!App", "tool-notepad.png", 3, id);
+            AddTool(Utils.getString("tools.notepad"), "", "WT_Microsoft.WindowsNotepad_8wekyb3d8bbwe!App", "tool-winnotepad.png", 3, id);
 
-            // Add apps to WindowsTools window (left part)
-            //AddTool(Utils.getString("tools.notepad"), "WT_Microsoft.WindowsNotepad_8wekyb3d8bbwe!App", "tool-notepad.png", 0, 0);
-            //AddTool(Utils.getString("tools.snippng"), "WT_Microsoft.ScreenSketch_8wekyb3d8bbwe!App", "tool-snipping.png", 0, 0);
-            //AddTool(Utils.getString("tools.calculator"), "WT_Microsoft.WindowsCalculator_8wekyb3d8bbwe!App", "tool-calculator.png", 0, 0);
-            //AddTool(Utils.getString("tools.todo"), "WT_Microsoft.Todos_8wekyb3d8bbwe!App", "tool-todo.png", 0, 0);
-            //AddTool(Utils.getString("tools.stickynotes"), "WT_Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe!App", "tool-snotes.png", 0, 0);
-            // Add omnitools to WindowsTools window (bottom list)
             AddTool(Utils.getString("tools.closeall"), Utils.getString("tools.closeall.tooltip"), "OT_CloseAll", "tool-closemaps.png", 0, 0);
             AddTool(Utils.getString("tools.saveall"), Utils.getString("tools.saveall.tooltip"), "OT_SaveAll", "tool-saveall.png", 0, 0);
             AddTool(Utils.getString("tools.mapcontent"), Utils.getString("tools.mapcontent.tooltip"), "OT_MapContent", "tool-mapcontent.png", 0, 0);
+            AddTool(Utils.getString("tools.readonlytopic"), Utils.getString("tools.readonlytopic.tooltip"), 
+                Utils.m_dataPath + "ToolStixApps\\read-only-topic.mmbas", "tool-locktopic.png", 0, 0);
 
             AddLinkGroup("Group 1", 0, 2);
             groupID = 1;

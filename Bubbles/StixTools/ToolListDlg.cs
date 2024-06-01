@@ -41,6 +41,8 @@ namespace Bubbles
             imageList1.Images.Add("chm", Image.FromFile(Utils.ImagesPath + "ms_chm.png"));
 
             string ipath = Utils.m_dataPath + "AppIconDB\\";
+            ListViewItem lv;
+
             foreach (var item in Tools)
             {
                 if (item.Type == "exe")
@@ -49,17 +51,21 @@ namespace Bubbles
                     {
                         Icon appIcon = Icon.ExtractAssociatedIcon(item.Path);
                         imageList1.Images.Add(item.Type, appIcon.ToBitmap());
-                        listView1.Items.Add(" " + item.Title, item.Type).Tag = item.Path;
+                        lv = listView1.Items.Add(" " + item.Title, item.Type);
                     }
-                    catch { listView1.Items.Add(" " + item.Title, item.Type).Tag = item; }
+                    catch { lv = listView1.Items.Add(" " + item.Title, item.Type); }
                 }
                 else if (item.Type.StartsWith("tool")) // custom image
                 {
                     imageList1.Images.Add(item.Type, Image.FromFile(ipath + item.Type));
-                    listView1.Items.Add(" " + item.Title, item.Type).Tag = item;
+                    lv = listView1.Items.Add(" " + item.Title, item.Type);
                 }
                 else
-                    listView1.Items.Add(" " + item.Title, item.Type).Tag = item;
+                    lv = listView1.Items.Add(" " + item.Title, item.Type);
+
+                lv.Tag = item;
+                if (item.Tooltip != "")
+                    lv.ToolTipText = item.Tooltip;
             }
 
             this.Paint += ToolListDlg_Paint; // paint the border

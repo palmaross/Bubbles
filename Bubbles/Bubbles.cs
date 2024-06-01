@@ -72,6 +72,7 @@ namespace Bubbles
             }
 
             InitializeTopicWidthDlg();
+            OmniTools.GetAppIcons();
 
             OmniStixButton.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
 
