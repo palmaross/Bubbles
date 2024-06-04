@@ -42,11 +42,14 @@ namespace Bubbles
 
             //// Context menu ////
 
-            TM_edit.Text = Utils.getString("button.rename");
+            TM_edit.Text = Utils.getString("button.edit");
             StixUtils.SetContextMenuImage(TM_edit, "edit.png");
 
             TM_delete.Text = Utils.getString("button.remove");
             StixUtils.SetContextMenuImage(TM_delete, "deleteall.png");
+
+            TM_omnibrowser.Text = Utils.getString("LinksDlg.omnibrowser");
+            TM_externalbrowser.Text = Utils.getString("LinksDlg.btnOpen");
 
             TM_closeoptions.Text = Utils.getString("tools.contextmenu.closeoptions");
             StixUtils.SetContextMenuImage(TM_closeoptions, "manage.png");
@@ -54,9 +57,14 @@ namespace Bubbles
             c_activemap.Text = Utils.getString("tools.closeoptions.activemap");
             c_alwayssave.Text = Utils.getString("tools.closeoptions.saveconfirm");
 
-            ToolStripItem tsi = cmsManage.Items.Add(Utils.getString("tools.managetools"));
+            ToolStripItem tsi = cmsManage.Items.Add(Utils.getString("ManageToolsDlg.btnNewTool"));
             tsi.Name = "NewTool";
+            StixUtils.SetContextMenuImage(tsi, "newsticker.png");
+
+            tsi = cmsManage.Items.Add(Utils.getString("tools.managetools"));
+            tsi.Name = "ManageTools";
             StixUtils.SetContextMenuImage(tsi, "tool.png");
+
             StixUtils.SetCommonContextMenu(cmsManage, StixUtils.typetools);
 
             cmsTool.ItemClicked += ContextMenuTool_ItemClicked;
@@ -167,26 +175,68 @@ namespace Bubbles
                 ToolItem item = (ToolItem)selectedIcon.Tag;
                 if (item == null) return;
 
+                string iconPath; bool changeInDatabase;
+
                 using (EditToolDlg dlg = new EditToolDlg())
                 {
+                    dlg.pIcon.Image = selectedIcon.Image;
+                    dlg.pIcon.Tag = item.Type;
+                    dlg.txtTitle.Text = item.Title;
+                    dlg.txtTooltip.Text = item.Tooltip;
+                    dlg.Location = StixUtils.GetChildLocation(this, dlg.Bounds, orientation);
+
                     if (dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
                         return;
+
+                    item.Title = dlg.txtTitle.Text.Trim();
+                    item.Tooltip = dlg.txtTooltip.Text.Trim();
+                    iconPath = dlg.pIcon.Tag.ToString();
+                    changeInDatabase = dlg.chChangeInDataBase.Checked;
                 }
 
-                // Get new tool's name
-                string name = StixUtils.GetName(this, orientation, StixUtils.typetools, item.Title);
-                if (name != "")
-                {
-                    // Change title in the picture box tag
-                    ((ToolItem)selectedIcon.Tag).Title = name;
-                    // Change title in the Tool list item
-                    Tools.Find(p => p.Path == item.Path).Title = name;
-                    toolTip1.SetToolTip(selectedIcon, name);
+                string name = item.Title;
+                if (item.Tooltip != "") name += "\r\n\r\n" + item.Tooltip;
+                toolTip1.SetToolTip(selectedIcon, name);
 
-                    // Change title in the database
-                    using (StixDB db = new StixDB())
-                        db.ExecuteNonQuery("update TOOLS set title=`" + name + "` where path=`" +
-                            item.Path + "` and stixID=" + (int)this.Tag + "");
+                // Proccess tool icon
+                string filename = Path.GetFileName(iconPath);
+                if (item.Type != filename)
+                {
+                    if (filename.StartsWith("tool-"))
+                        item.Type = filename;
+                    else
+                        item.Type = "tool-" + filename;
+
+                    string path = Utils.m_dataPath + "AppIconDB\\" + filename;
+                    if (!File.Exists(path))
+                        File.Copy(iconPath, path);
+
+                    selectedIcon.Image = Image.FromFile(path);
+                }
+
+                selectedIcon.Tag = item;
+
+                using (StixDB db = new StixDB())
+                {
+                    if (changeInDatabase)
+                    {
+                        db.ExecuteNonQuery("update TOOLS set " +
+                        "title=`" + item.Title + "`, " +
+                        "tooltip=`" + item.Tooltip + "`, " +
+                        "type=`" + item.Type + "` " +
+                        "where path=`" + item.Path + "`"
+                        );
+                    }
+                    else
+                    {
+                        // Changes only on this Stix
+                        db.ExecuteNonQuery("update TOOLS set " +
+                            "title=`" + item.Title + "`, " +
+                            "tooltip=`" + item.Tooltip + "`, " +
+                            "type=`" + item.Type + "` " +
+                            "where path=`" + item.Path + "` and stixID=" + (int)this.Tag
+                            + "");
+                    }
                 }
             }
             else if (e.ClickedItem.Name == "TM_delete")
@@ -196,14 +246,38 @@ namespace Bubbles
                 Tools.Clear(); Tools.AddRange(StixUtils.Tools);
                 RefreshStick();
             }
+            else if (e.ClickedItem == TM_omnibrowser)
+            {
+                ToolItem item = (ToolItem)selectedIcon.Tag;
+                OmniBrowser = true;
+                RunTool(item);
+            }
+            else if (e.ClickedItem == TM_externalbrowser)
+            {
+                ToolItem item = (ToolItem)selectedIcon.Tag;
+                OmniBrowser = false;
+                RunTool(item);
+            }
         }
 
         private void ContextMenuManage_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             if (e.ClickedItem.Name == "NewTool")
             {
-                using (ManageToolsDlg dlg = new ManageToolsDlg(this))
+                using (NewToolDlg dlg = new NewToolDlg(null, this))
+                {
+                    dlg.Location = StixUtils.GetChildLocation(this, dlg.Bounds, orientation);
                     dlg.ShowDialog();
+                }
+            }
+            else if (e.ClickedItem.Name == "ManageTools")
+            {
+                if (StixMain.m_ManageTools == null || StixMain.m_ManageTools.IsDisposed)
+                {
+                    StixMain.m_ManageTools = new ManageToolsDlg();
+                    StixMain.m_ManageTools.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                }
+                StixMain.m_ManageTools.Stix = this;
             }
             else if (e.ClickedItem.Name == "BI_deleteall")
             {
@@ -232,7 +306,8 @@ namespace Bubbles
                 string name = StixUtils.GetName(this, orientation, StixUtils.typestick, "");
                 if (name != "")
                 {
-                    StixTools form = new StixTools(0, orientation, name);
+                    int id = Utils.GetRandom();
+                    StixTools form = new StixTools(id, orientation, name);
                     StixUtils.CreateStick(form, name, StixUtils.typetools);
                 }
             }
@@ -322,7 +397,7 @@ namespace Bubbles
             aToolList.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
-        void RefreshStick(bool deleteall = false)
+        public void RefreshStick(bool deleteall = false)
         {
             StixUtils.Tools.Clear(); StixUtils.Tools.AddRange(Tools);
             List<PictureBox> pBoxs = StixUtils.RefreshStick(this, p1, orientation, MinLength, 
@@ -346,6 +421,7 @@ namespace Bubbles
 
             if (e.Button == MouseButtons.Left)
             {
+                OmniBrowser = Utils.getRegistry("OpenLinksInOmniBrowser", "0") == "1";
                 RunTool(icon);
             }
             else if (e.Button == MouseButtons.Right)
@@ -358,6 +434,14 @@ namespace Bubbles
                     TM_closeoptions.Visible = false;
                     toolStripSeparator1.Visible = false;
                 }
+                if (!icon.Path.StartsWith("http") && !icon.Path.StartsWith("www"))
+                {
+                    TM_omnibrowser.Visible = false;
+                    TM_externalbrowser.Visible = false;
+                    toolStripSeparator1.Visible = false;
+                }
+                if (icon.Path == "OT_CloseAll" || icon.Path.StartsWith("http") || icon.Path.StartsWith("www"))
+                    toolStripSeparator1.Visible = true;
 
                 cmsTool.Show(Cursor.Position);
             }
@@ -394,7 +478,31 @@ namespace Bubbles
                     if (path.EndsWith(".mmbas"))
                         MMUtils.MindManager.RunMacro(path);
                     else
-                        Process.Start(path);
+                    {
+                        if (path.EndsWith(".mp3") || path.EndsWith(".wav"))
+                            StixMain.Play(path);
+                        else if (path.StartsWith("http") || path.StartsWith("www"))
+                        {
+                            if (OmniBrowser)
+                            {
+                                if (LinksDlg.OmniBrowser == null || LinksDlg.OmniBrowser.IsDisposed)
+                                {
+                                    LinksDlg.OmniBrowser = new BrowserDlg(path);
+                                    LinksDlg.OmniBrowser.txtAddressBar.Text = path;
+                                    LinksDlg.OmniBrowser.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                                }
+                                else
+                                {
+                                    LinksDlg.OmniBrowser.txtAddressBar.Text = path;
+                                    LinksDlg.OmniBrowser.Navigate(true);
+                                }
+                            }
+                            else
+                                Process.Start(path);
+                        }
+                        else
+                            Process.Start(path);
+                    }
                 }
             }
             catch
@@ -544,6 +652,8 @@ namespace Bubbles
 
         string position;
 
+        bool OmniBrowser = false;
+
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
@@ -556,13 +666,14 @@ namespace Bubbles
 
     public class ToolItem
     {
-        public ToolItem(string title, string path, string type, int order, string tooltip)
+        public ToolItem(string title, string path, string type, int order, string tooltip, Image app_icon = null)
         {
             Order = order;
             Path = path;
             Title = title;
             Type = type;
             Tooltip = tooltip;
+            App_Icon = app_icon;
         }
 
         public string Title = "";
@@ -570,5 +681,6 @@ namespace Bubbles
         public string Path = "";
         public string Type = "";
         public string Tooltip = "";
+        public Image App_Icon = null;
     }
 }

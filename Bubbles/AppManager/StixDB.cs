@@ -53,7 +53,7 @@ namespace Bubbles
             );
         }
 
-        public void AddTool(string title, string tooltip, string path, string type, int order, int stixID)
+        public void AddTool(string title, string tooltip, string path, string type, int order, int stixID, string args = "")
         {
             m_db.ExecuteNonQuery("insert into TOOLS values(`"
                 + title + "`, `"
@@ -61,7 +61,8 @@ namespace Bubbles
                 + path + "`, `"
                 + type + "`, "
                 + order + ", "
-                + stixID + ", "
+                + stixID + ", `"
+                + args + "`, "
                 + "'', '', 0, 0"
                 + ");"
             );
@@ -220,7 +221,7 @@ namespace Bubbles
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
 
             m_db.ExecuteNonQuery("CREATE TABLE TOOLS(title text, tooltip text, path text, type text, " +
-                "_order integer, stixID int, " +
+                "_order integer, stixID int, args text, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
             // path - file path or
             //      OmniTool type, starting with "OT_". Eg.: if (path.StartsWith("OT_")) or

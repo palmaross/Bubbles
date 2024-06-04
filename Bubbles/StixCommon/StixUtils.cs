@@ -50,7 +50,6 @@ namespace Bubbles
                         if (stick) // rename stick
                         {
                             db.ExecuteNonQuery("update STIX set name=`" + name + "` where id=" + stixID + "");
-                            StixMain.m_StixBase.RenameContextMenuItem(type, stixID.ToString(), name);
                         }
                         else if (type == typeicons)
                             db.ExecuteNonQuery("update ICONS set name=`" + name +
@@ -66,23 +65,14 @@ namespace Bubbles
 
         public static void CreateStick(Form newForm, string stickname, string sticktype)
         {
-            int id = 0; bool contextmenu = false;
             using (StixDB db = new StixDB())
             {
-                id = Utils.GetRandom();
-                db.AddStix(id, stickname, sticktype, 0, "H", "");
+                db.AddStix((int)newForm.Tag, stickname, sticktype, 0, "H", "");
 
                 newForm.Location = StixMain.m_StixBase.GetStickLocation("", newForm.Size);
-                newForm.Tag = id;
-                StixMain.STICKS.Add(id, newForm);
+                StixMain.STICKS.Add((int)newForm.Tag, newForm);
                 newForm.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-
-                // Create context menu for stix button in the main menu if there are more than one stix of this type
-                DataTable dt = db.ExecuteQuery("select * from STIX where type=`" + sticktype + "`");
-                if (dt.Rows.Count > 1) contextmenu = true;
             }
-            if (contextmenu == true)
-                StixMain.m_StixBase.AddSelectMenu(sticktype);
         }
 
         /// <summary>
@@ -377,7 +367,6 @@ namespace Bubbles
                 MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
                 return false;
 
-            bool contextmenu = false;
             using (StixDB db = new StixDB())
             {
                 // Delete icons that belong to this stick and clear context menu of this button
@@ -397,15 +386,7 @@ namespace Bubbles
                 // Delete the stick
                 db.ExecuteNonQuery("delete from STIX where id=" + id + "");
                 StixMain.STICKS.Remove(id);
-
-                DataTable dt = db.ExecuteQuery("select * from STIX where type=`" + type + "`");
-                if (dt.Rows.Count > 1) contextmenu = true;
             }
-
-            // Create context menu for the main menu button if there are more than one stick of this type
-            if (contextmenu == true)
-                StixMain.m_StixBase.AddSelectMenu(type);
-
             return true;
         }
 

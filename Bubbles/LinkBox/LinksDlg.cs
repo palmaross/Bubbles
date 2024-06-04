@@ -591,7 +591,7 @@ namespace Bubbles
         DataGridViewRow selectedRow;
         DataGridViewSelectedRowCollection selectedRows;
 
-        BrowserDlg OmniBrowser = null;
+        public static BrowserDlg OmniBrowser = null;
 
         bool m_editMode = false;
         TreeNode m_editNode = null;

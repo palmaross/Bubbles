@@ -327,6 +327,12 @@
     <Compile Include="StixTools\MapContentDlg.Designer.cs">
       <DependentUpon>MapContentDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="StixTools\NewToolDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StixTools\NewToolDlg.Designer.cs">
+      <DependentUpon>NewToolDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="StixTools\OmniTools.cs" />
     <Compile Include="StixTools\StixTools.cs">
       <SubType>Form</SubType>
@@ -988,6 +994,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StixTools\MapContentDlg.resx">
       <DependentUpon>MapContentDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StixTools\NewToolDlg.resx">
+      <DependentUpon>NewToolDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StixTools\StixTools.resx">
       <DependentUpon>StixTools.cs</DependentUpon>

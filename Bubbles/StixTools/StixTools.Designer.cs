@@ -46,6 +46,8 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.TM_edit = new System.Windows.Forms.ToolStripMenuItem();
             this.TM_delete = new System.Windows.Forms.ToolStripMenuItem();
+            this.TM_omnibrowser = new System.Windows.Forms.ToolStripMenuItem();
+            this.TM_externalbrowser = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
@@ -136,11 +138,13 @@
             // 
             this.cmsTool.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TM_closeoptions,
+            this.TM_omnibrowser,
+            this.TM_externalbrowser,
             this.toolStripSeparator1,
             this.TM_edit,
             this.TM_delete});
             this.cmsTool.Name = "cmsManage";
-            this.cmsTool.Size = new System.Drawing.Size(181, 98);
+            this.cmsTool.Size = new System.Drawing.Size(207, 142);
             // 
             // TM_closeoptions
             // 
@@ -148,7 +152,7 @@
             this.c_activemap,
             this.c_alwayssave});
             this.TM_closeoptions.Name = "TM_closeoptions";
-            this.TM_closeoptions.Size = new System.Drawing.Size(180, 22);
+            this.TM_closeoptions.Size = new System.Drawing.Size(206, 22);
             this.TM_closeoptions.Text = "Close Options";
             // 
             // c_activemap
@@ -174,19 +178,31 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(203, 6);
             // 
             // TM_edit
             // 
             this.TM_edit.Name = "TM_edit";
-            this.TM_edit.Size = new System.Drawing.Size(180, 22);
+            this.TM_edit.Size = new System.Drawing.Size(206, 22);
             this.TM_edit.Text = "Edit";
             // 
             // TM_delete
             // 
             this.TM_delete.Name = "TM_delete";
-            this.TM_delete.Size = new System.Drawing.Size(180, 22);
+            this.TM_delete.Size = new System.Drawing.Size(206, 22);
             this.TM_delete.Text = "Удалить";
+            // 
+            // TM_omnibrowser
+            // 
+            this.TM_omnibrowser.Name = "TM_omnibrowser";
+            this.TM_omnibrowser.Size = new System.Drawing.Size(206, 22);
+            this.TM_omnibrowser.Text = "Open in OmniBrowser";
+            // 
+            // TM_externalbrowser
+            // 
+            this.TM_externalbrowser.Name = "TM_externalbrowser";
+            this.TM_externalbrowser.Size = new System.Drawing.Size(206, 22);
+            this.TM_externalbrowser.Text = "Open in External Browser";
             // 
             // StixTools
             // 
@@ -234,5 +250,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem c_activemap;
         private System.Windows.Forms.ToolStripMenuItem c_alwayssave;
+        private System.Windows.Forms.ToolStripMenuItem TM_omnibrowser;
+        private System.Windows.Forms.ToolStripMenuItem TM_externalbrowser;
     }
 }

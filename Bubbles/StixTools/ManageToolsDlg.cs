@@ -14,7 +14,7 @@ namespace Bubbles
 {
     public partial class ManageToolsDlg : Form
     {
-        public ManageToolsDlg(Form form = null)
+        public ManageToolsDlg()
         {
             InitializeComponent();
 
@@ -22,27 +22,10 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "WindowsToolsDlg.htm");
 
-            Stix = form;
-
-            Text = Utils.getString("WindowsToolsDlg.Title");
-            lblSpecifyPath.Text = Utils.getString("WindowsToolsDlg.lblSpecifyPath");
-            lblTitle.Text = Utils.getString("WindowsToolsDlg.lblTitle");
-            chAddToStix.Text = Utils.getString("WindowsToolsDlg.chAddToStix");
-            btnAddToStix.Text = Utils.getString("WindowsToolsDlg.chAddToStix");
-            btnAddTool.Text = Utils.getString("button.add");
-            lblToolIcon.Text = Utils.getString("WindowsToolsDlg.lblToolIcon");
-            lblChangeIcon.Text = Utils.getString("WindowsToolsDlg.lblChangeIcon");
-            lblChangeIcon2.Text = Utils.getString("WindowsToolsDlg.lblChangeIcon");
-            lblTooltip.Text = Utils.getString("WindowsToolsDlg.lblTooltip");
-            lblTip.Text = Utils.getString("WindowsToolsDlg.lblTip");
-            btnNewTool.Text = Utils.getString("WindowsToolsDlg.btnNewTool");
+            Text = Utils.getString("ManageToolsDlg.Title");
+            btnAddToStix.Text = Utils.getString("ManageToolsDlg.btnAddToStix");
+            btnNewTool.Text = Utils.getString("ManageToolsDlg.btnNewTool");
             btnClose.Text = Utils.getString("button.close");
-            btnCloseAddTool.Text = Utils.getString("button.close");
-
-            lblTitle2.Text = Utils.getString("WindowsToolsDlg.lblTitle");
-            lblToolIcon2.Text = Utils.getString("WindowsToolsDlg.lblToolIcon");
-            lblTooltip2.Text = Utils.getString("WindowsToolsDlg.lblTooltip");
-            btnCancel.Text = Utils.getString("button.cancel");
 
             t_edittool.Text = Utils.getString("button.edit");
             t_remove.Text = Utils.getString("button.remove");
@@ -66,6 +49,7 @@ namespace Bubbles
             imageList1.ImageSize = p1.Size;
             db = new StixDB();
 
+            Utils.InitIcons();
             Init();
         }
 
@@ -77,8 +61,6 @@ namespace Bubbles
                 if (lv.Columns.Count == 0) continue;
                 lv.Columns[0].Width = lv.Width - 4 - SystemInformation.VerticalScrollBarWidth;
             }
-
-            groupAddTool.Refresh();
         }
 
         public static IEnumerable<Control> GetControlsOfType<T>(Control control)
@@ -91,7 +73,7 @@ namespace Bubbles
         {
             if (e.ClickedItem == t_remove)
             {
-                if (MessageBox.Show(Utils.getString("WindowsToolsDlg.confirm.remove"), "",
+                if (MessageBox.Show(Utils.getString("ManageToolsDlg.confirm.remove"), "",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     // Get an array of all selected items
@@ -103,7 +85,7 @@ namespace Bubbles
                         StreamWriter sw = new StreamWriter(Utils.m_dataPath + "AppsToIgnore.txt", true);
                         foreach (ListViewItem item in selectedItems)
                         {
-                            ThisToolItem _item = item.Tag as ThisToolItem;
+                            ToolItem _item = item.Tag as ToolItem;
                             sw.WriteLine(_item.Path);
                             item.Remove();
                         }
@@ -126,21 +108,99 @@ namespace Bubbles
             }
             else if (e.ClickedItem == t_edittool)
             {
-                panelNewTool.Visible = false;
-                paneEditTool.Visible = true;
-                paneEditTool.Location = panelNewTool.Location;
-
                 ListViewItem lv = listOmniTools.SelectedItems[0];
-                ThisToolItem item = lv.Tag as ThisToolItem;
+                ToolItem item = lv.Tag as ToolItem;
 
-                txtTitle2.Text = item.Title;
-                txtTooltip2.Text = item.Tooltip;
-                pIcon2.Image = imageList1.Images[listOmniTools.SelectedItems[0].ImageIndex];
-                pIcon2.Tag = item.aType; // image file
+                using (EditToolDlg dlg = new EditToolDlg())
+                {
+                    dlg.chChangeInDataBase.Visible = false;
+                    dlg.Height -= dlg.chChangeInDataBase.Height;
+                    dlg.txtTitle.Text = item.Title;
+                    dlg.txtTooltip.Text = item.Tooltip;
+                    dlg.pIcon.Image = imageList1.Images[listOmniTools.SelectedItems[0].ImageIndex];
+                    dlg.pIcon.Tag = item.Type; // image file
+
+                    dlg.Location = new Point(this.Left + btnClose.Height, MousePosition.Y);
+                    int x = this.Left + btnClose.Height;
+                    int y = MousePosition.Y;
+                    // Check if the dlg is close to the bottom screen side...
+                    Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
+                    if (dlg.Bottom > area.Bottom) // is close to the bottom
+                        y -= dlg.Height + btnClose.Height; // Move dlg up
+                    dlg.Location = new Point(x, y);
+
+                    if (dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
+                        return;
+
+                    string title = dlg.txtTitle.Text.Trim();
+                    string tooltip = dlg.txtTooltip.Text.Trim();
+                    string type = dlg.pIcon.Tag.ToString();
+
+                    if (title == "") return;
+
+                    var tool = listOmniTools.SelectedItems[0];
+                    item = tool.Tag as ToolItem;
+
+                    item.Tooltip = tooltip;
+                    item.Title = title;
+
+                    if (dlg.pIcon.Tag.ToString() != item.Type)
+                    {
+                        item.Type = dlg.pIcon.Tag.ToString();
+
+                        if (imageList1.Images.ContainsKey(item.Type))
+                        {
+                            // if imageList contains image key, image file exists in the AppIconDB
+                            tool.ImageIndex = imageList1.Images.IndexOfKey(item.Type);
+                        }
+                        else
+                        {
+                            Image img = dlg.pIcon.Image;
+                            imageList1.Images.Add(img);
+                            tool.ImageIndex = imageList1.Images.Count - 1;
+
+                            // if image file not exists in the AppIconDB, add...
+                            if (!File.Exists(app_icons + item.Type))
+                                img.Save(app_icons + item.Type);
+                        }
+                    }
+
+                    tool.Text = title;
+                    tool.ToolTipText = tooltip;
+                    tool.Tag = item;
+                }
+
+                using (StixDB db = new StixDB())
+                {
+                    db.ExecuteNonQuery("update TOOLS set " +
+                        "title=`" + item.Title + "`, " +
+                        "tooltip=`" + item.Tooltip + "`, " +
+                        "type=`" + item.Type + "` " +
+                        "where path=`" + item.Path + "`"
+                        );
+                }
+
+                // Process changes on the open Stix
+                foreach (var pair in StixMain.STICKS)
+                {
+                    Form form = pair.Value;
+                    if (form.Name == StixUtils.typetools)
+                    {
+                        var stix = form as StixTools;
+                        for (int i = 0; i < stix.Tools.Count; i++)
+                        {
+                            if (stix.Tools[i].Path == item.Path)
+                            {
+                                stix.Tools[i] = item; break;
+                            }
+                        }
+                        stix.RefreshStick();
+                    }
+                }
             }
             else if (e.ClickedItem == t_run)
             {
-                ThisToolItem item = selectedList.SelectedItems[0].Tag as ThisToolItem;
+                ToolItem item = selectedList.SelectedItems[0].Tag as ToolItem;
                 RunTool(item.Path);
             }
         }
@@ -149,8 +209,8 @@ namespace Bubbles
         {
             Control pb = sender as Control;
             Point pnt = pb.PointToClient(Cursor.Position);
-            pnt = new Point(pnt.X += lblTitle.Height, pnt.Y);  // Give a little offset to right
-            toolTip1.Show(Utils.getString("WindowsToolsDlg.edit.tooltip"), pb, pnt, 2500);
+            pnt = new Point(pnt.X += btnClose.Height / 2, pnt.Y);  // Give a little offset to right
+            toolTip1.Show(Utils.getString("ManageToolsDlg.edit.tooltip"), pb, pnt, 2500);
         }
 
         private void listOmniTools_AfterLabelEdit(object sender, LabelEditEventArgs e)
@@ -158,17 +218,40 @@ namespace Bubbles
             toolTip1.Hide(listOmniTools);
             if (e.Label == null) return; // Esc key pressed
 
-            string oldName = listOmniTools.SelectedItems[0].Text.Trim();
+            ToolItem item = listOmniTools.SelectedItems[0].Tag as ToolItem;
+            string oldName = item.Title;
             string newName = e.Label.Trim();
+
             if (oldName == newName) return;
+
+            item.Title = newName;
 
             using (StixDB db = new StixDB())
                 db.ExecuteNonQuery("update TOOLS set title=`" + newName +
-                    "` where title=`" + oldName + "`");
+                    "` where path =`" + item.Path + "`");
+
+            // Process changes on the open Stix
+            foreach (var pair in StixMain.STICKS)
+            {
+                Form form = pair.Value;
+                if (form.Name == StixUtils.typetools)
+                {
+                    var stix = form as StixTools;
+                    for (int i = 0; i < stix.Tools.Count; i++)
+                    {
+                        if (stix.Tools[i].Path == item.Path)
+                        {
+                            stix.Tools[i] = item; break;
+                        }
+                    }
+                    stix.RefreshStick();
+                }
+            }
         }
 
         void Init()
         {
+            // Get Windows Tools to ignore
             StreamReader sr = new StreamReader(Utils.m_dataPath + "AppsToIgnore.txt");
             string line = sr.ReadLine();
             while (line != null)
@@ -178,43 +261,14 @@ namespace Bubbles
             }
             sr.Close();
 
-            // Init left part
-            DataTable dt = db.ExecuteQuery("select * from TOOLS");
-
-            int i = 0;
-            foreach (DataRow dr in dt.Rows)
-            {
-                if (dr["stixID"].ToString() == "0")
-                {
-                    ThisToolItem item = new ThisToolItem(dr["title"].ToString(), dr["tooltip"].ToString(), dr["path"].ToString(), dr["type"].ToString());
-                    ListViewItem lv = listOmniTools.Items.Add(dr["title"].ToString());
-                    lv.Tag = item;
-                    if (dr["tooltip"].ToString() != "")
-                        lv.ToolTipText = dr["tooltip"].ToString();
-
-                    if (imageList1.Images.ContainsKey(item.aType))
-                    {
-                        lv.ImageIndex = imageList1.Images.IndexOfKey(item.aType);
-                    }
-                    else
-                    {
-                        if (File.Exists(app_icons + item.aType))
-                            imageList1.Images.Add(item.aType, Image.FromFile(app_icons + item.aType));
-                        else
-                            imageList1.Images.Add(item.aType, StixUtils.GetToolImage(item.aType, item.Path));
-                        
-                        lv.ImageIndex = i++;
-                    }
-                }
-            }
+            // Populate Windows Tools
 
             // GUID taken from https://learn.microsoft.com/en-us/windows/win32/shell/knownfolderid
             var FODLERID_AppsFolder = new Guid("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}");
             ShellObject appsFolder = (ShellObject)KnownFolderHelper.FromKnownFolderId(FODLERID_AppsFolder);
 
-            
-            StreamWriter sw = new StreamWriter(Utils.m_dataPath + "AppsTest.txt", true);
-
+            //StreamWriter sw = new StreamWriter(Utils.m_dataPath + "AppsTest.txt", true);
+            int i = 0;
             foreach (var app in (IKnownFolder)appsFolder)
             {
                 // The friendly app name
@@ -260,9 +314,9 @@ namespace Bubbles
 
                 appIcon.MakeTransparent();
 
-                ThisToolItem item = new ThisToolItem(name, "", toolPath, type);
+                ToolItem item = new ToolItem(name, toolPath, type, 0, "");
                 if (OmniTools.WindowsAppIcons.ContainsKey(item.Path))
-                    item.aType = OmniTools.WindowsAppIcons[item.Path];
+                    item.Type = OmniTools.WindowsAppIcons[item.Path];
                 ListViewItem lv = listWindowsApps.Items.Add(name);
                 
                 imageList1.Images.Add(appIcon);
@@ -270,7 +324,44 @@ namespace Bubbles
                 item.App_Icon = appIcon;
                 lv.Tag = item;
             }
-            sw.Close();
+            //sw.Close();
+
+            // Populate bottom panel
+            InitOmniTools();
+        }
+
+        public void InitOmniTools()
+        {
+            listOmniTools.Items.Clear();
+
+            DataTable dt = db.ExecuteQuery("select * from TOOLS");
+
+            int i = imageList1.Images.Count;
+            foreach (DataRow dr in dt.Rows)
+            {
+                if (dr["stixID"].ToString() == "0")
+                {
+                    ToolItem item = new ToolItem(dr["title"].ToString(), dr["path"].ToString(), dr["type"].ToString(), 0, dr["tooltip"].ToString());
+                    ListViewItem lv = listOmniTools.Items.Add(dr["title"].ToString());
+                    lv.Tag = item;
+                    if (dr["tooltip"].ToString() != "")
+                        lv.ToolTipText = dr["tooltip"].ToString();
+
+                    if (imageList1.Images.ContainsKey(item.Type))
+                    {
+                        lv.ImageIndex = imageList1.Images.IndexOfKey(item.Type);
+                    }
+                    else
+                    {
+                        if (File.Exists(app_icons + item.Type))
+                            imageList1.Images.Add(item.Type, Image.FromFile(app_icons + item.Type));
+                        else
+                            imageList1.Images.Add(item.Type, StixUtils.GetToolImage(item.Type, item.Path));
+
+                        lv.ImageIndex = i++;
+                    }
+                }
+            }
         }
 
         private Image ImageWpfToGDI(System.Windows.Media.ImageSource image)
@@ -309,188 +400,48 @@ namespace Bubbles
             db.Dispose(); db = null;
         }
 
-        private void btnBrowse_Click(object sender, EventArgs e)
-        {
-            openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            if (openFileDialog1.ShowDialog(this) == DialogResult.OK)
-            {
-                txtPath.Text = openFileDialog1.FileName;
-                txtPath_KeyUp(null, null); // proceed with title and icon
-            }
-        }
-
-        private void txtPath_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (sender == null || e.KeyCode == Keys.Enter || (e.KeyCode == Keys.V && e.Control))
-            {
-                string path = txtPath.Text.Trim();
-                if (path == "") return;
-                string title = "";
-
-                if (path.StartsWith("http"))
-                {
-                    lblWait.Visible = true;
-                    title = Utils.GetWebPageTitle(path);
-                    lblWait.Visible = false;
-                }
-                else // file
-                {
-                    try { title = Path.GetFileName(path); }
-                    catch { }
-                }
-
-                if (!String.IsNullOrEmpty(title))
-                    txtTitle.Text = title;
-
-                // Set app icon
-                string imageType = Utils.GetFileType(path);
-                Image img = StixUtils.GetToolImage(imageType, path);
-                if (img != null) pIcon.Image = img;
-                pIcon.Tag = imageType;
-
-                this.Refresh();
-
-                if (e != null)
-                {
-                    e.Handled = true; // to avoid the "ding" sound
-                    e.SuppressKeyPress = true;
-                }
-            }
-        }
-
-        private void btnAddTool_Click(object sender, EventArgs e)
-        {
-            string toolPath = txtPath.Text.Trim();
-            string title = txtTitle.Text.Trim();
-            string tooltip = txtTooltip.Text.Trim();
-
-            if (toolPath == "" || title == "" || pIcon.Tag.ToString() == "") return;
-
-            string imageType = pIcon.Tag.ToString();
-
-            ThisToolItem item = new ThisToolItem(title, tooltip, toolPath, imageType, pIcon.Image);
-
-            int imageIndex;
-            if (imageList1.Images.ContainsKey(item.aType))
-            {
-                // if imageList contains image key, image file exists in the AppIconDB
-                imageIndex = imageList1.Images.IndexOfKey(item.aType);
-            }
-            else
-            {
-                imageList1.Images.Add(pIcon.Image);
-                imageIndex = imageList1.Images.Count - 1;
-
-                // if image file not exists in the AppIconDB, add...
-                if (item.aType.Contains(".") && // it's a file name (.png or .ico, etc...)
-                    !File.Exists(app_icons + item.aType)) // and file is not saved yet
-                    pIcon.Image.Save(app_icons + item.aType);
-            }
-
-            var tool = listOmniTools.Items.Add(title, imageIndex);
-            tool.Tag = item;
-
-            if (chAddToStix.Checked)
-                (Stix as StixTools).NewIcon(toolPath, title, "end", imageType, tooltip);
-
-            using (StixDB db = new StixDB())
-                db.AddTool(title, tooltip, toolPath, imageType, 0, 0);
-        }
-
-        /// <summary>
-        /// Process tool editing.
-        /// </summary>
-        private void btnOK_Click(object sender, EventArgs e)
-        {
-            string title = txtTitle2.Text.Trim();
-            string tooltip = txtTooltip2.Text.Trim();
-
-            if (title == "") return;
-
-            var tool = listOmniTools.SelectedItems[0];
-            ThisToolItem item = tool.Tag as ThisToolItem;
-
-            item.Tooltip = tooltip;
-            item.Title = title;
-
-            if (pIcon2.Tag.ToString() != item.aType)
-            {
-                item.aType = pIcon2.Tag.ToString();
-
-                if (imageList1.Images.ContainsKey(item.aType))
-                {
-                    // if imageList contains image key, image file exists in the AppIconDB
-                    tool.ImageIndex = imageList1.Images.IndexOfKey(item.aType);
-                }
-                else
-                {
-                    Image img = pIcon2.Image;
-                    imageList1.Images.Add(img);
-                    tool.ImageIndex = imageList1.Images.Count - 1;
-
-                    // if image file not exists in the AppIconDB, add...
-                    if (!File.Exists(app_icons + item.aType))
-                        img.Save(app_icons + item.aType);
-                }
-            }
-
-            tool.Text = title;
-            tool.ToolTipText = tooltip;
-            tool.Tag = item;
-
-            using (StixDB db = new StixDB())
-                db.ExecuteNonQuery("update TOOLS set " +
-                    "title=`" + title + "`, " +
-                    "tooltip=`" + tooltip + "`, " +
-                    "type=`" + item.aType + "` " +
-                    "where path=`" + item.Path + "`"
-                    );
-
-            paneEditTool.Visible = false;
-        }
-
-        /// <summary>
-        /// Close Edit Tool panel.
-        /// </summary>
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            paneEditTool.Visible = false;
-        }
-
-
-        private void txtPath_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            txtPath.SelectAll();
-        }
-
-        private void txtboxPaste_Click(object sender, EventArgs e)
-        {
-            txtPath.Text = Clipboard.GetText();
-            txtPath_KeyUp(null, null);
-        }
-
-        private void txtboxClear_Click(object sender, EventArgs e)
-        {
-            txtPath.Clear();
-        }
-
-        private void txtPath_TextChanged(object sender, EventArgs e)
-        {
-            if (txtPath.Text.Trim() == "" || txtTitle.Text.Trim() == "") btnAddTool.Enabled = false;
-            else btnAddTool.Enabled = true;
-        }
-
         private void btnAddToStix_Click(object sender, EventArgs e)
         {
-            if (Stix == null) return;
+            cbAddToStix.Items.Clear();
 
+            // Get ToolStix from database
+            using (StixDB db = new StixDB())
+            {
+                DataTable dt = db.ExecuteQuery("select * from STIX where type=`" + StixUtils.typetools + "`");
+
+                foreach (DataRow dr in dt.Rows)
+                    cbAddToStix.Items.Add(new cbToolItem(dr["name"].ToString(), Convert.ToInt32(dr["id"])));
+
+                if (dt.Rows.Count == 0) // There are no ToolStix
+                {
+                    return;
+                }
+                else if (dt.Rows.Count > 1) // More than one - user have to select needed Stix
+                {
+                    cbAddToStix.Focus();
+                    cbAddToStix.DroppedDown = true; // Open ComboBox
+                    return;
+                }
+            }
+
+            // There is one ToolStix only. No need to open ComboBox, add tool to stick.
+            AddToolToStix((cbAddToStix.Items[0] as cbToolItem).StixID);
+        }
+
+        private void cbAddToStix_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AddToolToStix((cbAddToStix.SelectedItem as cbToolItem).StixID);
+        }
+
+        private void AddToolToStix(int stixID)
+        {
             foreach (ListViewItem item in selectedList.SelectedItems)
             {
-                ThisToolItem _item = item.Tag as ThisToolItem;
+                ToolItem _item = item.Tag as ToolItem;
 
                 if (selectedList == listWindowsApps) // We have to save the Windows App icon
                 {
-                    if (_item.aType != "exe" && !_item.aType.EndsWith(".png"))
+                    if (_item.Type != "exe" && !_item.Type.EndsWith(".png"))
                     {
                         string temp = Utils.m_localDataPath + "auxicon.png";
                         if (File.Exists(temp)) File.Delete(temp);
@@ -501,28 +452,49 @@ namespace Bubbles
                         if (!File.Exists(newiconPath))
                             File.Move(temp, newiconPath);
 
-                        _item.aType = newicon;
+                        _item.Type = newicon;
                     }
                 }
 
-                (Stix as StixTools).NewIcon(_item.Path, _item.Title, "end", _item.aType, _item.Tooltip);
-            }
-        }
+                bool done = false;
+                foreach (var pair in StixMain.STICKS)
+                {
+                    if (pair.Key == stixID) // Stix is opened. Add tool to the Stix.
+                    {
+                        (pair.Value as StixTools).NewIcon(_item.Path, _item.Title, "end", _item.Type, _item.Tooltip);
+                        done = true; break;
+                    }
+                }
 
-        private void txtTitle_TextChanged(object sender, EventArgs e)
-        {
-            if (txtTitle.Text.Trim() == "" || txtPath.Text.Trim() == "") btnAddTool.Enabled = false;
-            else btnAddTool.Enabled = true;
+                if (!done) // Stix is not opened. Add icon to the stix in the database.
+                {
+                    DataTable dt = db.ExecuteQuery("select * from TOOLS where stixID=" + stixID + "");
+                    int count = dt.Rows.Count + 1;
+
+                    // Check if Stix has this tool already
+                    if (count > 1)
+                    {
+                        done = false;
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            if (dr["path"].ToString() == _item.Path)
+                                done = true; break;
+                        }
+                        if (done) continue; // Stix has tool. Do not add to database.
+                    }
+
+                    db.AddTool(_item.Title, _item.Tooltip, _item.Path, _item.Type, count, stixID);
+                }
+            }
         }
 
         private void btnNewTool_Click(object sender, EventArgs e)
         {
-            paneEditTool.Visible = false;
-            panelNewTool.Visible = true;
-
-            txtPath.Text = ""; txtTitle.Text = ""; txtTooltip.Text = "";
-            chAddToStix.Checked = false; pIcon.Tag = "";
-            pIcon.Image = Image.FromFile(Utils.m_imagesPath + "empty_icon.png");
+            using (NewToolDlg dlg = new NewToolDlg(this, null))
+            {
+                dlg.Location = this.Location;
+                dlg.ShowDialog();
+            }
         }
 
         private void pIcon_Click(object sender, EventArgs e)
@@ -539,6 +511,7 @@ namespace Bubbles
             }
 
             pb.Image = Image.FromFile(iconPath);
+
             string filename = Path.GetFileName(iconPath);
             if (filename.StartsWith("tool-"))
                 pb.Tag = Path.GetFileName(iconPath);
@@ -550,26 +523,21 @@ namespace Bubbles
                 File.Copy(iconPath, path);
         }
 
-        private void btnCloseAddTool_Click(object sender, EventArgs e)
-        {
-            panelNewTool.Visible = false;
-        }
-
         List<string> AppToIgnore = new List<string>();
         StixDB db;
         ListView selectedList;
-        Form Stix = null;
+        public Form Stix = null;
         string app_icons = Utils.m_dataPath + "AppIconDB\\";
 
         private void listWindowsApps_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ThisToolItem item = listWindowsApps.SelectedItems[0].Tag as ThisToolItem;
+            ToolItem item = listWindowsApps.SelectedItems[0].Tag as ToolItem;
             RunTool(item.Path);
         }
 
         private void listOmniTools_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ThisToolItem item = listOmniTools.SelectedItems[0].Tag as ThisToolItem;
+            ToolItem item = listOmniTools.SelectedItems[0].Tag as ToolItem;
             RunTool(item.Path);
         }
 
@@ -601,21 +569,20 @@ namespace Bubbles
         }
     }
 
-    public class ThisToolItem
+    public class cbToolItem
     {
-        public ThisToolItem(string title, string tooltip, string path, string type, Image app_icon = null)
+        public cbToolItem(string title, int stixID)
         {
-            Path = path;
+            StixID = stixID;
             Title = title;
-            aType = type;
-            App_Icon = app_icon;
-            Tooltip = tooltip;
         }
 
         public string Title = "";
-        public string Tooltip = "";
-        public string Path = "";
-        public string aType = "";
-        public Image App_Icon;
+        public int StixID;
+
+        public override string ToString()
+        {
+            return Title;
+        }
     }
 }

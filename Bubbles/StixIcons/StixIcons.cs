@@ -378,7 +378,8 @@ namespace Bubbles
                 string name = StixUtils.GetName(this, orientation, StixUtils.typestick, "");
                 if (name != "")
                 {
-                    StixIcons form = new StixIcons(0, orientation, name);
+                    int id = Utils.GetRandom();
+                    StixIcons form = new StixIcons(id, orientation, name);
                     StixUtils.CreateStick(form, name, StixUtils.typeicons);
                 }
             }

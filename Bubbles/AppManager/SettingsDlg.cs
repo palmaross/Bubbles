@@ -31,9 +31,11 @@ namespace Bubbles
             QTR_Effort.Text = Utils.getString("taskinfo.numEffort.tooltip");
 
             FaviconsToolStix.Text = Utils.getString("SettingsDlg.FaviconsToolStix");
-            toolTip1.SetToolTip(FaviconsToolStix, Utils.getString("SettingsDlg.favicon.tooltip"));
+            toolTip1.SetToolTip(FaviconsToolStix, Utils.getString("SettingsDlg.favicon"));
             FaviconsLinksWindow.Text = Utils.getString("SettingsDlg.FaviconsLinksWindow");
-            toolTip1.SetToolTip(FaviconsLinksWindow, Utils.getString("SettingsDlg.favicon.tooltip"));
+            toolTip1.SetToolTip(FaviconsLinksWindow, Utils.getString("SettingsDlg.favicon"));
+
+            chOpenInOmniBrowser.Text = Utils.getString("SettingsDlg.chOpenInOmniBrowser");
 
             btnSave.Text = Utils.getString("button.save");
             btnClose.Text = Utils.getString("button.close");
@@ -120,6 +122,7 @@ namespace Bubbles
 
             Utils.setRegistry("FaviconsToolStix", FaviconsToolStix.Checked ? "1" : "0");
             Utils.setRegistry("FaviconsLinksWindow", FaviconsLinksWindow.Checked ? "1" : "0");
+            Utils.setRegistry("OpenLinksInOmniBrowser", chOpenInOmniBrowser.Checked ? "1" : "0");
         }
 
         private void cbSelectAll_CheckedChanged(object sender, EventArgs e)

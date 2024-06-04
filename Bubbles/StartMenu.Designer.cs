@@ -266,7 +266,7 @@
             this.stxTools.TabIndex = 91;
             this.stxTools.TabStop = false;
             this.stxTools.Tag = "1";
-            this.stxTools.Click += new System.EventHandler(this.StxTools_Click);
+            this.stxTools.MouseClick += new System.Windows.Forms.MouseEventHandler(this.stxTools_MouseClick);
             // 
             // stxMapNavigator
             // 

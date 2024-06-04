@@ -137,54 +137,56 @@ namespace Bubbles
             Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
             if (t == null) return;
 
-            if (m_OmniSound.play) // OmniPlayer is busy.
-            {
-                m_OmniSound.btnPlay_Click(null, null); // Stop playing.
-                if (m_playBox != null && m_playBox.Visible)
-                    m_playBox.Close();
-            }
-            else // Start playing.
-            {
-                string audioPath = t.GetAttributes(STRIP_URI).GetAttributeValue(AUDIO_PATH);
-                if (String.IsNullOrEmpty(audioPath)) return;
+            string audioPath = t.GetAttributes(STRIP_URI).GetAttributeValue(AUDIO_PATH);
+            if (String.IsNullOrEmpty(audioPath)) return;
 
-                // Does file exist?
-                if (!File.Exists(audioPath))
+            Play(audioPath, t.Guid);
+        }
+
+        public static void Play(string audioPath, string topicGuid = "")
+        {
+            // Does file exist?
+            if (!File.Exists(audioPath))
+            {
+                MessageBox.Show(String.Format(Utils.getString("OmniSound.filenotexists"), audioPath));
+                return;
+            }
+
+            string trackName = Path.GetFileNameWithoutExtension(audioPath);
+
+            // Select record in OmniSound window
+            if (m_OmniSound.Visible)
+            {
+                if (m_OmniSound.play) // OmniPlayer is busy.
                 {
-                    MessageBox.Show(String.Format(Utils.getString("OmniSound.filenotexists"), audioPath));
-                    return;
+                    m_OmniSound.btnPlay_Click(null, null); // Stop playing.
+                    if (m_playBox != null && m_playBox.Visible)
+                        m_playBox.Close();
                 }
 
-                string trackName = Path.GetFileNameWithoutExtension(audioPath);
-
-                // Select topic record in OmniSound window
-                if (m_OmniSound.Visible)
+                foreach (var item in m_OmniSound.cbRecords.Items)
                 {
-                    foreach (var item in m_OmniSound.cbRecords.Items)
-                    {
-                        if ((item as AudioItem).Path == audioPath)
-                            m_OmniSound.cbRecords.SelectedItem = item;
-                    }
+                    if ((item as AudioItem).Path == audioPath)
+                        m_OmniSound.cbRecords.SelectedItem = item;
+                }
+            }
+            else
+            {
+                if (m_playBox == null || m_playBox.IsDisposed)
+                {
+                    m_playBox = new PlayBox(OmniStixButton.Bounds, trackName, topicGuid);
+                    m_playBox.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                 }
                 else
                 {
-                    if (m_playBox == null || m_playBox.IsDisposed)
-                    {
-                        m_playBox = new PlayBox(OmniStixButton.Bounds, trackName, t.Guid);
-                        m_playBox.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-                    }
-                    else
-                    {
-                        m_playBox.lblTrack.Text = trackName; m_playBox.lblTrack.Tag = t.Guid;
-                    }
+                    m_playBox.lblTrack.Text = trackName; m_playBox.lblTrack.Tag = topicGuid;
                 }
-
-                m_OmniSound.FilePath = audioPath;
-                m_OmniSound.TopicGuid = t.Guid;
-                m_OmniSound.btnPlay_Click(null, null);
             }
+
+            m_OmniSound.FilePath = audioPath;
+            m_OmniSound.TopicGuid = topicGuid;
+            m_OmniSound.btnPlay_Click(null, null);
         }
-        public const string AUDIO_PATH = "OMNIAUDIO_PATH";
 
         /// <summary>
         /// Hide command popup if cursor position is out of stick or popup bounds
@@ -826,6 +828,7 @@ namespace Bubbles
         private bool m_bCreated;
 
         public static OmniButton OmniStixButton = new OmniButton();
+        public const string AUDIO_PATH = "OMNIAUDIO_PATH";
 
         public static StixSnippets m_Snippets = null;
 
@@ -835,6 +838,7 @@ namespace Bubbles
         public static SearchTextDlg m_SearchText;
         public static NewLinkDlg m_NewLink;
         public static OmniSound m_OmniSound;
+        public static ManageToolsDlg m_ManageTools;
 
         public static ResourcesDlg m_Resources;
         public static LinksDlg m_AllSources;

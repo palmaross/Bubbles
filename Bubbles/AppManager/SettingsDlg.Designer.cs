@@ -55,6 +55,7 @@
             this.QTR_Dates = new System.Windows.Forms.CheckBox();
             this.FaviconsToolStix = new System.Windows.Forms.CheckBox();
             this.FaviconsLinksWindow = new System.Windows.Forms.CheckBox();
+            this.chOpenInOmniBrowser = new System.Windows.Forms.CheckBox();
             this.gbRunAtStart.SuspendLayout();
             this.gbScaleFactor.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -64,7 +65,7 @@
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(236, 379);
+            this.btnClose.Location = new System.Drawing.Point(236, 407);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 1;
@@ -75,7 +76,7 @@
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSave.Location = new System.Drawing.Point(155, 379);
+            this.btnSave.Location = new System.Drawing.Point(155, 407);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 3;
@@ -89,7 +90,7 @@
             this.listRunAtStart.HideSelection = false;
             this.listRunAtStart.Location = new System.Drawing.Point(12, 42);
             this.listRunAtStart.Name = "listRunAtStart";
-            this.listRunAtStart.Size = new System.Drawing.Size(276, 80);
+            this.listRunAtStart.Size = new System.Drawing.Size(276, 84);
             this.listRunAtStart.TabIndex = 14;
             this.listRunAtStart.UseCompatibleStateImageBehavior = false;
             this.listRunAtStart.View = System.Windows.Forms.View.SmallIcon;
@@ -332,7 +333,7 @@
             this.FaviconsToolStix.AutoSize = true;
             this.FaviconsToolStix.Checked = true;
             this.FaviconsToolStix.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.FaviconsToolStix.Location = new System.Drawing.Point(25, 327);
+            this.FaviconsToolStix.Location = new System.Drawing.Point(13, 330);
             this.FaviconsToolStix.Name = "FaviconsToolStix";
             this.FaviconsToolStix.Size = new System.Drawing.Size(235, 17);
             this.FaviconsToolStix.TabIndex = 22;
@@ -344,12 +345,22 @@
             this.FaviconsLinksWindow.AutoSize = true;
             this.FaviconsLinksWindow.Checked = true;
             this.FaviconsLinksWindow.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.FaviconsLinksWindow.Location = new System.Drawing.Point(25, 350);
+            this.FaviconsLinksWindow.Location = new System.Drawing.Point(13, 353);
             this.FaviconsLinksWindow.Name = "FaviconsLinksWindow";
             this.FaviconsLinksWindow.Size = new System.Drawing.Size(242, 17);
             this.FaviconsLinksWindow.TabIndex = 23;
             this.FaviconsLinksWindow.Text = "Show favicons for Web links in Links Window";
             this.FaviconsLinksWindow.UseVisualStyleBackColor = true;
+            // 
+            // chOpenInOmniBrowser
+            // 
+            this.chOpenInOmniBrowser.AutoSize = true;
+            this.chOpenInOmniBrowser.Location = new System.Drawing.Point(13, 382);
+            this.chOpenInOmniBrowser.Name = "chOpenInOmniBrowser";
+            this.chOpenInOmniBrowser.Size = new System.Drawing.Size(284, 17);
+            this.chOpenInOmniBrowser.TabIndex = 24;
+            this.chOpenInOmniBrowser.Text = "ToolStix: open web-links in the OmniBrowser by default";
+            this.chOpenInOmniBrowser.UseVisualStyleBackColor = true;
             // 
             // SettingsDlg
             // 
@@ -357,7 +368,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(322, 411);
+            this.ClientSize = new System.Drawing.Size(322, 439);
+            this.Controls.Add(this.chOpenInOmniBrowser);
             this.Controls.Add(this.FaviconsLinksWindow);
             this.Controls.Add(this.FaviconsToolStix);
             this.Controls.Add(this.groupBox1);
@@ -412,5 +424,6 @@
         private System.Windows.Forms.CheckBox QTR_Resources;
         private System.Windows.Forms.CheckBox FaviconsToolStix;
         private System.Windows.Forms.CheckBox FaviconsLinksWindow;
+        private System.Windows.Forms.CheckBox chOpenInOmniBrowser;
     }
 }

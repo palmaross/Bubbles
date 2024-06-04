@@ -1,0 +1,26 @@
+'#Language "WWB-COM"
+
+' The macro lock the topic text from changes.
+' To unlock it, you just need to run this macro again.
+' It works like a toggle.
+' Select a topic and run this macro.
+
+Option Explicit
+
+Sub Main
+Dim t As Topic
+
+If ActiveDocument.Selection.Count<>1 Then End
+If ActiveDocument.Selection.HasTopic = False Then End
+
+Set t = ActiveDocument.Selection.PrimaryTopic
+
+	If t.Title.ReadOnly = True Then
+		t.Title.ReadOnly = False
+		t.AllIcons.RemoveStockIcon(mmStockIconPadlockLocked)
+	Else
+		t.Title.ReadOnly = True
+		t.AllIcons.AddStockIcon(mmStockIconPadlockLocked)
+	End If
+
+End Sub

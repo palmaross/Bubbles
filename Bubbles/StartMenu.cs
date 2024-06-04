@@ -22,7 +22,8 @@ namespace Bubbles
             toolTip1.SetToolTip(stxTaskInfo, Utils.getString("StixTaskInfo.tooltip"));
             toolTip1.SetToolTip(stxMapNavigator, Utils.getString("StixMapNavigator.tooltip") + 
                 Utils.getString("StixMapNavigator.tooltip2"));
-            toolTip1.SetToolTip(stxTools, Utils.getString("StixTools.tooltip"));
+            toolTip1.SetToolTip(stxTools, Utils.getString("StixTools.tooltip") +
+                Utils.getString("StixTools.tooltip2"));
             toolTip1.SetToolTip(stxAddTopics, Utils.getString("StixAddTopic.tooltip"));
             toolTip1.SetToolTip(stxTextOps, Utils.getString("StixTextOps.tooltip"));
             toolTip1.SetToolTip(stxFormat, Utils.getString("StixFormat.tooltip"));
@@ -88,14 +89,11 @@ namespace Bubbles
             }
             catch { }
 
-            this.MouseDown += Move_Stick;
-            panelBoxes.MouseDown += Move_Stick;
-
-            // Context menu for multiple stix for button
-            AddSelectMenu();
+            this.MouseDown += Move_StartMenu;
+            panelBoxes.MouseDown += Move_StartMenu;
         }
 
-        private void Move_Stick(object sender, MouseEventArgs e)
+        private void Move_StartMenu(object sender, MouseEventArgs e)
         {
             ReleaseCapture();
             SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
@@ -137,7 +135,20 @@ namespace Bubbles
                         dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                     break;
                 case "cm_about":
-                    Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "About.htm");
+                    MMUtils.Company = Utils.Company;
+                    MMUtils.AddinName = Utils.AddinName;
+                    MMUtils.FriendlyAddinName = Utils.FriendlyAddinName;
+                    MMUtils.AddinVersion = Utils.getRegistry("", "version");
+                    MMUtils.licenseKeyStartsWith = "OS";
+
+                    using (aboutDlg dlg = new aboutDlg())
+                    {
+                        dlg.ShowDialog();
+                    }
+
+                    string licenseStatus = PRLicenseManager.licenseStatus;
+                    if (Utils.licenseStatus != licenseStatus)
+                        Utils.licenseStatus = licenseStatus;
                     break;
 
                 //Bulk operations
@@ -230,9 +241,20 @@ namespace Bubbles
             }
         }
 
-        private void StxTools_Click(object sender, EventArgs e)
+        private void stxTools_MouseClick(object sender, MouseEventArgs e)
         {
-            BaseIcon_MouseClick(stxTools, null);
+            if (e == null || e.Button == MouseButtons.Left)
+            {
+                BaseIcon_MouseClick(stxTools, null);
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                if (StixMain.m_ManageTools == null || StixMain.m_ManageTools.IsDisposed)
+                {
+                    StixMain.m_ManageTools = new ManageToolsDlg();
+                    StixMain.m_ManageTools.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                }
+            }
         }
 
         private void StxAddTopic_Click(object sender, EventArgs e)
@@ -330,9 +352,13 @@ namespace Bubbles
             {
                 stickType = StixUtils.typeicons;
                 defaultName = Utils.getString("StixIcons.tooltip");
-                if (cmsIcons.Items.Count > 0 && startId == 0)
+
+                ContextMenuStrip cms = GetStixContextMenu(stickType);
+                if (cms.Items.Count > 1 && startId == 0)
                 {
-                    cmsIcons.Show(Cursor.Position); return;
+                    cms.ItemClicked += cms_ItemClicked;
+                    cms.Show(Cursor.Position);
+                    return;
                 }
             }
             else if (pb == stxTaskInfo)
@@ -344,9 +370,13 @@ namespace Bubbles
             {
                 stickType = StixUtils.typetools;
                 defaultName = Utils.getString("StixTools.tooltip");
-                if (cmsTools.Items.Count > 0 && startId == 0)
+
+                ContextMenuStrip cms = GetStixContextMenu(stickType);
+                if (cms.Items.Count > 1 && startId == 0)
                 {
-                    cmsTools.Show(Cursor.Position); return;
+                    cms.ItemClicked += cms_ItemClicked;
+                    cms.Show(Cursor.Position);
+                    return;
                 }
             }
             else if (pb == stxMapNavigator)
@@ -518,51 +548,6 @@ namespace Bubbles
             }
         }
 
-        public void RenameContextMenuItem(string type, string id, string newname)
-        {
-            if (type == StixUtils.typeicons && cmsIcons.Items.Count > 1)
-            {
-                foreach (ToolStripItem item in cmsIcons.Items)
-                {
-                    string[] tag = item.Tag.ToString().Split(':');
-                    if (tag[0] == id)
-                    {
-                        item.Text = newname;
-                        item.Tag = id + ":" + type;
-                        return;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Create Context Menu for multiple stix per button
-        /// </summary>
-        /// <param name="type">Icons or MySources. If "", then all</param>
-        public void AddSelectMenu(string type = "")
-        {
-            if (type == "" || type == StixUtils.typeicons)
-            {
-                if (cmsIcons.Items.Count > 0) cmsIcons.Items.Clear();
-                cmsIcons = GetStix(StixUtils.typeicons, cmsIcons);
-                if (cmsIcons.Items.Count > 0)
-                {
-                    stxIcons.ContextMenuStrip = cmsIcons;
-                    cmsIcons.ItemClicked += cms_ItemClicked;
-                }
-            }
-            if (type == "" || type == StixUtils.typetools)
-            {
-                if (cmsTools.Items.Count > 0) cmsTools.Items.Clear();
-                cmsTools = GetStix(StixUtils.typetools, cmsTools);
-                if (cmsTools.Items.Count > 0)
-                {
-                    stxTools.ContextMenuStrip = cmsTools;
-                    cmsTools.ItemClicked += cms_ItemClicked;
-                }
-            }
-        }
-
         private void cms_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             var tsi = e.ClickedItem; if (tsi == null) return;
@@ -576,24 +561,24 @@ namespace Bubbles
                 case StixUtils.typeicons:
                     StxIcon_MouseClick(stxIcons, null); break;
                 case StixUtils.typetools:
-                    StxIcon_MouseClick(stxTools, null); break;
+                    stxTools_MouseClick(stxTools, null); break;
             }
         }
 
-        ContextMenuStrip GetStix(string type, ContextMenuStrip cms)
+        ContextMenuStrip GetStixContextMenu(string type)
         {
+            ContextMenuStrip cms = new ContextMenuStrip();
+            cms.ShowImageMargin = false;
+
             using (StixDB db = new StixDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from STIX where type=`" + type + "`");
 
-                if (dt.Rows.Count > 1)
+                foreach (DataRow row in dt.Rows)
                 {
-                    foreach (DataRow row in dt.Rows)
-                    {
-                        ToolStripMenuItem tsm = new ToolStripMenuItem(row["name"].ToString());
-                        tsm.Tag = row["id"] + ":" + type;
-                        cms.Items.Add(tsm);
-                    }
+                    ToolStripItem tsi = new ToolStripMenuItem(row["name"].ToString());
+                    tsi.Tag = row["id"] + ":" + type;
+                    cms.Items.Add(tsi);
                 }
             }
             return cms;

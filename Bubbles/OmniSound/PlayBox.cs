@@ -80,10 +80,18 @@ namespace Bubbles
 
         private void lblTrack_Click(object sender, EventArgs e)
         {
-            Topic t = MMUtils.ActiveDocument.FindByGuid(lblTrack.Tag.ToString()) as Topic;
+            if (lblTrack.Tag == null) return;
 
-            if (t != null) {
-                t.SelectOnly(); t.SnapIntoView(); }
+            string tGuid = lblTrack.Tag.ToString();
+            if (tGuid != "")
+            {
+                Topic t = MMUtils.ActiveDocument.FindByGuid(tGuid) as Topic;
+
+                if (t != null)
+                {
+                    t.SelectOnly(); t.SnapIntoView();
+                }
+            }
         }
 
         // Rounded corners

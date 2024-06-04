@@ -57,7 +57,7 @@ namespace Bubbles
                 };
                 treeView.Nodes.Add(priproNode);
             }
-            else if (From == "ManageTools")
+            else if (From == "ManageTools" || From == "EditTool")
             {
                 var toolsNode = new TreeNode()
                 {

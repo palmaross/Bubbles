@@ -83,15 +83,26 @@ namespace Bubbles
                     Directory.CreateDirectory(m_dataPath + "Demos");
                 if (!Directory.Exists(m_dataPath + "SoundDB"))
                     Directory.CreateDirectory(m_dataPath + "SoundDB");
+                if (!Directory.Exists(m_dataPath + "ToolStixApps"))
+                    Directory.CreateDirectory(m_dataPath + "ToolStixApps");
+                if (!Directory.Exists(m_dataPath + "AppIconDB"))
+                    Directory.CreateDirectory(m_dataPath + "AppIconDB");
+
+                File.Copy(dllPath + "Resources\\AppsToIgnore.txt", m_dataPath + "AppsToIgnore.txt", false);
+
+                di = new DirectoryInfo(dllPath + "Resources\\ToolStixApps");
+                foreach (var file in di.GetFiles())
+                    File.Copy(file.FullName, m_dataPath + "ToolStixApps\\" + file.Name, false);
+
+                di = new DirectoryInfo(dllPath + "images\\AppIconDB");
+                foreach (var file in di.GetFiles())
+                    File.Copy(file.FullName, m_dataPath + "AppIconDB\\" + file.Name, false);
 
                 m_iconDB = m_dataPath + "IconDB\\";
 
                 string from = dllPath + "\\Images\\", to = m_dataPath + "ImageDB\\";
-                if (!File.Exists(to + "hello1.png"))
-                    File.Copy(from + "hello1.png", to + "hello1.png");
-                if (!File.Exists(to + "pato.gif"))
-                    File.Copy(from + "pato.gif", to + "pato.gif");
-
+                File.Copy(from + "hello1.png", to + "hello1.png", false);
+                File.Copy(from + "pato.gif", to + "pato.gif", false);
             }
             catch { };
 
@@ -397,21 +408,27 @@ namespace Bubbles
         public static Image GetFavicon(string url)
         {
             Image img = null; Image ico = null;
-
-            HttpWebRequest w = (HttpWebRequest)WebRequest
+            HttpWebRequest w = null;
+            try
+            {
+                w = (HttpWebRequest)WebRequest
                     .Create("https://www.google.com/s2/favicons?sz=32&domain_url=" + url);
+            }
+            catch { }
 
             if (w != null)
             {
                 w.AllowAutoRedirect = true;
 
-                HttpWebResponse r = (HttpWebResponse)w.GetResponse();
-
-                using (Stream s = r.GetResponseStream())
+                try
                 {
-                    try { ico = Image.FromStream(s); }
-                    catch { img = http; }
-                }
+                    HttpWebResponse r = (HttpWebResponse)w.GetResponse();
+                    using (Stream s = r.GetResponseStream())
+                    {
+                        try { ico = Image.FromStream(s); }
+                        catch { img = http; }
+                    }
+                } catch { return http; }
             }
 
             if (ico == null) img = http;
