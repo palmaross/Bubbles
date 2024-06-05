@@ -701,7 +701,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            <rows ></>
                         </>
                      </>
-                     <_ tag = 0 id = copy disabled = 1 >
+                     <_ tag = 0 id = copy disabled = 0 >
                         <desc ></>
                         <srcpath >inst</>
                         <name >lang-resources\#clang#\Resources</>

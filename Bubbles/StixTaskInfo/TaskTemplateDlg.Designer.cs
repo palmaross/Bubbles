@@ -266,7 +266,7 @@
             // lblTagGroup
             // 
             this.lblTagGroup.AutoSize = true;
-            this.lblTagGroup.Location = new System.Drawing.Point(110, 303);
+            this.lblTagGroup.Location = new System.Drawing.Point(110, 302);
             this.lblTagGroup.Name = "lblTagGroup";
             this.lblTagGroup.Size = new System.Drawing.Size(45, 13);
             this.lblTagGroup.TabIndex = 22;
@@ -275,7 +275,7 @@
             // lblTag
             // 
             this.lblTag.AutoSize = true;
-            this.lblTag.Location = new System.Drawing.Point(231, 303);
+            this.lblTag.Location = new System.Drawing.Point(231, 302);
             this.lblTag.Name = "lblTag";
             this.lblTag.Size = new System.Drawing.Size(28, 13);
             this.lblTag.TabIndex = 23;

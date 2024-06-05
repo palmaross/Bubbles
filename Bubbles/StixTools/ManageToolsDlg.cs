@@ -30,6 +30,7 @@ namespace Bubbles
             t_edittool.Text = Utils.getString("button.edit");
             t_remove.Text = Utils.getString("button.remove");
             t_run.Text = Utils.getString("tools.runtool.menu");
+            t_copytoomni.Text = Utils.getString("tools.copytoomni.menu");
             cmsTool.ItemClicked += CmsTool_ItemClicked;
 
             // Resizing window causes black strips...
@@ -203,6 +204,17 @@ namespace Bubbles
                 ToolItem item = selectedList.SelectedItems[0].Tag as ToolItem;
                 RunTool(item.Path);
             }
+            else if (e.ClickedItem == t_copytoomni)
+            {
+                // Copy tool to omni panel
+                ToolItem item = selectedList.SelectedItems[0].Tag as ToolItem;
+                ListViewItem lv = listOmniTools.Items.Add(item.Title);
+                lv.Tag = item;
+                lv.ImageIndex = selectedList.SelectedItems[0].ImageIndex;
+
+                // Fix in database
+                db.AddTool(item.Title, item.Tooltip, item.Path, item.Type, 0, 0);
+            }
         }
 
         private void listOmniTools_BeforeLabelEdit(object sender, LabelEditEventArgs e)
@@ -276,7 +288,9 @@ namespace Bubbles
                 string appUserModelID = app.ParsingName;
                 string appPath = app.Properties.System.Link.TargetParsingPath.Value;
 
-                if (AppToIgnore.Contains(appUserModelID) || AppToIgnore.Contains("WT_" + appUserModelID))
+                if (AppToIgnore.Contains(appUserModelID) || 
+                    AppToIgnore.Contains("WT_" + appUserModelID) ||
+                    AppToIgnore.Contains(appPath))
                     continue;
 
                 // App icon
@@ -309,7 +323,10 @@ namespace Bubbles
                         type = OmniTools.WindowsAppIcons[toolPath];
                     }
                     else
+                    {
                         appIcon = app.Thumbnail.Bitmap;
+                        type = "file";
+                    }
                 }
 
                 appIcon.MakeTransparent();
@@ -385,6 +402,7 @@ namespace Bubbles
                     item.Visible = true;
 
                 if (lv == listWindowsApps) t_edittool.Visible = false;
+                else t_copytoomni.Visible = false;
 
                 cmsTool.Show(MousePosition);
             }

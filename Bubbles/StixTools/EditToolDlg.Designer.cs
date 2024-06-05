@@ -85,7 +85,7 @@
             // lblTooltip
             // 
             this.lblTooltip.AutoSize = true;
-            this.lblTooltip.Location = new System.Drawing.Point(8, 66);
+            this.lblTooltip.Location = new System.Drawing.Point(8, 65);
             this.lblTooltip.Name = "lblTooltip";
             this.lblTooltip.Size = new System.Drawing.Size(209, 13);
             this.lblTooltip.TabIndex = 33;

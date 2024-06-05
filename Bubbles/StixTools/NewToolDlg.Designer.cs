@@ -99,7 +99,7 @@
             // lblTooltip
             // 
             this.lblTooltip.AutoSize = true;
-            this.lblTooltip.Location = new System.Drawing.Point(8, 171);
+            this.lblTooltip.Location = new System.Drawing.Point(8, 170);
             this.lblTooltip.Name = "lblTooltip";
             this.lblTooltip.Size = new System.Drawing.Size(209, 13);
             this.lblTooltip.TabIndex = 33;
@@ -166,7 +166,7 @@
             // lblSpecifyPath
             // 
             this.lblSpecifyPath.AutoSize = true;
-            this.lblSpecifyPath.Location = new System.Drawing.Point(7, 47);
+            this.lblSpecifyPath.Location = new System.Drawing.Point(7, 46);
             this.lblSpecifyPath.Name = "lblSpecifyPath";
             this.lblSpecifyPath.Size = new System.Drawing.Size(254, 13);
             this.lblSpecifyPath.TabIndex = 43;

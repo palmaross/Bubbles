@@ -83,7 +83,7 @@ namespace Bubbles
             treeView.Nodes.Add(CreateDirectoryNode(rootDirectoryInfo));
 
             // First node can be PriPro node (if from IconStix) or Custom Icons node 
-            if (From != "IconStix" && From != "ManageTools")
+            if (From != "IconStix" && From != "ManageTools" && From != "EditTool")
                 treeView.SelectedNode = treeView.Nodes[1];
             else // if from IconStix or Manage Tools window
                 treeView.SelectedNode = treeView.Nodes[2];

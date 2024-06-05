@@ -39,6 +39,7 @@
             this.t_edittool = new System.Windows.Forms.ToolStripMenuItem();
             this.t_remove = new System.Windows.Forms.ToolStripMenuItem();
             this.t_run = new System.Windows.Forms.ToolStripMenuItem();
+            this.t_copytoomni = new System.Windows.Forms.ToolStripMenuItem();
             this.splitPanel = new System.Windows.Forms.SplitContainer();
             this.listOmniTools = new System.Windows.Forms.ListView();
             this.btnAddToStix = new System.Windows.Forms.Button();
@@ -100,27 +101,34 @@
             this.cmsTool.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.t_edittool,
             this.t_remove,
-            this.t_run});
+            this.t_run,
+            this.t_copytoomni});
             this.cmsTool.Name = "cmsTool";
-            this.cmsTool.Size = new System.Drawing.Size(118, 70);
+            this.cmsTool.Size = new System.Drawing.Size(177, 92);
             // 
             // t_edittool
             // 
             this.t_edittool.Name = "t_edittool";
-            this.t_edittool.Size = new System.Drawing.Size(117, 22);
+            this.t_edittool.Size = new System.Drawing.Size(180, 22);
             this.t_edittool.Text = "Edit";
             // 
             // t_remove
             // 
             this.t_remove.Name = "t_remove";
-            this.t_remove.Size = new System.Drawing.Size(117, 22);
+            this.t_remove.Size = new System.Drawing.Size(180, 22);
             this.t_remove.Text = "Remove";
             // 
             // t_run
             // 
             this.t_run.Name = "t_run";
-            this.t_run.Size = new System.Drawing.Size(117, 22);
+            this.t_run.Size = new System.Drawing.Size(180, 22);
             this.t_run.Text = "Run";
+            // 
+            // t_copytoomni
+            // 
+            this.t_copytoomni.Name = "t_copytoomni";
+            this.t_copytoomni.Size = new System.Drawing.Size(176, 22);
+            this.t_copytoomni.Text = "Copy to OmniTools";
             // 
             // splitPanel
             // 
@@ -241,5 +249,6 @@
         public System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.ComboBox cbAddToStix;
         public System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.ToolStripMenuItem t_copytoomni;
     }
 }

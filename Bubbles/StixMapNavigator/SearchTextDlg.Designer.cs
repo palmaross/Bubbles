@@ -70,7 +70,7 @@
             this.listTopics.ItemHeight = 15;
             this.listTopics.Location = new System.Drawing.Point(2, 34);
             this.listTopics.Name = "listTopics";
-            this.listTopics.Size = new System.Drawing.Size(278, 84);
+            this.listTopics.Size = new System.Drawing.Size(287, 86);
             this.listTopics.TabIndex = 2;
             this.listTopics.SelectedIndexChanged += new System.EventHandler(this.listTopics_SelectedIndexChanged);
             // 
@@ -79,9 +79,9 @@
             this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSearch.Location = new System.Drawing.Point(166, 8);
+            this.txtSearch.Location = new System.Drawing.Point(167, 8);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(98, 21);
+            this.txtSearch.Size = new System.Drawing.Size(105, 21);
             this.txtSearch.TabIndex = 3;
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
@@ -89,7 +89,7 @@
             // 
             this.pClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pClose.Image = ((System.Drawing.Image)(resources.GetObject("pClose.Image")));
-            this.pClose.Location = new System.Drawing.Point(263, 1);
+            this.pClose.Location = new System.Drawing.Point(273, 1);
             this.pClose.Name = "pClose";
             this.pClose.Size = new System.Drawing.Size(16, 16);
             this.pClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -101,7 +101,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(280, 122);
+            this.ClientSize = new System.Drawing.Size(290, 122);
             this.Controls.Add(this.pClose);
             this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.listTopics);

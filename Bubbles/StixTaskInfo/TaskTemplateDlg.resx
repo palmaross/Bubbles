@@ -145,10 +145,10 @@
   </data>
   <data name="pIcon.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAIAAAAC64paAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAAJwAAACcAV01BYoAAAB/SURBVDhPtdTLDoAgDERRwv9/sokOGVKglFJfd2PUOQlx
-        YTpyPh8FmHjhfTySguUmmIwrRkHfzxpGW68GA0aOn19pjExvPjQwUtPVcWyMBKwkWmIE5kj0Dxbm+K8/
-        mDk1H2rsHHJ+NWBHMjVoeCtZP6s4KJmMC74lGcmL31DOF3oxXAV0PglsAAAAAElFTkSuQmCC
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAIAAAAC64paAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAA
+        nAAAAJwBXTUFigAAAH9JREFUOE+11MsOgCAMRFHC/3+yiQ4ZUqCUUl93Y9Q5CXFhOnI+HwWYeOF9PJKC
+        5SaYjCtGQd/PGkZbrwYDRo6fX2mMTG8+NDBS09VxbIwErCRaYgTmSPQPFub4rz+YOTUfauwccn41YEcy
+        NWh4K1k/qzgomYwLviUZyYvfUM4XejFcBXQ+CWwAAAAASUVORK5CYII=
 </value>
   </data>
   <metadata name="helpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -342,10 +342,10 @@
   </data>
   <data name="pIconDefault.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAIAAAAC64paAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAAJwAAACcAV01BYoAAAB/SURBVDhPtdTLDoAgDERRwv9/sokOGVKglFJfd2PUOQlx
-        YTpyPh8FmHjhfTySguUmmIwrRkHfzxpGW68GA0aOn19pjExvPjQwUtPVcWyMBKwkWmIE5kj0Dxbm+K8/
-        mDk1H2rsHHJ+NWBHMjVoeCtZP6s4KJmMC74lGcmL31DOF3oxXAV0PglsAAAAAElFTkSuQmCC
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAIAAAAC64paAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAA
+        nAAAAJwBXTUFigAAAH9JREFUOE+11MsOgCAMRFHC/3+yiQ4ZUqCUUl93Y9Q5CXFhOnI+HwWYeOF9PJKC
+        5SaYjCtGQd/PGkZbrwYDRo6fX2mMTG8+NDBS09VxbIwErCRaYgTmSPQPFub4rz+YOTUfauwccn41YEcy
+        NWh4K1k/qzgomYwLviUZyYvfUM4XejFcBXQ+CWwAAAAASUVORK5CYII=
 </value>
   </data>
   <data name="pCalendar.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

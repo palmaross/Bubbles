@@ -13,7 +13,6 @@ using System.Net;
 using Image = System.Drawing.Image;
 using System.Text.RegularExpressions;
 using System.Text;
-using System.Security.Cryptography;
 
 namespace Bubbles
 {
@@ -90,7 +89,7 @@ namespace Bubbles
                     Directory.CreateDirectory(m_dataPath + "AppIconDB");
 
                 if (!File.Exists(m_dataPath + "AppsToIgnore.txt"))
-                    File.Copy(dllPath + "Resources\\AppsToIgnore.txt", m_dataPath + "AppsToIgnore.txt");
+                    File.Copy(dllPath + "AppsToIgnore.txt", m_dataPath + "AppsToIgnore.txt");
 
                 di = new DirectoryInfo(dllPath + "Resources\\ToolStixApps");
                 foreach (var file in di.GetFiles())

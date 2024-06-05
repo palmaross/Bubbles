@@ -146,7 +146,7 @@ namespace Bubbles
             foreach (Topic t in MMUtils.ActiveDocument.CentralTopic.AllSubTopics)
             {
                 string topicText = t.Text;
-                if (topicText.Length > 60) topicText = topicText.Substring(0, 60);
+                if (topicText.Length > 50) topicText = topicText.Substring(0, 50);
 
                 tsi = cmsMainTopics.Items.Add(topicText);
                 tsi.Tag = t.Guid;
@@ -273,7 +273,7 @@ namespace Bubbles
                         PictureBox pb = SetPosition(item.Number);
                         pb.Tag = item;
                         string text = item.TopicName;
-                        if (text.Length > 100) text = text.Substring(0, 100);
+                        if (text.Length > 80) text = text.Substring(0, 80);
                         toolTip1.SetToolTip(pb, text);
                     }
                 }
@@ -291,7 +291,7 @@ namespace Bubbles
         void AddBookmarkToList(string topicText, string topicGuid)
         {
             string text = topicText;
-            if (text.Length > 60) text = text.Substring(0, 60);
+            if (text.Length > 50) text = text.Substring(0, 50);
             ToolStripItem tsi = cmsBookmarks.Items.Add(text);
             tsi.Name = "aBookmark"; tsi.Tag = topicGuid;
             tsi.MouseDown += Bookmark_MouseDown;
@@ -448,7 +448,7 @@ namespace Bubbles
 
             string topicText = t.Text;
             string text = topicText;
-            if (text.Length > 100) text = text.Substring(0, 100);
+            if (text.Length > 80) text = text.Substring(0, 80);
 
             var position = DocumentPositions[docGuid].Find(x => x.TopicGuid == topicGuid);
             var bookmark = DocumentBookmarks[docGuid].Find(x => x.TopicGuid == topicGuid);
@@ -702,7 +702,7 @@ namespace Bubbles
             if (t == null) return;
 
             string topictext = t.Text;
-            if (topictext.Length > 100) topictext = topictext.Substring(0, 100);
+            if (topictext.Length > 80) topictext = topictext.Substring(0, 80);
 
             var item = DocumentPositions[MMUtils.ActiveDocument.Guid].Find(y => y.TopicGuid == t.Guid);
 
