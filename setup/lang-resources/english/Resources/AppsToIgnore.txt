@@ -43,3 +43,12 @@ Microsoft.Getstarted_8wekyb3d8bbwe!App
 Microsoft.WindowsTerminal_8wekyb3d8bbwe!App
 Microsoft.GetHelp_8wekyb3d8bbwe!App
 Microsoft.WindowsFeedbackHub_8wekyb3d8bbwe!App
+C:\Program Files (x86)\Glary Utilities\uninst.exe
+C:\Program Files\Microsoft Office\root\Client\AppVLP.exe
+WT_{7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E}\Glary Utilities\Website.url
+C:\Program Files\Microsoft Office\root\Client\AppVLP.exe
+C:\Program Files (x86)\Glary Utilities\uninst.exe
+WT_Microsoft.MicrosoftSolitaireCollection_8wekyb3d8bbwe!App
+C:\Program Files\Microsoft Office\root\Client\AppVLP.exe
+C:\Program Files (x86)\Glary Utilities\uninst.exe
+C:\Program Files (x86)\Glary Utilities\uninst.exe

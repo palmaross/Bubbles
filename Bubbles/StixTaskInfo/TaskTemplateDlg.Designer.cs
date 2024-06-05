@@ -94,11 +94,11 @@
             this.lblDueDate = new System.Windows.Forms.Label();
             this.mutDueDate = new System.Windows.Forms.PictureBox();
             this.lblResources = new System.Windows.Forms.Label();
-            this.chResources = new System.Windows.Forms.PictureBox();
+            this.ch4Resources = new System.Windows.Forms.PictureBox();
             this.lblIcon = new System.Windows.Forms.Label();
-            this.chIcon = new System.Windows.Forms.PictureBox();
+            this.ch4Icon = new System.Windows.Forms.PictureBox();
             this.lblTags = new System.Windows.Forms.Label();
-            this.chTags = new System.Windows.Forms.PictureBox();
+            this.ch4Tags = new System.Windows.Forms.PictureBox();
             this.mutEffort = new System.Windows.Forms.PictureBox();
             this.lblEffort = new System.Windows.Forms.Label();
             this.cbEffortUnits = new System.Windows.Forms.ComboBox();
@@ -107,6 +107,8 @@
             this.mutDuration = new System.Windows.Forms.PictureBox();
             this.lblDuration = new System.Windows.Forms.Label();
             this.cbDurationUnits = new System.Windows.Forms.ComboBox();
+            this.pIcon2 = new System.Windows.Forms.PictureBox();
+            this.pIcon3 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pProgress)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pPriority)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIcon)).BeginInit();
@@ -140,13 +142,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.mutPriority)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mutStartDate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mutDueDate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chResources)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chIcon)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ch4Resources)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ch4Icon)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ch4Tags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mutEffort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numEffort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDuration)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mutDuration)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pIcon2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pIcon3)).BeginInit();
             this.SuspendLayout();
             // 
             // cbTaskTemplates
@@ -227,17 +231,16 @@
             this.pIcon.TabIndex = 10;
             this.pIcon.TabStop = false;
             this.pIcon.Tag = "stockquestion-mark";
-            this.pIcon.Click += new System.EventHandler(this.pIcon_Click);
+            this.pIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.QuickTaskIcon_MouseClick);
             // 
             // lblChangeIcon
             // 
-            this.lblChangeIcon.AutoSize = true;
             this.lblChangeIcon.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblChangeIcon.Location = new System.Drawing.Point(136, 277);
+            this.lblChangeIcon.Location = new System.Drawing.Point(182, 270);
             this.lblChangeIcon.Name = "lblChangeIcon";
-            this.lblChangeIcon.Size = new System.Drawing.Size(104, 13);
+            this.lblChangeIcon.Size = new System.Drawing.Size(165, 26);
             this.lblChangeIcon.TabIndex = 11;
-            this.lblChangeIcon.Text = "Click to change icon";
+            this.lblChangeIcon.Text = "Click on icon to change it.\r\nRight-click on icon to clear it.";
             // 
             // txtResources
             // 
@@ -616,7 +619,7 @@
             // pIconDefault
             // 
             this.pIconDefault.Image = ((System.Drawing.Image)(resources.GetObject("pIconDefault.Image")));
-            this.pIconDefault.Location = new System.Drawing.Point(269, 275);
+            this.pIconDefault.Location = new System.Drawing.Point(291, 297);
             this.pIconDefault.Name = "pIconDefault";
             this.pIconDefault.Size = new System.Drawing.Size(16, 16);
             this.pIconDefault.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -827,40 +830,40 @@
             this.lblResources.Text = "Resources:";
             this.lblResources.MouseClick += new System.Windows.Forms.MouseEventHandler(this.FourStateCB_MouseClick);
             // 
-            // chResources
+            // ch4Resources
             // 
-            this.chResources.Image = ((System.Drawing.Image)(resources.GetObject("chResources.Image")));
-            this.chResources.Location = new System.Drawing.Point(11, 246);
-            this.chResources.Name = "chResources";
-            this.chResources.Size = new System.Drawing.Size(16, 16);
-            this.chResources.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.chResources.TabIndex = 106;
-            this.chResources.TabStop = false;
-            this.chResources.Tag = "";
-            this.chResources.MouseClick += new System.Windows.Forms.MouseEventHandler(this.FourStateCB_MouseClick);
+            this.ch4Resources.Image = ((System.Drawing.Image)(resources.GetObject("ch4Resources.Image")));
+            this.ch4Resources.Location = new System.Drawing.Point(11, 246);
+            this.ch4Resources.Name = "ch4Resources";
+            this.ch4Resources.Size = new System.Drawing.Size(16, 16);
+            this.ch4Resources.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ch4Resources.TabIndex = 106;
+            this.ch4Resources.TabStop = false;
+            this.ch4Resources.Tag = "";
+            this.ch4Resources.MouseClick += new System.Windows.Forms.MouseEventHandler(this.FourStateCB_MouseClick);
             // 
             // lblIcon
             // 
             this.lblIcon.AutoSize = true;
             this.lblIcon.Location = new System.Drawing.Point(30, 276);
             this.lblIcon.Name = "lblIcon";
-            this.lblIcon.Size = new System.Drawing.Size(31, 13);
+            this.lblIcon.Size = new System.Drawing.Size(36, 13);
             this.lblIcon.TabIndex = 107;
             this.lblIcon.Tag = "";
-            this.lblIcon.Text = "Icon:";
+            this.lblIcon.Text = "Icons:";
             this.lblIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.FourStateCB_MouseClick);
             // 
-            // chIcon
+            // ch4Icon
             // 
-            this.chIcon.Image = ((System.Drawing.Image)(resources.GetObject("chIcon.Image")));
-            this.chIcon.Location = new System.Drawing.Point(11, 274);
-            this.chIcon.Name = "chIcon";
-            this.chIcon.Size = new System.Drawing.Size(16, 16);
-            this.chIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.chIcon.TabIndex = 108;
-            this.chIcon.TabStop = false;
-            this.chIcon.Tag = "";
-            this.chIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.FourStateCB_MouseClick);
+            this.ch4Icon.Image = ((System.Drawing.Image)(resources.GetObject("ch4Icon.Image")));
+            this.ch4Icon.Location = new System.Drawing.Point(11, 274);
+            this.ch4Icon.Name = "ch4Icon";
+            this.ch4Icon.Size = new System.Drawing.Size(16, 16);
+            this.ch4Icon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ch4Icon.TabIndex = 108;
+            this.ch4Icon.TabStop = false;
+            this.ch4Icon.Tag = "";
+            this.ch4Icon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.FourStateCB_MouseClick);
             // 
             // lblTags
             // 
@@ -873,17 +876,17 @@
             this.lblTags.Text = "Tags:";
             this.lblTags.MouseClick += new System.Windows.Forms.MouseEventHandler(this.FourStateCB_MouseClick);
             // 
-            // chTags
+            // ch4Tags
             // 
-            this.chTags.Image = ((System.Drawing.Image)(resources.GetObject("chTags.Image")));
-            this.chTags.Location = new System.Drawing.Point(11, 332);
-            this.chTags.Name = "chTags";
-            this.chTags.Size = new System.Drawing.Size(16, 16);
-            this.chTags.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.chTags.TabIndex = 110;
-            this.chTags.TabStop = false;
-            this.chTags.Tag = "";
-            this.chTags.MouseClick += new System.Windows.Forms.MouseEventHandler(this.FourStateCB_MouseClick);
+            this.ch4Tags.Image = ((System.Drawing.Image)(resources.GetObject("ch4Tags.Image")));
+            this.ch4Tags.Location = new System.Drawing.Point(11, 332);
+            this.ch4Tags.Name = "ch4Tags";
+            this.ch4Tags.Size = new System.Drawing.Size(16, 16);
+            this.ch4Tags.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ch4Tags.TabIndex = 110;
+            this.ch4Tags.TabStop = false;
+            this.ch4Tags.Tag = "";
+            this.ch4Tags.MouseClick += new System.Windows.Forms.MouseEventHandler(this.FourStateCB_MouseClick);
             // 
             // mutEffort
             // 
@@ -895,7 +898,7 @@
             this.mutEffort.TabIndex = 113;
             this.mutEffort.TabStop = false;
             this.mutEffort.Tag = "";
-            this.mutEffort.Click += new System.EventHandler(this.mutEffort_Click);
+            this.mutEffort.MouseClick += new System.Windows.Forms.MouseEventHandler(this.FourStateCB_MouseClick);
             // 
             // lblEffort
             // 
@@ -906,7 +909,7 @@
             this.lblEffort.TabIndex = 112;
             this.lblEffort.Tag = "";
             this.lblEffort.Text = "Трудозатраты:";
-            this.lblEffort.Click += new System.EventHandler(this.mutEffort_Click);
+            this.lblEffort.MouseClick += new System.Windows.Forms.MouseEventHandler(this.FourStateCB_MouseClick);
             // 
             // cbEffortUnits
             // 
@@ -986,11 +989,35 @@
             this.cbDurationUnits.Size = new System.Drawing.Size(104, 21);
             this.cbDurationUnits.TabIndex = 115;
             // 
+            // pIcon2
+            // 
+            this.pIcon2.Image = ((System.Drawing.Image)(resources.GetObject("pIcon2.Image")));
+            this.pIcon2.Location = new System.Drawing.Point(135, 275);
+            this.pIcon2.Name = "pIcon2";
+            this.pIcon2.Size = new System.Drawing.Size(16, 16);
+            this.pIcon2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pIcon2.TabIndex = 119;
+            this.pIcon2.TabStop = false;
+            this.pIcon2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.QuickTaskIcon_MouseClick);
+            // 
+            // pIcon3
+            // 
+            this.pIcon3.Image = ((System.Drawing.Image)(resources.GetObject("pIcon3.Image")));
+            this.pIcon3.Location = new System.Drawing.Point(159, 275);
+            this.pIcon3.Name = "pIcon3";
+            this.pIcon3.Size = new System.Drawing.Size(16, 16);
+            this.pIcon3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pIcon3.TabIndex = 120;
+            this.pIcon3.TabStop = false;
+            this.pIcon3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.QuickTaskIcon_MouseClick);
+            // 
             // TaskTemplateDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(358, 415);
+            this.Controls.Add(this.pIcon3);
+            this.Controls.Add(this.pIcon2);
             this.Controls.Add(this.numDuration);
             this.Controls.Add(this.mutDuration);
             this.Controls.Add(this.lblDuration);
@@ -999,12 +1026,12 @@
             this.Controls.Add(this.mutEffort);
             this.Controls.Add(this.lblEffort);
             this.Controls.Add(this.cbEffortUnits);
-            this.Controls.Add(this.chTags);
+            this.Controls.Add(this.ch4Tags);
             this.Controls.Add(this.lblTags);
-            this.Controls.Add(this.chIcon);
+            this.Controls.Add(this.ch4Icon);
             this.Controls.Add(this.lblIcon);
             this.Controls.Add(this.dtpDueDate);
-            this.Controls.Add(this.chResources);
+            this.Controls.Add(this.ch4Resources);
             this.Controls.Add(this.lblResources);
             this.Controls.Add(this.mutDueDate);
             this.Controls.Add(this.lblDueDate);
@@ -1105,13 +1132,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.mutPriority)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mutStartDate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mutDueDate)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chResources)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chIcon)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ch4Resources)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ch4Icon)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ch4Tags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mutEffort)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numEffort)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDuration)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mutDuration)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pIcon2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pIcon3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1182,11 +1211,11 @@
         private System.Windows.Forms.Label lblDueDate;
         private System.Windows.Forms.PictureBox mutDueDate;
         private System.Windows.Forms.Label lblResources;
-        private System.Windows.Forms.PictureBox chResources;
+        private System.Windows.Forms.PictureBox ch4Resources;
         private System.Windows.Forms.Label lblIcon;
-        private System.Windows.Forms.PictureBox chIcon;
+        private System.Windows.Forms.PictureBox ch4Icon;
         private System.Windows.Forms.Label lblTags;
-        private System.Windows.Forms.PictureBox chTags;
+        private System.Windows.Forms.PictureBox ch4Tags;
         private System.Windows.Forms.PictureBox mutEffort;
         private System.Windows.Forms.Label lblEffort;
         private System.Windows.Forms.ComboBox cbEffortUnits;
@@ -1195,5 +1224,7 @@
         private System.Windows.Forms.PictureBox mutDuration;
         private System.Windows.Forms.Label lblDuration;
         private System.Windows.Forms.ComboBox cbDurationUnits;
+        private System.Windows.Forms.PictureBox pIcon2;
+        private System.Windows.Forms.PictureBox pIcon3;
     }
 }

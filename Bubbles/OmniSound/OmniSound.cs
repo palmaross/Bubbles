@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Collections;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using PRAManager;
@@ -10,13 +8,12 @@ using Color = System.Drawing.Color;
 using Mindjet.MindManager.Interop;
 using AppManager;
 using System.Linq;
-using System.IO.Compression;
-using System.Net.Mail;
 
 namespace Bubbles
 {
     public partial class OmniSound : Form
     {
+        // Try the https://www.nuget.org/packages/naudio !!!
         public OmniSound()
         {
             InitializeComponent();

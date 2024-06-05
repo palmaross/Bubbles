@@ -18,6 +18,7 @@ namespace Bubbles
             InitializeComponent();
 
             this.Tag = ID;
+            StixName = stickname;
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
@@ -313,8 +314,8 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_renamestick")
             {
-                string newName = StixUtils.GetName(this, orientation, StixUtils.typetools, 
-                    toolTip1.GetToolTip(pictureHandle), true);
+                string newName = StixUtils.GetName(this, orientation, StixUtils.typetools,
+                    StixName, true);
                 if (newName != "") toolTip1.SetToolTip(pictureHandle, newName);
             }
             else if (e.ClickedItem.Name == "BI_delete_stick")
@@ -645,7 +646,7 @@ namespace Bubbles
         string orientation = "H";
 
         ToolListDlg aToolList = null;
-        MapContentDlg aNavigationDlg = null;
+        string StixName = "";
 
         int MinLength;
         public float scaleFactor = 100;

@@ -13,6 +13,7 @@ using System.Net;
 using Image = System.Drawing.Image;
 using System.Text.RegularExpressions;
 using System.Text;
+using System.Security.Cryptography;
 
 namespace Bubbles
 {
@@ -88,21 +89,30 @@ namespace Bubbles
                 if (!Directory.Exists(m_dataPath + "AppIconDB"))
                     Directory.CreateDirectory(m_dataPath + "AppIconDB");
 
-                File.Copy(dllPath + "Resources\\AppsToIgnore.txt", m_dataPath + "AppsToIgnore.txt", false);
+                if (!File.Exists(m_dataPath + "AppsToIgnore.txt"))
+                    File.Copy(dllPath + "Resources\\AppsToIgnore.txt", m_dataPath + "AppsToIgnore.txt");
 
                 di = new DirectoryInfo(dllPath + "Resources\\ToolStixApps");
                 foreach (var file in di.GetFiles())
-                    File.Copy(file.FullName, m_dataPath + "ToolStixApps\\" + file.Name, false);
+                {
+                    string dest = m_dataPath + "ToolStixApps\\" + file.Name;
+                    if (!File.Exists(dest)) File.Copy(file.FullName, dest);
+                }
 
                 di = new DirectoryInfo(dllPath + "images\\AppIconDB");
                 foreach (var file in di.GetFiles())
-                    File.Copy(file.FullName, m_dataPath + "AppIconDB\\" + file.Name, false);
+                {
+                    string dest = m_dataPath + "AppIconDB\\" + file.Name;
+                    if (!File.Exists(dest)) File.Copy(file.FullName, dest);
+                }
 
                 m_iconDB = m_dataPath + "IconDB\\";
 
                 string from = dllPath + "\\Images\\", to = m_dataPath + "ImageDB\\";
-                File.Copy(from + "hello1.png", to + "hello1.png", false);
-                File.Copy(from + "pato.gif", to + "pato.gif", false);
+                if (!File.Exists(to + "hello1.png"))
+                    File.Copy(from + "hello1.png", to + "hello1.png");
+                if (!File.Exists(to + "pato.gif"))
+                    File.Copy(from + "pato.gif", to + "pato.gif");
             }
             catch { };
 

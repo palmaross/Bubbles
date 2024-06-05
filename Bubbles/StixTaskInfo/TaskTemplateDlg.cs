@@ -87,6 +87,12 @@ namespace Bubbles
 
             db = new StixDB();
 
+            foreach (PictureBox pb in this.Controls.OfType<PictureBox>())
+            {
+                if (pb.Name.StartsWith("mut") || pb.Name.StartsWith("ch4"))
+                    toolTip1.SetToolTip(pb, Utils.getString("quicktask.unchecked"));
+            }
+
             DataTable dt = db.ExecuteQuery("select * from TASKTEMPLATES order by name");
             foreach (DataRow row in dt.Rows)
             {
@@ -127,26 +133,30 @@ namespace Bubbles
                 if (duration != "")
                 {
                     parts = duration.Split(':');
-                    if (parts.Length == 3) { 
-                        durationState = parts[0]; duration = parts[1] + ":" + parts[2]; }
+                    if (parts.Length == 3)
+                    {
+                        durationState = parts[0]; duration = parts[1] + ":" + parts[2];
+                    }
                 }
 
                 string effort = row["effort"].ToString();
                 if (effort != "")
                 {
                     parts = effort.Split(':');
-                    if (parts.Length == 3) { 
-                        effortState = parts[0]; effort = parts[1] + ":" + parts[2]; }
+                    if (parts.Length == 3)
+                    {
+                        effortState = parts[0]; effort = parts[1] + ":" + parts[2];
+                    }
                 }
 
                 string icon = row["icon"].ToString(); parts = icon.Split(':');
-                if (parts.Length > 1) { iconState = parts[0]; icon = parts[1]; chIcon.Tag = iconState; }
+                if (parts.Length > 1) { iconState = parts[0]; icon = parts[1]; ch4Icon.Tag = iconState; }
 
                 string resources = row["resources"].ToString(); parts = resources.Split(':');
-                if (parts.Length > 1) { resourcesState = parts[0]; resources = parts[1]; chResources.Tag = resourcesState; }
+                if (parts.Length > 1) { resourcesState = parts[0]; resources = parts[1]; ch4Resources.Tag = resourcesState; }
 
                 string tags = row["tags"].ToString(); parts = tags.Split(':');
-                if (parts.Length > 1) { tagsState = parts[0]; tags = parts[1]; chTags.Tag = tagsState; }
+                if (parts.Length > 1) { tagsState = parts[0]; tags = parts[1]; ch4Tags.Tag = tagsState; }
 
                 TaskTemplateItem item = new TaskTemplateItem(Convert.ToInt32(row["prime"]), row["name"].ToString(),
                     topictext, _progress, _priority, dates, duration, effort, icon, resources, tags,
@@ -348,11 +358,21 @@ namespace Bubbles
                     item.TopicTextState == "uncheckedred" ? pUncheckedRed.Image : pCheckedRed.Image;
                 mutTopicText.Tag = item.TopicTextState;
 
+                string tooltip = item.TopicTextState;
+                if (tooltip == "") tooltip = "unchecked";
+                tooltip = "quicktask." + tooltip;
+                toolTip1.SetToolTip(mutTopicText, Utils.getString(tooltip));
+
                 mutProgress.Image =
                     item.ProgressState == "" ? pUnchecked.Image :
                     item.ProgressState == "checked" ? pChecked.Image :
                     item.ProgressState == "uncheckedred" ? pUncheckedRed.Image : pCheckedRed.Image;
                 mutProgress.Tag = item.ProgressState;
+
+                tooltip = item.ProgressState;
+                if (tooltip == "") tooltip = "unchecked";
+                tooltip = "quicktask." + tooltip;
+                toolTip1.SetToolTip(mutProgress, Utils.getString(tooltip));
 
                 mutPriority.Image =
                     item.PriorityState == "" ? pUnchecked.Image :
@@ -360,11 +380,21 @@ namespace Bubbles
                     item.PriorityState == "uncheckedred" ? pUncheckedRed.Image : pCheckedRed.Image;
                 mutPriority.Tag = item.PriorityState;
 
+                tooltip = item.PriorityState;
+                if (tooltip == "") tooltip = "unchecked";
+                tooltip = "quicktask." + tooltip;
+                toolTip1.SetToolTip(mutPriority, Utils.getString(tooltip));
+
                 mutStartDate.Image =
                     item.StartDateState == "" ? pUnchecked.Image :
                     item.StartDateState == "checked" ? pChecked.Image :
                     item.StartDateState == "uncheckedred" ? pUncheckedRed.Image : pCheckedRed.Image;
                 mutStartDate.Tag = item.StartDateState;
+
+                tooltip = item.StartDateState;
+                if (tooltip == "") tooltip = "unchecked";
+                tooltip = "quicktask." + tooltip;
+                toolTip1.SetToolTip(mutStartDate, Utils.getString(tooltip));
 
                 mutDueDate.Image =
                     item.DueDateState == "" ? pUnchecked.Image :
@@ -372,29 +402,57 @@ namespace Bubbles
                     item.DueDateState == "uncheckedred" ? pUncheckedRed.Image : pCheckedRed.Image;
                 mutDueDate.Tag = item.DueDateState;
 
+                tooltip = item.DueDateState;
+                if (tooltip == "") tooltip = "unchecked";
+                tooltip = "quicktask." + tooltip;
+                toolTip1.SetToolTip(mutDueDate, Utils.getString(tooltip));
+
                 mutDuration.Image = item.DurationState == "" ? pUnchecked.Image : pChecked.Image;
                 mutDuration.Tag = item.DurationState;
+                tooltip = item.DurationState;
+                if (tooltip == "") tooltip = "unchecked";
+                tooltip = "quicktask." + tooltip;
+                toolTip1.SetToolTip(mutDuration, Utils.getString(tooltip));
 
                 mutEffort.Image = item.EffortState == "" ? pUnchecked.Image : pChecked.Image;
                 mutEffort.Tag = item.EffortState;
+                tooltip = item.EffortState;
+                if (tooltip == "") tooltip = "unchecked";
+                tooltip = "quicktask." + tooltip;
+                toolTip1.SetToolTip(mutEffort, Utils.getString(tooltip));
 
-                chResources.Image =
+                ch4Resources.Image =
                     item.ResourcesState == "" ? pUnchecked.Image :
                     item.ResourcesState == "checked" ? pChecked.Image :
                     item.ResourcesState == "uncheckedred" ? pUncheckedRed.Image : pCheckedRed.Image;
-                chResources.Tag = item.ResourcesState;
+                ch4Resources.Tag = item.ResourcesState;
 
-                chIcon.Image =
+                tooltip = item.ResourcesState;
+                if (tooltip == "") tooltip = "unchecked";
+                tooltip = "quicktask." + tooltip;
+                toolTip1.SetToolTip(ch4Resources, Utils.getString(tooltip));
+
+                ch4Icon.Image =
                     item.IconState == "" ? pUnchecked.Image :
                     item.IconState == "checked" ? pChecked.Image :
                     item.IconState == "uncheckedred" ? pUncheckedRed.Image : pCheckedRed.Image;
-                chIcon.Tag = item.IconState;
+                ch4Icon.Tag = item.IconState;
 
-                chTags.Image =
+                tooltip = item.IconState;
+                if (tooltip == "") tooltip = "unchecked";
+                tooltip = "quicktask." + tooltip;
+                toolTip1.SetToolTip(ch4Icon, Utils.getString(tooltip));
+
+                ch4Tags.Image =
                     item.TagsState == "" ? pUnchecked.Image :
                     item.TagsState == "checked" ? pChecked.Image :
                     item.TagsState == "uncheckedred" ? pUncheckedRed.Image : pCheckedRed.Image;
-                chTags.Tag = item.TagsState;
+                ch4Tags.Tag = item.TagsState;
+
+                tooltip = item.TagsState;
+                if (tooltip == "") tooltip = "unchecked";
+                tooltip = "quicktask." + tooltip;
+                toolTip1.SetToolTip(ch4Tags, Utils.getString(tooltip));
 
                 txtTopicText.Text = item.TopicText;
 
@@ -507,29 +565,49 @@ namespace Bubbles
 
                 if (item.aIcon != "")
                 {
-                    string filename = item.aIcon;
-                    string path = "";
+                    string[] icons = item.aIcon.Split(';');
 
-                    if (filename.StartsWith("stock"))
+                    for (int i = 0; i < icons.Length; i++)
                     {
-                        path = MMUtils.MindManager.GetPath(Mindjet.MindManager.Interop.MmDirectory.mmDirectoryIcons);
-                        path += filename.Substring(5) + ".ico"; // stockemail -> email.ico
-                    }
-                    else
-                    {
-                        if (Utils.CustomIcons.ContainsKey(filename))
-                            path = Utils.CustomIcons[filename];
-                    }
+                        string filename = icons[i];
+                        string path = "";
 
-                    if (File.Exists(path))
-                    {
-                        pIcon.Image = System.Drawing.Image.FromFile(path);
-                        pIcon.Tag = filename;
+                        if (filename.StartsWith("stock"))
+                        {
+                            path = MMUtils.MindManager.GetPath(Mindjet.MindManager.Interop.MmDirectory.mmDirectoryIcons);
+                            path += filename.Substring(5) + ".ico"; // stockemail -> email.ico
+                        }
+                        else
+                        {
+                            if (Utils.CustomIcons.ContainsKey(filename))
+                                path = Utils.CustomIcons[filename];
+                        }
+
+                        if (File.Exists(path))
+                        {
+                            if (i == 0)
+                            {
+                                pIcon.Image = System.Drawing.Image.FromFile(path);
+                                pIcon.Tag = filename;
+                            }
+                            else if (i == 1)
+                            {
+                                pIcon2.Image = System.Drawing.Image.FromFile(path);
+                                pIcon2.Tag = filename;
+                            }
+                            else if (i == 2)
+                            {
+                                pIcon3.Image = System.Drawing.Image.FromFile(path);
+                                pIcon3.Tag = filename;
+                            }
+                        }
                     }
                 }
                 else
                 {
                     pIcon.Image = pIconDefault.Image; pIcon.Tag = "stockquestion-mark";
+                    pIcon2.Image = pIconDefault.Image; pIcon.Tag = "";
+                    pIcon3.Image = pIconDefault.Image; pIcon.Tag = "";
                 }
                 if (item.Tags != "")
                 {
@@ -591,7 +669,8 @@ namespace Bubbles
             item.Progress = Convert.ToInt32(pProgress.Tag);
             item.Priority = Convert.ToInt32(pPriority.Tag);
             item.Resources = txtResources.Text.Trim();
-            item.aIcon = (string)pIcon.Tag;
+            string icons = (string)pIcon.Tag + ";" + (string)pIcon2.Tag + ";" + (string)pIcon3.Tag;
+            item.aIcon = icons.Trim(';').Replace(";;", ";");
 
             item.Duration = numDuration.Value + ":" + cbDurationUnits.SelectedIndex;
             string duration = mutDuration.Tag.ToString() == "" ? "" : "checked:";
@@ -601,7 +680,7 @@ namespace Bubbles
             string effort = mutEffort.Tag.ToString() == "" ? "" : "checked:";
             effort += item.Effort;
 
-            string startdate = "", duedate = "";
+            string startdate, duedate;
 
             if ((string)pStartPlace.Tag == "period") // calendar is shown
             {
@@ -628,13 +707,17 @@ namespace Bubbles
             string tag1 = "", tag2 = "", tags = "";
             if (txtTagGroup1.Text != "" && txtTag1.Text != "")
                 tag1 = txtTagGroup1.Text.Trim() + ":" + txtTag1.Text.Trim();
-            else { 
-                txtTagGroup1.Text = ""; txtTag1.Text = ""; }
+            else
+            {
+                txtTagGroup1.Text = ""; txtTag1.Text = "";
+            }
 
             if (txtTagGroup2.Text != "" && txtTag2.Text != "")
                 tag2 = txtTagGroup2.Text.Trim() + ":" + txtTag2.Text.Trim();
-            else {
-                txtTagGroup2.Text = ""; txtTag2.Text = ""; }
+            else
+            {
+                txtTagGroup2.Text = ""; txtTag2.Text = "";
+            }
 
             if (tag1 != "") tags = tag1;
             if (tag2 != "")
@@ -652,11 +735,11 @@ namespace Bubbles
             item.DueDateState = (string)mutDueDate.Tag;
             item.DurationState = (string)mutDuration.Tag;
             item.EffortState = (string)mutEffort.Tag;
-            item.ResourcesState = (string)chResources.Tag;
-            item.IconState = (string)chIcon.Tag;
-            item.TagsState = (string)chTags.Tag;
+            item.ResourcesState = (string)ch4Resources.Tag;
+            item.IconState = (string)ch4Icon.Tag;
+            item.TagsState = (string)ch4Tags.Tag;
 
-            string topictext = item.TopicText; if (item.TopicTextState != "") 
+            string topictext = item.TopicText; if (item.TopicTextState != "")
                 topictext = (string)mutTopicText.Tag + "$$$" + topictext;
             string progress = item.Progress.ToString(); if ((string)mutProgress.Tag != "")
                 progress = (string)mutProgress.Tag + ":" + progress;
@@ -665,13 +748,13 @@ namespace Bubbles
 
             string state = (string)mutStartDate.Tag + ":" + (string)mutDueDate.Tag;
             if (state == ":") state = "";
-            string dates = item.Dates.ToString(); 
+            string dates = item.Dates.ToString();
             if (state != "") dates = state + "$$$" + dates;
 
-            string resources = item.Resources.ToString(); if ((string)chResources.Tag != "")
-                resources = (string)chResources.Tag + ":" + resources;
-            string _tags = item.Tags.ToString(); if ((string)chTags.Tag != "")
-                _tags = (string)chTags.Tag + ";" + _tags;
+            string resources = item.Resources.ToString(); if ((string)ch4Resources.Tag != "")
+                resources = (string)ch4Resources.Tag + ":" + resources;
+            string _tags = item.Tags.ToString(); if ((string)ch4Tags.Tag != "")
+                _tags = (string)ch4Tags.Tag + ";" + _tags;
             string icon = item.aIcon.ToString(); if (item.IconState != "")
                 icon = item.IconState + ":" + icon;
 
@@ -718,29 +801,39 @@ namespace Bubbles
             }
         }
 
-        private void pIcon_Click(object sender, EventArgs e)
+        private void QuickTaskIcon_MouseClick(object sender, MouseEventArgs e)
         {
-            using (SelectIconDlg _dlg = new SelectIconDlg("TaskTemplate"))
+            PictureBox pb = sender as PictureBox;
+
+            if (e.Button == MouseButtons.Left)
             {
-                if (_dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
-                    return;
-
-                string iconPath = _dlg.iconPath;
-                string fileName = "stock" + Path.GetFileNameWithoutExtension(iconPath);
-
-                if (StixIcons.StockIconFromString(fileName) == 0) // custom icon
+                using (SelectIconDlg _dlg = new SelectIconDlg("TaskTemplate"))
                 {
-                    fileName = MMUtils.MindManager.Utilities.GetCustomIconSignature(iconPath);
+                    if (_dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd)) == DialogResult.Cancel)
+                        return;
 
-                    if (!Utils.CustomIcons.ContainsKey(fileName))
+                    string iconPath = _dlg.iconPath;
+                    string fileName = "stock" + Path.GetFileNameWithoutExtension(iconPath);
+
+                    if (StixIcons.StockIconFromString(fileName) == 0) // custom icon
                     {
-                        Utils.CustomIcons.Add(fileName, iconPath);
-                        File.Copy(iconPath, Utils.m_iconDB + Path.GetFileName(iconPath));
-                    }
-                }
+                        fileName = MMUtils.MindManager.Utilities.GetCustomIconSignature(iconPath);
 
-                pIcon.Image = System.Drawing.Image.FromFile(iconPath);
-                pIcon.Tag = fileName;
+                        if (!Utils.CustomIcons.ContainsKey(fileName))
+                        {
+                            Utils.CustomIcons.Add(fileName, iconPath);
+                            File.Copy(iconPath, Utils.m_iconDB + Path.GetFileName(iconPath));
+                        }
+                    }
+
+                    pb.Image = System.Drawing.Image.FromFile(iconPath);
+                    pb.Tag = fileName;
+                }
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                pb.Image = System.Drawing.Image.FromFile(Utils.m_imagesPath + "empty_icon.png");
+                pb.Tag = "";
             }
         }
 
@@ -821,9 +914,9 @@ namespace Bubbles
                     case "lblPriority": pb = mutPriority; break;
                     case "lblStartDate": pb = mutStartDate; break;
                     case "lblDueDate": pb = mutDueDate; break;
-                    case "lblResources": pb = chResources; break;
-                    case "lblIcon": pb = chIcon; break;
-                    case "lblTags": pb = chTags; break;
+                    case "lblResources": pb = ch4Resources; break;
+                    case "lblIcon": pb = ch4Icon; break;
+                    case "lblTags": pb = ch4Tags; break;
                 }
             }
             else
@@ -836,21 +929,30 @@ namespace Bubbles
             if (state == "")
             {
                 pb.Tag = "checked"; pb.Image = pChecked.Image;
+                toolTip1.SetToolTip(pb, Utils.getString("quicktask.checked"));
             }
             else if (state == "checked")
             {
                 pb.Tag = "uncheckedred"; pb.Image = pUncheckedRed.Image;
+                toolTip1.SetToolTip(pb, Utils.getString("quicktask.uncheckedred"));
             }
             else if (state == "uncheckedred")
             {
-                if (pb.Name.StartsWith("mut")) {
-                    pb.Tag = ""; pb.Image = pUnchecked.Image; }
-                else {
-                    pb.Tag = "checkedred"; pb.Image = pCheckedRed.Image; }
+                if (pb.Name.StartsWith("mut"))
+                {
+                    pb.Tag = ""; pb.Image = pUnchecked.Image;
+                    toolTip1.SetToolTip(pb, Utils.getString("quicktask.unchecked"));
+                }
+                else
+                {
+                    pb.Tag = "checkedred"; pb.Image = pCheckedRed.Image;
+                    toolTip1.SetToolTip(pb, Utils.getString("quicktask.checkedred"));
+                }
             }
             else if (state == "checkedred")
             {
                 pb.Tag = ""; pb.Image = pUnchecked.Image;
+                toolTip1.SetToolTip(pb, Utils.getString("quicktask.unchecked"));
             }
         }
 
@@ -865,20 +967,6 @@ namespace Bubbles
             {
                 mutDuration.Image = pUnchecked.Image;
                 mutDuration.Tag = "";
-            }
-        }
-
-        private void mutEffort_Click(object sender, EventArgs e)
-        {
-            if (mutEffort.Tag.ToString() == "")
-            {
-                mutEffort.Image = pChecked.Image;
-                mutEffort.Tag = "checked";
-            }
-            else
-            {
-                mutEffort.Image = pUnchecked.Image;
-                mutEffort.Tag = "";
             }
         }
     }

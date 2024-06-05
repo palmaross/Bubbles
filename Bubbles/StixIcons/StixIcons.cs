@@ -385,9 +385,8 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_renamestick")
             {
-                string oldName = toolTip1.GetToolTip(pictureHandle);
-                string newName = StixUtils.GetName(this, orientation, StixUtils.typeicons, oldName, true);
-                if (newName != "" && newName != oldName)
+                string newName = StixUtils.GetName(this, orientation, StixUtils.typeicons, StickName, true);
+                if (newName != "" && newName != StickName)
                 {
                     toolTip1.SetToolTip(pictureHandle, newName);
                     StickName = newName;

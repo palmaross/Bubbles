@@ -428,9 +428,6 @@
     <Content Include="images\bookmarkMain.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\bookmarkRest.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="images\book_add.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -825,9 +822,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\sortZA.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\STICKS.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\tag.png">

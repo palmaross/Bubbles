@@ -1025,11 +1025,18 @@ namespace Bubbles
 
                 if (QuickTask.EffortState != "")
                 {
-                    string[] parts = QuickTask.Effort.Split(':');
-                    try {
-                        t.Task.EffortUnit = GetDurationUnit(false, Convert.ToInt32(parts[1]));
-                        t.Task.SetEffort(t.Task.EffortUnit, Convert.ToInt32(parts[0]));
-                    } catch { }
+                    if (QuickTask.ResourcesState.Contains("red"))
+                        Utils.DeleteEffort(t);
+                    else
+                    {
+                        string[] parts = QuickTask.Effort.Split(':');
+                        try
+                        {
+                            t.Task.EffortUnit = GetDurationUnit(false, Convert.ToInt32(parts[1]));
+                            t.Task.SetEffort(t.Task.EffortUnit, Convert.ToInt32(parts[0]));
+                        }
+                        catch { }
+                    }
                 }
 
                 if (QuickTask.ResourcesState != "")
@@ -1053,15 +1060,21 @@ namespace Bubbles
                 {
                     if (QuickTask.IconState.Contains("red"))
                         t.UserIcons.RemoveAll();
-                    else
-                        SetIcon(QuickTask.aIcon, t);
+
+                    if (QuickTask.IconState.StartsWith("checked"))
+                    {
+                        string[] icons = QuickTask.aIcon.Split(';');
+
+                        foreach (string icon in icons) SetIcon(icon, t);
+                    }
                 }
 
                 if (QuickTask.TagsState != "")
                 {
                     if (QuickTask.TagsState.Contains("red"))
                         t.TextLabels.RemoveAll();
-                    else
+
+                    if (QuickTask.TagsState.StartsWith("checked"))
                     {
                         string[] tags = QuickTask.Tags.Split(';');
                         string[] tag1 = tags[0].Split(':');

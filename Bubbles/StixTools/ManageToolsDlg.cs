@@ -435,6 +435,9 @@ namespace Bubbles
 
         private void AddToolToStix(int stixID)
         {
+            if (selectedList == null || selectedList.SelectedItems.Count == 0)
+                return;
+
             foreach (ListViewItem item in selectedList.SelectedItems)
             {
                 ToolItem _item = item.Tag as ToolItem;
