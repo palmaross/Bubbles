@@ -50,10 +50,13 @@
             this.btnSaveRecord = new System.Windows.Forms.Button();
             this.lblRecordName = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.pClose = new System.Windows.Forms.PictureBox();
-            this.pHelp = new System.Windows.Forms.PictureBox();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.chAttachment = new System.Windows.Forms.CheckBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.o_close = new System.Windows.Forms.ToolStripMenuItem();
+            this.o_advanced = new System.Windows.Forms.ToolStripMenuItem();
+            this.o_help = new System.Windows.Forms.ToolStripMenuItem();
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.btnRecord)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnPlay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnPause)).BeginInit();
@@ -62,8 +65,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.btnStopPlay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pRecord)).BeginInit();
             this.panelRecordName.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pClose)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pHelp)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // timer1
@@ -261,28 +263,6 @@
             // 
             this.toolTip1.ShowAlways = true;
             // 
-            // pClose
-            // 
-            this.pClose.Image = ((System.Drawing.Image)(resources.GetObject("pClose.Image")));
-            this.pClose.Location = new System.Drawing.Point(185, 1);
-            this.pClose.Name = "pClose";
-            this.pClose.Size = new System.Drawing.Size(16, 16);
-            this.pClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pClose.TabIndex = 22;
-            this.pClose.TabStop = false;
-            this.pClose.Click += new System.EventHandler(this.pClose_Click);
-            // 
-            // pHelp
-            // 
-            this.pHelp.Image = ((System.Drawing.Image)(resources.GetObject("pHelp.Image")));
-            this.pHelp.Location = new System.Drawing.Point(185, 121);
-            this.pHelp.Name = "pHelp";
-            this.pHelp.Size = new System.Drawing.Size(16, 16);
-            this.pHelp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pHelp.TabIndex = 23;
-            this.pHelp.TabStop = false;
-            this.pHelp.Click += new System.EventHandler(this.pHelp_Click);
-            // 
             // chAttachment
             // 
             this.chAttachment.AutoSize = true;
@@ -293,15 +273,46 @@
             this.chAttachment.Text = "As Attachment";
             this.chAttachment.UseVisualStyleBackColor = true;
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.o_close,
+            this.o_advanced,
+            this.o_help});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.ShowImageMargin = false;
+            this.contextMenuStrip1.Size = new System.Drawing.Size(103, 70);
+            // 
+            // o_close
+            // 
+            this.o_close.Name = "o_close";
+            this.o_close.Size = new System.Drawing.Size(155, 22);
+            this.o_close.Text = "Close";
+            // 
+            // o_advanced
+            // 
+            this.o_advanced.Name = "o_advanced";
+            this.o_advanced.Size = new System.Drawing.Size(155, 22);
+            this.o_advanced.Text = "Advanced";
+            // 
+            // o_help
+            // 
+            this.o_help.Name = "o_help";
+            this.o_help.Size = new System.Drawing.Size(155, 22);
+            this.o_help.Text = "Help";
+            // 
+            // timer2
+            // 
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            // 
             // OmniSound
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(202, 138);
+            this.ContextMenuStrip = this.contextMenuStrip1;
             this.Controls.Add(this.chAttachment);
-            this.Controls.Add(this.pHelp);
-            this.Controls.Add(this.pClose);
             this.Controls.Add(this.pRecord);
             this.Controls.Add(this.btnStopPlay);
             this.Controls.Add(this.panel1);
@@ -328,8 +339,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pRecord)).EndInit();
             this.panelRecordName.ResumeLayout(false);
             this.panelRecordName.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pClose)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pHelp)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -355,10 +365,13 @@
         private System.Windows.Forms.Button btnCancelRecord;
         private System.Windows.Forms.Label lblDuration;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.PictureBox pClose;
-        private System.Windows.Forms.PictureBox pHelp;
         public System.Windows.Forms.ComboBox cbRecords;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.CheckBox chAttachment;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem o_close;
+        private System.Windows.Forms.ToolStripMenuItem o_advanced;
+        private System.Windows.Forms.ToolStripMenuItem o_help;
+        private System.Windows.Forms.Timer timer2;
     }
 }

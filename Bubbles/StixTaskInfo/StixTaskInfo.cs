@@ -1058,7 +1058,7 @@ namespace Bubbles
 
                 if (QuickTask.IconState != "")
                 {
-                    if (QuickTask.IconState.Contains("red"))
+                    if (QuickTask.IconState.Contains("red") && t.UserIcons.Count > 0)
                         t.UserIcons.RemoveAll();
 
                     if (QuickTask.IconState.StartsWith("checked"))

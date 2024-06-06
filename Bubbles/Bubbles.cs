@@ -315,10 +315,51 @@ namespace Bubbles
         // For Task Info stick. For topic notes.
         public override void onObjectChanged(MMEventArgs aArgs)
         {
+            if (aArgs.what.Contains("selection"))
+            {
+                if (m_TaskInfo != null && m_TaskInfo.Visible && !m_TaskInfo.stickDuration)
+                {
+                    // If map selection changed, change the dates in the TaskInfo stick with selected topic dates
+                    SetDates();
+                }
+
+                // Process FormatStix
+                foreach (var form in STICKS.Values)
+                {
+                    // Set font state in the FormatStix
+                    if (form.Name == "StixFormat" && form.Visible)
+                    {
+                        var stix = form as StixFormat;
+                        ClearFontButtons(stix);
+
+                        bool bold = true, italic = true, underline = true, strikethrough = true;
+                        float size = 0; bool sizeequal = true;
+                        foreach (Topic _t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                        {
+                            if (size == 0) size = _t.Font.Size;
+                            if (_t.Font.Size != size) sizeequal = false;
+
+                            if (!_t.Font.Bold) bold = false; if (!_t.Font.Italic) italic = false;
+                            if (!_t.Font.Underline) underline = false; if (!_t.Font.Strikethrough) strikethrough = false;
+                        }
+
+                        if (sizeequal)
+                        {
+                            stix.numFontSize.Value = (int)size;
+                            stix.numFontSize.Text = size.ToString();
+                        }
+                        if (bold) stix.pBold.Image = stix.BoldA;
+                        if (italic) stix.pItalic.Image = stix.ItalicA;
+                        if (underline) stix.pUnder.Image = stix.UnderlineA;
+                        if (strikethrough) stix.pStrike.Image = stix.StrikethroughA;
+                    }
+                }
+            }
+
             if (!(aArgs.target is Topic t)) return;
 
             if (aArgs.what == "text") // topic text changed
-            { 
+            {
                 if (StixUtils.TopicAutoWidth && // Topic AutoWidth enabled
                     MMPaste && // Text is pasted into topic via MindManager
                     !StixTextOps.pastetext) // to insure: it's not a TextOpsStix operation)
@@ -347,49 +388,6 @@ namespace Bubbles
                 }
                 StixTextOps.UserActionNotes = true;
                 return;
-            }
-
-            if (aArgs.what.Contains("selection"))
-            {
-                if (m_TaskInfo != null && m_TaskInfo.Visible && !m_TaskInfo.stickDuration)
-                {
-                    // If map selection changed, change the dates in the TaskInfo stick with selected topic dates
-                    SetDates();
-                }
-
-                foreach (var form in STICKS.Values)
-                {
-                    // Set font state in the FormatStix
-                    if (form.Name == "StixFormat" && form.Visible)
-                    {
-                        var stix = form as StixFormat;
-
-                        ClearFontButtons(stix);
-
-                        if (MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-                            return;
-
-                        bool bold = true, italic = true, underline = true, strikethrough = true;
-                        float size = 0; bool sizeequal = true;
-                        foreach (Topic _t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                        {
-                            if (size == 0) size = _t.Font.Size;
-                            if (_t.Font.Size != size) sizeequal = false;
-
-                            if (!_t.Font.Bold) bold = false; if (!_t.Font.Italic) italic = false;
-                            if (!_t.Font.Underline) underline = false; if (!_t.Font.Strikethrough) strikethrough = false;
-                        }
-
-                        if (sizeequal) { 
-                            stix.numFontSize.Value = (int)size; 
-                            stix.numFontSize.Text = size.ToString(); 
-                        }
-                        if (bold) stix.pBold.Image = stix.BoldA;
-                        if (italic) stix.pItalic.Image = stix.ItalicA;
-                        if (underline) stix.pUnder.Image = stix.UnderlineA;
-                        if (strikethrough) stix.pStrike.Image = stix.StrikethroughA;
-                    }
-                }
             }
 
             if (m_TaskInfo != null && m_TaskInfo.Visible)

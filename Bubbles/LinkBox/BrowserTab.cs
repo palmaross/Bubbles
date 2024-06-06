@@ -29,7 +29,7 @@ namespace Bubbles
             CoreWebView2.DocumentTitleChanged += CoreWebView2_DocumentTitleChanged; // Just cosmetic code
         }
 
-        private void CoreWebView2_NewWindowRequested(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NewWindowRequestedEventArgs e)
+        private void CoreWebView2_NewWindowRequested(object sender, CoreWebView2NewWindowRequestedEventArgs e)
         {
             e.Handled = true; // let the default new window 
 

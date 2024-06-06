@@ -8,6 +8,7 @@ using Color = System.Drawing.Color;
 using Mindjet.MindManager.Interop;
 using AppManager;
 using System.Linq;
+using System.Drawing;
 
 namespace Bubbles
 {
@@ -26,14 +27,17 @@ namespace Bubbles
             lblRecordName.Text = Utils.getString("OmniSound.lblRecordName");
             btnSaveRecord.Text = Utils.getString("button.save");
             btnCancelRecord.Text = Utils.getString("button.cancel");
-            pClose.Text = Utils.getString("button.close");
-            pHelp.Text = Utils.getString("button.help");
             chAttachment.Text = Utils.getString("OmniSound.chAttachment");
 
             toolTip1.SetToolTip(btnRecord, Utils.getString("OmniSound.btnRecord.tooltip"));
             toolTip1.SetToolTip(btnPause, Utils.getString("OmniSound.btnPause.tooltip"));
             toolTip1.SetToolTip(btnPlay, Utils.getString("OmniSound.btnPlay.tooltip"));
             toolTip1.SetToolTip(chAttachment, Utils.getString("OmniSound.chAttachment.tooltip"));
+
+            o_close.Text = Utils.getString("button.close");
+            o_help.Text = Utils.getString("button.help");
+
+            contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
 
             this.Paint += This_Paint; // paint the border
 
@@ -51,6 +55,32 @@ namespace Bubbles
 
             if (cbRecords.Items.Count > 0)
                 cbRecords.SelectedIndex = 0;
+
+            // Rounded corners
+            var attribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
+            var preference = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
+            try
+            {
+                // Works only on Windows 11!
+                DwmSetWindowAttribute(this.Handle, attribute, ref preference, sizeof(uint));
+            }
+            catch { }
+        }
+
+        private void ContextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem == o_close)
+            {
+                this.Hide();
+            }
+            else if (e.ClickedItem == o_help)
+            {
+                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "OmniRecorder.htm");
+            }
+            else if (e.ClickedItem == o_advanced)
+            {
+
+            }
         }
 
         private void This_Paint(object sender, PaintEventArgs e)
@@ -327,16 +357,33 @@ namespace Bubbles
             }
         }
 
-
-
-        private void pClose_Click(object sender, EventArgs e)
+        private void OmniSound_MouseDown(object sender, MouseEventArgs e)
         {
-            this.Hide();
+            cur = MousePosition;
+
+            // move form
+            ReleaseCapture();
+            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+
+            // check if it's just á mouse click
+            timer2.Start();
         }
+        Point cur;
 
-        private void pHelp_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Check if MouseDown event is for move form or it is a click
+        /// </summary>
+        private void timer2_Tick(object sender, EventArgs e)
         {
-            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "OmniRecorder.htm");
+            if ((MouseButtons & MouseButtons.Left) != 0) // mouse button still is pressed
+                return;
+
+            timer2.Stop();
+            if (MousePosition.X < cur.X + 5 && MousePosition.X > cur.X - 5 &&
+                MousePosition.Y < cur.Y + 5 && MousePosition.Y > cur.Y - 5)
+            {
+                contextMenuStrip1.Show(MousePosition);
+            }
         }
 
         System.Drawing.Image StartRecord, StopRecord, StartPlay, StopPlay;
@@ -391,12 +438,6 @@ namespace Bubbles
             base.WndProc(ref m);
         }
 
-        private void OmniSound_MouseDown(object sender, MouseEventArgs e)
-        {
-            ReleaseCapture();
-            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
-        }
-
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
 
@@ -404,6 +445,30 @@ namespace Bubbles
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
+
+        // Rounded corners
+        // The enum flag for DwmSetWindowAttribute's second parameter, which tells the function what attribute to set.
+        // Copied from dwmapi.h
+        public enum DWMWINDOWATTRIBUTE
+        {
+            DWMWA_WINDOW_CORNER_PREFERENCE = 33
+        }
+
+        // The DWM_WINDOW_CORNER_PREFERENCE enum for DwmSetWindowAttribute's third parameter, which tells the function
+        // what value of the enum to set.
+        // Copied from dwmapi.h
+        public enum DWM_WINDOW_CORNER_PREFERENCE
+        {
+            DWMWCP_DEFAULT = 0,
+            DWMWCP_DONOTROUND = 1,
+            DWMWCP_ROUND = 2,
+            DWMWCP_ROUNDSMALL = 3
+        }
+
+        // Import dwmapi.dll and define DwmSetWindowAttribute in C# corresponding to the native function.
+        [DllImport("dwmapi.dll", CharSet = CharSet.Unicode, PreserveSig = false)]
+        internal static extern void DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE attribute,
+            ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute, uint cbAttribute);
     } 
 
     public class AudioItem
