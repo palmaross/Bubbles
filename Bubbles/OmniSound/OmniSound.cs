@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using System.Text;
 using PRAManager;
 using System.IO;
 using Color = System.Drawing.Color;
@@ -9,19 +8,28 @@ using Mindjet.MindManager.Interop;
 using AppManager;
 using System.Linq;
 using System.Drawing;
+using NAudio.Wave;
 
 namespace Bubbles
 {
     public partial class OmniSound : Form
     {
-        // Try the https://www.nuget.org/packages/naudio !!!
+        public enum OmniRecorder
+        {
+            Stopped,
+            Capturing,
+            Paused
+        }
+
+        public OmniRecorder omniRecorder = OmniRecorder.Stopped;
+
         public OmniSound()
         {
             InitializeComponent();
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "OmniRecorder.htm");
+            helpProvider1.SetHelpKeyword(this, "OmniSound.htm");
 
             btnAddToTopic.Text = Utils.getString("OmniSound.btnAddToTopic");
             lblRecordName.Text = Utils.getString("OmniSound.lblRecordName");
@@ -30,31 +38,22 @@ namespace Bubbles
             chAttachment.Text = Utils.getString("OmniSound.chAttachment");
 
             toolTip1.SetToolTip(btnRecord, Utils.getString("OmniSound.btnRecord.tooltip"));
+            toolTip1.SetToolTip(pRecordSystem, Utils.getString("OmniSound.btnRecord.tooltip"));
+            toolTip1.SetToolTip(btnStop, Utils.getString("OmniSound.btnStop.tooltip"));
             toolTip1.SetToolTip(btnPause, Utils.getString("OmniSound.btnPause.tooltip"));
             toolTip1.SetToolTip(btnPlay, Utils.getString("OmniSound.btnPlay.tooltip"));
             toolTip1.SetToolTip(chAttachment, Utils.getString("OmniSound.chAttachment.tooltip"));
 
             o_close.Text = Utils.getString("button.close");
             o_help.Text = Utils.getString("button.help");
+            o_recordsystem.Text = Utils.getString("OmniSound.o_recordsystem");
 
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
 
             this.Paint += This_Paint; // paint the border
+            pEmpty.Location = btnRecord.Location;
 
-            StartRecord = btnRecord.Image; StopRecord = btnStopRecord.Image;
-            StartPlay = btnPlay.Image; StopPlay = btnStopPlay.Image;
-
-            string path = Utils.m_dataPath + "SoundDB";
-            DirectoryInfo di = new DirectoryInfo(path);
-
-            var extensions = new[] { "*.wav", "*.mp3" };
-            var files = extensions.SelectMany(ext => di.GetFiles(ext, SearchOption.AllDirectories));
-
-            foreach (var fi in files)
-                cbRecords.Items.Add(new AudioItem(Path.GetFileNameWithoutExtension(fi.Name), fi.FullName));
-
-            if (cbRecords.Items.Count > 0)
-                cbRecords.SelectedIndex = 0;
+            InitAudioFiles();
 
             // Rounded corners
             var attribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
@@ -65,21 +64,77 @@ namespace Bubbles
                 DwmSetWindowAttribute(this.Handle, attribute, ref preference, sizeof(uint));
             }
             catch { }
+
+            Volume.Scroll += (s, a) =>
+            {
+                outputDevice.Volume = Volume.Value / 100f;
+            };
+            Volume.ValueChanged += (s, a) =>
+            {
+                if (StixMain.m_TopicPlayer != null && StixMain.m_TopicPlayer.Visible)
+                {
+                    StixMain.m_TopicPlayer.tbVolume.Value = Volume.Value;
+                    if (StixMain.m_TopicPlayer.pPosition.Visible) // not busy with Volume text 
+                        StixMain.m_TopicPlayer.lblClock.Text = "Volume  " + Volume.Value;
+                }
+            };
+            aTrack.Scroll += (s, a) =>
+            {
+                if (audioFile != null)
+                    audioFile.CurrentTime = TimeSpan.FromSeconds(aTrack.Value);
+            };
+            outputDevice.PlaybackStopped += OnPlaybackStopped;
+        }
+
+        public void InitAudioFiles()
+        {
+            cbRecords.Items.Clear();
+
+            string path = Utils.m_dataPath + "SoundDB";
+            DirectoryInfo di = new DirectoryInfo(path);
+
+            var extensions = new[] { "*.wav", "*.mp3", "*.mp4" };
+            var files = extensions.SelectMany(ext => di.GetFiles(ext, SearchOption.AllDirectories));
+
+            foreach (var fi in files)
+                cbRecords.Items.Add(new AudioItem(Path.GetFileNameWithoutExtension(fi.Name), fi.FullName));
+
+            if (cbRecords.Items.Count > 0)
+                cbRecords.SelectedIndex = 0;
         }
 
         private void ContextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             if (e.ClickedItem == o_close)
             {
+                btnStop_Click(null, null);
+                RecordLimit = 10;
+                this.Opacity = 1;
+                btnPause.Enabled = true;
+                btnStop.Enabled = true;
                 this.Hide();
             }
             else if (e.ClickedItem == o_help)
             {
-                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "OmniRecorder.htm");
+                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "OmniSound.htm");
             }
-            else if (e.ClickedItem == o_advanced)
+            else if (e.ClickedItem == o_recordsystem)
             {
-
+                if (o_recordsystem.Checked)
+                {
+                    pRecordSystem.Visible = false;
+                    btnRecord.Visible = true;
+                    btnRecord.BringToFront();
+                    SystemAudio = false;
+                }
+                else
+                {
+                    pRecordSystem.Visible = true;
+                    pRecordSystem.Location = btnRecord.Location;
+                    pRecordSystem.BringToFront();
+                    btnRecord.Visible = false;
+                    SystemAudio = true;
+                }
             }
         }
 
@@ -88,114 +143,344 @@ namespace Bubbles
             ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle, Color.Black, ButtonBorderStyle.Solid);
         }
 
-        private void OmniSound_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            try { new Microsoft.VisualBasic.Devices.Audio().Stop(); }
-            catch { }
-
-            timer1.Stop();
-            timer1.Enabled = false;
-        }
-
         private void btnRecord_Click(object sender, EventArgs e)
         {
-            if (play) // play is performed!
+            if (audioFile != null) // play is performed!
             {
-                MessageBox.Show("OmniSound.busy.playing");
+                MessageBox.Show(Utils.getString("OmniSound.busy.playing"));
                 return;
             }
 
-            lblDuration.Visible = false;
-
-            if (record) // Stop and save record
+            if (writer != null) // recording is performed!
             {
-                toolTip1.SetToolTip(btnRecord, Utils.getString("OmniSound.btnRecord.tooltip"));
-                record = false;
-                btnRecord.Image = StartRecord;
-                pRecord.Visible = false;
-                Stop_Click();
+                MessageBox.Show(Utils.getString("OmniSound.busy.recording"));
                 return;
+            }
+
+            if (StixMain.m_TopicRecorder != null && StixMain.m_TopicRecorder.Visible)
+            {
+                StixMain.m_TopicRecorder.Opacity = 0.3;
+                StixMain.m_TopicRecorder.btnStop.Enabled = false;
+                StixMain.m_TopicRecorder.btnPause.Enabled = false;
             }
 
             // Start record
 
-            record = true;
-            lblmin.Text = "00"; lblmin.ForeColor = Color.Red;
-            lblsecond.Text = "00"; lblsecond.ForeColor = Color.Red;
-            label1.ForeColor = Color.Red;
-            pRecord.Visible = true;
+            lblClock.ForeColor = Color.Red;
+            toolTip1.SetToolTip(lblClock, Utils.getString("OmniSound.lblClock.tooltip"));
+
+            // Blink the button and start clock
+            pEmpty.BringToFront();
+
+            AudioLength = " / " + RecordLimit + ":00";
 
             timer1.Enabled = true;
             timer1.Start();
-            mciSendString("open new Type waveaudio alias omnisound", null, 0, IntPtr.Zero);
-            mciSendString("set omnisound time format ms bitspersample 16 samplespersec 8000 channels 1", null, 0, IntPtr.Zero);
-            mciSendString("record omnisound", null, 0, IntPtr.Zero);
 
-            btnRecord.Image = StopRecord;
-            toolTip1.SetToolTip(btnRecord, Utils.getString("OmniSound.btnRecord.stop.tooltip"));
+            var outputFolder = Utils.m_dataPath + "SoundDB";
+            var outputFilePath = Path.Combine(outputFolder, "record.wav");
+            if (File.Exists(outputFilePath))
+                File.Delete(outputFilePath);
+
+            timer3.Start();
+
+            if (SystemAudio)
+            {
+                writer = new WaveFileWriter(outputFilePath, capture.WaveFormat);
+                capture.StartRecording();
+                StixMain.m_OmniSound.omniRecorder = OmniSound.OmniRecorder.Capturing;
+                capture.DataAvailable += WaveIn_DataAvailable;
+            }
+            else // Voice record
+            {
+                writer = new WaveFileWriter(outputFilePath, waveIn.WaveFormat);
+                waveIn.StartRecording();
+                omniRecorder = OmniRecorder.Capturing;
+                waveIn.DataAvailable += WaveIn_DataAvailable;
+            }
+        }
+
+        public void WaveIn_DataAvailable(object sender, WaveInEventArgs e)
+        {
+            writer.Write(e.Buffer, 0, e.BytesRecorded);
+            // Stop after 10 min (~ 12 Mb)
+            if (!SystemAudio && writer.Position > waveIn.WaveFormat.AverageBytesPerSecond * 60 * RecordLimit)
+            {
+                waveIn.StopRecording();
+                go = true;
+            }
+            if (SystemAudio && writer.Position > capture.WaveFormat.AverageBytesPerSecond * 60 * RecordLimit)
+            {
+                capture.StopRecording();
+                go = true;
+            }
+        }
+
+        bool go = false;
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+            if (!go) return;
+            go = false;
+            timer3.Stop();
+            timer1.Stop();
+
+            DialogResult dr;
+            using (TimeLimitReachedDlg dlg = new TimeLimitReachedDlg())
+                dr = dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+
+            if (dr == DialogResult.Cancel)
+            {
+                StopRecording(true, true);
+                if (File.Exists(Utils.m_dataPath + "SoundDB\\record.wav"))
+                    File.Delete(Utils.m_dataPath + "SoundDB\\record.wav");
+
+                omniRecorder = OmniRecorder.Stopped;
+            }
+            else if (dr == DialogResult.Yes) // Resume
+            {
+                pause = true;
+                omniRecorder = OmniRecorder.Paused;
+                RecordLimit += 5;
+                btnPause_Click(null, null);
+                timer3.Start();
+            }
+            else if (dr == DialogResult.No) // Stop
+            {
+                StopRecording(true);
+                omniRecorder = OmniRecorder.Stopped;
+            }
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            if (writer != null) // Stop recording
+            {
+                StopRecording();
+
+                if (StixMain.m_TopicRecorder != null && StixMain.m_TopicRecorder.Visible)
+                {
+                    StixMain.m_TopicRecorder.Opacity = 1;
+                    StixMain.m_TopicRecorder.btnStop.Enabled = true;
+                    StixMain.m_TopicRecorder.btnPause.Enabled = true;
+                }
+            }
+            if (outputDevice.PlaybackState != PlaybackState.Stopped) // Stop playing
+            {
+                outputDevice.Stop();
+            }
+        }
+
+        private void StopRecording(bool stopped = false, bool cancel = false)
+        {
+            if (SystemAudio && !stopped)
+                capture.StopRecording();
+            else if (!stopped)
+            {
+                waveIn.StopRecording();
+                waveIn.DataAvailable -= WaveIn_DataAvailable;
+            }
+
+            omniRecorder = OmniRecorder.Stopped;
+
+            writer?.Dispose();
+            writer = null;
+
+            timer1.Stop();
+            pEmpty.Visible = false;
+            btnRecord.Visible = true;
+
+            lblClock.Text = "00:00 / 00:00";
+            lblClock.ForeColor = Color.Black;
+            toolTip1.SetToolTip(lblClock, "");
+
+            if (cancel) return;
+
+            txtRecordName.Text = DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss");
+            panelRecordName.Visible = true;
+            panelRecordName.BringToFront();
+            txtRecordName.Focus();
         }
 
         public void btnPause_Click(object sender, EventArgs e)
         {
-            if (pause)
+            if (writer == null && audioFile == null) return;
+
+            if (pause) // Resume Play/Record
             {
                 pause = false;
-                mciSendString("resume omnisound", null, 0, IntPtr.Zero);
+
+                if (writer != null)
+                {
+                    if (SystemAudio)
+                        capture.StartRecording();
+                    else
+                        waveIn.StartRecording();
+
+                    omniRecorder = OmniRecorder.Capturing;
+                }
+                else if (outputDevice.PlaybackState != PlaybackState.Stopped)
+                {
+                    outputDevice.Play();
+                    if (StixMain.m_TopicPlayer != null && StixMain.m_TopicPlayer.Visible)
+                    {
+                        StixMain.m_TopicPlayer.btnPause.Visible = true;
+                        StixMain.m_TopicPlayer.btnPlay.Visible = false;
+                    }
+                }
+                else
+                    return;
+
                 timer1.Start();
-                if (StixMain.m_playBox != null && StixMain.m_playBox.Visible)
-                    StixMain.m_playBox.timer1.Start();
             }
-            else
+            else // Pause Play/Record
             {
                 pause = true;
-                mciSendString("pause omnisound", null, 0, IntPtr.Zero);
+
+                if (writer != null)
+                {
+                    if (SystemAudio)
+                        capture.StopRecording();
+                    else
+                        waveIn.StopRecording();
+
+                    omniRecorder = OmniRecorder.Paused;
+                }
+                else if (outputDevice.PlaybackState != PlaybackState.Stopped)
+                {
+                    outputDevice.Pause();
+                    if (StixMain.m_TopicPlayer != null && StixMain.m_TopicPlayer.Visible)
+                    {
+                        StixMain.m_TopicPlayer.btnPause.Visible = false;
+                        StixMain.m_TopicPlayer.btnPlay.Visible = true;
+                        StixMain.m_TopicPlayer.btnPlay.Location = StixMain.m_TopicPlayer.btnPause.Location;
+                    }
+                }
+
                 timer1.Stop();
-                if (StixMain.m_playBox != null && StixMain.m_playBox.Visible)
-                    StixMain.m_playBox.timer1.Stop();
             }
         }
 
-        private void Stop_Click()
+        public void btnPlay_Click(object sender, EventArgs e)
         {
-            mciSendString("stop omnisound", null, 0, IntPtr.Zero);
+            if (writer != null) // record is performed!
+            {
+                MessageBox.Show(Utils.getString("OmniSound.busy.recording"));
+                return;
+            }
+
+            if (sender == btnPlay)
+            {
+                FilePath = "";
+                TopicGuid = "";
+            }
+
+            lblClock.ForeColor = Color.Black;
+
+            // Start playing.
+
+            if (outputDevice.PlaybackState != PlaybackState.Stopped)
+            {
+                outputDevice.Stop();
+                timerStopPlay.Start();
+            }
+            else
+                Play();
+        }
+
+        void Play()
+        {
+            string filename = FilePath;
+            if (FilePath == "") // FilePath - called from TopicPlayer
+            {
+                if (cbRecords.Items.Count > 0 && cbRecords.SelectedIndex >= 0)
+                    filename = (cbRecords.SelectedItem as AudioItem).Path;
+                else
+                    return;
+            }
+
+            try
+            {
+                outputDevice.Volume = Volume.Value / 100f;
+                audioFile = new AudioFileReader(filename);
+            }
+            catch { MessageBox.Show(Utils.getString("OmniSound.filecorrupted")); return; }
+
+            outputDevice.Init(audioFile);
+
+            // Get audio length.
+            MediaFoundationReader mfr = new MediaFoundationReader(filename);
+            var ts = mfr.TotalTime;
+            AudioLength = " / 00:00";
+
+            if (ts.TotalSeconds > 0)
+            {
+                string mins = ts.Minutes.ToString();
+                if (ts.Minutes < 10) mins = "0" + mins;
+                string secs = ts.Seconds.ToString();
+                if (ts.Seconds < 10) secs = "0" + secs;
+
+                AudioLength = " / " + mins + ":" + secs;
+            }
+
+            aTrack.Value = 0;
+            aTrack.Maximum = (int)ts.TotalSeconds;
+
+            if (StixMain.m_TopicPlayer != null && StixMain.m_TopicPlayer.Visible)
+            {
+                StixMain.m_TopicPlayer.tbTrack.Value = 0;
+                StixMain.m_TopicPlayer.tbTrack.Maximum = (int)ts.TotalSeconds;
+
+                StixMain.m_TopicPlayer.lblTitle.Text = Path.GetFileNameWithoutExtension(filename);
+                StixMain.m_TopicPlayer.btnPause.Visible = true;
+                StixMain.m_TopicPlayer.btnPlay.Visible = false;
+            }
+
+            outputDevice.Play();
+            timer1.Start();
+        }
+
+        private void timerStopPlay_Tick(object sender, EventArgs e)
+        {
+            timerStopPlay.Stop();
+            Play();
+        }
+
+        public void OnPlaybackStopped(object sender, StoppedEventArgs args)
+        {
+            if (audioFile != null)
+            {
+                audioFile.Dispose();
+                audioFile = null;
+            }
+
+            if (StixMain.m_TopicPlayer != null && StixMain.m_TopicPlayer.Visible)
+                StixMain.m_TopicPlayer.Stop();
 
             timer1.Stop();
-            timer1.Enabled = false;
-
-            lblmin.Text = "00"; lblmin.ForeColor = Color.Black;
-            lblsecond.Text = "00"; lblsecond.ForeColor = Color.Black;
-            label1.ForeColor = Color.Black;
-
-            txtRecordName.Text = "Record 1";
-            panelRecordName.Visible = true;
-            panelRecordName.BringToFront();
-            txtRecordName.SelectAll();
-            txtRecordName.Focus();
+            lblClock.Text = "00:00 / 00:00";
         }
 
         private void txtRecordName_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
             {
-                mciSendString("close omnisound", null, 0, IntPtr.Zero);
                 panelRecordName.Visible = false;
                 return;
             }
             else if (e.KeyCode == Keys.Enter)
             {
-                SaveRecord();
+                SaveRecord(txtRecordName.Text.Trim());
             }
         }
 
-        void SaveRecord()
+        public void SaveRecord(string recordName)
         {
-            string recordName = txtRecordName.Text.Trim();
-            string path = Utils.m_dataPath + "SoundDB";
-            DirectoryInfo di = new DirectoryInfo(path);
+            string outputFolder = Utils.m_dataPath + "SoundDB";
+            DirectoryInfo di = new DirectoryInfo(outputFolder);
 
             foreach (FileInfo fi in di.GetFiles())
             {
-                if (Path.GetFileNameWithoutExtension(fi.Name) == recordName)
+                if (Path.GetFileNameWithoutExtension(fi.Name.ToLower()) == recordName.ToLower())
                 {
                     if (MessageBox.Show(Utils.getString("OmniSound.recordexists"), "",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
@@ -203,136 +488,92 @@ namespace Bubbles
                 }
             }
 
-            string filename = Utils.m_dataPath + "SoundDB\\" + recordName + ".wav";
-            mciSendString("save omnisound \"" + filename + "\"", null, 0, IntPtr.Zero);
-            mciSendString("close omnisound", null, 0, IntPtr.Zero);
+            string filename = Utils.m_dataPath + "SoundDB\\" + recordName + ".mp3";
+            string wavFile = Utils.m_dataPath + "SoundDB\\" + recordName + ".wav";
+            string recordedWavFile = Utils.m_dataPath + "SoundDB\\record.wav";
+
+            bool fail = false;
+            using (var reader = new WaveFileReader(recordedWavFile))
+            {
+                try
+                {
+                    MediaFoundationEncoder.EncodeToMp3(reader, filename);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    fail = true;
+
+                    File.Move(Utils.m_dataPath + "SoundDB\\record.wav", wavFile);
+                    filename = wavFile;
+
+                    MMBase.TRACE("encoding audiofile to MP3...\r\n\r\n" + ex.Message + "\r\n\r\n" + ex.StackTrace);
+                    MessageBox.Show("Error encoding audiofile to MP3...\r\n\r\nPlease find the 'OmniStix_logfile.txt' file in your Documents folder and send it to the support@palmaross.com\r\n\r\nThank you!",
+                        "", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                }
+            }
+
+            if (!fail)
+                File.Delete(recordedWavFile);
 
             int i = cbRecords.Items.Add(new AudioItem(recordName, filename));
             cbRecords.SelectedIndex = i;
             panelRecordName.Visible = false;
         }
 
-        public void btnPlay_Click(object sender, EventArgs e)
-        {
-            if (record) // record is performed!
-            {
-                MessageBox.Show("OmniSound.busy.recording");
-                return;
-            }
-
-            lblmin.Text = "00"; lblmin.ForeColor = Color.Black;
-            lblsecond.Text = "00"; lblsecond.ForeColor = Color.Black;
-            label1.ForeColor = Color.Black;
-
-            if (play) // Stop playing.
-            {
-                toolTip1.SetToolTip(btnPlay, Utils.getString("OmniSound.btnPlay.tooltip"));
-                play = false;
-                btnPlay.Image = StartPlay;
-                mciSendString("stop omnisound", null, 0, IntPtr.Zero);
-                mciSendString("close omnisound", null, 0, IntPtr.Zero);
-                timer1.Stop();
-                if (StixMain.m_playBox != null && StixMain.m_playBox.Visible) 
-                    StixMain.m_playBox.timer1.Stop();
-                lblDuration.Visible = false;
-                // Remove playing topic indices.
-                FilePath = "";
-                TopicGuid = "";
-                return;
-            }
-
-            // Start playing.
-
-            play = true; btnPlay.Image = StopPlay;
-            toolTip1.SetToolTip(btnPlay, Utils.getString("OmniSound.btnPlay.stop.tooltip"));
-
-            string filename = "";
-            if (FilePath == "")
-            {
-                if (cbRecords.Items.Count > 0 && cbRecords.SelectedIndex >= 0) // not from topic
-                    filename = (cbRecords.SelectedItem as AudioItem).Path;
-                else
-                    return;
-            }
-            else
-                filename = FilePath;
-
-            StringBuilder lengthBuf = new StringBuilder(32);
-
-            mciSendString("open \"" + filename + "\" type mpegvideo alias omnisound", null, 0, IntPtr.Zero);
-            mciSendString("status omnisound length", lengthBuf, lengthBuf.Capacity, IntPtr.Zero);
-            mciSendString("play omnisound from 0 notify", null, 0, this.Handle);
-
-            // Get audio length.
-            int length = 0;
-            int.TryParse(lengthBuf.ToString(), out length);
-
-            if (length > 0)
-            {
-                lblDuration.Visible = true;
-
-                float length2 = length / 1000F;
-                length = (int)Math.Round(length2);
-                playSecond = length;
-                int min = length / 60;
-                int sec = length % 60;
-
-                string duration = "/  ";
-                if (min < 10) duration += "0" + min; else duration += min;
-                duration += ":";
-                if (sec < 10) duration += "0" + sec; else duration += sec;
-                //duration += ")";
-
-                lblDuration.Text = duration;
-                if (StixMain.m_playBox != null && StixMain.m_playBox.Visible)
-                    StixMain.m_playBox.lblDuration.Text = duration;
-            }
-
-            timer1.Start();
-            if (StixMain.m_playBox != null && StixMain.m_playBox.Visible)
-                StixMain.m_playBox.timer1.Start();
-        }
-
-        /// <summary>Audio clock.</summary>
+        int blink = 0;
+        /// <summary>Audio ticker.</summary>
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (record) // blinking icon
+            if (writer != null) // Record ticker
             {
-                if (pRecord.Visible) pRecord.Visible = false;
-                else pRecord.Visible = true;
+                var ts = writer.TotalTime;
+
+                string mins = ts.Minutes.ToString();
+                if (ts.Minutes < 10) mins = "0" + mins;
+                string secs = ts.Seconds.ToString();
+                if (ts.Seconds < 10) secs = "0" + secs;
+
+                string playClock = mins + ":" + secs;
+                lblClock.Text = playClock + AudioLength;
+
+                // blinking icon
+                if (blink++ % 2 == 0) pEmpty.Visible = true;
+                else pEmpty.Visible = false;
             }
-
-            int sec = Convert.ToInt32(lblsecond.Text);
-
-            if (sec >= 60)
+            else // Playback ticker
             {
-                sec = -1;
-                int min = Convert.ToInt32(lblmin.Text);
+                aTrack.Value = (int)audioFile.CurrentTime.TotalSeconds;
 
-                if (++min > 9)
-                    lblmin.Text = min.ToString();
-                else
-                    lblmin.Text = "0" + min.ToString();
+                var ts = audioFile.CurrentTime;
+                string mins = ts.Minutes.ToString();
+                if (ts.Minutes < 10) mins = "0" + mins;
+                string secs = ts.Seconds.ToString();
+                if (ts.Seconds < 10) secs = "0" + secs;
+
+                string playClock = mins + ":" + secs;
+                lblClock.Text = playClock + AudioLength;
+
+                if (StixMain.m_TopicPlayer != null && StixMain.m_TopicPlayer.Visible)
+                {
+                    if (!StixMain.m_TopicPlayer.pPosition.Visible) // not busy with Volume text 
+                        StixMain.m_TopicPlayer.lblClock.Text = playClock + AudioLength;
+
+                    StixMain.m_TopicPlayer.tbTrack.Value = (int)audioFile.CurrentTime.TotalSeconds;
+                }
             }
-
-            if (++sec > 9)
-                lblsecond.Text = sec.ToString();
-            else
-                lblsecond.Text = "0" + sec.ToString();
-
-            // Get end of audio. Stop timer.
-            playSecond -= 1;
         }
 
         private void btnSaveRecord_Click(object sender, EventArgs e)
         {
-            SaveRecord();
+            SaveRecord(txtRecordName.Text.Trim());
+            panelRecordName.Visible = false;
         }
 
         private void btnCancelRecord_Click(object sender, EventArgs e)
         {
-            mciSendString("close omnisound", null, 0, IntPtr.Zero);
             panelRecordName.Visible = false;
+            if (File.Exists(Utils.m_dataPath + "SoundDB\\record.wav"))
+                File.Delete(Utils.m_dataPath + "SoundDB\\record.wav");
         }
 
         private void btnAddToTopic_Click(object sender, EventArgs e)
@@ -340,21 +581,21 @@ namespace Bubbles
             if (!(MMUtils.SelectedTopic() is Topic _t))
                 return;
 
-            if (_t.ContainsControlStripType(StixMain.STRIP_URI))
-                return;
+            if (_t.ContainsControlStripType(StixMain.SOUNDSTRIP_URI))
+            {
+                MessageBox.Show(Utils.getString("OmniSound.topichasaudio"), "",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
-            if (chAttachment.Checked) // Add as attachment
-            {
+            if (chAttachment.Checked) // Add attachment
                 _t.Attachments.Add((cbRecords.SelectedItem as AudioItem).Path);
-            }
-            else // Add strip icon.
-            {
-                TransactionWrapper _w = new TransactionWrapper(_t,
-                    TransactionWrapper.TransactionType.ADD_STRIP_ICON,
-                    (cbRecords.SelectedItem as AudioItem).Path);
-                _w.controlStripURI = StixMain.STRIP_URI;
-                _w.Execute();
-            }
+
+            // Add strip icon.
+            TransactionWrapper _w = new TransactionWrapper(_t,
+                TransactionWrapper.TransactionType.ADD_STRIP_ICON,
+                (cbRecords.SelectedItem as AudioItem).Path);
+            _w.controlStripURI = StixMain.SOUNDSTRIP_URI;
+            _w.Execute();
         }
 
         private void OmniSound_MouseDown(object sender, MouseEventArgs e)
@@ -386,58 +627,57 @@ namespace Bubbles
             }
         }
 
-        System.Drawing.Image StartRecord, StopRecord, StartPlay, StopPlay;
-
-        public bool play = false;
-        bool record = false;
-        bool pause = false;
-        int playSecond = 0;
-
-        /// <summary>
-        /// Path to audio file attached to topic.
-        /// </summary>
-        public string FilePath = "";
-        /// <summary>
-        /// Guid of paying topic.
-        /// </summary>
-        public string TopicGuid = "";
-
-        //[DllImport("winmm.dll", EntryPoint = "mciSendStringA", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
-        //private static extern int record(string lpstrCommand, string lpstrReturnString, int uReturnLength, int hwndCallback);
-
-        [DllImport("winmm.dll", EntryPoint = "mciSendStringA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        private static extern int mciSendString(string lpstrCommand, StringBuilder returnValue, int uReturnLength, IntPtr winHandle);
-        public const int MM_MCINOTIFY = 0x3B9;
-
-        ////[STAThread]
-
-        /// <summary>
-        /// Catch end of playing audio track.
-        /// </summary>
-        protected override void WndProc(ref Message m)
+        private void lblClock_Click(object sender, EventArgs e)
         {
-            if (m.Msg == MM_MCINOTIFY)
-            {
-                if (StixMain.m_playBox != null && StixMain.m_playBox.Visible)
-                {
-                    StixMain.m_playBox.timer1.Stop();
-                    StixMain.m_playBox.Close();
-                }
-                timer1.Stop();
-                lblDuration.Visible = false;
-                play = false;
-                btnPlay.Image = StartPlay;
-                lblmin.Text = "00";
-                lblsecond.Text = "00";
+            if (writer == null) return;
 
-                mciSendString("close omnisound", null, 0, IntPtr.Zero);
+            RecordLimit += 5;
+            AudioLength = " / " + RecordLimit + ":00";
 
-                FilePath = "";
-                TopicGuid = "";
-            }
-            base.WndProc(ref m);
+            if (RecordLimit >= 30 && SystemAudio)
+                MessageBox.Show(Utils.getString("OmniSound.RecordTimeWarning"), "",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
+        public void Destroy()
+        {
+            writer?.Dispose();
+            writer = null;
+            waveIn?.Dispose();
+            waveIn = null;
+            capture?.Dispose();
+            capture = null;
+
+            audioFile?.Dispose();
+            audioFile = null;
+            outputDevice?.Dispose();
+            outputDevice = null;
+
+            this.Close();
+        }
+
+        public bool pause = false;
+        string AudioLength = "";
+        public bool SystemAudio = false;
+
+        /// <summary> Path to audio file attached to topic.</summary>
+        public string FilePath = "";
+        /// <summary> Guid of paying topic.</summary>
+        public string TopicGuid = "";
+
+        public WaveInEvent waveIn = new WaveInEvent();
+        public WaveFileWriter writer = null;
+
+        public WaveOutEvent outputDevice = new WaveOutEvent();
+        public AudioFileReader audioFile;
+
+        WasapiLoopbackCapture capture = new WasapiLoopbackCapture();
+
+        int RecordLimit = 10; // Min.
+
+
+
+        #region Move the form
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
 
@@ -445,8 +685,9 @@ namespace Bubbles
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
+        #endregion
 
-        // Rounded corners
+        #region Rounded corners
         // The enum flag for DwmSetWindowAttribute's second parameter, which tells the function what attribute to set.
         // Copied from dwmapi.h
         public enum DWMWINDOWATTRIBUTE
@@ -469,7 +710,8 @@ namespace Bubbles
         [DllImport("dwmapi.dll", CharSet = CharSet.Unicode, PreserveSig = false)]
         internal static extern void DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE attribute,
             ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute, uint cbAttribute);
-    } 
+        #endregion
+    }
 
     public class AudioItem
     {

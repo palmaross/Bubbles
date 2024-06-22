@@ -1,6 +1,5 @@
 ﻿using PRAManager;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -19,7 +18,8 @@ namespace Bubbles
             helpProvider1.SetHelpKeyword(this, "TaskInfoQuickTask.htm");
 
             Text = Utils.getString("TaskTemplateDlg.title");
-            chPrimary.Text = Utils.getString("TaskTemplateDlg.chPrimary");
+            lblGroup.Text = Utils.getString("TaskTemplateDlg.lblGroup");
+            lblQTopic.Text = Utils.getString("TaskTemplateDlg.lblQTopic");
             lblTopicText.Text = Utils.getString("TopicTemplateDlg.lblTopicText");
             lblProgress.Text = Utils.getString("TaskTemplateDlg.chProgress");
             lblPriority.Text = Utils.getString("TaskTemplateDlg.chPriority");
@@ -39,9 +39,8 @@ namespace Bubbles
             btnClose.Text = Utils.getString("button.close");
 
             btnCancel.Text = Utils.getString("button.cancel");
-            lblResourceName.Text = Utils.getString("TaskTemplateDlg.lblResourceName");
+            lblItemName.Text = Utils.getString("TaskTemplateDlg.lblItemName");
 
-            toolTip1.SetToolTip(chPrimary, Utils.getString("TaskTemplateDlg.chPrimary.tooltip"));
             toolTip1.SetToolTip(numStartDate, Utils.getString("TaskTemplateDlg.numDate.tooltip"));
             toolTip1.SetToolTip(numDueDate, Utils.getString("TaskTemplateDlg.numDate.tooltip"));
             toolTip1.SetToolTip(New, Utils.getString("TaskTemplateDlg.New.tooltip"));
@@ -93,85 +92,20 @@ namespace Bubbles
                     toolTip1.SetToolTip(pb, Utils.getString("quicktask.unchecked"));
             }
 
-            DataTable dt = db.ExecuteQuery("select * from TASKTEMPLATES order by name");
+            DataTable dt = db.ExecuteQuery("select * from QUICKTOPICGROUPS order by _order");
             foreach (DataRow row in dt.Rows)
             {
-                string topictextState = "", progressState = "", priorityState = "", startdateState = "",
-                    duedateState = "", durationState = "", effortState = "", resourcesState = "", iconState = "", tagsState = "";
-
-                string topictext = row["topictext"].ToString();
-                string[] parts = topictext.Split(new string[] { "$$$" }, StringSplitOptions.None);
-                if (parts.Length > 1)
-                {
-                    topictextState = parts[0]; topictext = parts[1]; mutTopicText.Tag = topictextState;
-                }
-
-                string progress = row["progress"].ToString(); int _progress = -1;
-                parts = progress.Split(':');
-                if (parts.Length > 1)
-                {
-                    progressState = parts[0]; _progress = Convert.ToInt32(parts[1]); mutProgress.Tag = progressState;
-                }
-
-                string priority = row["priority"].ToString(); int _priority = 0;
-                parts = priority.Split(':');
-                if (parts.Length > 1)
-                {
-                    priorityState = parts[0]; _priority = Convert.ToInt32(parts[1]); mutPriority.Tag = priorityState;
-                }
-
-                string dates = row["dates"].ToString();
-                parts = dates.Split(new string[] { "$$$" }, StringSplitOptions.None);
-                if (parts.Length > 1)
-                {
-                    string[] states = parts[0].Split(':');
-                    startdateState = states[0]; duedateState = states[1]; dates = parts[1];
-                    mutStartDate.Tag = startdateState; mutDueDate.Tag = duedateState;
-                }
-
-                string duration = row["duration"].ToString();
-                if (duration != "")
-                {
-                    parts = duration.Split(':');
-                    if (parts.Length == 3)
-                    {
-                        durationState = parts[0]; duration = parts[1] + ":" + parts[2];
-                    }
-                }
-
-                string effort = row["effort"].ToString();
-                if (effort != "")
-                {
-                    parts = effort.Split(':');
-                    if (parts.Length == 3)
-                    {
-                        effortState = parts[0]; effort = parts[1] + ":" + parts[2];
-                    }
-                }
-
-                string icon = row["icon"].ToString(); parts = icon.Split(':');
-                if (parts.Length > 1) { iconState = parts[0]; icon = parts[1]; ch4Icon.Tag = iconState; }
-
-                string resources = row["resources"].ToString(); parts = resources.Split(':');
-                if (parts.Length > 1) { resourcesState = parts[0]; resources = parts[1]; ch4Resources.Tag = resourcesState; }
-
-                string tags = row["tags"].ToString(); parts = tags.Split(':');
-                if (parts.Length > 1) { tagsState = parts[0]; tags = parts[1]; ch4Tags.Tag = tagsState; }
-
-                TaskTemplateItem item = new TaskTemplateItem(Convert.ToInt32(row["prime"]), row["name"].ToString(),
-                    topictext, _progress, _priority, dates, duration, effort, icon, resources, tags,
-                    topictextState, progressState, priorityState, startdateState, duedateState,
-                    durationState, effortState, iconState, resourcesState, tagsState);
-
-                cbTaskTemplates.Items.Add(item);
+                QuickTopicGroup item = new QuickTopicGroup(Convert.ToInt32(row["id"]), row["name"].ToString(), Convert.ToInt32(row["_order"]));
+                cbGroups.Items.Add(item);
             }
+
+            if (cbGroups.Items.Count > 0)
+                cbGroups.SelectedIndex = 0;
 
             dt = db.ExecuteQuery("select * from RESOURCES order by name");
             foreach (DataRow row in dt.Rows)
                 cbResources.Items.Add(row["name"]);
 
-            if (cbTaskTemplates.Items.Count > 0)
-                cbTaskTemplates.SelectedIndex = 0;
             if (cbResources.Items.Count > 0)
                 cbResources.SelectedIndex = 0;
 
@@ -186,44 +120,103 @@ namespace Bubbles
             Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "TaskInfoQuickTask.htm");
         }
 
+        // New Quick Topic
         private void New_Click(object sender, EventArgs e)
         {
             panelTemplateName.Visible = true;
             panelTemplateName.BringToFront();
-            panelTemplateName.Tag = "new";
+            panelTemplateName.Tag = "newtopic";
             txtTemplateName.Text = "";
+            lblItemName.Text = Utils.getString("TaskTemplateDlg.lblItemName");
+        }
+
+        private void GNew_Click(object sender, EventArgs e)
+        {
+            panelTemplateName.Visible = true;
+            panelTemplateName.BringToFront();
+            panelTemplateName.Tag = "newgroup";
+            txtTemplateName.Text = "";
+            lblItemName.Text = Utils.getString("TaskTemplateDlg.lblItemName.group");
+
         }
 
         private void Edit_Click(object sender, EventArgs e)
         {
             panelTemplateName.Visible = true;
             panelTemplateName.BringToFront();
-            panelTemplateName.Tag = "edit";
-            txtTemplateName.Text = cbTaskTemplates.Text;
+            panelTemplateName.Tag = "edittopic";
+            txtTemplateName.Text = cbQuickTopics.Text;
+            lblItemName.Text = Utils.getString("TaskTemplateDlg.lblItemName");
+        }
+
+        private void GEdit_Click(object sender, EventArgs e)
+        {
+            panelTemplateName.Visible = true;
+            panelTemplateName.BringToFront();
+            panelTemplateName.Tag = "editgroup";
+            txtTemplateName.Text = cbGroups.Text;
+            lblItemName.Text = Utils.getString("TaskTemplateDlg.lblItemName.group");
         }
 
         private void Delete_Click(object sender, EventArgs e)
         {
-            if (chPrimary.Checked)
-            {
-                MessageBox.Show(Utils.getString("TaskTemplateDlg.primary.warning"), "",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             if (MessageBox.Show(Utils.getString("TaskTemplateDlg.delete.question"), "",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
 
-            string name = cbTaskTemplates.Text;
+            QuickTopicItem qtopic = cbQuickTopics.SelectedItem as QuickTopicItem;
 
-            cbTaskTemplates.Items.Remove(cbTaskTemplates.SelectedItem);
+            cbQuickTopics.Items.Remove(cbQuickTopics.SelectedItem);
 
             // Delete template from database
-            db.ExecuteNonQuery("delete from TASKTEMPLATES where name=`" + name + "`");
+            db.ExecuteNonQuery("delete from QUICKTOPICTEMPLATES where id=" + qtopic.ID + "");
 
-            if (cbTaskTemplates.Items.Count > 0)
-                cbTaskTemplates.SelectedIndex = 0;
+            if (cbQuickTopics.Items.Count > 0)
+            {
+                cbQuickTopics.SelectedIndex = 0;
+
+                int i = 1;
+                foreach (var item in cbQuickTopics.Items)
+                {
+                    qtopic = item as QuickTopicItem;
+                    db.ExecuteNonQuery("update QUICKTOPICTEMPLATES set _order=" + i++ +
+                        " where id=" + qtopic.ID + "");
+                }
+            }
+        }
+
+        private void GDelete_Click(object sender, EventArgs e)
+        {
+            QuickTopicGroup group = cbGroups.SelectedItem as QuickTopicGroup;
+
+            if (group.ID == 1)
+            {
+                MessageBox.Show(Utils.getString("TaskTemplateDlg.deletegroup.error"), "",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (MessageBox.Show(Utils.getString("TaskTemplateDlg.deletegroup.question"), "",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                return;
+
+            cbGroups.Items.Remove(cbQuickTopics.SelectedItem);
+
+            // Delete template from database
+            db.ExecuteNonQuery("delete from QUICKTOPICGROUPS where id=" + group.ID + "");
+
+            if (cbGroups.Items.Count > 0)
+            {
+                cbGroups.SelectedIndex = 0;
+
+                int i = 1;
+                foreach (var item in cbGroups.Items)
+                {
+                    group = item as QuickTopicGroup;
+                    db.ExecuteNonQuery("update QUICKTOPICGROUPS set _order=" + i++ + 
+                        " where id=" + group.ID + "");
+                }
+            }            
         }
 
         private void cbTaskTemplates_KeyDown(object sender, KeyEventArgs e)
@@ -237,17 +230,17 @@ namespace Bubbles
             if (selectedItem == null) return;
 
             var item = selectedItem;
-            string name = cbTaskTemplates.Text.Trim();
+            string name = cbQuickTopics.Text.Trim();
 
             if (item.Name != name) // User changed template name
             {
                 if (MessageBox.Show(Utils.getString("taskinfo.quicktask.rename"), "",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    db.ExecuteNonQuery("update TASKTEMPLATES set name=`" + name +
+                    db.ExecuteNonQuery("update QUICKTOPICTEMPLATES set name=`" + name +
                         "` where name=`" + item.Name + "`");
 
-                    DataTable dt = db.ExecuteQuery("select * from TASKTEMPLATES " +
+                    DataTable dt = db.ExecuteQuery("select * from QUICKTOPICTEMPLATES " +
                         "where name=`" + name + "`");
 
                     if (dt.Rows.Count > 0)
@@ -259,18 +252,18 @@ namespace Bubbles
 
                     RemoveItem(item.Name);
                     item.Name = name;
-                    int i = cbTaskTemplates.Items.Add(item);
-                    cbTaskTemplates.SelectedIndex = i;
+                    int i = cbQuickTopics.Items.Add(item);
+                    cbQuickTopics.SelectedIndex = i;
                 }
             }
             else
             {
-                foreach (var _item in cbTaskTemplates.Items)
+                foreach (var _item in cbQuickTopics.Items)
                 {
-                    TaskTemplateItem __item = _item as TaskTemplateItem;
+                    QuickTopicItem __item = _item as QuickTopicItem;
                     if (__item.Name == name)
                     {
-                        cbTaskTemplates.SelectedItem = __item;
+                        cbQuickTopics.SelectedItem = __item;
                         break;
                     }
                 }
@@ -279,12 +272,12 @@ namespace Bubbles
 
         void RemoveItem(string name)
         {
-            foreach (var _item in cbTaskTemplates.Items)
+            foreach (var _item in cbQuickTopics.Items)
             {
-                TaskTemplateItem item = _item as TaskTemplateItem;
+                QuickTopicItem item = _item as QuickTopicItem;
                 if (item.Name == name)
                 {
-                    cbTaskTemplates.Items.Remove(_item);
+                    cbQuickTopics.Items.Remove(_item);
                     return;
                 }
             }
@@ -292,39 +285,94 @@ namespace Bubbles
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            string oldName = cbTaskTemplates.Text;
             string newName = txtTemplateName.Text.Trim();
             if (String.IsNullOrEmpty(newName)) return;
 
-            DataTable dt = db.ExecuteQuery("select * from TASKTEMPLATES " +
-                "where name=`" + newName + "`");
 
-            if (dt.Rows.Count > 0)
+            if (panelTemplateName.Tag.ToString().EndsWith("topic"))
             {
-                MessageBox.Show(Utils.getString("TaskTemplateDlg.templateexists"), "",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                string oldName = cbQuickTopics.Text;
+                int groupID = (cbGroups.SelectedItem as QuickTopicGroup).ID;
+
+                DataTable dt = db.ExecuteQuery("select * from QUICKTOPICTEMPLATES " +
+                    "where name=`" + newName + "` and groupID=" + groupID + "");
+
+                if (dt.Rows.Count > 0)
+                {
+                    MessageBox.Show(Utils.getString("TaskTemplateDlg.templateexists"), "",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if ((string)panelTemplateName.Tag == "newtopic") // add new quick topic
+                {
+                    db.AddQuickTopicTemplate(newName, groupID, cbQuickTopics.Items.Count + 1, 
+                        "", "", "", "rel:today:1;rel:today:1", "", "", "", "", "");
+
+                    int id = 0;
+                    dt = db.ExecuteQuery("SELECT last_insert_rowid()");
+                    if (dt.Rows.Count > 0) id = Convert.ToInt32(dt.Rows[0][0]);
+
+                    QuickTopicItem item = new QuickTopicItem(newName, id, groupID, cbQuickTopics.Items.Count + 1, 
+                        "", 0, 0, "rel:today:1;rel:today:1", "", "", "", "", "");
+                    int i = cbQuickTopics.Items.Add(item);
+                    cbQuickTopics.SelectedIndex = i;
+                }
+                else // rename selected template
+                {
+                    QuickTopicItem item = cbQuickTopics.SelectedItem as QuickTopicItem;
+                    item.Name = newName;
+
+                    // Update template in the database
+                    db.ExecuteNonQuery("update QUICKTOPICTEMPLATES set name=`" + newName +
+                        "` where id=" + item.ID + "");
+
+                    cbQuickTopics.Items.Remove(cbQuickTopics.SelectedItem);
+                    int i = cbQuickTopics.Items.Add(item);
+                    cbQuickTopics.SelectedIndex = i;
+                }
             }
-
-            if ((string)panelTemplateName.Tag == "new") // add new template
+            else // group
             {
-                db.AddTaskTemplate(0, newName, "", "", "", "rel:today:1;rel:today:1", "", "", "", "", "");
-                TaskTemplateItem item = new TaskTemplateItem(0, newName, "", 0, 0, "rel:today:1;rel:today:1", "", "", "", "", "");
-                int i = cbTaskTemplates.Items.Add(item);
-                cbTaskTemplates.SelectedIndex = i;
-            }
-            else // rename selected template
-            {
-                TaskTemplateItem item = cbTaskTemplates.SelectedItem as TaskTemplateItem;
-                item.Name = newName;
+                QuickTopicGroup item = cbGroups.SelectedItem as QuickTopicGroup;
 
-                // Update template in the database
-                db.ExecuteNonQuery("update TASKTEMPLATES set name=`" + newName +
-                    "` where name=`" + oldName + "`");
+                string oldName = item.Name;
+                int groupID = item.ID;
 
-                cbTaskTemplates.Items.Remove(cbTaskTemplates.SelectedItem);
-                int i = cbTaskTemplates.Items.Add(item);
-                cbTaskTemplates.SelectedIndex = i;
+                DataTable dt = db.ExecuteQuery("select * from QUICKTOPICGROUPS " +
+                    "where name=`" + newName + "`");
+
+                if (dt.Rows.Count > 0)
+                {
+                    MessageBox.Show(Utils.getString("TaskTemplateDlg.groupexists"), "",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if ((string)panelTemplateName.Tag == "newgroup") // add new quick topic group
+                {
+                    db.AddQuickTopicGroup(newName, cbGroups.Items.Count + 1);
+
+                    int id = 0;
+                    dt = db.ExecuteQuery("SELECT last_insert_rowid()");
+                    if (dt.Rows.Count > 0) id = Convert.ToInt32(dt.Rows[0][0]);
+
+                    item = new QuickTopicGroup(id, newName, cbGroups.Items.Count + 1);
+                    int i = cbGroups.Items.Add(item);
+                    cbGroups.SelectedIndex = i;
+                }
+                else // rename selected group
+                {
+                    item.Name = newName;
+
+                    // Update template in the database
+                    db.ExecuteNonQuery("update QUICKTOPICGROUPS set name=`" + newName +
+                        "` where id=" + item.ID + "");
+
+                    cbQuickTopics.Items.Remove(cbGroups.SelectedItem);
+                    int i = cbGroups.Items.Add(item);
+                    cbGroups.SelectedIndex = i;
+                }
             }
 
             panelTemplateName.Visible = false;
@@ -337,7 +385,7 @@ namespace Bubbles
 
         private void cbTaskTemplates_SelectedIndexChanged(object sender, EventArgs e)
         {
-            TaskTemplateItem item = cbTaskTemplates.SelectedItem as TaskTemplateItem;
+            QuickTopicItem item = cbQuickTopics.SelectedItem as QuickTopicItem;
             selectedItem = item;
 
             if (item != null)
@@ -348,9 +396,6 @@ namespace Bubbles
                     string[] parts = item.Dates.Split(';');
                     startdate = parts[0]; duedate = parts[1];
                 }
-
-                chPrimary.Checked = item.Primary == 1;
-                if (chPrimary.Checked) chPrimary.Enabled = false; else chPrimary.Enabled = true;
 
                 mutTopicText.Image =
                     item.TopicTextState == "" ? pUnchecked.Image :
@@ -647,23 +692,7 @@ namespace Bubbles
             // First, check if template was renamed!
             RenameTemplate();
 
-            TaskTemplateItem item = cbTaskTemplates.SelectedItem as TaskTemplateItem;
-
-            if (chPrimary.Checked && chPrimary.Enabled) // primary changed!
-            {
-                db.ExecuteNonQuery("update TASKTEMPLATES set prime=0 where prime=1");
-                db.ExecuteNonQuery("update TASKTEMPLATES set prime=1 where name=`" + item.Name + "`");
-                chPrimary.Enabled = false;
-                for (int i = 0; i < cbTaskTemplates.Items.Count; i++)
-                {
-                    TaskTemplateItem _item = cbTaskTemplates.Items[i] as TaskTemplateItem;
-                    if (_item.Primary == 1)
-                    {
-                        _item.Primary = 0; cbTaskTemplates.Items[i] = _item; break;
-                    }
-                }
-                item.Primary = 1;
-            }
+            QuickTopicItem item = cbQuickTopics.SelectedItem as QuickTopicItem;
 
             item.TopicText = txtTopicText.Text.Trim();
             item.Progress = Convert.ToInt32(pProgress.Tag);
@@ -740,25 +769,25 @@ namespace Bubbles
             item.TagsState = (string)ch4Tags.Tag;
 
             string topictext = item.TopicText; if (item.TopicTextState != "")
-                topictext = (string)mutTopicText.Tag + "$$$" + topictext;
-            string progress = item.Progress.ToString(); if ((string)mutProgress.Tag != "")
-                progress = (string)mutProgress.Tag + ":" + progress;
-            string priority = item.Priority.ToString(); if ((string)mutPriority.Tag != "")
-                priority = (string)mutPriority.Tag + ":" + priority;
+                topictext = item.TopicTextState + "$$$" + topictext;
+            string progress = item.Progress.ToString(); if (item.ProgressState != "")
+                progress = item.ProgressState + ":" + progress;
+            string priority = item.Priority.ToString(); if (item.PriorityState != "")
+                priority = item.PriorityState + ":" + priority;
 
-            string state = (string)mutStartDate.Tag + ":" + (string)mutDueDate.Tag;
+            string state = item.StartDateState + ":" + item.DueDateState;
             if (state == ":") state = "";
             string dates = item.Dates.ToString();
             if (state != "") dates = state + "$$$" + dates;
 
-            string resources = item.Resources.ToString(); if ((string)ch4Resources.Tag != "")
-                resources = (string)ch4Resources.Tag + ":" + resources;
-            string _tags = item.Tags.ToString(); if ((string)ch4Tags.Tag != "")
-                _tags = (string)ch4Tags.Tag + ";" + _tags;
-            string icon = item.aIcon.ToString(); if (item.IconState != "")
-                icon = item.IconState + ":" + icon;
+            string resources = item.Resources.ToString(); if (item.ResourcesState != "")
+                resources = item.ResourcesState + ":" + resources;
+            string _tags = item.Tags.ToString(); if (item.TagsState != "")
+                _tags = item.TagsState + ";" + _tags;
+            string _icons = item.aIcon.ToString(); if (item.IconState != "")
+                _icons = item.IconState + ":" + _icons;
 
-            db.ExecuteNonQuery("update TASKTEMPLATES set " +
+            db.ExecuteNonQuery("update QUICKTOPICTEMPLATES set " +
                 "topictext=`" + topictext + "`, " +
                 "progress=`" + progress + "`, " +
                 "priority=`" + priority + "`, " +
@@ -766,7 +795,7 @@ namespace Bubbles
                 "duration=`" + duration + "`, " +
                 "effort=`" + effort + "`, " +
                 "resources=`" + resources + "`, " +
-                "icon=`" + icon + "`, " +
+                "icons=`" + _icons + "`, " +
                 "tags=`" + _tags + "` " +
                 "where name=`" + item.Name + "`");
         }
@@ -775,6 +804,11 @@ namespace Bubbles
         {
             db.Dispose(); db = null;
             this.Close();
+        }
+
+        private void TaskTemplateDlg_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            StixMain.m_TaskInfo.PopulateQuickTopics();
         }
 
         private void pProgress_Click(object sender, EventArgs e)
@@ -899,7 +933,7 @@ namespace Bubbles
         bool start = true;
 
         StixDB db = null;
-        TaskTemplateItem selectedItem = null;
+        QuickTopicItem selectedItem = null;
 
         private void FourStateCB_MouseClick(object sender, MouseEventArgs e)
         {
@@ -968,6 +1002,90 @@ namespace Bubbles
                 mutDuration.Image = pUnchecked.Image;
                 mutDuration.Tag = "";
             }
+        }
+
+        private void cbGroups_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            cbQuickTopics.Items.Clear(); cbQuickTopics.Text = "";
+
+            int groupID = (cbGroups.SelectedItem as QuickTopicGroup).ID;
+            DataTable dt = db.ExecuteQuery("select * from QUICKTOPICTEMPLATES " +
+                "where groupID=" + groupID + " order by name");
+
+            foreach (DataRow row in dt.Rows)
+            {
+                string topictextState = "", progressState = "", priorityState = "", startdateState = "",
+                    duedateState = "", durationState = "", effortState = "", resourcesState = "", iconState = "", tagsState = "";
+
+                string topictext = row["topictext"].ToString();
+                string[] parts = topictext.Split(new string[] { "$$$" }, StringSplitOptions.None);
+                if (parts.Length > 1)
+                {
+                    topictextState = parts[0]; topictext = parts[1]; mutTopicText.Tag = topictextState;
+                }
+
+                string progress = row["progress"].ToString(); int _progress = -1;
+                parts = progress.Split(':');
+                if (parts.Length > 1)
+                {
+                    progressState = parts[0]; _progress = Convert.ToInt32(parts[1]); mutProgress.Tag = progressState;
+                }
+
+                string priority = row["priority"].ToString(); int _priority = 0;
+                parts = priority.Split(':');
+                if (parts.Length > 1)
+                {
+                    priorityState = parts[0]; _priority = Convert.ToInt32(parts[1]); mutPriority.Tag = priorityState;
+                }
+
+                string dates = row["dates"].ToString();
+                parts = dates.Split(new string[] { "$$$" }, StringSplitOptions.None);
+                if (parts.Length > 1)
+                {
+                    string[] states = parts[0].Split(':');
+                    startdateState = states[0]; duedateState = states[1]; dates = parts[1];
+                    mutStartDate.Tag = startdateState; mutDueDate.Tag = duedateState;
+                }
+
+                string duration = row["duration"].ToString();
+                if (duration != "")
+                {
+                    parts = duration.Split(':');
+                    if (parts.Length == 3)
+                    {
+                        durationState = parts[0]; duration = parts[1] + ":" + parts[2];
+                    }
+                }
+
+                string effort = row["effort"].ToString();
+                if (effort != "")
+                {
+                    parts = effort.Split(':');
+                    if (parts.Length == 3)
+                    {
+                        effortState = parts[0]; effort = parts[1] + ":" + parts[2];
+                    }
+                }
+
+                string icons = row["icons"].ToString(); parts = icons.Split(':');
+                if (parts.Length > 1) { iconState = parts[0]; icons = parts[1]; ch4Icon.Tag = iconState; }
+
+                string resources = row["resources"].ToString(); parts = resources.Split(':');
+                if (parts.Length > 1) { resourcesState = parts[0]; resources = parts[1]; ch4Resources.Tag = resourcesState; }
+
+                string tags = row["tags"].ToString(); parts = tags.Split(':');
+                if (parts.Length > 1) { tagsState = parts[0]; tags = parts[1]; ch4Tags.Tag = tagsState; }
+
+                QuickTopicItem item = new QuickTopicItem(row["name"].ToString(), Convert.ToInt32(row["id"]), Convert.ToInt32(row["groupID"]),
+                        Convert.ToInt32(row["_order"]), topictext, _progress, _priority, dates, duration, effort, icons,
+                        resources, tags, topictextState, progressState, priorityState, startdateState,
+                        duedateState, durationState, effortState, iconState, resourcesState, tagsState);
+
+                cbQuickTopics.Items.Add(item);
+            }
+
+            if (cbQuickTopics.Items.Count > 0)
+                cbQuickTopics.SelectedIndex = 0;
         }
     }
 

@@ -68,6 +68,7 @@
             this.mm_paste = new System.Windows.Forms.ToolStripMenuItem();
             this.mm_pastefromclipboard = new System.Windows.Forms.ToolStripMenuItem();
             this.btnRemoveResources = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pHelp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pClose)).BeginInit();
@@ -81,6 +82,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.btnClose)).BeginInit();
             this.cmsResource.SuspendLayout();
             this.cmsMore.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // ListDBResources
@@ -107,6 +109,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.pHelp);
             this.panel1.Controls.Add(this.pClose);
             this.panel1.Location = new System.Drawing.Point(1, 1);
@@ -445,6 +448,18 @@
             this.btnRemoveResources.UseVisualStyleBackColor = false;
             this.btnRemoveResources.Click += new System.EventHandler(this.btnRemoveResources_Click);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(1, 1);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 5;
+            this.pictureBox1.TabStop = false;
+            // 
             // ResourcesDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -474,6 +489,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.btnClose)).EndInit();
             this.cmsResource.ResumeLayout(false);
             this.cmsMore.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -518,5 +534,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem mm_addtomap;
         private System.Windows.Forms.PictureBox splitter;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

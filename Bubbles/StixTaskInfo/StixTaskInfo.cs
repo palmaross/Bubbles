@@ -132,7 +132,7 @@ namespace Bubbles
 
             // Quick Task button context menu
             cmsTaskTemplates.ItemClicked += ContextMenu_ItemClicked;
-            PopulateQuickTasks();
+            PopulateQuickTopics();
 
             // Resources context menu
             cmsResources.ItemClicked += ContextMenu_ItemClicked;
@@ -338,82 +338,135 @@ namespace Bubbles
             }
         }
 
-        void PopulateQuickTasks()
+        public void PopulateQuickTopics()
         {
             cmsTaskTemplates.Items.Clear();
 
             ToolStripItem tsi = cmsTaskTemplates.Items.Add(Utils.getString("taskinfo.quicktask.manage"));
             tsi.Name = "ManageTaskTemplates";
-            StixUtils.SetContextMenuImage(cmsTaskTemplates.Items["ManageTaskTemplates"], "manage.png");
+            StixUtils.SetContextMenuImage(tsi, "manage.png");
+
+            tsi = cmsTaskTemplates.Items.Add(Utils.getString("taskinfo.quicktask.qtaskslist"));
+            tsi.Name = "QuickTaskList";
+            StixUtils.SetContextMenuImage(tsi, "list.png");
+
             cmsTaskTemplates.Items.Add(new ToolStripSeparator());
 
             using (StixDB db = new StixDB())
             {
-                DataTable dt = db.ExecuteQuery("select * from TASKTEMPLATES order by prime DESC, name");
-
+                // Get groups
+                DataTable dt = db.ExecuteQuery("select * from QUICKTOPICGROUPS order by _order");
+                Dictionary<int, string> groups = new Dictionary<int, string>();
                 foreach (DataRow row in dt.Rows)
+                    groups.Add(Convert.ToInt32(row["id"]), row["name"].ToString());
+
+                if (StixMain.m_QuickTopics != null && StixMain.m_QuickTopics.Visible)
+                    StixMain.m_QuickTopics.treeView1.Nodes.Clear();
+
+                foreach (var group in groups)
                 {
-                    string topictextState = "", progressState = "", priorityState = "", startdateState = "",
-                    duedateState = "", durationState = "", effortState = "", resourcesState = "", iconState = "", tagsState = "";
+                    ToolStripDropDown dd = null;
+                    TreeNode groupNode = null;
 
-                    string topictext = row["topictext"].ToString();
-                    string[] parts = topictext.Split(new string[] { "$$$" }, StringSplitOptions.None);
-                    if (parts.Length > 1) {
-                        topictextState = parts[0]; topictext = parts[1]; }
-
-                    string progress = row["progress"].ToString(); int _progress = -1;
-                    parts = progress.Split(':');
-                    if (parts.Length > 1) {
-                        progressState = parts[0]; _progress = Convert.ToInt32(parts[1]); }
-
-                    string priority = row["priority"].ToString(); int _priority = 0;
-                    parts = priority.Split(':');
-                    if (parts.Length > 1) {
-                        priorityState = parts[0]; _priority = Convert.ToInt32(parts[1]); }
-
-                    string dates = row["dates"].ToString();
-                    parts = dates.Split(new string[] { "$$$" }, StringSplitOptions.None);
-                    if (parts.Length > 1) { string[] states = parts[0].Split(':');
-                        startdateState = states[0]; duedateState = states[1]; dates = parts[1]; }
-
-                    string duration = row["duration"].ToString();
-                    if (duration != "")
+                    if (StixMain.m_QuickTopics != null && StixMain.m_QuickTopics.Visible)
                     {
-                        parts = duration.Split(':');
-                        if (parts.Length == 3)
-                        {
-                            durationState = parts[0]; duration = parts[1] + ":" + parts[2];
-                        }
+                        groupNode = StixMain.m_QuickTopics.treeView1.Nodes.Add(group.Value);
+                        groupNode.Tag = group.Key; groupNode.Name = "QTGroup";
                     }
 
-                    string effort = row["effort"].ToString();
-                    if (effort != "")
+                    if (group.Key > 1) // Not Favorites
                     {
-                        parts = effort.Split(':');
-                        if (parts.Length == 3)
-                        {
-                            effortState = parts[0]; effort = parts[1] + ":" + parts[2];
-                        }
+                        tsi = cmsTaskTemplates.Items.Add(group.Value);
+                        tsi.Tag = group.Key;
+                        dd = (tsi as ToolStripMenuItem).DropDown;
+                        (dd as ToolStripDropDownMenu).ShowImageMargin = false;
                     }
 
-                    string icon = row["icon"].ToString(); parts = icon.Split(':');
-                    if (parts.Length > 1) { iconState = parts[0]; icon = parts[1]; }
+                    dt = db.ExecuteQuery("select * from QUICKTOPICTEMPLATES " +
+                        "where groupID=" + group.Key + " order by _order");
 
-                    string resources = row["resources"].ToString(); parts = resources.Split(':');
-                    if (parts.Length > 1) { resourcesState = parts[0]; resources = parts[1]; }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        string topictextState = "", progressState = "", priorityState = "", startdateState = "",
+                        duedateState = "", durationState = "", effortState = "", resourcesState = "", iconState = "", tagsState = "";
 
-                    string tags = row["tags"].ToString(); parts = tags.Split(':');
-                    if (parts.Length > 1) { tagsState = parts[0]; tags = parts[1]; }
+                        string topictext = row["topictext"].ToString();
+                        string[] parts = topictext.Split(new string[] { "$$$" }, StringSplitOptions.None);
+                        if (parts.Length > 1)
+                        {
+                            topictextState = parts[0]; topictext = parts[1];
+                        }
 
-                    TaskTemplateItem item = new TaskTemplateItem(Convert.ToInt32(row["prime"]), row["name"].ToString(),
-                        topictext, _progress, _priority, dates, duration, effort, icon, resources, tags,
-                        topictextState, progressState, priorityState, startdateState, duedateState,
-                        durationState, effortState, iconState, resourcesState, tagsState);
+                        string progress = row["progress"].ToString(); int _progress = -1;
+                        parts = progress.Split(':');
+                        if (parts.Length > 1)
+                        {
+                            progressState = parts[0]; _progress = Convert.ToInt32(parts[1]);
+                        }
 
-                    tsi = cmsTaskTemplates.Items.Add(item.Name);
-                    tsi.Tag = item; tsi.Name = "TaskTemplate";
+                        string priority = row["priority"].ToString(); int _priority = 0;
+                        parts = priority.Split(':');
+                        if (parts.Length > 1)
+                        {
+                            priorityState = parts[0]; _priority = Convert.ToInt32(parts[1]);
+                        }
 
-                    if (item.Primary == 1) primaryQuickTask = item;
+                        string dates = row["dates"].ToString();
+                        parts = dates.Split(new string[] { "$$$" }, StringSplitOptions.None);
+                        if (parts.Length > 1)
+                        {
+                            string[] states = parts[0].Split(':');
+                            startdateState = states[0]; duedateState = states[1]; dates = parts[1];
+                        }
+
+                        string duration = row["duration"].ToString();
+                        if (duration != "")
+                        {
+                            parts = duration.Split(':');
+                            if (parts.Length == 3)
+                            {
+                                durationState = parts[0]; duration = parts[1] + ":" + parts[2];
+                            }
+                        }
+
+                        string effort = row["effort"].ToString();
+                        if (effort != "")
+                        {
+                            parts = effort.Split(':');
+                            if (parts.Length == 3)
+                            {
+                                effortState = parts[0]; effort = parts[1] + ":" + parts[2];
+                            }
+                        }
+
+                        string icons = row["icons"].ToString(); parts = icons.Split(':');
+                        if (parts.Length > 1) { iconState = parts[0]; icons = parts[1]; }
+
+                        string resources = row["resources"].ToString(); parts = resources.Split(':');
+                        if (parts.Length > 1) { resourcesState = parts[0]; resources = parts[1]; }
+
+                        string tags = row["tags"].ToString(); parts = tags.Split(':');
+                        if (parts.Length > 1) { tagsState = parts[0]; tags = parts[1]; }
+
+                        QuickTopicItem item = new QuickTopicItem(row["name"].ToString(), Convert.ToInt32(row["id"]), Convert.ToInt32(row["groupID"]),
+                            Convert.ToInt32(row["_order"]), topictext, _progress, _priority, dates, duration, effort, icons,
+                            resources, tags, topictextState, progressState, priorityState, startdateState,
+                            duedateState, durationState, effortState, iconState, resourcesState, tagsState);
+
+                        if (group.Key == 1) // Favorites
+                        {
+                            tsi = cmsTaskTemplates.Items.Add(item.Name);
+                            tsi.Tag = item; tsi.Name = "TaskTemplate";
+                        }
+                        else // Other group
+                        {
+                            tsi = dd.Items.Add(item.Name);
+                            tsi.Tag = item; tsi.Name = "TaskTemplate";
+                        }
+
+                        if (StixMain.m_QuickTopics != null && StixMain.m_QuickTopics.Visible)
+                            groupNode.Nodes.Add(item.Name).Tag = item;
+                    }
                 }
             }
         }
@@ -481,7 +534,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "TaskTemplate")
             {
-                QuickTask = e.ClickedItem.Tag as TaskTemplateItem;
+                QuickTask = e.ClickedItem.Tag as QuickTopicItem;
 
                 Transaction _tr = MMUtils.ActiveDocument.NewTransaction(Utils.getString("QuickTask.transaction.name"));
                 _tr.IsUndoable = true;
@@ -493,7 +546,19 @@ namespace Bubbles
                 using (TaskTemplateDlg dlg = new TaskTemplateDlg())
                     dlg.ShowDialog();
 
-                PopulateQuickTasks();
+                PopulateQuickTopics();
+            }
+            else if (e.ClickedItem.Name == "QuickTaskList")
+            {
+                if (StixMain.m_QuickTopics == null || StixMain.m_QuickTopics.IsDisposed)
+                {
+                    StixMain.m_QuickTopics = new QuickTopicsDlg();
+                    StixMain.m_QuickTopics.Location = StixUtils.GetChildLocation(this, StixMain.m_QuickTopics.Bounds, orientation);
+                    StixMain.m_QuickTopics.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                }
+                PopulateQuickTopics();
+                // Expand Favorites
+                StixMain.m_QuickTopics.treeView1.Nodes[0].Expand();
             }
             else if (e.ClickedItem.Name.StartsWith("Dates_"))
             {
@@ -573,7 +638,6 @@ namespace Bubbles
             if (e.ClickedItem.Name == "BI_close")
             {
                 StixMain.STICKS.Remove((int)this.Tag);
-                StixMain.m_TaskInfo = null;
                 this.Close();
             }
             else if (e.ClickedItem.Name == "BI_rotate")
@@ -965,9 +1029,8 @@ namespace Bubbles
 
         private void pQuickTask_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left && primaryQuickTask != null)
+            if (e.Button == MouseButtons.Left)
             {
-                QuickTask = primaryQuickTask;
                 Transaction _tr = MMUtils.ActiveDocument.NewTransaction(Utils.getString("QuickTask.transaction.name"));
                 _tr.IsUndoable = true;
                 _tr.Execute += new ITransactionEvents_ExecuteEventHandler(SetQuickTask);
@@ -982,7 +1045,7 @@ namespace Bubbles
             }
         }
 
-        void SetQuickTask(Document pDocument)
+        public void SetQuickTask(Document pDocument)
         {
             if (MMUtils.ActiveDocument == null ||
                 MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0) return;
@@ -1180,8 +1243,7 @@ namespace Bubbles
 
         string orientation = "H";
 
-        TaskTemplateItem primaryQuickTask = null;
-        TaskTemplateItem QuickTask = null;
+        public QuickTopicItem QuickTask = null;
         string daterightclick = "";
         public float scaleFactor = 100;
 
@@ -1196,16 +1258,37 @@ namespace Bubbles
         public static extern bool ReleaseCapture();
     }
 
-    public class TaskTemplateItem
+    public class QuickTopicGroup
     {
-        public TaskTemplateItem(int primary, string name, string topicText, int progress, int priority,
+        public QuickTopicGroup(int id, string name, int order) 
+        {
+            ID = id;
+            Name = name;
+            Order = order;
+        }
+
+        public int ID;
+        public string Name = "";
+        public int Order;
+
+        public override string ToString()
+        {
+            return Name;
+        }
+    }
+
+    public class QuickTopicItem
+    {
+        public QuickTopicItem(string name, int id, int groupID, int order, string topicText, int progress, int priority,
             string dates, string duration, string effort, string icon, string resources, string tags,
             string topicTextState = "", string progressState = "", string priorityState = "", 
             string startDateState = "", string dueDateState = "", string durationState = "", string effortState = "",
             string iconState = "", string resourcesState = "", string tagsState = "")
         {
-            Primary = primary;
             Name = name;
+            ID = id;
+            GroupID = groupID;
+            Order = order;
             TopicText = topicText;
             Progress = progress;
             Priority = priority;
@@ -1222,7 +1305,9 @@ namespace Bubbles
         }
 
         public string TopicText = "";
-        public int Primary = 0;
+        public int ID;
+        public int GroupID = 1;
+        public int Order = 0;
         public string Name = "";
         public int Progress = 0;
         public int Priority = 0;

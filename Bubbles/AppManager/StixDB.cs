@@ -102,16 +102,6 @@ namespace Bubbles
                 );
         }
 
-        public void AddConfig(string name, int start)
-        {
-            m_db.ExecuteNonQuery("insert into CONFIGS values(NULL, `"
-                + name + "`, "
-                + start + ", "
-                + "'', 0"
-                + ");"
-                );
-        }
-
         public void AddPattern(string templateName, string topicName, string pattern, string topicType)
         {
             m_db.ExecuteNonQuery("insert into ADDTOPIC_TEMPLATES values(NULL, `"
@@ -124,19 +114,30 @@ namespace Bubbles
             );
         }
 
-        public void AddTaskTemplate(int primary, string name, string topictext, string progress, string priority, 
-            string dates, string duration, string effort, string icon, string resources, string tags)
+        public void AddQuickTopicGroup(string name, int order = 100)
         {
-            m_db.ExecuteNonQuery("insert into TASKTEMPLATES values("
-                + primary + ", `"
-                + name + "`, `"
+            m_db.ExecuteNonQuery("insert into QUICKTOPICGROUPS values(NULL, `"
+                + name + "`, "
+                + order + ", "
+                + "'', 0"
+                + ");"
+                );
+        }
+
+        public void AddQuickTopicTemplate(string name, int groupID, int order, string topictext, string progress, string priority, 
+            string dates, string duration, string effort, string icons, string resources, string tags)
+        {
+            m_db.ExecuteNonQuery("insert into QUICKTOPICTEMPLATES values(NULL, `"
+                + name + "`, "
+                + groupID + ", "
+                + order + ", `"
                 + topictext + "`, `"
                 + progress + "`, `"
                 + priority + "`, `"
                 + dates + "`, `"
                 + duration + "`, `"
                 + effort + "`, `"
-                + icon + "`, `"
+                + icons + "`, `"
                 + resources + "`, `"
                 + tags + "`, "
                 + "'', '', '', 0, 0"
@@ -172,6 +173,31 @@ namespace Bubbles
                 + mapPath + "`, `"
                 + topicGuid + "`, "
                 + groupID + ", "
+                + "'', 0"
+                + ");"
+                );
+        }
+
+        public void AddAudioGroup(string name)
+        {
+            m_db.ExecuteNonQuery("insert into AUDIOGROUPS values(NULL, `"
+                + name + "`, "
+                + "'', 0"
+                + ");"
+                );
+        }
+
+        public void AddAudio(string title, string path, int length, string mappath, string topicguid, 
+            int groupID, string timepoints)
+        {
+            m_db.ExecuteNonQuery("insert into AUDIOS values(NULL, `"
+                + title + "`, `"
+                + path + "`, "
+                + length + ", `"
+                + mappath + "`, `"
+                + topicguid + "`, "
+                + groupID + ", `"
+                + timepoints + "`, "
                 + "'', 0"
                 + ");"
                 );
@@ -219,6 +245,7 @@ namespace Bubbles
             m_db.ExecuteNonQuery("CREATE TABLE LINKS(title text, path text, type text, " +
                 "state text, comment text, groupID int, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
+            // state - processed, important, etc...
 
             m_db.ExecuteNonQuery("CREATE TABLE TOOLS(title text, tooltip text, path text, type text, " +
                 "_order integer, stixID int, args text, " +
@@ -228,13 +255,15 @@ namespace Bubbles
             //      WindowsTool 'appUserModelID', starting with "WT_". Eg.: WT_Microsoft.WindowsCalculator_8wekyb3d8bbwe!App
             // type - file type (.exe, .docx, .txt, etc.)
             //      or tool icon filename, ex.: "tool-calculator.png" (stored in the IconDB)
-            // if stixID == 0, tool appears in the ToolStix menu
-            // if stixID == -1, tool appears in the right part in the WindowsToolsDlg 
+            // args - pages to open, for word and pdf documents
 
-            // Quick tasks
-            m_db.ExecuteNonQuery("CREATE TABLE TASKTEMPLATES(prime int, name text, topictext text, " +
-                "progress text, priority text, dates text, duration text, effort text, " +
-                "icon text, resources text, tags text, properties text, " +
+            m_db.ExecuteNonQuery("CREATE TABLE QUICKTOPICGROUPS(id INTEGER PRIMARY KEY, name text, _order int, " +
+                "reserved1 text, reserved2 integer);");
+
+            // Quick topics
+            m_db.ExecuteNonQuery("CREATE TABLE QUICKTOPICTEMPLATES(id INTEGER PRIMARY KEY, name text, " +
+                "groupID int, _order int, topictext text, progress text, priority text, dates text, " +
+                "duration text, effort text, icons text, resources text, tags text, properties text, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
             // topictext - "state$$$topictext"
             // progress - "state:int
@@ -243,7 +272,7 @@ namespace Bubbles
             //          abs - calendar date; rel - period, N - day of week or month
             // duration - "state:1:2" (0 - minutes, 1 - hours, 2 - days, 3 - weeks, 4 - months)
             // effort - "state:4:1"
-            // icon - same as in ICONS (file name for stock icons, signature for custom icons)
+            // icons - same as in ICONS (file name for stock icons, signature for custom icons)
             // resources - "state:resources"
             // tags - "state;group:tag;group:tag"
             // properties - "state;name:value:type;name:value:type;name:value:type"
@@ -261,8 +290,13 @@ namespace Bubbles
             m_db.ExecuteNonQuery("CREATE TABLE TOPICWIDTHS(name text, chars int, _value int, _checked int," +
                 "reserved1 text, reserved2 integer);");
 
-            m_db.ExecuteNonQuery("CREATE TABLE OMNISOUNDS(path text, length text, mappath, topicguid text, " +
+            m_db.ExecuteNonQuery("CREATE TABLE AUDIOGROUPS(id INTEGER PRIMARY KEY, name text, " +
                 "reserved1 text, reserved2 integer);");
+
+            m_db.ExecuteNonQuery("CREATE TABLE AUDIOS(id INTEGER PRIMARY KEY,title text, path text, " +
+                "length integer, mappath text, topicguid text, groupID int, timepoints text, " +
+                "reserved1 text, reserved2 integer);");
+            // timepoints - "tagname:seconds;tagname:seconds"
 
             m_db.ExecuteNonQuery("END");
 
@@ -366,9 +400,10 @@ namespace Bubbles
             AddResource(Utils.getString("taskinfo.database.resources.res4"), "#ffffff80", _id);
 
             // Add Task Templates
-            AddTaskTemplate(1, Utils.getString("quicktask.template.default"), "", "checked:0", "", "checked:checked$$$rel:today:1;rel:today:1", "", "", "", "", "");
-            AddTaskTemplate(0, Utils.getString("quicktask.template.important"), "", "", "checked:1", "checked:checked$$$rel:today:1;rel:today:1", "", "", "", "", "");
-            AddTaskTemplate(0, Utils.getString("quicktask.template.completed"), "", "checked:100", "", ":checked$$$;rel:today:1", "", "", "", "", "");
+            AddQuickTopicGroup(Utils.getString("quicktopic.favorites"), 1);
+            AddQuickTopicTemplate(Utils.getString("quicktask.template.default"), 1, 1, "", "checked:0", "", "checked:checked$$$rel:today:1;rel:today:1", "", "", "", "", "");
+            AddQuickTopicTemplate(Utils.getString("quicktask.template.important"), 1, 2, "", "", "checked:1", "checked:checked$$$rel:today:1;rel:today:1", "", "", "", "", "");
+            AddQuickTopicTemplate(Utils.getString("quicktask.template.completed"), 1, 3, "", "checked:100", "", ":checked$$$;rel:today:1", "", "", "", "", "");
 
             // Add values for Topic Width dialog
             AddTopicWidth("numMainWidth", 0, 64, 1);

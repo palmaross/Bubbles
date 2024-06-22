@@ -27,10 +27,9 @@ namespace Bubbles
             toolTip1.SetToolTip(stxAddTopics, Utils.getString("StixAddTopic.tooltip"));
             toolTip1.SetToolTip(stxTextOps, Utils.getString("StixTextOps.tooltip"));
             toolTip1.SetToolTip(stxFormat, Utils.getString("StixFormat.tooltip"));
-            toolTip1.SetToolTip(boxResources, Utils.getString("Box.Resources"));
             toolTip1.SetToolTip(boxBookmarks, Utils.getString("Box.Bookmarks"));
             toolTip1.SetToolTip(boxSources, Utils.getString("Box.Links"));
-            toolTip1.SetToolTip(OmniRec, Utils.getString("Box.OmniSound"));
+            toolTip1.SetToolTip(OmniSound, Utils.getString("Box.OmniSound"));
             toolTip1.SetToolTip(Stickers, Utils.getString("stickers.contextmenu.stickers"));
 
             cm_show.Text = Utils.getString("startmenu.contextmenu.show");
@@ -48,7 +47,16 @@ namespace Bubbles
             cm_autoclose.Text = Utils.getString("startmenu.contextmenu.autohide");
             cm_closemenu.Text = Utils.getString("button.close");
 
+            TopicPlayer.Text = Utils.getString("TopicPlayer.Title");
+            TopicRecorder.Text = Utils.getString("TopicRecorder.Title");
+
             StixUtils.cmiSize = p2.Size;
+
+            o_QuickTopics.Text = Utils.getString("QuickTopicsDlg.Title");
+            StixUtils.SetContextMenuImage(o_QuickTopics, "quicktask.png");
+            o_Resources.Text = Utils.getString("taskinfo.Resources");
+            StixUtils.SetContextMenuImage(o_Resources, "resources.png");
+            cmsMisc.ItemClicked += CmsMisc_ItemClicked;
 
             Color c = ColorTranslator.FromHtml("#e0e5ed");
             this.BackColor = c;
@@ -91,6 +99,43 @@ namespace Bubbles
 
             this.MouseDown += Move_StartMenu;
             panelBoxes.MouseDown += Move_StartMenu;
+        }
+
+        private void CmsMisc_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem == o_QuickTopics)
+            {
+                if (StixMain.m_QuickTopics == null || StixMain.m_QuickTopics.IsDisposed)
+                {
+                    StixMain.m_QuickTopics = new QuickTopicsDlg();
+                    StixMain.m_QuickTopics.Location = StixUtils.GetChildLocation(this, StixMain.m_QuickTopics.Bounds, "H");
+                    StixMain.m_QuickTopics.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+
+                    StixMain.m_TaskInfo.PopulateQuickTopics();
+
+                    // Expand Favorites
+                    StixMain.m_QuickTopics.treeView1.Nodes[0].Expand();
+                }
+            }
+            else if (e.ClickedItem == o_Resources)
+            {
+                if (StixMain.m_Resources == null)
+                    StixMain.m_Resources = new ResourcesDlg();
+
+                StixMain.m_Resources.InitCurrentMapResources();
+
+                if (StixMain.m_Resources.Visible)
+                    StixMain.m_Resources.WindowState = FormWindowState.Normal;
+                else
+                {
+                    if (StixMain.m_Resources.Location.IsEmpty)
+                    {
+                        StixMain.m_Resources.Location =
+                            new Point(StixMain.OmniStixButton.Location.X, this.Bottom);
+                    }
+                    StixMain.m_Resources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                }
+            }
         }
 
         private void Move_StartMenu(object sender, MouseEventArgs e)
@@ -290,38 +335,61 @@ namespace Bubbles
             }
         }
 
-        private void BoxResources_Click(object sender, EventArgs e)
+        private void Misc_MouseDown(object sender, MouseEventArgs e)
         {
-            if (StixMain.m_Resources == null)
-                StixMain.m_Resources = new ResourcesDlg();
+            cmsMisc.Show(MousePosition);
+        }
 
-            StixMain.m_Resources.InitCurrentMapResources();
-
-            if (StixMain.m_Resources.Visible)
-                StixMain.m_Resources.WindowState = FormWindowState.Normal;
-            else
+        private void OmniSound_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
             {
-                if (StixMain.m_Resources.Location.IsEmpty)
+                StixMain.m_OmniSound.InitAudioFiles();
+
+                if (StixMain.m_OmniSound.Visible)
+                    StixMain.m_OmniSound.WindowState = FormWindowState.Normal;
+                else
                 {
-                    StixMain.m_Resources.Location =
-                        new Point(StixMain.OmniStixButton.Location.X, this.Bottom);
+                    if (StixMain.m_OmniSound.Location.IsEmpty)
+                    {
+                        StixMain.m_OmniSound.Location =
+                            new Point(StixMain.OmniStixButton.Location.X, this.Bottom);
+                    }
+                    StixMain.m_OmniSound.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                 }
-                StixMain.m_Resources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                //foreach (ToolStripItem item in cmsOmniSound.Items)
+                //    item.Visible = true;
+
+                cmsOmniSound.Show(MousePosition);
             }
         }
 
-        private void OmniRec_Click(object sender, EventArgs e)
+        private void cmsOmniSound_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (StixMain.m_OmniSound.Visible)
-                StixMain.m_OmniSound.WindowState = FormWindowState.Normal;
-            else
+            if (e.ClickedItem == TopicPlayer)
             {
-                if (StixMain.m_OmniSound.Location.IsEmpty)
+                if (StixMain.m_TopicPlayer == null || StixMain.m_TopicPlayer.IsDisposed)
                 {
-                    StixMain.m_OmniSound.Location =
-                        new Point(StixMain.OmniStixButton.Location.X, this.Bottom);
+                    StixMain.m_TopicPlayer = new TopicPlayer(StixMain.OmniStixButton.Bounds, "", "");
+                    StixMain.m_TopicPlayer.btnPlay.Visible = true;
+                    StixMain.m_TopicPlayer.btnPlay.Location = StixMain.m_TopicPlayer.btnPause.Location;
                 }
-                StixMain.m_OmniSound.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+
+                if (!StixMain.m_TopicPlayer.Visible)
+                    StixMain.m_TopicPlayer.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            }
+            else if (e.ClickedItem == TopicRecorder)
+            {
+                if (StixMain.m_TopicRecorder == null || StixMain.m_TopicRecorder.IsDisposed)
+                {
+                    StixMain.m_TopicRecorder = new TopicRecorder(StixMain.OmniStixButton.Bounds, "");
+                }
+
+                if (!StixMain.m_TopicRecorder.Visible)
+                    StixMain.m_TopicRecorder.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
         }
 
@@ -482,7 +550,7 @@ namespace Bubbles
         /// Get stick parameters
         /// </summary>
         /// <returns>0 - stick troubles, don't run, 1 - stick ok, run it, 2 - stick already runned</returns>
-        int StickClicked(string type, ref string orientation, ref string location, ref string name, ref int id)
+        public int StickClicked(string type, ref string orientation, ref string location, ref string name, ref int id)
         {
             id = GetStick(type, id, ref location, ref orientation, ref name);
 

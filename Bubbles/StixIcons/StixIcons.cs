@@ -199,7 +199,6 @@ namespace Bubbles
             }
         }
 
-
         private void this_Paint(object sender, PaintEventArgs e)
         {
             if (scaleFactor < 125) return;

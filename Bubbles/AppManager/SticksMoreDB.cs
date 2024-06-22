@@ -78,8 +78,6 @@ namespace Bubbles
             m_db.ExecuteNonQuery("CREATE TABLE NOTETAGS(tag text, reserved1 text, reserved2 integer);");
             m_db.ExecuteNonQuery("CREATE TABLE IDEAS(content text, rating text, groupID int, " +
                 "reserved1 text, reserved2 integer);");
-            m_db.ExecuteNonQuery("CREATE TABLE LINKS(id INTEGER PRIMARY KEY, title text, link text, groupID int, " +
-                "reserved1 text, reserved2 integer);");
             m_db.ExecuteNonQuery("CREATE TABLE SNIPPETS(snippet text, reserved1 text, reserved2 integer);");
             m_db.ExecuteNonQuery("CREATE TABLE TODOS(id INTEGER PRIMARY KEY, todo text, datetime text, groupID int, " +
                 "reserved1 text, reserved2 integer);");

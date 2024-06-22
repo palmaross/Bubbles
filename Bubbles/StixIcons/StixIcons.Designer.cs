@@ -35,6 +35,7 @@
             this.BI_new = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_removeallfromtopic = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_addtomap = new System.Windows.Forms.ToolStripMenuItem();
+            this.BI_addtostix = new System.Windows.Forms.ToolStripMenuItem();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.label1 = new System.Windows.Forms.Label();
             this.Manage = new System.Windows.Forms.PictureBox();
@@ -45,7 +46,6 @@
             this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.p1 = new System.Windows.Forms.PictureBox();
             this.pIconDist = new System.Windows.Forms.PictureBox();
-            this.BI_addtostix = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsManage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
@@ -67,7 +67,7 @@
             this.BI_addtomap,
             this.BI_addtostix});
             this.cmsManage.Name = "contextMenuStrip1";
-            this.cmsManage.Size = new System.Drawing.Size(226, 114);
+            this.cmsManage.Size = new System.Drawing.Size(226, 92);
             // 
             // BI_new
             // 
@@ -86,6 +86,12 @@
             this.BI_addtomap.Name = "BI_addtomap";
             this.BI_addtomap.Size = new System.Drawing.Size(225, 22);
             this.BI_addtomap.Text = "Add to Map";
+            // 
+            // BI_addtostix
+            // 
+            this.BI_addtostix.Name = "BI_addtostix";
+            this.BI_addtostix.Size = new System.Drawing.Size(225, 22);
+            this.BI_addtostix.Text = "Add to Stix";
             // 
             // label1
             // 
@@ -168,12 +174,6 @@
             this.pIconDist.TabIndex = 101;
             this.pIconDist.TabStop = false;
             this.pIconDist.Visible = false;
-            // 
-            // BI_addtostix
-            // 
-            this.BI_addtostix.Name = "BI_addtostix";
-            this.BI_addtostix.Size = new System.Drawing.Size(225, 22);
-            this.BI_addtostix.Text = "Add to Stix";
             // 
             // StixIcons
             // 

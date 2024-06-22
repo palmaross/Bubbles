@@ -65,6 +65,27 @@
     <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.5.0, Culture=neutral, PublicKeyToken=8985beaab7ea3f04, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft-WindowsAPICodePack-Shell.1.1.5\lib\net472\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
     </Reference>
+    <Reference Include="NAudio, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.2.2.1\lib\net472\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio.Asio, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.Asio.2.2.1\lib\netstandard2.0\NAudio.Asio.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.Core.2.2.1\lib\netstandard2.0\NAudio.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio.Midi, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.Midi.2.2.1\lib\netstandard2.0\NAudio.Midi.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio.Wasapi, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.Wasapi.2.2.1\lib\netstandard2.0\NAudio.Wasapi.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio.WinForms, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.WinForms.2.2.1\lib\net472\NAudio.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio.WinMM, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.WinMM.2.2.1\lib\netstandard2.0\NAudio.WinMM.dll</HintPath>
+    </Reference>
     <Reference Include="PalmaRossCommon22, Version=1.0.0.0, Culture=neutral, PublicKeyToken=057dcba4e358e84f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Common\PalmaRossCommon22.dll</HintPath>
@@ -143,11 +164,32 @@
     <Compile Include="OmniSound\OmniSound.Designer.cs">
       <DependentUpon>OmniSound.cs</DependentUpon>
     </Compile>
-    <Compile Include="OmniSound\PlayBox.cs">
+    <Compile Include="OmniSound\SaveRecordDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OmniSound\PlayBox.Designer.cs">
-      <DependentUpon>PlayBox.cs</DependentUpon>
+    <Compile Include="OmniSound\SaveRecordDlg.Designer.cs">
+      <DependentUpon>SaveRecordDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OmniSound\TickerLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="OmniSound\TimeLimitReachedDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OmniSound\TimeLimitReachedDlg.Designer.cs">
+      <DependentUpon>TimeLimitReachedDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OmniSound\TopicPlayer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OmniSound\TopicPlayer.Designer.cs">
+      <DependentUpon>TopicPlayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OmniSound\TopicRecorder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OmniSound\TopicRecorder.Designer.cs">
+      <DependentUpon>TopicRecorder.cs</DependentUpon>
     </Compile>
     <Compile Include="Organizer\SnippetsDlg.cs">
       <SubType>Form</SubType>
@@ -272,6 +314,12 @@
     </Compile>
     <Compile Include="StixTaskInfo\MyDateTimePicker.Designer.cs">
       <DependentUpon>MyDateTimePicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StixTaskInfo\QuickTopicsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StixTaskInfo\QuickTopicsDlg.Designer.cs">
+      <DependentUpon>QuickTopicsDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="StixTaskInfo\ResourcesDlg.cs">
       <SubType>Form</SubType>
@@ -880,8 +928,17 @@
     <EmbeddedResource Include="OmniSound\OmniSound.resx">
       <DependentUpon>OmniSound.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OmniSound\PlayBox.resx">
-      <DependentUpon>PlayBox.cs</DependentUpon>
+    <EmbeddedResource Include="OmniSound\SaveRecordDlg.resx">
+      <DependentUpon>SaveRecordDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OmniSound\TimeLimitReachedDlg.resx">
+      <DependentUpon>TimeLimitReachedDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OmniSound\TopicPlayer.resx">
+      <DependentUpon>TopicPlayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OmniSound\TopicRecorder.resx">
+      <DependentUpon>TopicRecorder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Organizer\ManageNoteGroups.resx">
       <DependentUpon>ManageNoteGroups.cs</DependentUpon>
@@ -961,6 +1018,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StixTaskInfo\MyDateTimePicker.resx">
       <DependentUpon>MyDateTimePicker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StixTaskInfo\QuickTopicsDlg.resx">
+      <DependentUpon>QuickTopicsDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StixTaskInfo\ResourcesDlg.resx">
       <DependentUpon>ResourcesDlg.cs</DependentUpon>

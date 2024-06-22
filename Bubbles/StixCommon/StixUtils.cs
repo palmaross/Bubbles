@@ -823,10 +823,13 @@ namespace Bubbles
                 cms.Items.Add(new ToolStripSeparator());
             }
 
-            tsi = cms.Items.Add(Utils.getString("stix.contextmenu.rotate"));
-            tsi.Name = "BI_rotate";
-            tsi.ImageScaling = ToolStripItemImageScaling.None;
-            tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "rotate.png"), cmiSize);
+            if (stickType != typeTopicPlayer && stickType != "TopicRecorder")
+            {
+                tsi = cms.Items.Add(Utils.getString("stix.contextmenu.rotate"));
+                tsi.Name = "BI_rotate";
+                tsi.ImageScaling = ToolStripItemImageScaling.None;
+                tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "rotate.png"), cmiSize);
+            }
 
             tsi = cms.Items.Add(Utils.getString("stix.contextmenu.remember"));
             tsi.Name = "BI_store";
@@ -975,7 +978,8 @@ namespace Bubbles
         public const string typestick = "stick", typebase = "StixBase",
             typeicons = "StixIcons", typetaskinfo = "StixTaskInfo", 
             typeformat = "StixFormat", typetools = "StixTools", typemapnavigator = "StixMapNavigator",
-            typeaddtopic = "StixAddTopic", typetextops = "StixTextOps", typeorganizer = "StixOrganizer";
+            typeaddtopic = "StixAddTopic", typetextops = "StixTextOps", typeorganizer = "StixOrganizer",
+            typeTopicPlayer = "TopicPlayer";
 
         public static int stickLength;
         public static int icondist;

@@ -11,6 +11,7 @@ using PopupControl;
 using System.Linq;
 using AppManager;
 using System.IO;
+using NAudio.Wave;
 
 namespace Bubbles
 {
@@ -28,9 +29,16 @@ namespace Bubbles
             m_cmdDetachNotes.Click += new ICommandEvents_ClickEventHandler(m_cmdDetachNotes_Click);
             m_cmdDetachNotes.SetDynamicMenu(MmDynamicMenu.mmDynamicMenuContextTopic);
 
+            m_cmdTopicAudioNote = MMUtils.MindManager.Commands.Add(Utils.Registered_AddinName, "omnistix.TopicAudioNote");
+            m_cmdTopicAudioNote.Caption = Utils.getString("topiccontextmenu.audinote");
+            m_cmdTopicAudioNote.UpdateState += new ICommandEvents_UpdateStateEventHandler(m_cmdTopicAudioNote_UpdateState);
+            m_cmdTopicAudioNote.ImagePath = Utils.ImagesPath + "audio.ico";
+            m_cmdTopicAudioNote.Click += new ICommandEvents_ClickEventHandler(m_cmdTopicAudioNote_Click);
+            m_cmdTopicAudioNote.SetDynamicMenu(MmDynamicMenu.mmDynamicMenuContextTopic);
+
             m_menus = new DynamicMenus();
 
-            m_controlStrip = MMUtils.MindManager.ControlStripTypeRegistry.RegisterControlStripType(STRIP_URI, Utils.m_imagesPath + "audio.ico", true);
+            m_controlStrip = MMUtils.MindManager.ControlStripTypeRegistry.RegisterControlStripType(SOUNDSTRIP_URI, Utils.m_imagesPath + "audio.ico", true);
             m_controlStrip.FriendlyName = "Playback";
             Controls _stripControls = m_controlStrip.ContextMenu;
             m_controlStripCommand = MMUtils.MindManager.Commands.Add(Utils.Registered_AddinName, "omnistix.controlstrip.audiocommand");
@@ -41,14 +49,14 @@ namespace Bubbles
             // Add buttons to strip context menu
             m_menus.AddButton(_stripControls,
                 new SubMenuButtonData("omnistix.stripicon.stopplay",
-                    MMUtils.getString("omnistix.stripicon.stopplay.caption"),
+                    Utils.getString("omnistix.stripicon.stopplay.caption"),
                     "",
                     1),
                     "", "", "",
                     this);
             m_menus.AddButton(_stripControls,
                 new SubMenuButtonData("omnistix.stripicon.remove",
-                    MMUtils.getString("button.remove"),
+                    Utils.getString("button.remove"),
                     "",
                     4),
                     "", "", "",
@@ -57,6 +65,7 @@ namespace Bubbles
             m_Snippets = new StixSnippets();
             m_OmniSound = new OmniSound();
             m_StixBase = new StartMenu();
+            m_TaskInfo = new StixTaskInfo(0, "H");
             commandPopup.Tag = 0; // Tag is a stick ID
 
             DocumentStorage.Subscribe(this);
@@ -118,6 +127,9 @@ namespace Bubbles
             HidePopup.Tick += HidePopup_Tick;
             HidePopup.Start();
 
+            stopPlayTimer = new Timer() { Interval = 500 };
+            stopPlayTimer.Tick += StopPlayTimer_Tick; ;
+
             m_ReplaceDlg = new ReplaceDlg();
 
             if (MMUtils.ActiveDocument != null)
@@ -134,13 +146,39 @@ namespace Bubbles
         /// </summary>
         private void m_controlStripCommand_Click()
         {
+            Play();
+        }
+
+        public static void Play()
+        {
             Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
             if (t == null) return;
 
-            string audioPath = t.GetAttributes(STRIP_URI).GetAttributeValue(AUDIO_PATH);
-            if (String.IsNullOrEmpty(audioPath)) return;
+            string audioPath = t.GetAttributes(SOUNDSTRIP_URI).GetAttributeValue(AUDIO_PATH);
+            if (String.IsNullOrEmpty(audioPath))
+            {
+                MessageBox.Show(Utils.getString("OmniSound.isnotaudiotopic"));
+                return;
+            }
 
-            Play(audioPath, t.Guid);
+            if (t.Attachments.Count > 0)
+            {
+                foreach (Attachment attach in t.Attachments)
+                {
+                    string filename = attach.FileName;
+                    if (filename.EndsWith(".mp3") || filename.EndsWith(".wav"))
+                    {
+                        audioPath = Utils.m_dataPath + "SoundDB\\" + filename;
+                        if (!File.Exists(audioPath))
+                            attach.SaveAs(audioPath);
+                        Play(audioPath, t.Guid);
+                    }
+                }
+            }
+            else
+            {
+                Play(audioPath, t.Guid);
+            }
         }
 
         public static void Play(string audioPath, string topicGuid = "")
@@ -153,17 +191,9 @@ namespace Bubbles
             }
 
             string trackName = Path.GetFileNameWithoutExtension(audioPath);
-
-            // Select record in OmniSound window
-            if (m_OmniSound.Visible)
+            
+            if (m_OmniSound.Visible) // Select record in OmniSound window
             {
-                if (m_OmniSound.play) // OmniPlayer is busy.
-                {
-                    m_OmniSound.btnPlay_Click(null, null); // Stop playing.
-                    if (m_playBox != null && m_playBox.Visible)
-                        m_playBox.Close();
-                }
-
                 foreach (var item in m_OmniSound.cbRecords.Items)
                 {
                     if ((item as AudioItem).Path == audioPath)
@@ -172,20 +202,25 @@ namespace Bubbles
             }
             else
             {
-                if (m_playBox == null || m_playBox.IsDisposed)
+                if (m_TopicPlayer == null || m_TopicPlayer.IsDisposed)
                 {
-                    m_playBox = new PlayBox(OmniStixButton.Bounds, trackName, topicGuid);
-                    m_playBox.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                    m_TopicPlayer = new TopicPlayer(OmniStixButton.Bounds, trackName, topicGuid);
+                    m_TopicPlayer.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                 }
-                else
-                {
-                    m_playBox.lblTrack.Text = trackName; m_playBox.lblTrack.Tag = topicGuid;
-                }
+
+                m_TopicPlayer.lblTitle.Text = trackName;
+                m_TopicPlayer.btnPause.Visible = true;
+                m_TopicPlayer.btnPlay.Visible = false;
             }
 
             m_OmniSound.FilePath = audioPath;
             m_OmniSound.TopicGuid = topicGuid;
             m_OmniSound.btnPlay_Click(null, null);
+        }
+
+        private void StopPlayTimer_Tick(object sender, EventArgs e)
+        {
+            stopPlayTimer.Stop();
         }
 
         /// <summary>
@@ -208,6 +243,50 @@ namespace Bubbles
         }
 
         private void m_cmdDetachNotes_UpdateState(ref bool pEnabled, ref bool pChecked)
+        {
+            pEnabled = true;
+            pChecked = false;
+        }
+
+        private void m_cmdTopicAudioNote_Click()
+        {
+            Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
+            if (t == null) return;
+
+            if (t.ContainsControlStripType(SOUNDSTRIP_URI))
+            {
+                MessageBox.Show(Utils.getString("OmniSound.topichasaudio"), "",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                t = null; return;
+            }
+
+            if (m_OmniSound.writer != null) // Recorder is busy.
+            {
+                MessageBox.Show(Utils.getString("OmniSound.busy.recording"));
+            }
+            if (m_OmniSound.outputDevice.PlaybackState != PlaybackState.Stopped) // OmniPlayer is busy.
+            {
+                MessageBox.Show(Utils.getString("OmniSound.busy.playing"));
+                return;
+            }
+
+            if (m_TopicRecorder == null || m_TopicRecorder.IsDisposed)
+            {
+                m_TopicRecorder = new TopicRecorder(OmniStixButton.Bounds, t.Guid);
+                m_TopicRecorder.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            }
+            t = null;
+
+            using (SaveRecordDlg sr = new SaveRecordDlg(true, false))
+            {
+                int locx = (sr.Width - m_TopicRecorder.Width) / 2;
+                sr.Location = new Point(m_TopicRecorder.Left - locx, m_TopicRecorder.Bottom);
+
+                sr.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            }
+        }
+
+        private void m_cmdTopicAudioNote_UpdateState(ref bool pEnabled, ref bool pChecked)
         {
             pEnabled = true;
             pChecked = false;
@@ -246,8 +325,10 @@ namespace Bubbles
         {
             if (m_MapNavigator != null && m_MapNavigator.Visible) m_MapNavigator.Init();
             else if (m_MapNavigatorDlg != null && m_MapNavigatorDlg.Visible) m_MapNavigatorDlg.Init();
+            
             if (m_Resources != null && m_Resources.Visible) m_Resources.InitCurrentMapResources();
-            if (m_TaskInfo != null && m_TaskInfo.Visible) m_TaskInfo.PopulateResources();
+            if (m_TaskInfo.Visible) m_TaskInfo.PopulateResources();
+            if (m_TopicPlayer != null && m_TopicPlayer.Visible) m_TopicPlayer.InitSoundTopicsList();
 
             foreach (var form in STICKS.Values)
             {
@@ -660,23 +741,41 @@ namespace Bubbles
             switch (aData.intdata)
             {
                 case 1: // Stop playing.
-                    if (m_OmniSound.play == true)
-                        m_OmniSound.btnPlay_Click(null, null);
-                    if (m_playBox != null && m_playBox.Visible)
-                        m_playBox.Close();
+                    m_OmniSound.outputDevice.Stop();
+                    if (m_OmniSound.audioFile != null)
+                    {
+                        m_OmniSound.audioFile.Dispose();
+                        m_OmniSound.audioFile = null;
+                    }
                     return;
                 case 4: // Remove audio strip icon.
                     if (!(MMUtils.SelectedTopic() is Topic _t))
                         return;
 
+                    DialogResult dr;
+                    dr = MessageBox.Show(Utils.getString("OmnoSound.removeaudio"), "",
+                        MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+                    if (dr == DialogResult.Cancel) return;
+
+                    if (dr == DialogResult.Yes)
+                    {
+                        string audioPath = _t.GetAttributes(SOUNDSTRIP_URI).GetAttributeValue(AUDIO_PATH);
+                        if (File.Exists(audioPath))
+                            File.Delete(audioPath);
+
+                        // Delete from database
+
+                    }
+
                     // Remove path attribute.
-                    if (_t.ContainsControlStripType(STRIP_URI))
-                        _t.GetAttributes(STRIP_URI).DeleteAll();
+                    if (_t.ContainsControlStripType(SOUNDSTRIP_URI))
+                        _t.GetAttributes(SOUNDSTRIP_URI).DeleteAll();
 
                     // Remove strip icon.
                     TransactionWrapper _w = new TransactionWrapper(_t,
                         TransactionWrapper.TransactionType.REMOVE_STRIP_ICON, "");
-                    _w.controlStripURI = STRIP_URI;
+                    _w.controlStripURI = SOUNDSTRIP_URI;
                     _w.Execute();
                     return;
             }
@@ -690,11 +789,12 @@ namespace Bubbles
                 return;
 
             Marshal.ReleaseComObject(m_cmdDetachNotes); m_cmdDetachNotes = null;
+            Marshal.ReleaseComObject(m_cmdTopicAudioNote); m_cmdTopicAudioNote = null;
 
             try
             {
                 m_menus.DeleteDynamicMenu(m_controlStrip.ContextMenu);
-                MMUtils.MindManager.ControlStripTypeRegistry.UnRegisterControlStripType(STRIP_URI);
+                MMUtils.MindManager.ControlStripTypeRegistry.UnRegisterControlStripType(SOUNDSTRIP_URI);
                 Marshal.ReleaseComObject(m_controlStrip); m_controlStrip = null;
                 Marshal.ReleaseComObject(m_controlStripCommand); m_controlStripCommand = null;
             }
@@ -704,11 +804,6 @@ namespace Bubbles
                 m_Snippets.Hide();
             m_Snippets.Dispose();
             m_Snippets = null;
-
-            if (m_OmniSound.Visible)
-                m_OmniSound.Hide();
-            m_OmniSound.Dispose();
-            m_OmniSound = null;
 
             if (StixMapNavigator.DocumentBookmarks != null && StixMapNavigator.DocumentBookmarks.Count > 0)
             {
@@ -820,6 +915,8 @@ namespace Bubbles
 
             StixUtils.TopicWidthList.Clear();
 
+            m_OmniSound.Destroy();
+
             m_bCreated = false;
         }
 
@@ -837,6 +934,7 @@ namespace Bubbles
         public static NewLinkDlg m_NewLink;
         public static OmniSound m_OmniSound;
         public static ManageToolsDlg m_ManageTools;
+        public static QuickTopicsDlg m_QuickTopics;
 
         public static ResourcesDlg m_Resources;
         public static LinksDlg m_AllSources;
@@ -852,12 +950,15 @@ namespace Bubbles
         private Command m_cmdDetachNotes;
         public static TopicNotesDlg m_topicNotes;
 
+        private Command m_cmdTopicAudioNote;
+
         public static Dictionary<int, Form> STICKS = new Dictionary<int, Form>();
         public static Dictionary<int, Form> pNOTES = new Dictionary<int, Form>();
 
         public static Popup commandPopup = new Popup(new StixPopup().panelH);
 
         Timer HidePopup = new Timer();
+        public static Timer stopPlayTimer = new Timer();
 
         static ToolTip tt = new ToolTip() { ShowAlways = true, AutoPopDelay = 3000 };
 
@@ -867,12 +968,9 @@ namespace Bubbles
 
         private ControlStripType m_controlStrip = null;
         private Command m_controlStripCommand = null;
-        public const string STRIP_URI = "OMNISTIX_STRIPICON_OMNIAUDIO";
+        public const string SOUNDSTRIP_URI = "OMNISTIX_STRIPICON_OMNIAUDIO";
 
-        private Command m_cmdPlayAudio = null;
-        private Command m_cmdPlayAudioplayer = null;
-        private Command m_cmdDeleteAudio = null;
-
-        public static PlayBox m_playBox;
+        public static TopicPlayer m_TopicPlayer;
+        public static TopicRecorder m_TopicRecorder;
     }
 }

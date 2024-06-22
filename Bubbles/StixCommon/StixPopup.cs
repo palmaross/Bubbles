@@ -141,11 +141,6 @@ namespace Bubbles
 
             StixMain.STICKS.Remove((int)stick.Tag);
             stick.Close();
-
-            if (stick.Name == "StixTaskInfo")
-            {
-                StixMain.m_TaskInfo = null;
-            }
         }
 
         private void pRemember_Click(object sender, EventArgs e)

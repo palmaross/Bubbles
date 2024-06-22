@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TaskTemplateDlg));
-            this.cbTaskTemplates = new System.Windows.Forms.ComboBox();
+            this.cbQuickTopics = new System.Windows.Forms.ComboBox();
             this.pProgress = new System.Windows.Forms.PictureBox();
             this.lblChangeValue = new System.Windows.Forms.Label();
             this.pPriority = new System.Windows.Forms.PictureBox();
@@ -58,7 +58,6 @@
             this.numStartDate = new System.Windows.Forms.NumericUpDown();
             this.numDueDate = new System.Windows.Forms.NumericUpDown();
             this.dtpDueDate = new System.Windows.Forms.DateTimePicker();
-            this.chPrimary = new System.Windows.Forms.CheckBox();
             this.Edit = new System.Windows.Forms.PictureBox();
             this.Delete = new System.Windows.Forms.PictureBox();
             this.New = new System.Windows.Forms.PictureBox();
@@ -66,7 +65,7 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.txtTemplateName = new System.Windows.Forms.TextBox();
-            this.lblResourceName = new System.Windows.Forms.Label();
+            this.lblItemName = new System.Windows.Forms.Label();
             this.p50 = new System.Windows.Forms.PictureBox();
             this.p75 = new System.Windows.Forms.PictureBox();
             this.pPR5 = new System.Windows.Forms.PictureBox();
@@ -109,6 +108,12 @@
             this.cbDurationUnits = new System.Windows.Forms.ComboBox();
             this.pIcon2 = new System.Windows.Forms.PictureBox();
             this.pIcon3 = new System.Windows.Forms.PictureBox();
+            this.GEdit = new System.Windows.Forms.PictureBox();
+            this.GDelete = new System.Windows.Forms.PictureBox();
+            this.GNew = new System.Windows.Forms.PictureBox();
+            this.cbGroups = new System.Windows.Forms.ComboBox();
+            this.lblGroup = new System.Windows.Forms.Label();
+            this.lblQTopic = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pProgress)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pPriority)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIcon)).BeginInit();
@@ -151,22 +156,25 @@
             ((System.ComponentModel.ISupportInitialize)(this.mutDuration)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIcon2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIcon3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GEdit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GDelete)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GNew)).BeginInit();
             this.SuspendLayout();
             // 
-            // cbTaskTemplates
+            // cbQuickTopics
             // 
-            this.cbTaskTemplates.FormattingEnabled = true;
-            this.cbTaskTemplates.Location = new System.Drawing.Point(12, 12);
-            this.cbTaskTemplates.Name = "cbTaskTemplates";
-            this.cbTaskTemplates.Size = new System.Drawing.Size(176, 21);
-            this.cbTaskTemplates.TabIndex = 2;
-            this.cbTaskTemplates.SelectedIndexChanged += new System.EventHandler(this.cbTaskTemplates_SelectedIndexChanged);
-            this.cbTaskTemplates.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbTaskTemplates_KeyDown);
+            this.cbQuickTopics.FormattingEnabled = true;
+            this.cbQuickTopics.Location = new System.Drawing.Point(93, 40);
+            this.cbQuickTopics.Name = "cbQuickTopics";
+            this.cbQuickTopics.Size = new System.Drawing.Size(176, 21);
+            this.cbQuickTopics.TabIndex = 2;
+            this.cbQuickTopics.SelectedIndexChanged += new System.EventHandler(this.cbTaskTemplates_SelectedIndexChanged);
+            this.cbQuickTopics.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbTaskTemplates_KeyDown);
             // 
             // pProgress
             // 
             this.pProgress.Image = ((System.Drawing.Image)(resources.GetObject("pProgress.Image")));
-            this.pProgress.Location = new System.Drawing.Point(111, 72);
+            this.pProgress.Location = new System.Drawing.Point(111, 100);
             this.pProgress.Name = "pProgress";
             this.pProgress.Size = new System.Drawing.Size(16, 16);
             this.pProgress.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -179,7 +187,7 @@
             // 
             this.lblChangeValue.AutoSize = true;
             this.lblChangeValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblChangeValue.Location = new System.Drawing.Point(138, 87);
+            this.lblChangeValue.Location = new System.Drawing.Point(138, 115);
             this.lblChangeValue.Name = "lblChangeValue";
             this.lblChangeValue.Size = new System.Drawing.Size(148, 13);
             this.lblChangeValue.TabIndex = 4;
@@ -188,7 +196,7 @@
             // pPriority
             // 
             this.pPriority.Image = ((System.Drawing.Image)(resources.GetObject("pPriority.Image")));
-            this.pPriority.Location = new System.Drawing.Point(111, 98);
+            this.pPriority.Location = new System.Drawing.Point(111, 126);
             this.pPriority.Name = "pPriority";
             this.pPriority.Size = new System.Drawing.Size(16, 16);
             this.pPriority.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -199,7 +207,7 @@
             // 
             // dtpStartDate
             // 
-            this.dtpStartDate.Location = new System.Drawing.Point(111, 108);
+            this.dtpStartDate.Location = new System.Drawing.Point(111, 136);
             this.dtpStartDate.Name = "dtpStartDate";
             this.dtpStartDate.Size = new System.Drawing.Size(196, 20);
             this.dtpStartDate.TabIndex = 9;
@@ -208,7 +216,7 @@
             // cbStartDatePeriod
             // 
             this.cbStartDatePeriod.FormattingEnabled = true;
-            this.cbStartDatePeriod.Location = new System.Drawing.Point(111, 132);
+            this.cbStartDatePeriod.Location = new System.Drawing.Point(111, 160);
             this.cbStartDatePeriod.Name = "cbStartDatePeriod";
             this.cbStartDatePeriod.Size = new System.Drawing.Size(158, 21);
             this.cbStartDatePeriod.TabIndex = 13;
@@ -216,7 +224,7 @@
             // cbDueDatePeriod
             // 
             this.cbDueDatePeriod.FormattingEnabled = true;
-            this.cbDueDatePeriod.Location = new System.Drawing.Point(111, 157);
+            this.cbDueDatePeriod.Location = new System.Drawing.Point(111, 185);
             this.cbDueDatePeriod.Name = "cbDueDatePeriod";
             this.cbDueDatePeriod.Size = new System.Drawing.Size(158, 21);
             this.cbDueDatePeriod.TabIndex = 14;
@@ -224,7 +232,7 @@
             // pIcon
             // 
             this.pIcon.Image = ((System.Drawing.Image)(resources.GetObject("pIcon.Image")));
-            this.pIcon.Location = new System.Drawing.Point(111, 275);
+            this.pIcon.Location = new System.Drawing.Point(111, 303);
             this.pIcon.Name = "pIcon";
             this.pIcon.Size = new System.Drawing.Size(16, 16);
             this.pIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -236,7 +244,7 @@
             // lblChangeIcon
             // 
             this.lblChangeIcon.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblChangeIcon.Location = new System.Drawing.Point(182, 270);
+            this.lblChangeIcon.Location = new System.Drawing.Point(182, 298);
             this.lblChangeIcon.Name = "lblChangeIcon";
             this.lblChangeIcon.Size = new System.Drawing.Size(165, 26);
             this.lblChangeIcon.TabIndex = 11;
@@ -244,21 +252,21 @@
             // 
             // txtResources
             // 
-            this.txtResources.Location = new System.Drawing.Point(110, 245);
+            this.txtResources.Location = new System.Drawing.Point(110, 273);
             this.txtResources.Name = "txtResources";
             this.txtResources.Size = new System.Drawing.Size(216, 20);
             this.txtResources.TabIndex = 13;
             // 
             // txtTagGroup1
             // 
-            this.txtTagGroup1.Location = new System.Drawing.Point(110, 319);
+            this.txtTagGroup1.Location = new System.Drawing.Point(110, 347);
             this.txtTagGroup1.Name = "txtTagGroup1";
             this.txtTagGroup1.Size = new System.Drawing.Size(115, 20);
             this.txtTagGroup1.TabIndex = 15;
             // 
             // txtTag1
             // 
-            this.txtTag1.Location = new System.Drawing.Point(233, 319);
+            this.txtTag1.Location = new System.Drawing.Point(233, 347);
             this.txtTag1.Name = "txtTag1";
             this.txtTag1.Size = new System.Drawing.Size(115, 20);
             this.txtTag1.TabIndex = 16;
@@ -266,7 +274,7 @@
             // lblTagGroup
             // 
             this.lblTagGroup.AutoSize = true;
-            this.lblTagGroup.Location = new System.Drawing.Point(110, 302);
+            this.lblTagGroup.Location = new System.Drawing.Point(110, 330);
             this.lblTagGroup.Name = "lblTagGroup";
             this.lblTagGroup.Size = new System.Drawing.Size(45, 13);
             this.lblTagGroup.TabIndex = 22;
@@ -275,7 +283,7 @@
             // lblTag
             // 
             this.lblTag.AutoSize = true;
-            this.lblTag.Location = new System.Drawing.Point(231, 302);
+            this.lblTag.Location = new System.Drawing.Point(231, 330);
             this.lblTag.Name = "lblTag";
             this.lblTag.Size = new System.Drawing.Size(28, 13);
             this.lblTag.TabIndex = 23;
@@ -284,7 +292,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSave.Location = new System.Drawing.Point(11, 380);
+            this.btnSave.Location = new System.Drawing.Point(11, 404);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(80, 23);
             this.btnSave.TabIndex = 26;
@@ -295,7 +303,7 @@
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.Location = new System.Drawing.Point(270, 380);
+            this.btnClose.Location = new System.Drawing.Point(270, 404);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(76, 23);
             this.btnClose.TabIndex = 27;
@@ -307,7 +315,7 @@
             // 
             this.cbResources.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.cbResources.FormattingEnabled = true;
-            this.cbResources.Location = new System.Drawing.Point(228, 244);
+            this.cbResources.Location = new System.Drawing.Point(228, 272);
             this.cbResources.Name = "cbResources";
             this.cbResources.Size = new System.Drawing.Size(117, 21);
             this.cbResources.TabIndex = 28;
@@ -315,14 +323,14 @@
             // 
             // txtTag2
             // 
-            this.txtTag2.Location = new System.Drawing.Point(233, 343);
+            this.txtTag2.Location = new System.Drawing.Point(233, 371);
             this.txtTag2.Name = "txtTag2";
             this.txtTag2.Size = new System.Drawing.Size(115, 20);
             this.txtTag2.TabIndex = 30;
             // 
             // txtTagGroup2
             // 
-            this.txtTagGroup2.Location = new System.Drawing.Point(110, 343);
+            this.txtTagGroup2.Location = new System.Drawing.Point(110, 371);
             this.txtTagGroup2.Name = "txtTagGroup2";
             this.txtTagGroup2.Size = new System.Drawing.Size(115, 20);
             this.txtTagGroup2.TabIndex = 29;
@@ -331,7 +339,7 @@
             // 
             this.p25.Cursor = System.Windows.Forms.Cursors.Hand;
             this.p25.Image = ((System.Drawing.Image)(resources.GetObject("p25.Image")));
-            this.p25.Location = new System.Drawing.Point(283, 68);
+            this.p25.Location = new System.Drawing.Point(283, 96);
             this.p25.Name = "p25";
             this.p25.Size = new System.Drawing.Size(16, 16);
             this.p25.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -344,7 +352,7 @@
             // 
             this.pPR3.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pPR3.Image = ((System.Drawing.Image)(resources.GetObject("pPR3.Image")));
-            this.pPR3.Location = new System.Drawing.Point(303, 84);
+            this.pPR3.Location = new System.Drawing.Point(303, 112);
             this.pPR3.Name = "pPR3";
             this.pPR3.Size = new System.Drawing.Size(16, 16);
             this.pPR3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -355,7 +363,7 @@
             // 
             // pStartPlace
             // 
-            this.pStartPlace.Location = new System.Drawing.Point(328, 133);
+            this.pStartPlace.Location = new System.Drawing.Point(328, 161);
             this.pStartPlace.Name = "pStartPlace";
             this.pStartPlace.Size = new System.Drawing.Size(16, 16);
             this.pStartPlace.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -365,7 +373,7 @@
             // 
             // pDuePlace
             // 
-            this.pDuePlace.Location = new System.Drawing.Point(328, 157);
+            this.pDuePlace.Location = new System.Drawing.Point(328, 185);
             this.pDuePlace.Name = "pDuePlace";
             this.pDuePlace.Size = new System.Drawing.Size(16, 16);
             this.pDuePlace.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -375,7 +383,7 @@
             // 
             // numStartDate
             // 
-            this.numStartDate.Location = new System.Drawing.Point(274, 132);
+            this.numStartDate.Location = new System.Drawing.Point(274, 160);
             this.numStartDate.Maximum = new decimal(new int[] {
             31,
             0,
@@ -397,7 +405,7 @@
             // 
             // numDueDate
             // 
-            this.numDueDate.Location = new System.Drawing.Point(274, 157);
+            this.numDueDate.Location = new System.Drawing.Point(274, 185);
             this.numDueDate.Maximum = new decimal(new int[] {
             31,
             0,
@@ -419,27 +427,17 @@
             // 
             // dtpDueDate
             // 
-            this.dtpDueDate.Location = new System.Drawing.Point(111, 171);
+            this.dtpDueDate.Location = new System.Drawing.Point(111, 199);
             this.dtpDueDate.Name = "dtpDueDate";
             this.dtpDueDate.Size = new System.Drawing.Size(196, 20);
             this.dtpDueDate.TabIndex = 49;
             this.dtpDueDate.Visible = false;
             // 
-            // chPrimary
-            // 
-            this.chPrimary.AutoSize = true;
-            this.chPrimary.Location = new System.Drawing.Point(270, 14);
-            this.chPrimary.Name = "chPrimary";
-            this.chPrimary.Size = new System.Drawing.Size(60, 17);
-            this.chPrimary.TabIndex = 50;
-            this.chPrimary.Text = "Primary";
-            this.chPrimary.UseVisualStyleBackColor = true;
-            // 
             // Edit
             // 
             this.Edit.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Edit.Image = ((System.Drawing.Image)(resources.GetObject("Edit.Image")));
-            this.Edit.Location = new System.Drawing.Point(218, 12);
+            this.Edit.Location = new System.Drawing.Point(299, 40);
             this.Edit.Name = "Edit";
             this.Edit.Size = new System.Drawing.Size(20, 20);
             this.Edit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -451,7 +449,7 @@
             // 
             this.Delete.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Delete.Image = ((System.Drawing.Image)(resources.GetObject("Delete.Image")));
-            this.Delete.Location = new System.Drawing.Point(243, 12);
+            this.Delete.Location = new System.Drawing.Point(324, 40);
             this.Delete.Name = "Delete";
             this.Delete.Size = new System.Drawing.Size(20, 20);
             this.Delete.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -463,7 +461,7 @@
             // 
             this.New.Cursor = System.Windows.Forms.Cursors.Hand;
             this.New.Image = ((System.Drawing.Image)(resources.GetObject("New.Image")));
-            this.New.Location = new System.Drawing.Point(193, 12);
+            this.New.Location = new System.Drawing.Point(274, 40);
             this.New.Name = "New";
             this.New.Size = new System.Drawing.Size(20, 20);
             this.New.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -478,8 +476,8 @@
             this.panelTemplateName.Controls.Add(this.btnCancel);
             this.panelTemplateName.Controls.Add(this.btnOk);
             this.panelTemplateName.Controls.Add(this.txtTemplateName);
-            this.panelTemplateName.Controls.Add(this.lblResourceName);
-            this.panelTemplateName.Location = new System.Drawing.Point(11, 45);
+            this.panelTemplateName.Controls.Add(this.lblItemName);
+            this.panelTemplateName.Location = new System.Drawing.Point(11, 73);
             this.panelTemplateName.Name = "panelTemplateName";
             this.panelTemplateName.Size = new System.Drawing.Size(251, 85);
             this.panelTemplateName.TabIndex = 54;
@@ -512,20 +510,20 @@
             this.txtTemplateName.Size = new System.Drawing.Size(236, 20);
             this.txtTemplateName.TabIndex = 1;
             // 
-            // lblResourceName
+            // lblItemName
             // 
-            this.lblResourceName.AutoSize = true;
-            this.lblResourceName.Location = new System.Drawing.Point(4, 7);
-            this.lblResourceName.Name = "lblResourceName";
-            this.lblResourceName.Size = new System.Drawing.Size(79, 13);
-            this.lblResourceName.TabIndex = 0;
-            this.lblResourceName.Text = "Имя шаблона:";
+            this.lblItemName.AutoSize = true;
+            this.lblItemName.Location = new System.Drawing.Point(4, 7);
+            this.lblItemName.Name = "lblItemName";
+            this.lblItemName.Size = new System.Drawing.Size(79, 13);
+            this.lblItemName.TabIndex = 0;
+            this.lblItemName.Text = "Имя шаблона:";
             // 
             // p50
             // 
             this.p50.Cursor = System.Windows.Forms.Cursors.Hand;
             this.p50.Image = ((System.Drawing.Image)(resources.GetObject("p50.Image")));
-            this.p50.Location = new System.Drawing.Point(303, 65);
+            this.p50.Location = new System.Drawing.Point(303, 93);
             this.p50.Name = "p50";
             this.p50.Size = new System.Drawing.Size(16, 16);
             this.p50.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -537,7 +535,7 @@
             // 
             this.p75.Cursor = System.Windows.Forms.Cursors.Hand;
             this.p75.Image = ((System.Drawing.Image)(resources.GetObject("p75.Image")));
-            this.p75.Location = new System.Drawing.Point(323, 65);
+            this.p75.Location = new System.Drawing.Point(323, 93);
             this.p75.Name = "p75";
             this.p75.Size = new System.Drawing.Size(16, 16);
             this.p75.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -549,7 +547,7 @@
             // 
             this.pPR5.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pPR5.Image = ((System.Drawing.Image)(resources.GetObject("pPR5.Image")));
-            this.pPR5.Location = new System.Drawing.Point(342, 84);
+            this.pPR5.Location = new System.Drawing.Point(342, 112);
             this.pPR5.Name = "pPR5";
             this.pPR5.Size = new System.Drawing.Size(16, 16);
             this.pPR5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -561,7 +559,7 @@
             // 
             this.pPR2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pPR2.Image = ((System.Drawing.Image)(resources.GetObject("pPR2.Image")));
-            this.pPR2.Location = new System.Drawing.Point(283, 87);
+            this.pPR2.Location = new System.Drawing.Point(283, 115);
             this.pPR2.Name = "pPR2";
             this.pPR2.Size = new System.Drawing.Size(16, 16);
             this.pPR2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -573,7 +571,7 @@
             // 
             this.pPR4.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pPR4.Image = ((System.Drawing.Image)(resources.GetObject("pPR4.Image")));
-            this.pPR4.Location = new System.Drawing.Point(323, 85);
+            this.pPR4.Location = new System.Drawing.Point(323, 113);
             this.pPR4.Name = "pPR4";
             this.pPR4.Size = new System.Drawing.Size(15, 15);
             this.pPR4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -584,7 +582,7 @@
             // p0
             // 
             this.p0.Image = ((System.Drawing.Image)(resources.GetObject("p0.Image")));
-            this.p0.Location = new System.Drawing.Point(263, 68);
+            this.p0.Location = new System.Drawing.Point(263, 96);
             this.p0.Name = "p0";
             this.p0.Size = new System.Drawing.Size(16, 16);
             this.p0.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -596,7 +594,7 @@
             // 
             this.p100.Cursor = System.Windows.Forms.Cursors.Hand;
             this.p100.Image = ((System.Drawing.Image)(resources.GetObject("p100.Image")));
-            this.p100.Location = new System.Drawing.Point(342, 65);
+            this.p100.Location = new System.Drawing.Point(342, 93);
             this.p100.Name = "p100";
             this.p100.Size = new System.Drawing.Size(16, 16);
             this.p100.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -608,7 +606,7 @@
             // pPR1
             // 
             this.pPR1.Image = ((System.Drawing.Image)(resources.GetObject("pPR1.Image")));
-            this.pPR1.Location = new System.Drawing.Point(263, 87);
+            this.pPR1.Location = new System.Drawing.Point(263, 115);
             this.pPR1.Name = "pPR1";
             this.pPR1.Size = new System.Drawing.Size(16, 16);
             this.pPR1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -619,7 +617,7 @@
             // pIconDefault
             // 
             this.pIconDefault.Image = ((System.Drawing.Image)(resources.GetObject("pIconDefault.Image")));
-            this.pIconDefault.Location = new System.Drawing.Point(291, 297);
+            this.pIconDefault.Location = new System.Drawing.Point(291, 325);
             this.pIconDefault.Name = "pIconDefault";
             this.pIconDefault.Size = new System.Drawing.Size(16, 16);
             this.pIconDefault.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -630,7 +628,7 @@
             // pCalendar
             // 
             this.pCalendar.Image = ((System.Drawing.Image)(resources.GetObject("pCalendar.Image")));
-            this.pCalendar.Location = new System.Drawing.Point(310, 133);
+            this.pCalendar.Location = new System.Drawing.Point(310, 161);
             this.pCalendar.Name = "pCalendar";
             this.pCalendar.Size = new System.Drawing.Size(16, 16);
             this.pCalendar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -641,7 +639,7 @@
             // pPeriod
             // 
             this.pPeriod.Image = ((System.Drawing.Image)(resources.GetObject("pPeriod.Image")));
-            this.pPeriod.Location = new System.Drawing.Point(310, 157);
+            this.pPeriod.Location = new System.Drawing.Point(310, 185);
             this.pPeriod.Name = "pPeriod";
             this.pPeriod.Size = new System.Drawing.Size(16, 16);
             this.pPeriod.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -653,7 +651,7 @@
             // 
             this.pUnchecked.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pUnchecked.Image = ((System.Drawing.Image)(resources.GetObject("pUnchecked.Image")));
-            this.pUnchecked.Location = new System.Drawing.Point(111, 387);
+            this.pUnchecked.Location = new System.Drawing.Point(111, 411);
             this.pUnchecked.Name = "pUnchecked";
             this.pUnchecked.Size = new System.Drawing.Size(16, 16);
             this.pUnchecked.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -665,7 +663,7 @@
             // 
             this.pChecked.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pChecked.Image = ((System.Drawing.Image)(resources.GetObject("pChecked.Image")));
-            this.pChecked.Location = new System.Drawing.Point(133, 387);
+            this.pChecked.Location = new System.Drawing.Point(133, 411);
             this.pChecked.Name = "pChecked";
             this.pChecked.Size = new System.Drawing.Size(16, 16);
             this.pChecked.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -677,7 +675,7 @@
             // 
             this.pUncheckedRed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pUncheckedRed.Image = ((System.Drawing.Image)(resources.GetObject("pUncheckedRed.Image")));
-            this.pUncheckedRed.Location = new System.Drawing.Point(159, 387);
+            this.pUncheckedRed.Location = new System.Drawing.Point(159, 411);
             this.pUncheckedRed.Name = "pUncheckedRed";
             this.pUncheckedRed.Size = new System.Drawing.Size(16, 16);
             this.pUncheckedRed.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -689,7 +687,7 @@
             // 
             this.pCheckedRed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pCheckedRed.Image = ((System.Drawing.Image)(resources.GetObject("pCheckedRed.Image")));
-            this.pCheckedRed.Location = new System.Drawing.Point(181, 387);
+            this.pCheckedRed.Location = new System.Drawing.Point(181, 411);
             this.pCheckedRed.Name = "pCheckedRed";
             this.pCheckedRed.Size = new System.Drawing.Size(16, 16);
             this.pCheckedRed.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -700,7 +698,7 @@
             // mutTopicText
             // 
             this.mutTopicText.Image = ((System.Drawing.Image)(resources.GetObject("mutTopicText.Image")));
-            this.mutTopicText.Location = new System.Drawing.Point(11, 45);
+            this.mutTopicText.Location = new System.Drawing.Point(11, 73);
             this.mutTopicText.Name = "mutTopicText";
             this.mutTopicText.Size = new System.Drawing.Size(16, 16);
             this.mutTopicText.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -711,7 +709,7 @@
             // 
             // txtTopicText
             // 
-            this.txtTopicText.Location = new System.Drawing.Point(111, 45);
+            this.txtTopicText.Location = new System.Drawing.Point(111, 73);
             this.txtTopicText.Name = "txtTopicText";
             this.txtTopicText.Size = new System.Drawing.Size(235, 20);
             this.txtTopicText.TabIndex = 95;
@@ -719,7 +717,7 @@
             // lblTopicText
             // 
             this.lblTopicText.AutoSize = true;
-            this.lblTopicText.Location = new System.Drawing.Point(30, 47);
+            this.lblTopicText.Location = new System.Drawing.Point(30, 75);
             this.lblTopicText.Name = "lblTopicText";
             this.lblTopicText.Size = new System.Drawing.Size(61, 13);
             this.lblTopicText.TabIndex = 96;
@@ -730,7 +728,7 @@
             // lblProgress
             // 
             this.lblProgress.AutoSize = true;
-            this.lblProgress.Location = new System.Drawing.Point(30, 74);
+            this.lblProgress.Location = new System.Drawing.Point(30, 102);
             this.lblProgress.Name = "lblProgress";
             this.lblProgress.Size = new System.Drawing.Size(51, 13);
             this.lblProgress.TabIndex = 97;
@@ -741,7 +739,7 @@
             // mutProgress
             // 
             this.mutProgress.Image = ((System.Drawing.Image)(resources.GetObject("mutProgress.Image")));
-            this.mutProgress.Location = new System.Drawing.Point(11, 72);
+            this.mutProgress.Location = new System.Drawing.Point(11, 100);
             this.mutProgress.Name = "mutProgress";
             this.mutProgress.Size = new System.Drawing.Size(16, 16);
             this.mutProgress.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -753,7 +751,7 @@
             // mutPriority
             // 
             this.mutPriority.Image = ((System.Drawing.Image)(resources.GetObject("mutPriority.Image")));
-            this.mutPriority.Location = new System.Drawing.Point(11, 98);
+            this.mutPriority.Location = new System.Drawing.Point(11, 126);
             this.mutPriority.Name = "mutPriority";
             this.mutPriority.Size = new System.Drawing.Size(16, 16);
             this.mutPriority.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -765,7 +763,7 @@
             // lblPriority
             // 
             this.lblPriority.AutoSize = true;
-            this.lblPriority.Location = new System.Drawing.Point(30, 100);
+            this.lblPriority.Location = new System.Drawing.Point(30, 128);
             this.lblPriority.Name = "lblPriority";
             this.lblPriority.Size = new System.Drawing.Size(41, 13);
             this.lblPriority.TabIndex = 100;
@@ -776,7 +774,7 @@
             // mutStartDate
             // 
             this.mutStartDate.Image = ((System.Drawing.Image)(resources.GetObject("mutStartDate.Image")));
-            this.mutStartDate.Location = new System.Drawing.Point(11, 134);
+            this.mutStartDate.Location = new System.Drawing.Point(11, 162);
             this.mutStartDate.Name = "mutStartDate";
             this.mutStartDate.Size = new System.Drawing.Size(16, 16);
             this.mutStartDate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -788,7 +786,7 @@
             // lblStartDate
             // 
             this.lblStartDate.AutoSize = true;
-            this.lblStartDate.Location = new System.Drawing.Point(30, 135);
+            this.lblStartDate.Location = new System.Drawing.Point(30, 163);
             this.lblStartDate.Name = "lblStartDate";
             this.lblStartDate.Size = new System.Drawing.Size(74, 13);
             this.lblStartDate.TabIndex = 102;
@@ -799,7 +797,7 @@
             // lblDueDate
             // 
             this.lblDueDate.AutoSize = true;
-            this.lblDueDate.Location = new System.Drawing.Point(30, 162);
+            this.lblDueDate.Location = new System.Drawing.Point(30, 190);
             this.lblDueDate.Name = "lblDueDate";
             this.lblDueDate.Size = new System.Drawing.Size(56, 13);
             this.lblDueDate.TabIndex = 103;
@@ -810,7 +808,7 @@
             // mutDueDate
             // 
             this.mutDueDate.Image = ((System.Drawing.Image)(resources.GetObject("mutDueDate.Image")));
-            this.mutDueDate.Location = new System.Drawing.Point(11, 160);
+            this.mutDueDate.Location = new System.Drawing.Point(11, 188);
             this.mutDueDate.Name = "mutDueDate";
             this.mutDueDate.Size = new System.Drawing.Size(16, 16);
             this.mutDueDate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -822,7 +820,7 @@
             // lblResources
             // 
             this.lblResources.AutoSize = true;
-            this.lblResources.Location = new System.Drawing.Point(30, 249);
+            this.lblResources.Location = new System.Drawing.Point(30, 277);
             this.lblResources.Name = "lblResources";
             this.lblResources.Size = new System.Drawing.Size(61, 13);
             this.lblResources.TabIndex = 105;
@@ -833,7 +831,7 @@
             // ch4Resources
             // 
             this.ch4Resources.Image = ((System.Drawing.Image)(resources.GetObject("ch4Resources.Image")));
-            this.ch4Resources.Location = new System.Drawing.Point(11, 246);
+            this.ch4Resources.Location = new System.Drawing.Point(11, 274);
             this.ch4Resources.Name = "ch4Resources";
             this.ch4Resources.Size = new System.Drawing.Size(16, 16);
             this.ch4Resources.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -845,7 +843,7 @@
             // lblIcon
             // 
             this.lblIcon.AutoSize = true;
-            this.lblIcon.Location = new System.Drawing.Point(30, 276);
+            this.lblIcon.Location = new System.Drawing.Point(30, 304);
             this.lblIcon.Name = "lblIcon";
             this.lblIcon.Size = new System.Drawing.Size(36, 13);
             this.lblIcon.TabIndex = 107;
@@ -856,7 +854,7 @@
             // ch4Icon
             // 
             this.ch4Icon.Image = ((System.Drawing.Image)(resources.GetObject("ch4Icon.Image")));
-            this.ch4Icon.Location = new System.Drawing.Point(11, 274);
+            this.ch4Icon.Location = new System.Drawing.Point(11, 302);
             this.ch4Icon.Name = "ch4Icon";
             this.ch4Icon.Size = new System.Drawing.Size(16, 16);
             this.ch4Icon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -868,7 +866,7 @@
             // lblTags
             // 
             this.lblTags.AutoSize = true;
-            this.lblTags.Location = new System.Drawing.Point(30, 333);
+            this.lblTags.Location = new System.Drawing.Point(30, 361);
             this.lblTags.Name = "lblTags";
             this.lblTags.Size = new System.Drawing.Size(34, 13);
             this.lblTags.TabIndex = 109;
@@ -879,7 +877,7 @@
             // ch4Tags
             // 
             this.ch4Tags.Image = ((System.Drawing.Image)(resources.GetObject("ch4Tags.Image")));
-            this.ch4Tags.Location = new System.Drawing.Point(11, 332);
+            this.ch4Tags.Location = new System.Drawing.Point(11, 360);
             this.ch4Tags.Name = "ch4Tags";
             this.ch4Tags.Size = new System.Drawing.Size(16, 16);
             this.ch4Tags.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -891,7 +889,7 @@
             // mutEffort
             // 
             this.mutEffort.Image = ((System.Drawing.Image)(resources.GetObject("mutEffort.Image")));
-            this.mutEffort.Location = new System.Drawing.Point(11, 212);
+            this.mutEffort.Location = new System.Drawing.Point(11, 240);
             this.mutEffort.Name = "mutEffort";
             this.mutEffort.Size = new System.Drawing.Size(16, 16);
             this.mutEffort.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -903,7 +901,7 @@
             // lblEffort
             // 
             this.lblEffort.AutoSize = true;
-            this.lblEffort.Location = new System.Drawing.Point(30, 214);
+            this.lblEffort.Location = new System.Drawing.Point(30, 242);
             this.lblEffort.Name = "lblEffort";
             this.lblEffort.Size = new System.Drawing.Size(82, 13);
             this.lblEffort.TabIndex = 112;
@@ -914,14 +912,14 @@
             // cbEffortUnits
             // 
             this.cbEffortUnits.FormattingEnabled = true;
-            this.cbEffortUnits.Location = new System.Drawing.Point(165, 209);
+            this.cbEffortUnits.Location = new System.Drawing.Point(165, 237);
             this.cbEffortUnits.Name = "cbEffortUnits";
             this.cbEffortUnits.Size = new System.Drawing.Size(104, 21);
             this.cbEffortUnits.TabIndex = 111;
             // 
             // numEffort
             // 
-            this.numEffort.Location = new System.Drawing.Point(111, 210);
+            this.numEffort.Location = new System.Drawing.Point(111, 238);
             this.numEffort.Maximum = new decimal(new int[] {
             240,
             0,
@@ -938,7 +936,7 @@
             // 
             // numDuration
             // 
-            this.numDuration.Location = new System.Drawing.Point(111, 184);
+            this.numDuration.Location = new System.Drawing.Point(111, 212);
             this.numDuration.Maximum = new decimal(new int[] {
             240,
             0,
@@ -961,7 +959,7 @@
             // mutDuration
             // 
             this.mutDuration.Image = ((System.Drawing.Image)(resources.GetObject("mutDuration.Image")));
-            this.mutDuration.Location = new System.Drawing.Point(11, 186);
+            this.mutDuration.Location = new System.Drawing.Point(11, 214);
             this.mutDuration.Name = "mutDuration";
             this.mutDuration.Size = new System.Drawing.Size(16, 16);
             this.mutDuration.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -973,7 +971,7 @@
             // lblDuration
             // 
             this.lblDuration.AutoSize = true;
-            this.lblDuration.Location = new System.Drawing.Point(30, 188);
+            this.lblDuration.Location = new System.Drawing.Point(30, 216);
             this.lblDuration.Name = "lblDuration";
             this.lblDuration.Size = new System.Drawing.Size(83, 13);
             this.lblDuration.TabIndex = 116;
@@ -984,7 +982,7 @@
             // cbDurationUnits
             // 
             this.cbDurationUnits.FormattingEnabled = true;
-            this.cbDurationUnits.Location = new System.Drawing.Point(165, 183);
+            this.cbDurationUnits.Location = new System.Drawing.Point(165, 211);
             this.cbDurationUnits.Name = "cbDurationUnits";
             this.cbDurationUnits.Size = new System.Drawing.Size(104, 21);
             this.cbDurationUnits.TabIndex = 115;
@@ -992,7 +990,7 @@
             // pIcon2
             // 
             this.pIcon2.Image = ((System.Drawing.Image)(resources.GetObject("pIcon2.Image")));
-            this.pIcon2.Location = new System.Drawing.Point(135, 275);
+            this.pIcon2.Location = new System.Drawing.Point(135, 303);
             this.pIcon2.Name = "pIcon2";
             this.pIcon2.Size = new System.Drawing.Size(16, 16);
             this.pIcon2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -1003,7 +1001,7 @@
             // pIcon3
             // 
             this.pIcon3.Image = ((System.Drawing.Image)(resources.GetObject("pIcon3.Image")));
-            this.pIcon3.Location = new System.Drawing.Point(159, 275);
+            this.pIcon3.Location = new System.Drawing.Point(159, 303);
             this.pIcon3.Name = "pIcon3";
             this.pIcon3.Size = new System.Drawing.Size(16, 16);
             this.pIcon3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -1011,11 +1009,83 @@
             this.pIcon3.TabStop = false;
             this.pIcon3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.QuickTaskIcon_MouseClick);
             // 
+            // GEdit
+            // 
+            this.GEdit.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.GEdit.Image = ((System.Drawing.Image)(resources.GetObject("GEdit.Image")));
+            this.GEdit.Location = new System.Drawing.Point(299, 12);
+            this.GEdit.Name = "GEdit";
+            this.GEdit.Size = new System.Drawing.Size(20, 20);
+            this.GEdit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.GEdit.TabIndex = 124;
+            this.GEdit.TabStop = false;
+            this.GEdit.Click += new System.EventHandler(this.GEdit_Click);
+            // 
+            // GDelete
+            // 
+            this.GDelete.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.GDelete.Image = ((System.Drawing.Image)(resources.GetObject("GDelete.Image")));
+            this.GDelete.Location = new System.Drawing.Point(324, 12);
+            this.GDelete.Name = "GDelete";
+            this.GDelete.Size = new System.Drawing.Size(20, 20);
+            this.GDelete.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.GDelete.TabIndex = 123;
+            this.GDelete.TabStop = false;
+            this.GDelete.Click += new System.EventHandler(this.GDelete_Click);
+            // 
+            // GNew
+            // 
+            this.GNew.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.GNew.Image = ((System.Drawing.Image)(resources.GetObject("GNew.Image")));
+            this.GNew.Location = new System.Drawing.Point(274, 12);
+            this.GNew.Name = "GNew";
+            this.GNew.Size = new System.Drawing.Size(20, 20);
+            this.GNew.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.GNew.TabIndex = 122;
+            this.GNew.TabStop = false;
+            this.GNew.Click += new System.EventHandler(this.GNew_Click);
+            // 
+            // cbGroups
+            // 
+            this.cbGroups.FormattingEnabled = true;
+            this.cbGroups.Location = new System.Drawing.Point(93, 12);
+            this.cbGroups.Name = "cbGroups";
+            this.cbGroups.Size = new System.Drawing.Size(176, 21);
+            this.cbGroups.TabIndex = 121;
+            this.cbGroups.SelectedIndexChanged += new System.EventHandler(this.cbGroups_SelectedIndexChanged);
+            // 
+            // lblGroup
+            // 
+            this.lblGroup.AutoSize = true;
+            this.lblGroup.Location = new System.Drawing.Point(8, 17);
+            this.lblGroup.Name = "lblGroup";
+            this.lblGroup.Size = new System.Drawing.Size(39, 13);
+            this.lblGroup.TabIndex = 125;
+            this.lblGroup.Tag = "";
+            this.lblGroup.Text = "Group:";
+            // 
+            // lblQTopic
+            // 
+            this.lblQTopic.AutoSize = true;
+            this.lblQTopic.Location = new System.Drawing.Point(8, 45);
+            this.lblQTopic.Name = "lblQTopic";
+            this.lblQTopic.Size = new System.Drawing.Size(82, 13);
+            this.lblQTopic.TabIndex = 126;
+            this.lblQTopic.Tag = "";
+            this.lblQTopic.Text = "Быстрая тема:";
+            // 
             // TaskTemplateDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(358, 415);
+            this.ClientSize = new System.Drawing.Size(358, 439);
+            this.Controls.Add(this.panelTemplateName);
+            this.Controls.Add(this.lblQTopic);
+            this.Controls.Add(this.lblGroup);
+            this.Controls.Add(this.GEdit);
+            this.Controls.Add(this.GDelete);
+            this.Controls.Add(this.GNew);
+            this.Controls.Add(this.cbGroups);
             this.Controls.Add(this.pIcon3);
             this.Controls.Add(this.pIcon2);
             this.Controls.Add(this.numDuration);
@@ -1048,7 +1118,6 @@
             this.Controls.Add(this.pUncheckedRed);
             this.Controls.Add(this.pChecked);
             this.Controls.Add(this.pUnchecked);
-            this.Controls.Add(this.panelTemplateName);
             this.Controls.Add(this.txtResources);
             this.Controls.Add(this.pPeriod);
             this.Controls.Add(this.pCalendar);
@@ -1066,7 +1135,6 @@
             this.Controls.Add(this.Edit);
             this.Controls.Add(this.Delete);
             this.Controls.Add(this.New);
-            this.Controls.Add(this.chPrimary);
             this.Controls.Add(this.numDueDate);
             this.Controls.Add(this.numStartDate);
             this.Controls.Add(this.pDuePlace);
@@ -1088,7 +1156,7 @@
             this.Controls.Add(this.pPriority);
             this.Controls.Add(this.lblChangeValue);
             this.Controls.Add(this.pProgress);
-            this.Controls.Add(this.cbTaskTemplates);
+            this.Controls.Add(this.cbQuickTopics);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.HelpButton = true;
             this.MaximizeBox = false;
@@ -1098,6 +1166,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Task Template";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TaskTemplateDlg_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.pProgress)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pPriority)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIcon)).EndInit();
@@ -1141,13 +1210,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.mutDuration)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIcon2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIcon3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GEdit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GDelete)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GNew)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.ComboBox cbTaskTemplates;
+        private System.Windows.Forms.ComboBox cbQuickTopics;
         private System.Windows.Forms.PictureBox pProgress;
         private System.Windows.Forms.Label lblChangeValue;
         private System.Windows.Forms.PictureBox pPriority;
@@ -1173,7 +1245,6 @@
         private System.Windows.Forms.NumericUpDown numStartDate;
         private System.Windows.Forms.NumericUpDown numDueDate;
         private System.Windows.Forms.DateTimePicker dtpDueDate;
-        private System.Windows.Forms.CheckBox chPrimary;
         private System.Windows.Forms.PictureBox Edit;
         private System.Windows.Forms.PictureBox Delete;
         private System.Windows.Forms.PictureBox New;
@@ -1181,7 +1252,7 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.TextBox txtTemplateName;
-        private System.Windows.Forms.Label lblResourceName;
+        private System.Windows.Forms.Label lblItemName;
         public System.Windows.Forms.PictureBox p50;
         public System.Windows.Forms.PictureBox p25;
         public System.Windows.Forms.PictureBox p75;
@@ -1226,5 +1297,11 @@
         private System.Windows.Forms.ComboBox cbDurationUnits;
         private System.Windows.Forms.PictureBox pIcon2;
         private System.Windows.Forms.PictureBox pIcon3;
+        private System.Windows.Forms.PictureBox GEdit;
+        private System.Windows.Forms.PictureBox GDelete;
+        private System.Windows.Forms.PictureBox GNew;
+        private System.Windows.Forms.ComboBox cbGroups;
+        private System.Windows.Forms.Label lblGroup;
+        private System.Windows.Forms.Label lblQTopic;
     }
 }

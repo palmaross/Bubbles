@@ -60,7 +60,6 @@ namespace Bubbles
             string qtr_defaults = Utils.getRegistry("QuickTaskRemoveDefaults", "");
             if (qtr_defaults != "")
             {
-                bool taskinfostix = StixMain.m_TaskInfo != null;
                 string[] parts = qtr_defaults.Split(';');
                 foreach (string part in parts)
                 {
@@ -117,7 +116,7 @@ namespace Bubbles
             defaults += "effort:" + (QTR_Effort.Checked ? "1" : "0");
             Utils.setRegistry("QuickTaskRemoveDefaults", defaults);
 
-            if (StixMain.m_TaskInfo != null)
+            if (StixMain.m_TaskInfo.Visible)
                 StixMain.m_TaskInfo.SetQuickTaskDefault();
 
             Utils.setRegistry("FaviconsToolStix", FaviconsToolStix.Checked ? "1" : "0");

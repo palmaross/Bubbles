@@ -109,6 +109,9 @@ namespace Bubbles
                 case StixUtils.typetextops:
                     (stix as StixTextOps).ScaleStick(ScaleFactor, SF_Stix);
                     break;
+                case StixUtils.typeTopicPlayer:
+                    (stix as TopicPlayer).ScaleStick(ScaleFactor, SF_Stix);
+                    break;
             }
 
             DialogResult = DialogResult.OK;

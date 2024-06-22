@@ -53,13 +53,19 @@
             this.cm_closemenu = new System.Windows.Forms.ToolStripMenuItem();
             this.stxTools = new System.Windows.Forms.PictureBox();
             this.stxMapNavigator = new System.Windows.Forms.PictureBox();
-            this.boxResources = new System.Windows.Forms.PictureBox();
             this.boxBookmarks = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panelBoxes = new System.Windows.Forms.Panel();
-            this.OmniRec = new System.Windows.Forms.PictureBox();
+            this.Misc = new System.Windows.Forms.PictureBox();
+            this.OmniSound = new System.Windows.Forms.PictureBox();
             this.Stickers = new System.Windows.Forms.PictureBox();
             this.p2 = new System.Windows.Forms.PictureBox();
+            this.cmsOmniSound = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.TopicPlayer = new System.Windows.Forms.ToolStripMenuItem();
+            this.TopicRecorder = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsMisc = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.o_QuickTopics = new System.Windows.Forms.ToolStripMenuItem();
+            this.o_Resources = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.stxAddTopics)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxTextOps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxFormat)).BeginInit();
@@ -70,12 +76,14 @@
             this.cmsManage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.stxTools)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxMapNavigator)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.boxResources)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxBookmarks)).BeginInit();
             this.panelBoxes.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.OmniRec)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Misc)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.OmniSound)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Stickers)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
+            this.cmsOmniSound.SuspendLayout();
+            this.cmsMisc.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -281,20 +289,6 @@
             this.stxMapNavigator.Tag = "1";
             this.stxMapNavigator.MouseClick += new System.Windows.Forms.MouseEventHandler(this.StxBookmarks_MouseClick);
             // 
-            // boxResources
-            // 
-            this.boxResources.BackColor = System.Drawing.Color.Moccasin;
-            this.boxResources.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.boxResources.Image = ((System.Drawing.Image)(resources.GetObject("boxResources.Image")));
-            this.boxResources.Location = new System.Drawing.Point(8, 6);
-            this.boxResources.Name = "boxResources";
-            this.boxResources.Size = new System.Drawing.Size(24, 24);
-            this.boxResources.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.boxResources.TabIndex = 93;
-            this.boxResources.TabStop = false;
-            this.boxResources.Tag = "1";
-            this.boxResources.Click += new System.EventHandler(this.BoxResources_Click);
-            // 
             // boxBookmarks
             // 
             this.boxBookmarks.BackColor = System.Drawing.Color.Moccasin;
@@ -322,8 +316,8 @@
             // panelBoxes
             // 
             this.panelBoxes.BackColor = System.Drawing.Color.Moccasin;
-            this.panelBoxes.Controls.Add(this.OmniRec);
-            this.panelBoxes.Controls.Add(this.boxResources);
+            this.panelBoxes.Controls.Add(this.Misc);
+            this.panelBoxes.Controls.Add(this.OmniSound);
             this.panelBoxes.Controls.Add(this.boxBookmarks);
             this.panelBoxes.Controls.Add(this.boxSources);
             this.panelBoxes.Controls.Add(this.Stickers);
@@ -333,26 +327,40 @@
             this.panelBoxes.Size = new System.Drawing.Size(245, 37);
             this.panelBoxes.TabIndex = 96;
             // 
-            // OmniRec
+            // Misc
             // 
-            this.OmniRec.BackColor = System.Drawing.Color.Moccasin;
-            this.OmniRec.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.OmniRec.Image = ((System.Drawing.Image)(resources.GetObject("OmniRec.Image")));
-            this.OmniRec.Location = new System.Drawing.Point(124, 6);
-            this.OmniRec.Name = "OmniRec";
-            this.OmniRec.Size = new System.Drawing.Size(24, 24);
-            this.OmniRec.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.OmniRec.TabIndex = 98;
-            this.OmniRec.TabStop = false;
-            this.OmniRec.Tag = "1";
-            this.OmniRec.Click += new System.EventHandler(this.OmniRec_Click);
+            this.Misc.BackColor = System.Drawing.Color.Moccasin;
+            this.Misc.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Misc.Image = ((System.Drawing.Image)(resources.GetObject("Misc.Image")));
+            this.Misc.Location = new System.Drawing.Point(110, 6);
+            this.Misc.Name = "Misc";
+            this.Misc.Size = new System.Drawing.Size(24, 24);
+            this.Misc.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Misc.TabIndex = 99;
+            this.Misc.TabStop = false;
+            this.Misc.Tag = "1";
+            this.Misc.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Misc_MouseDown);
+            // 
+            // OmniSound
+            // 
+            this.OmniSound.BackColor = System.Drawing.Color.Moccasin;
+            this.OmniSound.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.OmniSound.Image = ((System.Drawing.Image)(resources.GetObject("OmniSound.Image")));
+            this.OmniSound.Location = new System.Drawing.Point(8, 6);
+            this.OmniSound.Name = "OmniSound";
+            this.OmniSound.Size = new System.Drawing.Size(24, 24);
+            this.OmniSound.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.OmniSound.TabIndex = 98;
+            this.OmniSound.TabStop = false;
+            this.OmniSound.Tag = "1";
+            this.OmniSound.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OmniSound_MouseClick);
             // 
             // Stickers
             // 
             this.Stickers.BackColor = System.Drawing.Color.Moccasin;
             this.Stickers.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Stickers.Image = ((System.Drawing.Image)(resources.GetObject("Stickers.Image")));
-            this.Stickers.Location = new System.Drawing.Point(158, 6);
+            this.Stickers.Location = new System.Drawing.Point(160, 6);
             this.Stickers.Name = "Stickers";
             this.Stickers.Size = new System.Drawing.Size(24, 24);
             this.Stickers.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -370,6 +378,49 @@
             this.p2.TabIndex = 98;
             this.p2.TabStop = false;
             this.p2.Visible = false;
+            // 
+            // cmsOmniSound
+            // 
+            this.cmsOmniSound.AllowDrop = true;
+            this.cmsOmniSound.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.TopicPlayer,
+            this.TopicRecorder});
+            this.cmsOmniSound.Name = "cmsOmniSound";
+            this.cmsOmniSound.ShowImageMargin = false;
+            this.cmsOmniSound.Size = new System.Drawing.Size(128, 48);
+            this.cmsOmniSound.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsOmniSound_ItemClicked);
+            // 
+            // TopicPlayer
+            // 
+            this.TopicPlayer.Name = "TopicPlayer";
+            this.TopicPlayer.Size = new System.Drawing.Size(127, 22);
+            this.TopicPlayer.Text = "Topic Player";
+            // 
+            // TopicRecorder
+            // 
+            this.TopicRecorder.Name = "TopicRecorder";
+            this.TopicRecorder.Size = new System.Drawing.Size(127, 22);
+            this.TopicRecorder.Text = "Topic Recorder";
+            // 
+            // cmsMisc
+            // 
+            this.cmsMisc.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.o_QuickTopics,
+            this.o_Resources});
+            this.cmsMisc.Name = "cmsMisc";
+            this.cmsMisc.Size = new System.Drawing.Size(142, 48);
+            // 
+            // o_QuickTopics
+            // 
+            this.o_QuickTopics.Name = "o_QuickTopics";
+            this.o_QuickTopics.Size = new System.Drawing.Size(141, 22);
+            this.o_QuickTopics.Text = "Quick Topics";
+            // 
+            // o_Resources
+            // 
+            this.o_Resources.Name = "o_Resources";
+            this.o_Resources.Size = new System.Drawing.Size(141, 22);
+            this.o_Resources.Text = "Resources";
             // 
             // StartMenu
             // 
@@ -402,12 +453,14 @@
             this.cmsManage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.stxTools)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxMapNavigator)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.boxResources)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxBookmarks)).EndInit();
             this.panelBoxes.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.OmniRec)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Misc)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.OmniSound)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Stickers)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
+            this.cmsOmniSound.ResumeLayout(false);
+            this.cmsMisc.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -420,7 +473,6 @@
         private System.Windows.Forms.ContextMenuStrip cmsManage;
         public System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panelBoxes;
-        private System.Windows.Forms.PictureBox boxResources;
         private System.Windows.Forms.PictureBox boxBookmarks;
         public System.Windows.Forms.PictureBox Manage;
         private System.Windows.Forms.PictureBox Stickers;
@@ -443,6 +495,13 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem cm_autoclose;
         private System.Windows.Forms.ToolStripMenuItem cm_closemenu;
-        private System.Windows.Forms.PictureBox OmniRec;
+        private System.Windows.Forms.PictureBox OmniSound;
+        private System.Windows.Forms.ContextMenuStrip cmsOmniSound;
+        private System.Windows.Forms.ToolStripMenuItem TopicPlayer;
+        private System.Windows.Forms.ToolStripMenuItem TopicRecorder;
+        private System.Windows.Forms.PictureBox Misc;
+        private System.Windows.Forms.ContextMenuStrip cmsMisc;
+        private System.Windows.Forms.ToolStripMenuItem o_QuickTopics;
+        private System.Windows.Forms.ToolStripMenuItem o_Resources;
     }
 }
