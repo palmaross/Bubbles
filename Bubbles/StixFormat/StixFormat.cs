@@ -190,6 +190,7 @@ namespace Bubbles
                     return;
 
                 sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.SPACE);
+                pBold.Image = Bold; pItalic.Image = Italic; pUnder.Image = Underline; pStrike.Image = Strikethrough;
             }
             else if (e.ClickedItem == clear_textformat)
             {
@@ -202,6 +203,7 @@ namespace Bubbles
                         t.Font.SetAttributeAutomatic((int)MmFontAttributeFlags.mmFontAttributeFlagSize);
                         t.Font.SetAttributeAutomatic((int)MmFontAttributeFlags.mmFontAttributeFlagName);
                     }
+                    pBold.Image = Bold; pItalic.Image = Italic; pUnder.Image = Underline; pStrike.Image = Strikethrough;
                 }
             }
             else if (e.ClickedItem == clear_textcolor)
@@ -401,6 +403,9 @@ namespace Bubbles
                     return;
 
                 sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.SPACE);
+
+                // Clear buttons.
+                pBold.Image = Bold; pItalic.Image = Italic; pUnder.Image = Underline; pStrike.Image = Strikethrough;
             }
             else if (e.Button == MouseButtons.Right)
             {

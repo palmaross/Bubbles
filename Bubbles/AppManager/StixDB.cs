@@ -187,18 +187,17 @@ namespace Bubbles
                 );
         }
 
-        public void AddAudio(string title, string path, int length, string mappath, string topicguid, 
-            int groupID, string timepoints)
+        public void AddAudio(string title, string path, string mappath, string maptitle, string topicguid, 
+            int groupID)
         {
             m_db.ExecuteNonQuery("insert into AUDIOS values(NULL, `"
                 + title + "`, `"
-                + path + "`, "
-                + length + ", `"
+                + path + "`, `"
                 + mappath + "`, `"
+                + maptitle + "`, `"
                 + topicguid + "`, "
-                + groupID + ", `"
-                + timepoints + "`, "
-                + "'', 0"
+                + groupID + ", "
+                + "'', '', 0"
                 + ");"
                 );
         }
@@ -293,10 +292,15 @@ namespace Bubbles
             m_db.ExecuteNonQuery("CREATE TABLE AUDIOGROUPS(id INTEGER PRIMARY KEY, name text, " +
                 "reserved1 text, reserved2 integer);");
 
-            m_db.ExecuteNonQuery("CREATE TABLE AUDIOS(id INTEGER PRIMARY KEY,title text, path text, " +
-                "length integer, mappath text, topicguid text, groupID int, timepoints text, " +
+            m_db.ExecuteNonQuery("CREATE TABLE AUDIOS(id INTEGER PRIMARY KEY, title text, path text, " +
+                "mappath text, maptitle text, topicguid text, groupID int, timepoints text, " +
                 "reserved1 text, reserved2 integer);");
             // timepoints - "tagname:seconds;tagname:seconds"
+
+            m_db.ExecuteNonQuery("CREATE TABLE LEGOCONFIGS(id INTEGER PRIMARY KEY, name text, " +
+                "reserved1 text, reserved2 integer);");
+            m_db.ExecuteNonQuery("CREATE TABLE LEGOSTIX(configID integer, tools text" +
+                "reserved1 text, reserved2 integer);");
 
             m_db.ExecuteNonQuery("END");
 
@@ -374,6 +378,10 @@ namespace Bubbles
             id = r.Next();
             AddStix(id, Utils.getString("StixFormat.tooltip"), StixUtils.typeformat, 0, "H", "");
 
+            // Add Favorites stick
+            id = r.Next();
+            AddStix(id, Utils.getString("StixLego.tooltip"), StixUtils.typeLego, 0, "H", "");
+
             // Add ADDTOPIC_TEMPLATES
             AddPattern(Utils.getString("Template.Day"), Utils.getString("Template.Day") + " ", "increment###1,10,1,end", "subtopic");
             AddPattern(Utils.getString("Template.Month"), Utils.getString("Template.January") + " ", "increment###1,31,1,end", "subtopic");
@@ -415,6 +423,7 @@ namespace Bubbles
             AddTopicWidth("numAuto5", 150, 120, 1); AddTopicWidth("numAuto6", 150, 120, 1);
 
             AddBookmarkGroup(Utils.getString("BookmarksDlg.defaultgroup"));
+            AddAudioGroup(Utils.getString("OmnoSound.defaultgroup"));
         }
     }
 }

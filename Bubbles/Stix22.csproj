@@ -158,6 +158,12 @@
     <Compile Include="OmniButton.Designer.cs">
       <DependentUpon>OmniButton.cs</DependentUpon>
     </Compile>
+    <Compile Include="OmniSound\ManageAudioDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OmniSound\ManageAudioDlg.Designer.cs">
+      <DependentUpon>ManageAudioDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="OmniSound\OmniSound.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -924,6 +930,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OmniButton.resx">
       <DependentUpon>OmniButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OmniSound\ManageAudioDlg.resx">
+      <DependentUpon>ManageAudioDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OmniSound\OmniSound.resx">
       <DependentUpon>OmniSound.cs</DependentUpon>

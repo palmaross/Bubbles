@@ -18,14 +18,14 @@ namespace AppManager
             REMOVE_STRIP_ICON,
         }
 
-        public TransactionWrapper(Topic aTopic, TransactionType aType, string _audioPath, 
-            string aUndoCaption = "Transaction", bool aUndoable = false)
+        public TransactionWrapper(Topic aTopic, TransactionType aType, string args, 
+            string aUndoCaption = "Audio Note", bool aUndoable = false)
         {
             m_topic = aTopic;
             m_type = aType;
             m_undoCaption = aUndoCaption;
             m_undoable = aUndoable;
-            audioPath = _audioPath;
+            Args = args;
         }
 
         public void Execute(bool aWaitForCompletion = false)
@@ -51,7 +51,7 @@ namespace AppManager
                         try
                         {
                             m_topic.AddControlStripType(controlStripURI);
-                            m_topic.GetAttributes(STRIP_URI).SetAttributeValue(AUDIO_PATH, audioPath);
+                            m_topic.GetAttributes(STRIP_URI).SetAttributeValue(AUDIO_PATH, Args);
                         }
                         catch { }
                         break;
@@ -95,7 +95,7 @@ namespace AppManager
         protected bool m_undoable = true;
 
         public string controlStripURI = "";
-        public string audioPath = "";
+        public string Args = "";
 
         public const string STRIP_URI = "OMNISTIX_STRIPICON_OMNIAUDIO";
         public const string AUDIO_PATH = "OMNIAUDIO_PATH";

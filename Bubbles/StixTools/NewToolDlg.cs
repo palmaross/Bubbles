@@ -17,6 +17,7 @@ namespace Bubbles
             lblToolName.Text = Utils.getString("NewToolDlg.lblTitle");
             lblTooltip.Text = Utils.getString("NewToolDlg.lblTooltip");
             lblChangeIcon.Text = Utils.getString("NewToolDlg.lblChangeIcon");
+            lblToolIcon.Text = Utils.getString("NewToolDlg.lblToolIcon");
             lblTip.Text = Utils.getString("NewToolDlg.lblTip");
             chAddToDatabase.Text = Utils.getString("NewToolDlg.chAddToDatabase");
             btnAddTool.Text = Utils.getString("button.add");

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Bubbles
@@ -26,12 +27,15 @@ namespace Bubbles
             rbtnCustom.Text = Utils.getString("TopicTemplateDlg.rbtnFreeTemplate");
             rbtnUseIncrement.Text = Utils.getString("TopicTemplateDlg.rbtnUseIncrement");
             btnSave.Text = Utils.getString("button.save");
-            grAdd.Text = Utils.getString("button.add");
+            toolTip1.SetToolTip(btnSave, Utils.getString("TopicTemplateDlg.btnSave.tooltip"));
+            grAdd.Text = Utils.getString("AddTopicStix_AddAs");
             Subtopic.Text = Utils.getString("TopicTemplateDlg.rbtnSubtopic");
             NextTopic.Text = Utils.getString("TopicTemplateDlg.rbtnNextTopic");
             TopicBefore.Text = Utils.getString("TopicTemplateDlg.rbtnTopicBefore");
             btnAddTopics.Text = Utils.getString("TopicTemplateDlg.btnAdd");
+            toolTip1.SetToolTip(btnAddTopics, Utils.getString("TopicTemplateDlg.btnAdd.tooltip"));
             btnClose.Text = Utils.getString("button.close");
+            lblSaved.Text = Utils.getString("TopicTemplateDlg.lblSaved");
 
             toolTip1.SetToolTip(New, Utils.getString("TopicTemplateDlg.pNewTemplate"));
             toolTip1.SetToolTip(Delete, Utils.getString("TopicTemplateDlg.pDeleteTemplate"));
@@ -271,7 +275,7 @@ namespace Bubbles
             string newName = txtTemplateName.Text.Trim();
             if (save) newName = cbTemplates.Text;
 
-            string topicName = txtTopicText.Text.Trim();
+            string topicName = txtTopicText.Text;
             if (newName == "") return;
 
             string pattern_data = "";
@@ -319,6 +323,11 @@ namespace Bubbles
             }
             panelNewTemplate.Visible = false;
             changed = true;
+
+            lblSaved.Visible = true;
+            System.Windows.Forms.Application.DoEvents();
+            Thread.Sleep(2000);
+            lblSaved.Visible = false;
         }
 
         private void btnCancelCreate_Click(object sender, EventArgs e)

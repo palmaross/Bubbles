@@ -47,6 +47,8 @@ namespace Bubbles
                 bool allselected = true;
                 foreach (DataRow dr in dt.Rows)
                 {
+                    if (dr["type"].ToString() == "StixLego")
+                        continue;
                     var item = listRunAtStart.Items.Add(dr["name"].ToString());
                     item.Tag = dr["id"].ToString();
                     item.Checked = dr["start"].ToString() == "1";

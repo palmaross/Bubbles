@@ -398,7 +398,7 @@ namespace Bubbles
         {
             if (aArgs.what.Contains("selection"))
             {
-                if (m_TaskInfo != null && m_TaskInfo.Visible && !m_TaskInfo.stickDuration)
+                if (m_TaskInfo != null && m_TaskInfo.Visible)// && !m_TaskInfo.stickDuration)
                 {
                     // If map selection changed, change the dates in the TaskInfo stick with selected topic dates
                     SetDates();
@@ -487,6 +487,8 @@ namespace Bubbles
 
         public static void SetDates()
         {
+            if (!m_TaskInfo.Visible) return;
+
             // No topics selected. Disable Task Info stick controls
             if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.PrimaryTopic == null)
             {
@@ -509,7 +511,7 @@ namespace Bubbles
             Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
             if (t == null) return;
 
-            m_TaskInfo.MMDuration = true;
+            //m_TaskInfo.MMDuration = true;
 
             DateTime startdate = t.Task.StartDate, duedate = t.Task.DueDate;
             bool startequal = true, dueequal = true;
@@ -574,18 +576,53 @@ namespace Bubbles
                 tt.SetToolTip(m_TaskInfo.pTopicDueDate, Utils.getString("taskinfo.pTopicDueDate.remove.tooltip"));
             }
 
+            if (m_TaskInfo.stickDuration) return;
+
             // Duration and Effort
 
-            if (!m_TaskInfo.stickDuration)
+            // If task doesn't have dates or if multiple topics selected
+            // set duration to 0 (no duration)
+            if ((t.Task.StartDate == MMUtils.NULLDATE && t.Task.DueDate == MMUtils.NULLDATE) ||
+                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 1)
+            {
+                m_TaskInfo.ST_DurationUnits.SelectedIndex = 2;
+                m_TaskInfo.numDuration.Value = 0;
+            }
+            else
             {
                 SetTaskInfoDurationUnit(t);
 
                 int duration = t.Task.GetDuration(t.Task.DurationUnit);
+                int i = m_TaskInfo.ST_DurationUnits.SelectedIndex;
+                MmDurationUnit unit = StixTaskInfo.GetDurationUnit(i);
 
-                if (m_TaskInfo.numDuration.Value != duration)
+                if (m_TaskInfo.numDuration.Value != duration || t.Task.DurationUnit != unit)
                     m_TaskInfo.numDuration.Value = duration;
+            }
 
-                m_TaskInfo.MMDuration = false;
+            if (MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 1)
+            {
+                m_TaskInfo.ST_EffortUnits.SelectedIndex = 2;
+                m_TaskInfo.numEffort.Value = 0; m_TaskInfo.numEffort.Text = "";
+            }
+            else
+            {
+                if (t.Task.HasEffort)
+                {
+                    SetTaskInfoEffortUnit(t);
+
+                    int duration = t.Task.GetEffort(t.Task.EffortUnit);
+                    int i = m_TaskInfo.ST_EffortUnits.SelectedIndex;
+                    MmDurationUnit unit = StixTaskInfo.GetDurationUnit(i);
+
+                    if (m_TaskInfo.numEffort.Value != duration || t.Task.EffortUnit != unit)
+                        m_TaskInfo.numEffort.Value = duration;
+                }
+                else
+                {
+                    m_TaskInfo.ST_EffortUnits.SelectedIndex = 2;
+                    m_TaskInfo.numEffort.Value = 0; m_TaskInfo.numEffort.Text = "";
+                }
             }
         }
 
@@ -596,15 +633,20 @@ namespace Bubbles
             switch (unit)
             {
                 case MmDurationUnit.mmDurationUnitMinute:
-                    m_TaskInfo.ST_DurationUnits.SelectedIndex = 0; break;
+                    if (m_TaskInfo.ST_DurationUnits.SelectedIndex != 0)
+                        m_TaskInfo.ST_DurationUnits.SelectedIndex = 0; break;
                 case MmDurationUnit.mmDurationUnitHour:
-                    m_TaskInfo.ST_DurationUnits.SelectedIndex = 1; break;
+                    if (m_TaskInfo.ST_DurationUnits.SelectedIndex != 1)
+                        m_TaskInfo.ST_DurationUnits.SelectedIndex = 1; break;
                 case MmDurationUnit.mmDurationUnitDay:
-                    m_TaskInfo.ST_DurationUnits.SelectedIndex = 2; break;
+                    if (m_TaskInfo.ST_DurationUnits.SelectedIndex != 2)
+                        m_TaskInfo.ST_DurationUnits.SelectedIndex = 2; break;
                 case MmDurationUnit.mmDurationUnitWeek:
-                    m_TaskInfo.ST_DurationUnits.SelectedIndex = 3; break;
+                    if (m_TaskInfo.ST_DurationUnits.SelectedIndex != 3)
+                        m_TaskInfo.ST_DurationUnits.SelectedIndex = 3; break;
                 case MmDurationUnit.mmDurationUnitMonth:
-                    m_TaskInfo.ST_DurationUnits.SelectedIndex = 4; break;
+                    if (m_TaskInfo.ST_DurationUnits.SelectedIndex != 4)
+                        m_TaskInfo.ST_DurationUnits.SelectedIndex = 4; break;
             }
         }
 
@@ -615,15 +657,20 @@ namespace Bubbles
             switch (unit)
             {
                 case MmDurationUnit.mmDurationUnitMinute:
-                    m_TaskInfo.ST_EffortUnits.SelectedIndex = 0; break;
+                    if (m_TaskInfo.ST_EffortUnits.SelectedIndex != 0)
+                        m_TaskInfo.ST_EffortUnits.SelectedIndex = 0; break;
                 case MmDurationUnit.mmDurationUnitHour:
-                    m_TaskInfo.ST_EffortUnits.SelectedIndex = 1; break;
+                    if (m_TaskInfo.ST_EffortUnits.SelectedIndex != 1)
+                        m_TaskInfo.ST_EffortUnits.SelectedIndex = 1; break;
                 case MmDurationUnit.mmDurationUnitDay:
-                    m_TaskInfo.ST_EffortUnits.SelectedIndex = 2; break;
+                    if (m_TaskInfo.ST_EffortUnits.SelectedIndex != 2)
+                        m_TaskInfo.ST_EffortUnits.SelectedIndex = 2; break;
                 case MmDurationUnit.mmDurationUnitWeek:
-                    m_TaskInfo.ST_EffortUnits.SelectedIndex = 3; break;
+                    if (m_TaskInfo.ST_EffortUnits.SelectedIndex != 3)
+                        m_TaskInfo.ST_EffortUnits.SelectedIndex = 3; break;
                 case MmDurationUnit.mmDurationUnitMonth:
-                    m_TaskInfo.ST_EffortUnits.SelectedIndex = 4; break;
+                    if (m_TaskInfo.ST_EffortUnits.SelectedIndex != 4)
+                        m_TaskInfo.ST_EffortUnits.SelectedIndex = 4; break;
             }
         }
 
@@ -868,6 +915,13 @@ namespace Bubbles
             OmniStixButton.Dispose();
             OmniStixButton = null;
 
+            if (m_ManageAudio != null && m_ManageAudio.Visible)
+            {
+                m_ManageAudio.Hide();
+                m_ManageAudio.Dispose();
+                m_ManageAudio = null;
+            }
+
             if (m_StixBase.Visible)
                 m_StixBase.Hide();
             m_StixBase.Dispose();
@@ -972,5 +1026,6 @@ namespace Bubbles
 
         public static TopicPlayer m_TopicPlayer;
         public static TopicRecorder m_TopicRecorder;
+        public static ManageAudioDlg m_ManageAudio;
     }
 }

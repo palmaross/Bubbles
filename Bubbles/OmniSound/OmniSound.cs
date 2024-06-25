@@ -6,9 +6,9 @@ using System.IO;
 using Color = System.Drawing.Color;
 using Mindjet.MindManager.Interop;
 using AppManager;
-using System.Linq;
 using System.Drawing;
 using NAudio.Wave;
+using System.Data;
 
 namespace Bubbles
 {
@@ -44,7 +44,7 @@ namespace Bubbles
             toolTip1.SetToolTip(btnPlay, Utils.getString("OmniSound.btnPlay.tooltip"));
             toolTip1.SetToolTip(chAttachment, Utils.getString("OmniSound.chAttachment.tooltip"));
 
-            o_close.Text = Utils.getString("button.close");
+            btnClose.Text = Utils.getString("button.close");
             o_help.Text = Utils.getString("button.help");
             o_recordsystem.Text = Utils.getString("OmniSound.o_recordsystem");
 
@@ -88,35 +88,55 @@ namespace Bubbles
 
         public void InitAudioFiles()
         {
+            cbGroups.Items.Clear();
+
+            using (StixDB db = new StixDB())
+            {
+                DataTable dt = db.ExecuteQuery("select * from AUDIOGROUPS order by name");
+                foreach (DataRow row in dt.Rows)
+                    cbGroups.Items.Add(new AudioGroup(row["name"].ToString(), Convert.ToInt32(row["id"])));
+            }
+
+            if (cbGroups.Items.Count > 0)
+                cbGroups.SelectedIndex = 0;
+        }
+
+        private void cbGroups_SelectedIndexChanged(object sender, EventArgs e)
+        {
             cbRecords.Items.Clear();
+            int groupID = (cbGroups.SelectedItem as AudioGroup).ID;
 
-            string path = Utils.m_dataPath + "SoundDB";
-            DirectoryInfo di = new DirectoryInfo(path);
+            using (StixDB db = new StixDB())
+            {
+                DataTable dt = db.ExecuteQuery("select * from AUDIOS where groupID=" + groupID + " order by title");
 
-            var extensions = new[] { "*.wav", "*.mp3", "*.mp4" };
-            var files = extensions.SelectMany(ext => di.GetFiles(ext, SearchOption.AllDirectories));
-
-            foreach (var fi in files)
-                cbRecords.Items.Add(new AudioItem(Path.GetFileNameWithoutExtension(fi.Name), fi.FullName));
+                foreach (DataRow row in dt.Rows)
+                    cbRecords.Items.Add(new AudioItem(Convert.ToInt32(row["id"]), 
+                        row["title"].ToString(), row["path"].ToString()));
+            }
 
             if (cbRecords.Items.Count > 0)
                 cbRecords.SelectedIndex = 0;
         }
 
+        private void btnMore_Click(object sender, EventArgs e)
+        {
+            contextMenuStrip1.Show(MousePosition);
+        }
+
         private void ContextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem == o_close)
-            {
-                btnStop_Click(null, null);
-                RecordLimit = 10;
-                this.Opacity = 1;
-                btnPause.Enabled = true;
-                btnStop.Enabled = true;
-                this.Hide();
-            }
-            else if (e.ClickedItem == o_help)
+            if (e.ClickedItem == o_help)
             {
                 Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "OmniSound.htm");
+            }
+            else if (e.ClickedItem == o_manage)
+            {
+                if (StixMain.m_ManageAudio == null || StixMain.m_ManageAudio.IsDisposed)
+                {
+                    StixMain.m_ManageAudio = new ManageAudioDlg();
+                    StixMain.m_ManageAudio.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                }
             }
             else if (e.ClickedItem == o_recordsystem)
             {
@@ -136,6 +156,16 @@ namespace Bubbles
                     SystemAudio = true;
                 }
             }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            btnStop_Click(null, null);
+            RecordLimit = 10;
+            this.Opacity = 1;
+            btnPause.Enabled = true;
+            btnStop.Enabled = true;
+            this.Hide();
         }
 
         private void This_Paint(object sender, PaintEventArgs e)
@@ -469,11 +499,12 @@ namespace Bubbles
             }
             else if (e.KeyCode == Keys.Enter)
             {
-                SaveRecord(txtRecordName.Text.Trim());
+                int groupID = (cbGroups.SelectedItem as AudioGroup).ID;
+                SaveRecord(txtRecordName.Text.Trim(), groupID);
             }
         }
 
-        public void SaveRecord(string recordName)
+        public void SaveRecord(string recordName, int groupID, string mappath = "", string maptitle = "", string topicguid = "")
         {
             string outputFolder = Utils.m_dataPath + "SoundDB";
             DirectoryInfo di = new DirectoryInfo(outputFolder);
@@ -515,7 +546,15 @@ namespace Bubbles
             if (!fail)
                 File.Delete(recordedWavFile);
 
-            int i = cbRecords.Items.Add(new AudioItem(recordName, filename));
+            int id = 0;
+            using (StixDB db = new StixDB())
+            {
+                db.AddAudio(recordName, filename, mappath, maptitle, topicguid, groupID);
+                DataTable dt = db.ExecuteQuery("SELECT last_insert_rowid()");
+                if (dt.Rows.Count > 0) id = Convert.ToInt32(dt.Rows[0][0]);
+            }
+
+            int i = cbRecords.Items.Add(new AudioItem(id, recordName, filename));
             cbRecords.SelectedIndex = i;
             panelRecordName.Visible = false;
         }
@@ -565,7 +604,8 @@ namespace Bubbles
 
         private void btnSaveRecord_Click(object sender, EventArgs e)
         {
-            SaveRecord(txtRecordName.Text.Trim());
+            int groupID = (cbGroups.SelectedItem as AudioGroup).ID;
+            SaveRecord(txtRecordName.Text.Trim(), groupID);
             panelRecordName.Visible = false;
         }
 
@@ -585,7 +625,16 @@ namespace Bubbles
             {
                 MessageBox.Show(Utils.getString("OmniSound.topichasaudio"), "",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
+
+            int id = (cbRecords.SelectedItem as AudioItem).ID;
+
+            using (StixDB db = new StixDB())
+                db.ExecuteNonQuery("update AUDIOS set " +
+                    "mappath=`" + MMUtils.ActiveDocument.FullName + "`, " +
+                    "maptitle=`" + MMUtils.ActiveDocument.CentralTopic.Text + "`, " +
+                    "topicguid=`" + _t.Guid + "` where id=" + id + "");
 
             if (chAttachment.Checked) // Add attachment
                 _t.Attachments.Add((cbRecords.SelectedItem as AudioItem).Path);
@@ -600,31 +649,9 @@ namespace Bubbles
 
         private void OmniSound_MouseDown(object sender, MouseEventArgs e)
         {
-            cur = MousePosition;
-
             // move form
             ReleaseCapture();
             SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
-
-            // check if it's just á mouse click
-            timer2.Start();
-        }
-        Point cur;
-
-        /// <summary>
-        /// Check if MouseDown event is for move form or it is a click
-        /// </summary>
-        private void timer2_Tick(object sender, EventArgs e)
-        {
-            if ((MouseButtons & MouseButtons.Left) != 0) // mouse button still is pressed
-                return;
-
-            timer2.Stop();
-            if (MousePosition.X < cur.X + 5 && MousePosition.X > cur.X - 5 &&
-                MousePosition.Y < cur.Y + 5 && MousePosition.Y > cur.Y - 5)
-            {
-                contextMenuStrip1.Show(MousePosition);
-            }
         }
 
         private void lblClock_Click(object sender, EventArgs e)
@@ -715,14 +742,32 @@ namespace Bubbles
 
     public class AudioItem
     {
-        public AudioItem(string name, string path)
+        public AudioItem(int id, string name, string path)
         {
             Name = name;
             Path = path;
+            ID = id;
         }
 
         public string Name;
         public string Path;
+        public int ID;
+
+        public override string ToString()
+        {
+            return Name;
+        }
+    }
+    public class AudioGroup
+    {
+        public AudioGroup(string name, int id)
+        {
+            Name = name;
+            ID = id;
+        }
+
+        public string Name;
+        public int ID;
 
         public override string ToString()
         {

@@ -20,17 +20,21 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "WindowsToolsDlg.htm");
+            helpProvider1.SetHelpKeyword(this, "ManageToolsDlg.htm");
 
             Text = Utils.getString("ManageToolsDlg.Title");
+            lblWTools.Text = Utils.getString("ManageToolsDlg.lblWTools");
+            lblOTools.Text = Utils.getString("ManageToolsDlg.lblOTools");
             btnAddToStix.Text = Utils.getString("ManageToolsDlg.btnAddToStix");
             btnNewTool.Text = Utils.getString("ManageToolsDlg.btnNewTool");
             btnClose.Text = Utils.getString("button.close");
 
             t_edittool.Text = Utils.getString("button.edit");
             t_remove.Text = Utils.getString("button.remove");
+            t_remove.ToolTipText = Utils.getString("tools.remove.menu.tooltip");
             t_run.Text = Utils.getString("tools.runtool.menu");
             t_copytoomni.Text = Utils.getString("tools.copytoomni.menu");
+            t_copytoomni.ToolTipText = Utils.getString("tools.copytoomni.menu.tooltip");
             cmsTool.ItemClicked += CmsTool_ItemClicked;
 
             // Resizing window causes black strips...
@@ -47,11 +51,16 @@ namespace Bubbles
             }
 
             this.FormClosing += WindowsToolsDlg_FormClosing;
+            this.HelpButtonClicked += this_HelpButtonClicked;
             imageList1.ImageSize = p1.Size;
             db = new StixDB();
 
             Utils.InitIcons();
             Init();
+        }
+        private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "ManageToolsDlg.htm");
         }
 
         private void WindowsToolsDlg_Resize(object sender, EventArgs e)
@@ -403,6 +412,12 @@ namespace Bubbles
 
                 if (lv == listWindowsApps) t_edittool.Visible = false;
                 else t_copytoomni.Visible = false;
+
+                if (lv.SelectedItems.Count > 1)
+                {
+                    t_run.Visible = false;
+                    t_edittool.Visible = false;
+                }
 
                 cmsTool.Show(MousePosition);
             }

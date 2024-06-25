@@ -66,6 +66,7 @@
             this.cmsMisc = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.o_QuickTopics = new System.Windows.Forms.ToolStripMenuItem();
             this.o_Resources = new System.Windows.Forms.ToolStripMenuItem();
+            this.ManageAudio = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.stxAddTopics)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxTextOps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxFormat)).BeginInit();
@@ -384,22 +385,23 @@
             this.cmsOmniSound.AllowDrop = true;
             this.cmsOmniSound.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TopicPlayer,
-            this.TopicRecorder});
+            this.TopicRecorder,
+            this.ManageAudio});
             this.cmsOmniSound.Name = "cmsOmniSound";
             this.cmsOmniSound.ShowImageMargin = false;
-            this.cmsOmniSound.Size = new System.Drawing.Size(128, 48);
+            this.cmsOmniSound.Size = new System.Drawing.Size(156, 92);
             this.cmsOmniSound.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsOmniSound_ItemClicked);
             // 
             // TopicPlayer
             // 
             this.TopicPlayer.Name = "TopicPlayer";
-            this.TopicPlayer.Size = new System.Drawing.Size(127, 22);
+            this.TopicPlayer.Size = new System.Drawing.Size(155, 22);
             this.TopicPlayer.Text = "Topic Player";
             // 
             // TopicRecorder
             // 
             this.TopicRecorder.Name = "TopicRecorder";
-            this.TopicRecorder.Size = new System.Drawing.Size(127, 22);
+            this.TopicRecorder.Size = new System.Drawing.Size(155, 22);
             this.TopicRecorder.Text = "Topic Recorder";
             // 
             // cmsMisc
@@ -421,6 +423,12 @@
             this.o_Resources.Name = "o_Resources";
             this.o_Resources.Size = new System.Drawing.Size(141, 22);
             this.o_Resources.Text = "Resources";
+            // 
+            // ManageAudio
+            // 
+            this.ManageAudio.Name = "ManageAudio";
+            this.ManageAudio.Size = new System.Drawing.Size(155, 22);
+            this.ManageAudio.Text = "Manage Audio";
             // 
             // StartMenu
             // 
@@ -503,5 +511,6 @@
         private System.Windows.Forms.ContextMenuStrip cmsMisc;
         private System.Windows.Forms.ToolStripMenuItem o_QuickTopics;
         private System.Windows.Forms.ToolStripMenuItem o_Resources;
+        private System.Windows.Forms.ToolStripMenuItem ManageAudio;
     }
 }

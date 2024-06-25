@@ -391,6 +391,14 @@ namespace Bubbles
                 if (!StixMain.m_TopicRecorder.Visible)
                     StixMain.m_TopicRecorder.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
+            else if (e.ClickedItem == ManageAudio)
+            {
+                if (StixMain.m_ManageAudio == null || StixMain.m_ManageAudio.IsDisposed)
+                {
+                    StixMain.m_ManageAudio = new ManageAudioDlg();
+                    StixMain.m_ManageAudio.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                }
+            }
         }
 
         private void BoxSources_Click(object sender, EventArgs e)

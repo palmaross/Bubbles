@@ -154,11 +154,11 @@ namespace Bubbles
                 QuickTopicItem QuickTask = e.Node.Tag as QuickTopicItem;
                 if (QuickTask == null) return; // group clicked
 
-                StixMain.m_TaskInfo.QuickTask = QuickTask;
+                StixMain.m_TaskInfo.QuickTopic = QuickTask;
 
                 Transaction _tr = MMUtils.ActiveDocument.NewTransaction(Utils.getString("QuickTask.transaction.name"));
                 _tr.IsUndoable = true;
-                _tr.Execute += new ITransactionEvents_ExecuteEventHandler(StixMain.m_TaskInfo.SetQuickTask);
+                _tr.Execute += new ITransactionEvents_ExecuteEventHandler(StixMain.m_TaskInfo.SetQuickTopic);
                 _tr.Start();
             }
             else if (e.Button == MouseButtons.Right)

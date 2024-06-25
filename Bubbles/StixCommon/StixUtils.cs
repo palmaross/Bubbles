@@ -979,7 +979,7 @@ namespace Bubbles
             typeicons = "StixIcons", typetaskinfo = "StixTaskInfo", 
             typeformat = "StixFormat", typetools = "StixTools", typemapnavigator = "StixMapNavigator",
             typeaddtopic = "StixAddTopic", typetextops = "StixTextOps", typeorganizer = "StixOrganizer",
-            typeTopicPlayer = "TopicPlayer";
+            typeTopicPlayer = "TopicPlayer", typeLego = "StixLego";
 
         public static int stickLength;
         public static int icondist;

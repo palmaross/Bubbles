@@ -3,7 +3,6 @@ using PRAManager;
 using System;
 using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using Image = System.Drawing.Image;
 
@@ -270,9 +269,14 @@ namespace Bubbles
 
         private void b_addBookmark_Click(object sender, EventArgs e)
         {
+            Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
+            if (t == null) return;
+
             lblGroupBookmark.Text = Utils.getString("BookmarksDlg.bookmarkname");
             btnAction.Text = Utils.getString("BookmarksDlg.addbookmark");
-            txtGroupBookmark.Text = "";
+            string text = t.Text;
+            if (text.Length > 35) text = text.Substring(0, 35);
+            txtGroupBookmark.Text = text;
             btnAction.Tag = "addbookmark";
 
             panelActions.Visible = true;

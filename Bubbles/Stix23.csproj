@@ -132,11 +132,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppManager\AlfaChanges.cs" />
-    <Compile Include="OmniSound\OmniSound2.cs">
+    <Compile Include="OmniSound\ManageAudioDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OmniSound\OmniSound2.Designer.cs">
-      <DependentUpon>OmniSound2.cs</DependentUpon>
+    <Compile Include="OmniSound\ManageAudioDlg.Designer.cs">
+      <DependentUpon>ManageAudioDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="OmniSound\SaveRecordDlg.cs">
       <SubType>Form</SubType>
@@ -1161,8 +1161,8 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="OmniSound\OmniSound2.resx">
-      <DependentUpon>OmniSound2.cs</DependentUpon>
+    <EmbeddedResource Include="OmniSound\ManageAudioDlg.resx">
+      <DependentUpon>ManageAudioDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OmniSound\SaveRecordDlg.resx">
       <DependentUpon>SaveRecordDlg.cs</DependentUpon>

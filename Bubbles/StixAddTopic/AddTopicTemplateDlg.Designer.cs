@@ -59,6 +59,7 @@
             this.New = new System.Windows.Forms.PictureBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.lblSaved = new System.Windows.Forms.Label();
             this.panelNewTemplate.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTopics)).BeginInit();
             this.grAdd.SuspendLayout();
@@ -204,6 +205,7 @@
             // 
             // cbTemplates
             // 
+            this.cbTemplates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbTemplates.FormattingEnabled = true;
             this.cbTemplates.Location = new System.Drawing.Point(11, 11);
             this.cbTemplates.Name = "cbTemplates";
@@ -370,12 +372,24 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // lblSaved
+            // 
+            this.lblSaved.AutoSize = true;
+            this.lblSaved.ForeColor = System.Drawing.Color.Red;
+            this.lblSaved.Location = new System.Drawing.Point(134, 352);
+            this.lblSaved.Name = "lblSaved";
+            this.lblSaved.Size = new System.Drawing.Size(83, 13);
+            this.lblSaved.TabIndex = 58;
+            this.lblSaved.Text = "Template saved";
+            this.lblSaved.Visible = false;
+            // 
             // AddTopicTemplateDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
             this.ClientSize = new System.Drawing.Size(328, 401);
+            this.Controls.Add(this.lblSaved);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.Rename);
             this.Controls.Add(this.Delete);
@@ -445,5 +459,6 @@
         private System.Windows.Forms.PictureBox New;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.HelpProvider helpProvider1;
+        private System.Windows.Forms.Label lblSaved;
     }
 }

@@ -114,6 +114,8 @@
             this.ST_DurationUnits.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ST_DurationUnits.Name = "ST_DurationUnits";
             this.ST_DurationUnits.Size = new System.Drawing.Size(125, 23);
+            this.ST_DurationUnits.DropDown += new System.EventHandler(this.ST_DurationUnits_DropDown);
+            this.ST_DurationUnits.DropDownClosed += new System.EventHandler(this.ST_DurationUnits_DropDownClosed);
             this.ST_DurationUnits.SelectedIndexChanged += new System.EventHandler(this.ST_DurationUnits_SelectedIndexChanged);
             this.ST_DurationUnits.MouseEnter += new System.EventHandler(this.ST_DurationUnits_MouseEnter);
             // 
@@ -121,6 +123,8 @@
             // 
             this.ST_EffortUnits.Name = "ST_EffortUnits";
             this.ST_EffortUnits.Size = new System.Drawing.Size(121, 23);
+            this.ST_EffortUnits.DropDown += new System.EventHandler(this.ST_DurationUnits_DropDown);
+            this.ST_EffortUnits.DropDownClosed += new System.EventHandler(this.ST_DurationUnits_DropDownClosed);
             this.ST_EffortUnits.SelectedIndexChanged += new System.EventHandler(this.ST_DurationUnits_SelectedIndexChanged);
             this.ST_EffortUnits.MouseEnter += new System.EventHandler(this.ST_DurationUnits_MouseEnter);
             // 
@@ -212,6 +216,7 @@
             this.numDuration.Tag = "1";
             this.numDuration.ValueChanged += new System.EventHandler(this.numDuration_ValueChanged);
             this.numDuration.KeyDown += new System.Windows.Forms.KeyEventHandler(this.numDuration_KeyDown);
+            this.numDuration.MouseDown += new System.Windows.Forms.MouseEventHandler(this.numDuration_MouseDown);
             // 
             // p100
             // 
@@ -431,7 +436,7 @@
             // cmsTaskTemplates
             // 
             this.cmsTaskTemplates.Name = "cmsTaskTemplates";
-            this.cmsTaskTemplates.Size = new System.Drawing.Size(181, 26);
+            this.cmsTaskTemplates.Size = new System.Drawing.Size(61, 4);
             // 
             // cmsRemoveTaskInfo
             // 
@@ -501,6 +506,7 @@
             0});
             this.numEffort.ValueChanged += new System.EventHandler(this.numDuration_ValueChanged);
             this.numEffort.KeyDown += new System.Windows.Forms.KeyEventHandler(this.numDuration_KeyDown);
+            this.numEffort.MouseDown += new System.Windows.Forms.MouseEventHandler(this.numEffort_MouseDown);
             // 
             // StixTaskInfo
             // 
@@ -527,6 +533,7 @@
             this.Name = "StixTaskInfo";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+            this.Load += new System.EventHandler(this.StixTaskInfo_Load);
             this.cmsDuration.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();

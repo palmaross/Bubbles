@@ -21,6 +21,13 @@ namespace Bubbles
         {
             InitializeComponent();
 
+            lblGroup.Text = Utils.getString("SaveRecordDlg.lblGroup");
+            lblRecordName.Text = Utils.getString("SaveRecordDlg.lblRecordName");
+            chAttachment.Text = Utils.getString("SaveRecordDlg.chAttachment");
+            chCloseRecorder.Text = Utils.getString("SaveRecordDlg.chCloseRecorder");
+            btnSave.Text = Utils.getString("button.save");
+            btnCancel.Text = Utils.getString("button.cancel");
+
             if (count)
             {
                 panelSave.Visible = false;
@@ -31,6 +38,16 @@ namespace Bubbles
             {
                 panelSave.Visible = true;
                 lblCount.Visible = false;
+
+                using (StixDB db = new StixDB())
+                {
+                    DataTable dt = db.ExecuteQuery("select * from AUDIOGROUPS order by name");
+                    foreach (DataRow row in dt.Rows)
+                        cbGroups.Items.Add(new AudioGroup(row["name"].ToString(), Convert.ToInt32(row["id"])));
+                }
+
+                if (cbGroups.Items.Count > 0)
+                    cbGroups.SelectedIndex = 0;
             }
         }
 
@@ -63,16 +80,20 @@ namespace Bubbles
             string filename = txtName.Text.Trim();
             string outputFolder = Utils.m_dataPath + "SoundDB\\";
 
-            StixMain.m_OmniSound.SaveRecord(filename);
-
             if (!(MMUtils.SelectedTopic() is Topic _t))
                 return;
 
             if (_t.ContainsControlStripType(StixMain.SOUNDSTRIP_URI))
                 return;
 
+            string a_guid = "";
             if (chAttachment.Checked) // Add as attachment
-                _t.Attachments.Add(outputFolder + filename + ".mp3");
+                a_guid = _t.Attachments.Add(outputFolder + filename + ".mp3").Guid;
+
+            int groupID = (cbGroups.SelectedItem as AudioGroup).ID;
+            string mappath = MMUtils.ActiveDocument.FullName;
+            string maptitle = MMUtils.ActiveDocument.CentralTopic.Text;
+            StixMain.m_OmniSound.SaveRecord(filename, groupID, mappath, maptitle, _t.Guid);
 
             TransactionWrapper _w = new TransactionWrapper(_t,
                 TransactionWrapper.TransactionType.ADD_STRIP_ICON, outputFolder + filename + ".mp3");

@@ -72,7 +72,7 @@
             // 
             // txtText1
             // 
-            this.txtText1.Location = new System.Drawing.Point(66, 38);
+            this.txtText1.Location = new System.Drawing.Point(66, 45);
             this.txtText1.Name = "txtText1";
             this.txtText1.Size = new System.Drawing.Size(182, 20);
             this.txtText1.TabIndex = 2;
@@ -80,7 +80,7 @@
             // labelWith
             // 
             this.labelWith.AutoSize = true;
-            this.labelWith.Location = new System.Drawing.Point(13, 83);
+            this.labelWith.Location = new System.Drawing.Point(13, 82);
             this.labelWith.Name = "labelWith";
             this.labelWith.Size = new System.Drawing.Size(26, 13);
             this.labelWith.TabIndex = 3;
@@ -210,7 +210,7 @@
             // lblReplace
             // 
             this.lblReplace.AutoSize = true;
-            this.lblReplace.Location = new System.Drawing.Point(13, 42);
+            this.lblReplace.Location = new System.Drawing.Point(13, 48);
             this.lblReplace.Name = "lblReplace";
             this.lblReplace.Size = new System.Drawing.Size(47, 13);
             this.lblReplace.TabIndex = 21;

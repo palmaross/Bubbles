@@ -87,7 +87,7 @@ namespace Bubbles
             cmsCommon.ItemClicked += cmsCommon_ItemClicked;
             StixUtils.SetCommonContextMenu(cmsCommon, StixUtils.typetaskinfo);
 
-            MMDuration = true;
+            StixStarting = true;
             ST_DurationUnits.Items.Add(Utils.getString("task.durationunits.minute"));
             ST_DurationUnits.Items.Add(Utils.getString("task.durationunits.hour"));
             ST_DurationUnits.Items.Add(Utils.getString("task.durationunits.day"));
@@ -96,7 +96,6 @@ namespace Bubbles
             ST_DurationUnits.SelectedIndex = 2;
             linkDurationUnit.Text = Utils.getString("task.durationunit.day");
 
-            MMDuration = true;
             ST_EffortUnits.Items.Add(Utils.getString("task.durationunits.minute"));
             ST_EffortUnits.Items.Add(Utils.getString("task.durationunits.hour"));
             ST_EffortUnits.Items.Add(Utils.getString("task.durationunits.day"));
@@ -104,7 +103,7 @@ namespace Bubbles
             ST_EffortUnits.Items.Add(Utils.getString("task.durationunits.month"));
             ST_EffortUnits.SelectedIndex = 1;
             linkEffortUnit.Text = Utils.getString("task.durationunit.hour");
-            MMDuration = false;
+            StixStarting = false;
 
             pictureHandle.MouseDoubleClick += (sender, e) => this.Hide();
             pictureHandle.MouseDown += Move_Stick;
@@ -128,8 +127,6 @@ namespace Bubbles
             numDuration.Size = new Size(numDuration.Width, p2.Width);
             linkDurationUnit.BringToFront();
 
-            StixMain.SetDates();
-
             // Quick Task button context menu
             cmsTaskTemplates.ItemClicked += ContextMenu_ItemClicked;
             PopulateQuickTopics();
@@ -140,7 +137,6 @@ namespace Bubbles
 
             // Check Quick Task Remove Defaults
 
-
             fsize = pStartDate.Font.Size; ffsize = linkDurationUnit.Font.Size;
 
             // Apply scale factor
@@ -148,8 +144,14 @@ namespace Bubbles
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
             ScaleStick(100F, scaleFactor);
         }
-
         ToolStripItem TaskInfoDates, TaskInfoProgress, TaskInfoPriority, TaskInfoResources, TaskInfoEffort;
+
+        private void StixTaskInfo_Load(object sender, EventArgs e)
+        {
+            StixStarting = true;
+            StixMain.SetDates();
+            StixStarting = false;
+        }
 
         public void SetQuickTaskDefault()
         {
@@ -457,6 +459,8 @@ namespace Bubbles
                         {
                             tsi = cmsTaskTemplates.Items.Add(item.Name);
                             tsi.Tag = item; tsi.Name = "TaskTemplate";
+
+                            if (item.Order == 1) QuickTopic = item;
                         }
                         else // Other group
                         {
@@ -534,11 +538,11 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "TaskTemplate")
             {
-                QuickTask = e.ClickedItem.Tag as QuickTopicItem;
+                QuickTopic = e.ClickedItem.Tag as QuickTopicItem;
 
                 Transaction _tr = MMUtils.ActiveDocument.NewTransaction(Utils.getString("QuickTask.transaction.name"));
                 _tr.IsUndoable = true;
-                _tr.Execute += new ITransactionEvents_ExecuteEventHandler(SetQuickTask);
+                _tr.Execute += new ITransactionEvents_ExecuteEventHandler(SetQuickTopic);
                 _tr.Start();
             }
             else if (e.ClickedItem.Name == "ManageTaskTemplates")
@@ -827,6 +831,22 @@ namespace Bubbles
             (sender as ToolStripComboBox).DroppedDown = true;
         }
 
+        // User selecting duration/effort unit
+        private void ST_DurationUnits_DropDown(object sender, EventArgs e)
+        {
+            ToolStripComboBox cb = sender as ToolStripComboBox;
+            selectedUnit = cb.SelectedIndex;
+        }
+
+        // User selected duration/effort unit
+        private void ST_DurationUnits_DropDownClosed(object sender, EventArgs e)
+        {
+            ToolStripComboBox cb = sender as ToolStripComboBox;
+            if (cb.SelectedIndex != selectedUnit)
+                stickDuration = true;
+        }
+        int selectedUnit;
+
         private void ST_DurationUnits_SelectedIndexChanged(object sender, EventArgs e)
         {
             int i = (sender as ToolStripComboBox).SelectedIndex;
@@ -853,14 +873,17 @@ namespace Bubbles
 
             StixUtils.ActivateMindManager(); // cmsDuration.Hide() locks MindManager
 
-            if (MMDuration) return;
+            if (StixStarting) return;
 
-            stickDuration = true;
+            if ((sender as ToolStripComboBox).DroppedDown)
+            {
+                stickDuration = true;
 
-            if ((sender as ToolStripComboBox) == ST_DurationUnits)
-                numDuration_ValueChanged(numDuration, null);
-            else if (numEffort.Value > 0)
-                numDuration_ValueChanged(numEffort, null);
+                if ((sender as ToolStripComboBox) == ST_DurationUnits)
+                    numDuration_ValueChanged(numDuration, null);
+                else if (numEffort.Value > 0)
+                    numDuration_ValueChanged(numEffort, null);
+            }
         }
 
         /// <summary>
@@ -884,6 +907,17 @@ namespace Bubbles
             cmsDuration.Show(rec.X, rec.Bottom);
         }
 
+        private void numDuration_MouseDown(object sender, MouseEventArgs e)
+        {
+            durationValueBefore = numDuration.Value;
+        }
+        decimal durationValueBefore;
+        private void numEffort_MouseDown(object sender, MouseEventArgs e)
+        {
+            effortValueBefore = numEffort.Value;
+        }
+        decimal effortValueBefore;
+
         private void numDuration_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -892,6 +926,14 @@ namespace Bubbles
                 {
                     if (numEffort.Value == 0) numEffort.Text = "";
                     if (numEffort.Text == "") { numEffort.Value = 0; numEffort.Text = ""; }
+
+                    if (numEffort.Value == effortValueBefore)
+                        return;
+                }
+                else
+                {
+                    if (numDuration.Value == durationValueBefore)
+                        return;
                 }
 
                 stickDuration = true;
@@ -900,7 +942,7 @@ namespace Bubbles
                 e.Handled = true; // to avoid the "ding" sound
                 e.SuppressKeyPress = true;
             }
-        }
+       }
 
         private void btnSetDuration_Click(object sender, EventArgs e)
         {
@@ -919,16 +961,17 @@ namespace Bubbles
             numDuration_ValueChanged(num, e);
         }
 
-        bool haha = false;
         private void numDuration_ValueChanged(object sender, EventArgs e)
         {
             if ((sender as NumericUpDown) == numDuration)
             {
-                if (MMDuration || !stickDuration || haha) return; // Duration was changed by MM. Do not process here!
+                if (MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 1 && !stickDuration)
+                    return; // Duration for multiple topics = 0
 
                 if (MMUtils.ActiveDocument != null && MMUtils.ActiveDocument.Selection.PrimaryTopic != null)
                 {
                     stickDuration = true; // do not set numDuration value in Bubbles.onObjectChanged event
+
                     foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                     {
                         int effort = 0;
@@ -937,19 +980,21 @@ namespace Bubbles
 
                         int duration = t.Task.GetDuration(t.Task.DurationUnit);
 
-                        MmDurationUnit unit = GetDurationUnit();
-                        t.Task.DurationUnit = unit;                    
-                        t.Task.SetDuration(unit, (int)numDuration.Value); // raises onObjectChanged event
+                        int i = ST_DurationUnits.SelectedIndex;
+                        MmDurationUnit unit = GetDurationUnit(i);
+                        if (t.Task.DurationUnit != unit || duration != (int)numDuration.Value)
+                        {
+                            t.Task.DurationUnit = unit;
+                            t.Task.SetDuration(unit, (int)numDuration.Value); // raises onObjectChanged event
+                        }
 
                         if (t.Task.HasEffort && duration == effort)
                         {
                             t.Task.EffortUnit = unit;
                             t.Task.SetEffort(unit, (int)numDuration.Value);
 
-                            haha = true;
                             StixMain.SetTaskInfoEffortUnit(t);
                             numEffort.Value = (int)numDuration.Value;
-                            haha = false;
                         }
                     }
                     // onObjectChanged event raised now
@@ -958,7 +1003,11 @@ namespace Bubbles
             }
             else // numEffort
             {
-                if (MMDuration || !stickDuration) return; // Duration was changed by MM. Do not process here!
+                if (!stickDuration) return;
+
+                if (MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 1 && !stickDuration)
+                    return; // Duration for multiple topics = 0
+
                 if (MMUtils.ActiveDocument == null) return;
 
                 List<Topic> topics = MMUtils.ActiveDocument.Selection.OfType<Topic>().ToList();
@@ -975,7 +1024,8 @@ namespace Bubbles
                         }
                         else
                         {
-                            MmDurationUnit unit = GetDurationUnit(false);
+                            int i = ST_EffortUnits.SelectedIndex;
+                            MmDurationUnit unit = GetDurationUnit(i);
                             t.Task.EffortUnit = unit;
                             t.Task.SetEffort(unit, (int)numEffort.Value); // raises onObjectChanged event
                         }
@@ -988,8 +1038,8 @@ namespace Bubbles
 
         /// <summary>True - Duration was set by stick </summary>
         public bool stickDuration = false;
-        /// <summary>True - Duration was set by MM </summary>
-        public bool MMDuration = true;
+        /// <summary>True - Duration is set when starting Stix</summary>
+        public bool StixStarting = true;
 
         #endregion
 
@@ -1033,7 +1083,7 @@ namespace Bubbles
             {
                 Transaction _tr = MMUtils.ActiveDocument.NewTransaction(Utils.getString("QuickTask.transaction.name"));
                 _tr.IsUndoable = true;
-                _tr.Execute += new ITransactionEvents_ExecuteEventHandler(SetQuickTask);
+                _tr.Execute += new ITransactionEvents_ExecuteEventHandler(SetQuickTopic);
                 _tr.Start();
             }
             else if (e.Button == MouseButtons.Right)
@@ -1045,71 +1095,71 @@ namespace Bubbles
             }
         }
 
-        public void SetQuickTask(Document pDocument)
+        public void SetQuickTopic(Document pDocument)
         {
             if (MMUtils.ActiveDocument == null ||
                 MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0) return;
 
             string startdate = "", duedate = "";
-            if (QuickTask.Dates != "")
+            if (QuickTopic.Dates != "")
             {
-                string[] dates = QuickTask.Dates.Split(';');
+                string[] dates = QuickTopic.Dates.Split(';');
                 startdate = dates[0]; duedate = dates[1];
             }
 
             foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
             {
-                if (QuickTask.TopicTextState != "")
-                    t.Text = QuickTask.TopicText;
+                if (QuickTopic.TopicTextState != "")
+                    t.Text = QuickTopic.TopicText;
 
-                if (QuickTask.ProgressState != "")
-                    t.Task.Complete = QuickTask.Progress;
+                if (QuickTopic.ProgressState != "")
+                    t.Task.Complete = QuickTopic.Progress;
 
-                if (QuickTask.PriorityState != "")
-                    t.Task.Priority = GetPriority(QuickTask.Priority);
+                if (QuickTopic.PriorityState != "")
+                    t.Task.Priority = GetPriority(QuickTopic.Priority);
 
                 DateTime? dtstart = Utils.GetDate(startdate);
                 DateTime? dtdue = Utils.GetDate(duedate);
-                if (QuickTask.StartDateState != "")
+                if (QuickTopic.StartDateState != "")
                     t.Task.StartDate = (DateTime)dtstart;
-                if (QuickTask.DueDateState != "")
+                if (QuickTopic.DueDateState != "")
                     t.Task.DueDate = (DateTime)dtdue;
 
-                if (QuickTask.DurationState != "")
+                if (QuickTopic.DurationState != "")
                 {
-                    string[] parts = QuickTask.Duration.Split(':');
+                    string[] parts = QuickTopic.Duration.Split(':');
                     try
                     {
-                        t.Task.DurationUnit = GetDurationUnit(true, Convert.ToInt32(parts[1]));
+                        t.Task.DurationUnit = GetDurationUnit(Convert.ToInt32(parts[1]));
                         t.Task.SetDuration(t.Task.DurationUnit, Convert.ToInt32(parts[0]));
                     }
                     catch { }
                 }
 
-                if (QuickTask.EffortState != "")
+                if (QuickTopic.EffortState != "")
                 {
-                    if (QuickTask.ResourcesState.Contains("red"))
+                    if (QuickTopic.ResourcesState.Contains("red"))
                         Utils.DeleteEffort(t);
                     else
                     {
-                        string[] parts = QuickTask.Effort.Split(':');
+                        string[] parts = QuickTopic.Effort.Split(':');
                         try
                         {
-                            t.Task.EffortUnit = GetDurationUnit(false, Convert.ToInt32(parts[1]));
+                            t.Task.EffortUnit = GetDurationUnit(Convert.ToInt32(parts[1]));
                             t.Task.SetEffort(t.Task.EffortUnit, Convert.ToInt32(parts[0]));
                         }
                         catch { }
                     }
                 }
 
-                if (QuickTask.ResourcesState != "")
+                if (QuickTopic.ResourcesState != "")
                 {
-                    if (QuickTask.ResourcesState.Contains("red"))
-                        t.Task.Resources = QuickTask.Resources;
+                    if (QuickTopic.ResourcesState.Contains("red"))
+                        t.Task.Resources = QuickTopic.Resources;
                     else
                     {
                         string[] topicResources = t.Task.Resources.Split(',').Select(x => x.Trim()).ToArray();
-                        string[] resources = QuickTask.Resources.Split(',').Select(x => x.Trim()).ToArray();
+                        string[] resources = QuickTopic.Resources.Split(',').Select(x => x.Trim()).ToArray();
                         string[] newResources = topicResources.Union(resources).ToArray();
 
                         string result = "";
@@ -1119,27 +1169,27 @@ namespace Bubbles
                     }
                 }
 
-                if (QuickTask.IconState != "")
+                if (QuickTopic.IconState != "")
                 {
-                    if (QuickTask.IconState.Contains("red") && t.UserIcons.Count > 0)
+                    if (QuickTopic.IconState.Contains("red") && t.UserIcons.Count > 0)
                         t.UserIcons.RemoveAll();
 
-                    if (QuickTask.IconState.StartsWith("checked"))
+                    if (QuickTopic.IconState.StartsWith("checked"))
                     {
-                        string[] icons = QuickTask.aIcon.Split(';');
+                        string[] icons = QuickTopic.aIcon.Split(';');
 
                         foreach (string icon in icons) SetIcon(icon, t);
                     }
                 }
 
-                if (QuickTask.TagsState != "")
+                if (QuickTopic.TagsState != "")
                 {
-                    if (QuickTask.TagsState.Contains("red"))
+                    if (QuickTopic.TagsState.Contains("red"))
                         t.TextLabels.RemoveAll();
 
-                    if (QuickTask.TagsState.StartsWith("checked"))
+                    if (QuickTopic.TagsState.StartsWith("checked"))
                     {
-                        string[] tags = QuickTask.Tags.Split(';');
+                        string[] tags = QuickTopic.Tags.Split(';');
                         string[] tag1 = tags[0].Split(':');
                         MapMarkers.AddTagToTopic(t, tag1[1], "", tag1[0], "");
 
@@ -1186,15 +1236,8 @@ namespace Bubbles
         /// <param name="duration">Get duration unit. False - effort unit</param>
         /// <param name="i">From Quick Task</param>
         /// <returns></returns>
-        private MmDurationUnit GetDurationUnit(bool duration = true, int i = -1)
+        public static MmDurationUnit GetDurationUnit(int i)
         {
-            if (i < 0)
-            {
-                i = ST_DurationUnits.SelectedIndex;
-                if (!duration) // effort needed
-                    i = ST_EffortUnits.SelectedIndex;
-            }
-
             switch (i)
             {
                 case 0:
@@ -1243,8 +1286,9 @@ namespace Bubbles
 
         string orientation = "H";
 
-        public QuickTopicItem QuickTask = null;
+        public QuickTopicItem QuickTopic = null;
         string daterightclick = "";
+
         public float scaleFactor = 100;
 
         // For this_MouseDown

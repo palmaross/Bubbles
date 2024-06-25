@@ -47,11 +47,9 @@
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.chAttachment = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.o_manage = new System.Windows.Forms.ToolStripMenuItem();
             this.o_recordsystem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.o_close = new System.Windows.Forms.ToolStripMenuItem();
             this.o_help = new System.Windows.Forms.ToolStripMenuItem();
-            this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.aTrack = new System.Windows.Forms.TrackBar();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -61,6 +59,11 @@
             this.lblClock = new System.Windows.Forms.Label();
             this.timer3 = new System.Windows.Forms.Timer(this.components);
             this.timerStopPlay = new System.Windows.Forms.Timer(this.components);
+            this.cbGroups = new System.Windows.Forms.ComboBox();
+            this.btnMore = new System.Windows.Forms.PictureBox();
+            this.btnClose = new System.Windows.Forms.PictureBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.btnRecord)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnPlay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnPause)).BeginInit();
@@ -74,6 +77,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pRecordSystem)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pEmpty)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBlink)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnMore)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnClose)).BeginInit();
             this.SuspendLayout();
             // 
             // timer1
@@ -83,15 +88,15 @@
             // 
             // txtRecordName
             // 
-            this.txtRecordName.Location = new System.Drawing.Point(10, 50);
+            this.txtRecordName.Location = new System.Drawing.Point(6, 31);
             this.txtRecordName.Name = "txtRecordName";
-            this.txtRecordName.Size = new System.Drawing.Size(165, 20);
+            this.txtRecordName.Size = new System.Drawing.Size(178, 20);
             this.txtRecordName.TabIndex = 8;
             this.txtRecordName.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtRecordName_KeyUp);
             // 
             // btnAddToTopic
             // 
-            this.btnAddToTopic.Location = new System.Drawing.Point(14, 103);
+            this.btnAddToTopic.Location = new System.Drawing.Point(14, 123);
             this.btnAddToTopic.Name = "btnAddToTopic";
             this.btnAddToTopic.Size = new System.Drawing.Size(84, 23);
             this.btnAddToTopic.TabIndex = 9;
@@ -102,7 +107,7 @@
             // cbRecords
             // 
             this.cbRecords.FormattingEnabled = true;
-            this.cbRecords.Location = new System.Drawing.Point(14, 72);
+            this.cbRecords.Location = new System.Drawing.Point(14, 92);
             this.cbRecords.Name = "cbRecords";
             this.cbRecords.Size = new System.Drawing.Size(178, 21);
             this.cbRecords.Sorted = true;
@@ -111,7 +116,7 @@
             // btnRecord
             // 
             this.btnRecord.Image = ((System.Drawing.Image)(resources.GetObject("btnRecord.Image")));
-            this.btnRecord.Location = new System.Drawing.Point(12, 12);
+            this.btnRecord.Location = new System.Drawing.Point(14, 18);
             this.btnRecord.Name = "btnRecord";
             this.btnRecord.Size = new System.Drawing.Size(28, 28);
             this.btnRecord.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -122,7 +127,7 @@
             // btnPlay
             // 
             this.btnPlay.Image = ((System.Drawing.Image)(resources.GetObject("btnPlay.Image")));
-            this.btnPlay.Location = new System.Drawing.Point(161, 12);
+            this.btnPlay.Location = new System.Drawing.Point(159, 18);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(28, 28);
             this.btnPlay.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -155,19 +160,21 @@
             // panelRecordName
             // 
             this.panelRecordName.BackColor = System.Drawing.Color.PapayaWhip;
+            this.panelRecordName.Controls.Add(this.checkBox2);
+            this.panelRecordName.Controls.Add(this.checkBox1);
             this.panelRecordName.Controls.Add(this.btnCancelRecord);
             this.panelRecordName.Controls.Add(this.btnSaveRecord);
             this.panelRecordName.Controls.Add(this.lblRecordName);
             this.panelRecordName.Controls.Add(this.txtRecordName);
-            this.panelRecordName.Location = new System.Drawing.Point(8, 12);
+            this.panelRecordName.Location = new System.Drawing.Point(6, 10);
             this.panelRecordName.Name = "panelRecordName";
-            this.panelRecordName.Size = new System.Drawing.Size(186, 117);
+            this.panelRecordName.Size = new System.Drawing.Size(190, 134);
             this.panelRecordName.TabIndex = 21;
             this.panelRecordName.Visible = false;
             // 
             // btnCancelRecord
             // 
-            this.btnCancelRecord.Location = new System.Drawing.Point(100, 85);
+            this.btnCancelRecord.Location = new System.Drawing.Point(109, 98);
             this.btnCancelRecord.Name = "btnCancelRecord";
             this.btnCancelRecord.Size = new System.Drawing.Size(75, 23);
             this.btnCancelRecord.TabIndex = 23;
@@ -177,7 +184,7 @@
             // 
             // btnSaveRecord
             // 
-            this.btnSaveRecord.Location = new System.Drawing.Point(10, 85);
+            this.btnSaveRecord.Location = new System.Drawing.Point(6, 98);
             this.btnSaveRecord.Name = "btnSaveRecord";
             this.btnSaveRecord.Size = new System.Drawing.Size(75, 23);
             this.btnSaveRecord.TabIndex = 22;
@@ -187,17 +194,18 @@
             // 
             // lblRecordName
             // 
-            this.lblRecordName.Location = new System.Drawing.Point(5, 8);
+            this.lblRecordName.AutoSize = true;
+            this.lblRecordName.Location = new System.Drawing.Point(3, 12);
             this.lblRecordName.Name = "lblRecordName";
-            this.lblRecordName.Size = new System.Drawing.Size(176, 30);
+            this.lblRecordName.Size = new System.Drawing.Size(76, 13);
             this.lblRecordName.TabIndex = 9;
-            this.lblRecordName.Text = "Введите имя записи и нажмите Enter. Для отмены - Escape.";
+            this.lblRecordName.Text = "Record Name:";
             // 
             // Volume
             // 
             this.Volume.AutoSize = false;
             this.Volume.BackColor = System.Drawing.Color.Lavender;
-            this.Volume.Location = new System.Drawing.Point(28, 134);
+            this.Volume.Location = new System.Drawing.Point(28, 154);
             this.Volume.Maximum = 100;
             this.Volume.Name = "Volume";
             this.Volume.Size = new System.Drawing.Size(164, 20);
@@ -212,57 +220,46 @@
             // chAttachment
             // 
             this.chAttachment.AutoSize = true;
-            this.chAttachment.Location = new System.Drawing.Point(103, 107);
+            this.chAttachment.Location = new System.Drawing.Point(103, 127);
             this.chAttachment.Name = "chAttachment";
-            this.chAttachment.Size = new System.Drawing.Size(95, 17);
+            this.chAttachment.Size = new System.Drawing.Size(89, 17);
             this.chAttachment.TabIndex = 24;
-            this.chAttachment.Text = "As Attachment";
+            this.chAttachment.Text = "+ Attachment";
             this.chAttachment.UseVisualStyleBackColor = true;
             // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.o_manage,
             this.o_recordsystem,
-            this.toolStripSeparator1,
-            this.o_close,
             this.o_help});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.ShowCheckMargin = true;
             this.contextMenuStrip1.ShowImageMargin = false;
-            this.contextMenuStrip1.Size = new System.Drawing.Size(188, 76);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(163, 70);
+            // 
+            // o_manage
+            // 
+            this.o_manage.Name = "o_manage";
+            this.o_manage.Size = new System.Drawing.Size(162, 22);
+            this.o_manage.Text = "Manage Audios";
             // 
             // o_recordsystem
             // 
             this.o_recordsystem.CheckOnClick = true;
             this.o_recordsystem.Name = "o_recordsystem";
-            this.o_recordsystem.Size = new System.Drawing.Size(187, 22);
+            this.o_recordsystem.Size = new System.Drawing.Size(162, 22);
             this.o_recordsystem.Text = "Record System Audio";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(184, 6);
-            // 
-            // o_close
-            // 
-            this.o_close.Name = "o_close";
-            this.o_close.Size = new System.Drawing.Size(187, 22);
-            this.o_close.Text = "Close";
             // 
             // o_help
             // 
             this.o_help.Name = "o_help";
-            this.o_help.Size = new System.Drawing.Size(187, 22);
+            this.o_help.Size = new System.Drawing.Size(162, 22);
             this.o_help.Text = "Help";
-            // 
-            // timer2
-            // 
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(10, 135);
+            this.pictureBox1.Location = new System.Drawing.Point(10, 155);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(16, 16);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -273,7 +270,7 @@
             // 
             this.aTrack.AutoSize = false;
             this.aTrack.BackColor = System.Drawing.Color.Lavender;
-            this.aTrack.Location = new System.Drawing.Point(28, 156);
+            this.aTrack.Location = new System.Drawing.Point(28, 176);
             this.aTrack.Maximum = 10000;
             this.aTrack.Name = "aTrack";
             this.aTrack.Size = new System.Drawing.Size(164, 20);
@@ -282,7 +279,7 @@
             // pictureBox2
             // 
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(10, 157);
+            this.pictureBox2.Location = new System.Drawing.Point(10, 177);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(16, 16);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -326,7 +323,7 @@
             // 
             this.lblClock.BackColor = System.Drawing.Color.Transparent;
             this.lblClock.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblClock.Location = new System.Drawing.Point(62, 47);
+            this.lblClock.Location = new System.Drawing.Point(63, 47);
             this.lblClock.Name = "lblClock";
             this.lblClock.Size = new System.Drawing.Size(78, 18);
             this.lblClock.TabIndex = 81;
@@ -344,13 +341,72 @@
             this.timerStopPlay.Interval = 500;
             this.timerStopPlay.Tick += new System.EventHandler(this.timerStopPlay_Tick);
             // 
+            // cbGroups
+            // 
+            this.cbGroups.FormattingEnabled = true;
+            this.cbGroups.Location = new System.Drawing.Point(14, 70);
+            this.cbGroups.Name = "cbGroups";
+            this.cbGroups.Size = new System.Drawing.Size(178, 21);
+            this.cbGroups.Sorted = true;
+            this.cbGroups.TabIndex = 82;
+            this.cbGroups.SelectedIndexChanged += new System.EventHandler(this.cbGroups_SelectedIndexChanged);
+            // 
+            // btnMore
+            // 
+            this.btnMore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnMore.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnMore.Image = ((System.Drawing.Image)(resources.GetObject("btnMore.Image")));
+            this.btnMore.Location = new System.Drawing.Point(5, 1);
+            this.btnMore.Name = "btnMore";
+            this.btnMore.Size = new System.Drawing.Size(16, 16);
+            this.btnMore.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.btnMore.TabIndex = 94;
+            this.btnMore.TabStop = false;
+            this.btnMore.Click += new System.EventHandler(this.btnMore_Click);
+            // 
+            // btnClose
+            // 
+            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClose.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnClose.Image = ((System.Drawing.Image)(resources.GetObject("btnClose.Image")));
+            this.btnClose.Location = new System.Drawing.Point(185, 1);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(16, 16);
+            this.btnClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.btnClose.TabIndex = 93;
+            this.btnClose.TabStop = false;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(98, 67);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(89, 17);
+            this.checkBox1.TabIndex = 26;
+            this.checkBox1.Text = "+ Attachment";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(8, 67);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(87, 17);
+            this.checkBox2.TabIndex = 27;
+            this.checkBox2.Text = "Add to Topic";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
             // OmniSound
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(202, 186);
-            this.ContextMenuStrip = this.contextMenuStrip1;
+            this.ClientSize = new System.Drawing.Size(202, 202);
+            this.Controls.Add(this.panelRecordName);
+            this.Controls.Add(this.btnMore);
+            this.Controls.Add(this.btnClose);
+            this.Controls.Add(this.cbGroups);
             this.Controls.Add(this.lblClock);
             this.Controls.Add(this.pBlink);
             this.Controls.Add(this.pEmpty);
@@ -366,7 +422,6 @@
             this.Controls.Add(this.btnAddToTopic);
             this.Controls.Add(this.cbRecords);
             this.Controls.Add(this.chAttachment);
-            this.Controls.Add(this.panelRecordName);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "OmniSound";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
@@ -386,6 +441,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pRecordSystem)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pEmpty)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBlink)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnMore)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnClose)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -406,15 +463,12 @@
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.CheckBox chAttachment;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem o_close;
         private System.Windows.Forms.ToolStripMenuItem o_recordsystem;
         private System.Windows.Forms.ToolStripMenuItem o_help;
-        private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TrackBar aTrack;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pRecordSystem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         public System.Windows.Forms.PictureBox pEmpty;
         public System.Windows.Forms.PictureBox pBlink;
         public System.Windows.Forms.Label lblClock;
@@ -423,5 +477,11 @@
         public System.Windows.Forms.TrackBar Volume;
         public System.Windows.Forms.PictureBox btnPause;
         public System.Windows.Forms.PictureBox btnStop;
+        public System.Windows.Forms.ComboBox cbGroups;
+        private System.Windows.Forms.PictureBox btnMore;
+        private System.Windows.Forms.PictureBox btnClose;
+        private System.Windows.Forms.ToolStripMenuItem o_manage;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
