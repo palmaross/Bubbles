@@ -127,13 +127,15 @@ namespace Bubbles
             di = new DirectoryInfo(m_localDataPath);
             foreach (FileInfo fi in di.GetFiles())
                 fi.Delete();
+
+            OmniButtonX = Convert.ToInt32(getRegistry("OmniButtonX", "0"));
         }
 
         public static void InitIcons()
         {
             if (audio != null) return; // Icons are initialized already.
 
-            audio = Image.FromFile(ImagesPath + "ms_audio.png");
+            audio = Image.FromFile(ImagesPath + "audio.ico");
             excel = Image.FromFile(ImagesPath + "ms_excel.png");
             exe = Image.FromFile(ImagesPath + "ms_exe.png");
             file = Image.FromFile(ImagesPath + "ms_file.png");
@@ -275,6 +277,17 @@ namespace Bubbles
             return true;
         }
 
+        /// <summary>
+        /// Validate string for SQLite
+        /// </summary>
+        /// <param name="s">Given string</param>
+        /// <returns>Validated string</returns>
+        public static string VS(string s)
+        {
+            s = s.Replace("`", "``");
+            return s;
+        }
+
         #region DateTime
 
         public static DateTime NULLDATE = new DateTime(1899, 12, 30, 0, 0, 0);
@@ -367,6 +380,21 @@ namespace Bubbles
             }
 
             t.Xml = topicXML.InnerXml;
+        }
+
+        public static void ShowHelp(string path)
+        {
+            if (StixMain.OmniBrowser == null || StixMain.OmniBrowser.IsDisposed)
+            {
+                StixMain.OmniBrowser = new BrowserDlg(path);
+                StixMain.OmniBrowser.txtAddressBar.Text = path;
+                StixMain.OmniBrowser.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            }
+            else
+            {
+                StixMain.OmniBrowser.txtAddressBar.Text = path;
+                StixMain.OmniBrowser.Navigate(true);
+            }
         }
 
         public static string GetWebPageTitle(string url)
@@ -559,6 +587,8 @@ namespace Bubbles
         public static string FriendlyAddinName;
         public static string Language;
         public static string licenseStatus = "";
+
+        public static int OmniButtonX = 0;
 
         /// <summary>
         /// Name, Path

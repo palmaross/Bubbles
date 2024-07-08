@@ -20,7 +20,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "ManageToolsDlg.htm");
+            helpProvider1.SetHelpKeyword(this, "ManageTools.htm");
 
             Text = Utils.getString("ManageToolsDlg.Title");
             lblWTools.Text = Utils.getString("ManageToolsDlg.lblWTools");
@@ -60,7 +60,7 @@ namespace Bubbles
         }
         private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "ManageToolsDlg.htm");
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "ManageTools.htm");
         }
 
         private void WindowsToolsDlg_Resize(object sender, EventArgs e)

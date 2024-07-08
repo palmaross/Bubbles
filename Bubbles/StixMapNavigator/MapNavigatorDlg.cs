@@ -17,7 +17,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "BookmarksStix.htm");
+            helpProvider1.SetHelpKeyword(this, "NavigatorWindow.htm");
 
             lblTitle.Text = Utils.getString("StixMapNavigator.tooltip");
             tabMain.Text = Utils.getString("MapNavigatorDlg.tabMain");
@@ -97,7 +97,7 @@ namespace Bubbles
             InitPositions();
         }
 
-        public void InitMainTopics(bool fromStix = false, bool deleteall = false)
+        public void InitMainTopics(bool fromStix = false)
         {
             listMainTopics.Items.Clear();
             if (MMUtils.ActiveDocument == null) return;
@@ -489,7 +489,7 @@ namespace Bubbles
 
         private void btnHelp_Click(object sender, EventArgs e)
         {
-            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "BookmarksStix.htm");
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "NavigatorWindow.htm");
         }
 
         private void listBookmarks_DrawItem(object sender, DrawItemEventArgs e)

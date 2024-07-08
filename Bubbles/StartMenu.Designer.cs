@@ -56,17 +56,18 @@
             this.boxBookmarks = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panelBoxes = new System.Windows.Forms.Panel();
-            this.Misc = new System.Windows.Forms.PictureBox();
+            this.boxQuickTopics = new System.Windows.Forms.PictureBox();
+            this.boxResources = new System.Windows.Forms.PictureBox();
             this.OmniSound = new System.Windows.Forms.PictureBox();
             this.Stickers = new System.Windows.Forms.PictureBox();
             this.p2 = new System.Windows.Forms.PictureBox();
             this.cmsOmniSound = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.TopicPlayer = new System.Windows.Forms.ToolStripMenuItem();
             this.TopicRecorder = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsMisc = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.o_QuickTopics = new System.Windows.Forms.ToolStripMenuItem();
-            this.o_Resources = new System.Windows.Forms.ToolStripMenuItem();
             this.ManageAudio = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsMisc = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.o_Resources = new System.Windows.Forms.ToolStripMenuItem();
+            this.o_Navigator = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.stxAddTopics)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxTextOps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxFormat)).BeginInit();
@@ -79,7 +80,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.stxMapNavigator)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxBookmarks)).BeginInit();
             this.panelBoxes.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Misc)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.boxQuickTopics)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.boxResources)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.OmniSound)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Stickers)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
@@ -307,7 +309,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(124, 18);
+            this.label1.Location = new System.Drawing.Point(120, 18);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(56, 13);
             this.label1.TabIndex = 95;
@@ -317,7 +319,8 @@
             // panelBoxes
             // 
             this.panelBoxes.BackColor = System.Drawing.Color.Moccasin;
-            this.panelBoxes.Controls.Add(this.Misc);
+            this.panelBoxes.Controls.Add(this.boxQuickTopics);
+            this.panelBoxes.Controls.Add(this.boxResources);
             this.panelBoxes.Controls.Add(this.OmniSound);
             this.panelBoxes.Controls.Add(this.boxBookmarks);
             this.panelBoxes.Controls.Add(this.boxSources);
@@ -328,19 +331,33 @@
             this.panelBoxes.Size = new System.Drawing.Size(245, 37);
             this.panelBoxes.TabIndex = 96;
             // 
-            // Misc
+            // boxQuickTopics
             // 
-            this.Misc.BackColor = System.Drawing.Color.Moccasin;
-            this.Misc.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Misc.Image = ((System.Drawing.Image)(resources.GetObject("Misc.Image")));
-            this.Misc.Location = new System.Drawing.Point(110, 6);
-            this.Misc.Name = "Misc";
-            this.Misc.Size = new System.Drawing.Size(24, 24);
-            this.Misc.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.Misc.TabIndex = 99;
-            this.Misc.TabStop = false;
-            this.Misc.Tag = "1";
-            this.Misc.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Misc_MouseDown);
+            this.boxQuickTopics.BackColor = System.Drawing.Color.Moccasin;
+            this.boxQuickTopics.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.boxQuickTopics.Image = ((System.Drawing.Image)(resources.GetObject("boxQuickTopics.Image")));
+            this.boxQuickTopics.Location = new System.Drawing.Point(110, 6);
+            this.boxQuickTopics.Name = "boxQuickTopics";
+            this.boxQuickTopics.Size = new System.Drawing.Size(24, 24);
+            this.boxQuickTopics.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.boxQuickTopics.TabIndex = 100;
+            this.boxQuickTopics.TabStop = false;
+            this.boxQuickTopics.Tag = "1";
+            this.boxQuickTopics.MouseDown += new System.Windows.Forms.MouseEventHandler(this.boxQuickTopics_MouseDown);
+            // 
+            // boxResources
+            // 
+            this.boxResources.BackColor = System.Drawing.Color.Moccasin;
+            this.boxResources.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.boxResources.Image = ((System.Drawing.Image)(resources.GetObject("boxResources.Image")));
+            this.boxResources.Location = new System.Drawing.Point(144, 6);
+            this.boxResources.Name = "boxResources";
+            this.boxResources.Size = new System.Drawing.Size(24, 24);
+            this.boxResources.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.boxResources.TabIndex = 99;
+            this.boxResources.TabStop = false;
+            this.boxResources.Tag = "1";
+            this.boxResources.MouseDown += new System.Windows.Forms.MouseEventHandler(this.boxResources_MouseDown);
             // 
             // OmniSound
             // 
@@ -361,18 +378,19 @@
             this.Stickers.BackColor = System.Drawing.Color.Moccasin;
             this.Stickers.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Stickers.Image = ((System.Drawing.Image)(resources.GetObject("Stickers.Image")));
-            this.Stickers.Location = new System.Drawing.Point(160, 6);
+            this.Stickers.Location = new System.Drawing.Point(178, 6);
             this.Stickers.Name = "Stickers";
             this.Stickers.Size = new System.Drawing.Size(24, 24);
             this.Stickers.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Stickers.TabIndex = 97;
             this.Stickers.TabStop = false;
             this.Stickers.Tag = "1";
+            this.Stickers.Visible = false;
             this.Stickers.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Stickers_MouseClick);
             // 
             // p2
             // 
-            this.p2.Location = new System.Drawing.Point(123, 34);
+            this.p2.Location = new System.Drawing.Point(131, 34);
             this.p2.Name = "p2";
             this.p2.Size = new System.Drawing.Size(12, 12);
             this.p2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -389,46 +407,46 @@
             this.ManageAudio});
             this.cmsOmniSound.Name = "cmsOmniSound";
             this.cmsOmniSound.ShowImageMargin = false;
-            this.cmsOmniSound.Size = new System.Drawing.Size(156, 92);
+            this.cmsOmniSound.Size = new System.Drawing.Size(128, 70);
             this.cmsOmniSound.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsOmniSound_ItemClicked);
             // 
             // TopicPlayer
             // 
             this.TopicPlayer.Name = "TopicPlayer";
-            this.TopicPlayer.Size = new System.Drawing.Size(155, 22);
+            this.TopicPlayer.Size = new System.Drawing.Size(127, 22);
             this.TopicPlayer.Text = "Topic Player";
             // 
             // TopicRecorder
             // 
             this.TopicRecorder.Name = "TopicRecorder";
-            this.TopicRecorder.Size = new System.Drawing.Size(155, 22);
+            this.TopicRecorder.Size = new System.Drawing.Size(127, 22);
             this.TopicRecorder.Text = "Topic Recorder";
-            // 
-            // cmsMisc
-            // 
-            this.cmsMisc.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.o_QuickTopics,
-            this.o_Resources});
-            this.cmsMisc.Name = "cmsMisc";
-            this.cmsMisc.Size = new System.Drawing.Size(142, 48);
-            // 
-            // o_QuickTopics
-            // 
-            this.o_QuickTopics.Name = "o_QuickTopics";
-            this.o_QuickTopics.Size = new System.Drawing.Size(141, 22);
-            this.o_QuickTopics.Text = "Quick Topics";
-            // 
-            // o_Resources
-            // 
-            this.o_Resources.Name = "o_Resources";
-            this.o_Resources.Size = new System.Drawing.Size(141, 22);
-            this.o_Resources.Text = "Resources";
             // 
             // ManageAudio
             // 
             this.ManageAudio.Name = "ManageAudio";
-            this.ManageAudio.Size = new System.Drawing.Size(155, 22);
+            this.ManageAudio.Size = new System.Drawing.Size(127, 22);
             this.ManageAudio.Text = "Manage Audio";
+            // 
+            // cmsMisc
+            // 
+            this.cmsMisc.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.o_Resources,
+            this.o_Navigator});
+            this.cmsMisc.Name = "cmsMisc";
+            this.cmsMisc.Size = new System.Drawing.Size(181, 70);
+            // 
+            // o_Resources
+            // 
+            this.o_Resources.Name = "o_Resources";
+            this.o_Resources.Size = new System.Drawing.Size(180, 22);
+            this.o_Resources.Text = "Resources";
+            // 
+            // o_Navigator
+            // 
+            this.o_Navigator.Name = "o_Navigator";
+            this.o_Navigator.Size = new System.Drawing.Size(180, 22);
+            this.o_Navigator.Text = "Navigator";
             // 
             // StartMenu
             // 
@@ -463,7 +481,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.stxMapNavigator)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxBookmarks)).EndInit();
             this.panelBoxes.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Misc)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.boxQuickTopics)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.boxResources)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.OmniSound)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Stickers)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
@@ -507,10 +526,11 @@
         private System.Windows.Forms.ContextMenuStrip cmsOmniSound;
         private System.Windows.Forms.ToolStripMenuItem TopicPlayer;
         private System.Windows.Forms.ToolStripMenuItem TopicRecorder;
-        private System.Windows.Forms.PictureBox Misc;
+        private System.Windows.Forms.PictureBox boxResources;
         private System.Windows.Forms.ContextMenuStrip cmsMisc;
-        private System.Windows.Forms.ToolStripMenuItem o_QuickTopics;
         private System.Windows.Forms.ToolStripMenuItem o_Resources;
         private System.Windows.Forms.ToolStripMenuItem ManageAudio;
+        private System.Windows.Forms.PictureBox boxQuickTopics;
+        private System.Windows.Forms.ToolStripMenuItem o_Navigator;
     }
 }

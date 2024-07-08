@@ -20,6 +20,7 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "TaskInfoResources.htm");
 
+            lblTitle.Text = Utils.getString("taskinfo.Resources");
             txtCurrentMap.Text = Utils.getString("ResourcesDlg.dummytext");
             toolTip1.SetToolTip(txtCurrentMap, Utils.getString("ResourcesDlg.addnewresource.curmap.tooltip"));
             txtCurrentMap.ForeColor = SystemColors.GrayText;

@@ -64,7 +64,6 @@
             this.txtAddressBar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.txtAddressBar.Location = new System.Drawing.Point(48, 8);
             this.txtAddressBar.Name = "txtAddressBar";
-            this.txtAddressBar.ReadOnly = true;
             this.txtAddressBar.Size = new System.Drawing.Size(761, 21);
             this.txtAddressBar.TabIndex = 6;
             this.txtAddressBar.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtAddressBar_KeyUp);

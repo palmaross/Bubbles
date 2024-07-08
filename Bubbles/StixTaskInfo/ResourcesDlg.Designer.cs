@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ResourcesDlg));
             this.ListDBResources = new System.Windows.Forms.ListView();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblTitle = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pHelp = new System.Windows.Forms.PictureBox();
             this.pClose = new System.Windows.Forms.PictureBox();
@@ -96,7 +97,7 @@
             this.ListDBResources.Location = new System.Drawing.Point(1, 40);
             this.ListDBResources.Name = "ListDBResources";
             this.ListDBResources.ShowItemToolTips = true;
-            this.ListDBResources.Size = new System.Drawing.Size(147, 88);
+            this.ListDBResources.Size = new System.Drawing.Size(160, 88);
             this.ListDBResources.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.ListDBResources.TabIndex = 0;
             this.ListDBResources.UseCompatibleStateImageBehavior = false;
@@ -109,6 +110,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.panel1.Controls.Add(this.lblTitle);
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.pHelp);
             this.panel1.Controls.Add(this.pClose);
@@ -117,6 +119,17 @@
             this.panel1.Size = new System.Drawing.Size(165, 18);
             this.panel1.TabIndex = 1;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            // 
+            // lblTitle
+            // 
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.Location = new System.Drawing.Point(23, 1);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(75, 15);
+            this.lblTitle.TabIndex = 6;
+            this.lblTitle.Text = "Resources";
+            this.lblTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             // 
             // pictureBox1
             // 
@@ -129,6 +142,7 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             // 
             // pHelp
             // 
@@ -182,7 +196,7 @@
             this.ListMapResources.Location = new System.Drawing.Point(1, 38);
             this.ListMapResources.Name = "ListMapResources";
             this.ListMapResources.ShowItemToolTips = true;
-            this.ListMapResources.Size = new System.Drawing.Size(147, 70);
+            this.ListMapResources.Size = new System.Drawing.Size(160, 70);
             this.ListMapResources.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.ListMapResources.TabIndex = 7;
             this.ListMapResources.UseCompatibleStateImageBehavior = false;
@@ -200,7 +214,7 @@
             this.txtCurrentMap.ForeColor = System.Drawing.SystemColors.GrayText;
             this.txtCurrentMap.Location = new System.Drawing.Point(1, 17);
             this.txtCurrentMap.Name = "txtCurrentMap";
-            this.txtCurrentMap.Size = new System.Drawing.Size(151, 21);
+            this.txtCurrentMap.Size = new System.Drawing.Size(164, 21);
             this.txtCurrentMap.TabIndex = 8;
             this.txtCurrentMap.Tag = "resource";
             this.txtCurrentMap.Text = "New";
@@ -273,7 +287,7 @@
             // 
             this.btnClose.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.btnClose.Image = ((System.Drawing.Image)(resources.GetObject("btnClose.Image")));
-            this.btnClose.Location = new System.Drawing.Point(144, 21);
+            this.btnClose.Location = new System.Drawing.Point(150, 21);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(15, 15);
             this.btnClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -303,7 +317,7 @@
             this.txtNewResourceDB.ForeColor = System.Drawing.SystemColors.WindowText;
             this.txtNewResourceDB.Location = new System.Drawing.Point(2, 19);
             this.txtNewResourceDB.Name = "txtNewResourceDB";
-            this.txtNewResourceDB.Size = new System.Drawing.Size(151, 21);
+            this.txtNewResourceDB.Size = new System.Drawing.Size(164, 21);
             this.txtNewResourceDB.TabIndex = 11;
             this.txtNewResourceDB.Tag = "resource";
             this.txtNewResourceDB.Text = "111";
@@ -449,6 +463,7 @@
             // 
             // btnRemoveResources
             // 
+            this.btnRemoveResources.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnRemoveResources.BackColor = System.Drawing.SystemColors.Info;
             this.btnRemoveResources.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnRemoveResources.ForeColor = System.Drawing.Color.Red;
@@ -476,6 +491,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "ResourcesDlg";
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHelp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pClose)).EndInit();
@@ -536,5 +552,6 @@
         private System.Windows.Forms.ToolStripMenuItem mm_addtomap;
         private System.Windows.Forms.PictureBox splitter;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label lblTitle;
     }
 }

@@ -448,8 +448,7 @@
             // cmsResources
             // 
             this.cmsResources.Name = "cmsResources";
-            this.cmsResources.ShowImageMargin = false;
-            this.cmsResources.Size = new System.Drawing.Size(36, 4);
+            this.cmsResources.Size = new System.Drawing.Size(181, 26);
             // 
             // panelEffort
             // 

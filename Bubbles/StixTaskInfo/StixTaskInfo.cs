@@ -231,10 +231,14 @@ namespace Bubbles
 
             ToolStripItem tsi = cmsResources.Items.Add(Utils.getString("Box.Resources"));
             tsi.Name = "ResourceBox";
+            StixUtils.SetContextMenuImage(tsi, "resources.png");
 
             tsi = cmsResources.Items.Add(Utils.getString("taskinfo.resources.delete"));
             tsi.ToolTipText = Utils.getString("taskinfo.resources.delete.tooltip");
             tsi.Name = "RemoveResources";
+            StixUtils.SetContextMenuImage(tsi, "deleteall.png");
+
+            cmsResources.Items.Add(new ToolStripSeparator());
 
             ToolStripTextBox mtb = new ToolStripTextBox();
             mtb.Size = new Size(panelDueDate.Width * 4, mtb.Height);
@@ -340,7 +344,7 @@ namespace Bubbles
             }
         }
 
-        public void PopulateQuickTopics()
+        public void PopulateQuickTopics(bool fromQuicTopics = false)
         {
             cmsTaskTemplates.Items.Clear();
 
@@ -362,7 +366,7 @@ namespace Bubbles
                 foreach (DataRow row in dt.Rows)
                     groups.Add(Convert.ToInt32(row["id"]), row["name"].ToString());
 
-                if (StixMain.m_QuickTopics != null && StixMain.m_QuickTopics.Visible)
+                if (StixMain.m_QuickTopics != null && StixMain.m_QuickTopics.Visible && !fromQuicTopics)
                     StixMain.m_QuickTopics.treeView1.Nodes.Clear();
 
                 foreach (var group in groups)
@@ -370,7 +374,7 @@ namespace Bubbles
                     ToolStripDropDown dd = null;
                     TreeNode groupNode = null;
 
-                    if (StixMain.m_QuickTopics != null && StixMain.m_QuickTopics.Visible)
+                    if (StixMain.m_QuickTopics != null && StixMain.m_QuickTopics.Visible && !fromQuicTopics)
                     {
                         groupNode = StixMain.m_QuickTopics.treeView1.Nodes.Add(group.Value);
                         groupNode.Tag = group.Key; groupNode.Name = "QTGroup";
@@ -468,7 +472,7 @@ namespace Bubbles
                             tsi.Tag = item; tsi.Name = "TaskTemplate";
                         }
 
-                        if (StixMain.m_QuickTopics != null && StixMain.m_QuickTopics.Visible)
+                        if (StixMain.m_QuickTopics != null && StixMain.m_QuickTopics.Visible && !fromQuicTopics)
                             groupNode.Nodes.Add(item.Name).Tag = item;
                     }
                 }

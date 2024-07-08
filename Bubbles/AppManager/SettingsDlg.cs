@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PRAManager;
+using System;
 using System.Data;
 using System.Windows.Forms;
 
@@ -36,6 +37,9 @@ namespace Bubbles
             toolTip1.SetToolTip(FaviconsLinksWindow, Utils.getString("SettingsDlg.favicon"));
 
             chOpenInOmniBrowser.Text = Utils.getString("SettingsDlg.chOpenInOmniBrowser");
+            chTopicAutoWidth.Text = Utils.getString("SettingsDlg.chTopicAutoWidth");
+            toolTip1.SetToolTip(chTopicAutoWidth, Utils.getString("TextOpsStix.MMAutoWidth.tooltip"));
+            btnManageAutoWidth.Text = Utils.getString("SettingsDlg.btnManageAutoWidth");
 
             btnSave.Text = Utils.getString("button.save");
             btnClose.Text = Utils.getString("button.close");
@@ -84,6 +88,8 @@ namespace Bubbles
             FaviconsToolStix.Checked = Utils.getRegistry("FaviconsToolStix", "1") == "1";
             FaviconsLinksWindow.Checked = Utils.getRegistry("FaviconsLinksWindow", "1") == "1";
 
+            chTopicAutoWidth.Checked = Utils.getRegistry("TopicAutoWidth", "0") == "1";
+
             this.HelpButtonClicked += this_HelpButtonClicked;
         }
 
@@ -124,6 +130,8 @@ namespace Bubbles
             Utils.setRegistry("FaviconsToolStix", FaviconsToolStix.Checked ? "1" : "0");
             Utils.setRegistry("FaviconsLinksWindow", FaviconsLinksWindow.Checked ? "1" : "0");
             Utils.setRegistry("OpenLinksInOmniBrowser", chOpenInOmniBrowser.Checked ? "1" : "0");
+
+            Utils.setRegistry("TopicAutoWidth", chTopicAutoWidth.Checked ? "1" : "0");
         }
 
         private void cbSelectAll_CheckedChanged(object sender, EventArgs e)
@@ -148,6 +156,15 @@ namespace Bubbles
                 numStixBase.Text = cbStixBase.Text;
             else if (cb == cbBoxes)
                 numBoxes.Text = cbBoxes.Text;
+        }
+
+        private void btnManageAutoWidth_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (StixMain.m_topicAutoWidth != null && StixMain.m_topicAutoWidth.Visible) return;
+
+            StixMain.m_topicAutoWidth = new AutoWidthsDlg();
+            StixMain.m_topicAutoWidth.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            this.Close();
         }
 
         private void btnTestScale_Click(object sender, EventArgs e)

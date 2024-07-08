@@ -15,7 +15,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "TaskInfoQuickTask.htm");
+            helpProvider1.SetHelpKeyword(this, "Manage_Quick_Topics.htm");
 
             Text = Utils.getString("TaskTemplateDlg.title");
             lblGroup.Text = Utils.getString("TaskTemplateDlg.lblGroup");
@@ -117,7 +117,7 @@ namespace Bubbles
 
         private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "TaskInfoQuickTask.htm");
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "Manage_Quick_Topics.htm");
         }
 
         // New Quick Topic
@@ -217,70 +217,6 @@ namespace Bubbles
                         " where id=" + group.ID + "");
                 }
             }            
-        }
-
-        private void cbTaskTemplates_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-                RenameTemplate();
-        }
-
-        void RenameTemplate()
-        {
-            if (selectedItem == null) return;
-
-            var item = selectedItem;
-            string name = cbQuickTopics.Text.Trim();
-
-            if (item.Name != name) // User changed template name
-            {
-                if (MessageBox.Show(Utils.getString("taskinfo.quicktask.rename"), "",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    db.ExecuteNonQuery("update QUICKTOPICTEMPLATES set name=`" + name +
-                        "` where name=`" + item.Name + "`");
-
-                    DataTable dt = db.ExecuteQuery("select * from QUICKTOPICTEMPLATES " +
-                        "where name=`" + name + "`");
-
-                    if (dt.Rows.Count > 0)
-                    {
-                        MessageBox.Show(Utils.getString("TaskTemplateDlg.templateexists"), "",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    RemoveItem(item.Name);
-                    item.Name = name;
-                    int i = cbQuickTopics.Items.Add(item);
-                    cbQuickTopics.SelectedIndex = i;
-                }
-            }
-            else
-            {
-                foreach (var _item in cbQuickTopics.Items)
-                {
-                    QuickTopicItem __item = _item as QuickTopicItem;
-                    if (__item.Name == name)
-                    {
-                        cbQuickTopics.SelectedItem = __item;
-                        break;
-                    }
-                }
-            }
-        }
-
-        void RemoveItem(string name)
-        {
-            foreach (var _item in cbQuickTopics.Items)
-            {
-                QuickTopicItem item = _item as QuickTopicItem;
-                if (item.Name == name)
-                {
-                    cbQuickTopics.Items.Remove(_item);
-                    return;
-                }
-            }
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -689,10 +625,8 @@ namespace Bubbles
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            // First, check if template was renamed!
-            RenameTemplate();
-
             QuickTopicItem item = cbQuickTopics.SelectedItem as QuickTopicItem;
+            if (item == null) return;
 
             item.TopicText = txtTopicText.Text.Trim();
             item.Progress = Convert.ToInt32(pProgress.Tag);

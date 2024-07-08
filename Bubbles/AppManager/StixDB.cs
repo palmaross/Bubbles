@@ -415,15 +415,17 @@ namespace Bubbles
 
             // Add values for Topic Width dialog
             AddTopicWidth("numMainWidth", 0, 64, 1);
+            // stix widths
             AddTopicWidth("numWidth1", 0, 100, 1); AddTopicWidth("numWidth2", 0, 120, 1);
             AddTopicWidth("numWidth3", 0, 150, 1); AddTopicWidth("numWidth4", 0, 180, 1);
             AddTopicWidth("numWidth5", 0, 200, 0); AddTopicWidth("numWidth6", 0, 200, 0);
+            // auto widths
             AddTopicWidth("numAuto1", 500, 200, 1); AddTopicWidth("numAuto2", 200, 160, 1);
-            AddTopicWidth("numAuto3", 150, 120, 1); AddTopicWidth("numAuto4", 150, 120, 1);
-            AddTopicWidth("numAuto5", 150, 120, 1); AddTopicWidth("numAuto6", 150, 120, 1);
+            AddTopicWidth("numAuto3", 150, 120, 1); AddTopicWidth("numAuto4", 150, 120, 0);
+            AddTopicWidth("numAuto5", 150, 120, 0); AddTopicWidth("numAuto6", 150, 120, 0);
 
             AddBookmarkGroup(Utils.getString("BookmarksDlg.defaultgroup"));
-            AddAudioGroup(Utils.getString("OmnoSound.defaultgroup"));
+            AddAudioGroup(Utils.getString("OmniSound.defaultgroup"));
         }
     }
 }

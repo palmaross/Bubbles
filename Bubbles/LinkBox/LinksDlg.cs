@@ -59,7 +59,7 @@ namespace Bubbles
             Init();
         }
 
-        private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
+        private void this_HelpButtonClicked(object sender, CancelEventArgs e)
         {
             Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "LinksWindow.htm");
         }

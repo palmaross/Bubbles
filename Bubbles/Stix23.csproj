@@ -248,6 +248,12 @@
     <Compile Include="StixTaskInfo\QuickTopicsDlg.Designer.cs">
       <DependentUpon>QuickTopicsDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="StixTextOps\TopicWidthsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StixTextOps\TopicWidthsDlg.Designer.cs">
+      <DependentUpon>TopicWidthsDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="StixTools\EditToolDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -455,11 +461,11 @@
     <Compile Include="StixAddTopic\TopicTemplatePreview.Designer.cs">
       <DependentUpon>TopicTemplatePreview.cs</DependentUpon>
     </Compile>
-    <Compile Include="StixTextOps\TopicWidthDlg.cs">
+    <Compile Include="StixTextOps\AutoWidthsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StixTextOps\TopicWidthDlg.Designer.cs">
-      <DependentUpon>TopicWidthDlg.cs</DependentUpon>
+    <Compile Include="StixTextOps\AutoWidthsDlg.Designer.cs">
+      <DependentUpon>AutoWidthsDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="AppManager\Utils.cs" />
   </ItemGroup>
@@ -1212,6 +1218,9 @@
     <EmbeddedResource Include="StixTaskInfo\QuickTopicsDlg.resx">
       <DependentUpon>QuickTopicsDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="StixTextOps\TopicWidthsDlg.resx">
+      <DependentUpon>TopicWidthsDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StixTools\EditToolDlg.resx">
       <DependentUpon>EditToolDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -1313,8 +1322,8 @@
     <EmbeddedResource Include="StixAddTopic\TopicTemplatePreview.resx">
       <DependentUpon>TopicTemplatePreview.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StixTextOps\TopicWidthDlg.resx">
-      <DependentUpon>TopicWidthDlg.cs</DependentUpon>
+    <EmbeddedResource Include="StixTextOps\AutoWidthsDlg.resx">
+      <DependentUpon>AutoWidthsDlg.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

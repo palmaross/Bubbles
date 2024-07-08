@@ -345,6 +345,12 @@
     <Compile Include="StixTaskInfo\TaskTemplateDlg.Designer.cs">
       <DependentUpon>TaskTemplateDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="StixTextOps\AutoWidthsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StixTextOps\AutoWidthsDlg.Designer.cs">
+      <DependentUpon>AutoWidthsDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="StixTextOps\ReplaceDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -357,11 +363,11 @@
     <Compile Include="StixTextOps\StixTextOps.Designer.cs">
       <DependentUpon>StixTextOps.cs</DependentUpon>
     </Compile>
-    <Compile Include="StixTextOps\TopicWidthDlg.cs">
+    <Compile Include="StixTextOps\TopicWidthsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StixTextOps\TopicWidthDlg.Designer.cs">
-      <DependentUpon>TopicWidthDlg.cs</DependentUpon>
+    <Compile Include="StixTextOps\TopicWidthsDlg.Designer.cs">
+      <DependentUpon>TopicWidthsDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="StixTools\EditToolDlg.cs">
       <SubType>Form</SubType>
@@ -1040,14 +1046,17 @@
     <EmbeddedResource Include="StixTaskInfo\TaskTemplateDlg.resx">
       <DependentUpon>TaskTemplateDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="StixTextOps\AutoWidthsDlg.resx">
+      <DependentUpon>AutoWidthsDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StixTextOps\ReplaceDlg.resx">
       <DependentUpon>ReplaceDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StixTextOps\StixTextOps.resx">
       <DependentUpon>StixTextOps.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StixTextOps\TopicWidthDlg.resx">
-      <DependentUpon>TopicWidthDlg.cs</DependentUpon>
+    <EmbeddedResource Include="StixTextOps\TopicWidthsDlg.resx">
+      <DependentUpon>TopicWidthsDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StixTools\EditToolDlg.resx">
       <DependentUpon>EditToolDlg.cs</DependentUpon>

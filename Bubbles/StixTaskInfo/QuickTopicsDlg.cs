@@ -36,6 +36,13 @@ namespace Bubbles
             {
                 if (treeView1.SelectedNode.Parent == null) // Group
                 {
+                    if ((int)treeView1.SelectedNode.Tag == 1)
+                    {
+                        MessageBox.Show(Utils.getString("TaskTemplateDlg.deletegroup.error"), "",
+                            MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        return;
+                    }
+
                     if (MessageBox.Show(Utils.getString("TaskTemplateDlg.deletegroup.question"), "",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
@@ -122,11 +129,10 @@ namespace Bubbles
                 }
             }
 
+            if (!group) selected.Parent.Expand();
+
             if (StixMain.m_TaskInfo.Visible)
-            {
-                StixMain.m_TaskInfo.PopulateQuickTopics();
-                if (!group) selected.Parent.Expand();
-            }
+                StixMain.m_TaskInfo.PopulateQuickTopics(true);
         }
 
         private void QuickTopicsDlg_MouseDown(object sender, MouseEventArgs e)
@@ -163,7 +169,13 @@ namespace Bubbles
             }
             else if (e.Button == MouseButtons.Right)
             {
+                if ((int)e.Node.Tag == 1)
+                    m_Delete.Visible = false;
+                else
+                    m_Delete.Visible = true;
+
                 contextMenuStrip1.Show(MousePosition);
+                treeView1.SelectedNode = treeView1.GetNodeAt(e.X, e.Y);
             }
         }
 

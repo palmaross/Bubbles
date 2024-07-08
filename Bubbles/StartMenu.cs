@@ -29,6 +29,7 @@ namespace Bubbles
             toolTip1.SetToolTip(stxFormat, Utils.getString("StixFormat.tooltip"));
             toolTip1.SetToolTip(boxBookmarks, Utils.getString("Box.Bookmarks"));
             toolTip1.SetToolTip(boxSources, Utils.getString("Box.Links"));
+            toolTip1.SetToolTip(boxQuickTopics, Utils.getString("QuickTopicsDlg.Title"));
             toolTip1.SetToolTip(OmniSound, Utils.getString("Box.OmniSound"));
             toolTip1.SetToolTip(Stickers, Utils.getString("stickers.contextmenu.stickers"));
 
@@ -49,13 +50,14 @@ namespace Bubbles
 
             TopicPlayer.Text = Utils.getString("TopicPlayer.Title");
             TopicRecorder.Text = Utils.getString("TopicRecorder.Title");
+            ManageAudio.Text = Utils.getString("ManageAudioDlg.title");
 
             StixUtils.cmiSize = p2.Size;
 
-            o_QuickTopics.Text = Utils.getString("QuickTopicsDlg.Title");
-            StixUtils.SetContextMenuImage(o_QuickTopics, "quicktask.png");
             o_Resources.Text = Utils.getString("taskinfo.Resources");
             StixUtils.SetContextMenuImage(o_Resources, "resources.png");
+            o_Navigator.Text = Utils.getString("navigator.frommenu");
+            StixUtils.SetContextMenuImage(o_Navigator, "position.png");
             cmsMisc.ItemClicked += CmsMisc_ItemClicked;
 
             Color c = ColorTranslator.FromHtml("#e0e5ed");
@@ -99,23 +101,38 @@ namespace Bubbles
 
             this.MouseDown += Move_StartMenu;
             panelBoxes.MouseDown += Move_StartMenu;
+            this.ResizeEnd += StartMenu_ResizeEnd;
+        }
+
+        private void StartMenu_ResizeEnd(object sender, EventArgs e)
+        {
+            if (cm_autoclose.Tag.ToString() == "auto")
+            {
+                int X = this.Bounds.X + (this.Width - StixMain.OmniStixButton.Width) / 2;
+                Utils.OmniButtonX = X;
+                Utils.setRegistry("OmniButtonX", X.ToString());
+                this.Hide();
+            }
         }
 
         private void CmsMisc_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem == o_QuickTopics)
+            if (e.ClickedItem == o_Navigator)
             {
-                if (StixMain.m_QuickTopics == null || StixMain.m_QuickTopics.IsDisposed)
+                if (StixMain.m_MapNavigatorDlg == null)
                 {
-                    StixMain.m_QuickTopics = new QuickTopicsDlg();
-                    StixMain.m_QuickTopics.Location = StixUtils.GetChildLocation(this, StixMain.m_QuickTopics.Bounds, "H");
-                    StixMain.m_QuickTopics.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                    StixMain.m_MapNavigatorDlg = new MapNavigatorDlg();
 
-                    StixMain.m_TaskInfo.PopulateQuickTopics();
+                    // Get navigation window location
+                    if (StixMain.m_MapNavigatorDlg.Location.IsEmpty)
+                    {
+                        StixMain.m_MapNavigatorDlg.Location =
+                            new Point(StixMain.OmniStixButton.Location.X, this.Bottom);
+                    }
 
-                    // Expand Favorites
-                    StixMain.m_QuickTopics.treeView1.Nodes[0].Expand();
+                    StixMain.m_MapNavigatorDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                 }
+                StixMain.m_MapNavigatorDlg.Init();
             }
             else if (e.ClickedItem == o_Resources)
             {
@@ -183,7 +200,7 @@ namespace Bubbles
                     MMUtils.Company = Utils.Company;
                     MMUtils.AddinName = Utils.AddinName;
                     MMUtils.FriendlyAddinName = Utils.FriendlyAddinName;
-                    MMUtils.AddinVersion = Utils.getRegistry("", "version");
+                    MMUtils.AddinVersion = Utils.getRegistry("version");
                     MMUtils.licenseKeyStartsWith = "OS";
 
                     using (aboutDlg dlg = new aboutDlg())
@@ -335,7 +352,7 @@ namespace Bubbles
             }
         }
 
-        private void Misc_MouseDown(object sender, MouseEventArgs e)
+        private void boxResources_MouseDown(object sender, MouseEventArgs e)
         {
             cmsMisc.Show(MousePosition);
         }
@@ -699,5 +716,20 @@ namespace Bubbles
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
+
+        private void boxQuickTopics_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (StixMain.m_QuickTopics == null || StixMain.m_QuickTopics.IsDisposed)
+            {
+                StixMain.m_QuickTopics = new QuickTopicsDlg();
+                StixMain.m_QuickTopics.Location = StixUtils.GetChildLocation(this, StixMain.m_QuickTopics.Bounds, "H");
+                StixMain.m_QuickTopics.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+
+                StixMain.m_TaskInfo.PopulateQuickTopics();
+
+                // Expand Favorites
+                StixMain.m_QuickTopics.treeView1.Nodes[0].Expand();
+            }
+        }
     }
 }

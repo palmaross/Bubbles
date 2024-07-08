@@ -13,6 +13,10 @@ namespace Bubbles
         {
             InitializeComponent();
 
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
+            helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
+            helpProvider1.SetHelpKeyword(this, "ToolStix.htm#newtool");
+
             lblSpecifyPath.Text = Utils.getString("NewToolDlg.lblSpecifyPath");
             lblToolName.Text = Utils.getString("NewToolDlg.lblTitle");
             lblTooltip.Text = Utils.getString("NewToolDlg.lblTooltip");
@@ -37,6 +41,12 @@ namespace Bubbles
                 chAddToDatabase.Checked = true;
 
             this.Paint += This_Paint; // paint the border
+            this.HelpButtonClicked += this_HelpButtonClicked;
+        }
+
+        private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "ToolStix.htm#newtool");
         }
 
         private void This_Paint(object sender, PaintEventArgs e)
@@ -46,7 +56,7 @@ namespace Bubbles
 
         private void txtPath_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter || (e.KeyCode == Keys.V && e.Control))
+            if (e == null || e.KeyCode == Keys.Enter || (e.KeyCode == Keys.V && e.Control))
             {
                 ClearPages();
                 btnPages.Visible = false;
@@ -207,7 +217,7 @@ namespace Bubbles
             if (openFileDialog1.ShowDialog(this) == DialogResult.OK)
             {
                 txtPath.Text = openFileDialog1.FileName;
-                txtPath_KeyUp(null, null); // proceed with title and icon
+                txtPath_KeyUp(sender, null); // proceed with title and icon
             }
         }
 
@@ -230,7 +240,7 @@ namespace Bubbles
         private void txtboxPaste_Click(object sender, EventArgs e)
         {
             txtPath.Text = Clipboard.GetText();
-            txtPath_KeyUp(null, null);
+            txtPath_KeyUp(sender, null);
         }
 
         private void txtboxClear_Click(object sender, EventArgs e)

@@ -163,13 +163,13 @@
             // 
             // cbQuickTopics
             // 
+            this.cbQuickTopics.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbQuickTopics.FormattingEnabled = true;
             this.cbQuickTopics.Location = new System.Drawing.Point(93, 40);
             this.cbQuickTopics.Name = "cbQuickTopics";
             this.cbQuickTopics.Size = new System.Drawing.Size(176, 21);
             this.cbQuickTopics.TabIndex = 2;
             this.cbQuickTopics.SelectedIndexChanged += new System.EventHandler(this.cbTaskTemplates_SelectedIndexChanged);
-            this.cbQuickTopics.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbTaskTemplates_KeyDown);
             // 
             // pProgress
             // 
@@ -1047,6 +1047,7 @@
             // 
             // cbGroups
             // 
+            this.cbGroups.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbGroups.FormattingEnabled = true;
             this.cbGroups.Location = new System.Drawing.Point(93, 12);
             this.cbGroups.Name = "cbGroups";

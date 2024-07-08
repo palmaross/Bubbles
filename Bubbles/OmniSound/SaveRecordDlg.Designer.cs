@@ -53,7 +53,6 @@
             this.panelSave.Controls.Add(this.chAttachment);
             this.panelSave.Controls.Add(this.txtName);
             this.panelSave.Controls.Add(this.lblRecordName);
-            this.panelSave.Controls.Add(this.lblCount);
             this.panelSave.Location = new System.Drawing.Point(1, 1);
             this.panelSave.Name = "panelSave";
             this.panelSave.Size = new System.Drawing.Size(200, 168);
@@ -121,11 +120,11 @@
             this.lblCount.AutoSize = true;
             this.lblCount.Font = new System.Drawing.Font("Verdana", 80F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCount.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblCount.Location = new System.Drawing.Point(41, 13);
+            this.lblCount.Location = new System.Drawing.Point(46, 16);
             this.lblCount.Name = "lblCount";
             this.lblCount.Size = new System.Drawing.Size(123, 130);
             this.lblCount.TabIndex = 0;
-            this.lblCount.Text = "5";
+            this.lblCount.Text = "3";
             // 
             // timer1
             // 
@@ -155,6 +154,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Info;
             this.ClientSize = new System.Drawing.Size(202, 170);
+            this.Controls.Add(this.lblCount);
             this.Controls.Add(this.panelSave);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "SaveRecordDlg";
@@ -164,6 +164,7 @@
             this.panelSave.ResumeLayout(false);
             this.panelSave.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

@@ -148,15 +148,8 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "ManageTopicWidths")
             {
-                if (StixMain.topicWidthDlg.Visible)
-                {
-                    StixMain.topicWidthDlg.Hide();
-                }
-                else
-                {
-                    StixMain.topicWidthDlg.form = this;
-                    StixMain.topicWidthDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-                }
+                using (TopicWidthsDlg dlg = new TopicWidthsDlg(this))
+                    dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
             else if (e.ClickedItem.Name == "ManualWidth")
             {
@@ -169,19 +162,16 @@ namespace Bubbles
                         t.Shape.TextWidth = width;
                 }
             }
-            else if (e.ClickedItem.Name == "MMAutoWidth")
+            else if (e.ClickedItem.Name == "TopicAutoWidth")
             {
                 if (StixUtils.TopicAutoWidth)
                     StixUtils.TopicAutoWidth = false;
                 else
                     StixUtils.TopicAutoWidth = true;
 
-                Utils.setRegistry("MMAutoWidth", StixUtils.TopicAutoWidth ? "1" : "0");
+                Utils.setRegistry("TopicAutoWidth", StixUtils.TopicAutoWidth ? "1" : "0");
             }
-            else if (e.ClickedItem.Name == "MMAutoWidthOut")
-            {
-                
-            }
+
             else if (e.ClickedItem.Name == "BI_rotate")
             {
                 Rotate();
@@ -1034,7 +1024,7 @@ namespace Bubbles
             tsi.Font = new Font(tsi.Font, FontStyle.Bold);
             cmsTopicWidths.Items.Add(tsi);
 
-            foreach (int width in StixUtils.ManualTopicWidths)
+            foreach (int width in TopicWidthsDlg.stixwidths)
             {
                 tsi = cmsTopicWidths.Items.Add(width.ToString());
                 tsi.Name = "ManualWidth"; tsi.Tag = width.ToString();
@@ -1089,7 +1079,7 @@ namespace Bubbles
                 if (MMUtils.ActiveDocument == null) return;
 
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                    t.Shape.TextWidth = StixUtils.MainTopicWidth;
+                    t.Shape.TextWidth = TopicWidthsDlg.mainwidth;
             }
             else if (e.Button == MouseButtons.Right)
             {

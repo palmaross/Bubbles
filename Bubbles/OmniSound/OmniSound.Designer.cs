@@ -39,6 +39,10 @@
             this.btnPause = new System.Windows.Forms.PictureBox();
             this.btnStop = new System.Windows.Forms.PictureBox();
             this.panelRecordName = new System.Windows.Forms.Panel();
+            this.btnNewGroup = new System.Windows.Forms.PictureBox();
+            this.cbGroupsSave = new System.Windows.Forms.ComboBox();
+            this.chAddToTopic = new System.Windows.Forms.CheckBox();
+            this.chAttachmentSave = new System.Windows.Forms.CheckBox();
             this.btnCancelRecord = new System.Windows.Forms.Button();
             this.btnSaveRecord = new System.Windows.Forms.Button();
             this.lblRecordName = new System.Windows.Forms.Label();
@@ -48,7 +52,8 @@
             this.chAttachment = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.o_manage = new System.Windows.Forms.ToolStripMenuItem();
-            this.o_recordsystem = new System.Windows.Forms.ToolStripMenuItem();
+            this.o_recordtype = new System.Windows.Forms.ToolStripMenuItem();
+            this.o_newgroup = new System.Windows.Forms.ToolStripMenuItem();
             this.o_help = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.aTrack = new System.Windows.Forms.TrackBar();
@@ -62,13 +67,17 @@
             this.cbGroups = new System.Windows.Forms.ComboBox();
             this.btnMore = new System.Windows.Forms.PictureBox();
             this.btnClose = new System.Windows.Forms.PictureBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.panelNewGroup = new System.Windows.Forms.Panel();
+            this.btnCancelGroup = new System.Windows.Forms.Button();
+            this.btnAddGroup = new System.Windows.Forms.Button();
+            this.txtGroupName = new System.Windows.Forms.TextBox();
+            this.lblGroupName = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.btnRecord)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnPlay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnPause)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnStop)).BeginInit();
             this.panelRecordName.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.btnNewGroup)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Volume)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -79,6 +88,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pBlink)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnMore)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnClose)).BeginInit();
+            this.panelNewGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // timer1
@@ -88,11 +98,10 @@
             // 
             // txtRecordName
             // 
-            this.txtRecordName.Location = new System.Drawing.Point(6, 31);
+            this.txtRecordName.Location = new System.Drawing.Point(6, 66);
             this.txtRecordName.Name = "txtRecordName";
             this.txtRecordName.Size = new System.Drawing.Size(178, 20);
             this.txtRecordName.TabIndex = 8;
-            this.txtRecordName.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtRecordName_KeyUp);
             // 
             // btnAddToTopic
             // 
@@ -106,6 +115,7 @@
             // 
             // cbRecords
             // 
+            this.cbRecords.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbRecords.FormattingEnabled = true;
             this.cbRecords.Location = new System.Drawing.Point(14, 92);
             this.cbRecords.Name = "cbRecords";
@@ -160,21 +170,64 @@
             // panelRecordName
             // 
             this.panelRecordName.BackColor = System.Drawing.Color.PapayaWhip;
-            this.panelRecordName.Controls.Add(this.checkBox2);
-            this.panelRecordName.Controls.Add(this.checkBox1);
+            this.panelRecordName.Controls.Add(this.btnNewGroup);
+            this.panelRecordName.Controls.Add(this.cbGroupsSave);
+            this.panelRecordName.Controls.Add(this.chAddToTopic);
+            this.panelRecordName.Controls.Add(this.chAttachmentSave);
             this.panelRecordName.Controls.Add(this.btnCancelRecord);
             this.panelRecordName.Controls.Add(this.btnSaveRecord);
             this.panelRecordName.Controls.Add(this.lblRecordName);
             this.panelRecordName.Controls.Add(this.txtRecordName);
-            this.panelRecordName.Location = new System.Drawing.Point(6, 10);
+            this.panelRecordName.Location = new System.Drawing.Point(6, 9);
             this.panelRecordName.Name = "panelRecordName";
-            this.panelRecordName.Size = new System.Drawing.Size(190, 134);
+            this.panelRecordName.Size = new System.Drawing.Size(190, 185);
             this.panelRecordName.TabIndex = 21;
             this.panelRecordName.Visible = false;
             // 
+            // btnNewGroup
+            // 
+            this.btnNewGroup.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnNewGroup.Image = ((System.Drawing.Image)(resources.GetObject("btnNewGroup.Image")));
+            this.btnNewGroup.Location = new System.Drawing.Point(164, 20);
+            this.btnNewGroup.Name = "btnNewGroup";
+            this.btnNewGroup.Size = new System.Drawing.Size(20, 20);
+            this.btnNewGroup.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.btnNewGroup.TabIndex = 123;
+            this.btnNewGroup.TabStop = false;
+            this.btnNewGroup.Click += new System.EventHandler(this.btnNewGroup_Click);
+            // 
+            // cbGroupsSave
+            // 
+            this.cbGroupsSave.FormattingEnabled = true;
+            this.cbGroupsSave.Location = new System.Drawing.Point(6, 20);
+            this.cbGroupsSave.Name = "cbGroupsSave";
+            this.cbGroupsSave.Size = new System.Drawing.Size(155, 21);
+            this.cbGroupsSave.Sorted = true;
+            this.cbGroupsSave.TabIndex = 83;
+            // 
+            // chAddToTopic
+            // 
+            this.chAddToTopic.AutoSize = true;
+            this.chAddToTopic.Location = new System.Drawing.Point(8, 102);
+            this.chAddToTopic.Name = "chAddToTopic";
+            this.chAddToTopic.Size = new System.Drawing.Size(87, 17);
+            this.chAddToTopic.TabIndex = 27;
+            this.chAddToTopic.Text = "Add to Topic";
+            this.chAddToTopic.UseVisualStyleBackColor = true;
+            // 
+            // chAttachmentSave
+            // 
+            this.chAttachmentSave.AutoSize = true;
+            this.chAttachmentSave.Location = new System.Drawing.Point(98, 102);
+            this.chAttachmentSave.Name = "chAttachmentSave";
+            this.chAttachmentSave.Size = new System.Drawing.Size(89, 17);
+            this.chAttachmentSave.TabIndex = 26;
+            this.chAttachmentSave.Text = "+ Attachment";
+            this.chAttachmentSave.UseVisualStyleBackColor = true;
+            // 
             // btnCancelRecord
             // 
-            this.btnCancelRecord.Location = new System.Drawing.Point(109, 98);
+            this.btnCancelRecord.Location = new System.Drawing.Point(109, 146);
             this.btnCancelRecord.Name = "btnCancelRecord";
             this.btnCancelRecord.Size = new System.Drawing.Size(75, 23);
             this.btnCancelRecord.TabIndex = 23;
@@ -184,7 +237,7 @@
             // 
             // btnSaveRecord
             // 
-            this.btnSaveRecord.Location = new System.Drawing.Point(6, 98);
+            this.btnSaveRecord.Location = new System.Drawing.Point(6, 146);
             this.btnSaveRecord.Name = "btnSaveRecord";
             this.btnSaveRecord.Size = new System.Drawing.Size(75, 23);
             this.btnSaveRecord.TabIndex = 22;
@@ -195,7 +248,7 @@
             // lblRecordName
             // 
             this.lblRecordName.AutoSize = true;
-            this.lblRecordName.Location = new System.Drawing.Point(3, 12);
+            this.lblRecordName.Location = new System.Drawing.Point(3, 48);
             this.lblRecordName.Name = "lblRecordName";
             this.lblRecordName.Size = new System.Drawing.Size(76, 13);
             this.lblRecordName.TabIndex = 9;
@@ -229,31 +282,40 @@
             // 
             // contextMenuStrip1
             // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.o_manage,
-            this.o_recordsystem,
+            this.o_recordtype,
+            this.o_newgroup,
             this.o_help});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.ShowImageMargin = false;
-            this.contextMenuStrip1.Size = new System.Drawing.Size(163, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(156, 114);
             // 
             // o_manage
             // 
             this.o_manage.Name = "o_manage";
-            this.o_manage.Size = new System.Drawing.Size(162, 22);
+            this.o_manage.Size = new System.Drawing.Size(155, 22);
             this.o_manage.Text = "Manage Audios";
             // 
-            // o_recordsystem
+            // o_recordtype
             // 
-            this.o_recordsystem.CheckOnClick = true;
-            this.o_recordsystem.Name = "o_recordsystem";
-            this.o_recordsystem.Size = new System.Drawing.Size(162, 22);
-            this.o_recordsystem.Text = "Record System Audio";
+            this.o_recordtype.CheckOnClick = true;
+            this.o_recordtype.Name = "o_recordtype";
+            this.o_recordtype.Size = new System.Drawing.Size(155, 22);
+            this.o_recordtype.Tag = "false";
+            this.o_recordtype.Text = "System Sound";
+            // 
+            // o_newgroup
+            // 
+            this.o_newgroup.Name = "o_newgroup";
+            this.o_newgroup.Size = new System.Drawing.Size(155, 22);
+            this.o_newgroup.Text = "Add New Group";
             // 
             // o_help
             // 
             this.o_help.Name = "o_help";
-            this.o_help.Size = new System.Drawing.Size(162, 22);
+            this.o_help.Size = new System.Drawing.Size(155, 22);
             this.o_help.Text = "Help";
             // 
             // pictureBox1
@@ -343,6 +405,7 @@
             // 
             // cbGroups
             // 
+            this.cbGroups.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbGroups.FormattingEnabled = true;
             this.cbGroups.Location = new System.Drawing.Point(14, 70);
             this.cbGroups.Name = "cbGroups";
@@ -377,25 +440,54 @@
             this.btnClose.TabStop = false;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
-            // checkBox1
+            // panelNewGroup
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(98, 67);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(89, 17);
-            this.checkBox1.TabIndex = 26;
-            this.checkBox1.Text = "+ Attachment";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.panelNewGroup.BackColor = System.Drawing.Color.PapayaWhip;
+            this.panelNewGroup.Controls.Add(this.btnCancelGroup);
+            this.panelNewGroup.Controls.Add(this.btnAddGroup);
+            this.panelNewGroup.Controls.Add(this.txtGroupName);
+            this.panelNewGroup.Controls.Add(this.lblGroupName);
+            this.panelNewGroup.Location = new System.Drawing.Point(6, 67);
+            this.panelNewGroup.Name = "panelNewGroup";
+            this.panelNewGroup.Size = new System.Drawing.Size(190, 81);
+            this.panelNewGroup.TabIndex = 95;
+            this.panelNewGroup.Visible = false;
             // 
-            // checkBox2
+            // btnCancelGroup
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(8, 67);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(87, 17);
-            this.checkBox2.TabIndex = 27;
-            this.checkBox2.Text = "Add to Topic";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.btnCancelGroup.Location = new System.Drawing.Point(109, 52);
+            this.btnCancelGroup.Name = "btnCancelGroup";
+            this.btnCancelGroup.Size = new System.Drawing.Size(75, 23);
+            this.btnCancelGroup.TabIndex = 3;
+            this.btnCancelGroup.Text = "Cancel";
+            this.btnCancelGroup.UseVisualStyleBackColor = true;
+            this.btnCancelGroup.Click += new System.EventHandler(this.btnCancelGroup_Click);
+            // 
+            // btnAddGroup
+            // 
+            this.btnAddGroup.Location = new System.Drawing.Point(6, 52);
+            this.btnAddGroup.Name = "btnAddGroup";
+            this.btnAddGroup.Size = new System.Drawing.Size(75, 23);
+            this.btnAddGroup.TabIndex = 2;
+            this.btnAddGroup.Text = "Add";
+            this.btnAddGroup.UseVisualStyleBackColor = true;
+            this.btnAddGroup.Click += new System.EventHandler(this.btnAddGroup_Click);
+            // 
+            // txtGroupName
+            // 
+            this.txtGroupName.Location = new System.Drawing.Point(6, 24);
+            this.txtGroupName.Name = "txtGroupName";
+            this.txtGroupName.Size = new System.Drawing.Size(178, 20);
+            this.txtGroupName.TabIndex = 1;
+            // 
+            // lblGroupName
+            // 
+            this.lblGroupName.AutoSize = true;
+            this.lblGroupName.Location = new System.Drawing.Point(6, 6);
+            this.lblGroupName.Name = "lblGroupName";
+            this.lblGroupName.Size = new System.Drawing.Size(70, 13);
+            this.lblGroupName.TabIndex = 0;
+            this.lblGroupName.Text = "Group Name:";
             // 
             // OmniSound
             // 
@@ -403,7 +495,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(202, 202);
-            this.Controls.Add(this.panelRecordName);
+            this.Controls.Add(this.panelNewGroup);
             this.Controls.Add(this.btnMore);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.cbGroups);
@@ -422,6 +514,7 @@
             this.Controls.Add(this.btnAddToTopic);
             this.Controls.Add(this.cbRecords);
             this.Controls.Add(this.chAttachment);
+            this.Controls.Add(this.panelRecordName);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "OmniSound";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
@@ -433,6 +526,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.btnStop)).EndInit();
             this.panelRecordName.ResumeLayout(false);
             this.panelRecordName.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.btnNewGroup)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Volume)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -443,6 +537,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pBlink)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnMore)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnClose)).EndInit();
+            this.panelNewGroup.ResumeLayout(false);
+            this.panelNewGroup.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -463,7 +559,7 @@
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.CheckBox chAttachment;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem o_recordsystem;
+        private System.Windows.Forms.ToolStripMenuItem o_recordtype;
         private System.Windows.Forms.ToolStripMenuItem o_help;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TrackBar aTrack;
@@ -481,7 +577,15 @@
         private System.Windows.Forms.PictureBox btnMore;
         private System.Windows.Forms.PictureBox btnClose;
         private System.Windows.Forms.ToolStripMenuItem o_manage;
-        private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox chAddToTopic;
+        private System.Windows.Forms.CheckBox chAttachmentSave;
+        public System.Windows.Forms.ComboBox cbGroupsSave;
+        private System.Windows.Forms.ToolStripMenuItem o_newgroup;
+        private System.Windows.Forms.Panel panelNewGroup;
+        private System.Windows.Forms.Button btnCancelGroup;
+        private System.Windows.Forms.Button btnAddGroup;
+        private System.Windows.Forms.TextBox txtGroupName;
+        private System.Windows.Forms.Label lblGroupName;
+        private System.Windows.Forms.PictureBox btnNewGroup;
     }
 }

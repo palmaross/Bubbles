@@ -12,6 +12,7 @@ using System.Linq;
 using AppManager;
 using System.IO;
 using NAudio.Wave;
+using System.Diagnostics;
 
 namespace Bubbles
 {
@@ -148,11 +149,20 @@ namespace Bubbles
         {
             Play();
         }
+        public static string playingtopicguid = "";
 
         public static void Play()
         {
             Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
             if (t == null) return;
+
+            // Current topic sounding. Stop it.
+            if (m_OmniSound.audioFile != null && playingtopicguid == t.Guid)
+            {
+                if (m_OmniSound.outputDevice.PlaybackState != PlaybackState.Stopped)
+                    m_OmniSound.outputDevice.Stop();
+                playingtopicguid = "";
+            }
 
             string audioPath = t.GetAttributes(SOUNDSTRIP_URI).GetAttributeValue(AUDIO_PATH);
             if (String.IsNullOrEmpty(audioPath))
@@ -161,24 +171,44 @@ namespace Bubbles
                 return;
             }
 
-            if (t.Attachments.Count > 0)
+            string[] parts = audioPath.Split(new string[] { "###" }, StringSplitOptions.None);
+
+            int id = Convert.ToInt32(parts[0]);
+            string attachGuid = "";
+
+            if (parts.Length > 1)
+                attachGuid = parts[1];
+
+            audioPath = "";
+
+            using (StixDB db = new StixDB())
+            {
+                DataTable dt = db.ExecuteQuery("select * from AUDIOS where id=" + id + "");
+
+                if (dt.Rows.Count > 0)
+                    audioPath = dt.Rows[0]["path"].ToString();
+            }
+
+            if (audioPath == "" && attachGuid == "") // Audiofile not found and no attachment
+            {
+                MessageBox.Show(String.Format(Utils.getString("OmniSound.filenotexists"), ""));
+                return;
+            }
+
+            if (audioPath != "" && attachGuid != "")
             {
                 foreach (Attachment attach in t.Attachments)
                 {
-                    string filename = attach.FileName;
-                    if (filename.EndsWith(".mp3") || filename.EndsWith(".wav"))
+                    if (attach.Guid == attachGuid)
                     {
-                        audioPath = Utils.m_dataPath + "SoundDB\\" + filename;
+                        audioPath = Utils.m_dataPath + "SoundDB\\" + attach.FileName;
+
                         if (!File.Exists(audioPath))
                             attach.SaveAs(audioPath);
-                        Play(audioPath, t.Guid);
                     }
                 }
             }
-            else
-            {
-                Play(audioPath, t.Guid);
-            }
+            Play(audioPath, t.Guid);
         }
 
         public static void Play(string audioPath, string topicGuid = "")
@@ -214,7 +244,7 @@ namespace Bubbles
             }
 
             m_OmniSound.FilePath = audioPath;
-            m_OmniSound.TopicGuid = topicGuid;
+            playingtopicguid = topicGuid;
             m_OmniSound.btnPlay_Click(null, null);
         }
 
@@ -250,6 +280,12 @@ namespace Bubbles
 
         private void m_cmdTopicAudioNote_Click()
         {
+            if (MMUtils.ActiveDocument.Path == "")
+            {
+                MessageBox.Show(Utils.getString("OmniStix.SaveMap"));
+                return;
+            }
+
             Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
             if (t == null) return;
 
@@ -376,6 +412,24 @@ namespace Bubbles
                 // Well, there is a window only
                 else if (m_MapNavigatorDlg != null && !m_MapNavigatorDlg.IsDisposed)
                     m_MapNavigatorDlg.TopicAffected(MMUtils.ActiveDocument.Guid, t, "deleted");
+
+                if (t.IsMainTopic) { InitMainTopics = true; }
+            }
+        }
+        bool InitMainTopics = false;
+
+        public override void onAfterObjectRemoved(MMEventArgs aArgs)
+        {
+            if (InitMainTopics)
+            {
+                InitMainTopics = false;
+
+                // Process MapNavigator Stix. It will also process MP window
+                if (m_MapNavigator != null && !m_MapNavigator.IsDisposed)
+                    m_MapNavigator.InitMainTopicsContextMenu();
+                // Well, there is a window only
+                else if (m_MapNavigatorDlg != null && !m_MapNavigatorDlg.IsDisposed)
+                    m_MapNavigatorDlg.InitMainTopics();
             }
         }
 
@@ -697,7 +751,6 @@ namespace Bubbles
 
         void InitializeTopicWidthDlg()
         {
-            List<int> mwidths = new List<int>();
             Dictionary<int, int> awidths = new Dictionary<int, int>();
 
             using (StixDB db = new StixDB())
@@ -713,56 +766,54 @@ namespace Bubbles
                     switch (row["name"].ToString())
                     {
                         case "numMainWidth":
-                            topicWidthDlg.numMainWidth.Value = _value;
-                            StixUtils.MainTopicWidth = _value; break;
+                            TopicWidthsDlg.mainwidth = _value; break;
                         case "numWidth1":
-                            topicWidthDlg.numWidth1.Value = _value;
-                            topicWidthDlg.cbm1.Checked = _checked; break;
+                            TopicWidthsDlg.widths[0] = _value;
+                            TopicWidthsDlg.checkstate[0] = _checked; break;
                         case "numWidth2":
-                            topicWidthDlg.numWidth2.Value = _value;
-                            topicWidthDlg.cbm2.Checked = _checked; break;
+                            TopicWidthsDlg.widths[1] = _value;
+                            TopicWidthsDlg.checkstate[1] = _checked; break;
                         case "numWidth3":
-                            topicWidthDlg.numWidth3.Value = _value;
-                            topicWidthDlg.cbm3.Checked = _checked; break;
+                            TopicWidthsDlg.widths[2] = _value;
+                            TopicWidthsDlg.checkstate[2] = _checked; break;
                         case "numWidth4":
-                            topicWidthDlg.numWidth4.Value = _value;
-                            topicWidthDlg.cbm4.Checked = _checked; break;
+                            TopicWidthsDlg.widths[3] = _value;
+                            TopicWidthsDlg.checkstate[3] = _checked; break;
                         case "numWidth5":
-                            topicWidthDlg.numWidth5.Value = _value;
-                            topicWidthDlg.cbm5.Checked = _checked; break;
+                            TopicWidthsDlg.widths[4] = _value;
+                            TopicWidthsDlg.checkstate[4] = _checked; break;
                         case "numWidth6":
-                            topicWidthDlg.numWidth6.Value = _value;
-                            topicWidthDlg.cbm6.Checked = _checked; break;
-
+                            TopicWidthsDlg.widths[5] = _value;
+                            TopicWidthsDlg.checkstate[5] = _checked; break;
                         case "numAuto1":
-                            topicWidthDlg.cbTextMore1.Checked = _checked;
-                            topicWidthDlg.numChars1.Value = chars;
-                            topicWidthDlg.numAuto1.Value = _value; break;
+                            AutoWidthsDlg.checkstate[0] = _checked;
+                            AutoWidthsDlg.chars[0] = chars;
+                            AutoWidthsDlg.lengths[0] = _value; break;
                         case "numAuto2":
-                            topicWidthDlg.cbTextMore2.Checked = _checked;
-                            topicWidthDlg.numChars2.Value = chars;
-                            topicWidthDlg.numAuto2.Value = _value; break;
+                            AutoWidthsDlg.checkstate[1] = _checked;
+                            AutoWidthsDlg.chars[1] = chars;
+                            AutoWidthsDlg.lengths[1] = _value; break;
                         case "numAuto3":
-                            topicWidthDlg.cbTextMore3.Checked = _checked;
-                            topicWidthDlg.numChars3.Value = chars;
-                            topicWidthDlg.numAuto3.Value = _value; break;
+                            AutoWidthsDlg.checkstate[2] = _checked;
+                            AutoWidthsDlg.chars[2] = chars;
+                            AutoWidthsDlg.lengths[2] = _value; break;
                         case "numAuto4":
-                            topicWidthDlg.cbTextMore4.Checked = _checked;
-                            topicWidthDlg.numChars4.Value = chars;
-                            topicWidthDlg.numAuto4.Value = _value; break;
+                            AutoWidthsDlg.checkstate[3] = _checked;
+                            AutoWidthsDlg.chars[3] = chars;
+                            AutoWidthsDlg.lengths[3] = _value; break;
                         case "numAuto5":
-                            topicWidthDlg.cbTextMore5.Checked = _checked;
-                            topicWidthDlg.numChars5.Value = chars;
-                            topicWidthDlg.numAuto5.Value = _value; break;
+                            AutoWidthsDlg.checkstate[4] = _checked;
+                            AutoWidthsDlg.chars[4] = chars;
+                            AutoWidthsDlg.lengths[4] = _value; break;
                         case "numAuto6":
-                            topicWidthDlg.cbTextMore6.Checked = _checked;
-                            topicWidthDlg.numChars6.Value = chars;
-                            topicWidthDlg.numAuto6.Value = _value; break;
+                            AutoWidthsDlg.checkstate[5] = _checked;
+                            AutoWidthsDlg.chars[5] = chars;
+                            AutoWidthsDlg.lengths[5] = _value; break;
                     }
 
                     if (row["name"].ToString().StartsWith("numWidth"))
                     {
-                        if (_checked && !mwidths.Contains(_value)) mwidths.Add(_value);
+                        if (_checked && !TopicWidthsDlg.stixwidths.Contains(_value)) TopicWidthsDlg.stixwidths.Add(_value);
                     }
                     else if (row["name"].ToString().StartsWith("numAuto"))
                     {
@@ -771,10 +822,9 @@ namespace Bubbles
                 }
             }
 
-            StixUtils.ManualTopicWidths = mwidths.OrderBy(i => i).ToList();
             StixUtils.AutoTopicWidths = awidths.OrderByDescending(key => key.Key).ToDictionary(pair => pair.Key, pair => pair.Value);
             StixUtils.MinAutoTopicWidth = StixUtils.AutoTopicWidths.Keys.Last();
-            StixUtils.TopicAutoWidth = Utils.getRegistry("MMAutoWidth", "0") == "1";
+            StixUtils.TopicAutoWidth = Utils.getRegistry("TopicAutoWidth", "0") == "1";
         }
 
         public override void SubMenuButtonCallbackUpdateState(ref bool pEnabled, ref bool pChecked, SubMenuButtonData aData)
@@ -800,24 +850,59 @@ namespace Bubbles
                         return;
 
                     DialogResult dr;
-                    dr = MessageBox.Show(Utils.getString("OmnoSound.removeaudio"), "",
+                    dr = MessageBox.Show(Utils.getString("OmniSound.removeaudio"), "",
                         MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
                     if (dr == DialogResult.Cancel) return;
 
-                    if (dr == DialogResult.Yes)
+                    if (!_t.ContainsControlStripType(SOUNDSTRIP_URI)) return;
+
+                    int id = 0; string attachGuid = "";
+                    using (StixDB db = new StixDB())
                     {
                         string audioPath = _t.GetAttributes(SOUNDSTRIP_URI).GetAttributeValue(AUDIO_PATH);
-                        if (File.Exists(audioPath))
-                            File.Delete(audioPath);
+                        string[] parts = audioPath.Split(new string[] { "###" }, StringSplitOptions.None);
+                        try {
+                            id = Convert.ToInt32(parts[0]);
+                        }
+                        catch {
+                            _t.GetAttributes(SOUNDSTRIP_URI).DeleteAll();
 
-                        // Delete from database
+                            // Remove strip icon.
+                            TransactionWrapper _q = new TransactionWrapper(_t,
+                                TransactionWrapper.TransactionType.REMOVE_STRIP_ICON, "");
+                            _q.controlStripURI = SOUNDSTRIP_URI;
+                            _q.Execute();
+                            return;
+                        }
 
+                        if (parts.Length > 1)
+                            attachGuid = parts[1];
+
+                        audioPath = ""; int groupID = 1;
+                        DataTable dt = db.ExecuteQuery("select * from AUDIOS where id=" + id + "");
+
+                        if (dt.Rows.Count > 0)
+                        {
+                            audioPath = dt.Rows[0]["path"].ToString();
+                            groupID = Convert.ToInt32(dt.Rows[0]["groupID"]);
+                        }
+
+                        if (dr == DialogResult.Yes) // delete file
+                        {
+                            if (File.Exists(audioPath)) File.Delete(audioPath);
+                            // Delete from database
+                            db.ExecuteNonQuery("delete from AUDIOS where path=`" + audioPath + "`");
+                        }
+                        else // move audio to the General group
+                        {
+                            db.ExecuteNonQuery("update AUDIOS set groupID=1" +
+                                " where path=`" + audioPath + "` and groupID=" + groupID + "");
+                        }
                     }
 
-                    // Remove path attribute.
-                    if (_t.ContainsControlStripType(SOUNDSTRIP_URI))
-                        _t.GetAttributes(SOUNDSTRIP_URI).DeleteAll();
+                    // Remove sound attribute from topic.
+                    _t.GetAttributes(SOUNDSTRIP_URI).DeleteAll();
 
                     // Remove strip icon.
                     TransactionWrapper _w = new TransactionWrapper(_t,
@@ -879,13 +964,6 @@ namespace Bubbles
                 m_ReplaceDlg = null;
             }
 
-            if (topicWidthDlg != null)
-            {
-                topicWidthDlg.Hide();
-                topicWidthDlg.Dispose();
-                topicWidthDlg = null;
-            }
-
             if (m_Resources != null)
             {
                 m_Resources.Hide();
@@ -914,6 +992,13 @@ namespace Bubbles
                 OmniStixButton.Hide();
             OmniStixButton.Dispose();
             OmniStixButton = null;
+
+            if (m_topicAutoWidth != null && m_topicAutoWidth.Visible)
+            {
+                m_topicAutoWidth.Hide();
+                m_topicAutoWidth.Dispose();
+                m_topicAutoWidth = null;
+            }
 
             if (m_ManageAudio != null && m_ManageAudio.Visible)
             {
@@ -989,6 +1074,9 @@ namespace Bubbles
         public static OmniSound m_OmniSound;
         public static ManageToolsDlg m_ManageTools;
         public static QuickTopicsDlg m_QuickTopics;
+        public static AutoWidthsDlg m_topicAutoWidth;
+
+        public static BrowserDlg OmniBrowser = null;
 
         public static ResourcesDlg m_Resources;
         public static LinksDlg m_AllSources;
@@ -1015,8 +1103,6 @@ namespace Bubbles
         public static Timer stopPlayTimer = new Timer();
 
         static ToolTip tt = new ToolTip() { ShowAlways = true, AutoPopDelay = 3000 };
-
-        public static TopicWidthDlg topicWidthDlg = new TopicWidthDlg();
 
         private DynamicMenus m_menus;
 

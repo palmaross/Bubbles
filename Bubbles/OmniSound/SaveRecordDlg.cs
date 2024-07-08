@@ -3,14 +3,8 @@ using Mindjet.MindManager.Interop;
 using NAudio.Wave;
 using PRAManager;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Bubbles
@@ -32,6 +26,7 @@ namespace Bubbles
             {
                 panelSave.Visible = false;
                 lblCount.Visible = true;
+                lblCount.BringToFront();
                 timer1.Start();
             }
             else if (save)
@@ -51,7 +46,7 @@ namespace Bubbles
             }
         }
 
-        int i = 4;
+        int i = 2;
         private void timer1_Tick(object sender, EventArgs e)
         {
             lblCount.Text = i.ToString();
@@ -78,29 +73,17 @@ namespace Bubbles
         private void btnSave_Click(object sender, EventArgs e)
         {
             string filename = txtName.Text.Trim();
-            string outputFolder = Utils.m_dataPath + "SoundDB\\";
 
-            if (!(MMUtils.SelectedTopic() is Topic _t))
-                return;
+            if (!(MMUtils.SelectedTopic() is Topic _t)) return;
+            if (filename == "") return;
 
-            if (_t.ContainsControlStripType(StixMain.SOUNDSTRIP_URI))
-                return;
-
-            string a_guid = "";
-            if (chAttachment.Checked) // Add as attachment
-                a_guid = _t.Attachments.Add(outputFolder + filename + ".mp3").Guid;
+            if (_t.ContainsControlStripType(StixMain.SOUNDSTRIP_URI)) return;
 
             int groupID = (cbGroups.SelectedItem as AudioGroup).ID;
-            string mappath = MMUtils.ActiveDocument.FullName;
-            string maptitle = MMUtils.ActiveDocument.CentralTopic.Text;
-            StixMain.m_OmniSound.SaveRecord(filename, groupID, mappath, maptitle, _t.Guid);
-
-            TransactionWrapper _w = new TransactionWrapper(_t,
-                TransactionWrapper.TransactionType.ADD_STRIP_ICON, outputFolder + filename + ".mp3");
-            _w.controlStripURI = StixMain.SOUNDSTRIP_URI;
-            _w.Execute();
+            StixMain.m_OmniSound.SaveRecord(filename, groupID, true, chAttachment.Checked);
 
             if (chCloseRecorder.Checked) StixMain.m_TopicRecorder.Close();
+            cbGroupsIndex = cbGroups.SelectedIndex;
             this.Close();
         }
 
@@ -109,5 +92,7 @@ namespace Bubbles
             if (chCloseRecorder.Checked) StixMain.m_TopicRecorder.Close();
             this.Close();
         }
+
+        static int cbGroupsIndex = 0;
     }
 }

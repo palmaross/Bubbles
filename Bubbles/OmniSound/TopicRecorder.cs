@@ -74,6 +74,13 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
+                if (MMUtils.ActiveDocument.Path == "")
+                {
+                    MessageBox.Show(Utils.getString("OmniStix.SaveMap"), "",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 if (StixMain.m_OmniSound.writer == null)
                 {
                     Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;

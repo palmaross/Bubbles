@@ -32,9 +32,10 @@ namespace Bubbles
         {
             if (StixMain.m_StixBase.Visible) { return; }
 
-            StixMain.m_StixBase.Location = new Point(this.Location.X, this.Location.Y - StixMain.m_StixBase.Height);
+            int X = this.Location.X - ((StixMain.m_StixBase.Width - this.Width) / 2);
+            StixMain.m_StixBase.Location = new Point(X, this.Location.Y - StixMain.m_StixBase.Height);
             StixMain.m_StixBase.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-            int X = StixMain.m_StixBase.Location.X;
+            X = StixMain.m_StixBase.Location.X;
             int Y = StixMain.m_StixBase.Location.Y;
 
             do
@@ -85,8 +86,9 @@ namespace Bubbles
             Point rec = Utils.MMScreen(MMUtils.MindManager.Left + MMUtils.MindManager.Width / 2,
                 MMUtils.MindManager.Top + MMUtils.MindManager.Height / 2);
 
-            int X = MMUtils.MindManager.Left, Y = MMUtils.MindManager.Top, W = MMUtils.MindManager.Width;
-            X += (int)(W / 3 * 1.85);
+            int X = Utils.OmniButtonX, Y = MMUtils.MindManager.Top, W = MMUtils.MindManager.Width;
+            if (X == 0) X = MMUtils.MindManager.Left + (int)(W / 3 * 1.85);
+
             if (Y < rec.Y) Y = rec.Y; // correct MindManager top position when MM is maximized
 
             if (this.Location.X != X || this.Location.Y != Y)

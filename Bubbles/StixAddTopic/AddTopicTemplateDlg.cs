@@ -18,7 +18,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "AddTopicStix.htm#addmultiple");
+            helpProvider1.SetHelpKeyword(this, "AddTopic_Templates.htm");
 
             Text = Utils.getString("TopicTemplateDlg.Title");
             lblTopicText.Text = Utils.getString("TopicTemplateDlg.lblTopicText");
@@ -78,7 +78,7 @@ namespace Bubbles
 
         private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "AddTopicStix.htm#addmultiple");
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "AddTopic_Templates.htm");
         }
 
         // Generate topics with increment

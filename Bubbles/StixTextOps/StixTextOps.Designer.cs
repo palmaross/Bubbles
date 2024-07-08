@@ -40,7 +40,6 @@
             this.Manage = new System.Windows.Forms.PictureBox();
             this.cmsOptions = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.OP_myrisk = new System.Windows.Forms.ToolStripMenuItem();
-            this.OP_SourceLink = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsCommon = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmiSize = new System.Windows.Forms.PictureBox();
             this.subtopic = new System.Windows.Forms.PictureBox();
@@ -158,8 +157,7 @@
             // 
             this.cmsOptions.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.cmsOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.OP_myrisk,
-            this.OP_SourceLink});
+            this.OP_myrisk});
             this.cmsOptions.Name = "cmsPasteText";
             this.cmsOptions.ShowCheckMargin = true;
             this.cmsOptions.ShowImageMargin = false;
@@ -171,12 +169,6 @@
             this.OP_myrisk.Name = "OP_myrisk";
             this.OP_myrisk.Size = new System.Drawing.Size(238, 22);
             this.OP_myrisk.Text = "Quick Insert (my responsibility)";
-            // 
-            // OP_SourceLink
-            // 
-            this.OP_SourceLink.Name = "OP_SourceLink";
-            this.OP_SourceLink.Size = new System.Drawing.Size(238, 22);
-            this.OP_SourceLink.Text = "Source Link on Topic";
             // 
             // cmsCommon
             // 
@@ -341,7 +333,8 @@
             this.cmsTopicWidths.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.cmsTopicWidths.Name = "cmsTopicWidths";
             this.cmsTopicWidths.ShowCheckMargin = true;
-            this.cmsTopicWidths.Size = new System.Drawing.Size(83, 4);
+            this.cmsTopicWidths.ShowImageMargin = false;
+            this.cmsTopicWidths.Size = new System.Drawing.Size(61, 4);
             // 
             // StixTextOps
             // 
@@ -418,6 +411,5 @@
         public System.Windows.Forms.PictureBox OptionInternalLinks;
         private System.Windows.Forms.PictureBox pTopicWidth;
         private System.Windows.Forms.ContextMenuStrip cmsTopicWidths;
-        private System.Windows.Forms.ToolStripMenuItem OP_SourceLink;
     }
 }

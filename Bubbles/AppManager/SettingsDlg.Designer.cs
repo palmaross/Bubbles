@@ -56,6 +56,8 @@
             this.FaviconsToolStix = new System.Windows.Forms.CheckBox();
             this.FaviconsLinksWindow = new System.Windows.Forms.CheckBox();
             this.chOpenInOmniBrowser = new System.Windows.Forms.CheckBox();
+            this.chTopicAutoWidth = new System.Windows.Forms.CheckBox();
+            this.btnManageAutoWidth = new System.Windows.Forms.LinkLabel();
             this.gbRunAtStart.SuspendLayout();
             this.gbScaleFactor.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -65,7 +67,7 @@
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(236, 407);
+            this.btnClose.Location = new System.Drawing.Point(236, 448);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 1;
@@ -76,7 +78,7 @@
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSave.Location = new System.Drawing.Point(155, 407);
+            this.btnSave.Location = new System.Drawing.Point(155, 448);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 3;
@@ -362,13 +364,36 @@
             this.chOpenInOmniBrowser.Text = "ToolStix: open web-links in the OmniBrowser by default";
             this.chOpenInOmniBrowser.UseVisualStyleBackColor = true;
             // 
+            // chTopicAutoWidth
+            // 
+            this.chTopicAutoWidth.AutoSize = true;
+            this.chTopicAutoWidth.Location = new System.Drawing.Point(13, 410);
+            this.chTopicAutoWidth.Name = "chTopicAutoWidth";
+            this.chTopicAutoWidth.Size = new System.Drawing.Size(181, 17);
+            this.chTopicAutoWidth.TabIndex = 25;
+            this.chTopicAutoWidth.Text = "Автоматическая ширина темы";
+            this.chTopicAutoWidth.UseVisualStyleBackColor = true;
+            // 
+            // btnManageAutoWidth
+            // 
+            this.btnManageAutoWidth.AutoSize = true;
+            this.btnManageAutoWidth.Location = new System.Drawing.Point(197, 411);
+            this.btnManageAutoWidth.Name = "btnManageAutoWidth";
+            this.btnManageAutoWidth.Size = new System.Drawing.Size(107, 13);
+            this.btnManageAutoWidth.TabIndex = 26;
+            this.btnManageAutoWidth.TabStop = true;
+            this.btnManageAutoWidth.Text = "Manage Auto-Widths";
+            this.btnManageAutoWidth.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.btnManageAutoWidth_LinkClicked);
+            // 
             // SettingsDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(322, 439);
+            this.ClientSize = new System.Drawing.Size(322, 480);
+            this.Controls.Add(this.btnManageAutoWidth);
+            this.Controls.Add(this.chTopicAutoWidth);
             this.Controls.Add(this.chOpenInOmniBrowser);
             this.Controls.Add(this.FaviconsLinksWindow);
             this.Controls.Add(this.FaviconsToolStix);
@@ -425,5 +450,7 @@
         private System.Windows.Forms.CheckBox FaviconsToolStix;
         private System.Windows.Forms.CheckBox FaviconsLinksWindow;
         private System.Windows.Forms.CheckBox chOpenInOmniBrowser;
+        private System.Windows.Forms.CheckBox chTopicAutoWidth;
+        private System.Windows.Forms.LinkLabel btnManageAutoWidth;
     }
 }

@@ -6,9 +6,9 @@ using System.IO;
 using Color = System.Drawing.Color;
 using Mindjet.MindManager.Interop;
 using AppManager;
-using System.Drawing;
 using NAudio.Wave;
 using System.Data;
+using System.Drawing;
 
 namespace Bubbles
 {
@@ -36,6 +36,12 @@ namespace Bubbles
             btnSaveRecord.Text = Utils.getString("button.save");
             btnCancelRecord.Text = Utils.getString("button.cancel");
             chAttachment.Text = Utils.getString("OmniSound.chAttachment");
+            chAddToTopic.Text = Utils.getString("OmniSound.btnAddToTopic");
+            chAttachmentSave.Text = Utils.getString("OmniSound.chAttachment");
+
+            lblGroupName.Text = Utils.getString("ResourcesDlg.lblGroupName");
+            btnAddGroup.Text = Utils.getString("button.add");
+            btnCancelGroup.Text = Utils.getString("button.cancel");
 
             toolTip1.SetToolTip(btnRecord, Utils.getString("OmniSound.btnRecord.tooltip"));
             toolTip1.SetToolTip(pRecordSystem, Utils.getString("OmniSound.btnRecord.tooltip"));
@@ -46,7 +52,8 @@ namespace Bubbles
 
             btnClose.Text = Utils.getString("button.close");
             o_help.Text = Utils.getString("button.help");
-            o_recordsystem.Text = Utils.getString("OmniSound.o_recordsystem");
+            o_recordtype.Text = Utils.getString("OmniSound.o_recordsystem");
+            o_newgroup.Text = Utils.getString("OmniSound.newgroup");
 
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
 
@@ -89,16 +96,19 @@ namespace Bubbles
         public void InitAudioFiles()
         {
             cbGroups.Items.Clear();
+            cbGroupsSave.Items.Clear();
 
             using (StixDB db = new StixDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from AUDIOGROUPS order by name");
                 foreach (DataRow row in dt.Rows)
+                {
                     cbGroups.Items.Add(new AudioGroup(row["name"].ToString(), Convert.ToInt32(row["id"])));
+                    cbGroupsSave.Items.Add(new AudioGroup(row["name"].ToString(), Convert.ToInt32(row["id"])));
+                }
             }
-
-            if (cbGroups.Items.Count > 0)
-                cbGroups.SelectedIndex = 0;
+            if (cbGroups.Items.Count > 0) cbGroups.SelectedIndex = 0;
+            if (cbGroupsSave.Items.Count > 0) cbGroupsSave.SelectedIndex = 0;
         }
 
         private void cbGroups_SelectedIndexChanged(object sender, EventArgs e)
@@ -138,23 +148,62 @@ namespace Bubbles
                     StixMain.m_ManageAudio.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                 }
             }
-            else if (e.ClickedItem == o_recordsystem)
+            else if (e.ClickedItem == o_recordtype)
             {
-                if (o_recordsystem.Checked)
+                if (o_recordtype.Checked) // switch to microphone
                 {
                     pRecordSystem.Visible = false;
                     btnRecord.Visible = true;
                     btnRecord.BringToFront();
                     SystemAudio = false;
+                    o_recordtype.Text = Utils.getString("OmniSound.o_recordsystem");
                 }
-                else
+                else // switch to system sound
                 {
                     pRecordSystem.Visible = true;
                     pRecordSystem.Location = btnRecord.Location;
                     pRecordSystem.BringToFront();
                     btnRecord.Visible = false;
                     SystemAudio = true;
+                    o_recordtype.Text = Utils.getString("OmniSound.o_micro");
                 }
+            }
+            else if (e.ClickedItem == o_newgroup)
+            {
+                panelNewGroup.Location = panelRecordName.Location;
+                panelNewGroup.Visible = true; 
+                panelNewGroup.BringToFront();
+            }
+        }
+
+        private void btnCancelGroup_Click(object sender, EventArgs e)
+        {
+            panelNewGroup.Visible = false;
+        }
+
+        private void btnAddGroup_Click(object sender, EventArgs e)
+        {
+            string name = txtGroupName.Text.Trim();
+            if (name == "") return;
+
+            using (StixDB db = new StixDB())
+            {
+                DataTable dt = db.ExecuteQuery("select * from AUDIOGROUPS where name=`" + name + "`");
+                if (dt.Rows.Count > 0)
+                {
+                    MessageBox.Show(Utils.getString("ResourcesDlg.groupexists"));
+                    return;
+                }
+
+                db.AddAudioGroup(name); int id = 0;
+                dt = db.ExecuteQuery("SELECT last_insert_rowid()");
+                if (dt.Rows.Count > 0) id = Convert.ToInt32(dt.Rows[0][0]);
+
+                AudioGroup item = new AudioGroup(name, id);
+                int i = cbGroups.Items.Add(item); cbGroups.SelectedIndex = i;
+                cbGroupsSave.Items.Add(item); cbGroupsSave.SelectedIndex = i;
+
+                panelNewGroup.Visible = false;
             }
         }
 
@@ -175,6 +224,13 @@ namespace Bubbles
 
         private void btnRecord_Click(object sender, EventArgs e)
         {
+            if (MMUtils.ActiveDocument.Path == "")
+            {
+                if (MessageBox.Show(Utils.getString("OmniStix.SaveMap.warning"), "",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                    return;
+            }
+
             if (audioFile != null) // play is performed!
             {
                 MessageBox.Show(Utils.getString("OmniSound.busy.playing"));
@@ -218,7 +274,7 @@ namespace Bubbles
             {
                 writer = new WaveFileWriter(outputFilePath, capture.WaveFormat);
                 capture.StartRecording();
-                StixMain.m_OmniSound.omniRecorder = OmniSound.OmniRecorder.Capturing;
+                omniRecorder = OmniRecorder.Capturing;
                 capture.DataAvailable += WaveIn_DataAvailable;
             }
             else // Voice record
@@ -245,6 +301,7 @@ namespace Bubbles
                 go = true;
             }
         }
+        bool sampleIsEmpty = true;
 
         bool go = false;
         private void timer3_Tick(object sender, EventArgs e)
@@ -303,7 +360,10 @@ namespace Bubbles
         private void StopRecording(bool stopped = false, bool cancel = false)
         {
             if (SystemAudio && !stopped)
+            {
                 capture.StopRecording();
+                capture.DataAvailable -= WaveIn_DataAvailable;
+            }
             else if (!stopped)
             {
                 waveIn.StopRecording();
@@ -311,6 +371,8 @@ namespace Bubbles
             }
 
             omniRecorder = OmniRecorder.Stopped;
+
+            bool sampleEmpty = writer == null || writer.Length == 0;
 
             writer?.Dispose();
             writer = null;
@@ -325,7 +387,14 @@ namespace Bubbles
 
             if (cancel) return;
 
+            if (sampleEmpty)
+            {
+                MessageBox.Show(Utils.getString("OmniSound.emptyrecord"));
+                return;
+            }
+
             txtRecordName.Text = DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss");
+            cbGroupsSave.SelectedIndex = cbGroups.SelectedIndex;
             panelRecordName.Visible = true;
             panelRecordName.BringToFront();
             txtRecordName.Focus();
@@ -399,10 +468,7 @@ namespace Bubbles
             }
 
             if (sender == btnPlay)
-            {
                 FilePath = "";
-                TopicGuid = "";
-            }
 
             lblClock.ForeColor = Color.Black;
 
@@ -411,7 +477,7 @@ namespace Bubbles
             if (outputDevice.PlaybackState != PlaybackState.Stopped)
             {
                 outputDevice.Stop();
-                timerStopPlay.Start();
+                timerStopPlay.Start(); // We have to exit first.
             }
             else
                 Play();
@@ -488,23 +554,10 @@ namespace Bubbles
 
             timer1.Stop();
             lblClock.Text = "00:00 / 00:00";
+            StixMain.playingtopicguid = "";
         }
 
-        private void txtRecordName_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Escape)
-            {
-                panelRecordName.Visible = false;
-                return;
-            }
-            else if (e.KeyCode == Keys.Enter)
-            {
-                int groupID = (cbGroups.SelectedItem as AudioGroup).ID;
-                SaveRecord(txtRecordName.Text.Trim(), groupID);
-            }
-        }
-
-        public void SaveRecord(string recordName, int groupID, string mappath = "", string maptitle = "", string topicguid = "")
+        public void SaveRecord(string recordName, int groupID, bool addtotopic, bool attachment)
         {
             string outputFolder = Utils.m_dataPath + "SoundDB";
             DirectoryInfo di = new DirectoryInfo(outputFolder);
@@ -534,7 +587,7 @@ namespace Bubbles
                 {
                     fail = true;
 
-                    File.Move(Utils.m_dataPath + "SoundDB\\record.wav", wavFile);
+                    File.Copy(Utils.m_dataPath + "SoundDB\\record.wav", wavFile);
                     filename = wavFile;
 
                     MMBase.TRACE("encoding audiofile to MP3...\r\n\r\n" + ex.Message + "\r\n\r\n" + ex.StackTrace);
@@ -544,7 +597,19 @@ namespace Bubbles
             }
 
             if (!fail)
-                File.Delete(recordedWavFile);
+            {
+                try { File.Delete(recordedWavFile); } catch { }
+            }
+
+            string mappath = "", maptitle = "", topicguid = "";
+            Topic t = MMUtils.SelectedTopic();
+
+            if (addtotopic && t != null)
+            {
+                mappath = t.Document.FullName;
+                maptitle = t.Document.CentralTopic.Text;
+                topicguid = t.Guid;
+            }
 
             int id = 0;
             using (StixDB db = new StixDB())
@@ -554,9 +619,22 @@ namespace Bubbles
                 if (dt.Rows.Count > 0) id = Convert.ToInt32(dt.Rows[0][0]);
             }
 
+            string a_guid = "";
+            if (attachment && t != null)
+                a_guid = "###" + t.Attachments.Add(filename).Guid;
+
+            if (addtotopic && t != null)
+            {
+                TransactionWrapper _w = new TransactionWrapper(t,
+            TransactionWrapper.TransactionType.ADD_STRIP_ICON, id.ToString() + a_guid);
+                _w.controlStripURI = StixMain.SOUNDSTRIP_URI;
+                _w.Execute();
+            }
+
             int i = cbRecords.Items.Add(new AudioItem(id, recordName, filename));
             cbRecords.SelectedIndex = i;
             panelRecordName.Visible = false;
+            t = null;
         }
 
         int blink = 0;
@@ -604,8 +682,11 @@ namespace Bubbles
 
         private void btnSaveRecord_Click(object sender, EventArgs e)
         {
-            int groupID = (cbGroups.SelectedItem as AudioGroup).ID;
-            SaveRecord(txtRecordName.Text.Trim(), groupID);
+            int groupID = (cbGroupsSave.SelectedItem as AudioGroup).ID;
+
+            if (txtRecordName.Text.Trim() == "") return;
+
+            SaveRecord(txtRecordName.Text.Trim(), groupID, chAddToTopic.Checked, chAttachmentSave.Checked);
             panelRecordName.Visible = false;
         }
 
@@ -620,6 +701,15 @@ namespace Bubbles
         {
             if (!(MMUtils.SelectedTopic() is Topic _t))
                 return;
+
+            if (cbRecords.Items.Count == 0) return;
+
+            if (MMUtils.ActiveDocument.Path == "")
+            {
+                MessageBox.Show(Utils.getString("OmniStix.SaveMap"), "",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+            }
 
             if (_t.ContainsControlStripType(StixMain.SOUNDSTRIP_URI))
             {
@@ -689,8 +779,6 @@ namespace Bubbles
 
         /// <summary> Path to audio file attached to topic.</summary>
         public string FilePath = "";
-        /// <summary> Guid of paying topic.</summary>
-        public string TopicGuid = "";
 
         public WaveInEvent waveIn = new WaveInEvent();
         public WaveFileWriter writer = null;
@@ -738,6 +826,13 @@ namespace Bubbles
         internal static extern void DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE attribute,
             ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute, uint cbAttribute);
         #endregion
+
+        private void btnNewGroup_Click(object sender, EventArgs e)
+        {
+            panelNewGroup.Location = new Point(panelRecordName.Left, panelRecordName.Bottom - panelNewGroup.Height);
+            panelNewGroup.Visible = true;
+            panelNewGroup.BringToFront();
+        }
     }
 
     public class AudioItem

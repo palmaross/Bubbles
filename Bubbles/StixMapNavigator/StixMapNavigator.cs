@@ -23,7 +23,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "BookmarksStix.htm");
+            helpProvider1.SetHelpKeyword(this, "NavigationStix.htm");
 
             toolTip1.SetToolTip(pictureHandle, stickname + Utils.getString("HeadIcon.tooltip"));
             toolTip1.SetToolTip(Manage, Utils.getString("ManageIcon.tooltip"));
@@ -560,7 +560,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_help")
             {
-                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "BookmarksStix.htm");
+                Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "NavigationStix.htm");
             }
             else if (e.ClickedItem.Name == "BI_store")
             {

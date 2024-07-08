@@ -326,7 +326,7 @@
             // 
             // numFontSize
             // 
-            this.numFontSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numFontSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numFontSize.Location = new System.Drawing.Point(0, 0);
             this.numFontSize.Maximum = new decimal(new int[] {
             99,
@@ -339,7 +339,7 @@
             0,
             0});
             this.numFontSize.Name = "numFontSize";
-            this.numFontSize.Size = new System.Drawing.Size(32, 21);
+            this.numFontSize.Size = new System.Drawing.Size(32, 20);
             this.numFontSize.TabIndex = 96;
             this.numFontSize.Value = new decimal(new int[] {
             10,

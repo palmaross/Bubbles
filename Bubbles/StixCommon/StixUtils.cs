@@ -988,8 +988,6 @@ namespace Bubbles
         [DllImport("user32.dll")]
         static extern int SetForegroundWindow(IntPtr point);
 
-        public static int MainTopicWidth = 63;
-        public static List<int> ManualTopicWidths = new List<int>();
         public static Dictionary<int, int> AutoTopicWidths = new Dictionary<int, int>();
         public static int MinAutoTopicWidth;
         public static bool TopicAutoWidth = false;
