@@ -16,7 +16,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "LinksWindow.htm#addlink");
+            helpProvider1.SetHelpKeyword(this, "Add_Edit_Link.htm");
 
             Text = Utils.getString("NewLinkDlg.title");
             lblTitle.Text = Utils.getString("NewLinkDlg.lblTitle");
@@ -40,7 +40,7 @@ namespace Bubbles
 
         private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "LinksWindow.htm#addlink");
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "Add_Edit_Link.htm");
         }
 
         public void FillGroups()
@@ -178,6 +178,7 @@ namespace Bubbles
         {
             string link = txtLink.Text.Trim();
             string title = txtTitle.Text.Trim();
+            string comment = txtComment.Text.Trim();
 
             if (link == "" || title == "") return; // to do message to user
 
@@ -186,7 +187,7 @@ namespace Bubbles
             {
                 // Validate file name
                 string titlevalid = string.Concat(title.Split(Path.GetInvalidFileNameChars()));
-                if (titlevalid.Length > 50) titlevalid = titlevalid.Substring(0, 60);
+                if (titlevalid.Length > 50) titlevalid = titlevalid.Substring(0, 50);
 
                 saveFileDialog1.DefaultExt = "html";
                 saveFileDialog1.AddExtension = true;
@@ -235,7 +236,10 @@ namespace Bubbles
                     if (groupID == 0) return;
 
                     if (fromLinksDlg)
+                    {
                         LinksDialog.AddToTable(title, link, LinksDialog.selectedNode.Text, comment, groupID);
+                        LinksDialog.txtComment.Text = comment;
+                    }
 
                     _db.AddLink(title, link, type, "", comment, groupID);
                 }

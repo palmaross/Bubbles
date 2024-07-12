@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using Mindjet.MindManager.Interop;
+﻿using Mindjet.MindManager.Interop;
 using NAudio.Wave;
 using PRAManager;
 using PRMapCompanion;
@@ -39,6 +38,7 @@ namespace Bubbles
 
             lblAddToGroup.Text = Utils.getString("ManageAudioDlg.lblAddToGroup");
             lblPathToAudio.Text = Utils.getString("ManageAudioDlg.lblPathToAudio");
+            lblAudioTitle.Text = Utils.getString("ManageAudioDlg.AudioTitle");
             btnAddFile.Text = Utils.getString("button.add");
             btnCancel.Text = Utils.getString("button.cancel");
 
@@ -126,7 +126,7 @@ namespace Bubbles
 
         private void this_HelpButtonClicked(object sender, CancelEventArgs e)
         {
-            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "LinksWindow.htm");
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "ManageAudio.htm");
         }
 
         void Init()
@@ -381,7 +381,7 @@ namespace Bubbles
         private void btnAddAudio_Click(object sender, EventArgs e)
         {
             panelAddAudio.Visible = true; panelAddAudio.BringToFront();
-            panelAddAudio.Location = panelManageGroups.Location;
+            panelAddAudio.Location = new Point(panelManageGroups.Location.X, panelAddAudio.Location.Y);
         }
 
         private void btnAddFile_Click(object sender, EventArgs e)
@@ -403,6 +403,7 @@ namespace Bubbles
                 AddToTable(id, groupID, title, path, "", "", "", "");
             }
             panelAddAudio.Visible = false;
+            txtPath.Text = ""; txtAudioTitle.Text = "";
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)
@@ -410,11 +411,14 @@ namespace Bubbles
             openFileDialog1.Filter = "Audio Files|*.mp3;*.wav;*.mp4;*wma;*.aac;*m4a";
             if (openFileDialog1.ShowDialog(this) == DialogResult.Cancel) return;
             txtPath.Text = openFileDialog1.FileName;
+
+            txtAudioTitle.Text = Path.GetFileNameWithoutExtension(txtPath.Text);
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             panelAddAudio.Visible = false;
+            txtPath.Text = ""; txtAudioTitle.Text = "";
         }
 
         private void dgv_KeyDown(object sender, KeyEventArgs e)
@@ -434,8 +438,13 @@ namespace Bubbles
                 foreach (DataGridViewRow row in dgv.SelectedRows)
                 {
                     int id = Convert.ToInt32(row.Cells["ID"].Value);
+                    string path = row.Cells["AudioPath"].Value.ToString();
+
                     db.ExecuteNonQuery("delete from AUDIOS where id=" + id + "");
                     dgv.Rows.Remove(row);
+
+                    // Delete file
+                    if (File.Exists(path)) File.Delete(path);
                 }
             }
         }

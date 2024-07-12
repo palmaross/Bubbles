@@ -244,6 +244,8 @@ namespace Bubbles
             m_db.ExecuteNonQuery("CREATE TABLE LINKS(title text, path text, type text, " +
                 "state text, comment text, groupID int, " +
                 "reserved1 text, reserved2 text, reserved3 integer, reserved4 integer);");
+            // type - link type (http, word, excel, etc.)
+            // if it's an http or html, "http:" + favicon name as website host
             // state - processed, important, etc...
 
             m_db.ExecuteNonQuery("CREATE TABLE TOOLS(title text, tooltip text, path text, type text, " +

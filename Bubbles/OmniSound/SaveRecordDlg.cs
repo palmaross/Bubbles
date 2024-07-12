@@ -22,6 +22,8 @@ namespace Bubbles
             btnSave.Text = Utils.getString("button.save");
             btnCancel.Text = Utils.getString("button.cancel");
 
+            this.Paint += this_Paint; // paint form border
+
             if (count)
             {
                 panelSave.Visible = false;
@@ -44,6 +46,11 @@ namespace Bubbles
                 if (cbGroups.Items.Count > 0)
                     cbGroups.SelectedIndex = 0;
             }
+        }
+
+        private void this_Paint(object sender, PaintEventArgs e)
+        {
+            ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle, System.Drawing.Color.Black, ButtonBorderStyle.Solid);
         }
 
         int i = 2;
@@ -85,6 +92,43 @@ namespace Bubbles
             if (chCloseRecorder.Checked) StixMain.m_TopicRecorder.Close();
             cbGroupsIndex = cbGroups.SelectedIndex;
             this.Close();
+        }
+
+        private void btnNewGroup_Click(object sender, EventArgs e)
+        {
+            panelNewGroup.Visible = true;
+            panelNewGroup.BringToFront();
+        }
+
+        private void btnAddGroup_Click(object sender, EventArgs e)
+        {
+            string name = txtGroupName.Text.Trim();
+            if (name == "") return;
+
+            using (StixDB db = new StixDB())
+            {
+                DataTable dt = db.ExecuteQuery("select * from AUDIOGROUPS where name=`" + name + "`");
+                if (dt.Rows.Count > 0)
+                {
+                    MessageBox.Show(Utils.getString("ResourcesDlg.groupexists"));
+                    return;
+                }
+
+                db.AddAudioGroup(name); int id = 0;
+                dt = db.ExecuteQuery("SELECT last_insert_rowid()");
+                if (dt.Rows.Count > 0) id = Convert.ToInt32(dt.Rows[0][0]);
+
+                AudioGroup item = new AudioGroup(name, id);
+                int i = cbGroups.Items.Add(item); cbGroups.SelectedIndex = i;
+                cbGroups.Items.Add(item); cbGroups.SelectedIndex = i;
+
+                panelNewGroup.Visible = false;
+            }
+        }
+
+        private void btnCancelGroup_Click(object sender, EventArgs e)
+        {
+            panelNewGroup.Visible = false;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

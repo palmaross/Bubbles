@@ -73,7 +73,7 @@ namespace Bubbles
             mm_paste.Text = Utils.getString("ResourcesDlg.Paste");
             mm_pastefromclipboard.Text = Utils.getString("ResourcesDlg.PasteClipboard");
 
-            this.Paint += this_Paint; // paint the border
+            this.Paint += this_Paint; // paint form border
             this.MinimumSize = new Size(this.Width, this.Height / 2);
             this.MaximumSize = new Size(this.Width, Screen.AllScreens.Max(s => s.Bounds.Height));
 

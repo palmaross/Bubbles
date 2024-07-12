@@ -179,14 +179,17 @@ namespace Bubbles
             if (parts.Length > 1)
                 attachGuid = parts[1];
 
-            audioPath = "";
+            audioPath = ""; string title = "";
 
             using (StixDB db = new StixDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from AUDIOS where id=" + id + "");
 
                 if (dt.Rows.Count > 0)
+                {
+                    title = dt.Rows[0]["title"].ToString();
                     audioPath = dt.Rows[0]["path"].ToString();
+                }
             }
 
             if (audioPath == "" && attachGuid == "") // Audiofile not found and no attachment
@@ -208,10 +211,10 @@ namespace Bubbles
                     }
                 }
             }
-            Play(audioPath, t.Guid);
+            Play(audioPath, title, t.Guid);
         }
 
-        public static void Play(string audioPath, string topicGuid = "")
+        public static void Play(string audioPath, string title = "", string topicGuid = "")
         {
             // Does file exist?
             if (!File.Exists(audioPath))
@@ -220,7 +223,9 @@ namespace Bubbles
                 return;
             }
 
-            string trackName = Path.GetFileNameWithoutExtension(audioPath);
+            string trackName = title;
+            if (title == "")
+                trackName = Path.GetFileNameWithoutExtension(audioPath);
             
             if (m_OmniSound.Visible) // Select record in OmniSound window
             {
@@ -244,6 +249,7 @@ namespace Bubbles
             }
 
             m_OmniSound.FilePath = audioPath;
+            m_OmniSound.TrackName = trackName;
             playingtopicguid = topicGuid;
             m_OmniSound.btnPlay_Click(null, null);
         }
@@ -299,6 +305,7 @@ namespace Bubbles
             if (m_OmniSound.writer != null) // Recorder is busy.
             {
                 MessageBox.Show(Utils.getString("OmniSound.busy.recording"));
+                return;
             }
             if (m_OmniSound.outputDevice.PlaybackState != PlaybackState.Stopped) // OmniPlayer is busy.
             {

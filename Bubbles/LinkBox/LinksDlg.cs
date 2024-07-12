@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Bubbles
@@ -16,7 +18,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "LinksWindow.htm");
+            helpProvider1.SetHelpKeyword(this, "OmniLinks.htm");
 
             Text = Utils.getString("LinksDlg.title");
             lblOpenIn.Text = Utils.getString("LinksDlg.lblOpenIn");
@@ -33,6 +35,10 @@ namespace Bubbles
 
             g_AddLink.Text = Utils.getString("LinksDlg.addlink");
             g_AddGroup.Text = Utils.getString("LinksDlg.NewGroup");
+            g_AddGroupBelow.Text = Utils.getString("LinksDlg.NewGroup.Below");
+            g_AddGroupAbove.Text = Utils.getString("LinksDlg.NewGroup.Above");
+            g_AddChildGroup.Text = Utils.getString("LinksDlg.NewGroup.Child");
+
             g_RenameGroup.Text = Utils.getString("LinksDlg.RenameGroup");
             g_DeleteGroup.Text = Utils.getString("LinksDlg.DeleteGroup");
 
@@ -61,7 +67,7 @@ namespace Bubbles
 
         private void this_HelpButtonClicked(object sender, CancelEventArgs e)
         {
-            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "LinksWindow.htm");
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "OmniLinks.htm");
         }
 
         void Init()
@@ -112,6 +118,7 @@ namespace Bubbles
         {
             string imageType = Utils.GetFileType(path);
             Image img = null;
+            string faviconDB = Utils.m_dataPath + "FaviconDB\\";
 
             if (imageType == "exe")
             {
@@ -150,28 +157,7 @@ namespace Bubbles
         {
             if (e.ClickedItem.Name == "g_AddGroup")
             {
-                selectedNode = treeView1.SelectedNode;
-
-                if (selectedNode == treeView1.Nodes[0])
-                    m_editNode = treeView1.Nodes.Add("");
-                else
-                {
-                    m_editNode = selectedNode.Nodes.Add("");
-                    selectedNode.Expand();
-                }
-
-                m_editNode.Tag = -1;
-                treeView1.SelectedNode = m_editNode;
-                selectedNode = m_editNode;
-                SelectedNodeChanged();
-                txtLink.Text = "";
-
-                txtEditNode.Location = new Point(m_editNode.Bounds.X, m_editNode.Bounds.Y);
-                txtEditNode.Size = new Size(treeView1.Width - m_editNode.Bounds.X - pSize.Width, txtEditNode.Height);
-                txtEditNode.Visible = true; txtEditNode.Focus();
-                txtEditNode.Text = Utils.getString("LinksDlg.NewGroup");
-                txtEditNode.SelectAll();
-                m_editMode = false; // "new group" mode
+                AddGroup("below");
             }
             else if (e.ClickedItem.Name == "g_RenameGroup")
             {
@@ -284,6 +270,64 @@ namespace Bubbles
                     }
                 }
             }
+        }
+
+        private void g_AddGroupBelow_Click(object sender, EventArgs e)
+        {
+            AddGroup("below");
+        }
+
+        private void g_AddGroupAbove_Click(object sender, EventArgs e)
+        {
+            AddGroup("above");
+        }
+
+        private void g_AddChildGroup_Click(object sender, EventArgs e)
+        {
+            AddGroup("child");
+        }
+
+        void AddGroup(string position)
+        {
+            selectedNode = treeView1.SelectedNode;
+
+            if (selectedNode == treeView1.Nodes[0])
+                m_editNode = treeView1.Nodes.Add("");
+            else
+            {
+                if (position == "child")
+                {
+                    m_editNode = selectedNode.Nodes.Add("");
+                    selectedNode.Expand();
+                }
+                else if (position == "below")
+                {
+                    if (selectedNode.Parent == null)
+                        m_editNode = treeView1.Nodes.Insert(selectedNode.Index + 1, "");
+                    else
+                        m_editNode = selectedNode.Parent.Nodes.Insert(selectedNode.Index + 1, "");
+                }
+                else if (position == "above")
+                {
+                    if (selectedNode.Parent == null)
+                        m_editNode = treeView1.Nodes.Insert(selectedNode.Index, "");
+                    else
+                        m_editNode = selectedNode.Parent.Nodes.Insert(selectedNode.Index, "");
+                }
+            }
+
+            m_editNode.Tag = -1;
+            treeView1.SelectedNode = m_editNode;
+            selectedNode = m_editNode;
+            SelectedNodeChanged();
+            txtLink.Text = "";
+
+            txtEditNode.Location = new Point(m_editNode.Bounds.X, m_editNode.Bounds.Y);
+            txtEditNode.Size = new Size(treeView1.Width - m_editNode.Bounds.X - pSize.Width, txtEditNode.Height);
+            txtEditNode.Visible = true; txtEditNode.Focus();
+            txtEditNode.Text = Utils.getString("LinksDlg.NewGroup");
+            txtEditNode.SelectAll();
+            m_editMode = false; // "new group" mode
         }
 
         void OpenLink(bool omniBrowser)
@@ -576,10 +620,16 @@ namespace Bubbles
                         dr["comment"].ToString(), linkGroup);
                 }
             }
+
             if (dataGridView1.Rows.Count > 0)
             {
                 dataGridView1.Rows[0].Selected = true;
                 dataGridView1_SelectionChanged(null, null);
+            }
+            else
+            {
+                txtLink.Text = "";
+                txtComment.Text = "";
             }
         }
 

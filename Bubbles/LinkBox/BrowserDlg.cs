@@ -3,6 +3,7 @@ using PRAManager;
 using System;
 using System.Drawing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Color = System.Drawing.Color;
 
@@ -254,6 +255,9 @@ namespace Bubbles
             if (selectedText != "" && selectedText != "\"\"")
             {
                 selectedText = selectedText.Trim('\"');
+                selectedText = Regex.Unescape(selectedText);
+                selectedText = Regex.Replace(selectedText, "(?<!\r)\n", "\r\n");
+
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                 {
                     if (notes)

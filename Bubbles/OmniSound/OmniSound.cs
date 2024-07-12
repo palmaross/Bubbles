@@ -9,6 +9,7 @@ using AppManager;
 using NAudio.Wave;
 using System.Data;
 using System.Drawing;
+using System.Net.Mail;
 
 namespace Bubbles
 {
@@ -174,6 +175,14 @@ namespace Bubbles
                 panelNewGroup.Visible = true; 
                 panelNewGroup.BringToFront();
             }
+        }
+
+        private void btnNewGroup_Click(object sender, EventArgs e)
+        {
+            panelNewGroup.Location = panelRecordName.Location;
+            panelNewGroup.Size = panelRecordName.Size;
+            panelNewGroup.Visible = true;
+            panelNewGroup.BringToFront();
         }
 
         private void btnCancelGroup_Click(object sender, EventArgs e)
@@ -526,7 +535,9 @@ namespace Bubbles
                 StixMain.m_TopicPlayer.tbTrack.Value = 0;
                 StixMain.m_TopicPlayer.tbTrack.Maximum = (int)ts.TotalSeconds;
 
-                StixMain.m_TopicPlayer.lblTitle.Text = Path.GetFileNameWithoutExtension(filename);
+                StixMain.m_TopicPlayer.lblTitle.Text = TrackName;
+                if (TrackName == "")
+                    StixMain.m_TopicPlayer.lblTitle.Text = Path.GetFileNameWithoutExtension(filename);
                 StixMain.m_TopicPlayer.btnPause.Visible = true;
                 StixMain.m_TopicPlayer.btnPlay.Visible = false;
             }
@@ -726,13 +737,16 @@ namespace Bubbles
                     "maptitle=`" + MMUtils.ActiveDocument.CentralTopic.Text + "`, " +
                     "topicguid=`" + _t.Guid + "` where id=" + id + "");
 
+            string a_guid = "";
             if (chAttachment.Checked) // Add attachment
-                _t.Attachments.Add((cbRecords.SelectedItem as AudioItem).Path);
+            {
+                var attach = _t.Attachments.Add((cbRecords.SelectedItem as AudioItem).Path);
+                a_guid = "###" + attach.Guid;
+            }
 
             // Add strip icon.
             TransactionWrapper _w = new TransactionWrapper(_t,
-                TransactionWrapper.TransactionType.ADD_STRIP_ICON,
-                (cbRecords.SelectedItem as AudioItem).Path);
+                TransactionWrapper.TransactionType.ADD_STRIP_ICON, id.ToString() + a_guid);
             _w.controlStripURI = StixMain.SOUNDSTRIP_URI;
             _w.Execute();
         }
@@ -778,7 +792,7 @@ namespace Bubbles
         public bool SystemAudio = false;
 
         /// <summary> Path to audio file attached to topic.</summary>
-        public string FilePath = "";
+        public string FilePath = "", TrackName = "";
 
         public WaveInEvent waveIn = new WaveInEvent();
         public WaveFileWriter writer = null;
@@ -789,8 +803,6 @@ namespace Bubbles
         WasapiLoopbackCapture capture = new WasapiLoopbackCapture();
 
         int RecordLimit = 10; // Min.
-
-
 
         #region Move the form
         public const int WM_NCLBUTTONDOWN = 0xA1;
@@ -826,13 +838,6 @@ namespace Bubbles
         internal static extern void DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE attribute,
             ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute, uint cbAttribute);
         #endregion
-
-        private void btnNewGroup_Click(object sender, EventArgs e)
-        {
-            panelNewGroup.Location = new Point(panelRecordName.Left, panelRecordName.Bottom - panelNewGroup.Height);
-            panelNewGroup.Visible = true;
-            panelNewGroup.BringToFront();
-        }
     }
 
     public class AudioItem

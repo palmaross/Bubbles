@@ -77,6 +77,8 @@ namespace Bubbles
             {
                 if (!Directory.Exists(m_dataPath + "IconDB"))
                     Directory.CreateDirectory(m_dataPath + "IconDB");
+                if (!Directory.Exists(m_dataPath + "FaviconDB"))
+                    Directory.CreateDirectory(m_dataPath + "FaviconDB");
                 if (!Directory.Exists(m_dataPath + "ImageDB"))
                     Directory.CreateDirectory(m_dataPath + "ImageDB");
                 if (!Directory.Exists(m_dataPath + "Demos"))
@@ -445,6 +447,19 @@ namespace Bubbles
         public static Image GetFavicon(string url)
         {
             Image img = null; Image ico = null;
+
+            string host = new Uri(url).Host;
+            string faviconDB = Utils.m_dataPath + "FaviconDB\\";
+
+            DirectoryInfo di = new DirectoryInfo(faviconDB);
+            FileInfo fi = new FileInfo(faviconDB + host + ".png");
+
+            if (di.GetFiles().Any(x => x.Name == fi.Name))
+            {
+                img = Image.FromFile(fi.FullName);
+                return img;
+            }
+
             HttpWebRequest w = null;
             try
             {
@@ -469,7 +484,7 @@ namespace Bubbles
             }
 
             if (ico == null) img = http;
-            else img = ico;
+            else { img = ico; img.Save(fi.FullName); }
 
             return img;
         }
