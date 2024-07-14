@@ -5,6 +5,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using WindowsInput;
+using WindowsInput.Native;
+using static Community.CsharpSqlite.Sqlite3;
 using Color = System.Drawing.Color;
 
 namespace Bubbles
@@ -20,10 +23,15 @@ namespace Bubbles
             helpProvider1.SetHelpKeyword(this, "OmniBrowser.htm");
 
             Text = Utils.getString("BrowserDlg.title");
+            toolTip1.SetToolTip(pSearch, Utils.getString("BrowserDlg.searchbutton"));
             btnAddSubtopic.Text = Utils.getString("BrowserDlg.btnAddSubtopic");
             toolTip1.SetToolTip(btnAddSubtopic, Utils.getString("BrowserDlg.btnAddSubtopic.tooltip"));
             btnAddNotes.Text = Utils.getString("BrowserDlg.btnAddNotes");
             toolTip1.SetToolTip(btnAddNotes, Utils.getString("BrowserDlg.btnAddSubtopic.tooltip"));
+            btnAddLinkToTopic.Text = Utils.getString("BrowserDlg.btnAddLinkToTopic");
+            toolTip1.SetToolTip(btnAddLinkToTopic, Utils.getString("BrowserDlg.btnAddLinkToTopic.tooltip"));
+            btnSaveLink.Text = Utils.getString("BrowserDlg.btnSaveLink");
+            toolTip1.SetToolTip(btnSaveLink, Utils.getString("BrowserDlg.btnSaveLink.tooltip"));
             btnClose.Text = Utils.getString("button.close");
 
             tabRemove.Text = Utils.getString("BrowserDlg.RemoveTab");
@@ -33,6 +41,10 @@ namespace Bubbles
             this.ResizeRedraw = true;
 
             tabControl1.MouseClick += TabControl1_MouseClick;
+
+            this.MinimumSize = panelMinimized.Size;
+            this.ResizeEnd += This_ResizeEnd;
+            this.HelpButtonClicked += This_HelpButtonClicked;
 
             // There is a "New" tab preinstalled. Save it.
             tabControl1.TabPages[0].Text = Utils.getString("BrowserDlg.NewPage");
@@ -54,9 +66,25 @@ namespace Bubbles
             }
         }
 
-        private void pHelp_Click(object sender, EventArgs e)
+        private void This_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "OmniBrowser.htm");
+        }
+
+        private void BrowserDlg_Load(object sender, EventArgs e)
+        {
+            WindowExpanded = this.Bounds;
+            WindowCollapsed = new Rectangle(this.Location, panelMinimized.Size);
+        }
+        Rectangle WindowExpanded;
+        Rectangle WindowCollapsed;
+
+        private void This_ResizeEnd(object sender, EventArgs e)
+        {
+            if (this.Height > panelMinimized.Height)
+                WindowExpanded = this.Bounds;
+            else
+                WindowCollapsed = this.Bounds;
         }
 
         /// <summary>
@@ -110,6 +138,9 @@ namespace Bubbles
             tabControl1.SelectedTab = PreviewPage;
             Navigate(false, url);
         }
+        // Preview case
+        public string p_url = "", p_title = "", p_comment = "";
+        public int p_group = 0; // group combobox selected index
 
         private void txtAddressBar_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -191,6 +222,14 @@ namespace Bubbles
                 txtAddressBar.Text = ((BrowserTab)tabControl1.SelectedTab.Tag).path;
         }
 
+        private void btnAddLinkToTopic_Click(object sender, EventArgs e)
+        {
+            if (MMUtils.ActiveDocument == null) return;
+
+            foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                t.Hyperlinks.AddHyperlink(txtAddressBar.Text);
+        }
+
         private void btnSaveLink_Click(object sender, EventArgs e)
         {
             if (StixMain.m_NewLink == null || StixMain.m_NewLink.IsDisposed)
@@ -202,13 +241,26 @@ namespace Bubbles
                 Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
                 if (StixMain.m_NewLink.Right > area.Right) // close to the right
                     StixMain.m_NewLink.Location = new Point(this.Left - StixMain.m_NewLink.Width, this.Top);
-                if (StixMain.m_NewLink.Left < area.Left) // close to the left
-                    StixMain.m_NewLink.Location = new Point(this.Left, this.Top);
-
+                if (StixMain.m_NewLink.Left < area.Left) // close to the left and to the right
+                    StixMain.m_NewLink.StartPosition = FormStartPosition.CenterScreen;
 
                 StixMain.m_NewLink.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
+            StixMain.m_NewLink.Activate();
 
+            string link = txtAddressBar.Text;
+            if (tabControl1.SelectedTab.Name == "PreviewPage")
+            {
+                StixMain.m_NewLink.from = "OmniBrowser";
+                StixMain.m_NewLink.newLink = true;
+                StixMain.m_NewLink.txtLink.Text = p_url;
+                StixMain.m_NewLink.txtTitle.Text = p_title;
+                StixMain.m_NewLink.txtComment.Text = p_comment;
+                StixMain.m_NewLink.chDownload.Checked = true;
+                StixMain.m_NewLink.btnOK_Click(null, null);
+                StixMain.m_NewLink.cbLinkGroup.SelectedIndex = p_group;
+                return;
+            }
             StixMain.m_NewLink.from = "OmniBrowser";
             StixMain.m_NewLink.newLink = true;
             StixMain.m_NewLink.txtLink.Text = txtAddressBar.Text;
@@ -291,6 +343,29 @@ namespace Bubbles
             if (bt.CanGoForward) bt.GoForward();
         }
 
+        private void pSearch_Click(object sender, EventArgs e)
+        {
+            (tabControl1.SelectedTab.Tag as BrowserTab).Focus();
+            InputSimulator sim = new InputSimulator();
+            sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_F);
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+            const int WM_NCLBUTTONDBLCLK = 0x00A3;    // this constant int is different
+
+            if (m.Msg == WM_NCLBUTTONDBLCLK)
+            {
+                if (this.Height <= panelMinimized.Height + 10)
+                    this.Bounds = WindowExpanded;
+                else
+                    this.Bounds = WindowCollapsed;
+
+                this.OnResizeEnd(EventArgs.Empty);
+            }
+        }
+
         private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
         {
             int w = pDraw.Width, h = pDraw.Height;
@@ -359,7 +434,10 @@ namespace Bubbles
 
         int ClickedTab = -1;
         TabPage NewPage = null;
+
         TabPage PreviewPage = null;
         string selectedText = "";
+
+        InputSimulator sim = new InputSimulator();
     }
 }

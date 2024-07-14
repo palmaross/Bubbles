@@ -307,6 +307,7 @@ namespace Bubbles
         {
             if (e == null || e.Button == MouseButtons.Left)
             {
+                if (StixMain.OmniStixButton.OmniButtonHovered) return;
                 BaseIcon_MouseClick(stxTools, null);
             }
             else if (e.Button == MouseButtons.Right)
@@ -438,6 +439,8 @@ namespace Bubbles
 
         public void BaseIcon_MouseClick(object sender, MouseEventArgs e)
         {
+            if (StixMain.OmniStixButton.OmniButtonHovered) return;
+
             string stickType; string defaultName;
             PictureBox pb = sender as PictureBox;
 

@@ -45,7 +45,17 @@ namespace Bubbles
                 StixMain.m_StixBase.Refresh();
             }
             while (Y < this.Location.Y);
+
+            OmniButtonHovered = true;
+            timer1.Start();
         }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            timer1.Stop();
+            OmniButtonHovered = false;
+        }
+        public bool OmniButtonHovered = false;
 
         private void Rounded_MouseDown(object sender, MouseEventArgs e)
         {

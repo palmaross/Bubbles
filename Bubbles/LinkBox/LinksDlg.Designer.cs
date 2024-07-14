@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.txtEditNode = new System.Windows.Forms.TextBox();
             this.pSize = new System.Windows.Forms.PictureBox();
@@ -65,6 +65,9 @@
             this.g_AddLink = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.g_AddGroup = new System.Windows.Forms.ToolStripMenuItem();
+            this.g_AddGroupBelow = new System.Windows.Forms.ToolStripMenuItem();
+            this.g_AddGroupAbove = new System.Windows.Forms.ToolStripMenuItem();
+            this.g_AddChildGroup = new System.Windows.Forms.ToolStripMenuItem();
             this.g_RenameGroup = new System.Windows.Forms.ToolStripMenuItem();
             this.g_DeleteGroup = new System.Windows.Forms.ToolStripMenuItem();
             this.imageListDrag = new System.Windows.Forms.ImageList(this.components);
@@ -72,9 +75,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.g_AddGroupAbove = new System.Windows.Forms.ToolStripMenuItem();
-            this.g_AddGroupBelow = new System.Windows.Forms.ToolStripMenuItem();
-            this.g_AddChildGroup = new System.Windows.Forms.ToolStripMenuItem();
+            this.panelMinimized = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -100,6 +101,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.panelMinimized);
             this.splitContainer1.Panel2.Controls.Add(this.btnSaveComment);
             this.splitContainer1.Panel2.Controls.Add(this.dataGridView1);
             this.splitContainer1.Panel2.Controls.Add(this.txtLink);
@@ -122,7 +124,7 @@
             // pSize
             // 
             this.pSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.pSize.Location = new System.Drawing.Point(65, 188);
+            this.pSize.Location = new System.Drawing.Point(65, 509);
             this.pSize.Name = "pSize";
             this.pSize.Size = new System.Drawing.Size(16, 16);
             this.pSize.TabIndex = 5;
@@ -146,7 +148,8 @@
             // 
             // btnSaveComment
             // 
-            this.btnSaveComment.Location = new System.Drawing.Point(406, 300);
+            this.btnSaveComment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveComment.Location = new System.Drawing.Point(406, 621);
             this.btnSaveComment.Name = "btnSaveComment";
             this.btnSaveComment.Size = new System.Drawing.Size(76, 21);
             this.btnSaveComment.TabIndex = 23;
@@ -162,14 +165,14 @@
             this.dataGridView1.AllowUserToResizeColumns = false;
             this.dataGridView1.AllowUserToResizeRows = false;
             this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = System.Drawing.Color.LightCyan;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle25.BackColor = System.Drawing.Color.LightCyan;
+            dataGridViewCellStyle25.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle25.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle25.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle25.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle25.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle25;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.LinkImage,
@@ -185,8 +188,8 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle27.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle27;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(482, 234);
             this.dataGridView1.TabIndex = 21;
@@ -208,8 +211,8 @@
             // 
             // LinkTitle
             // 
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.LinkTitle.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle26.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.LinkTitle.DefaultCellStyle = dataGridViewCellStyle26;
             this.LinkTitle.FillWeight = 101.7739F;
             this.LinkTitle.HeaderText = "Title";
             this.LinkTitle.Name = "LinkTitle";
@@ -376,18 +379,18 @@
             this.g_RenameGroup,
             this.g_DeleteGroup});
             this.cmsGroup.Name = "cmsGroup";
-            this.cmsGroup.Size = new System.Drawing.Size(181, 120);
+            this.cmsGroup.Size = new System.Drawing.Size(154, 98);
             // 
             // g_AddLink
             // 
             this.g_AddLink.Name = "g_AddLink";
-            this.g_AddLink.Size = new System.Drawing.Size(180, 22);
+            this.g_AddLink.Size = new System.Drawing.Size(153, 22);
             this.g_AddLink.Text = "Add Link";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(150, 6);
             // 
             // g_AddGroup
             // 
@@ -396,19 +399,40 @@
             this.g_AddGroupAbove,
             this.g_AddChildGroup});
             this.g_AddGroup.Name = "g_AddGroup";
-            this.g_AddGroup.Size = new System.Drawing.Size(180, 22);
+            this.g_AddGroup.Size = new System.Drawing.Size(153, 22);
             this.g_AddGroup.Text = "New Group";
+            // 
+            // g_AddGroupBelow
+            // 
+            this.g_AddGroupBelow.Name = "g_AddGroupBelow";
+            this.g_AddGroupBelow.Size = new System.Drawing.Size(147, 22);
+            this.g_AddGroupBelow.Text = "Group Below";
+            this.g_AddGroupBelow.Click += new System.EventHandler(this.g_AddGroupBelow_Click);
+            // 
+            // g_AddGroupAbove
+            // 
+            this.g_AddGroupAbove.Name = "g_AddGroupAbove";
+            this.g_AddGroupAbove.Size = new System.Drawing.Size(147, 22);
+            this.g_AddGroupAbove.Text = "Grioup Above";
+            this.g_AddGroupAbove.Click += new System.EventHandler(this.g_AddGroupAbove_Click);
+            // 
+            // g_AddChildGroup
+            // 
+            this.g_AddChildGroup.Name = "g_AddChildGroup";
+            this.g_AddChildGroup.Size = new System.Drawing.Size(147, 22);
+            this.g_AddChildGroup.Text = "Child Group";
+            this.g_AddChildGroup.Click += new System.EventHandler(this.g_AddChildGroup_Click);
             // 
             // g_RenameGroup
             // 
             this.g_RenameGroup.Name = "g_RenameGroup";
-            this.g_RenameGroup.Size = new System.Drawing.Size(180, 22);
+            this.g_RenameGroup.Size = new System.Drawing.Size(153, 22);
             this.g_RenameGroup.Text = "Rename Group";
             // 
             // g_DeleteGroup
             // 
             this.g_DeleteGroup.Name = "g_DeleteGroup";
-            this.g_DeleteGroup.Size = new System.Drawing.Size(180, 22);
+            this.g_DeleteGroup.Size = new System.Drawing.Size(153, 22);
             this.g_DeleteGroup.Text = "Delete Group";
             // 
             // imageListDrag
@@ -435,26 +459,13 @@
             this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
             this.dataGridViewImageColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             // 
-            // g_AddGroupAbove
+            // panelMinimized
             // 
-            this.g_AddGroupAbove.Name = "g_AddGroupAbove";
-            this.g_AddGroupAbove.Size = new System.Drawing.Size(180, 22);
-            this.g_AddGroupAbove.Text = "Grioup Above";
-            this.g_AddGroupAbove.Click += new System.EventHandler(this.g_AddGroupAbove_Click);
-            // 
-            // g_AddGroupBelow
-            // 
-            this.g_AddGroupBelow.Name = "g_AddGroupBelow";
-            this.g_AddGroupBelow.Size = new System.Drawing.Size(180, 22);
-            this.g_AddGroupBelow.Text = "Group Below";
-            this.g_AddGroupBelow.Click += new System.EventHandler(this.g_AddGroupBelow_Click);
-            // 
-            // g_AddChildGroup
-            // 
-            this.g_AddChildGroup.Name = "g_AddChildGroup";
-            this.g_AddChildGroup.Size = new System.Drawing.Size(180, 22);
-            this.g_AddChildGroup.Text = "Child Group";
-            this.g_AddChildGroup.Click += new System.EventHandler(this.g_AddChildGroup_Click);
+            this.panelMinimized.Location = new System.Drawing.Point(198, 58);
+            this.panelMinimized.Name = "panelMinimized";
+            this.panelMinimized.Size = new System.Drawing.Size(260, 37);
+            this.panelMinimized.TabIndex = 24;
+            this.panelMinimized.Visible = false;
             // 
             // LinksDlg
             // 
@@ -469,6 +480,7 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Links2Dlg";
+            this.Load += new System.EventHandler(this.LinksDlg_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -530,5 +542,6 @@
         private System.Windows.Forms.ToolStripMenuItem g_AddGroupAbove;
         private System.Windows.Forms.ToolStripMenuItem g_AddGroupBelow;
         private System.Windows.Forms.ToolStripMenuItem g_AddChildGroup;
+        private System.Windows.Forms.Panel panelMinimized;
     }
 }

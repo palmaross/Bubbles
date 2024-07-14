@@ -61,8 +61,27 @@ namespace Bubbles
             //dataGridView1.Columns[0].CellTemplate = new MyDataGridViewImageCell();
             this.HelpButtonClicked += this_HelpButtonClicked;
 
+            this.MinimumSize = panelMinimized.Size;
+            this.ResizeEnd += LinksDlg_ResizeEnd;
+
             Utils.InitIcons();
             Init();
+        }
+
+        private void LinksDlg_Load(object sender, EventArgs e)
+        {
+            WindowExpanded = this.Bounds;
+            WindowCollapsed = new Rectangle(this.Location, panelMinimized.Size);
+        }
+        Rectangle WindowExpanded;
+        Rectangle WindowCollapsed;
+
+        private void LinksDlg_ResizeEnd(object sender, EventArgs e)
+        {
+            if (this.Height > panelMinimized.Height)
+                WindowExpanded = this.Bounds;
+            else
+                WindowCollapsed = this.Bounds;
         }
 
         private void this_HelpButtonClicked(object sender, CancelEventArgs e)
@@ -204,6 +223,8 @@ namespace Bubbles
                     Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
                     if (StixMain.m_NewLink.Right > area.Right) // close to the right
                         StixMain.m_NewLink.Location = new Point(this.Left - StixMain.m_NewLink.Width, this.Top);
+                    if (StixMain.m_NewLink.Left < area.Left) // close to the left and right, center it
+                        StixMain.m_NewLink.StartPosition = FormStartPosition.CenterScreen;
 
                     StixMain.m_NewLink.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                 }
@@ -1053,6 +1074,22 @@ namespace Bubbles
         {
             selectedRows = dataGridView1.SelectedRows;
             selectedLinksGroup = (int)treeView1.SelectedNode.Tag;
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+            const int WM_NCLBUTTONDBLCLK = 0x00A3;    // this constant int is different
+
+            if (m.Msg == WM_NCLBUTTONDBLCLK)
+            {
+                if (this.Height <= panelMinimized.Height + 10)
+                    this.Bounds = WindowExpanded;
+                else
+                    this.Bounds = WindowCollapsed;
+
+                this.OnResizeEnd(EventArgs.Empty);
+            }
         }
     }
 

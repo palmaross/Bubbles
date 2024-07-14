@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.OmniStix = new System.Windows.Forms.Label();
             this.Radius = new System.Windows.Forms.PictureBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.Radius)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,6 +58,11 @@
             this.Radius.TabStop = false;
             this.Radius.Visible = false;
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 500;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // OmniButton
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -78,5 +85,6 @@
 
         private System.Windows.Forms.Label OmniStix;
         private System.Windows.Forms.PictureBox Radius;
+        private System.Windows.Forms.Timer timer1;
     }
 }

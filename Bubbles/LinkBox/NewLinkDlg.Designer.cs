@@ -34,12 +34,14 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.txtLink = new System.Windows.Forms.TextBox();
+            this.TextBoxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.pasteTxt = new System.Windows.Forms.ToolStripMenuItem();
             this.lblLink = new System.Windows.Forms.Label();
             this.txtTitle = new System.Windows.Forms.TextBox();
             this.lblTitle = new System.Windows.Forms.Label();
             this.grBoxDownload = new System.Windows.Forms.GroupBox();
             this.btnPreview = new System.Windows.Forms.Button();
-            this.cbDownload = new System.Windows.Forms.CheckBox();
+            this.chDownload = new System.Windows.Forms.CheckBox();
             this.lblLinkGroup = new System.Windows.Forms.Label();
             this.cbLinkGroup = new System.Windows.Forms.ComboBox();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
@@ -49,6 +51,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.txtComment = new System.Windows.Forms.TextBox();
+            this.TextBoxMenu.SuspendLayout();
             this.grBoxDownload.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -101,12 +104,27 @@
             // 
             // txtLink
             // 
+            this.txtLink.ContextMenuStrip = this.TextBoxMenu;
             this.txtLink.Location = new System.Drawing.Point(16, 25);
             this.txtLink.Name = "txtLink";
             this.txtLink.Size = new System.Drawing.Size(356, 20);
             this.txtLink.TabIndex = 29;
             this.txtLink.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtLink_KeyUp);
             this.txtLink.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.txtLink_MouseDoubleClick);
+            // 
+            // TextBoxMenu
+            // 
+            this.TextBoxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.pasteTxt});
+            this.TextBoxMenu.Name = "TextBoxMenu";
+            this.TextBoxMenu.Size = new System.Drawing.Size(103, 26);
+            // 
+            // pasteTxt
+            // 
+            this.pasteTxt.Name = "pasteTxt";
+            this.pasteTxt.Size = new System.Drawing.Size(102, 22);
+            this.pasteTxt.Text = "Paste";
+            this.pasteTxt.Click += new System.EventHandler(this.paste_Click);
             // 
             // lblLink
             // 
@@ -137,7 +155,7 @@
             // grBoxDownload
             // 
             this.grBoxDownload.Controls.Add(this.btnPreview);
-            this.grBoxDownload.Controls.Add(this.cbDownload);
+            this.grBoxDownload.Controls.Add(this.chDownload);
             this.grBoxDownload.Location = new System.Drawing.Point(16, 189);
             this.grBoxDownload.Name = "grBoxDownload";
             this.grBoxDownload.Size = new System.Drawing.Size(387, 52);
@@ -156,15 +174,15 @@
             this.btnPreview.UseVisualStyleBackColor = true;
             this.btnPreview.Click += new System.EventHandler(this.btnPreview_Click);
             // 
-            // cbDownload
+            // chDownload
             // 
-            this.cbDownload.AutoSize = true;
-            this.cbDownload.Location = new System.Drawing.Point(61, 23);
-            this.cbDownload.Name = "cbDownload";
-            this.cbDownload.Size = new System.Drawing.Size(116, 17);
-            this.cbDownload.TabIndex = 20;
-            this.cbDownload.Text = "Скачать страницу";
-            this.cbDownload.UseVisualStyleBackColor = true;
+            this.chDownload.AutoSize = true;
+            this.chDownload.Location = new System.Drawing.Point(61, 23);
+            this.chDownload.Name = "chDownload";
+            this.chDownload.Size = new System.Drawing.Size(116, 17);
+            this.chDownload.TabIndex = 20;
+            this.chDownload.Text = "Скачать страницу";
+            this.chDownload.UseVisualStyleBackColor = true;
             // 
             // lblLinkGroup
             // 
@@ -243,6 +261,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "NewLinkDlg";
+            this.TextBoxMenu.ResumeLayout(false);
             this.grBoxDownload.ResumeLayout(false);
             this.grBoxDownload.PerformLayout();
             this.ResumeLayout(false);
@@ -254,12 +273,10 @@
 
         private System.Windows.Forms.Label lblResult;
         private System.Windows.Forms.Label lblWait;
-        private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Label lblLink;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Button btnPreview;
-        private System.Windows.Forms.CheckBox cbDownload;
         private System.Windows.Forms.Label lblLinkGroup;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.ToolTip toolTip1;
@@ -272,5 +289,9 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Timer timer1;
         public System.Windows.Forms.TextBox txtComment;
+        private System.Windows.Forms.ContextMenuStrip TextBoxMenu;
+        private System.Windows.Forms.ToolStripMenuItem pasteTxt;
+        private System.Windows.Forms.Button btnOK;
+        public System.Windows.Forms.CheckBox chDownload;
     }
 }

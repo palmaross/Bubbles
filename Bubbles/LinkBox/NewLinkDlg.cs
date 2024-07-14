@@ -5,6 +5,7 @@ using System.Data;
 using System.IO;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Security.Policy;
 
 namespace Bubbles
 {
@@ -22,14 +23,16 @@ namespace Bubbles
             lblTitle.Text = Utils.getString("NewLinkDlg.lblTitle");
             lblLink.Text = Utils.getString("NewLinkDlg.lblLink");
             lblWait.Text = Utils.getString("NewLinkDlg.lblWait");
-            cbDownload.Text = Utils.getString("NewLinkDlg.cbDownload");
+            chDownload.Text = Utils.getString("NewLinkDlg.cbDownload");
             lblLinkGroup.Text = Utils.getString("NewLinkDlg.lblLinkGroup");
             grBoxDownload.Text = Utils.getString("NewLinkDlg.grBoxDownload");
-            cbDownload.Text = Utils.getString("NewLinkDlg.cbDownload");
+            chDownload.Text = Utils.getString("NewLinkDlg.cbDownload");
             btnPreview.Text = Utils.getString("NewLinkDlg.btnPreview");
             lblResult.Text = Utils.getString("NewLinkDlg.lblResult");
             txtComment.Text = Utils.getString("NewLinkDlg.txtComment");
             btnClose.Text = Utils.getString("button.close");
+
+            pasteTxt.Text = Utils.getString("button.paste");
 
             thisHeight = this.Height;
             this.HelpButtonClicked += this_HelpButtonClicked;
@@ -78,6 +81,13 @@ namespace Bubbles
             txtTitle.SelectAll();
         }
 
+        private void paste_Click(object sender, EventArgs e)
+        {
+            txtLink.Text = Clipboard.GetText().Trim();
+            if (txtLink.Text != "")
+                txtLink_KeyUp(null, null);
+        }
+
         public void txtLink_KeyUp(object sender, KeyEventArgs e)
         {
             string link = txtLink.Text.Trim();
@@ -95,8 +105,21 @@ namespace Bubbles
                 try
                 {
                     htmlDoc = web.Load(link);
+                    try
+                    {
+                        var node = htmlDoc.DocumentNode.SelectSingleNode("//head");
 
-                    title = htmlDoc.DocumentNode.SelectSingleNode("//head/title").InnerText;
+                        foreach (var nNode in htmlDoc.DocumentNode.Descendants())
+                        {
+                            if (nNode.Name == "title")
+                            {
+                                title = nNode.InnerText;
+                                break;
+                            }
+                        }
+                    }
+                    catch { }
+
                     lblWait.Visible = false;
 
                     if (!link.Contains("youtube.com")) // youtube is not suitable for html file
@@ -163,6 +186,10 @@ namespace Bubbles
                 OmniBrowser.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
 
+            OmniBrowser.p_url = txtLink.Text;
+            OmniBrowser.p_title = txtTitle.Text;
+            OmniBrowser.p_comment = txtComment.Text;
+            OmniBrowser.p_group = cbLinkGroup.SelectedIndex;
             OmniBrowser.Preview(filepath);
         }
 
@@ -174,16 +201,15 @@ namespace Bubbles
             return uri.ToString();
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        public void btnOK_Click(object sender, EventArgs e)
         {
             string link = txtLink.Text.Trim();
             string title = txtTitle.Text.Trim();
-            string comment = txtComment.Text.Trim();
 
             if (link == "" || title == "") return; // to do message to user
 
             // Download webpage.
-            if (cbDownload.Checked)
+            if (chDownload.Checked)
             {
                 // Validate file name
                 string titlevalid = string.Concat(title.Split(Path.GetInvalidFileNameChars()));
@@ -235,7 +261,7 @@ namespace Bubbles
                     if (dt.Rows.Count > 0) return; // to do message to user
                     if (groupID == 0) return;
 
-                    if (fromLinksDlg)
+                    //if (fromLinksDlg)
                     {
                         LinksDialog.AddToTable(title, link, LinksDialog.selectedNode.Text, comment, groupID);
                         LinksDialog.txtComment.Text = comment;

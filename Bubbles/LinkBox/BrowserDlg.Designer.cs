@@ -33,6 +33,7 @@
             this.txtAddressBar = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.panelMinimized = new System.Windows.Forms.Panel();
             this.pDraw = new System.Windows.Forms.PictureBox();
             this.pRemove = new System.Windows.Forms.PictureBox();
             this.btnAddSubtopic = new System.Windows.Forms.Button();
@@ -45,7 +46,8 @@
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnSaveLink = new System.Windows.Forms.Button();
-            this.pHelp = new System.Windows.Forms.PictureBox();
+            this.btnAddLinkToTopic = new System.Windows.Forms.Button();
+            this.pSearch = new System.Windows.Forms.PictureBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pDraw)).BeginInit();
@@ -53,7 +55,7 @@
             this.cmsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pGoBack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pGoForward)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pHelp)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pSearch)).BeginInit();
             this.SuspendLayout();
             // 
             // txtAddressBar
@@ -64,7 +66,7 @@
             this.txtAddressBar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.txtAddressBar.Location = new System.Drawing.Point(48, 8);
             this.txtAddressBar.Name = "txtAddressBar";
-            this.txtAddressBar.Size = new System.Drawing.Size(761, 21);
+            this.txtAddressBar.Size = new System.Drawing.Size(738, 21);
             this.txtAddressBar.TabIndex = 6;
             this.txtAddressBar.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtAddressBar_KeyUp);
             this.txtAddressBar.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.txtAddressBar_MouseDoubleClick);
@@ -88,6 +90,7 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage1.Controls.Add(this.panelMinimized);
             this.tabPage1.Controls.Add(this.pDraw);
             this.tabPage1.Controls.Add(this.pRemove);
             this.tabPage1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -98,6 +101,14 @@
             this.tabPage1.Size = new System.Drawing.Size(805, 350);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "New";
+            // 
+            // panelMinimized
+            // 
+            this.panelMinimized.Location = new System.Drawing.Point(44, 15);
+            this.panelMinimized.Name = "panelMinimized";
+            this.panelMinimized.Size = new System.Drawing.Size(260, 37);
+            this.panelMinimized.TabIndex = 25;
+            this.panelMinimized.Visible = false;
             // 
             // pDraw
             // 
@@ -125,11 +136,11 @@
             // btnAddSubtopic
             // 
             this.btnAddSubtopic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAddSubtopic.Location = new System.Drawing.Point(12, 418);
+            this.btnAddSubtopic.Location = new System.Drawing.Point(10, 418);
             this.btnAddSubtopic.Name = "btnAddSubtopic";
             this.btnAddSubtopic.Size = new System.Drawing.Size(140, 23);
             this.btnAddSubtopic.TabIndex = 9;
-            this.btnAddSubtopic.Text = "Add as Subtopic";
+            this.btnAddSubtopic.Text = "Add Text as Subtopic";
             this.btnAddSubtopic.UseVisualStyleBackColor = true;
             this.btnAddSubtopic.Click += new System.EventHandler(this.btnAddAsSubtopic_Click);
             // 
@@ -162,11 +173,11 @@
             // btnAddNotes
             // 
             this.btnAddNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAddNotes.Location = new System.Drawing.Point(158, 418);
+            this.btnAddNotes.Location = new System.Drawing.Point(156, 418);
             this.btnAddNotes.Name = "btnAddNotes";
             this.btnAddNotes.Size = new System.Drawing.Size(140, 23);
             this.btnAddNotes.TabIndex = 11;
-            this.btnAddNotes.Text = "Добавить в примечания";
+            this.btnAddNotes.Text = "Add Text to Topic Notes";
             this.btnAddNotes.UseVisualStyleBackColor = true;
             this.btnAddNotes.Click += new System.EventHandler(this.btnAddToTopicNotes_Click);
             // 
@@ -195,25 +206,36 @@
             // btnSaveLink
             // 
             this.btnSaveLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSaveLink.Location = new System.Drawing.Point(358, 418);
+            this.btnSaveLink.Location = new System.Drawing.Point(507, 418);
             this.btnSaveLink.Name = "btnSaveLink";
-            this.btnSaveLink.Size = new System.Drawing.Size(140, 23);
+            this.btnSaveLink.Size = new System.Drawing.Size(148, 23);
             this.btnSaveLink.TabIndex = 13;
-            this.btnSaveLink.Text = "Save Link";
+            this.btnSaveLink.Text = "Save Link to OmniLinks";
             this.btnSaveLink.UseVisualStyleBackColor = true;
             this.btnSaveLink.Click += new System.EventHandler(this.btnSaveLink_Click);
             // 
-            // pHelp
+            // btnAddLinkToTopic
             // 
-            this.pHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pHelp.Image = ((System.Drawing.Image)(resources.GetObject("pHelp.Image")));
-            this.pHelp.Location = new System.Drawing.Point(791, 9);
-            this.pHelp.Name = "pHelp";
-            this.pHelp.Size = new System.Drawing.Size(16, 16);
-            this.pHelp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pHelp.TabIndex = 14;
-            this.pHelp.TabStop = false;
-            this.pHelp.Click += new System.EventHandler(this.pHelp_Click);
+            this.btnAddLinkToTopic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnAddLinkToTopic.Location = new System.Drawing.Point(353, 418);
+            this.btnAddLinkToTopic.Name = "btnAddLinkToTopic";
+            this.btnAddLinkToTopic.Size = new System.Drawing.Size(148, 23);
+            this.btnAddLinkToTopic.TabIndex = 15;
+            this.btnAddLinkToTopic.Text = "Добавить ссылку на тему";
+            this.btnAddLinkToTopic.UseVisualStyleBackColor = true;
+            this.btnAddLinkToTopic.Click += new System.EventHandler(this.btnAddLinkToTopic_Click);
+            // 
+            // pSearch
+            // 
+            this.pSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pSearch.Image = ((System.Drawing.Image)(resources.GetObject("pSearch.Image")));
+            this.pSearch.Location = new System.Drawing.Point(792, 10);
+            this.pSearch.Name = "pSearch";
+            this.pSearch.Size = new System.Drawing.Size(16, 16);
+            this.pSearch.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pSearch.TabIndex = 16;
+            this.pSearch.TabStop = false;
+            this.pSearch.Click += new System.EventHandler(this.pSearch_Click);
             // 
             // BrowserDlg
             // 
@@ -221,7 +243,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
             this.ClientSize = new System.Drawing.Size(813, 450);
-            this.Controls.Add(this.pHelp);
+            this.Controls.Add(this.pSearch);
+            this.Controls.Add(this.btnAddLinkToTopic);
             this.Controls.Add(this.btnSaveLink);
             this.Controls.Add(this.pGoForward);
             this.Controls.Add(this.pGoBack);
@@ -230,11 +253,15 @@
             this.Controls.Add(this.btnAddSubtopic);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.txtAddressBar);
+            this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "BrowserDlg";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "OmniStix Browser";
+            this.Load += new System.EventHandler(this.BrowserDlg_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pDraw)).EndInit();
@@ -242,7 +269,7 @@
             this.cmsTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pGoBack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pGoForward)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pHelp)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pSearch)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -264,6 +291,8 @@
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Button btnSaveLink;
-        private System.Windows.Forms.PictureBox pHelp;
+        private System.Windows.Forms.Button btnAddLinkToTopic;
+        private System.Windows.Forms.PictureBox pSearch;
+        private System.Windows.Forms.Panel panelMinimized;
     }
 }
