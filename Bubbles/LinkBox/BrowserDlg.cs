@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using WindowsInput;
 using WindowsInput.Native;
-using static Community.CsharpSqlite.Sqlite3;
 using Color = System.Drawing.Color;
 
 namespace Bubbles
@@ -27,7 +26,7 @@ namespace Bubbles
             btnAddSubtopic.Text = Utils.getString("BrowserDlg.btnAddSubtopic");
             toolTip1.SetToolTip(btnAddSubtopic, Utils.getString("BrowserDlg.btnAddSubtopic.tooltip"));
             btnAddNotes.Text = Utils.getString("BrowserDlg.btnAddNotes");
-            toolTip1.SetToolTip(btnAddNotes, Utils.getString("BrowserDlg.btnAddSubtopic.tooltip"));
+            toolTip1.SetToolTip(btnAddNotes, Utils.getString("BrowserDlg.btnAddNotes.tooltip"));
             btnAddLinkToTopic.Text = Utils.getString("BrowserDlg.btnAddLinkToTopic");
             toolTip1.SetToolTip(btnAddLinkToTopic, Utils.getString("BrowserDlg.btnAddLinkToTopic.tooltip"));
             btnSaveLink.Text = Utils.getString("BrowserDlg.btnSaveLink");
@@ -76,8 +75,8 @@ namespace Bubbles
             WindowExpanded = this.Bounds;
             WindowCollapsed = new Rectangle(this.Location, panelMinimized.Size);
         }
-        Rectangle WindowExpanded;
-        Rectangle WindowCollapsed;
+        public Rectangle WindowExpanded;
+        public Rectangle WindowCollapsed;
 
         private void This_ResizeEnd(object sender, EventArgs e)
         {

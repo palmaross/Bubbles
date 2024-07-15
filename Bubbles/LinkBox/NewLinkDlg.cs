@@ -182,9 +182,10 @@ namespace Bubbles
             if (OmniBrowser == null || OmniBrowser.IsDisposed)
             {
                 OmniBrowser = new BrowserDlg("");
-                //OmniBrowser.txtAddressBar.Text = filepath;
                 OmniBrowser.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
+            else if (OmniBrowser.Height < OmniBrowser.panelMinimized.Height + 10)
+                OmniBrowser.Bounds = OmniBrowser.WindowExpanded;
 
             OmniBrowser.p_url = txtLink.Text;
             OmniBrowser.p_title = txtTitle.Text;

@@ -259,6 +259,7 @@
             this.MinimizeBox = false;
             this.Name = "BrowserDlg";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "OmniStix Browser";
             this.Load += new System.EventHandler(this.BrowserDlg_Load);
@@ -293,6 +294,6 @@
         private System.Windows.Forms.Button btnSaveLink;
         private System.Windows.Forms.Button btnAddLinkToTopic;
         private System.Windows.Forms.PictureBox pSearch;
-        private System.Windows.Forms.Panel panelMinimized;
+        public System.Windows.Forms.Panel panelMinimized;
     }
 }

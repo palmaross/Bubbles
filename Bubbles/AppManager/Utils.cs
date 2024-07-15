@@ -384,21 +384,6 @@ namespace Bubbles
             t.Xml = topicXML.InnerXml;
         }
 
-        public static void ShowHelp(string path)
-        {
-            if (StixMain.OmniBrowser == null || StixMain.OmniBrowser.IsDisposed)
-            {
-                StixMain.OmniBrowser = new BrowserDlg(path);
-                StixMain.OmniBrowser.txtAddressBar.Text = path;
-                StixMain.OmniBrowser.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
-            }
-            else
-            {
-                StixMain.OmniBrowser.txtAddressBar.Text = path;
-                StixMain.OmniBrowser.Navigate(true);
-            }
-        }
-
         public static string GetWebPageTitle(string url)
         {
             string title = "";

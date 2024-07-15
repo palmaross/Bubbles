@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace Bubbles
 {
@@ -26,6 +27,7 @@ namespace Bubbles
             rbtnExternalApp.Text = Utils.getString("LinksDlg.rbtnExternalApp");
             btnSaveComment.Text = Utils.getString("button.save");
             toolTip1.SetToolTip(btnSaveComment, Utils.getString("LinksDlg.btnSaveComment"));
+            toolTip1.SetToolTip(txtComment, Utils.getString("LinksDlg.txtComment.tooltip"));
 
             m_OpenLink.Text = Utils.getString("LinksDlg.btnOpen");
             m_OpenInOmniBrowser.Text = Utils.getString("LinksDlg.omnibrowser");
@@ -380,6 +382,9 @@ namespace Bubbles
                     }
                     else
                     {
+                        if (OmniBrowser.Height < panelMinimized.Height + 10)
+                            OmniBrowser.Bounds = OmniBrowser.WindowExpanded;
+
                         OmniBrowser.txtAddressBar.Text = path;
                         OmniBrowser.Navigate(true);
                     }
@@ -472,12 +477,7 @@ namespace Bubbles
         /// </summary>
         private void DataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (e.RowIndex < 0 && e.ColumnIndex == 0)
-            {
-                sortby = "SortByImage";
-                thenby = "LinkTitle";
-                SortByType();
-            }
+
         }
 
         private void SortByType()
@@ -505,8 +505,21 @@ namespace Bubbles
 
                 if (item.Cells["LinkPath"].Value != null)
                     txtLink.Text = item.Cells["LinkPath"].Value.ToString();
-                if (item.Cells["Comment"].Value != null)
+
+                if (item.Cells["Comment"].Value == null || (string)item.Cells["Comment"].Value == "")
+                {
+                    txtComment.ForeColor = SystemColors.GrayText;
+                    txtComment.Text = Utils.getString("NewLinkDlg.txtComment");
+                }
+                else
+                {
+                    txtComment.ForeColor = SystemColors.WindowText;
                     txtComment.Text = item.Cells["Comment"].Value.ToString();
+                }
+            }
+            else
+            {
+                txtLink.Text = ""; txtComment.Text = "";
             }
         }
 
@@ -654,8 +667,6 @@ namespace Bubbles
             }
         }
 
-        Dictionary<int, string> LinkGroups = new Dictionary<int, string>();
-
         public static string sortby;
         public static string thenby;
 
@@ -666,8 +677,6 @@ namespace Bubbles
 
         bool m_editMode = false;
         TreeNode m_editNode = null;
-
-        HtmlAgilityPack.HtmlDocument htmlDoc = null;
 
         #region DragDrop
         TreeNode m_dragNode, m_tempDropNode, m_timerNode;
@@ -1014,14 +1023,6 @@ namespace Bubbles
         }
         #endregion
 
-        private void dataGridView1_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            //if (e.ColumnIndex == 1)
-            //{
-            //    selectedState = dataGridView1.SelectedRows;
-            //}
-        }
-
         private void btnSaveComment_Click(object sender, EventArgs e)
         {
             if (dataGridView1.SelectedRows.Count != 1) return;
@@ -1067,6 +1068,24 @@ namespace Bubbles
                 {
                     dataGridView1.DoDragDrop(dataGridView1.SelectedRows, DragDropEffects.Move);
                 }
+            }
+        }
+
+        private void txtComment_Enter(object sender, EventArgs e)
+        {
+            if (txtComment.ForeColor == SystemColors.GrayText)
+            {
+                txtComment.ForeColor = SystemColors.WindowText;
+                txtComment.Text = "";
+            }
+        }
+
+        private void txtComment_Leave(object sender, EventArgs e)
+        {
+            if (txtComment.Text == "")
+            {
+                txtComment.ForeColor = SystemColors.GrayText;
+                txtComment.Text = Utils.getString("NewLinkDlg.txtComment");
             }
         }
 

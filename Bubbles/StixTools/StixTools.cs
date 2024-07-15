@@ -485,16 +485,19 @@ namespace Bubbles
                         {
                             if (OmniBrowser)
                             {
-                                if (LinksDlg.OmniBrowser == null || LinksDlg.OmniBrowser.IsDisposed)
+                                if (StixMain.OmniBrowser == null || StixMain.OmniBrowser.IsDisposed)
                                 {
-                                    LinksDlg.OmniBrowser = new BrowserDlg(path);
-                                    LinksDlg.OmniBrowser.txtAddressBar.Text = path;
-                                    LinksDlg.OmniBrowser.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                                    StixMain.OmniBrowser = new BrowserDlg(path);
+                                    StixMain.OmniBrowser.txtAddressBar.Text = path;
+                                    StixMain.OmniBrowser.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                                 }
                                 else
                                 {
-                                    LinksDlg.OmniBrowser.txtAddressBar.Text = path;
-                                    LinksDlg.OmniBrowser.Navigate(true);
+                                    if (StixMain.OmniBrowser.Height < StixMain.OmniBrowser.panelMinimized.Height + 10)
+                                        StixMain.OmniBrowser.Bounds = StixMain.OmniBrowser.WindowExpanded;
+
+                                    StixMain.OmniBrowser.txtAddressBar.Text = path;
+                                    StixMain.OmniBrowser.Navigate(true);
                                 }
                             }
                             else
