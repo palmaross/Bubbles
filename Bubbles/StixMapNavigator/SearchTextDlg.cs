@@ -12,9 +12,15 @@ namespace Bubbles
         {
             InitializeComponent();
 
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
+            helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
+            helpProvider1.SetHelpKeyword(this, "SearchTopics.htm");
+
             rbtnContains.Text = Utils.getString("SearchTextDlg.rbtnContains");
             rbtnStartsWith.Text = Utils.getString("SearchTextDlg.rbtnStartsWith");
             pClose.Text = Utils.getString("button.close");
+
+            panelHead.BackColor = Utils.header;
 
             this.Paint += This_Paint; // paint the border
 
@@ -23,6 +29,12 @@ namespace Bubbles
             this.ResizeRedraw = true;
 
             this.MouseDown += SearchTextDlg_MouseDown;
+            panelHead.MouseDown += SearchTextDlg_MouseDown;
+        }
+
+        private void pHelp_Click(object sender, EventArgs e)
+        {
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "SearchTopics.htm");
         }
 
         private void SearchTextDlg_MouseDown(object sender, MouseEventArgs e)

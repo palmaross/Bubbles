@@ -3,6 +3,7 @@ using PRAManager;
 using System;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using Image = System.Drawing.Image;
 
@@ -23,7 +24,11 @@ namespace Bubbles
             btnClose.Text = Utils.getString("button.close");
             btnCancel.Text = Utils.getString("button.cancel");
 
-            treeView1.Sorted = true;
+            // Resizing window causes black strips...
+            this.DoubleBuffered = true;
+            this.ResizeRedraw = true;
+
+            //treeView1.Sorted = true;
 
             imageList1.ImageSize = p1.Size;
             Image img1 = Image.FromFile(Utils.m_imagesPath + "folder.png");
@@ -45,6 +50,7 @@ namespace Bubbles
                     // Add group.
                     TreeNode node = treeView1.Nodes.Add("group", dr["name"].ToString());
                     node.Tag = new GroupNode(Convert.ToInt32(dr["id"]), dr["name"].ToString());
+                    if (Convert.ToInt32(dr["id"]) == 1) singlebookmarks = node;
                     node.ImageIndex = 0;
                     node.SelectedImageIndex = node.IsExpanded ? 1 : 0;
 
@@ -62,10 +68,17 @@ namespace Bubbles
                     }
                 }
             }
+            
             treeView1.Select();
+            if (singlebookmarks != null)
+            {
+                treeView1.Nodes.Remove(singlebookmarks);
+                treeView1.Nodes.Insert(0, singlebookmarks);
+            }
 
             this.HelpButtonClicked += this_HelpButtonClicked;
         }
+        TreeNode singlebookmarks = null;
 
         private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -111,6 +124,13 @@ namespace Bubbles
 
                         TreeNode node = treeView1.Nodes.Add("group", name);
                         node.Tag = new GroupNode(groupID, name);
+  
+                        treeView1.Sort(); treeView1.Sorted = false;
+                        if (singlebookmarks != null)
+                        {
+                            treeView1.Nodes.Remove(singlebookmarks);
+                            treeView1.Nodes.Insert(0, singlebookmarks);
+                        }
                     }
                     else // rename group
                     {
@@ -121,6 +141,13 @@ namespace Bubbles
                         GroupNode gn = treeView1.SelectedNode.Tag as GroupNode;
                         gn.GroupName = name;
                         treeView1.SelectedNode.Tag = gn;
+
+                        treeView1.Sort(); treeView1.Sorted = false;
+                        if (singlebookmarks != null)
+                        {
+                            treeView1.Nodes.Remove(singlebookmarks);
+                            treeView1.Nodes.Insert(0, singlebookmarks);
+                        }
                     }
                 }
                 else if (action == "addbookmark")
@@ -231,7 +258,49 @@ namespace Bubbles
                     }
 
                     if (doc == null)
-                        doc = MMUtils.MindManager.AllDocuments.Open(mapPath);
+                    {
+                        try
+                        {
+                            doc = MMUtils.MindManager.AllDocuments.Open(mapPath);
+                        }
+                        catch {
+                            if (mapPath.Contains("AppData\\Local\\Mindjet"))
+                            {
+                                // Wait document to be active, as opening is asyncronous thing.
+                                long _now = MMUtils.GetTimestamp();
+
+                                string mapName = Path.GetFileName(mapPath);
+                                bool openedSuccess = false;
+
+                                while ((MMUtils.GetTimestamp() - _now) < 60)
+                                {
+                                    int _ts = (int)(MMUtils.GetTimestamp() - _now);
+                                    if (_ts > 60)
+                                        _ts = 60;
+                                    // Flush event loop
+                                    try
+                                    {
+                                        System.Windows.Forms.Application.DoEvents();
+                                    }
+                                    catch { }
+                                    // Try to locate document
+                                    foreach (Document _doc in MMUtils.MindManager.AllDocuments)
+                                    {
+                                        // New cloud
+                                        string docFullName = _doc.FullName.ToLower();
+
+                                        if (docFullName.EndsWith(mapName.ToLower()))
+                                        {
+                                            openedSuccess = true;
+                                            doc = _doc;
+                                            break;
+                                        }
+                                    }
+                                    if (openedSuccess) break;
+                                }
+                            }
+                        }
+                    }
 
                     if (doc == null)
                     {
@@ -250,9 +319,13 @@ namespace Bubbles
                     }
                     else
                     {
-                        t.SelectOnly();
-                        t.SnapIntoView();
-                        StixUtils.ActivateMindManager();
+                        try
+                        {
+                            t.SnapIntoView();
+                            t.SelectOnly();
+                            StixUtils.ActivateMindManager();
+                        }
+                        catch { }
                     }
                 }
             }
@@ -294,21 +367,29 @@ namespace Bubbles
 
         private void b_deleteGroup_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show(Utils.getString("BookmarksDlg.deletegroup.confirm"), "", 
-                MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
-            {
-                GroupNode gn = (GroupNode)treeView1.SelectedNode.Tag;
-                if (gn != null)
-                {
-                    using (StixDB db = new StixDB())
-                    {
-                        db.ExecuteNonQuery("delete from BOOKMARKS where groupID=" + gn.ID + "");
-                        db.ExecuteNonQuery("delete from BOOKMARKGROUPS where id=" + gn.ID + "");
-                    }
+            GroupNode gn = (GroupNode)treeView1.SelectedNode.Tag;
+            if (gn == null) return;
 
-                    treeView1.SelectedNode.Remove();
-                }
+            if (gn.ID == 1)
+            {
+                MessageBox.Show(Utils.getString("BookmarksDlg.deletedefault"), "",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
+
+            if (treeView1.SelectedNode.Nodes.Count > 0)
+            {
+                if (MessageBox.Show(Utils.getString("BookmarksDlg.deletegroup.confirm"), "",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                    return;
+            }
+
+            using (StixDB db = new StixDB())
+            {
+                db.ExecuteNonQuery("delete from BOOKMARKS where groupID=" + gn.ID + "");
+                db.ExecuteNonQuery("delete from BOOKMARKGROUPS where id=" + gn.ID + "");
+            }
+            treeView1.SelectedNode.Remove();
         }
 
         private void b_renameBookmark_Click(object sender, EventArgs e)

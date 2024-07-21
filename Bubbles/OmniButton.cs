@@ -57,15 +57,6 @@ namespace Bubbles
         }
         public bool OmniButtonHovered = false;
 
-        private void Rounded_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Clicks == 1)
-            {
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
-            }
-        }
-
         protected override void OnLoad(EventArgs e)
         {
             this.Height = thisHeight;
@@ -88,21 +79,30 @@ namespace Bubbles
             drawTimer.Dispose(); drawTimer = null;
         }
 
+        public static decimal OmniButtonXRel = Convert.ToDecimal(Utils.getRegistry("OmniButtonX", "67")) / 100;
+        public static bool ButtonMoved = false;
+
         private void DrawForm(object pSender, EventArgs pE)
         {
             // Check if MM position is changed
+            Rectangle MMBounds = new Rectangle(MMUtils.MindManager.Left, MMUtils.MindManager.Top, MMUtils.MindManager.Width, MMUtils.MindManager.Height);
 
-            // Get screen (location of the screen where the center of MindManager is located)
-            Point rec = Utils.MMScreen(MMUtils.MindManager.Left + MMUtils.MindManager.Width / 2,
-                MMUtils.MindManager.Top + MMUtils.MindManager.Height / 2);
+            if (this.Location.IsEmpty || // MindManager started
+                ButtonMoved || // user moved the Start Menu
+                MMBounds != Utils.MMBounds) // MindManager position was changed
+            {
+                MMBase.TRACE("start button");
+                ButtonMoved = false;
+                // Get screen (location of the screen where the center of MindManager is located)
+                Point rec = Utils.MMScreen(MMUtils.MindManager.Left + MMUtils.MindManager.Width / 2,
+                    MMUtils.MindManager.Top + MMUtils.MindManager.Height / 2);
 
-            int X = Utils.OmniButtonX, Y = MMUtils.MindManager.Top, W = MMUtils.MindManager.Width;
-            if (X == 0) X = MMUtils.MindManager.Left + (int)(W / 3 * 1.85);
-
-            if (Y < rec.Y) Y = rec.Y; // correct MindManager top position when MM is maximized
-
-            if (this.Location.X != X || this.Location.Y != Y)
+                Utils.MMBounds = MMBounds;
+                int X = MMUtils.MindManager.Left + (int)(MMUtils.MindManager.Width * OmniButtonXRel);
+                int Y = MMUtils.MindManager.Top;
+                if (Y < rec.Y) Y = rec.Y; // correct MindManager top position when MM is maximized
                 this.Location = new Point(X, Y);
+            }
 
             // Check if the Resource group is changed
             if (StixMain.m_Resources != null && StixMain.m_Resources.Visible)
@@ -204,13 +204,13 @@ namespace Bubbles
         }
 
         // For this_MouseDown
-        public const int WM_NCLBUTTONDOWN = 0xA1;
-        public const int HT_CAPTION = 0x2;
+        //public const int WM_NCLBUTTONDOWN = 0xA1;
+        //public const int HT_CAPTION = 0x2;
 
-        [DllImportAttribute("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-        [DllImportAttribute("user32.dll")]
-        public static extern bool ReleaseCapture();
+        //[DllImportAttribute("user32.dll")]
+        //public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        //[DllImportAttribute("user32.dll")]
+        //public static extern bool ReleaseCapture();
     }
 
     public static class RoundedRectangle

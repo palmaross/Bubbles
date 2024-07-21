@@ -769,7 +769,7 @@ namespace Bubbles
             {
                 StixMain.m_SearchText = new SearchTextDlg();
 
-                // Get bookmark list location
+                // Get window location
                 Rectangle child = StixMain.m_SearchText.RectangleToScreen(StixMain.m_SearchText.ClientRectangle);
                 StixMain.m_SearchText.Location = StixUtils.GetChildLocation(this, child, orientation, "bookmarks");
 

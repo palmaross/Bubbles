@@ -76,7 +76,7 @@
             this.listBookmarks.IntegralHeight = false;
             this.listBookmarks.Location = new System.Drawing.Point(1, 2);
             this.listBookmarks.Name = "listBookmarks";
-            this.listBookmarks.Size = new System.Drawing.Size(212, 69);
+            this.listBookmarks.Size = new System.Drawing.Size(212, 70);
             this.listBookmarks.TabIndex = 0;
             this.listBookmarks.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listBookmarks_MouseUp);
             // 
@@ -100,7 +100,7 @@
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClose.Image = ((System.Drawing.Image)(resources.GetObject("btnClose.Image")));
-            this.btnClose.Location = new System.Drawing.Point(211, 2);
+            this.btnClose.Location = new System.Drawing.Point(211, 1);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(16, 16);
             this.btnClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -113,7 +113,7 @@
             this.btnHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnHelp.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnHelp.Image = ((System.Drawing.Image)(resources.GetObject("btnHelp.Image")));
-            this.btnHelp.Location = new System.Drawing.Point(191, 2);
+            this.btnHelp.Location = new System.Drawing.Point(191, 1);
             this.btnHelp.Name = "btnHelp";
             this.btnHelp.Size = new System.Drawing.Size(16, 16);
             this.btnHelp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -131,10 +131,10 @@
             this.tabControl1.Controls.Add(this.tabNavigation);
             this.tabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabControl1.Location = new System.Drawing.Point(1, 21);
+            this.tabControl1.Location = new System.Drawing.Point(1, 20);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(230, 116);
+            this.tabControl1.Size = new System.Drawing.Size(230, 117);
             this.tabControl1.TabIndex = 82;
             this.tabControl1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabControl1_DrawItem);
             // 
@@ -148,7 +148,7 @@
             this.tabMain.Location = new System.Drawing.Point(4, 24);
             this.tabMain.Name = "tabMain";
             this.tabMain.Padding = new System.Windows.Forms.Padding(3);
-            this.tabMain.Size = new System.Drawing.Size(222, 88);
+            this.tabMain.Size = new System.Drawing.Size(222, 89);
             this.tabMain.TabIndex = 0;
             this.tabMain.Text = "Main Topics";
             // 
@@ -176,7 +176,7 @@
             this.listMainTopics.ItemHeight = 15;
             this.listMainTopics.Location = new System.Drawing.Point(1, 16);
             this.listMainTopics.Name = "listMainTopics";
-            this.listMainTopics.Size = new System.Drawing.Size(222, 72);
+            this.listMainTopics.Size = new System.Drawing.Size(222, 73);
             this.listMainTopics.TabIndex = 1;
             this.listMainTopics.SelectedIndexChanged += new System.EventHandler(this.listMainTopics_SelectedIndexChanged);
             // 
@@ -189,7 +189,7 @@
             this.tabBookmarks.Location = new System.Drawing.Point(4, 24);
             this.tabBookmarks.Name = "tabBookmarks";
             this.tabBookmarks.Padding = new System.Windows.Forms.Padding(3);
-            this.tabBookmarks.Size = new System.Drawing.Size(212, 88);
+            this.tabBookmarks.Size = new System.Drawing.Size(222, 89);
             this.tabBookmarks.TabIndex = 1;
             this.tabBookmarks.Text = "Bookmarks";
             this.tabBookmarks.UseVisualStyleBackColor = true;
@@ -199,7 +199,7 @@
             this.linkDeleteAllBookmarks.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.linkDeleteAllBookmarks.AutoSize = true;
             this.linkDeleteAllBookmarks.LinkColor = System.Drawing.Color.Purple;
-            this.linkDeleteAllBookmarks.Location = new System.Drawing.Point(125, 73);
+            this.linkDeleteAllBookmarks.Location = new System.Drawing.Point(125, 74);
             this.linkDeleteAllBookmarks.Name = "linkDeleteAllBookmarks";
             this.linkDeleteAllBookmarks.Size = new System.Drawing.Size(80, 15);
             this.linkDeleteAllBookmarks.TabIndex = 2;
@@ -212,7 +212,7 @@
             this.linkAddBookmark.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.linkAddBookmark.AutoSize = true;
             this.linkAddBookmark.LinkColor = System.Drawing.Color.Purple;
-            this.linkAddBookmark.Location = new System.Drawing.Point(1, 73);
+            this.linkAddBookmark.Location = new System.Drawing.Point(1, 74);
             this.linkAddBookmark.Name = "linkAddBookmark";
             this.linkAddBookmark.Size = new System.Drawing.Size(119, 15);
             this.linkAddBookmark.TabIndex = 1;
@@ -228,7 +228,7 @@
             this.tabNavigation.Location = new System.Drawing.Point(4, 24);
             this.tabNavigation.Name = "tabNavigation";
             this.tabNavigation.Padding = new System.Windows.Forms.Padding(3);
-            this.tabNavigation.Size = new System.Drawing.Size(212, 88);
+            this.tabNavigation.Size = new System.Drawing.Size(222, 89);
             this.tabNavigation.TabIndex = 2;
             this.tabNavigation.Text = "Navigation";
             this.tabNavigation.UseVisualStyleBackColor = true;
@@ -259,7 +259,7 @@
             this.listPositions.ItemHeight = 15;
             this.listPositions.Location = new System.Drawing.Point(3, 18);
             this.listPositions.Name = "listPositions";
-            this.listPositions.Size = new System.Drawing.Size(206, 70);
+            this.listPositions.Size = new System.Drawing.Size(206, 71);
             this.listPositions.TabIndex = 1;
             this.listPositions.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listPositions_MouseUp);
             // 
@@ -276,16 +276,16 @@
             this.panelControls.Controls.Add(this.btnClose);
             this.panelControls.Location = new System.Drawing.Point(1, 1);
             this.panelControls.Name = "panelControls";
-            this.panelControls.Size = new System.Drawing.Size(230, 20);
+            this.panelControls.Size = new System.Drawing.Size(230, 18);
             this.panelControls.TabIndex = 83;
             // 
             // pRefresh
             // 
             this.pRefresh.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pRefresh.Image = ((System.Drawing.Image)(resources.GetObject("pRefresh.Image")));
-            this.pRefresh.Location = new System.Drawing.Point(3, 2);
+            this.pRefresh.Location = new System.Drawing.Point(173, 2);
             this.pRefresh.Name = "pRefresh";
-            this.pRefresh.Size = new System.Drawing.Size(16, 16);
+            this.pRefresh.Size = new System.Drawing.Size(14, 14);
             this.pRefresh.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pRefresh.TabIndex = 86;
             this.pRefresh.TabStop = false;
@@ -317,12 +317,11 @@
             // 
             // lblTitle
             // 
-            this.lblTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitle.Location = new System.Drawing.Point(24, 1);
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.Location = new System.Drawing.Point(1, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(162, 15);
+            this.lblTitle.Size = new System.Drawing.Size(107, 15);
             this.lblTitle.TabIndex = 83;
             this.lblTitle.Text = "Map Navigation";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -349,6 +348,7 @@
             this.tabNavigation.ResumeLayout(false);
             this.tabNavigation.PerformLayout();
             this.panelControls.ResumeLayout(false);
+            this.panelControls.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pRefresh)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pDraw)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();

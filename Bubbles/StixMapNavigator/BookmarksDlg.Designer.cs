@@ -55,6 +55,9 @@
             // 
             // treeView1
             // 
+            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.treeView1.ImageIndex = 0;
             this.treeView1.ImageList = this.imageList1;
             this.treeView1.Location = new System.Drawing.Point(2, 2);
@@ -75,7 +78,7 @@
             // btnNewGroup
             // 
             this.btnNewGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnNewGroup.Location = new System.Drawing.Point(2, 159);
+            this.btnNewGroup.Location = new System.Drawing.Point(9, 159);
             this.btnNewGroup.Name = "btnNewGroup";
             this.btnNewGroup.Size = new System.Drawing.Size(88, 23);
             this.btnNewGroup.TabIndex = 1;
@@ -87,7 +90,7 @@
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(146, 159);
+            this.btnClose.Location = new System.Drawing.Point(137, 159);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(88, 23);
             this.btnClose.TabIndex = 2;

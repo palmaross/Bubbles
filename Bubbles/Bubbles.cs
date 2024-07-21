@@ -12,7 +12,6 @@ using System.Linq;
 using AppManager;
 using System.IO;
 using NAudio.Wave;
-using System.Diagnostics;
 
 namespace Bubbles
 {
@@ -26,7 +25,7 @@ namespace Bubbles
             m_cmdDetachNotes = MMUtils.MindManager.Commands.Add(Utils.Registered_AddinName, "omnistix.detach_notes");
             m_cmdDetachNotes.Caption = Utils.getString("topiccontextmenu.notes.detach");
             m_cmdDetachNotes.UpdateState += new ICommandEvents_UpdateStateEventHandler(m_cmdDetachNotes_UpdateState);
-            m_cmdDetachNotes.ImagePath = Utils.ImagesPath + "detach.png";
+            m_cmdDetachNotes.ImagePath = Utils.ImagesPath + "notes_detach3.png";
             m_cmdDetachNotes.Click += new ICommandEvents_ClickEventHandler(m_cmdDetachNotes_Click);
             m_cmdDetachNotes.SetDynamicMenu(MmDynamicMenu.mmDynamicMenuContextTopic);
 
@@ -343,25 +342,38 @@ namespace Bubbles
             if (!m_topicNotes.Visible)
                 m_topicNotes.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
 
-            int selectedtopic_index = -1, addedtopics = 0;
+            TreeNode map = null, node = null;
+            foreach (TreeNode _node in m_topicNotes.listTopics.Nodes)
+            {
+                if (_node.Name == MMUtils.ActiveDocument.FullName) {
+                    map = _node; break; }
+            }
+            if (map == null)
+                map = m_topicNotes.listTopics.Nodes.Add(MMUtils.ActiveDocument.FullName, MMUtils.ActiveDocument.CentralTopic.Text, 0);
+
+            map.NodeFont = new Font(m_topicNotes.listTopics.Font, FontStyle.Bold);
+            map.Text = map.Text;
+
             foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
             {
                 if (String.IsNullOrEmpty(t.Notes.Text))
                     continue;
 
-                addedtopics++;
                 string notes = t.Notes.Text;
+                string text = t.Text.Trim();
+                if (String.IsNullOrEmpty(text)) text = Utils.getString("TopicNotesDlg.noname");
 
-                string rtf = "";
-                rtf = t.Notes.TextRTF;
-                //if (!t.Notes.IsPlainTextOnly) { rtf = t.Notes.TextRTF; }
-                TopicNotesItem item = new TopicNotesItem(t, notes, rtf, t.Text, t.Guid,
-                    t.Document.FullName, t.Document.CentralTopic.Text);
-                selectedtopic_index = m_topicNotes.listTopics.Items.Add(item);
+                string rtf = t.Notes.TextRTF;
+
+                TopicNotesItem item = new TopicNotesItem(t, notes, rtf, t.Text, t.Guid);
+                node = map.Nodes.Add(text);
+                node.Tag = item;
             }
-            // If we have added one topic only, select this topic
-            if (addedtopics == 1)
-                m_topicNotes.listTopics.SelectedIndex = selectedtopic_index;
+            if (node != null)
+                m_topicNotes.listTopics.SelectedNode = node;
+
+            m_topicNotes.Select();
+            m_topicNotes.listTopics.Select();
         }
 
         public override void onDocumentActivated(MMEventArgs aArgs)
@@ -529,6 +541,38 @@ namespace Bubbles
                         StixTextOps.TopicsWithNotes.Add(t.Guid);
                 }
                 StixTextOps.UserActionNotes = true;
+
+                // Do changes in the TopicNotesDlg
+                if (m_topicNotes != null && m_topicNotes.Visible && !m_topicNotes.fromTNDlg)
+                {
+                    foreach (TreeNode map in m_topicNotes.listTopics.Nodes) // map node
+                    {
+                        foreach (TreeNode node in map.Nodes)
+                        {
+                            TopicNotesItem item = node.Tag as TopicNotesItem;
+                            if (item.TopicGuid == t.Guid)
+                            {
+                                t.Notes.Commit();
+                                item.PlainNotes = t.Notes.Text;
+                                item.RtfNotes = t.Notes.TextRTF;
+
+                                m_topicNotes.falsealarm = true;
+                                foreach (TabPage tp in m_topicNotes.tabControl1.TabPages)
+                                {
+                                    RichTextBox rtb = tp.Controls.OfType<RichTextBox>().First();
+                                    rtbItem rtbitem = rtb.Tag as rtbItem;
+                                    if (rtbitem.Node == node)
+                                    {
+                                        rtbitem.PlainText = item.PlainNotes;
+                                        rtbitem.RtfText = item.RtfNotes;
+                                        rtb.Rtf = item.RtfNotes;
+                                    }
+                                }
+                                m_topicNotes.falsealarm = false;
+                            }
+                        }
+                    }
+                }
                 return;
             }
 
@@ -987,7 +1031,7 @@ namespace Bubbles
 
             if (m_topicNotes != null)
             {
-                m_topicNotes.listTopics.Items.Clear();
+                m_topicNotes.listTopics.Nodes.Clear();
                 m_topicNotes.Close();
                 m_topicNotes.Dispose();
                 m_topicNotes = null;

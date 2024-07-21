@@ -58,6 +58,8 @@ namespace Bubbles
             StixUtils.SetContextMenuImage(o_Resources, "resources.png");
             o_Navigator.Text = Utils.getString("navigator.frommenu");
             StixUtils.SetContextMenuImage(o_Navigator, "position.png");
+            o_SearchTopics.Text = Utils.getString("SearchTextDlg.title");
+            StixUtils.SetContextMenuImage(o_SearchTopics, "notesSearchBlack.png");
             cmsMisc.ItemClicked += CmsMisc_ItemClicked;
 
             Color c = ColorTranslator.FromHtml("#e0e5ed");
@@ -109,8 +111,11 @@ namespace Bubbles
             if (cm_autoclose.Tag.ToString() == "auto")
             {
                 int X = this.Bounds.X + (this.Width - StixMain.OmniStixButton.Width) / 2;
-                Utils.OmniButtonX = X;
-                Utils.setRegistry("OmniButtonX", X.ToString());
+                float mmX = X - MMUtils.MindManager.Left;
+                float mmw = MMUtils.MindManager.Width;
+                OmniButton.OmniButtonXRel = decimal.Round((decimal)(1 / (mmw / mmX)), 2);
+                OmniButton.ButtonMoved = true;
+                Utils.setRegistry("OmniButtonX", ((int)(OmniButton.OmniButtonXRel * 100)).ToString());
                 this.Hide();
             }
         }
@@ -151,6 +156,19 @@ namespace Bubbles
                             new Point(StixMain.OmniStixButton.Location.X, this.Bottom);
                     }
                     StixMain.m_Resources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                }
+            }
+            else if (e.ClickedItem == o_SearchTopics)
+            {
+                if (StixMain.m_SearchText == null || StixMain.m_SearchText.IsDisposed)
+                {
+                    StixMain.m_SearchText = new SearchTextDlg();
+
+                    // Get window location
+                    Rectangle child = StixMain.m_SearchText.RectangleToScreen(StixMain.m_SearchText.ClientRectangle);
+                    StixMain.m_SearchText.Location = StixUtils.GetChildLocation(this, child, "H");
+
+                    StixMain.m_SearchText.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                 }
             }
         }

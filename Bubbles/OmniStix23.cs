@@ -47,6 +47,7 @@
 
             try
             {
+                MMUtils.AddinName = "OmniStix";
                 MMUtils.Version = 23;
                 MMUtils.Registered_AddinName = "OmniStix23.Connect";
                 MMUtils.CLSID = "A6E25E96-3200-4C90-9D4C-58BB430A8406";
@@ -54,7 +55,6 @@
                 MMUtils.CreateAddinAppDataFolder = true;
                 MMUtils.checkForUpdates = true;
 
-                MMUtils.AddinName = "OmniStix";
                 MMUtils.FriendlyAddinName = "OmniStix";
                 MMUtils.Company = "PalmaRoss";
                 Utils.Company = "PalmaRoss";
@@ -63,7 +63,6 @@
                 MMUtils.Language = Utils.getRegistry("language", "english");
                 MMUtils.AddinVersion = Utils.getRegistry("version");
                 MMUtils.licenseKeyStartsWith = "OS";
-
                 MMUtils.MindManager = (Application)application;
                 if (MMUtils.DoNotStartAddin)
                     return;

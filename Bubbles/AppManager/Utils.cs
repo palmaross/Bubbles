@@ -130,10 +130,10 @@ namespace Bubbles
             foreach (FileInfo fi in di.GetFiles())
                 fi.Delete();
 
-            OmniButtonX = Convert.ToInt32(getRegistry("OmniButtonX", "0"));
-        }
+            MMBounds = new Rectangle(MMUtils.MindManager.Left, MMUtils.MindManager.Top, MMUtils.MindManager.Width, MMUtils.MindManager.Height);
+    }
 
-        public static void InitIcons()
+    public static void InitIcons()
         {
             if (audio != null) return; // Icons are initialized already.
 
@@ -588,7 +588,7 @@ namespace Bubbles
         public static string Language;
         public static string licenseStatus = "";
 
-        public static int OmniButtonX = 0;
+        public static Rectangle MMBounds;
 
         /// <summary>
         /// Name, Path
@@ -612,6 +612,8 @@ namespace Bubbles
         public static readonly List<string> Video = new List<string> { ".asf", ".avi", ".mp4", ".mov", ".m4v", ".mpg", ".mpeg", ".wmv" };
         public static readonly List<string> Word = new List<string> { ".doc", ".docm", ".docx", ".rtf" };
         public static readonly List<string> Excel = new List<string> { ".xls", ".xlsx", ".xlsm" };
+
+        public static System.Drawing.Color header = System.Drawing.Color.Moccasin;
     }
 
     class ScalingFactor

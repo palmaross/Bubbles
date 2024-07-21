@@ -631,6 +631,12 @@
     <Content Include="images\folder_opened.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\notesSearchBlack.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\notes_detach3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\position.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

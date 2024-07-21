@@ -15,6 +15,10 @@ namespace Bubbles
         {
             InitializeComponent();
 
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
+            helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
+            helpProvider1.SetHelpKeyword(this, "quick_topics.htm");
+
             lblTitle.Text = Utils.getString("QuickTopicsDlg.Title");
 
             m_Delete.Text = Utils.getString("button.delete");
@@ -28,6 +32,11 @@ namespace Bubbles
 
             this.Paint += this_Paint; // paint the border
             this.MouseDown += QuickTopicsDlg_MouseDown;
+        }
+
+        private void pHelp_Click(object sender, EventArgs e)
+        {
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "quick_topics.htm");
         }
 
         private void ContextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)

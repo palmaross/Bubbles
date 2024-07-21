@@ -203,6 +203,18 @@
         jV0tWKwX2tjtxsbICyRHTnHydP1FQ+PYapStj00N/wGhnfdZGBwX9gAAAABJRU5ErkJggg==
 </value>
   </data>
+  <data name="pHelp.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAAAHUAAAB1AePCB2UAAAC7SURBVDhPpc+hCkIxGIbhIxgsJq/AYlGs3oA2gwiybvQ2
+        rGYxGAW1eQNWo1UsBrsIItrEd4ch+7f/iAfDE76XjbHEGPMXNeahRjSxwRknrFFDdDYKqOOOHXoYYI8r
+        qhDnxXCmuKDstQpumHgtJYbTQjto1gH2K6KL8UUXLwy9lhIjQwcPrFBw7UMMRQNPLFF0TYhCYI4j1MuW
+        Gj1bzIImqNFTQubrlho9I/SDJqjRs8A4aIIa81Dj70zyBuwaHByugy6MAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <metadata name="helpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>172, 17</value>
+  </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>45</value>
   </metadata>

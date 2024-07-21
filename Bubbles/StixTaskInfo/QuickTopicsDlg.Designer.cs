@@ -40,12 +40,15 @@
             this.m_Rename = new System.Windows.Forms.ToolStripMenuItem();
             this.btnManage = new System.Windows.Forms.PictureBox();
             this.p11 = new System.Windows.Forms.PictureBox();
+            this.pHelp = new System.Windows.Forms.PictureBox();
+            this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             ((System.ComponentModel.ISupportInitialize)(this.pQuickTask)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pClose)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHandle)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnManage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p11)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pHelp)).BeginInit();
             this.SuspendLayout();
             // 
             // treeView1
@@ -56,9 +59,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.treeView1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.treeView1.LabelEdit = true;
-            this.treeView1.Location = new System.Drawing.Point(1, 22);
+            this.treeView1.Location = new System.Drawing.Point(1, 23);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(183, 194);
+            this.treeView1.Size = new System.Drawing.Size(183, 193);
             this.treeView1.TabIndex = 0;
             this.treeView1.BeforeLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeView1_BeforeLabelEdit);
             this.treeView1.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeView1_AfterLabelEdit);
@@ -72,7 +75,7 @@
             // 
             this.pQuickTask.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pQuickTask.Image = ((System.Drawing.Image)(resources.GetObject("pQuickTask.Image")));
-            this.pQuickTask.Location = new System.Drawing.Point(1, 1);
+            this.pQuickTask.Location = new System.Drawing.Point(1, 2);
             this.pQuickTask.Name = "pQuickTask";
             this.pQuickTask.Size = new System.Drawing.Size(20, 20);
             this.pQuickTask.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -110,7 +113,7 @@
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblTitle.Location = new System.Drawing.Point(25, 3);
+            this.lblTitle.Location = new System.Drawing.Point(25, 4);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(89, 15);
             this.lblTitle.TabIndex = 90;
@@ -142,7 +145,7 @@
             this.btnManage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnManage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnManage.Image = ((System.Drawing.Image)(resources.GetObject("btnManage.Image")));
-            this.btnManage.Location = new System.Drawing.Point(145, 3);
+            this.btnManage.Location = new System.Drawing.Point(123, 3);
             this.btnManage.Name = "btnManage";
             this.btnManage.Size = new System.Drawing.Size(17, 17);
             this.btnManage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -159,11 +162,25 @@
             this.p11.TabStop = false;
             this.p11.Visible = false;
             // 
+            // pHelp
+            // 
+            this.pHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pHelp.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pHelp.Image = ((System.Drawing.Image)(resources.GetObject("pHelp.Image")));
+            this.pHelp.Location = new System.Drawing.Point(148, 3);
+            this.pHelp.Name = "pHelp";
+            this.pHelp.Size = new System.Drawing.Size(16, 16);
+            this.pHelp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pHelp.TabIndex = 94;
+            this.pHelp.TabStop = false;
+            this.pHelp.Click += new System.EventHandler(this.pHelp_Click);
+            // 
             // QuickTopicsDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(184, 228);
+            this.Controls.Add(this.pHelp);
             this.Controls.Add(this.p11);
             this.Controls.Add(this.btnManage);
             this.Controls.Add(this.lblTitle);
@@ -181,6 +198,7 @@
             this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.btnManage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p11)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pHelp)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -197,5 +215,7 @@
         private System.Windows.Forms.ToolStripMenuItem m_Rename;
         private System.Windows.Forms.PictureBox btnManage;
         private System.Windows.Forms.PictureBox p11;
+        private System.Windows.Forms.PictureBox pHelp;
+        private System.Windows.Forms.HelpProvider helpProvider1;
     }
 }

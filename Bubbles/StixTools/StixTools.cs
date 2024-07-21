@@ -303,7 +303,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_newstick")
             {
-                string name = StixUtils.GetName(this, orientation, StixUtils.typestick, "");
+                string name = StixUtils.GetName(this, orientation, StixUtils.typestick, "", true);
                 if (name != "")
                 {
                     int id = Utils.GetRandom();

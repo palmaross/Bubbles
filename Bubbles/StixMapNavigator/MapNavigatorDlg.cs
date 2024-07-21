@@ -19,7 +19,8 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "NavigatorWindow.htm");
 
-            lblTitle.Text = Utils.getString("StixMapNavigator.tooltip");
+            lblTitle.Text = Utils.getString("MapNavigatorDlg.Title");
+            panelControls.BackColor = Utils.header;
             tabMain.Text = Utils.getString("MapNavigatorDlg.tabMain");
             tabBookmarks.Text = Utils.getString("MapNavigatorDlg.tabBookmarks");
             tabNavigation.Text = Utils.getString("MapNavigatorDlg.tabNavigation");
@@ -556,7 +557,7 @@ namespace Bubbles
                 }
                 else // All the rest tabs
                 {
-                    Brush _BackBrush = new SolidBrush(Color.PapayaWhip);
+                    Brush _BackBrush = new SolidBrush(SystemColors.ButtonFace);
 
                     Rectangle rect = e.Bounds;
                     e.Graphics.FillRectangle(_BackBrush, rect.X, (rect.Y) - 0, rect.Width, (rect.Height) + (int)(w * 1.5));
