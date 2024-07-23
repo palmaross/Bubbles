@@ -69,6 +69,7 @@
             this.o_Resources = new System.Windows.Forms.ToolStripMenuItem();
             this.o_Navigator = new System.Windows.Forms.ToolStripMenuItem();
             this.o_SearchTopics = new System.Windows.Forms.ToolStripMenuItem();
+            this.o_TopicNotes = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.stxAddTopics)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxTextOps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxFormat)).BeginInit();
@@ -434,9 +435,10 @@
             this.cmsMisc.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.o_Resources,
             this.o_Navigator,
-            this.o_SearchTopics});
+            this.o_SearchTopics,
+            this.o_TopicNotes});
             this.cmsMisc.Name = "cmsMisc";
-            this.cmsMisc.Size = new System.Drawing.Size(181, 92);
+            this.cmsMisc.Size = new System.Drawing.Size(181, 114);
             // 
             // o_Resources
             // 
@@ -455,6 +457,12 @@
             this.o_SearchTopics.Name = "o_SearchTopics";
             this.o_SearchTopics.Size = new System.Drawing.Size(180, 22);
             this.o_SearchTopics.Text = "Search Topics";
+            // 
+            // o_TopicNotes
+            // 
+            this.o_TopicNotes.Name = "o_TopicNotes";
+            this.o_TopicNotes.Size = new System.Drawing.Size(180, 22);
+            this.o_TopicNotes.Text = "Topic Notes";
             // 
             // StartMenu
             // 
@@ -541,5 +549,6 @@
         private System.Windows.Forms.PictureBox boxQuickTopics;
         private System.Windows.Forms.ToolStripMenuItem o_Navigator;
         private System.Windows.Forms.ToolStripMenuItem o_SearchTopics;
+        private System.Windows.Forms.ToolStripMenuItem o_TopicNotes;
     }
 }

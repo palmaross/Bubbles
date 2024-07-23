@@ -116,6 +116,12 @@
     <Compile Include="AppManager\AlfaChanges.cs" />
     <Compile Include="AppManager\DragHelper.cs" />
     <Compile Include="AppManager\MapMarkers.cs" />
+    <Compile Include="AppManager\ProgressDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AppManager\ProgressDlg.Designer.cs">
+      <DependentUpon>ProgressDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="AppManager\SettingsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -444,10 +450,10 @@
     <Compile Include="Organizer\NotesDlg.Designer.cs">
       <DependentUpon>NotesDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="TopicNotesDlg.cs">
+    <Compile Include="Topic Notes\TopicNotesDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TopicNotesDlg.Designer.cs">
+    <Compile Include="Topic Notes\TopicNotesDlg.Designer.cs">
       <DependentUpon>TopicNotesDlg.cs</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -922,6 +928,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AppManager\ProgressDlg.resx">
+      <DependentUpon>ProgressDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AppManager\SettingsDlg.resx">
       <DependentUpon>SettingsDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -1076,7 +1085,7 @@
     <EmbeddedResource Include="StixTools\ToolListDlg.resx">
       <DependentUpon>ToolListDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TopicNotesDlg.resx">
+    <EmbeddedResource Include="Topic Notes\TopicNotesDlg.resx">
       <DependentUpon>TopicNotesDlg.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

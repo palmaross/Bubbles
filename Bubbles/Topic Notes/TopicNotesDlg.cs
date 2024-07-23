@@ -1,10 +1,9 @@
 ﻿using Mindjet.MindManager.Interop;
-using Organizer;
 using PRAManager;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -12,7 +11,7 @@ using Image = System.Drawing.Image;
 
 namespace Bubbles
 {
-    public partial class TopicNotesDlg : Form
+    internal partial class TopicNotesDlg : Form
     {
         public TopicNotesDlg()
         {
@@ -38,21 +37,33 @@ namespace Bubbles
 
             tabControl1.TabPages.Remove(tabPage2);
             rtbPreview.Font = new Font("Microsoft Sans Serif", font);
+            rtbPreview.SelectionChanged += rtb_SelectionChanged;
+            rtbPreview.KeyDown += rtb_KeyDown;
+            PreviewPage.AccessibleName = "";
+            PreviewPage.Text = Utils.getString("TopicNotesDlg.PreviewPage");
+            AddContextMenu(rtbPreview); // richTextBox context menu
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
             this.ResizeRedraw = true;
 
-            AddContextMenu(); // richTextBox context menu
-
             // Context menu
-            contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
+            cmsTopics.ItemClicked += ContextMenuStrip1_ItemClicked;
+            cmsSearchOptions.ItemClicked += CmsSearchOptions_ItemClicked;
+            cmsSearchOptions.Closing += CmsSearchOptions_Closing;
 
-            contextMenuStrip1.Items["MI_gototopic"].Text = Utils.getString("TopicNotesDlg.contextmenu.gototopic");
-            StixUtils.SetContextMenuImage(contextMenuStrip1.Items["MI_gototopic"], "expand.png");
+            SO_AddToResults.Text = Utils.getString("SO_AddToResults");
+            SO_ReplaceResults.Text = Utils.getString("SO_ReplaceResults");
+            SO_AddToResults.Checked = true;
 
-            contextMenuStrip1.Items["MI_remove"].Text = Utils.getString("TopicNotesDlg.contextmenu.remove");
-            StixUtils.SetContextMenuImage(contextMenuStrip1.Items["MI_remove"], "deleteall.png");
+            MI_gototopic.Text = Utils.getString("TopicNotesDlg.contextmenu.gototopic");
+            StixUtils.SetContextMenuImage(MI_gototopic, "expand.png");
+
+            MI_remove.Text = Utils.getString("TopicNotesDlg.contextmenu.remove");
+            StixUtils.SetContextMenuImage(MI_remove, "deleteall.png");
+
+            MI_UpdateTopicNotes.Text = Utils.getString("TopicNotesDlg.contextmenu.updatenotes");
+            StixUtils.SetContextMenuImage(MI_UpdateTopicNotes, "refresh.png");
 
             fBold = Image.FromFile(Utils.ImagesPath + "f_bold.png");
             fItalic = Image.FromFile(Utils.ImagesPath + "f_italic.png");
@@ -68,6 +79,49 @@ namespace Bubbles
 
             btnSaveOne.Location = btnSaveOneNo.Location;
             btnSaveAll.Location = btnSaveAllNo.Location;
+
+            cbFindIn.DisplayMember = "Text"; cbFindIn.ValueMember = "Value";
+
+            //cbFindIn.Items.Add(new { Text = Utils.getString("LookIn.thisRtb"), Value = "thisRtb" });
+            cbFindIn.Items.Add(new { Text = Utils.getString("LookIn.currentMap"), Value = "currentMap" });
+            cbFindIn.Items.Add(new { Text = Utils.getString("LookIn.openMaps"), Value = "openMaps" });
+            cbFindIn.SelectedIndex = 0;
+
+            m_progressDlg.Create();
+            m_progressDlg.dlgParams.title = Utils.getString("TopicNotesDlg.ProgressDlg.Title");
+            m_progressDlg.dlgParams.abortTitle = Utils.getString("TopicNotesDlg.ProgressDlg.Abort");
+            m_progressDlg.dlgParams.message = Utils.getString("TopicNotesDlg.ProgressDlg.message");
+        }
+        private void This_ResizeEnd(object sender, EventArgs e)
+        {
+            if (this.Height > panelMinimized.Height)
+                WindowExpanded = this.Bounds;
+            else
+                WindowCollapsed = this.Bounds;
+        }
+
+        private void CmsSearchOptions_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        {
+            if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
+                e.Cancel = true;
+        }
+
+        private void CmsSearchOptions_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem == SO_AddToResults)
+            {
+                if (SO_AddToResults.Checked)
+                    SO_ReplaceResults.Checked = true;
+                else
+                    SO_ReplaceResults.Checked = false;
+            }
+            else if (e.ClickedItem == SO_ReplaceResults)
+            {
+                if (SO_ReplaceResults.Checked)
+                    SO_AddToResults.Checked = true;
+                else
+                    SO_AddToResults.Checked = false;
+            }
         }
 
         private void This_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
@@ -80,27 +134,105 @@ namespace Bubbles
             WindowExpanded = this.Bounds;
             WindowCollapsed = new Rectangle(this.Location, panelMinimized.Size);
         }
-        Rectangle WindowExpanded;
+        public Rectangle WindowExpanded;
         Rectangle WindowCollapsed;
-
-        private void This_ResizeEnd(object sender, EventArgs e)
-        {
-            if (this.Height > panelMinimized.Height)
-                WindowExpanded = this.Bounds;
-            else
-                WindowCollapsed = this.Bounds;
-        }
 
         private void ContextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Name == "MI_gototopic")
+            if (e.ClickedItem == MI_gototopic)
             {
                 if (listTopics.SelectedNode != null)
                     GetTopic(listTopics.SelectedNode, true);
             }
-            else if (e.ClickedItem.Name == "MI_remove")
+            else if (e.ClickedItem == MI_remove)
             {
                 listTopics_KeyDown(null, null);
+            }
+            else if (e.ClickedItem == MI_UpdateTopicNotes)
+            {
+                Document doc = null;
+
+                string mappath = "";
+                TreeNode node = listTopics.SelectedNode;
+                if (node.Parent == null) // map
+                    mappath = node.Name;
+                else // topic
+                    mappath = node.Parent.Name;
+
+                foreach (Document _doc in MMUtils.MindManager.VisibleDocuments)
+                {
+                    if (_doc.FullName == mappath) doc = _doc; break;
+                }
+
+                bool mapcopy = false, mapopened = false;
+                if (doc == null) { // we have to open document
+                    doc = MMUtils.MindManager.AllDocuments.Open(mappath, "", false); mapopened = true; }
+                else
+                { // map is here. Get the copy.
+                    doc = StixUtils.GetMapCopy(); mapcopy = true;
+                    if (doc != null) mappath = doc.FullName;
+                }
+
+                if (doc == null) return;
+
+                falsealarm = true;
+                if (node.Parent == null) // map
+                {
+                    foreach (TreeNode _node in node.Nodes)
+                        UpdateNotes(_node, doc, mapcopy);
+                }
+                else // topic
+                {
+                    UpdateNotes(node, doc, mapcopy);
+                }
+                falsealarm = false;
+
+                if (mapopened || mapcopy) {
+                    doc.Save(); doc.Close(); }
+                if (mapcopy && File.Exists(mappath))
+                    File.Delete(mappath);
+
+                UpdateSaveButtons();
+            }
+        }
+
+        void UpdateNotes(TreeNode node, Document doc, bool mapcopy)
+        {
+            // Get topic 
+            TopicNotesItem item = node.Tag as TopicNotesItem;
+            Topic t = item.topic;
+            if (t == null || !t.IsValid)
+                doc.FindByGuid(item.TopicGuid);
+            if (t == null) return;
+
+            string notes = t.Notes.Text;
+            string topictext = t.Text.Trim();
+            if (String.IsNullOrEmpty(topictext)) topictext = Utils.getString("TopicNotesDlg.noname");
+
+            string rtf = "", html = "";
+            if (!t.Notes.IsPlainTextOnly) { rtf = t.Notes.TextRTF; html = t.Notes.TextXHTML; }
+
+            item = new TopicNotesItem(t, topictext, t.Guid, notes, rtf, html);
+            node.Tag = item;
+
+            if (mapcopy && item.topic != null && item.topic.IsValid)
+                item.topic.Notes = t.Notes;
+
+            foreach (TabPage tp in tabControl1.TabPages)
+            {
+                RichTextBox rtb = tp.Controls.OfType<RichTextBox>().First();
+                rtbItem rtbitem = rtb.Tag as rtbItem;
+                if (rtbitem.Node == node) // 
+                {
+                    if (item.RtfNotes != "")
+                    {
+                        rtb.Rtf = item.RtfNotes; rtbitem.RtfText = item.RtfNotes;
+                    }
+                    else rtb.Text = item.PlainNotes;
+                    rtbitem.PlainText = item.PlainNotes;
+
+                    tp.AccessibleName = ""; // remove status "modified"
+                }
             }
         }
 
@@ -116,7 +248,8 @@ namespace Bubbles
             TreeNode selectednode = listTopics.SelectedNode;
 
             // No topic selected
-            if (selectednode == null || selectednode.Parent == null) return;
+            if (selectednode == null || selectednode.Parent == null) // switch to Preview Page
+                return;
 
             RichTextBox rtb = null;
             // Check if notes are opened
@@ -147,11 +280,29 @@ namespace Bubbles
                 tp.Controls.Add(rtb);
                 tabControl1.SelectTab(tp);
                 rtb.TextChanged += rtb_TextChanged;
+                rtb.SelectionChanged += rtb_SelectionChanged;
+                rtb.KeyDown += rtb_KeyDown;
+                AddContextMenu(rtb);
             }
             else // Open in the Preview page
             {
-                if (PreviewPage.AccessibleName == "edited")
+                if (PreviewPage.AccessibleName == "edited") // there are modified notes here
                 {
+                    // Save changes? 
+                    DialogResult dr = MessageBox.Show(Utils.getString("TopicNotesDlg.notsavedpage"), "",
+                        MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+                    rtbItem preview = PreviewPage.Controls.OfType<RichTextBox>().First().Tag as rtbItem;
+
+                    if (dr == DialogResult.Cancel)
+                    {
+                        listTopics.SelectedNode = preview.Node;
+                        return;
+                    }
+                    else if (dr == DialogResult.Yes) // Save changes
+                    {
+                        SaveNotes(PreviewPage);
+                    }
                     PreviewPage.AccessibleName = "";
                 }
 
@@ -167,13 +318,13 @@ namespace Bubbles
             // Show topic notes
             if (item != null)
             {
-                if (item.RtfNotes != "")
-                    rtb.Rtf = item.RtfNotes;
-                else
+                if (item.RtfNotes == "")
                     rtb.Text = item.PlainNotes;
+                else
+                    rtb.Rtf = item.RtfNotes;
             }
 
-            btnSearch_Click(null, null);
+            SearchInNotes();
             tabControl1.Invalidate();
             falsealarm = false;
         }
@@ -193,29 +344,21 @@ namespace Bubbles
             }
         }
 
+        rtbItem preview_modified = null;
         private void listTopics_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                // SelectedNode here is a previous selected node!
-                if (listTopics.SelectedNode != null && listTopics.SelectedNode.Parent != null)
-                {
-                    if (true) // Save notes text.
-                    {
-                        TopicNotesItem _item = listTopics.SelectedNode.Tag as TopicNotesItem;
-                        _item.RtfNotes = rtbPreview.Rtf; _item.PlainNotes = rtbPreview.Text;
-                        listTopics.SelectedNode.Tag = _item;
-                    }
-                }
+                // Will be processed in the AfterSelect event.
             }
             else if (e.Button == MouseButtons.Right)
             {
                 listTopics.SelectedNode = e.Node;
 
-                foreach (ToolStripItem item in contextMenuStrip1.Items)
+                foreach (ToolStripItem item in cmsTopics.Items)
                     item.Visible = true;
 
-                contextMenuStrip1.Show(Cursor.Position);
+                cmsTopics.Show(Cursor.Position);
             }
         }
 
@@ -301,33 +444,121 @@ namespace Bubbles
             }
             else // Function is called from the SaveNotes button
                 return t;
-
-            //t = null; doc = null; // important!
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private void btnSearch_Click(object sender, EventArgs e)
+        void SearchInNotes()
         {
-            falsealarm = true;
-
             string searchedText = cbSearchedText.Text.Trim().ToLower();
+
+            falsealarm = true;
+            RichTextBox rtb = tabControl1.SelectedTab.Controls.OfType<RichTextBox>().First();
+
             // deselect all text
-            rtbPreview.SelectAll();
-            rtbPreview.SelectionBackColor = rtbPreview.BackColor;
+            rtb.SelectAll();
+            rtb.SelectionBackColor = rtb.BackColor;
             if (searchedText == "") return; // nothing to search for
 
-            string tt = rtbPreview.Text.ToLower();
+            string tt = rtb.Text.ToLower();
             Regex regex = new Regex(searchedText, RegexOptions.IgnoreCase);
             MatchCollection matches = regex.Matches(tt);
 
             foreach (Match match in matches)
             {
-                rtbPreview.Select(match.Index, match.Length);
-                rtbPreview.SelectionBackColor = System.Drawing.Color.Yellow;
+                rtb.Select(match.Index, match.Length);
+                rtb.SelectionBackColor = System.Drawing.Color.Yellow;
             }
             falsealarm = false;
+        }
+
+        /// <summary>
+        /// Search topics with notes conteining the text or the text in notes
+        /// </summary>
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            string lookin = (cbFindIn.SelectedItem as dynamic).Value;
+            string searchedText = cbSearchedText.Text.Trim().ToLower();
+            if (searchedText == "") return;
+
+            TreeNode map = null;
+            MyNodes.Clear();
+
+            if (SO_ReplaceResults.Checked) listTopics.Nodes.Clear();
+            else if (SO_AddToResults.Checked) // get nodes to avoid duplicates
+            {
+                foreach (TreeNode node in listTopics.Nodes)
+                {
+                    foreach (TreeNode _node in node.Nodes)
+                        MyNodes[_node] = (_node.Tag as TopicNotesItem).TopicGuid;
+                }
+            }
+
+            m_progressDlg.Show();
+
+            if (lookin == "currentMap")
+            {
+                map = SearchNotesInMap(searchedText, MMUtils.ActiveDocument, "1 / 1");
+            }
+            else if (lookin == "openMaps")
+            {
+                int i = 1, maps = MMUtils.MindManager.VisibleDocuments.Count;
+                foreach (Document doc in MMUtils.MindManager.VisibleDocuments)
+                {
+                    string mapcount = i++ + " / " + maps;
+                    map = SearchNotesInMap(searchedText, doc, mapcount);
+                }
+            }
+            m_progressDlg.Hide();
+
+            listTopics.Select();
+            if (map != null)
+                listTopics.SelectedNode = map.Nodes[0];
+            else if (listTopics.Nodes.Count > 0)
+                listTopics.SelectedNode = listTopics.Nodes[0];
+        }
+        Dictionary<TreeNode, string> MyNodes = new Dictionary<TreeNode, string>();
+
+        TreeNode SearchNotesInMap(string searchedText, Document doc, string mapcount)
+        {
+            TreeNode map = GetMapNode(doc);
+            int max = doc.Range(MmRange.mmRangeAllTopics).Count;
+
+            m_progressDlg.dlgParams.minimum = 0;
+            m_progressDlg.dlgParams.value = 1;
+            m_progressDlg.dlgParams.maximum = doc.Range(MmRange.mmRangeAllTopics).Count;
+
+            foreach (Topic t in doc.Range(MmRange.mmRangeAllTopics))
+            {
+                if (m_progressDlg.AbortPressed)
+                {
+                    if (map.Nodes.Count == 0) { map.Remove(); map = null; }
+                    return map;
+                }
+
+                m_progressDlg.dlgParams.value++;
+                m_progressDlg.dlgParams.count = mapcount;
+                System.Windows.Forms.Application.DoEvents();
+
+                if (!t.Notes.IsTextEmpty && t.Notes.Text.Contains(searchedText))
+                {
+                    AddNotesNode(t, map, MyNodes.Values.Contains(t.Guid));
+                }
+
+                if (map.Nodes.Count == 1) map.Expand(); // user can view how topics are added
+            }
+
+            if (map.Nodes.Count == 0) { map.Remove(); map = null; }
+            return map;
+        }
+
+        private void cbSearchedText_TextChanged(object sender, EventArgs e)
+        {
+            if (cbSearchedText.Text == "" || cbSearchedText.Text.Length > 1)
+                SearchInNotes();
+        }
+
+        private void pDeleteSearchedText_Click(object sender, EventArgs e)
+        {
+            cbSearchedText.Text = "";
         }
 
         private void fontUp_Click(object sender, EventArgs e)
@@ -344,9 +575,9 @@ namespace Bubbles
             Change_RichTextBox_Size(font);
         }
 
-        public void AddContextMenu()
+        public void AddContextMenu(RichTextBox rtb)
         {
-            if (rtbPreview.ContextMenuStrip == null)
+            if (rtb.ContextMenuStrip == null)
             {
                 ContextMenuStrip cms = new ContextMenuStrip()
                 {
@@ -354,63 +585,59 @@ namespace Bubbles
                 };
 
                 ToolStripMenuItem tsmiCut = new ToolStripMenuItem(Utils.getString("button.cut"));
-                tsmiCut.Click += (sender, e) => rtbPreview.Cut();
+                tsmiCut.Click += (sender, e) => rtb.Cut();
                 cms.Items.Add(tsmiCut);
 
                 ToolStripMenuItem tsmiCopy = new ToolStripMenuItem(Utils.getString("button.copy"));
-                tsmiCopy.Click += (sender, e) => rtbPreview.Copy();
+                tsmiCopy.Click += (sender, e) => rtb.Copy();
                 cms.Items.Add(tsmiCopy);
 
                 ToolStripMenuItem tsmiPaste = new ToolStripMenuItem(Utils.getString("button.paste"));
-                tsmiPaste.Click += (sender, e) => rtbPreview.Paste();
+                tsmiPaste.Click += (sender, e) => rtb.Paste();
                 cms.Items.Add(tsmiPaste);
 
                 cms.Items.Add(new ToolStripSeparator());
 
                 ToolStripMenuItem tsmiSelectAll = new ToolStripMenuItem(Utils.getString("button.selectall"));
-                tsmiSelectAll.Click += (sender, e) => rtbPreview.SelectAll();
+                tsmiSelectAll.Click += (sender, e) => rtb.SelectAll();
                 cms.Items.Add(tsmiSelectAll);
 
                 cms.Opening += (sender, e) =>
                 {
-                    tsmiCut.Enabled = !rtbPreview.ReadOnly && rtbPreview.SelectionLength > 0;
-                    tsmiCopy.Enabled = rtbPreview.SelectionLength > 0;
-                    tsmiPaste.Enabled = !rtbPreview.ReadOnly && System.Windows.Clipboard.ContainsText();
-                    tsmiSelectAll.Enabled = rtbPreview.TextLength > 0 && rtbPreview.SelectionLength < rtbPreview.TextLength;
+                    tsmiCut.Enabled = !rtb.ReadOnly && rtb.SelectionLength > 0;
+                    tsmiCopy.Enabled = rtb.SelectionLength > 0;
+                    tsmiPaste.Enabled = !rtb.ReadOnly && System.Windows.Clipboard.ContainsText();
+                    tsmiSelectAll.Enabled = rtb.TextLength > 0 && rtb.SelectionLength < rtb.TextLength;
                 };
 
-                rtbPreview.ContextMenuStrip = cms;
+                rtb.ContextMenuStrip = cms;
             }
         }
 
         private void Change_RichTextBox_Size(float size)
         {
-            if (rtbPreview.SelectionLength > 0) // change only selected text size
-            {
-                rtbPreview.SelectionFont = new Font(rtbPreview.SelectionFont.Name, size, rtbPreview.SelectionFont.Style);
-                return;
-            }
+            RichTextBox rtb = tabControl1.SelectedTab.Controls.OfType<RichTextBox>().First();
 
             // Change all text size
-            if (rtbPreview.TextLength == 0) return;
+            if (rtb.TextLength == 0) return;
             panelEditButtons.Select();
-            int currentsel = rtbPreview.SelectionStart; // remember position
+            int currentsel = rtb.SelectionStart; // remember position
 
-            rtbPreview.Select(0, 1);
-            var lastFontStyle = rtbPreview.SelectionFont.Style;
-            var lastFontName = rtbPreview.SelectionFont.Name;
+            rtb.Select(0, 1);
+            var lastFontStyle = rtb.SelectionFont.Style;
+            var lastFontName = rtb.SelectionFont.Name;
             var lastSelectionStart = 0;
-            for (int i = 1; i < rtbPreview.TextLength; i++)
+            for (int i = 1; i < rtb.TextLength; i++)
             {
-                rtbPreview.Select(i, 1);
+                rtb.Select(i, 1);
 
-                var selStyle = rtbPreview.SelectionFont.Style;
-                var selName = rtbPreview.SelectionFont.Name;
+                var selStyle = rtb.SelectionFont.Style;
+                var selName = rtb.SelectionFont.Name;
 
-                if (selStyle != lastFontStyle || selName != lastFontName || i == rtbPreview.TextLength - 1)
+                if (selStyle != lastFontStyle || selName != lastFontName || i == rtb.TextLength - 1)
                 {
-                    rtbPreview.Select(lastSelectionStart, i - lastSelectionStart);
-                    rtbPreview.SelectionFont =
+                    rtb.Select(lastSelectionStart, i - lastSelectionStart);
+                    rtb.SelectionFont =
                         new Font(lastFontName, size, lastFontStyle);
 
                     lastFontStyle = selStyle;
@@ -418,14 +645,14 @@ namespace Bubbles
                     lastSelectionStart = i;
                 }
             }
-            rtbPreview.Select(currentsel, 0); // restore position
+            rtb.Select(currentsel, 0); // restore position
         }
 
         private void txtSearchNotes_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                btnSearch_Click(null, null);
+                SearchInNotes();
 
                 e.Handled = true; // to avoid the "ding" sound
                 e.SuppressKeyPress = true;
@@ -434,73 +661,71 @@ namespace Bubbles
 
         private void pBold_Click(object sender, EventArgs e)
         {
-            if (rtbPreview.SelectionFont.Bold)
+            RichTextBox rtb = tabControl1.SelectedTab.Controls.OfType<RichTextBox>().First();
+
+            if (rtb.SelectionFont.Bold)
             {
-                rtbPreview.SelectionFont = new Font(rtbPreview.SelectionFont, ~FontStyle.Bold & rtbPreview.SelectionFont.Style);
+                rtb.SelectionFont = new Font(rtb.SelectionFont, ~FontStyle.Bold & rtb.SelectionFont.Style);
                 pBold.Image = fBold;
             }
             else
             {
-                rtbPreview.SelectionFont = new Font(rtbPreview.SelectionFont, FontStyle.Bold | rtbPreview.SelectionFont.Style);
+                rtb.SelectionFont = new Font(rtb.SelectionFont, FontStyle.Bold | rtb.SelectionFont.Style);
                 pBold.Image = fBoldActive;
             }
         }
 
         private void pItalic_Click(object sender, EventArgs e)
         {
-            if (rtbPreview.SelectionFont.Italic)
+            RichTextBox rtb = tabControl1.SelectedTab.Controls.OfType<RichTextBox>().First();
+
+            if (rtb.SelectionFont.Italic)
             {
-                rtbPreview.SelectionFont = new Font(rtbPreview.SelectionFont, ~FontStyle.Italic & rtbPreview.SelectionFont.Style);
+                rtb.SelectionFont = new Font(rtb.SelectionFont, ~FontStyle.Italic & rtb.SelectionFont.Style);
                 pItalic.Image = fItalic;
             }
             else
             {
-                rtbPreview.SelectionFont = new Font(rtbPreview.SelectionFont, FontStyle.Italic | rtbPreview.SelectionFont.Style);
+                rtb.SelectionFont = new Font(rtb.SelectionFont, FontStyle.Italic | rtb.SelectionFont.Style);
                 pItalic.Image = fItalicActive;
             }
         }
 
         private void pStrikeout_Click(object sender, EventArgs e)
         {
-            if (rtbPreview.SelectionFont.Strikeout)
+            RichTextBox rtb = tabControl1.SelectedTab.Controls.OfType<RichTextBox>().First();
+
+            if (rtb.SelectionFont.Strikeout)
             {
-                rtbPreview.SelectionFont = new Font(rtbPreview.SelectionFont, ~FontStyle.Strikeout & rtbPreview.SelectionFont.Style);
+                rtb.SelectionFont = new Font(rtb.SelectionFont, ~FontStyle.Strikeout & rtb.SelectionFont.Style);
                 pStrikeout.Image = fStrikeout;
             }
             else
             {
-                rtbPreview.SelectionFont = new Font(rtbPreview.SelectionFont, FontStyle.Strikeout | rtbPreview.SelectionFont.Style);
+                rtb.SelectionFont = new Font(rtb.SelectionFont, FontStyle.Strikeout | rtb.SelectionFont.Style);
                 pStrikeout.Image = fStrikeoutActive;
             }
         }
 
         private void pUnderline_Click(object sender, EventArgs e)
         {
-            if (rtbPreview.SelectionFont.Underline)
+            RichTextBox rtb = tabControl1.SelectedTab.Controls.OfType<RichTextBox>().First();
+
+            if (rtb.SelectionFont.Underline)
             {
-                rtbPreview.SelectionFont = new Font(rtbPreview.SelectionFont, ~FontStyle.Underline & rtbPreview.SelectionFont.Style);
+                rtb.SelectionFont = new Font(rtb.SelectionFont, ~FontStyle.Underline & rtb.SelectionFont.Style);
                 pUnderline.Image = fUnderline;
             }
             else
             {
-                rtbPreview.SelectionFont = new Font(rtbPreview.SelectionFont, FontStyle.Underline | rtbPreview.SelectionFont.Style);
+                rtb.SelectionFont = new Font(rtb.SelectionFont, FontStyle.Underline | rtb.SelectionFont.Style);
                 pUnderline.Image = fUnderlineActive;
             }
         }
 
         private void rtb_SelectionChanged(object sender, EventArgs e)
         {
-            if (rtbPreview.SelectionFont.Bold) pBold.Image = fBoldActive;
-            else pBold.Image = fBold;
 
-            if (rtbPreview.SelectionFont.Italic) pItalic.Image = fItalicActive;
-            else pItalic.Image = fItalic;
-
-            if (rtbPreview.SelectionFont.Underline) pUnderline.Image = fUnderlineActive;
-            else pUnderline.Image = fUnderline;
-
-            if (rtbPreview.SelectionFont.Strikeout) pStrikeout.Image = fStrikeoutActive;
-            else pStrikeout.Image = fStrikeout;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -508,27 +733,36 @@ namespace Bubbles
             fromTNDlg = true;
             SaveNotes(tabControl1.SelectedTab);
             fromTNDlg = false;
+            UpdateSaveButtons();
         }
 
         private void btnSaveAll_Click(object sender, EventArgs e)
         {
             fromTNDlg = true;
-            bool allsaved = true;
+
+            foreach (TabPage tp in tabControl1.TabPages)
+                if (tp.AccessibleName == "edited")
+                    SaveNotes(tp);
+
+            fromTNDlg = false;
+            UpdateSaveButtons();
+        }
+
+        void UpdateSaveButtons()
+        {
+            btnSaveOne.Visible = false; btnSaveAll.Visible = false;
+            btnSaveOneNo.Visible = true; btnSaveAllNo.Visible = true;
+
             foreach (TabPage tp in tabControl1.TabPages)
             {
                 if (tp.AccessibleName == "edited")
-                    if (!SaveNotes(tp)) allsaved = false;
+                {
+                    btnSaveAll.Visible = true;
+
+                    if (tabControl1.SelectedTab == tp)
+                        btnSaveOne.Visible = true;
+                }
             }
-            fromTNDlg = false;
-
-            // Turn off the Save All button
-            if (allsaved) {
-                btnSaveAll.Visible = false; btnSaveAllNo.Visible = true; }
-
-            if (tabControl1.SelectedTab.AccessibleName == "edit") {
-                btnSaveOne.Visible = true; btnSaveOneNo.Visible = false; }
-            else {
-                btnSaveOne.Visible = false; btnSaveOneNo.Visible = true; }
         }
 
         private bool SaveNotes(TabPage tp)
@@ -570,43 +804,56 @@ namespace Bubbles
 
         private void btnGetNotes_Click(object sender, EventArgs e)
         {
-            TreeNode map = null, node = null;
-            foreach (TreeNode _node in listTopics.Nodes)
-            {
-                if (_node.Name == MMUtils.ActiveDocument.FullName)
-                {
-                    map = _node; break;
-                }
-            }
-            if (map == null)
-                map =listTopics.Nodes.Add(MMUtils.ActiveDocument.FullName, MMUtils.ActiveDocument.CentralTopic.Text, 0);
+            if (MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0) return;
 
-            map.NodeFont = new Font(map.NodeFont, FontStyle.Bold);
+            TreeNode map = GetMapNode(MMUtils.ActiveDocument);
 
             foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
             {
                 if (String.IsNullOrEmpty(t.Notes.Text))
                     continue;
-
-                string notes = t.Notes.Text;
-                string text = t.Text.Trim();
-                if (String.IsNullOrEmpty(text)) text = Utils.getString("TopicNotesDlg.noname");
-
-                string rtf = t.Notes.TextRTF;
-                TopicNotesItem item = new TopicNotesItem(t, notes, rtf, t.Text, t.Guid);
-
-                node = map.Nodes.Add(text);
-                node.Tag = item;
+                AddNotesNode(t, map);
             }
-            // If we have added one topic only, select this topic
-            if (node != null)
-                listTopics.SelectedNode = node;
+
+            if (map.Nodes.Count == 0) map.Remove();
+
+            listTopics.SelectedNode = map;
             listTopics.Select();
         }
 
-        private void btnFindNotes_Click(object sender, EventArgs e)
+        TreeNode GetMapNode(Document doc)
         {
+            TreeNode map = null;
+            foreach (TreeNode _node in listTopics.Nodes)
+            {
+                if (_node.Name == doc.FullName)
+                {
+                    map = _node; break;
+                }
+            }
+            if (map == null)
+                map = listTopics.Nodes.Add(doc.FullName, doc.CentralTopic.Text, 0);
 
+            map.NodeFont = new Font(listTopics.Font, FontStyle.Bold);
+            map.Text = map.Text;
+            return map;
+        }
+
+        void AddNotesNode(Topic t, TreeNode map, bool replace = false)
+        {
+            TreeNode node = null;
+            string notes = t.Notes.Text;
+            string topictext = t.Text.Trim();
+            if (String.IsNullOrEmpty(topictext)) topictext = Utils.getString("TopicNotesDlg.noname");
+
+            string rtf = "", html = "";
+            if (!t.Notes.IsPlainTextOnly) { rtf = t.Notes.TextRTF; html = t.Notes.TextXHTML; }
+
+            TopicNotesItem item = new TopicNotesItem(t, topictext, t.Guid, notes, rtf, html);
+
+            if (replace) node = map;
+            else node = map.Nodes.Add(topictext);
+            node.Tag = item;
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -622,6 +869,9 @@ namespace Bubbles
 
         private int HoverIndex = -1;
         Rectangle Delete;
+
+        public ThreadedProgressDlg m_progressDlg = new ThreadedProgressDlg();
+
         private void tabControlNotes_DrawItem(object sender, DrawItemEventArgs e)
         {
             var g = e.Graphics;
@@ -690,6 +940,12 @@ namespace Bubbles
                 tabControl1.Invalidate();
             }
         }
+
+        private void linkSearchOptions_Click(object sender, EventArgs e)
+        {
+            cmsSearchOptions.Show(MousePosition);
+        }
+
         TabPage preselectedTab = null;
 
         private void tabControl1_MouseLeave(object sender, EventArgs e)
@@ -748,20 +1004,30 @@ namespace Bubbles
             }
             else // Select appropiate node
             {
-                TreeNode node = ((rtbItem)tp.Controls.OfType<RichTextBox>().First().Tag).Node;
-                listTopics.SelectedNode = node;
-                listTopics.Select();
+                if ((rtbItem)tp.Controls.OfType<RichTextBox>().First().Tag != null)
+                {
+                    TreeNode node = ((rtbItem)tp.Controls.OfType<RichTextBox>().First().Tag).Node;
+                    listTopics.SelectedNode = node;
+                    listTopics.Select();
+                }
             }
+
+            UpdateSaveButtons();
         }
 
         private void TopicNotesDlg_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (MessageBox.Show(Utils.getString("TopicNotesDlg.closewindow"), "", 
-                MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            if (!MMClose)
             {
-                e.Cancel = true;
+                if (MessageBox.Show(Utils.getString("TopicNotesDlg.closewindow"), "",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                {
+                    e.Cancel = true;
+                }
             }
+            m_progressDlg.Destroy();
         }
+        public bool MMClose = false;
 
         private void rtb_KeyDown(object sender, KeyEventArgs e)
         {
@@ -797,32 +1063,35 @@ namespace Bubbles
                     {
                         if (listTopics.SelectedNode.Nodes.Count > 0) // has topic nodes
                         {
-                            // Check if tab with this node is opened
-                            foreach (TabPage tp in tabControl1.TabPages)
+                            foreach (TreeNode node in listTopics.SelectedNode.Nodes)
                             {
-                                rtbItem rtbitem = tp.Controls.OfType<RichTextBox>().First().Tag as rtbItem;
-                                if (rtbitem.Node == listTopics.SelectedNode) // Yes. it is opened
+                                // Check if tab with this node is opened
+                                foreach (TabPage tp in tabControl1.TabPages)
                                 {
-                                    if (tp.AccessibleName == "edited") // and it is modified!
+                                    rtbItem rtbitem = tp.Controls.OfType<RichTextBox>().First().Tag as rtbItem;
+                                    if (rtbitem.Node == node) // Yes. it is opened
                                     {
-                                        // Save changes? 
-                                        DialogResult dr = MessageBox.Show(Utils.getString("TopicNotesDlg.modifiednotes"), "",
-                                            MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                                        if (tp.AccessibleName == "edited") // and it is modified!
+                                        {
+                                            // Save changes? 
+                                            DialogResult dr = MessageBox.Show(String.Format(Utils.getString("TopicNotesDlg.modifiednotes"), tp.Text), "",
+                                                MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
-                                        if (dr == DialogResult.Cancel)
-                                        {
-                                            tabControl1.SelectTab(tp);
-                                            return;
+                                            if (dr == DialogResult.Cancel)
+                                            {
+                                                tabControl1.SelectTab(tp);
+                                                return;
+                                            }
+                                            else if (dr == DialogResult.Yes) // Save changes and remove
+                                            {
+                                                SaveNotes(tp);
+                                            }
                                         }
-                                        else if (dr == DialogResult.Yes) // Save changes and remove
-                                        {
-                                            SaveNotes(tp);
-                                        }
+
+                                        // Remove tab page.
+                                        if (tp != PreviewPage)
+                                            tabControl1.TabPages.Remove(tp);
                                     }
-
-                                    // Remove tab page.
-                                    if (tp != PreviewPage)
-                                        tabControl1.TabPages.Remove(tp);
                                 }
                             }
                         }
@@ -879,20 +1148,14 @@ namespace Bubbles
                             listTopics.SelectedNode = selectnode;
                     }
                 }
-                // Check Save buttons
-                btnSaveOne.Visible = false; btnSaveAll.Visible = false;
-                btnSaveOneNo.Visible = true; btnSaveAllNo.Visible = true;
 
-                foreach (TabPage tp in tabControl1.TabPages)
+                if (listTopics.Nodes.Count == 0)
                 {
-                    if (tp.AccessibleName == "edited")
-                    {
-                        btnSaveAll.Visible = true;
-
-                        if (tabControl1.SelectedTab == tp)
-                            btnSaveOne.Visible = true;
-                    } 
+                    PreviewPage.Controls.OfType<RichTextBox>().First().Text = "";
+                    PreviewPage.AccessibleName = "";
+                    PreviewPage.Text = Utils.getString("TopicNotesDlg.PreviewPage");
                 }
+                UpdateSaveButtons();
             }
         }
 
@@ -915,18 +1178,20 @@ namespace Bubbles
 
     public class TopicNotesItem
     {
-        public TopicNotesItem(Topic t, string plainNotes, string rtfNotes, string topicName, string topicGuid)
+        public TopicNotesItem(Topic t, string topicName, string topicGuid, string text, string rtf, string html)
         {
             topic = t;
-            PlainNotes = plainNotes;
-            RtfNotes = rtfNotes;
             TopicName = topicName;
             TopicGuid = topicGuid;
+            PlainNotes = text;
+            RtfNotes = rtf;
+            HtmlNotes = html;
         }
 
         public Topic topic = null;
         public string PlainNotes;
         public string RtfNotes;
+        public string HtmlNotes;
         public string TopicName;
         public string TopicGuid;
 

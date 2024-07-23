@@ -25,7 +25,7 @@ namespace Bubbles
             m_cmdDetachNotes = MMUtils.MindManager.Commands.Add(Utils.Registered_AddinName, "omnistix.detach_notes");
             m_cmdDetachNotes.Caption = Utils.getString("topiccontextmenu.notes.detach");
             m_cmdDetachNotes.UpdateState += new ICommandEvents_UpdateStateEventHandler(m_cmdDetachNotes_UpdateState);
-            m_cmdDetachNotes.ImagePath = Utils.ImagesPath + "notes_detach3.png";
+            m_cmdDetachNotes.ImagePath = Utils.ImagesPath + "notes_detach.png";
             m_cmdDetachNotes.Click += new ICommandEvents_ClickEventHandler(m_cmdDetachNotes_Click);
             m_cmdDetachNotes.SetDynamicMenu(MmDynamicMenu.mmDynamicMenuContextTopic);
 
@@ -342,6 +342,9 @@ namespace Bubbles
             if (!m_topicNotes.Visible)
                 m_topicNotes.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
 
+            if (m_topicNotes.Height < m_topicNotes.panelMinimized.Height + 10)
+                m_topicNotes.Bounds = m_topicNotes.WindowExpanded;
+
             TreeNode map = null, node = null;
             foreach (TreeNode _node in m_topicNotes.listTopics.Nodes)
             {
@@ -360,13 +363,15 @@ namespace Bubbles
                     continue;
 
                 string notes = t.Notes.Text;
-                string text = t.Text.Trim();
-                if (String.IsNullOrEmpty(text)) text = Utils.getString("TopicNotesDlg.noname");
+                string topictext = t.Text.Trim();
+                if (String.IsNullOrEmpty(topictext)) topictext = Utils.getString("TopicNotesDlg.noname");
 
-                string rtf = t.Notes.TextRTF;
+                string rtf = "", html = "";
+                if (!t.Notes.IsPlainTextOnly) { rtf = t.Notes.TextRTF; html = t.Notes.TextXHTML; }
 
-                TopicNotesItem item = new TopicNotesItem(t, notes, rtf, t.Text, t.Guid);
-                node = map.Nodes.Add(text);
+                TopicNotesItem item = new TopicNotesItem(t, topictext, t.Guid, notes, rtf, html);
+
+                node = map.Nodes.Add(topictext);
                 node.Tag = item;
             }
             if (node != null)
@@ -552,9 +557,9 @@ namespace Bubbles
                             TopicNotesItem item = node.Tag as TopicNotesItem;
                             if (item.TopicGuid == t.Guid)
                             {
-                                t.Notes.Commit();
                                 item.PlainNotes = t.Notes.Text;
-                                item.RtfNotes = t.Notes.TextRTF;
+                                item.RtfNotes = t.Notes.IsPlainTextOnly ? "" : t.Notes.TextRTF;
+                                item.HtmlNotes = t.Notes.IsPlainTextOnly ? "" : t.Notes.TextXHTML;
 
                                 m_topicNotes.falsealarm = true;
                                 foreach (TabPage tp in m_topicNotes.tabControl1.TabPages)
@@ -565,7 +570,10 @@ namespace Bubbles
                                     {
                                         rtbitem.PlainText = item.PlainNotes;
                                         rtbitem.RtfText = item.RtfNotes;
-                                        rtb.Rtf = item.RtfNotes;
+                                        if (rtbitem.RtfText == "")
+                                            rtb.Text = item.PlainNotes;
+                                        else
+                                            rtb.Rtf = item.RtfNotes;
                                     }
                                 }
                                 m_topicNotes.falsealarm = false;
@@ -1031,6 +1039,7 @@ namespace Bubbles
 
             if (m_topicNotes != null)
             {
+                m_topicNotes.MMClose = true;
                 m_topicNotes.listTopics.Nodes.Clear();
                 m_topicNotes.Close();
                 m_topicNotes.Dispose();

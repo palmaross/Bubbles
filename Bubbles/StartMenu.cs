@@ -60,6 +60,8 @@ namespace Bubbles
             StixUtils.SetContextMenuImage(o_Navigator, "position.png");
             o_SearchTopics.Text = Utils.getString("SearchTextDlg.title");
             StixUtils.SetContextMenuImage(o_SearchTopics, "notesSearchBlack.png");
+            o_TopicNotes.Text = Utils.getString("TopicNotesDlg.title");
+            StixUtils.SetContextMenuImage(o_TopicNotes, "notes_detach.png");
             cmsMisc.ItemClicked += CmsMisc_ItemClicked;
 
             Color c = ColorTranslator.FromHtml("#e0e5ed");
@@ -170,6 +172,17 @@ namespace Bubbles
 
                     StixMain.m_SearchText.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                 }
+            }
+            else if (e.ClickedItem == o_TopicNotes)
+            {
+                if (StixMain.m_topicNotes == null || StixMain.m_topicNotes.IsDisposed)
+                    StixMain.m_topicNotes = new TopicNotesDlg();
+
+                if (!StixMain.m_topicNotes.Visible)
+                    StixMain.m_topicNotes.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+
+                if (StixMain.m_topicNotes.Height < StixMain.m_topicNotes.panelMinimized.Height + 10)
+                    StixMain.m_topicNotes.Bounds = StixMain.m_topicNotes.WindowExpanded;
             }
         }
 

@@ -37,9 +37,10 @@
             this.pBold = new System.Windows.Forms.PictureBox();
             this.fontDown = new System.Windows.Forms.PictureBox();
             this.fontUp = new System.Windows.Forms.PictureBox();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsTopics = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MI_gototopic = new System.Windows.Forms.ToolStripMenuItem();
             this.MI_remove = new System.Windows.Forms.ToolStripMenuItem();
+            this.MI_UpdateTopicNotes = new System.Windows.Forms.ToolStripMenuItem();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.helpProvider2 = new System.Windows.Forms.HelpProvider();
@@ -65,12 +66,21 @@
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.panelFind = new System.Windows.Forms.Panel();
+            this.pDeleteSearchedText = new System.Windows.Forms.PictureBox();
             this.linkSearchOptions = new System.Windows.Forms.LinkLabel();
             this.btnSearch = new System.Windows.Forms.Button();
             this.cbSearchedText = new System.Windows.Forms.ComboBox();
             this.pBrowse = new System.Windows.Forms.PictureBox();
             this.cbFindIn = new System.Windows.Forms.ComboBox();
             this.lblLookIn = new System.Windows.Forms.Label();
+            this.cmsSearchOptions = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.SO_AddToResults = new System.Windows.Forms.ToolStripMenuItem();
+            this.SO_ReplaceResults = new System.Windows.Forms.ToolStripMenuItem();
+            this.panelSearchProgress = new System.Windows.Forms.Panel();
+            this.pbTopics = new System.Windows.Forms.ProgressBar();
+            this.lblTopics = new System.Windows.Forms.Label();
+            this.pbMaps = new System.Windows.Forms.ProgressBar();
+            this.label1 = new System.Windows.Forms.Label();
             this.panelEditButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pStrikeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pUnderline)).BeginInit();
@@ -78,7 +88,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pBold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fontDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fontUp)).BeginInit();
-            this.contextMenuStrip1.SuspendLayout();
+            this.cmsTopics.SuspendLayout();
             this.panelBottom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnSaveAllNo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnSaveOneNo)).BeginInit();
@@ -93,7 +103,10 @@
             this.PreviewPage.SuspendLayout();
             this.panelFindNotes.SuspendLayout();
             this.panelFind.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pDeleteSearchedText)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBrowse)).BeginInit();
+            this.cmsSearchOptions.SuspendLayout();
+            this.panelSearchProgress.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelEditButtons
@@ -175,13 +188,14 @@
             this.fontUp.TabStop = false;
             this.fontUp.Click += new System.EventHandler(this.fontUp_Click);
             // 
-            // contextMenuStrip1
+            // cmsTopics
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsTopics.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MI_gototopic,
-            this.MI_remove});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(235, 48);
+            this.MI_remove,
+            this.MI_UpdateTopicNotes});
+            this.cmsTopics.Name = "contextMenuStrip1";
+            this.cmsTopics.Size = new System.Drawing.Size(235, 70);
             // 
             // MI_gototopic
             // 
@@ -194,6 +208,12 @@
             this.MI_remove.Name = "MI_remove";
             this.MI_remove.Size = new System.Drawing.Size(234, 22);
             this.MI_remove.Text = "Remove From List (Delete key)";
+            // 
+            // MI_UpdateTopicNotes
+            // 
+            this.MI_UpdateTopicNotes.Name = "MI_UpdateTopicNotes";
+            this.MI_UpdateTopicNotes.Size = new System.Drawing.Size(234, 22);
+            this.MI_UpdateTopicNotes.Text = "Update Topic Notes";
             // 
             // panelBottom
             // 
@@ -443,6 +463,7 @@
             // 
             // panelFind
             // 
+            this.panelFind.Controls.Add(this.pDeleteSearchedText);
             this.panelFind.Controls.Add(this.linkSearchOptions);
             this.panelFind.Controls.Add(this.btnSearch);
             this.panelFind.Controls.Add(this.cbSearchedText);
@@ -455,6 +476,18 @@
             this.panelFind.Size = new System.Drawing.Size(620, 23);
             this.panelFind.TabIndex = 28;
             // 
+            // pDeleteSearchedText
+            // 
+            this.pDeleteSearchedText.BackColor = System.Drawing.Color.Transparent;
+            this.pDeleteSearchedText.Image = ((System.Drawing.Image)(resources.GetObject("pDeleteSearchedText.Image")));
+            this.pDeleteSearchedText.Location = new System.Drawing.Point(390, 2);
+            this.pDeleteSearchedText.Name = "pDeleteSearchedText";
+            this.pDeleteSearchedText.Size = new System.Drawing.Size(15, 15);
+            this.pDeleteSearchedText.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pDeleteSearchedText.TabIndex = 30;
+            this.pDeleteSearchedText.TabStop = false;
+            this.pDeleteSearchedText.Click += new System.EventHandler(this.pDeleteSearchedText_Click);
+            // 
             // linkSearchOptions
             // 
             this.linkSearchOptions.AutoSize = true;
@@ -464,6 +497,7 @@
             this.linkSearchOptions.TabIndex = 29;
             this.linkSearchOptions.TabStop = true;
             this.linkSearchOptions.Text = "Opciones de búsqueda";
+            this.linkSearchOptions.Click += new System.EventHandler(this.linkSearchOptions_Click);
             // 
             // btnSearch
             // 
@@ -482,6 +516,7 @@
             this.cbSearchedText.Name = "cbSearchedText";
             this.cbSearchedText.Size = new System.Drawing.Size(160, 21);
             this.cbSearchedText.TabIndex = 12;
+            this.cbSearchedText.TextChanged += new System.EventHandler(this.cbSearchedText_TextChanged);
             // 
             // pBrowse
             // 
@@ -492,6 +527,7 @@
             this.pBrowse.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pBrowse.TabIndex = 9;
             this.pBrowse.TabStop = false;
+            this.pBrowse.Visible = false;
             // 
             // cbFindIn
             // 
@@ -510,11 +546,82 @@
             this.lblLookIn.TabIndex = 6;
             this.lblLookIn.Text = "Look in:";
             // 
+            // cmsSearchOptions
+            // 
+            this.cmsSearchOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.SO_AddToResults,
+            this.SO_ReplaceResults});
+            this.cmsSearchOptions.Name = "cmsSearchOptions";
+            this.cmsSearchOptions.ShowCheckMargin = true;
+            this.cmsSearchOptions.ShowImageMargin = false;
+            this.cmsSearchOptions.Size = new System.Drawing.Size(156, 48);
+            // 
+            // SO_AddToResults
+            // 
+            this.SO_AddToResults.CheckOnClick = true;
+            this.SO_AddToResults.Name = "SO_AddToResults";
+            this.SO_AddToResults.Size = new System.Drawing.Size(155, 22);
+            this.SO_AddToResults.Text = "Add to Results";
+            // 
+            // SO_ReplaceResults
+            // 
+            this.SO_ReplaceResults.CheckOnClick = true;
+            this.SO_ReplaceResults.Name = "SO_ReplaceResults";
+            this.SO_ReplaceResults.Size = new System.Drawing.Size(155, 22);
+            this.SO_ReplaceResults.Text = "Replace Results";
+            // 
+            // panelSearchProgress
+            // 
+            this.panelSearchProgress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelSearchProgress.Controls.Add(this.pbTopics);
+            this.panelSearchProgress.Controls.Add(this.lblTopics);
+            this.panelSearchProgress.Controls.Add(this.pbMaps);
+            this.panelSearchProgress.Controls.Add(this.label1);
+            this.panelSearchProgress.Location = new System.Drawing.Point(1, 1);
+            this.panelSearchProgress.Name = "panelSearchProgress";
+            this.panelSearchProgress.Size = new System.Drawing.Size(285, 114);
+            this.panelSearchProgress.TabIndex = 1;
+            this.panelSearchProgress.Visible = false;
+            // 
+            // pbTopics
+            // 
+            this.pbTopics.Location = new System.Drawing.Point(12, 79);
+            this.pbTopics.Maximum = 5000;
+            this.pbTopics.Name = "pbTopics";
+            this.pbTopics.Size = new System.Drawing.Size(259, 20);
+            this.pbTopics.TabIndex = 2;
+            // 
+            // lblTopics
+            // 
+            this.lblTopics.AutoSize = true;
+            this.lblTopics.Location = new System.Drawing.Point(10, 61);
+            this.lblTopics.Name = "lblTopics";
+            this.lblTopics.Size = new System.Drawing.Size(42, 13);
+            this.lblTopics.TabIndex = 3;
+            this.lblTopics.Text = "Topics:";
+            // 
+            // pbMaps
+            // 
+            this.pbMaps.Location = new System.Drawing.Point(12, 31);
+            this.pbMaps.Name = "pbMaps";
+            this.pbMaps.Size = new System.Drawing.Size(259, 20);
+            this.pbMaps.TabIndex = 1;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(10, 12);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(31, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Map:";
+            // 
             // TopicNotesDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(620, 331);
+            this.Controls.Add(this.panelSearchProgress);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panelFind);
             this.Controls.Add(this.panelFindNotes);
@@ -536,7 +643,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pBold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fontDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fontUp)).EndInit();
-            this.contextMenuStrip1.ResumeLayout(false);
+            this.cmsTopics.ResumeLayout(false);
             this.panelBottom.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.btnSaveAllNo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnSaveOneNo)).EndInit();
@@ -553,7 +660,11 @@
             this.panelFindNotes.PerformLayout();
             this.panelFind.ResumeLayout(false);
             this.panelFind.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pDeleteSearchedText)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBrowse)).EndInit();
+            this.cmsSearchOptions.ResumeLayout(false);
+            this.panelSearchProgress.ResumeLayout(false);
+            this.panelSearchProgress.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -562,7 +673,7 @@
         private System.Windows.Forms.Panel panelEditButtons;
         private System.Windows.Forms.PictureBox fontDown;
         private System.Windows.Forms.PictureBox fontUp;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip cmsTopics;
         private System.Windows.Forms.ToolStripMenuItem MI_gototopic;
         private System.Windows.Forms.ToolStripMenuItem MI_remove;
         private System.Windows.Forms.HelpProvider helpProvider1;
@@ -600,5 +711,15 @@
         private System.Windows.Forms.Button btnNewTab;
         private System.Windows.Forms.RichTextBox rtbPreview;
         public System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.ToolStripMenuItem MI_UpdateTopicNotes;
+        private System.Windows.Forms.PictureBox pDeleteSearchedText;
+        private System.Windows.Forms.ContextMenuStrip cmsSearchOptions;
+        private System.Windows.Forms.ToolStripMenuItem SO_AddToResults;
+        private System.Windows.Forms.ToolStripMenuItem SO_ReplaceResults;
+        private System.Windows.Forms.Panel panelSearchProgress;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblTopics;
+        private System.Windows.Forms.ProgressBar pbTopics;
+        private System.Windows.Forms.ProgressBar pbMaps;
     }
 }

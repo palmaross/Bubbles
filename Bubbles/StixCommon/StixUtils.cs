@@ -970,6 +970,48 @@ namespace Bubbles
             return pos;
         }
 
+        /// <summary>
+        /// Save copy of a map and open it in background
+        /// </summary>
+        /// <returns>Map copy as Document</returns>
+        public static Document GetMapCopy()
+        {
+            string aName = MMUtils.nowUnixTimestamp() + ".mmap"; // temp map
+            string path = Utils.m_localDataPath + aName;
+            MMUtils.ActiveDocument.SaveAs(path, true); // save it to temp directory
+
+            // Wait document to be active, as opening is asyncronous thing.
+            long _now = MMUtils.GetTimestamp();
+            bool mapopening = false;
+
+            while ((MMUtils.GetTimestamp() - _now) < 30)
+            {
+                int _ts = (int)(MMUtils.GetTimestamp() - _now);
+                if (_ts > 30) _ts = 30;
+
+                try { System.Windows.Forms.Application.DoEvents(); }
+                catch { }
+
+                if (File.Exists(path) && !mapopening) // map has been saved
+                {
+                    if (!mapopening) // open it (if not opened already)
+                    {
+                        MMUtils.MindManager.AllDocuments.Open(path, "", false);
+                        mapopening = true;
+                    }
+
+                    // Try to locate document
+                    foreach (Document _doc in MMUtils.MindManager.AllDocuments)
+                    {
+                        if (_doc.Name == aName)
+                            return _doc;
+                    }
+                }
+            }
+            // 30 sec. passed, document was not opened, so...
+            return null;
+        }
+
         public static List<IconItem> Icons = new List<IconItem>();
         public static List<BookmarkItem> Bookmarks = new List<BookmarkItem>();
         public static List<ToolItem> Tools = new List<ToolItem>();

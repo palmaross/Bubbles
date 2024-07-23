@@ -132,6 +132,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppManager\AlfaChanges.cs" />
+    <Compile Include="AppManager\ProgressDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AppManager\ProgressDlg.Designer.cs">
+      <DependentUpon>ProgressDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="OmniSound\ManageAudioDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -449,10 +455,10 @@
     <Compile Include="StixTools\ManageToolsDlg.Designer.cs">
       <DependentUpon>ManageToolsDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="TopicNotesDlg.cs">
+    <Compile Include="Topic Notes\TopicNotesDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TopicNotesDlg.Designer.cs">
+    <Compile Include="Topic Notes\TopicNotesDlg.Designer.cs">
       <DependentUpon>TopicNotesDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="StixAddTopic\TopicTemplatePreview.cs">
@@ -634,7 +640,7 @@
     <Content Include="images\notesSearchBlack.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="images\notes_detach3.png">
+    <Content Include="images\notes_detach.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\position.png">
@@ -1173,6 +1179,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AppManager\ProgressDlg.resx">
+      <DependentUpon>ProgressDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="OmniSound\ManageAudioDlg.resx">
       <DependentUpon>ManageAudioDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -1322,7 +1331,7 @@
     <EmbeddedResource Include="StixTools\ManageToolsDlg.resx">
       <DependentUpon>ManageToolsDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TopicNotesDlg.resx">
+    <EmbeddedResource Include="Topic Notes\TopicNotesDlg.resx">
       <DependentUpon>TopicNotesDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StixAddTopic\TopicTemplatePreview.resx">
