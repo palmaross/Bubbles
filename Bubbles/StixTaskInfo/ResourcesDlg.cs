@@ -62,8 +62,8 @@ namespace Bubbles
             mi_rename.Text = Utils.getString("button.rename");
             mi_delete.Text = Utils.getString("button.delete");
             mi_color.Text = Utils.getString("stixformat.contextmenu.color");
-            mi_copy.Text = Utils.getString("ResourcesDlg.Copy");
-            mi_cut.Text = Utils.getString("ResourcesDlg.Cut");
+            mi_copy.Text = Utils.getString("button.copy");
+            mi_cut.Text = Utils.getString("button.cut");
 
             mm_new.Text = Utils.getString("ResourcesDlg.NewGroup");
             mm_rename.Text = Utils.getString("ResourcesDlg.RenameGroup");

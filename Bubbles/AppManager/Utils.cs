@@ -126,14 +126,36 @@ namespace Bubbles
             }
             StockIconsDupes.Clear();
 
-            di = new DirectoryInfo(m_localDataPath);
-            foreach (FileInfo fi in di.GetFiles())
-                fi.Delete();
+            List<string> files = new List<string>(Directory.EnumerateFiles(m_localDataPath));
+            foreach (string file in files)
+                File.Delete(file);
 
             MMBounds = new Rectangle(MMUtils.MindManager.Left, MMUtils.MindManager.Top, MMUtils.MindManager.Width, MMUtils.MindManager.Height);
-    }
 
-    public static void InitIcons()
+            InitStartedMaps();
+        }
+
+        static void InitStartedMaps()
+        {
+            foreach (Document doc in MMUtils.MindManager.VisibleDocuments)
+            {
+                // Create list of topics with notes.
+                foreach (Topic t in doc.Range(MmRange.mmRangeAllTopics))
+                {
+                    string path = doc.FullName.ToLower();
+                    if (!t.Notes.IsEmpty)
+                    {
+                        if (!StixMain.MapTopicsWithNotes.Keys.Contains(path))
+                            StixMain.MapTopicsWithNotes[path]
+                                = new Dictionary<string, bool> { { t.Guid, false } };
+                        else
+                            StixMain.MapTopicsWithNotes[path].Add(t.Guid, false);
+                    }
+                }
+            }
+        }
+
+        public static void InitIcons()
         {
             if (audio != null) return; // Icons are initialized already.
 
@@ -213,6 +235,23 @@ namespace Bubbles
         {
             MMUtils._hashtableCommon = I18n_common;
             return MMUtils.getCommonString(name);
+        }
+
+        public static Document GetOrOpenDocument(string path, bool activate = false, bool visible = true)
+        {
+            foreach (Document doc in MMUtils.MindManager.AllDocuments)
+            {
+                if (doc.FullName.ToLower() == path.ToLower())
+                {
+                    if (activate) doc.Activate();
+                    return doc;
+                }
+            }
+
+            if (File.Exists(path))
+                return MMUtils.MindManager.AllDocuments.Open(path, "", visible);
+            else
+                return null;
         }
 
         public static bool IsFree()
@@ -557,6 +596,49 @@ namespace Bubbles
                 }
             }
             return "";
+        }
+
+        /// <summary>
+        /// Save copy of a map and get its path.
+        /// </summary>
+        /// <returns>Path of given document copy</returns>
+        public static string GetMapCopy(Document doc)
+        {
+            string aName = MMUtils.nowUnixTimestamp() + ".mmap"; // temp map
+            string path = Utils.m_localDataPath + aName;
+            doc.SaveAs(path, true); // save it to temp directory
+            return path;
+
+            // Wait document to be active, as opening is asyncronous thing.
+            //long _now = MMUtils.GetTimestamp();
+            //bool mapopening = false;
+
+            //while ((MMUtils.GetTimestamp() - _now) < 30)
+            //{
+            //    int _ts = (int)(MMUtils.GetTimestamp() - _now);
+            //    if (_ts > 30) _ts = 30;
+
+            //    try { System.Windows.Forms.Application.DoEvents(); }
+            //    catch { }
+
+            //    if (File.Exists(path) && !mapopening) // map has been saved
+            //    {
+            //        if (!mapopening) // open it (if not opened already)
+            //        {
+            //            MMUtils.MindManager.AllDocuments.Open(path, "", false);
+            //            mapopening = true;
+            //        }
+
+            //        // Try to locate document
+            //        foreach (Document _doc in MMUtils.MindManager.AllDocuments)
+            //        {
+            //            if (_doc.Name == aName)
+            //                return _doc;
+            //        }
+            //    }
+            //}
+            // 30 sec. passed, document was not opened, so...
+            //return null;
         }
 
         public static void InitMarkersList(Topic t)

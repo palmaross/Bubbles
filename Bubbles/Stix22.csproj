@@ -50,6 +50,9 @@
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\packages\HtmlAgilityPack.1.11.60\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.1722.45, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -98,6 +101,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -132,6 +137,8 @@
     <Compile Include="AppManager\StixDB.cs" />
     <Compile Include="AppManager\TransactionWrapper.cs" />
     <Compile Include="AppManager\Utils.cs" />
+    <Compile Include="AppManager\XMLMapCompanion.cs" />
+    <Compile Include="AppManager\XMLTopicCompanion.cs" />
     <Compile Include="LinkBox\BrowserDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -450,6 +457,7 @@
     <Compile Include="Organizer\NotesDlg.Designer.cs">
       <DependentUpon>NotesDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Topic Notes\HtmlEditor.cs" />
     <Compile Include="Topic Notes\TopicNotesDlg.cs">
       <SubType>Form</SubType>
     </Compile>

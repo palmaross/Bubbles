@@ -50,13 +50,8 @@ namespace Bubbles
             toolTip1.SetToolTip(pictureHandle, stickname + Utils.getString("HeadIcon.tooltip"));
             toolTip1.SetToolTip(Manage, Utils.getString("ManageIcon.tooltip"));
 
-            cmsOptions.ItemClicked += ContextMenu_ItemClicked;
             cmsTopicWidths.ItemClicked += ContextMenu_ItemClicked;
             cmsCommon.ItemClicked += ContextMenu_ItemClicked;
-
-            OP_myrisk.Text = Utils.getString("textops.notescontextmenu.insertnotes");
-            OP_myrisk.ToolTipText = Utils.getString("textops.notescontextmenu.insertnotes.tooltip");
-            OP_myrisk.Tag = "myrisk";
 
             StixUtils.SetCommonContextMenu(cmsCommon, StixUtils.typetextops);
 
@@ -103,12 +98,6 @@ namespace Bubbles
                 Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid);
         }
 
-        private void CmsOptions_Closing(object sender, ToolStripDropDownClosingEventArgs e)
-        {
-            if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
-                e.Cancel = true;
-        }
-
         private void PictureHandle_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Clicks == 1)
@@ -121,32 +110,7 @@ namespace Bubbles
 
         private void ContextMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem == OP_myrisk)
-            {
-                if (OP_myrisk.Checked) // user unchecks _Unsafe_ Insert Notes mode
-                {
-                    PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotes.png");
-
-                    if (OptionReplaceInsert.Tag.ToString() == "replace")
-                        toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.PasteNotes.tooltip"));
-                    else
-                        toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.AddNotes.tooltip"));
-                }
-                else // user checks _Unsafe_ Insert Notes mode
-                {
-                    if (OptionReplaceInsert.Tag.ToString() == "insert")
-                    {
-                        PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotesRisk.png");
-                        toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.AddNotes.unsafe.tooltip"));
-                    }
-                    else
-                    {
-                        PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotes.png");
-                        toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.PasteNotes.tooltip"));
-                    }
-                }
-            }
-            else if (e.ClickedItem.Name == "ManageTopicWidths")
+            if (e.ClickedItem.Name == "ManageTopicWidths")
             {
                 using (TopicWidthsDlg dlg = new TopicWidthsDlg(this))
                     dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
@@ -171,7 +135,6 @@ namespace Bubbles
 
                 Utils.setRegistry("TopicAutoWidth", StixUtils.TopicAutoWidth ? "1" : "0");
             }
-
             else if (e.ClickedItem.Name == "BI_rotate")
             {
                 Rotate();
@@ -221,23 +184,19 @@ namespace Bubbles
 
         private void PasteNotes_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
-            {
-                foreach (ToolStripItem item in cmsOptions.Items)
-                    item.Visible = true;
-
-                cmsOptions.Show(Cursor.Position);
-                return;
-            }
-
             if (MMUtils.ActiveDocument == null || !Clipboard.ContainsText() ||
                 MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
                 return;
 
-            replace = OptionReplaceInsert.Tag.ToString() == "replace";
-
             SelectedTopics.Clear();
             SelectedTopics.AddRange(MMUtils.ActiveDocument.Selection.OfType<Topic>());
+
+            replace = OptionReplaceInsert.Tag.ToString() == "replace";
+
+            // If there are affected by MM API bug topic notes, update them
+            if (!replace)
+                StixMain.UpdateTopicNotes(MMUtils.ActiveDocument);
+
             string rtf = Clipboard.GetText(TextDataFormat.Rtf);
 
             StixUtils.GetLinks(OptionSourceLink.Tag.ToString() == "yes",
@@ -263,44 +222,24 @@ namespace Bubbles
 
         void ProcessTopicNotes(string rtf)
         {
-            Topic topictoselect = null;
+            Topic topictoselect = null; 
+            bool affected = false; falsealarm = true;
 
-            if (replace) // replace topic notes text with text from Clipboard
+            foreach (Topic t in SelectedTopics)
             {
-                foreach (Topic t in SelectedTopics)
+                if (replace) // replace topic notes text with text from Clipboard
                 {
-                    UserActionNotes = false; // do not add notes to the TopicsWithNotes
-
                     if (OptionTextFormat.Tag.ToString() == "formatted")
                         t.Notes.TextRTF = rtf;
                     else
                         t.Notes.Text = Clipboard.GetText(TextDataFormat.UnicodeText);
 
-                    UserActionNotes = false; // do not add notes to the TopicsWithNotes
-
-                    AddLinksToTopicNotes(t);
+                    affected = AddLinksToTopicNotes(t);
                     t.Notes.Commit();
                     topictoselect = t;
                 }
-            }
-            else // insert text at the end
-            {
-                Document doc = null; Topic tcopy;
-
-                if (!OP_myrisk.Checked)
-                { doc = StixUtils.GetMapCopy(); }
-
-                foreach (Topic t in SelectedTopics)
+                else // insert text at the end
                 {
-                    UserActionNotes = false; // do not add notes to the TopicsWithNotes
-
-                    if (doc != null)
-                    {
-                        tcopy = doc.FindByGuid(t.Guid) as Topic;
-                        if (tcopy == null) continue;
-                        t.Notes.TextXHTML = tcopy.Notes.TextXHTML;
-                    }
-
                     if (OptionTextFormat.Tag.ToString() == "formatted")
                     {
                         t.Notes.AppendRtf(rtf);
@@ -311,21 +250,12 @@ namespace Bubbles
                         t.Notes.Insert("\r\n" + Clipboard.GetText(TextDataFormat.UnicodeText));
                     }
 
-                    UserActionNotes = false; // do not add notes to the TopicsWithNotes
-
                     AddLinksToTopicNotes(t);
                     t.Notes.Commit();
                     topictoselect = t;
+                    affected = true;
                 }
-
-                if (doc != null)
-                {
-                    // Close and delete temp doc
-                    string path = doc.FullName;
-                    doc.Close();
-                    try { File.Delete(path); } catch { }
-                    doc = null; tcopy = null;
-                }
+                StixMain.MarkOrAddTopicToBugList(t, affected);
             }
 
             if (topictoselect != null)
@@ -335,24 +265,25 @@ namespace Bubbles
                 topictoselect = null;
             }
         }
+        public static bool falsealarm = false;
 
-        void AddLinksToTopicNotes(Topic t)
+        bool AddLinksToTopicNotes(Topic t)
         {
-            t.Notes.CursorPosition = -1;
+            t.Notes.CursorPosition = -1; bool affected = false;
 
             if (StixUtils.SourceURL != "")
-                t.Notes.InsertTextHyperlink(StixUtils.SourceURL,  Utils.getString("TextOpsStix.AddNotes.Source"));
-
+            {
+                t.Notes.InsertTextHyperlink(StixUtils.SourceURL, Utils.getString("TextOpsStix.AddNotes.Source"));
+                affected = true;
+            }
             if (StixUtils.Links.Count > 0)
             {
-                int i = 1;
+                affected = true; int i = 1;
                 foreach (string link in StixUtils.Links)
                     t.Notes.InsertTextHyperlink(link, Utils.getString("TextOpsStix.AddNotes.Link") + " " + i++);
             }
+            return affected;
         }
-
-        public static List<string> TopicsWithNotes = new List<string>();
-        public static bool UserActionNotes = true;
 
         private void AddPasteTopic_MouseHover(object sender, EventArgs e)
         {
@@ -396,13 +327,6 @@ namespace Bubbles
                     Clipboard.Clear(); Clipboard.SetDataObject(dto);
                 }
             }
-            //else if (e.Button == MouseButtons.Right)
-            //{
-            //    foreach (ToolStripItem item in cmsOptions.Items)
-            //        item.Visible = false;
-
-            //    cmsOptions.Show(Cursor.Position);
-            //}
         }
 
         public static bool pastetext = false;
@@ -892,16 +816,8 @@ namespace Bubbles
                         OptionReplaceInsert.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "inserttext.png");
                         toolTip1.SetToolTip(OptionReplaceInsert, Utils.getString("textops.contextmenu.insert1"));
 
-                        if (OP_myrisk.Checked)
-                        {
-                            PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotesRisk.png");
-                            toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.AddNotes.unsafe.tooltip"));
-                        }
-                        else
-                        {
-                            PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotes.png");
-                            toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.AddNotes.tooltip"));
-                        }
+                        PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotes.png");
+                        toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.AddNotes.tooltip"));
                     }
                     else
                     {
@@ -958,13 +874,6 @@ namespace Bubbles
                         toolTip1.SetToolTip(OptionInternalLinks, Utils.getString("TextOpsStix.internallinks_no"));
                     }
                 }
-            }
-            else if (e.Button == MouseButtons.Right)
-            {
-                //foreach (ToolStripItem item in cmsOptions.Items)
-                //    item.Visible = true;
-
-                //cmsOptions.Show(Cursor.Position);
             }
         }
 

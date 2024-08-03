@@ -12,6 +12,7 @@ using System.Linq;
 using AppManager;
 using System.IO;
 using NAudio.Wave;
+using Bubbles.AppManager;
 
 namespace Bubbles
 {
@@ -128,7 +129,7 @@ namespace Bubbles
             HidePopup.Start();
 
             stopPlayTimer = new Timer() { Interval = 500 };
-            stopPlayTimer.Tick += StopPlayTimer_Tick; ;
+            stopPlayTimer.Tick += StopPlayTimer_Tick;
 
             m_ReplaceDlg = new ReplaceDlg();
 
@@ -346,39 +347,128 @@ namespace Bubbles
                 m_topicNotes.Bounds = m_topicNotes.WindowExpanded;
 
             TreeNode map = null, node = null;
+            string mappath = MMUtils.ActiveDocument.FullName.ToLower();
             foreach (TreeNode _node in m_topicNotes.listTopics.Nodes)
             {
-                if (_node.Name == MMUtils.ActiveDocument.FullName) {
+                if (_node.Name == mappath) {
                     map = _node; break; }
             }
             if (map == null)
-                map = m_topicNotes.listTopics.Nodes.Add(MMUtils.ActiveDocument.FullName, MMUtils.ActiveDocument.CentralTopic.Text, 0);
+            {
+                map = m_topicNotes.listTopics.Nodes.Add(mappath, MMUtils.ActiveDocument.CentralTopic.Text, 0);
+                map.NodeFont = new Font(m_topicNotes.listTopics.Font, FontStyle.Bold);
+                map.Text = map.Text;
+            }
 
-            map.NodeFont = new Font(m_topicNotes.listTopics.Font, FontStyle.Bold);
-            map.Text = map.Text;
+            UpdateTopicNotes(MMUtils.ActiveDocument);
 
             foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
             {
                 if (String.IsNullOrEmpty(t.Notes.Text))
                     continue;
 
-                string notes = t.Notes.Text;
+                // Check if topic already is 
+                bool found = false;
+                foreach (TreeNode _node in map.Nodes)
+                    if ((_node.Tag as TopicNotesItem).TopicGuid == t.Guid)
+                    {
+                        m_topicNotes.listTopics.SelectedNode = _node;
+                        m_topicNotes.Select();
+                        m_topicNotes.listTopics.Select();
+                        found = true;
+                        break;
+                    }
+                if (found) continue;
+
                 string topictext = t.Text.Trim();
                 if (String.IsNullOrEmpty(topictext)) topictext = Utils.getString("TopicNotesDlg.noname");
 
-                string rtf = "", html = "";
-                if (!t.Notes.IsPlainTextOnly) { rtf = t.Notes.TextRTF; html = t.Notes.TextXHTML; }
-
-                TopicNotesItem item = new TopicNotesItem(t, topictext, t.Guid, notes, rtf, html);
+                TopicNotesItem item = new TopicNotesItem(topictext, t.Guid, t.Notes.TextXHTML);
 
                 node = map.Nodes.Add(topictext);
                 node.Tag = item;
-            }
-            if (node != null)
-                m_topicNotes.listTopics.SelectedNode = node;
 
+                if (OmniTopics.Keys.Contains(mappath))
+                    OmniTopics[mappath].Add(t.Guid, node);
+                else
+                    OmniTopics[mappath] = new Dictionary<string, TreeNode> { { t.Guid, node } };
+            }
+
+            // Select appropiate node
+            if (node != null) m_topicNotes.listTopics.SelectedNode = node;
             m_topicNotes.Select();
             m_topicNotes.listTopics.Select();
+        }
+
+        /// <summary>
+        /// MindManager API Bug.
+        /// Check if there are changed topic notes in the given document.
+        /// If there are, update them from the saved document copy.
+        /// </summary>
+        /// <param name="doc"></param>
+        public static void UpdateTopicNotes(Document doc, List<string> topics = null)
+        {
+            if (topics == null)
+            {
+                topics = new List<string>();
+                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                    topics.Add(t.Guid);
+            }
+
+            string mappath = doc.FullName.ToLower();
+            bool modified = false;
+
+            if (!MapTopicsWithNotes.Keys.Contains(mappath)) return;
+
+            // Check if there are modified topic notes among selected topics
+            foreach (var pair in MapTopicsWithNotes[mappath])
+                if (pair.Value == true && topics.Contains(pair.Key)) { // topic notes are changed
+                    modified = true; break; }
+
+            if (!modified) return; // There are no modified topic notes
+
+            string docCopyPath = Utils.GetMapCopy(doc); // Prepare map copy for XML
+
+            XMLMapCompanion.Get(docCopyPath); // Get XML
+
+            foreach (var pair in MapTopicsWithNotes[mappath].Reverse())
+            {
+                if (pair.Value == true) // affected notes
+                {
+                    foreach (var _pair in XMLMapCompanion.m_topics)
+                    {
+                        if (_pair.Key == pair.Key)
+                        {
+                            string notes = _pair.Value.NotesHtml();
+                            Topic t = doc.FindByGuid(_pair.Key) as Topic;
+                            if (t != null)
+                            {
+                                falsealarm2 = true;
+                                t.Notes.TextXHTML = notes; // false alarm?
+                            }
+                            MapTopicsWithNotes[mappath][pair.Key] = false;
+                        }
+                    }
+                }
+            }
+
+            if (File.Exists(docCopyPath))
+                File.Delete(docCopyPath);
+        }
+
+        public static void MarkOrAddTopicToBugList(Topic t, bool affected)
+        {
+            string mappath = t.Document.FullName.ToLower();
+
+            if (MapTopicsWithNotes.Keys.Contains(mappath))
+            {
+                if (MapTopicsWithNotes[mappath].Keys.Contains(t.Guid))
+                    MapTopicsWithNotes[mappath][t.Guid] = affected;
+                else
+                    MapTopicsWithNotes[mappath].Add(t.Guid, affected);
+            }
+            else
+                MapTopicsWithNotes[mappath] = new Dictionary<string, bool>() { {  t.Guid, affected } };
         }
 
         public override void onDocumentActivated(MMEventArgs aArgs)
@@ -397,6 +487,23 @@ namespace Bubbles
             }
 
             DocumentStorage.Sync(MMUtils.ActiveDocument); // subscribe document to events
+        }
+
+        public override void onDocumentOpened(MMEventArgs aArgs)
+        {
+            // Create list of topics with notes.
+            foreach (Topic t in MMUtils.ActiveDocument.Range(MmRange.mmRangeAllTopics))
+            {
+                string path = MMUtils.ActiveDocument.FullName.ToLower();
+                if (!t.Notes.IsEmpty)
+                {
+                    if (!StixMain.MapTopicsWithNotes.Keys.Contains(path))
+                        MapTopicsWithNotes[path]
+                            = new Dictionary<string, bool> { { t.Guid, false } };
+                    else
+                        MapTopicsWithNotes[path].Add(t.Guid, false);
+                }
+            }
         }
 
         public override void onObjectAdded(MMEventArgs aArgs)
@@ -462,6 +569,11 @@ namespace Bubbles
             // last visible document is closing
             if (MMUtils.MindManager.VisibleDocuments.Count == 1 && m_MapNavigator != null)
                 m_MapNavigator.Init();
+        }
+
+        public override void onDocumentClosed(MMEventArgs aArgs)
+        {
+            //MapTopicsWithNotes.Remove(aArgs.Document.FullName.ToLower());
         }
 
         public override void onDocumentClipboardPasteOrDrop(MMEventArgs aArgs)
@@ -540,45 +652,82 @@ namespace Bubbles
 
             if (aArgs.what.Contains("notesxhtmldata"))
             {
-                if (StixTextOps.UserActionNotes)
+                ///// MindManager API bug /////
+                
+                if (StixTextOps.falsealarm) { StixTextOps.falsealarm = false; return; }
+
+                // Changes are from the OmniTopicNotes window
+                if (m_topicNotes != null && m_topicNotes.fromTNDlg) return;
+                if (falsealarm2) { falsealarm2 = false; return; }
+
+                // Add topic to MapTopicsWithNotes dictionary (MTWND)
+                string path = MMUtils.ActiveDocument.FullName.ToLower();
+                if (MapTopicsWithNotes.Keys.Contains(path)) // MTWND contains map
                 {
-                    if (!StixTextOps.TopicsWithNotes.Contains(t.Guid))
-                        StixTextOps.TopicsWithNotes.Add(t.Guid);
+                    if (MapTopicsWithNotes[path].Keys.Contains(t.Guid)) // topic notes changed, mark it as changed
+                        MapTopicsWithNotes[path][t.Guid] = true;
+                    else { // but not contains topic. It's a topic with created, not changed notes {
+                        MapTopicsWithNotes[path].Add(t.Guid, false); return; }
+
                 }
-                StixTextOps.UserActionNotes = true;
-
-                // Do changes in the TopicNotesDlg
-                if (m_topicNotes != null && m_topicNotes.Visible && !m_topicNotes.fromTNDlg)
+                else // First created topic notes in this map 
                 {
-                    foreach (TreeNode map in m_topicNotes.listTopics.Nodes) // map node
-                    {
-                        foreach (TreeNode node in map.Nodes)
-                        {
-                            TopicNotesItem item = node.Tag as TopicNotesItem;
-                            if (item.TopicGuid == t.Guid)
-                            {
-                                item.PlainNotes = t.Notes.Text;
-                                item.RtfNotes = t.Notes.IsPlainTextOnly ? "" : t.Notes.TextRTF;
-                                item.HtmlNotes = t.Notes.IsPlainTextOnly ? "" : t.Notes.TextXHTML;
+                    MapTopicsWithNotes[path] = new Dictionary<string, bool>() { { t.Guid, false } };
+                    return;
+                }
 
-                                m_topicNotes.falsealarm = true;
-                                foreach (TabPage tp in m_topicNotes.tabControl1.TabPages)
-                                {
-                                    RichTextBox rtb = tp.Controls.OfType<RichTextBox>().First();
-                                    rtbItem rtbitem = rtb.Tag as rtbItem;
-                                    if (rtbitem.Node == node)
-                                    {
-                                        rtbitem.PlainText = item.PlainNotes;
-                                        rtbitem.RtfText = item.RtfNotes;
-                                        if (rtbitem.RtfText == "")
-                                            rtb.Text = item.PlainNotes;
-                                        else
-                                            rtb.Rtf = item.RtfNotes;
-                                    }
-                                }
-                                m_topicNotes.falsealarm = false;
-                            }
+                // Topic notes were changed
+
+                // Is OmniTopicNotes window opened?
+                if (m_topicNotes == null || !m_topicNotes.Visible) return;
+
+                // Check if the topic is in the OmniTopicNotes window
+                if (OmniTopics.Count == 0 || !OmniTopics.Keys.Contains(path) ||
+                    !OmniTopics[path].Keys.Contains(t.Guid)) return; // Not
+
+                // We have to update topic notes
+                string aName = MMUtils.nowUnixTimestamp() + ".mmap"; // temp map
+                string _path = Utils.m_localDataPath + aName;
+                MMUtils.ActiveDocument.SaveAs(_path, true); // save it to temp directory
+
+                // Get topic notes from document copy
+                var m_xmlDocument = XMLMapCompanion.GetDocumentXML(_path);
+                string notes = XMLMapCompanion.GetTopicNotes(m_xmlDocument, t.Guid);
+                if (notes == null) return; // Fail with document XML
+
+                // Get topic node
+                TreeNode node = OmniTopics[path][t.Guid];
+                TopicNotesItem item = node.Tag as TopicNotesItem;
+                t.Notes.TextXHTML = notes; t.Notes.Commit();
+
+                // Check if the notes are opened in the tab page and modified there
+                foreach (TabPage tp in m_topicNotes.tabControl1.TabPages)
+                {
+                    if (tp.Controls.OfType<WebBrowser>().Count() == 0) continue;
+
+                    WebBrowser wb = tp.Controls.OfType<WebBrowser>().First();
+                    wbItem rtbitem = wb.Tag as wbItem;
+
+                    if (rtbitem.Node == node) // Yes, they are in this page
+                    {
+                        if (tp.AccessibleName == "edited") // And modified in the window. Conflict.
+                        {
+                            // Warning the user
+                            if (MessageBox.Show(Utils.getString("TopicNotesDlg.notesconflict"), "",
+                                MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                            return;
                         }
+
+                        // Replace node notes
+                        falsealarm2 = true;
+                        item.TopicNotes = notes; // !!
+                        MapTopicsWithNotes[path][t.Guid] = false;
+                        WebBrowser newwb = m_topicNotes.CreateWB(notes, node);
+                        tp.Controls.Remove(wb);
+                        tp.Controls.Add(newwb);
+
+                        tp.AccessibleName = "";
+                        m_topicNotes.tabControl1.Invalidate();
                     }
                 }
                 return;
@@ -590,6 +739,7 @@ namespace Bubbles
                     SetDates2();
             }
         }
+        static bool falsealarm2 = false;
 
         void ClearFontButtons(StixFormat stix)
         {
@@ -1173,5 +1323,15 @@ namespace Bubbles
         public static TopicPlayer m_TopicPlayer;
         public static TopicRecorder m_TopicRecorder;
         public static ManageAudioDlg m_ManageAudio;
+
+        /// <summary>
+        /// All map topics with notes.
+        /// Key: MapPath, Value: Dictionary [Key: Topic Guid, Value: changed]
+        /// </summary>
+        public static Dictionary<string, Dictionary<string, bool>> MapTopicsWithNotes = new Dictionary<string, Dictionary<string, bool>>();
+        /// <summary>
+        /// Key: MapPath, Value: Dictionary [Key: Topic Guid, Value: Topic Node]
+        /// </summary>
+        public static Dictionary<string, Dictionary<string, TreeNode>> OmniTopics = new Dictionary<string, Dictionary<string, TreeNode>>();
     }
 }

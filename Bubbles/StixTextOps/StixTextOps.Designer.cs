@@ -38,8 +38,6 @@
             this.UnformatText = new System.Windows.Forms.PictureBox();
             this.pictureHandle = new System.Windows.Forms.PictureBox();
             this.Manage = new System.Windows.Forms.PictureBox();
-            this.cmsOptions = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.OP_myrisk = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsCommon = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmiSize = new System.Windows.Forms.PictureBox();
             this.subtopic = new System.Windows.Forms.PictureBox();
@@ -60,7 +58,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.UnformatText)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
-            this.cmsOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cmiSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.subtopic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pPasteToTopic)).BeginInit();
@@ -152,23 +149,6 @@
             this.Manage.TabIndex = 88;
             this.Manage.TabStop = false;
             this.Manage.Click += new System.EventHandler(this.Manage_Click);
-            // 
-            // cmsOptions
-            // 
-            this.cmsOptions.ImageScalingSize = new System.Drawing.Size(32, 32);
-            this.cmsOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.OP_myrisk});
-            this.cmsOptions.Name = "cmsPasteText";
-            this.cmsOptions.ShowCheckMargin = true;
-            this.cmsOptions.ShowImageMargin = false;
-            this.cmsOptions.Size = new System.Drawing.Size(239, 48);
-            // 
-            // OP_myrisk
-            // 
-            this.OP_myrisk.CheckOnClick = true;
-            this.OP_myrisk.Name = "OP_myrisk";
-            this.OP_myrisk.Size = new System.Drawing.Size(238, 22);
-            this.OP_myrisk.Text = "Quick Insert (my responsibility)";
             // 
             // cmsCommon
             // 
@@ -371,7 +351,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.UnformatText)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
-            this.cmsOptions.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.cmiSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.subtopic)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pPasteToTopic)).EndInit();
@@ -394,11 +373,9 @@
         private System.Windows.Forms.PictureBox UnformatText;
         private System.Windows.Forms.PictureBox pictureHandle;
         private System.Windows.Forms.PictureBox Manage;
-        private System.Windows.Forms.ContextMenuStrip cmsOptions;
         private System.Windows.Forms.ContextMenuStrip cmsCommon;
         private System.Windows.Forms.PictureBox cmiSize;
         public System.Windows.Forms.PictureBox subtopic;
-        private System.Windows.Forms.ToolStripMenuItem OP_myrisk;
         private System.Windows.Forms.PictureBox pPasteToTopic;
         public System.Windows.Forms.PictureBox OptionTextFormat;
         public System.Windows.Forms.PictureBox PasteLink;
