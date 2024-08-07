@@ -18,7 +18,7 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "TopicPlayer.htm");
 
-            toolTip1.SetToolTip(pictureHandle, Utils.getString("TopicPlayer.Title") + Utils.getString("HeadIcon.tooltip"));
+            toolTip1.SetToolTip(pictureHandle, Utils.getString("TopicPlayer.Title") + Utils.getString("HeadIcon.tooltip.tips"));
             toolTip1.SetToolTip(btnPause, Utils.getString("TopicPlayer.btnPause") + Utils.getString("TopicPlayer.btnPausePlay"));
             toolTip1.SetToolTip(btnPlay, Utils.getString("TopicPlayer.btnPlay") + Utils.getString("TopicPlayer.btnPausePlay"));
             toolTip1.SetToolTip(pVolume, Utils.getString("TopicPlayer.pVolume"));

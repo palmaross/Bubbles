@@ -59,6 +59,7 @@
             this.pCloseFontSize = new System.Windows.Forms.PictureBox();
             this.numFontSize = new System.Windows.Forms.NumericUpDown();
             this.panelFontSize = new System.Windows.Forms.Panel();
+            this.myToolTip1 = new Bubbles.MyToolTip();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
@@ -358,6 +359,11 @@
             this.panelFontSize.TabIndex = 97;
             this.panelFontSize.Visible = false;
             // 
+            // myToolTip1
+            // 
+            this.myToolTip1.OwnerDraw = true;
+            this.myToolTip1.ShowAlways = true;
+            // 
             // StixFormat
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -441,5 +447,6 @@
         public System.Windows.Forms.PictureBox pUnder;
         public System.Windows.Forms.PictureBox pStrike;
         public System.Windows.Forms.NumericUpDown numFontSize;
+        private MyToolTip myToolTip1;
     }
 }

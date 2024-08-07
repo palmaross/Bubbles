@@ -1,10 +1,8 @@
 ﻿using Mindjet.MindManager.Interop;
 using PRAManager;
-using PRMapCompanion;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -47,7 +45,8 @@ namespace Bubbles
             toolTip1.SetToolTip(OptionSourceLink, Utils.getString("TextOpsStix.sourcelink_no"));
             toolTip1.SetToolTip(OptionInternalLinks, Utils.getString("TextOpsStix.internallinks_no"));
 
-            toolTip1.SetToolTip(pictureHandle, stickname + Utils.getString("HeadIcon.tooltip"));
+            myToolTip1.SetToolTip(pictureHandle, stickname +
+                Utils.getString("StixTextOps.description") + Utils.getString("HeadIcon.tooltip.tips"));
             toolTip1.SetToolTip(Manage, Utils.getString("ManageIcon.tooltip"));
 
             cmsTopicWidths.ItemClicked += ContextMenu_ItemClicked;

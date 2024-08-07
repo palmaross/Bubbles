@@ -7,6 +7,7 @@ using System.Security.Permissions;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Bubbles
 {
@@ -88,6 +89,7 @@ namespace Bubbles
         public void Copy() { doc.execCommand("copy", false, null); }
         public void Cut() { doc.execCommand("cut", false, null); }
         public void Paste() { doc.execCommand("paste", false, null); }
+        public void Delete() { doc.execCommand("delete", false, null); }
         public void SelectAll() { doc.execCommand("SelectAll", false, null); }
         public void UnselectAll() { doc.execCommand("Unselect", false, Type.Missing); }
 
@@ -133,24 +135,30 @@ namespace Bubbles
         }
         IHTMLTxtRange SelectedRange()
         {
-            IHTMLSelectionObject selection = (IHTMLSelectionObject)doc.selection;
-            return (IHTMLTxtRange)selection.createRange();
+            try
+            {
+                IHTMLSelectionObject selection = (IHTMLSelectionObject)doc.selection;
+                return (IHTMLTxtRange)selection.createRange();
+            } catch { return null; }
         }
 
         public enum Headings { H1, H2, H3, H4, H5, H6 }
 
         public Image fBold, fItalic, fBoldActive, fItalicActive;
 
-        public void SearchText(string search)
+        public void SearchText(List<string> _search)
         {
-            StringBuilder strBuilder = new StringBuilder(doc.body.outerHTML);
-            string HTMLString = strBuilder.ToString().Replace("&nbsp;", " ");
+            foreach (string search in _search)
+            {
+                StringBuilder strBuilder = new StringBuilder(doc.body.outerHTML);
+                string HTMLString = strBuilder.ToString().Replace("&nbsp;", " ");
 
-            string replacePattern = "$1<span style=\"background-color: rgb(255, 250, 0);\">$2</span>$3";
-            string searchPattern = String.Format("(>[^<>]*?)({0})([^<>]*?<)", search.Trim());
-            HTMLString = Regex.Replace(HTMLString, searchPattern, replacePattern, RegexOptions.IgnoreCase);
+                string replacePattern = "$1<span style=\"background-color: rgb(255, 250, 0);\">$2</span>$3";
+                string searchPattern = String.Format("(>[^<>]*?)({0})([^<>]*?<)", search.Trim());
+                HTMLString = Regex.Replace(HTMLString, searchPattern, replacePattern, RegexOptions.IgnoreCase);
 
-            doc.body.innerHTML = HTMLString;
+                doc.body.innerHTML = HTMLString;
+            }
         }
 
         public void ClearSearchedText()
@@ -263,6 +271,11 @@ namespace Bubbles
                     {
                         // Ctrl+X
                         StixMain.m_topicNotes.editor.Cut();
+                    }
+                    else if (keyData == Keys.Delete && KeyWasAlreadyPressed == false)
+                    {
+                        // Delete key
+                        StixMain.m_topicNotes.editor.Delete();
                     }
                     else if (Functions.IsKeyDown(Keys.ControlKey) && keyData == Keys.B && KeyWasAlreadyPressed == false)
                     {

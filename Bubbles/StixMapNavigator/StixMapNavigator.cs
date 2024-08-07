@@ -25,8 +25,11 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "NavigationStix.htm");
 
-            toolTip1.SetToolTip(pictureHandle, stickname + Utils.getString("HeadIcon.tooltip"));
+            myToolTip1.SetToolTip(pictureHandle, stickname +
+                Utils.getString("StixMapNavigator.description") +
+                Utils.getString("HeadIcon.tooltip.tips"));
             toolTip1.SetToolTip(Manage, Utils.getString("ManageIcon.tooltip"));
+            toolTip1.SetToolTip(pSearch, Utils.getString("SearchTextDlg.title"));
 
             foreach (PictureBox pb in this.Controls.OfType<PictureBox>())
                 if (pb.Name.StartsWith("B"))

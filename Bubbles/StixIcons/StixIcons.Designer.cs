@@ -28,10 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StixIcons));
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.cmsManage = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolTip1 = new System.Windows.Forms.ToolTip();
+            this.cmsManage = new System.Windows.Forms.ContextMenuStrip();
             this.BI_new = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_removeallfromtopic = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_addtomap = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,12 +39,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.Manage = new System.Windows.Forms.PictureBox();
             this.pictureHandle = new System.Windows.Forms.PictureBox();
-            this.cmsIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsIcon = new System.Windows.Forms.ContextMenuStrip();
             this.BI_newicon = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_rename = new System.Windows.Forms.ToolStripMenuItem();
             this.BI_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.p1 = new System.Windows.Forms.PictureBox();
             this.pIconDist = new System.Windows.Forms.PictureBox();
+            this.myToolTip1 = new Bubbles.MyToolTip();
             this.cmsManage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
@@ -175,6 +175,11 @@
             this.pIconDist.TabStop = false;
             this.pIconDist.Visible = false;
             // 
+            // myToolTip1
+            // 
+            this.myToolTip1.OwnerDraw = true;
+            this.myToolTip1.ShowAlways = true;
+            // 
             // StixIcons
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -219,5 +224,6 @@
         private System.Windows.Forms.ToolStripMenuItem BI_addtomap;
         private System.Windows.Forms.PictureBox pIconDist;
         private System.Windows.Forms.ToolStripMenuItem BI_addtostix;
+        private MyToolTip myToolTip1;
     }
 }

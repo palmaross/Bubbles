@@ -56,6 +56,7 @@
             this.boxBookmarks = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panelBoxes = new System.Windows.Forms.Panel();
+            this.pMyTooltipOffset = new System.Windows.Forms.PictureBox();
             this.boxQuickTopics = new System.Windows.Forms.PictureBox();
             this.boxResources = new System.Windows.Forms.PictureBox();
             this.OmniSound = new System.Windows.Forms.PictureBox();
@@ -70,6 +71,7 @@
             this.o_Navigator = new System.Windows.Forms.ToolStripMenuItem();
             this.o_SearchTopics = new System.Windows.Forms.ToolStripMenuItem();
             this.o_TopicNotes = new System.Windows.Forms.ToolStripMenuItem();
+            this.myToolTip1 = new Bubbles.MyToolTip();
             ((System.ComponentModel.ISupportInitialize)(this.stxAddTopics)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxTextOps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxFormat)).BeginInit();
@@ -82,6 +84,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.stxMapNavigator)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxBookmarks)).BeginInit();
             this.panelBoxes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pMyTooltipOffset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxQuickTopics)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxResources)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.OmniSound)).BeginInit();
@@ -321,6 +324,7 @@
             // panelBoxes
             // 
             this.panelBoxes.BackColor = System.Drawing.Color.Moccasin;
+            this.panelBoxes.Controls.Add(this.pMyTooltipOffset);
             this.panelBoxes.Controls.Add(this.boxQuickTopics);
             this.panelBoxes.Controls.Add(this.boxResources);
             this.panelBoxes.Controls.Add(this.OmniSound);
@@ -332,6 +336,17 @@
             this.panelBoxes.Name = "panelBoxes";
             this.panelBoxes.Size = new System.Drawing.Size(245, 37);
             this.panelBoxes.TabIndex = 96;
+            // 
+            // pMyTooltipOffset
+            // 
+            this.pMyTooltipOffset.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pMyTooltipOffset.Location = new System.Drawing.Point(24, 0);
+            this.pMyTooltipOffset.Name = "pMyTooltipOffset";
+            this.pMyTooltipOffset.Size = new System.Drawing.Size(24, 3);
+            this.pMyTooltipOffset.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pMyTooltipOffset.TabIndex = 99;
+            this.pMyTooltipOffset.TabStop = false;
+            this.pMyTooltipOffset.Tag = "1";
             // 
             // boxQuickTopics
             // 
@@ -438,31 +453,36 @@
             this.o_SearchTopics,
             this.o_TopicNotes});
             this.cmsMisc.Name = "cmsMisc";
-            this.cmsMisc.Size = new System.Drawing.Size(181, 114);
+            this.cmsMisc.Size = new System.Drawing.Size(146, 92);
             // 
             // o_Resources
             // 
             this.o_Resources.Name = "o_Resources";
-            this.o_Resources.Size = new System.Drawing.Size(180, 22);
+            this.o_Resources.Size = new System.Drawing.Size(145, 22);
             this.o_Resources.Text = "Resources";
             // 
             // o_Navigator
             // 
             this.o_Navigator.Name = "o_Navigator";
-            this.o_Navigator.Size = new System.Drawing.Size(180, 22);
+            this.o_Navigator.Size = new System.Drawing.Size(145, 22);
             this.o_Navigator.Text = "Navigator";
             // 
             // o_SearchTopics
             // 
             this.o_SearchTopics.Name = "o_SearchTopics";
-            this.o_SearchTopics.Size = new System.Drawing.Size(180, 22);
+            this.o_SearchTopics.Size = new System.Drawing.Size(145, 22);
             this.o_SearchTopics.Text = "Search Topics";
             // 
             // o_TopicNotes
             // 
             this.o_TopicNotes.Name = "o_TopicNotes";
-            this.o_TopicNotes.Size = new System.Drawing.Size(180, 22);
+            this.o_TopicNotes.Size = new System.Drawing.Size(145, 22);
             this.o_TopicNotes.Text = "Topic Notes";
+            // 
+            // myToolTip1
+            // 
+            this.myToolTip1.OwnerDraw = true;
+            this.myToolTip1.ShowAlways = true;
             // 
             // StartMenu
             // 
@@ -497,6 +517,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.stxMapNavigator)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxBookmarks)).EndInit();
             this.panelBoxes.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pMyTooltipOffset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxQuickTopics)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxResources)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.OmniSound)).EndInit();
@@ -550,5 +571,7 @@
         private System.Windows.Forms.ToolStripMenuItem o_Navigator;
         private System.Windows.Forms.ToolStripMenuItem o_SearchTopics;
         private System.Windows.Forms.ToolStripMenuItem o_TopicNotes;
+        public System.Windows.Forms.PictureBox pMyTooltipOffset;
+        private MyToolTip myToolTip1;
     }
 }

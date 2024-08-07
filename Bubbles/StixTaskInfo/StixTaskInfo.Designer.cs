@@ -71,6 +71,7 @@
             this.linkEffortUnit = new System.Windows.Forms.LinkLabel();
             this.btnSetEffort = new System.Windows.Forms.PictureBox();
             this.numEffort = new System.Windows.Forms.NumericUpDown();
+            this.myToolTip1 = new Bubbles.MyToolTip();
             this.cmsDuration.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
@@ -210,6 +211,11 @@
             // 
             this.numDuration.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.numDuration.Location = new System.Drawing.Point(0, 0);
+            this.numDuration.Maximum = new decimal(new int[] {
+            24000,
+            0,
+            0,
+            0});
             this.numDuration.Name = "numDuration";
             this.numDuration.Size = new System.Drawing.Size(30, 20);
             this.numDuration.TabIndex = 83;
@@ -448,7 +454,7 @@
             // cmsResources
             // 
             this.cmsResources.Name = "cmsResources";
-            this.cmsResources.Size = new System.Drawing.Size(181, 26);
+            this.cmsResources.Size = new System.Drawing.Size(61, 4);
             // 
             // panelEffort
             // 
@@ -494,6 +500,11 @@
             // 
             this.numEffort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.numEffort.Location = new System.Drawing.Point(0, 0);
+            this.numEffort.Maximum = new decimal(new int[] {
+            24000,
+            0,
+            0,
+            0});
             this.numEffort.Name = "numEffort";
             this.numEffort.Size = new System.Drawing.Size(30, 20);
             this.numEffort.TabIndex = 104;
@@ -506,6 +517,11 @@
             this.numEffort.ValueChanged += new System.EventHandler(this.numDuration_ValueChanged);
             this.numEffort.KeyDown += new System.Windows.Forms.KeyEventHandler(this.numDuration_KeyDown);
             this.numEffort.MouseDown += new System.Windows.Forms.MouseEventHandler(this.numEffort_MouseDown);
+            // 
+            // myToolTip1
+            // 
+            this.myToolTip1.OwnerDraw = true;
+            this.myToolTip1.ShowAlways = true;
             // 
             // StixTaskInfo
             // 
@@ -603,5 +619,6 @@
         public System.Windows.Forms.PictureBox btnSetEffort;
         public System.Windows.Forms.PictureBox btnSetDuration;
         public System.Windows.Forms.NumericUpDown numEffort;
+        private MyToolTip myToolTip1;
     }
 }

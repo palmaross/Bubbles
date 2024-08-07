@@ -465,7 +465,12 @@
       <DependentUpon>TopicNotesDlg.cs</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="Stix23.csproj">
+      <Project>{243ABB0B-DD55-4E6E-8F67-ED9ACEB51A0E}</Project>
+      <Name>Stix23</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="app21.config" />
     <None Include="I18n.default.ini">

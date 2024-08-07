@@ -30,7 +30,8 @@ namespace Bubbles
             lblTextColor.Text = Utils.getString("stixformat.lblTextColor");
             lblFillColor.Text = Utils.getString("stixformat.lblFillColor");
 
-            toolTip1.SetToolTip(pictureHandle, stickname + Utils.getString("HeadIcon.tooltip"));
+            myToolTip1.SetToolTip(pictureHandle, stickname +
+                Utils.getString("StixFormat.description") + Utils.getString("HeadIcon.tooltip.tips"));
             toolTip1.SetToolTip(Manage, Utils.getString("ManageIcon.tooltip"));
             toolTip1.SetToolTip(pClearFormat, Utils.getString("stixformat.clearformat"));
             toolTip1.SetToolTip(pCloseFontSize, Utils.getString("stixformat.pCloseFontSize"));

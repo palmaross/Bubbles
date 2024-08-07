@@ -25,7 +25,8 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "IconStix.htm");
 
-            toolTip1.SetToolTip(pictureHandle, stickname + Utils.getString("HeadIcon.tooltip"));
+            myToolTip1.SetToolTip(pictureHandle, stickname + 
+                Utils.getString("StixIcons.description") + Utils.getString("HeadIcon.tooltip.tips"));
             StickName = stickname;
             toolTip1.SetToolTip(Manage, Utils.getString("ManageIcon.tooltip"));
 

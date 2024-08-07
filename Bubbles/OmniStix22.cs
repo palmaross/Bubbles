@@ -48,6 +48,7 @@
             try
             {
                 MMUtils.Version = 22;
+                Utils.Version = 22;
                 MMUtils.Registered_AddinName = "OmniStix22.Connect";
                 MMUtils.CLSID = "47753526-1994-4211-A1DA-926C94F51BB2";
                 MMUtils.CreateAddinFolder = true;

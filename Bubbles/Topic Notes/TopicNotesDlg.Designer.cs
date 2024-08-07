@@ -352,7 +352,7 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 23);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 29);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -365,7 +365,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tabControl1);
             this.splitContainer1.Panel2.Controls.Add(this.panelTop);
-            this.splitContainer1.Size = new System.Drawing.Size(620, 271);
+            this.splitContainer1.Size = new System.Drawing.Size(620, 265);
             this.splitContainer1.SplitterDistance = 163;
             this.splitContainer1.TabIndex = 14;
             // 
@@ -383,7 +383,7 @@
             this.listTopics.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listTopics.Location = new System.Drawing.Point(0, 23);
             this.listTopics.Name = "listTopics";
-            this.listTopics.Size = new System.Drawing.Size(163, 248);
+            this.listTopics.Size = new System.Drawing.Size(163, 242);
             this.listTopics.TabIndex = 11;
             this.listTopics.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.listTopics_AfterSelect);
             this.listTopics.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.listTopics_NodeMouseClick);
@@ -412,7 +412,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 25);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(453, 246);
+            this.tabControl1.Size = new System.Drawing.Size(453, 240);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.TabIndex = 14;
             this.tabControl1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabControlNotes_DrawItem);
@@ -426,7 +426,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(445, 216);
+            this.tabPage2.Size = new System.Drawing.Size(445, 210);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "   ";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -454,14 +454,14 @@
             this.panelFind.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelFind.Location = new System.Drawing.Point(0, 0);
             this.panelFind.Name = "panelFind";
-            this.panelFind.Size = new System.Drawing.Size(620, 23);
+            this.panelFind.Size = new System.Drawing.Size(620, 29);
             this.panelFind.TabIndex = 28;
             // 
             // pDeleteSearchedText
             // 
             this.pDeleteSearchedText.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.pDeleteSearchedText.Image = ((System.Drawing.Image)(resources.GetObject("pDeleteSearchedText.Image")));
-            this.pDeleteSearchedText.Location = new System.Drawing.Point(426, 3);
+            this.pDeleteSearchedText.Location = new System.Drawing.Point(426, 6);
             this.pDeleteSearchedText.Name = "pDeleteSearchedText";
             this.pDeleteSearchedText.Size = new System.Drawing.Size(15, 15);
             this.pDeleteSearchedText.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -472,7 +472,7 @@
             // linkSearchOptions
             // 
             this.linkSearchOptions.AutoSize = true;
-            this.linkSearchOptions.Location = new System.Drawing.Point(535, 5);
+            this.linkSearchOptions.Location = new System.Drawing.Point(535, 8);
             this.linkSearchOptions.Name = "linkSearchOptions";
             this.linkSearchOptions.Size = new System.Drawing.Size(80, 13);
             this.linkSearchOptions.TabIndex = 29;
@@ -482,7 +482,7 @@
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(466, 0);
+            this.btnSearch.Location = new System.Drawing.Point(466, 3);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(62, 23);
             this.btnSearch.TabIndex = 28;
@@ -493,7 +493,7 @@
             // cbSearchedText
             // 
             this.cbSearchedText.FormattingEnabled = true;
-            this.cbSearchedText.Location = new System.Drawing.Point(289, 2);
+            this.cbSearchedText.Location = new System.Drawing.Point(289, 5);
             this.cbSearchedText.Name = "cbSearchedText";
             this.cbSearchedText.Size = new System.Drawing.Size(169, 21);
             this.cbSearchedText.TabIndex = 12;
@@ -502,7 +502,7 @@
             // pBrowse
             // 
             this.pBrowse.Image = ((System.Drawing.Image)(resources.GetObject("pBrowse.Image")));
-            this.pBrowse.Location = new System.Drawing.Point(266, 3);
+            this.pBrowse.Location = new System.Drawing.Point(266, 6);
             this.pBrowse.Name = "pBrowse";
             this.pBrowse.Size = new System.Drawing.Size(16, 16);
             this.pBrowse.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -513,7 +513,7 @@
             // cbFindIn
             // 
             this.cbFindIn.FormattingEnabled = true;
-            this.cbFindIn.Location = new System.Drawing.Point(64, 2);
+            this.cbFindIn.Location = new System.Drawing.Point(64, 5);
             this.cbFindIn.Name = "cbFindIn";
             this.cbFindIn.Size = new System.Drawing.Size(196, 21);
             this.cbFindIn.TabIndex = 7;
@@ -522,7 +522,7 @@
             // lblLookIn
             // 
             this.lblLookIn.AutoSize = true;
-            this.lblLookIn.Location = new System.Drawing.Point(3, 5);
+            this.lblLookIn.Location = new System.Drawing.Point(3, 8);
             this.lblLookIn.Name = "lblLookIn";
             this.lblLookIn.Size = new System.Drawing.Size(45, 13);
             this.lblLookIn.TabIndex = 6;

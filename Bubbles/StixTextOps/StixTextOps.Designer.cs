@@ -52,6 +52,7 @@
             this.OptionInternalLinks = new System.Windows.Forms.PictureBox();
             this.pTopicWidth = new System.Windows.Forms.PictureBox();
             this.cmsTopicWidths = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.myToolTip1 = new Bubbles.MyToolTip();
             ((System.ComponentModel.ISupportInitialize)(this.PasteLink)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PasteNotes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pCopyTopicText)).BeginInit();
@@ -316,6 +317,11 @@
             this.cmsTopicWidths.ShowImageMargin = false;
             this.cmsTopicWidths.Size = new System.Drawing.Size(61, 4);
             // 
+            // myToolTip1
+            // 
+            this.myToolTip1.OwnerDraw = true;
+            this.myToolTip1.ShowAlways = true;
+            // 
             // StixTextOps
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -388,5 +394,6 @@
         public System.Windows.Forms.PictureBox OptionInternalLinks;
         private System.Windows.Forms.PictureBox pTopicWidth;
         private System.Windows.Forms.ContextMenuStrip cmsTopicWidths;
+        private MyToolTip myToolTip1;
     }
 }

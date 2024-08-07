@@ -143,6 +143,9 @@
     </Compile>
     <Compile Include="AppManager\XMLMapCompanion.cs" />
     <Compile Include="AppManager\XMLTopicCompanion.cs" />
+    <Compile Include="MyToolTip.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="OmniSound\ManageAudioDlg.cs">
       <SubType>Form</SubType>
     </Compile>

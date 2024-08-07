@@ -383,13 +383,18 @@ namespace Bubbles
                 string topictext = t.Text.Trim();
                 if (String.IsNullOrEmpty(topictext)) topictext = Utils.getString("TopicNotesDlg.noname");
 
-                TopicNotesItem item = new TopicNotesItem(topictext, t.Guid, t.Notes.TextXHTML);
+                string html = Utils.ClearTopicNotes(t.Notes.TextXHTML);
+
+                TopicNotesItem item = new TopicNotesItem(topictext, t.Guid, html);
 
                 node = map.Nodes.Add(topictext);
                 node.Tag = item;
 
                 if (OmniTopics.Keys.Contains(mappath))
+                {
+                    if (OmniTopics[mappath].Keys.Contains(t.Guid)) continue;
                     OmniTopics[mappath].Add(t.Guid, node);
+                }
                 else
                     OmniTopics[mappath] = new Dictionary<string, TreeNode> { { t.Guid, node } };
             }
@@ -614,7 +619,7 @@ namespace Bubbles
                             if (!_t.Font.Underline) underline = false; if (!_t.Font.Strikethrough) strikethrough = false;
                         }
 
-                        if (sizeequal)
+                        if (size > 3 && sizeequal)
                         {
                             stix.numFontSize.Value = (int)size;
                             stix.numFontSize.Text = size.ToString();
@@ -880,6 +885,7 @@ namespace Bubbles
 
                     if (m_TaskInfo.numEffort.Value != duration || t.Task.EffortUnit != unit)
                         m_TaskInfo.numEffort.Value = duration;
+                
                 }
                 else
                 {

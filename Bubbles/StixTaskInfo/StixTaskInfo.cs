@@ -14,9 +14,11 @@ namespace Bubbles
 {
     internal partial class StixTaskInfo : Form
     {
+        private MyToolTip myToolTip;
         public StixTaskInfo(int ID, string _orientation, string stickname = "")
         {
             InitializeComponent();
+            myToolTip = new MyToolTip();
 
             StixMain.m_TaskInfo = this;
 
@@ -27,7 +29,9 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "TaskInfoStix.htm");
 
-            toolTip1.SetToolTip(pictureHandle, stickname + Utils.getString("HeadIcon.tooltip"));
+            myToolTip1.SetToolTip(pictureHandle, stickname +
+                Utils.getString("StixTaskInfo.description") +
+                Utils.getString("HeadIcon.tooltip.tips"));
             toolTip1.SetToolTip(Manage, Utils.getString("ManageIcon.tooltip"));
             toolTip1.SetToolTip(pProgress, Utils.getString("taskinfo.pProgress.tooltip"));
             toolTip1.SetToolTip(pPriority, Utils.getString("taskinfo.pPriority.tooltip"));

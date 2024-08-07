@@ -18,20 +18,30 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "stixstartmenu.htm");
 
-            toolTip1.SetToolTip(stxIcons, Utils.getString("StixIcons.tooltip"));
-            toolTip1.SetToolTip(stxTaskInfo, Utils.getString("StixTaskInfo.tooltip"));
-            toolTip1.SetToolTip(stxMapNavigator, Utils.getString("StixMapNavigator.tooltip") + 
-                Utils.getString("StixMapNavigator.tooltip2"));
-            toolTip1.SetToolTip(stxTools, Utils.getString("StixTools.tooltip") +
-                Utils.getString("StixTools.tooltip2"));
-            toolTip1.SetToolTip(stxAddTopics, Utils.getString("StixAddTopic.tooltip"));
-            toolTip1.SetToolTip(stxTextOps, Utils.getString("StixTextOps.tooltip"));
-            toolTip1.SetToolTip(stxFormat, Utils.getString("StixFormat.tooltip"));
-            toolTip1.SetToolTip(boxBookmarks, Utils.getString("Box.Bookmarks"));
-            toolTip1.SetToolTip(boxSources, Utils.getString("Box.Links"));
-            toolTip1.SetToolTip(boxQuickTopics, Utils.getString("QuickTopicsDlg.Title"));
-            toolTip1.SetToolTip(OmniSound, Utils.getString("Box.OmniSound"));
-            toolTip1.SetToolTip(Stickers, Utils.getString("stickers.contextmenu.stickers"));
+            myToolTip1.SetToolTip(stxIcons, Utils.getString("StixIcons.tooltip") +
+                Utils.getString("StixIcons.description"));
+            myToolTip1.SetToolTip(stxTaskInfo, Utils.getString("StixTaskInfo.tooltip") +
+                Utils.getString("StixTaskInfo.description"));
+            myToolTip1.SetToolTip(stxMapNavigator, Utils.getString("StixMapNavigator.tooltip") +
+                Utils.getString("StixMapNavigator.description") + Utils.getString("StixMapNavigator.tips"));
+            myToolTip1.SetToolTip(stxTools, Utils.getString("StixTools.tooltip") +
+                Utils.getString("StixTools.description") + Utils.getString("StixTools.tips"));
+            myToolTip1.SetToolTip(stxAddTopics, Utils.getString("StixAddTopic.tooltip") +
+                Utils.getString("StixAddTopic.description"));
+            myToolTip1.SetToolTip(stxTextOps, Utils.getString("StixTextOps.tooltip") +
+                 Utils.getString("StixTextOps.description"));
+            myToolTip1.SetToolTip(stxFormat, Utils.getString("StixFormat.tooltip") +
+                 Utils.getString("StixFormat.description"));
+
+            myToolTip1.SetToolTip(boxBookmarks, Utils.getString("Box.Bookmarks") +
+                Utils.getString("Box.Bookmarks.description"));
+            myToolTip1.SetToolTip(boxSources, Utils.getString("Box.Links") +
+                Utils.getString("Box.Links.description"));
+            myToolTip1.SetToolTip(boxQuickTopics, Utils.getString("Box.QuickTopics") +
+                Utils.getString("Box.QuickTopics.description"));
+            myToolTip1.SetToolTip(OmniSound, Utils.getString("Box.OmniSound") +
+                Utils.getString("Box.OmniSound.description") + Utils.getString("Box.OmniSound.tips"));
+            toolTip1.SetToolTip(Manage, Utils.getString("ManageButton.tooltip"));
 
             cm_show.Text = Utils.getString("startmenu.contextmenu.show");
             cm_hide.Text = Utils.getString("startmenu.contextmenu.hide");
@@ -49,18 +59,27 @@ namespace Bubbles
             cm_closemenu.Text = Utils.getString("button.close");
 
             TopicPlayer.Text = Utils.getString("TopicPlayer.Title");
+            TopicPlayer.ToolTipText = Utils.getString("TopicPlayer.tooltip");
             TopicRecorder.Text = Utils.getString("TopicRecorder.Title");
+            TopicRecorder.ToolTipText = Utils.getString("TopicRecorder.tooltip");
+
             ManageAudio.Text = Utils.getString("ManageAudioDlg.title");
+            ManageAudio.ToolTipText = Utils.getString("ManageAudio.tooltip");
 
             StixUtils.cmiSize = p2.Size;
+            MyToolTip.offset = pMyTooltipOffset.Height;
 
             o_Resources.Text = Utils.getString("taskinfo.Resources");
+            o_Resources.ToolTipText = Utils.getString("Resources.tooltip");
             StixUtils.SetContextMenuImage(o_Resources, "resources.png");
             o_Navigator.Text = Utils.getString("navigator.frommenu");
+            o_Navigator.ToolTipText = Utils.getString("StixMapNavigator.description").TrimStart('\n');
             StixUtils.SetContextMenuImage(o_Navigator, "position.png");
             o_SearchTopics.Text = Utils.getString("SearchTextDlg.title");
+            o_SearchTopics.ToolTipText = Utils.getString("Box.SearchTopics.tooltip");
             StixUtils.SetContextMenuImage(o_SearchTopics, "notesSearchBlack.png");
             o_TopicNotes.Text = Utils.getString("TopicNotesDlg.title");
+            o_TopicNotes.ToolTipText = Utils.getString("Box.TopicNotes.tooltip");
             StixUtils.SetContextMenuImage(o_TopicNotes, "notes_detach.png");
             cmsMisc.ItemClicked += CmsMisc_ItemClicked;
 

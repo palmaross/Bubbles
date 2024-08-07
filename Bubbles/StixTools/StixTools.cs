@@ -23,8 +23,10 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "ToolStix.htm");
 
+            myToolTip1.SetToolTip(pictureHandle, stickname +
+                Utils.getString("StixTools.description") +
+                Utils.getString("HeadIcon.tooltip.tips"));
             toolTip1.SetToolTip(ToolList, Utils.getString("tools.toolview.list"));
-            toolTip1.SetToolTip(pictureHandle, stickname + Utils.getString("HeadIcon.tooltip"));
             toolTip1.SetToolTip(Manage, Utils.getString("ManageIcon.tooltip"));
 
             orientation = _orientation; // "H" or "V"

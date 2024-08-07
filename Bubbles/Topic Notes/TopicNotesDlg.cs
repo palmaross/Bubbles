@@ -77,7 +77,7 @@ namespace Bubbles
 
             SO_AddToResults.Text = Utils.getString("SO_AddToResults");
             SO_ReplaceResults.Text = Utils.getString("SO_ReplaceResults");
-            SO_AddToResults.Checked = true;
+            SO_ReplaceResults.Checked = true;
 
             MI_gototopic.Text = Utils.getString("TopicNotesDlg.contextmenu.gototopic");
             StixUtils.SetContextMenuImage(MI_gototopic, "expand.png");
@@ -784,13 +784,18 @@ namespace Bubbles
 
         private void SelectionChanged(object sender, EventArgs e)
         {
+            if (editor == null) return;
+
             if (editor.IsBold()) pBold.Image = fBoldActive; else pBold.Image = fBold;
             if (editor.IsItalic()) pItalic.Image = fItalicActive; else pItalic.Image = fItalic;
             if (editor.IsUnderline()) pUnderline.Image = fUnderlineActive; else pUnderline.Image = fUnderline;
             if (editor.IsStrikeThrough()) pStrikethrough.Image = fStrikethroughActive; else pStrikethrough.Image = fStrikethrough;
-        
-            string font = editor.Selection.queryCommandValue("fontname");
-            cbFontFamily.Text = font;
+
+            try
+            {
+                string font = editor.Selection.queryCommandValue("fontname");
+                cbFontFamily.Text = font;
+            } catch { }
         }
 
         private void CmsWebBrowser_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -901,61 +906,68 @@ namespace Bubbles
 
         #region SearchPanel
 
-        void InitCollectionsAndFolders()
+        void InitCollectionsAndFolders(bool collections = true, bool folders = true)
         {
-            Collections.Items.Clear();
-            Folders.Items.Clear();
-
-            ToolStripItem tsi = Collections.Items.Add(Utils.getString("button.refresh"));
-            tsi.Name = "RefreshCollections";
-            Collections.Items.Add(new ToolStripSeparator());
-
-            foreach (MapShortcutCollection collection in MMUtils.MindManager.MapShortcutCollections)
+            if (collections)
             {
-                if (collection.Count == 0) continue;
+                Collections.Items.Clear();
 
-                tsi = Collections.Items.Add(collection.Name);
-                tsi.Name = "mapcollection";
-                CollectionMaps = (tsi as ToolStripMenuItem).DropDown;
-                (CollectionMaps as ToolStripDropDownMenu).ShowImageMargin = false;
-                CollectionMaps.ItemClicked += CmsLookIn_ItemClicked;
+                ToolStripItem tsi = Collections.Items.Add(Utils.getString("button.refresh"));
+                tsi.Name = "RefreshCollections";
+                Collections.Items.Add(new ToolStripSeparator());
 
-                foreach (MapShortcut item in collection)
+                foreach (MapShortcutCollection collection in MMUtils.MindManager.MapShortcutCollections)
                 {
-                    tsi = CollectionMaps.Items.Add(item.Name);
-                    tsi.Tag = item.Path;
-                    tsi.Name = "mappath";
+                    if (collection.Count == 0) continue;
+
+                    tsi = Collections.Items.Add(collection.Name);
+                    tsi.Name = "mapcollection";
+                    tsi.Tag =
+                    CollectionMaps = (tsi as ToolStripMenuItem).DropDown;
+                    (CollectionMaps as ToolStripDropDownMenu).ShowImageMargin = false;
+                    CollectionMaps.ItemClicked += CmsLookIn_ItemClicked;
+
+                    foreach (MapShortcut item in collection)
+                    {
+                        tsi = CollectionMaps.Items.Add(item.Name);
+                        tsi.Tag = item.Path;
+                        tsi.Name = "mappath";
+                    }
                 }
             }
 
-            // Add Folders
-            Dictionary<string, string> _Folders = GetRegistrySubKeys();
-
-            tsi = Folders.Items.Add(Utils.getString("button.refresh"));
-            tsi.Name = "RefreshFolders";
-            Folders.Items.Add(new ToolStripSeparator());
-
-            Folders.Visible = true;
-            foreach (var folder in _Folders)
+            if (folders)
             {
-                tsi = Folders.Items.Add(folder.Key);
-                tsi.Name = "folder"; 
-                tsi.Tag = folder.Value; // Path to folder
-                FolderMaps = (tsi as ToolStripMenuItem).DropDown;
-                (FolderMaps as ToolStripDropDownMenu).ShowImageMargin = false;
-                FolderMaps.ItemClicked += CmsLookIn_ItemClicked;
+                Folders.Items.Clear();
+                Dictionary<string, string> _Folders = GetMyFolders();
 
-                DirectoryInfo di = new DirectoryInfo(folder.Value);
-                FileInfo[] ffi =  di.GetFiles("*.mmap", SearchOption.TopDirectoryOnly);
-                foreach (var fi in ffi)
+                ToolStripItem tsi = Folders.Items.Add(Utils.getString("button.refresh"));
+                tsi.Name = "RefreshFolders";
+                Folders.Items.Add(new ToolStripSeparator());
+
+                Folders.Visible = true;
+                foreach (var folder in _Folders)
                 {
-                    tsi = FolderMaps.Items.Add(Path.GetFileNameWithoutExtension(fi.Name));
-                    tsi.Tag = fi.FullName;
-                    tsi.Name = "mappath";
+                    tsi = Folders.Items.Add(folder.Key);
+                    tsi.Name = "folder";
+                    tsi.Tag = folder.Value; // Path to folder
+                    FolderMaps = (tsi as ToolStripMenuItem).DropDown;
+                    (FolderMaps as ToolStripDropDownMenu).ShowImageMargin = false;
+                    FolderMaps.ItemClicked += CmsLookIn_ItemClicked;
+
+                    DirectoryInfo di = new DirectoryInfo(folder.Value);
+                    FileInfo[] ffi = di.GetFiles("*.mmap", SearchOption.TopDirectoryOnly);
+                    foreach (var fi in ffi)
+                    {
+                        tsi = FolderMaps.Items.Add(Path.GetFileNameWithoutExtension(fi.Name));
+                        tsi.Tag = fi.FullName;
+                        tsi.Name = "mappath";
+                    }
                 }
             }
         }
 
+        /// <summary>Open Folder/File dialog</summary>
         private void pBrowse_MouseClick(object sender, MouseEventArgs e)
         {
             CommonOpenFileDialog dlg = new CommonOpenFileDialog();
@@ -976,15 +988,19 @@ namespace Bubbles
             if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 cbFindIn.Text = dlg.FileName;
-                cbFindIn.Tag = "map";
-                if (dlg.IsFolderPicker) cbFindIn.Tag = "folder";
+                string what = "mappath:";
+                if (dlg.IsFolderPicker) what = "folder:";
+                cbFindIn.Tag = what + dlg.FileName;
             }
         }
 
-        private Dictionary<string, string> GetRegistrySubKeys()
+        /// <summary>Get MM MyMaps Folders from registry</summary>
+        /// <returns>Dictionary Key = Folder Name, Value = Folder Path</returns>
+        private Dictionary<string, string> GetMyFolders()
         {
             var valuesBynames = new Dictionary<string, string>();
-            const string REGISTRY_ROOT = @"Software\Mindjet\MindManager\23\MyMaps\Folders";
+            int mmVersion = Utils.Version;
+            string REGISTRY_ROOT = @"Software\Mindjet\MindManager\" + mmVersion.ToString() + @"\MyMaps\Folders";
 
             using (RegistryKey rootKey = Registry.CurrentUser.OpenSubKey(REGISTRY_ROOT))
             {
@@ -1036,11 +1052,6 @@ namespace Bubbles
                 cbFindIn.Text = e.ClickedItem.Text;
                 cbFindIn.Tag = "mc:" + e.ClickedItem.Text;
             }
-            else if (e.ClickedItem.Name == "mappath")
-            {
-                cbFindIn.Text = e.ClickedItem.Tag as string;
-                cbFindIn.Tag = cbFindIn.Text;
-            }
             else if (e.ClickedItem == LookInFolders) // Look in the all folders
             {
                 cbFindIn.Text = LookInFolders.Text;
@@ -1049,8 +1060,23 @@ namespace Bubbles
             else if (e.ClickedItem.Name == "folder") // look in the given folder
             {
                 cbFindIn.Text = e.ClickedItem.Text;
-                cbFindIn.Tag = e.ClickedItem.Tag as string;
+                cbFindIn.Tag = "folder:" + e.ClickedItem.Tag;
             }
+            else if (e.ClickedItem.Name == "mappath")
+            {
+                cbFindIn.Text = e.ClickedItem.Text;
+                cbFindIn.Tag = "mappath:" + e.ClickedItem.Tag;
+            }
+            else if (e.ClickedItem.Name == "RefreshCollections")
+            {
+                InitCollectionsAndFolders(true, false);
+            }
+            else if (e.ClickedItem.Name == "RefreshFolders")
+            {
+                InitCollectionsAndFolders(false);
+            }
+
+            cmsLookIn.Close();
         }
 
         private void CmsSearchOptions_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -1075,36 +1101,54 @@ namespace Bubbles
         {
             if (tabControl1.SelectedTab.Controls.OfType<WebBrowser>().Count() == 0) return;
 
-            string searchedText = cbSearchedText.Text.Trim().ToLower();
+            string _searchedText = cbSearchedText.Text.Trim().ToLower();
             WebBrowser wb = tabControl1.SelectedTab.Controls.OfType<WebBrowser>().First();
             falsealarm = true;
             // deselect all text
             editor.ClearSearchedText();
-            if (searchedText == "" || searchedText == "*") return; // nothing to search for
+            if (_searchedText == "" || _searchedText == "*") return; // nothing to search for
+
+            List<string> searchedText = new List<string>();
+
+            if (_searchedText.StartsWith("\""))
+            {
+                if (_searchedText.Length < 3 || !_searchedText.EndsWith("\"")) return;
+                searchedText.Add(_searchedText.TrimStart('\"').TrimEnd('\"'));
+            }
+            else
+                searchedText = _searchedText.Replace("  ", " ").Split(' ').ToList();
 
             editor.SearchText(searchedText);
         }
 
+        /// <summary>Show cbFindIn combobox context menu</summary>
         private void cbFindIn_Click(object sender, EventArgs e)
         {
             Point loc = new Point(0, cbFindIn.Height);
             cmsLookIn.Show(cbFindIn, loc);
+            cmsLookIn.Focus();
         }
 
         /// <summary>
-        /// Search topics with notes conteining the text or the text in notes
+        /// Search topics with notes containing the text or the text in notes
         /// </summary>
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            string lookin = cbFindIn.Tag as string; string mappath = lookin;
-            string searchedText = cbSearchedText.Text.Trim().ToLower();
-            if (searchedText == "") return;
+            string lookin = cbFindIn.Tag as string;
+            string _searchedText = cbSearchedText.Text.Trim().ToLower();
+            if (_searchedText == "") return;
+            List<string> searchedText = new List<string>();
+
+            if (_searchedText.StartsWith("\"") && _searchedText.EndsWith("\""))
+                searchedText.Add(_searchedText.TrimStart('\"').TrimEnd('\"'));
+            else
+                searchedText = _searchedText.Replace("  ", " ").Split(' ').ToList();
 
             List<string> keywords = Utils.getRegistry("SearchHistory", "").Split(';').ToList();
-            if (searchedText != "*" && !keywords.Contains(searchedText))
+            if (_searchedText != "*" && !keywords.Contains(_searchedText))
             {
                 if (keywords.Count >= 15) _ = keywords.Take(14).ToList();
-                keywords.Insert(0, searchedText);
+                keywords.Insert(0, _searchedText);
                 string _keywords = string.Join(";", keywords).TrimEnd(';');
                 Utils.setRegistry("SearchHistory", _keywords);
                 cbSearchedText.Items.Insert(0, searchedText);
@@ -1112,6 +1156,7 @@ namespace Bubbles
 
             TreeNode map = null;
             MyNodes.Clear();
+            List<string> mappaths = new List<string>();
 
             if (SO_ReplaceResults.Checked) listTopics.Nodes.Clear();
             else if (SO_AddToResults.Checked) // get nodes to avoid duplicates
@@ -1143,7 +1188,6 @@ namespace Bubbles
                 foreach (MapShortcutCollection collection in MMUtils.MindManager.MapShortcutCollections)
                     maps += collection.Count;
 
-                List<string> mappaths = new List<string>();
                 foreach (MapShortcutCollection collection in MMUtils.MindManager.MapShortcutCollections)
                 {
                     foreach (MapShortcut _map in collection)
@@ -1158,7 +1202,7 @@ namespace Bubbles
             else if (lookin.StartsWith("mc:")) // Search for notes in the specified map collection
             {
                 string cName = lookin.Substring(3);
-                List<string> mappaths = new List<string>();
+                
                 foreach (MapShortcutCollection collection in MMUtils.MindManager.MapShortcutCollections)
                 {
                     maps = collection.Count; // number of maps in the collection
@@ -1176,33 +1220,46 @@ namespace Bubbles
             }
             else if (lookin == "myfolders") // Search for notes in the all folders
             {
-                foreach (ToolStripDropDown folder in Folders.Items)
-                    maps += folder.Items.Count;
-
-                foreach (ToolStripDropDown folder in Folders.Items)
+                foreach (ToolStripItem folder in Folders.Items)
                 {
-                    foreach (ToolStripItem _map in folder.Items)
+                    if (folder as ToolStripMenuItem is ToolStripDropDownItem _folder)
+                        maps += _folder.DropDown.Items.Count;
+                }
+
+                foreach (ToolStripItem folder in Folders.Items)
+                {
+                    if (folder as ToolStripMenuItem is ToolStripDropDownItem _folder)
                     {
-                        string mapcount = i++ + " / " + maps;
-                        map = SearchNotesInMap(searchedText, _map.Tag as string, mapcount);
+                        foreach (ToolStripItem _map in _folder.DropDown.Items)
+                        {
+                            string mapcount = i++ + " / " + maps;
+                            if (mappaths.Contains(_map.Tag as string)) continue;
+                            map = SearchNotesInMap(searchedText, _map.Tag as string, mapcount);
+                            mappaths.Add(_map.Tag as string);
+                        }
                     }
                 }
             }
-            else if (lookin == "folder") // Search for notes in the specified folder
+            else if (lookin.StartsWith("folder:")) // Search for notes in the specified folder
             {
-                DirectoryInfo di = new DirectoryInfo(cbFindIn.Tag as string);
+                string folderPath = lookin.Substring(7);
+
+                DirectoryInfo di = new DirectoryInfo(folderPath);
                 FileInfo[] ffi = di.GetFiles("*.mmap", SearchOption.TopDirectoryOnly);
                 maps += ffi.Count();
 
                 foreach (var fi in ffi)
                 {
                     string mapcount = i++ + " / " + maps;
+                    if (mappaths.Contains(fi.FullName)) continue;
                     map = SearchNotesInMap(searchedText, fi.FullName, mapcount);
+                    mappaths.Add(fi.FullName);
                 }
             }
-            else // Is a map or folder path
+            else if (lookin.StartsWith("mappath:")) // Is a map path
             {
-                map = SearchNotesInMap(searchedText, mappath, "1 / 1");
+                string mapPath = lookin.Substring(8);
+                map = SearchNotesInMap(searchedText, mapPath, "1 / 1");
             }
             m_progressDlg.Hide();
 
@@ -1214,9 +1271,12 @@ namespace Bubbles
         }
         Dictionary<TreeNode, string> MyNodes = new Dictionary<TreeNode, string>();
 
-        TreeNode SearchNotesInMap(string searchedText, string mappath, string mapcount)
+        TreeNode SearchNotesInMap(List<string> searchedText, string mappath, string mapcount)
         {
+            mappath = mappath.ToLower();
             var m_xmlDocument = XMLMapCompanion.Get(mappath);
+            if (m_xmlDocument == null) return null;
+
             string mapName = XMLMapCompanion.CentralTopicText;
             TreeNode map = GetMapNode(mappath, mapName);
 
@@ -1231,10 +1291,8 @@ namespace Bubbles
                 m_progressDlg.dlgParams.count = mapcount;
                 System.Windows.Forms.Application.DoEvents();
 
-                topicNotes = t.Value.NotesHtml();
+                topicNotes = Utils.ClearTopicNotes(t.Value.NotesHtml());
                 if (topicNotes == "") continue;
-
-                XMLTopicCompanion _t = t.Value;
 
                 topicName = t.Value.TopicText;
                 topicGuid = t.Key;
@@ -1246,9 +1304,10 @@ namespace Bubbles
                     return map;
                 }
 
-                if (searchedText == "*" || topicNotes.Contains(searchedText))
+                foreach (string search in searchedText)
                 {
-                    AddNotesNode(mappath, mapName, item, MyNodes.Values.Contains(topicGuid));
+                    if (search == "*" || topicNotes.ToLower().Contains(search))
+                        AddNotesNode(mappath, mapName, item, MyNodes.Values.Contains(topicGuid));
                 }
 
                 if (map.Nodes.Count == 1) 

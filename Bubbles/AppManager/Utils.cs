@@ -598,6 +598,17 @@ namespace Bubbles
             return "";
         }
 
+        public static string ClearTopicNotes(string html)
+        {
+            int i = html.IndexOf("<head>");
+            int k = -1;
+            if (i > -1) { k = html.IndexOf("</head>"); }
+
+            if (k > -1)
+                return html.Remove(i, k - i + 7);
+            else return html;
+        }
+
         /// <summary>
         /// Save copy of a map and get its path.
         /// </summary>
@@ -660,6 +671,7 @@ namespace Bubbles
         public static string ImagesPath = "";
         public static string dllPath = "";
         public static string Company;
+        public static int Version;
         public static string Registered_AddinName;
 
         /// <summary>

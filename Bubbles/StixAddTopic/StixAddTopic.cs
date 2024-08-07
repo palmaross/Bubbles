@@ -45,7 +45,8 @@ namespace Bubbles
             toolTip1.SetToolTip(chIncrement, Utils.getString("AddTopicStix.pIncrement"));
             toolTip1.SetToolTip(pAddMultiple, Utils.getString("AddTopicStix.pAddMultiple"));
 
-            toolTip1.SetToolTip(pictureHandle, stickname + Utils.getString("HeadIcon.tooltip"));
+            myToolTip1.SetToolTip(pictureHandle, stickname +
+                Utils.getString("StixAddTopic.description") + Utils.getString("HeadIcon.tooltip.tips"));
             toolTip1.SetToolTip(Manage, Utils.getString("ManageIcon.tooltip"));
 
             cmsAddMultiple.ItemClicked += ContextMenu_ItemClicked;

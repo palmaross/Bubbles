@@ -48,6 +48,7 @@
             this.chIncrement = new System.Windows.Forms.CheckBox();
             this.V2 = new System.Windows.Forms.PictureBox();
             this.V3 = new System.Windows.Forms.PictureBox();
+            this.myToolTip1 = new Bubbles.MyToolTip();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.V1)).BeginInit();
@@ -255,6 +256,11 @@
             this.V3.TabStop = false;
             this.V3.Visible = false;
             // 
+            // myToolTip1
+            // 
+            this.myToolTip1.OwnerDraw = true;
+            this.myToolTip1.ShowAlways = true;
+            // 
             // StixAddTopic
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -316,5 +322,6 @@
         private System.Windows.Forms.CheckBox chIncrement;
         private System.Windows.Forms.PictureBox V2;
         private System.Windows.Forms.PictureBox V3;
+        private MyToolTip myToolTip1;
     }
 }

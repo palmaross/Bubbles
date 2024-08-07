@@ -178,7 +178,7 @@ namespace Bubbles
             }
             else if (e.Button == MouseButtons.Right)
             {
-                if ((int)e.Node.Tag == 1)
+                if (e.Node.Parent == null && (int)e.Node.Tag == 1)
                     m_Delete.Visible = false;
                 else
                     m_Delete.Visible = true;

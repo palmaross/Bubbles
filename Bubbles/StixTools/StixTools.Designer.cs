@@ -43,11 +43,12 @@
             this.TM_closeoptions = new System.Windows.Forms.ToolStripMenuItem();
             this.c_activemap = new System.Windows.Forms.ToolStripMenuItem();
             this.c_alwayssave = new System.Windows.Forms.ToolStripMenuItem();
+            this.TM_omnibrowser = new System.Windows.Forms.ToolStripMenuItem();
+            this.TM_externalbrowser = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.TM_edit = new System.Windows.Forms.ToolStripMenuItem();
             this.TM_delete = new System.Windows.Forms.ToolStripMenuItem();
-            this.TM_omnibrowser = new System.Windows.Forms.ToolStripMenuItem();
-            this.TM_externalbrowser = new System.Windows.Forms.ToolStripMenuItem();
+            this.myToolTip1 = new Bubbles.MyToolTip();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
@@ -144,7 +145,7 @@
             this.TM_edit,
             this.TM_delete});
             this.cmsTool.Name = "cmsManage";
-            this.cmsTool.Size = new System.Drawing.Size(207, 142);
+            this.cmsTool.Size = new System.Drawing.Size(207, 120);
             // 
             // TM_closeoptions
             // 
@@ -175,6 +176,18 @@
             this.c_alwayssave.Text = "Always save modified map";
             this.c_alwayssave.Click += new System.EventHandler(this.c_alwayssave_Click);
             // 
+            // TM_omnibrowser
+            // 
+            this.TM_omnibrowser.Name = "TM_omnibrowser";
+            this.TM_omnibrowser.Size = new System.Drawing.Size(206, 22);
+            this.TM_omnibrowser.Text = "Open in OmniBrowser";
+            // 
+            // TM_externalbrowser
+            // 
+            this.TM_externalbrowser.Name = "TM_externalbrowser";
+            this.TM_externalbrowser.Size = new System.Drawing.Size(206, 22);
+            this.TM_externalbrowser.Text = "Open in External Browser";
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -192,17 +205,10 @@
             this.TM_delete.Size = new System.Drawing.Size(206, 22);
             this.TM_delete.Text = "Удалить";
             // 
-            // TM_omnibrowser
+            // myToolTip1
             // 
-            this.TM_omnibrowser.Name = "TM_omnibrowser";
-            this.TM_omnibrowser.Size = new System.Drawing.Size(206, 22);
-            this.TM_omnibrowser.Text = "Open in OmniBrowser";
-            // 
-            // TM_externalbrowser
-            // 
-            this.TM_externalbrowser.Name = "TM_externalbrowser";
-            this.TM_externalbrowser.Size = new System.Drawing.Size(206, 22);
-            this.TM_externalbrowser.Text = "Open in External Browser";
+            this.myToolTip1.OwnerDraw = true;
+            this.myToolTip1.ShowAlways = true;
             // 
             // StixTools
             // 
@@ -252,5 +258,6 @@
         private System.Windows.Forms.ToolStripMenuItem c_alwayssave;
         private System.Windows.Forms.ToolStripMenuItem TM_omnibrowser;
         private System.Windows.Forms.ToolStripMenuItem TM_externalbrowser;
+        private MyToolTip myToolTip1;
     }
 }

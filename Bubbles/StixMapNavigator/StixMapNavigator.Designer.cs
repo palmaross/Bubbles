@@ -50,6 +50,7 @@
             this.pBookmarkList = new System.Windows.Forms.PictureBox();
             this.pSearch = new System.Windows.Forms.PictureBox();
             this.cmsBookmarks = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.myToolTip1 = new Bubbles.MyToolTip();
             ((System.ComponentModel.ISupportInitialize)(this.pCentral)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
@@ -251,6 +252,11 @@
             this.cmsBookmarks.Name = "contextMenuStrip1";
             this.cmsBookmarks.Size = new System.Drawing.Size(61, 4);
             // 
+            // myToolTip1
+            // 
+            this.myToolTip1.OwnerDraw = true;
+            this.myToolTip1.ShowAlways = true;
+            // 
             // StixMapNavigator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -312,5 +318,6 @@
         private System.Windows.Forms.ContextMenuStrip cmsBookmarks;
         public System.Windows.Forms.ToolTip toolTip1;
         public System.Windows.Forms.PictureBox pCentral;
+        private MyToolTip myToolTip1;
     }
 }
