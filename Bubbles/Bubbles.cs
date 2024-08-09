@@ -610,6 +610,10 @@ namespace Bubbles
 
                         bool bold = true, italic = true, underline = true, strikethrough = true;
                         float size = 0; bool sizeequal = true;
+
+                        if (MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0) {
+                            bold = false; italic = false; underline = false; strikethrough = false; }
+
                         foreach (Topic _t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                         {
                             if (size == 0) size = _t.Font.Size;
@@ -797,9 +801,9 @@ namespace Bubbles
             if (dt == MMUtils.NULLDATE || !startequal)
             {
                 m_TaskInfo.pStartDate.BackColor = SystemColors.ControlLight;
-                m_TaskInfo.pTopicStartDate.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
-                m_TaskInfo.pTopicStartDate.Tag = false;
-                tt.SetToolTip(m_TaskInfo.pTopicStartDate, Utils.getString("taskinfo.pTopicStartDate.set.tooltip"));
+                m_TaskInfo.pStartDateToggle.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
+                m_TaskInfo.pStartDateToggle.Tag = false;
+                tt.SetToolTip(m_TaskInfo.pStartDateToggle, Utils.getString("taskinfo.pTopicStartDate.set.tooltip"));
             }
             else
             {
@@ -813,9 +817,9 @@ namespace Bubbles
                     tt.SetToolTip(m_TaskInfo.pStartDate, dt.ToLongDateString());
                 }
                 m_TaskInfo.pStartDate.Select(0, 0); // set carret to the beginning
-                m_TaskInfo.pTopicStartDate.Tag = true;
-                m_TaskInfo.pTopicStartDate.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_active.png");
-                tt.SetToolTip(m_TaskInfo.pTopicStartDate, Utils.getString("taskinfo.pTopicStartDate.remove.tooltip"));
+                m_TaskInfo.pStartDateToggle.Tag = true;
+                m_TaskInfo.pStartDateToggle.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_active.png");
+                tt.SetToolTip(m_TaskInfo.pStartDateToggle, Utils.getString("taskinfo.pTopicStartDate.remove.tooltip"));
             }
 
             // Due Date
@@ -823,9 +827,9 @@ namespace Bubbles
             if (dt == MMUtils.NULLDATE || !dueequal)
             {
                 m_TaskInfo.pDueDate.BackColor = SystemColors.ControlLight;
-                m_TaskInfo.pTopicDueDate.Tag = false;
-                m_TaskInfo.pTopicDueDate.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
-                tt.SetToolTip(m_TaskInfo.pTopicDueDate, Utils.getString("taskinfo.pTopicDueDate.set.tooltip"));
+                m_TaskInfo.pDueDateToggle.Tag = false;
+                m_TaskInfo.pDueDateToggle.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
+                tt.SetToolTip(m_TaskInfo.pDueDateToggle, Utils.getString("taskinfo.pTopicDueDate.set.tooltip"));
             }
             else
             {
@@ -839,9 +843,9 @@ namespace Bubbles
                     tt.SetToolTip(m_TaskInfo.pDueDate, dt.ToLongDateString());
                 }
                 m_TaskInfo.pDueDate.Select(0, 0);
-                m_TaskInfo.pTopicDueDate.Tag = true;
-                m_TaskInfo.pTopicDueDate.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_active.png");
-                tt.SetToolTip(m_TaskInfo.pTopicDueDate, Utils.getString("taskinfo.pTopicDueDate.remove.tooltip"));
+                m_TaskInfo.pDueDateToggle.Tag = true;
+                m_TaskInfo.pDueDateToggle.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_active.png");
+                tt.SetToolTip(m_TaskInfo.pDueDateToggle, Utils.getString("taskinfo.pTopicDueDate.remove.tooltip"));
             }
 
             if (m_TaskInfo.stickDuration) return;
@@ -945,20 +949,20 @@ namespace Bubbles
 
         static void EnableTaskInfoControls(bool enable = true)
         {
-            foreach (System.Windows.Forms.Control c in m_TaskInfo.Controls)
-            {
-                if (c.Name != "pictureHandle" && c.Name != "Manage" && 
-                    c.Name != "pResources" && c.Name != "pQuickTask" && c.Name != "pRemoveTaskInfo")
-                {
-                    c.Enabled = enable;
-                }
-            }
+            //foreach (System.Windows.Forms.Control c in m_TaskInfo.Controls)
+            //{
+            //    if (c.Name != "pictureHandle" && c.Name != "Manage" && 
+            //        c.Name != "pResources" && c.Name != "pQuickTask" && c.Name != "pRemoveTaskInfo")
+            //    {
+            //        c.Enabled = enable;
+            //    }
+            //}
 
             // Disable set date checkbox if controls are disabled
             if (!enable)
             {
-                m_TaskInfo.pTopicStartDate.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
-                m_TaskInfo.pTopicDueDate.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
+                m_TaskInfo.pStartDateToggle.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
+                m_TaskInfo.pDueDateToggle.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
                 m_TaskInfo.pStartDate.BackColor = SystemColors.ControlLight;
                 m_TaskInfo.pDueDate.BackColor = SystemColors.ControlLight;
             }

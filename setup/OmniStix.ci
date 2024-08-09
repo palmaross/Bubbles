@@ -1066,7 +1066,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            </>
                         </>
                      </>
-                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
                         <children >
                            <_ tag = 0 id = unpack >
                               <desc ></>
@@ -1206,7 +1206,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <_ >
                                  <valname >version</>
                                  <regtype >str</>
-                                 <value >1.0.6.2</>
+                                 <value >1.0.6.3</>
                                  <if ></>
                                  <comm ></>
                               </>
@@ -2015,8 +2015,8 @@ Please try further.</>
          </>
          <_ >
             <varname >version</>
-            <value1 >1.0.6.2</>
-            <value2 >1.0.6.2</>
+            <value1 >1.0.6.3</>
+            <value2 >1.0.6.3</>
             <value3 ></>
             <value4 ></>
             <value5 ></>

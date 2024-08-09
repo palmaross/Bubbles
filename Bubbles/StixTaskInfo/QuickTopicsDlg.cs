@@ -20,6 +20,9 @@ namespace Bubbles
             helpProvider1.SetHelpKeyword(this, "quick_topics.htm");
 
             lblTitle.Text = Utils.getString("QuickTopicsDlg.Title");
+            toolTip1.SetToolTip(btnManage, Utils.getString("taskinfo.quicktask.manage"));
+            toolTip1.SetToolTip(pHelp, Utils.getString("button.help"));
+            toolTip1.SetToolTip(pClose, Utils.getString("button.close"));
 
             m_Delete.Text = Utils.getString("button.delete");
             m_Rename.Text = Utils.getString("button.rename");
@@ -32,6 +35,8 @@ namespace Bubbles
 
             this.Paint += this_Paint; // paint the border
             this.MouseDown += QuickTopicsDlg_MouseDown;
+            panelHead.MouseDown += QuickTopicsDlg_MouseDown;
+            lblTitle.MouseDown += QuickTopicsDlg_MouseDown;
         }
 
         private void pHelp_Click(object sender, EventArgs e)

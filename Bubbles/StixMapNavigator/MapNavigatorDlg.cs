@@ -67,10 +67,10 @@ namespace Bubbles
 
             this.Paint += BookmarkListDlg_Paint; // paint the border
 
-            if (!StixMapNavigator.DocumentPositions.Keys.Contains(MMUtils.ActiveDocument.Guid))
-                StixMapNavigator.DocumentPositions.Add(MMUtils.ActiveDocument.Guid, new List<PositionItem>());
-            if (!StixMapNavigator.DocumentBookmarks.Keys.Contains(MMUtils.ActiveDocument.Guid))
-                StixMapNavigator.DocumentBookmarks.Add(MMUtils.ActiveDocument.Guid, new List<BookmarkItem>());
+            //if (!StixMapNavigator.DocumentPositions.Keys.Contains(MMUtils.ActiveDocument.Guid))
+            //    StixMapNavigator.DocumentPositions.Add(MMUtils.ActiveDocument.Guid, new List<PositionItem>());
+            //if (!StixMapNavigator.DocumentBookmarks.Keys.Contains(MMUtils.ActiveDocument.Guid))
+            //    StixMapNavigator.DocumentBookmarks.Add(MMUtils.ActiveDocument.Guid, new List<BookmarkItem>());
 
             Init();
         }
@@ -503,7 +503,7 @@ namespace Bubbles
             if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                 e = new DrawItemEventArgs(e.Graphics, e.Font, e.Bounds, e.Index,
                                 e.State ^ DrawItemState.Selected, e.ForeColor,
-                                Color.Lavender); // selected item color
+                                Color.WhiteSmoke); // selected item color
 
             e.DrawBackground();
             lb.ItemHeight = lb.Font.Height;            
@@ -516,7 +516,7 @@ namespace Bubbles
                 Font addposition = new Font(lb.Font, FontStyle.Underline);
 
                 if (p_data.TopicGuid == "")
-                    e.Graphics.DrawString(p_data.TopicName, addposition, Brushes.Purple, e.Bounds);
+                    e.Graphics.DrawString(p_data.TopicName, addposition, Brushes.Gray, e.Bounds);
                 else
                     e.Graphics.DrawString(p_data.TopicName, lb.Font, Brushes.Black, e.Bounds);
             }
@@ -525,13 +525,13 @@ namespace Bubbles
                 Font central = new Font(lb.Font, FontStyle.Bold);
                 BookmarkItem b_data = lb.Items[e.Index] as BookmarkItem;
 
-                if (b_data.TopicType == Central)
-                    e.Graphics.DrawString(b_data.TopicName, central, Brushes.Black, e.Bounds);
-                if (b_data.TopicType == Main)
-                    e.Graphics.DrawString(b_data.TopicName, lb.Font, Brushes.Blue, e.Bounds);
-                else if (b_data.TopicType == Floating)
-                    e.Graphics.DrawString(b_data.TopicName, lb.Font, Brushes.Magenta, e.Bounds);
-                else if (b_data.TopicType == Normal)
+                //if (b_data.TopicType == Central)
+                //    e.Graphics.DrawString(b_data.TopicName, central, Brushes.Black, e.Bounds);
+                //if (b_data.TopicType == Main)
+                //    e.Graphics.DrawString(b_data.TopicName, lb.Font, Brushes.Blue, e.Bounds);
+                //else if (b_data.TopicType == Floating)
+                //    e.Graphics.DrawString(b_data.TopicName, lb.Font, Brushes.Magenta, e.Bounds);
+                //else if (b_data.TopicType == Normal)
                     e.Graphics.DrawString(b_data.TopicName, lb.Font, Brushes.Black, e.Bounds);
             }
             e.DrawFocusRectangle();

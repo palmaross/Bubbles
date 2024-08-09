@@ -83,7 +83,7 @@
             this.Manage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Manage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Manage.Image = ((System.Drawing.Image)(resources.GetObject("Manage.Image")));
-            this.Manage.Location = new System.Drawing.Point(318, 5);
+            this.Manage.Location = new System.Drawing.Point(324, 5);
             this.Manage.Name = "Manage";
             this.Manage.Size = new System.Drawing.Size(20, 20);
             this.Manage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -117,7 +117,7 @@
             // 
             this.pAddMultiple.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pAddMultiple.Image = ((System.Drawing.Image)(resources.GetObject("pAddMultiple.Image")));
-            this.pAddMultiple.Location = new System.Drawing.Point(292, 5);
+            this.pAddMultiple.Location = new System.Drawing.Point(298, 5);
             this.pAddMultiple.Name = "pAddMultiple";
             this.pAddMultiple.Size = new System.Drawing.Size(20, 20);
             this.pAddMultiple.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -194,7 +194,7 @@
             // numUpDown
             // 
             this.numUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numUpDown.Location = new System.Drawing.Point(225, 5);
+            this.numUpDown.Location = new System.Drawing.Point(231, 5);
             this.numUpDown.Minimum = new decimal(new int[] {
             1,
             0,
@@ -216,15 +216,16 @@
             this.TopicText.Location = new System.Drawing.Point(158, 5);
             this.TopicText.Multiline = true;
             this.TopicText.Name = "TopicText";
-            this.TopicText.Size = new System.Drawing.Size(64, 21);
+            this.TopicText.Size = new System.Drawing.Size(70, 21);
             this.TopicText.TabIndex = 102;
             this.TopicText.Tag = "1";
+            this.TopicText.WordWrap = false;
             // 
             // chIncrement
             // 
             this.chIncrement.Appearance = System.Windows.Forms.Appearance.Button;
             this.chIncrement.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chIncrement.Location = new System.Drawing.Point(260, 5);
+            this.chIncrement.Location = new System.Drawing.Point(266, 5);
             this.chIncrement.Name = "chIncrement";
             this.chIncrement.Size = new System.Drawing.Size(26, 19);
             this.chIncrement.TabIndex = 104;
@@ -266,7 +267,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(340, 30);
+            this.ClientSize = new System.Drawing.Size(346, 30);
             this.ControlBox = false;
             this.Controls.Add(this.V3);
             this.Controls.Add(this.V2);

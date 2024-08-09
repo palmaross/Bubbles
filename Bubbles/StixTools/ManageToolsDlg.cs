@@ -373,7 +373,12 @@ namespace Bubbles
                     if (dr["tooltip"].ToString() != "")
                         lv.ToolTipText = dr["tooltip"].ToString();
 
-                    if (imageList1.Images.ContainsKey(item.Type))
+                    if (item.Type == "http")
+                    {
+                        imageList1.Images.Add(item.Type, Utils.GetFavicon(item.Path));
+                        lv.ImageIndex = i++;
+                    }
+                    else if (imageList1.Images.ContainsKey(item.Type))
                     {
                         lv.ImageIndex = imageList1.Images.IndexOfKey(item.Type);
                     }

@@ -48,8 +48,8 @@
             this.pRemoveTaskInfo = new System.Windows.Forms.PictureBox();
             this.p2 = new System.Windows.Forms.PictureBox();
             this.linkDurationUnit = new System.Windows.Forms.LinkLabel();
-            this.pTopicStartDate = new System.Windows.Forms.PictureBox();
-            this.pTopicDueDate = new System.Windows.Forms.PictureBox();
+            this.pStartDateToggle = new System.Windows.Forms.PictureBox();
+            this.pDueDateToggle = new System.Windows.Forms.PictureBox();
             this.panelStartDate = new System.Windows.Forms.Panel();
             this.pStartDate = new System.Windows.Forms.MaskedTextBox();
             this.cmsDates = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -84,8 +84,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pQuickTask)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pRemoveTaskInfo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pTopicStartDate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pTopicDueDate)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pStartDateToggle)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pDueDateToggle)).BeginInit();
             this.panelStartDate.SuspendLayout();
             this.cmsDates.SuspendLayout();
             this.panelDueDate.SuspendLayout();
@@ -287,31 +287,31 @@
             this.linkDurationUnit.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.linkDurationUnit.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkDurationUnit_LinkClicked);
             // 
-            // pTopicStartDate
+            // pStartDateToggle
             // 
-            this.pTopicStartDate.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pTopicStartDate.Location = new System.Drawing.Point(0, 16);
-            this.pTopicStartDate.Name = "pTopicStartDate";
-            this.pTopicStartDate.Size = new System.Drawing.Size(32, 13);
-            this.pTopicStartDate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pTopicStartDate.TabIndex = 94;
-            this.pTopicStartDate.TabStop = false;
-            this.pTopicStartDate.Click += new System.EventHandler(this.pTopicSetDate_Click);
+            this.pStartDateToggle.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pStartDateToggle.Location = new System.Drawing.Point(0, 16);
+            this.pStartDateToggle.Name = "pStartDateToggle";
+            this.pStartDateToggle.Size = new System.Drawing.Size(32, 13);
+            this.pStartDateToggle.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pStartDateToggle.TabIndex = 94;
+            this.pStartDateToggle.TabStop = false;
+            this.pStartDateToggle.Click += new System.EventHandler(this.pTopicSetDate_Click);
             // 
-            // pTopicDueDate
+            // pDueDateToggle
             // 
-            this.pTopicDueDate.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pTopicDueDate.Location = new System.Drawing.Point(0, 16);
-            this.pTopicDueDate.Name = "pTopicDueDate";
-            this.pTopicDueDate.Size = new System.Drawing.Size(32, 13);
-            this.pTopicDueDate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pTopicDueDate.TabIndex = 96;
-            this.pTopicDueDate.TabStop = false;
-            this.pTopicDueDate.Click += new System.EventHandler(this.pTopicSetDate_Click);
+            this.pDueDateToggle.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pDueDateToggle.Location = new System.Drawing.Point(0, 16);
+            this.pDueDateToggle.Name = "pDueDateToggle";
+            this.pDueDateToggle.Size = new System.Drawing.Size(32, 13);
+            this.pDueDateToggle.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pDueDateToggle.TabIndex = 96;
+            this.pDueDateToggle.TabStop = false;
+            this.pDueDateToggle.Click += new System.EventHandler(this.pTopicSetDate_Click);
             // 
             // panelStartDate
             // 
-            this.panelStartDate.Controls.Add(this.pTopicStartDate);
+            this.panelStartDate.Controls.Add(this.pStartDateToggle);
             this.panelStartDate.Controls.Add(this.pStartDate);
             this.panelStartDate.Location = new System.Drawing.Point(113, 0);
             this.panelStartDate.Name = "panelStartDate";
@@ -392,7 +392,7 @@
             // 
             // panelDueDate
             // 
-            this.panelDueDate.Controls.Add(this.pTopicDueDate);
+            this.panelDueDate.Controls.Add(this.pDueDateToggle);
             this.panelDueDate.Controls.Add(this.pDueDate);
             this.panelDueDate.Location = new System.Drawing.Point(149, 0);
             this.panelDueDate.Name = "panelDueDate";
@@ -561,8 +561,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pQuickTask)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pRemoveTaskInfo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pTopicStartDate)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pTopicDueDate)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pStartDateToggle)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pDueDateToggle)).EndInit();
             this.panelStartDate.ResumeLayout(false);
             this.panelStartDate.PerformLayout();
             this.cmsDates.ResumeLayout(false);
@@ -596,8 +596,8 @@
         public System.Windows.Forms.NumericUpDown numDuration;
         public System.Windows.Forms.LinkLabel linkDurationUnit;
         public System.Windows.Forms.ToolStripComboBox ST_DurationUnits;
-        public System.Windows.Forms.PictureBox pTopicStartDate;
-        public System.Windows.Forms.PictureBox pTopicDueDate;
+        public System.Windows.Forms.PictureBox pStartDateToggle;
+        public System.Windows.Forms.PictureBox pDueDateToggle;
         public System.Windows.Forms.PictureBox pResources;
         public System.Windows.Forms.MaskedTextBox pStartDate;
         public System.Windows.Forms.MaskedTextBox pDueDate;

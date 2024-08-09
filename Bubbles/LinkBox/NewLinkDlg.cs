@@ -304,6 +304,16 @@ namespace Bubbles
         private void btnBrowse_Click(object sender, EventArgs e)
         {
             openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            openFileDialog1.Filter = 
+                "Word files (*.docx, *.doc)|*.docx;*.doc;|" +
+                "Excel files (*.xlsx, *.xls)|*.xlsx;*.xls;|" +
+                "PDF files (*.pdf)|*.pdf;|" +
+                "Text files (*.txt, *.ini)|*.txt;*.ini;|" +
+                "MindManager files (*.mmap, *.mmat)|*.mmap;*.mmat;|" +
+                "HTML files (*.html, *.htm)|*.html;*.htm;|" +
+                "All files (*.*)|*.*";
+            openFileDialog1.FileName = "";
+
             if (openFileDialog1.ShowDialog(this) == DialogResult.OK)
             {
                 txtLink.Text = openFileDialog1.FileName;

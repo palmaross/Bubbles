@@ -37,6 +37,20 @@ namespace Bubbles
             toolTip1.SetToolTip(pCloseFontSize, Utils.getString("stixformat.pCloseFontSize"));
             toolTip1.SetToolTip(numFontSize, Utils.getString("stixformat.numFontSize"));
 
+            toolTip1.SetToolTip(pBold, Utils.getString("stixformat.bold"));
+            toolTip1.SetToolTip(pItalic, Utils.getString("stixformat.italic"));
+            toolTip1.SetToolTip(pUnder, Utils.getString("stixformat.underline"));
+            toolTip1.SetToolTip(pStrike, Utils.getString("stixformat.strikethrough"));
+            toolTip1.SetToolTip(pFontIncrease, Utils.getString("stixformat.font.bigger"));
+            toolTip1.SetToolTip(pFontDecrease, Utils.getString("stixformat.font.smaller"));
+
+            toolTip1.SetToolTip(fontcolor1, Utils.getString("stixformat.textcolor"));
+            toolTip1.SetToolTip(fontcolor2, Utils.getString("stixformat.textcolor"));
+            toolTip1.SetToolTip(fontcolor3, Utils.getString("stixformat.textcolor"));
+            toolTip1.SetToolTip(fillcolor1, Utils.getString("stixformat.fillcolor"));
+            toolTip1.SetToolTip(fillcolor2, Utils.getString("stixformat.fillcolor"));
+            toolTip1.SetToolTip(fillcolor3, Utils.getString("stixformat.fillcolor"));
+
             if (orientation == "V") {
                 orientation = "H"; Rotate(); }
 

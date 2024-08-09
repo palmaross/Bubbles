@@ -94,7 +94,7 @@ namespace Bubbles
             }
 
             stixwidths = stixwidths.OrderBy(i => i).ToList();
-            (form as StixTextOps).PopulateTopicWidth();
+            (form as StixTextOps).PopulateTopicWidths();
         }
 
         private void btnClose_Click(object sender, EventArgs e)

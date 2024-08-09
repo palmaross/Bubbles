@@ -54,7 +54,7 @@ namespace Bubbles
 
             StixUtils.SetCommonContextMenu(cmsCommon, StixUtils.typetextops);
 
-            PopulateTopicWidth();
+            PopulateTopicWidths();
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
@@ -882,15 +882,12 @@ namespace Bubbles
                 StixMain.m_ReplaceDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
-        public void PopulateTopicWidth()
+        public void PopulateTopicWidths()
         {
             cmsTopicWidths.Items.Clear();
 
-            ToolStripItem tsi = null;
-            tsi = cmsTopicWidths.Items.Add(Utils.getString("TextOpsStix.TopicWidth.Manage"));
-            tsi.Name = "ManageTopicWidths";
 
-            tsi = new ToolStripLabel(Utils.getString("TextOpsStix.TopicWidth.Label"));
+            ToolStripItem tsi = new ToolStripLabel(Utils.getString("TextOpsStix.TopicWidth.Label"));
             tsi.Font = new Font(tsi.Font, FontStyle.Bold);
             cmsTopicWidths.Items.Add(tsi);
 
@@ -900,9 +897,9 @@ namespace Bubbles
                 tsi.Name = "ManualWidth"; tsi.Tag = width.ToString();
             }
 
-            tsi = new ToolStripLabel(Utils.getString("TextOpsStix.TopicWidth.Label2"));
-            tsi.ToolTipText = Utils.getString("TextOpsStix.TopicWidth.tooltip");
-            cmsTopicWidths.Items.Add(tsi);
+            //tsi = new ToolStripLabel(Utils.getString("TextOpsStix.TopicWidth.Label2"));
+            //tsi.ToolTipText = Utils.getString("TextOpsStix.TopicWidth.tooltip");
+            //cmsTopicWidths.Items.Add(tsi);
 
             ToolStripTextBox mtb = new ToolStripTextBox();
             mtb.Width = Manage.Width * 2;
@@ -913,12 +910,15 @@ namespace Bubbles
 
             cmsTopicWidths.Items.Add(new ToolStripSeparator());
 
-            tsi = cmsTopicWidths.Items.Add(Utils.getString("TextOpsStix.TopicWidth.MMAutoWidth"));
-            tsi.Name = "MMAutoWidth";
-            tsi.ToolTipText = Utils.getString("TextOpsStix.MMAutoWidth.tooltip");
-            (tsi as ToolStripMenuItem).CheckOnClick = true;
-            (tsi as ToolStripMenuItem).Checked = StixUtils.TopicAutoWidth;
-            cmsTopicWidths.Items.Add(tsi);
+            tsi = cmsTopicWidths.Items.Add(Utils.getString("TextOpsStix.TopicWidth.Manage"));
+            tsi.Name = "ManageTopicWidths";
+
+            //tsi = cmsTopicWidths.Items.Add(Utils.getString("TextOpsStix.TopicWidth.MMAutoWidth"));
+            //tsi.Name = "MMAutoWidth";
+            //tsi.ToolTipText = Utils.getString("TextOpsStix.MMAutoWidth.tooltip");
+            //(tsi as ToolStripMenuItem).CheckOnClick = true;
+            //(tsi as ToolStripMenuItem).Checked = StixUtils.TopicAutoWidth;
+            //cmsTopicWidths.Items.Add(tsi);
         }
 
         private void Mtb_KeyDown(object sender, KeyEventArgs e)

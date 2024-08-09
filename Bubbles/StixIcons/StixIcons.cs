@@ -65,7 +65,7 @@ namespace Bubbles
             BI_addtomap.ToolTipText = Utils.getString("icons.contextmenu.addtomap.tooltip");
 
             BI_addtostix.Text = Utils.getString("icons.contextmenu.addtostix");
-            StixUtils.SetContextMenuImage(BI_addtomap, "icongroup.png");
+            StixUtils.SetContextMenuImage(BI_addtostix, "icongroup.png");
             BI_addtostix.ToolTipText = Utils.getString("icons.contextmenu.addtostix.tooltip");
 
             IconGroupsDropDown = BI_addtostix.DropDown;
@@ -121,6 +121,7 @@ namespace Bubbles
             }
 
             // Handle drag drop to place icon to the end
+            this.AllowDrop = true;
             this.DragEnter += Handle_DragEnter;
             this.DragDrop += Handle_DragDrop;
 
@@ -129,7 +130,6 @@ namespace Bubbles
             pictureHandle.DragEnter += Handle_DragEnter;
             pictureHandle.DragDrop += Handle_DragDrop;
 
-            pictureHandle.Click += PictureHandle_Click; // right click to show context menu (Paste icon to the begin)
             pictureHandle.MouseDown += Move_Stick; // move the stick
             pictureHandle.MouseDoubleClick += (sender, e) => this.Hide();
 
@@ -237,14 +237,6 @@ namespace Bubbles
             cmsManage.Show(Cursor.Position);
         }
         public bool m_updateIconsGroupMenu = true;
-
-        public void PictureHandle_Click(object sender, EventArgs e)
-        {
-            foreach (ToolStripItem item in cmsManage.Items)
-                item.Visible = false;
-
-            cmsManage.Show(Cursor.Position);
-        }
 
         private void Move_Stick(object sender, MouseEventArgs e)
         {

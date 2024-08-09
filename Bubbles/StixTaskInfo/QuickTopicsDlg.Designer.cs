@@ -42,6 +42,8 @@
             this.p11 = new System.Windows.Forms.PictureBox();
             this.pHelp = new System.Windows.Forms.PictureBox();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.panelHead = new System.Windows.Forms.Panel();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pQuickTask)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pClose)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHandle)).BeginInit();
@@ -49,6 +51,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.btnManage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p11)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHelp)).BeginInit();
+            this.panelHead.SuspendLayout();
             this.SuspendLayout();
             // 
             // treeView1
@@ -59,9 +62,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.treeView1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.treeView1.LabelEdit = true;
-            this.treeView1.Location = new System.Drawing.Point(1, 23);
+            this.treeView1.Location = new System.Drawing.Point(2, 21);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(183, 193);
+            this.treeView1.Size = new System.Drawing.Size(182, 195);
             this.treeView1.TabIndex = 0;
             this.treeView1.BeforeLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeView1_BeforeLabelEdit);
             this.treeView1.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeView1_AfterLabelEdit);
@@ -75,9 +78,9 @@
             // 
             this.pQuickTask.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pQuickTask.Image = ((System.Drawing.Image)(resources.GetObject("pQuickTask.Image")));
-            this.pQuickTask.Location = new System.Drawing.Point(1, 2);
+            this.pQuickTask.Location = new System.Drawing.Point(3, 1);
             this.pQuickTask.Name = "pQuickTask";
-            this.pQuickTask.Size = new System.Drawing.Size(20, 20);
+            this.pQuickTask.Size = new System.Drawing.Size(16, 16);
             this.pQuickTask.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pQuickTask.TabIndex = 86;
             this.pQuickTask.TabStop = false;
@@ -88,7 +91,7 @@
             this.pClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pClose.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pClose.Image = ((System.Drawing.Image)(resources.GetObject("pClose.Image")));
-            this.pClose.Location = new System.Drawing.Point(167, 3);
+            this.pClose.Location = new System.Drawing.Point(165, 1);
             this.pClose.Name = "pClose";
             this.pClose.Size = new System.Drawing.Size(16, 16);
             this.pClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -113,7 +116,7 @@
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblTitle.Location = new System.Drawing.Point(25, 4);
+            this.lblTitle.Location = new System.Drawing.Point(22, 1);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(89, 15);
             this.lblTitle.TabIndex = 90;
@@ -145,7 +148,7 @@
             this.btnManage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnManage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnManage.Image = ((System.Drawing.Image)(resources.GetObject("btnManage.Image")));
-            this.btnManage.Location = new System.Drawing.Point(123, 3);
+            this.btnManage.Location = new System.Drawing.Point(124, 1);
             this.btnManage.Name = "btnManage";
             this.btnManage.Size = new System.Drawing.Size(17, 17);
             this.btnManage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -167,7 +170,7 @@
             this.pHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pHelp.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pHelp.Image = ((System.Drawing.Image)(resources.GetObject("pHelp.Image")));
-            this.pHelp.Location = new System.Drawing.Point(148, 3);
+            this.pHelp.Location = new System.Drawing.Point(145, 1);
             this.pHelp.Name = "pHelp";
             this.pHelp.Size = new System.Drawing.Size(16, 16);
             this.pHelp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -175,18 +178,27 @@
             this.pHelp.TabStop = false;
             this.pHelp.Click += new System.EventHandler(this.pHelp_Click);
             // 
+            // panelHead
+            // 
+            this.panelHead.BackColor = System.Drawing.Color.Moccasin;
+            this.panelHead.Controls.Add(this.pQuickTask);
+            this.panelHead.Controls.Add(this.lblTitle);
+            this.panelHead.Controls.Add(this.pHelp);
+            this.panelHead.Controls.Add(this.btnManage);
+            this.panelHead.Controls.Add(this.pClose);
+            this.panelHead.Location = new System.Drawing.Point(1, 1);
+            this.panelHead.Name = "panelHead";
+            this.panelHead.Size = new System.Drawing.Size(182, 18);
+            this.panelHead.TabIndex = 95;
+            // 
             // QuickTopicsDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(184, 228);
-            this.Controls.Add(this.pHelp);
+            this.Controls.Add(this.panelHead);
             this.Controls.Add(this.p11);
-            this.Controls.Add(this.btnManage);
-            this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.pHandle);
-            this.Controls.Add(this.pClose);
-            this.Controls.Add(this.pQuickTask);
             this.Controls.Add(this.treeView1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "QuickTopicsDlg";
@@ -199,8 +211,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.btnManage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p11)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pHelp)).EndInit();
+            this.panelHead.ResumeLayout(false);
+            this.panelHead.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -217,5 +230,7 @@
         private System.Windows.Forms.PictureBox p11;
         private System.Windows.Forms.PictureBox pHelp;
         private System.Windows.Forms.HelpProvider helpProvider1;
+        private System.Windows.Forms.Panel panelHead;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

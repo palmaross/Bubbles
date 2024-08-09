@@ -40,10 +40,15 @@ namespace Bubbles
             toolTip1.SetToolTip(topicbefore, Utils.getString("AddTopicStix.addbefore"));
             toolTip1.SetToolTip(ParentTopic, Utils.getString("AddTopicStix.addparent"));
             toolTip1.SetToolTip(Callout, Utils.getString("AddTopicStix.addcallout"));
-            toolTip1.SetToolTip(TopicText, Utils.getString("AddTopicStix.TopicText"));
+            toolTip1.SetToolTip(TopicText, Utils.getString("AddTopicStix.TopicText.tooltip"));
             toolTip1.SetToolTip(numUpDown, Utils.getString("AddTopicStix.numUpDown"));
             toolTip1.SetToolTip(chIncrement, Utils.getString("AddTopicStix.pIncrement"));
             toolTip1.SetToolTip(pAddMultiple, Utils.getString("AddTopicStix.pAddMultiple"));
+
+            TopicText.Text = Utils.getString("AddTopicStix.TopicText");
+            TopicText.ForeColor = SystemColors.ControlDark;
+            TopicText.GotFocus += TopicText_GotFocus;
+            TopicText.LostFocus += TopicText_LostFocus;
 
             myToolTip1.SetToolTip(pictureHandle, stickname +
                 Utils.getString("StixAddTopic.description") + Utils.getString("HeadIcon.tooltip.tips"));
@@ -66,6 +71,24 @@ namespace Bubbles
             fsize = TopicText.Font.Size; ffsize = chIncrement.Font.Size;
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
             ScaleStick(100F, scaleFactor);
+        }
+
+        private void TopicText_LostFocus(object sender, EventArgs e)
+        {
+            if (TopicText.Text == "")
+            {
+                TopicText.ForeColor = SystemColors.ControlDark;
+                TopicText.Text = Utils.getString("AddTopicStix.TopicText");
+            }
+        }
+
+        private void TopicText_GotFocus(object sender, EventArgs e)
+        {
+            if (TopicText.ForeColor == SystemColors.ControlDark)
+            {
+                TopicText.ForeColor = SystemColors.WindowText;
+                TopicText.Text = "";
+            }
         }
 
         public void ScaleStick(float fromScale, float toScale)

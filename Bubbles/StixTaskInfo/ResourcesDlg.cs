@@ -42,6 +42,7 @@ namespace Bubbles
             this.ResizeRedraw = true;
 
             thisHeight = this.Height;
+            panel1.BackColor = Utils.header;
 
             ListDBResources.Columns.Add("", 0, HorizontalAlignment.Left);
             ListDBResources.HeaderStyle = ColumnHeaderStyle.None;

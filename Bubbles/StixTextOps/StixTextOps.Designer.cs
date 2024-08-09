@@ -313,9 +313,8 @@
             // 
             this.cmsTopicWidths.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.cmsTopicWidths.Name = "cmsTopicWidths";
-            this.cmsTopicWidths.ShowCheckMargin = true;
             this.cmsTopicWidths.ShowImageMargin = false;
-            this.cmsTopicWidths.Size = new System.Drawing.Size(61, 4);
+            this.cmsTopicWidths.Size = new System.Drawing.Size(156, 26);
             // 
             // myToolTip1
             // 

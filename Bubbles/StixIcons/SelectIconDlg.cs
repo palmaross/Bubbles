@@ -221,6 +221,8 @@ namespace Bubbles
         private void btnBrowse_Click(object sender, System.EventArgs e)
         {
             openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            openFileDialog1.Filter = "Image files (*.ico, *.png, *.jpg, *.gif, *.bmp)|*.ico;*.png;*.jpg;*.jpeg;*.gif;*.bmp;|All files (*.*)|*.*";
+            openFileDialog1.FileName = "";
             if (openFileDialog1.ShowDialog(this) == DialogResult.OK)
                 txtPath.Text = openFileDialog1.FileName;
         }

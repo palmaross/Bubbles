@@ -97,7 +97,7 @@
             this.ListDBResources.Location = new System.Drawing.Point(1, 40);
             this.ListDBResources.Name = "ListDBResources";
             this.ListDBResources.ShowItemToolTips = true;
-            this.ListDBResources.Size = new System.Drawing.Size(160, 88);
+            this.ListDBResources.Size = new System.Drawing.Size(160, 99);
             this.ListDBResources.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.ListDBResources.TabIndex = 0;
             this.ListDBResources.UseCompatibleStateImageBehavior = false;
@@ -116,7 +116,7 @@
             this.panel1.Controls.Add(this.pClose);
             this.panel1.Location = new System.Drawing.Point(1, 1);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(165, 18);
+            this.panel1.Size = new System.Drawing.Size(168, 18);
             this.panel1.TabIndex = 1;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             // 
@@ -136,7 +136,7 @@
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(1, 1);
+            this.pictureBox1.Location = new System.Drawing.Point(4, 1);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(16, 16);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -149,7 +149,7 @@
             this.pHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pHelp.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pHelp.Image = ((System.Drawing.Image)(resources.GetObject("pHelp.Image")));
-            this.pHelp.Location = new System.Drawing.Point(128, 1);
+            this.pHelp.Location = new System.Drawing.Point(131, 1);
             this.pHelp.Name = "pHelp";
             this.pHelp.Size = new System.Drawing.Size(16, 16);
             this.pHelp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -162,7 +162,7 @@
             this.pClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pClose.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pClose.Image = ((System.Drawing.Image)(resources.GetObject("pClose.Image")));
-            this.pClose.Location = new System.Drawing.Point(148, 1);
+            this.pClose.Location = new System.Drawing.Point(151, 1);
             this.pClose.Name = "pClose";
             this.pClose.Size = new System.Drawing.Size(16, 16);
             this.pClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -196,7 +196,7 @@
             this.ListMapResources.Location = new System.Drawing.Point(1, 38);
             this.ListMapResources.Name = "ListMapResources";
             this.ListMapResources.ShowItemToolTips = true;
-            this.ListMapResources.Size = new System.Drawing.Size(160, 70);
+            this.ListMapResources.Size = new System.Drawing.Size(160, 78);
             this.ListMapResources.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.ListMapResources.TabIndex = 7;
             this.ListMapResources.UseCompatibleStateImageBehavior = false;
@@ -209,7 +209,7 @@
             // 
             // txtCurrentMap
             // 
-            this.txtCurrentMap.BackColor = System.Drawing.SystemColors.Info;
+            this.txtCurrentMap.BackColor = System.Drawing.SystemColors.Window;
             this.txtCurrentMap.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.txtCurrentMap.ForeColor = System.Drawing.SystemColors.GrayText;
             this.txtCurrentMap.Location = new System.Drawing.Point(1, 17);
@@ -240,13 +240,13 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.splitContainer.Location = new System.Drawing.Point(2, 19);
+            this.splitContainer.Location = new System.Drawing.Point(2, 20);
             this.splitContainer.Name = "splitContainer";
             this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // splitContainer.Panel1
             // 
-            this.splitContainer.Panel1.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.splitContainer.Panel1.BackColor = System.Drawing.SystemColors.Control;
             this.splitContainer.Panel1.Controls.Add(this.splitter);
             this.splitContainer.Panel1.Controls.Add(this.p11);
             this.splitContainer.Panel1.Controls.Add(this.ListMapResources);
@@ -255,13 +255,13 @@
             // 
             // splitContainer.Panel2
             // 
-            this.splitContainer.Panel2.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.splitContainer.Panel2.BackColor = System.Drawing.SystemColors.Control;
             this.splitContainer.Panel2.Controls.Add(this.btnClose);
             this.splitContainer.Panel2.Controls.Add(this.cbResourceGroup);
             this.splitContainer.Panel2.Controls.Add(this.txtNewResourceDB);
             this.splitContainer.Panel2.Controls.Add(this.ListDBResources);
-            this.splitContainer.Size = new System.Drawing.Size(166, 246);
-            this.splitContainer.SplitterDistance = 111;
+            this.splitContainer.Size = new System.Drawing.Size(166, 265);
+            this.splitContainer.SplitterDistance = 119;
             this.splitContainer.TabIndex = 12;
             // 
             // splitter
@@ -312,7 +312,7 @@
             // 
             // txtNewResourceDB
             // 
-            this.txtNewResourceDB.BackColor = System.Drawing.SystemColors.Info;
+            this.txtNewResourceDB.BackColor = System.Drawing.SystemColors.Window;
             this.txtNewResourceDB.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.txtNewResourceDB.ForeColor = System.Drawing.SystemColors.WindowText;
             this.txtNewResourceDB.Location = new System.Drawing.Point(2, 19);
@@ -474,6 +474,7 @@
             this.btnRemoveResources.Text = "Remove Resources from topic";
             this.btnRemoveResources.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.btnRemoveResources.UseVisualStyleBackColor = false;
+            this.btnRemoveResources.Visible = false;
             this.btnRemoveResources.Click += new System.EventHandler(this.btnRemoveResources_Click);
             // 
             // ResourcesDlg

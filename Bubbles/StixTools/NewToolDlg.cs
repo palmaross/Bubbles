@@ -24,6 +24,7 @@ namespace Bubbles
             lblToolIcon.Text = Utils.getString("NewToolDlg.lblToolIcon");
             lblTip.Text = Utils.getString("NewToolDlg.lblTip");
             chAddToDatabase.Text = Utils.getString("NewToolDlg.chAddToDatabase");
+            toolTip1.SetToolTip(chAddToDatabase, "NewToolDlg.chAddToDatabase.tooltip");
             btnAddTool.Text = Utils.getString("button.add");
             btnClose.Text = Utils.getString("button.close");
 
@@ -37,8 +38,6 @@ namespace Bubbles
 
             if (Stix == null)
                 chAddToDatabase.Visible = false;
-            else
-                chAddToDatabase.Checked = true;
 
             this.Paint += This_Paint; // paint the border
             this.HelpButtonClicked += this_HelpButtonClicked;
@@ -214,6 +213,16 @@ namespace Bubbles
         private void btnBrowse_Click(object sender, EventArgs e)
         {
             openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            openFileDialog1.Filter =
+                "App files (*.exe)|*.exe;|" +
+                "Word files (*.docx, *.doc)|*.docx;*.doc;|" +
+                "Excel files (*.xlsx, *.xls)|*.xlsx;*.xls;|" +
+                "PDF files (*.pdf)|*.pdf;|" +
+                "MindManager files (*.mmap, *.mmat)|*.mmap;*.mmat;|" +
+                "MindManager Macro files (*.mmbas)|*.mmbas;|" +
+                "All files (*.*)|*.*";
+            openFileDialog1.FileName = "";
+
             if (openFileDialog1.ShowDialog(this) == DialogResult.OK)
             {
                 txtPath.Text = openFileDialog1.FileName;

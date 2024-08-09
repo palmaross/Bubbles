@@ -17,18 +17,17 @@ namespace Bubbles
             helpProvider1.SetHelpKeyword(this, "manage_topic_widths.htm");
 
             Text = Utils.getString("TopicWidthDlg.Title");
-            cbTextMore1.Text = Utils.getString("TopicWidthDlg.lblTextMore");
-            cbTextMore2.Text = Utils.getString("TopicWidthDlg.lblTextMore");
-            cbTextMore3.Text = Utils.getString("TopicWidthDlg.lblTextMore");
-            cbTextMore4.Text = Utils.getString("TopicWidthDlg.lblTextMore");
-            cbTextMore5.Text = Utils.getString("TopicWidthDlg.lblTextMore");
-            cbTextMore6.Text = Utils.getString("TopicWidthDlg.lblTextMore");
-            lblChars1.Text = Utils.getString("TopicWidthDlg.lblChars");
-            lblChars2.Text = Utils.getString("TopicWidthDlg.lblChars");
-            lblChars3.Text = Utils.getString("TopicWidthDlg.lblChars");
-            lblChars4.Text = Utils.getString("TopicWidthDlg.lblChars");
-            lblChars5.Text = Utils.getString("TopicWidthDlg.lblChars");
-            lblChars6.Text = Utils.getString("TopicWidthDlg.lblChars");
+            lblTextMore.Text = Utils.getString("TopicWidthDlg.lblTextMore");
+            lblTopicWidth.Text = Utils.getString("TopicWidthDlg.lblTopicWidth");
+
+            foreach (Label lbl in this.Controls.OfType<Label>())
+            {
+                if (lbl.Name.StartsWith("lblChars"))
+                    lbl.Text = Utils.getString("TopicWidthDlg.lblChars");
+                else if (lbl.Name.StartsWith("mm"))
+                    lbl.Text = Utils.getString("TopicWidthDlg.mm");
+            }
+
             btnClose.Text = Utils.getString("button.close");
             btnSave.Text = Utils.getString("button.save");
 

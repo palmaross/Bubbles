@@ -408,7 +408,8 @@ namespace Bubbles
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            openFileDialog1.Filter = "Audio Files|*.mp3;*.wav;*.mp4;*wma;*.aac;*m4a";
+            openFileDialog1.Filter = "Audio Files (*.mp3, *.wav, *.mp4, *wma, *.aac, *m4a)|*.mp3;*.wav;*.mp4;*wma;*.aac;*m4a;|All files (*.*)|*.*";
+            openFileDialog1.FileName = "";
             if (openFileDialog1.ShowDialog(this) == DialogResult.Cancel) return;
             txtPath.Text = openFileDialog1.FileName;
 

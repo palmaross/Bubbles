@@ -28,8 +28,9 @@ namespace Bubbles
             myToolTip1.SetToolTip(pictureHandle, stickname +
                 Utils.getString("StixMapNavigator.description") +
                 Utils.getString("HeadIcon.tooltip.tips"));
+            toolTip1.SetToolTip(pCentral, Utils.getString("bookmarks.centraltopic"));
             toolTip1.SetToolTip(Manage, Utils.getString("ManageIcon.tooltip"));
-            toolTip1.SetToolTip(pSearch, Utils.getString("SearchTextDlg.title"));
+            toolTip1.SetToolTip(pSearch, Utils.getString("bookmarks.SearchTopics"));
 
             foreach (PictureBox pb in this.Controls.OfType<PictureBox>())
                 if (pb.Name.StartsWith("B"))
@@ -122,12 +123,12 @@ namespace Bubbles
             if (MMUtils.ActiveDocument == null)
             {
                 pCentral.Tag = "";
-                toolTip1.SetToolTip(pCentral, "");
+                //toolTip1.SetToolTip(pCentral, "");
             }
             else
             {
                 pCentral.Tag = MMUtils.ActiveDocument.CentralTopic.Guid;
-                toolTip1.SetToolTip(pCentral, MMUtils.ActiveDocument.CentralTopic.Text);
+                //toolTip1.SetToolTip(pCentral, MMUtils.ActiveDocument.CentralTopic.Text);
 
                 InitMainTopicsContextMenu();
                 InitBookmarksContextMenu();
@@ -139,12 +140,9 @@ namespace Bubbles
         {
             cmsMainTopics.Items.Clear();
 
-            ToolStripItem tsi = cmsMainTopics.Items.Add(Utils.getString("button.refresh"));
-            tsi.ToolTipText = Utils.getString("bookmarks.refresh.maintopics");
-            StixUtils.SetContextMenuImage(tsi, "refresh.png");
-            tsi.Click += RefreshMainTopics;
-
-            cmsMainTopics.Items.Add(new ToolStripSeparator());
+            ToolStripItem tsi = new ToolStripLabel(Utils.getString("bookmarks.maintopics"));
+            tsi.Font = new Font(cmsMainTopics.Font, FontStyle.Bold);
+            cmsMainTopics.Items.Add(tsi);
 
             foreach (Topic t in MMUtils.ActiveDocument.CentralTopic.AllSubTopics)
             {
@@ -159,6 +157,13 @@ namespace Bubbles
             // Update main topics in the Map Navigator window
             if (!fromList && StixMain.m_MapNavigatorDlg != null && StixMain.m_MapNavigatorDlg.Visible)
                 StixMain.m_MapNavigatorDlg.InitMainTopics(true);
+
+            cmsMainTopics.Items.Add(new ToolStripSeparator());
+
+            tsi = cmsMainTopics.Items.Add(Utils.getString("button.refresh"));
+            tsi.ToolTipText = Utils.getString("bookmarks.refresh.maintopics");
+            StixUtils.SetContextMenuImage(tsi, "refresh.png");
+            tsi.Click += RefreshMainTopics;
         }
 
         private void RefreshMainTopics(object sender, EventArgs e)
@@ -171,9 +176,9 @@ namespace Bubbles
         {
             cmsBookmarks.Items.Clear();
 
-            ToolStripItem tsi = cmsBookmarks.Items.Add(Utils.getString("bookmarks.contextmenu.addbookmark"));
-            StixUtils.SetContextMenuImage(tsi, "newsticker.png");
-            tsi.Click += AddBookmark_Click;
+            ToolStripItem tsi = new ToolStripLabel(Utils.getString("bookmarks.ebookmarks"));
+            tsi.Font = new Font(cmsMainTopics.Font, FontStyle.Bold);
+            cmsBookmarks.Items.Add(tsi);
 
             if (deleteall) // delete all bookmarks in the current map and the stix
             {
@@ -183,19 +188,6 @@ namespace Bubbles
             }
             else // Fill context menu
             {
-                tsi = cmsBookmarks.Items.Add(Utils.getString("bookmarks.contextmenu.delete.allbookmarks"));
-                StixUtils.SetContextMenuImage(tsi, "deleteall.png");
-                tsi.Click += DeleteAllBookmarks_Click;
-
-                tsi = cmsBookmarks.Items.Add(Utils.getString("button.refresh"));
-                StixUtils.SetContextMenuImage(tsi, "refresh.png");
-                tsi.Click += RefreshBookmarks;
-
-                cmsBookmarks.Items.Add(new ToolStripSeparator());
-
-                //int i = cmsBookmarks.Items.Add(new ToolStripLabel(Utils.getString("BookmarkListDlg.tabBookmarks") + ":"));
-                //cmsBookmarks.Items[i].Font = new Font(cmsBookmarks.Font, FontStyle.Bold);
-
                 // Fill bookmarks from dictionary
                 bool bookmarks = false;
                 if (DocumentBookmarks.Keys.Contains(MMUtils.ActiveDocument.Guid))
@@ -232,6 +224,20 @@ namespace Bubbles
 
                 if (bookmarks) // There are bookmarks in the map.
                     pBookmarkList.Image = pBookmarksActive;
+
+                cmsBookmarks.Items.Add(new ToolStripSeparator());
+
+                tsi = cmsBookmarks.Items.Add(Utils.getString("bookmarks.contextmenu.addbookmark"));
+                StixUtils.SetContextMenuImage(tsi, "newsticker.png");
+                tsi.Click += AddBookmark_Click;
+
+                tsi = cmsBookmarks.Items.Add(Utils.getString("bookmarks.contextmenu.delete.allbookmarks"));
+                StixUtils.SetContextMenuImage(tsi, "deleteall.png");
+                tsi.Click += DeleteAllBookmarks_Click;
+
+                tsi = cmsBookmarks.Items.Add(Utils.getString("button.refresh"));
+                StixUtils.SetContextMenuImage(tsi, "refresh.png");
+                tsi.Click += RefreshBookmarks;
             }
 
             // Update bookmarks in the Map Navigator window

@@ -14,11 +14,9 @@ namespace Bubbles
 {
     internal partial class StixTaskInfo : Form
     {
-        private MyToolTip myToolTip;
         public StixTaskInfo(int ID, string _orientation, string stickname = "")
         {
             InitializeComponent();
-            myToolTip = new MyToolTip();
 
             StixMain.m_TaskInfo = this;
 
@@ -32,6 +30,8 @@ namespace Bubbles
             myToolTip1.SetToolTip(pictureHandle, stickname +
                 Utils.getString("StixTaskInfo.description") +
                 Utils.getString("HeadIcon.tooltip.tips"));
+
+            toolTip1.SetToolTip(p100, Utils.getString("taskinfo.p100.tooltip"));
             toolTip1.SetToolTip(Manage, Utils.getString("ManageIcon.tooltip"));
             toolTip1.SetToolTip(pProgress, Utils.getString("taskinfo.pProgress.tooltip"));
             toolTip1.SetToolTip(pPriority, Utils.getString("taskinfo.pPriority.tooltip"));
@@ -42,8 +42,10 @@ namespace Bubbles
             toolTip1.SetToolTip(linkEffortUnit, Utils.getString("taskinfo.lblEffortUnit.tooltip"));
             toolTip1.SetToolTip(btnSetDuration, Utils.getString("taskinfo.btnSetDuration.tooltip"));
             toolTip1.SetToolTip(btnSetEffort, Utils.getString("taskinfo.btnSetEffort.tooltip"));
-            toolTip1.SetToolTip(pQuickTask, Utils.getString("taskinfo.pQuickTask.tooltip"));
-            toolTip1.SetToolTip(pRemoveTaskInfo, Utils.getString("taskinfo.pRemoveTaskInfo.tooltip"));
+            myToolTip1.SetToolTip(pQuickTask, Utils.getString("taskinfo.pQuickTask.tooltip") +
+                Utils.getString("taskinfo.pQuickTask.description") + Utils.getString("taskinfo.pQuickTask.tips"));
+            myToolTip1.SetToolTip(pRemoveTaskInfo, Utils.getString("taskinfo.pRemoveTaskInfo.tooltip") +
+                Utils.getString("taskinfo.pRemoveTaskInfo.description") + Utils.getString("taskinfo.pRemoveTaskInfo.tips"));
             toolTip1.SetToolTip(pStartDate, Utils.getString("taskinfo.pStartDate.tooltip"));
             toolTip1.SetToolTip(pDueDate, Utils.getString("taskinfo.pDueDate.tooltip"));
 
@@ -232,34 +234,7 @@ namespace Bubbles
             if (MMUtils.ActiveDocument == null) return;
 
             cmsResources.Items.Clear();
-
-            ToolStripItem tsi = cmsResources.Items.Add(Utils.getString("Box.Resources"));
-            tsi.Name = "ResourceBox";
-            StixUtils.SetContextMenuImage(tsi, "resources.png");
-
-            tsi = cmsResources.Items.Add(Utils.getString("taskinfo.resources.delete"));
-            tsi.ToolTipText = Utils.getString("taskinfo.resources.delete.tooltip");
-            tsi.Name = "RemoveResources";
-            StixUtils.SetContextMenuImage(tsi, "deleteall.png");
-
-            cmsResources.Items.Add(new ToolStripSeparator());
-
-            ToolStripTextBox mtb = new ToolStripTextBox();
-            mtb.Size = new Size(panelDueDate.Width * 4, mtb.Height);
-            mtb.BorderStyle = BorderStyle.FixedSingle;
-            mtb.Text = Utils.getString("ResourcesDlg.dummytext");
-            mtb.ForeColor = SystemColors.GrayText;
-            //mtb.ToolTipText = Utils.getString("taskinfo.newresource.tooltip");
-            mtb.KeyDown += Mtb_KeyDown;
-            mtb.GotFocus += Mtb_GotFocus;
-            mtb.LostFocus += Mtb_LostFocus;
-            cmsResources.Items.Add(mtb);
-
-            cmsResources.Items.Add(new ToolStripSeparator());
-
-            tsi = new ToolStripLabel(Utils.getString("taskinfo.MapResources"));
-            tsi.Font = new Font(tsi.Font, FontStyle.Bold);
-            cmsResources.Items.Add(tsi);
+            ToolStripItem tsi;
 
             MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
             foreach (MapMarker mm in mg)
@@ -279,6 +254,36 @@ namespace Bubbles
                     else tsi.ForeColor = SystemColors.Window;
                 }
             }
+
+            ToolStripTextBox mtb = new ToolStripTextBox();
+            mtb.Size = new Size(panelDueDate.Width * 4, mtb.Height);
+            mtb.BorderStyle = BorderStyle.FixedSingle;
+            mtb.Text = Utils.getString("ResourcesDlg.dummytext");
+            mtb.ForeColor = SystemColors.GrayText;
+            //mtb.ToolTipText = Utils.getString("taskinfo.newresource.tooltip");
+            mtb.KeyDown += Mtb_KeyDown;
+            mtb.GotFocus += Mtb_GotFocus;
+            mtb.LostFocus += Mtb_LostFocus;
+            cmsResources.Items.Add(mtb);
+
+            tsi = new ToolStripLabel("");
+            tsi.Font = new Font("Arial", 1);
+            cmsResources.Items.Add(tsi);
+            //cmsResources.Items.Add(new ToolStripSeparator());
+            cmsResources.Items.Add(new ToolStripSeparator());
+
+            tsi = cmsResources.Items.Add(Utils.getString("taskinfo.resources.delete"));
+            tsi.ToolTipText = Utils.getString("taskinfo.resources.delete.tooltip");
+            tsi.Name = "RemoveResources";
+            StixUtils.SetContextMenuImage(tsi, "deleteall.png");
+
+            tsi = cmsResources.Items.Add(Utils.getString("Box.Resources"));
+            tsi.Name = "ResourceBox";
+            StixUtils.SetContextMenuImage(tsi, "resources.png");
+
+            //tsi = new ToolStripLabel(Utils.getString("taskinfo.MapResources"));
+            //tsi.Font = new Font(tsi.Font, FontStyle.Bold);
+            //cmsResources.Items.Add(tsi);
         }
 
         private void Mtb_LostFocus(object sender, EventArgs e)
@@ -804,13 +809,13 @@ namespace Bubbles
                     if (pb.Name == "pTopicStartDate")
                     {
                         t.Task.StartDate = (DateTime)dt;
-                        pTopicStartDate.Image = Image.FromFile(Utils.ImagesPath + "topic_setdate_active.png");
+                        pStartDateToggle.Image = Image.FromFile(Utils.ImagesPath + "topic_setdate_active.png");
 
                     }
                     else
                     {
                         t.Task.DueDate = (DateTime)dt;
-                        pTopicDueDate.Image = Image.FromFile(Utils.ImagesPath + "topic_setdate_active.png");
+                        pDueDateToggle.Image = Image.FromFile(Utils.ImagesPath + "topic_setdate_active.png");
 
                     }
                 }
@@ -819,13 +824,13 @@ namespace Bubbles
                     if (pb.Name == "pTopicStartDate")
                     {
                         t.Task.StartDate = MMUtils.NULLDATE;
-                        pTopicStartDate.Image = Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
+                        pStartDateToggle.Image = Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
 
                     }
                     else
                     {
                         t.Task.DueDate = MMUtils.NULLDATE;
-                        pTopicDueDate.Image = Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
+                        pDueDateToggle.Image = Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
 
                     }
                 }

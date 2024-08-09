@@ -219,6 +219,8 @@
             // chAddToDatabase
             // 
             this.chAddToDatabase.AutoSize = true;
+            this.chAddToDatabase.Checked = true;
+            this.chAddToDatabase.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chAddToDatabase.Location = new System.Drawing.Point(12, 216);
             this.chAddToDatabase.Name = "chAddToDatabase";
             this.chAddToDatabase.Size = new System.Drawing.Size(151, 17);
