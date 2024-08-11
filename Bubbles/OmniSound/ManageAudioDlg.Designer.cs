@@ -66,6 +66,8 @@
             this.btnCloseManage = new System.Windows.Forms.Button();
             this.txtGroupName = new System.Windows.Forms.TextBox();
             this.panelAddAudio = new System.Windows.Forms.Panel();
+            this.lblAudioTitle = new System.Windows.Forms.Label();
+            this.txtAudioTitle = new System.Windows.Forms.TextBox();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.lblPathToAudio = new System.Windows.Forms.Label();
             this.cbGroups = new System.Windows.Forms.ComboBox();
@@ -74,8 +76,6 @@
             this.txtPath = new System.Windows.Forms.TextBox();
             this.lblAddToGroup = new System.Windows.Forms.Label();
             this.btnManageGroups = new System.Windows.Forms.Button();
-            this.lblAudioTitle = new System.Windows.Forms.Label();
-            this.txtAudioTitle = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
@@ -90,6 +90,7 @@
             // 
             this.dgv.AllowUserToAddRows = false;
             this.dgv.AllowUserToDeleteRows = false;
+            this.dgv.AllowUserToResizeRows = false;
             this.dgv.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -402,6 +403,22 @@
             this.panelAddAudio.TabIndex = 97;
             this.panelAddAudio.Visible = false;
             // 
+            // lblAudioTitle
+            // 
+            this.lblAudioTitle.AutoSize = true;
+            this.lblAudioTitle.Location = new System.Drawing.Point(10, 77);
+            this.lblAudioTitle.Name = "lblAudioTitle";
+            this.lblAudioTitle.Size = new System.Drawing.Size(60, 13);
+            this.lblAudioTitle.TabIndex = 8;
+            this.lblAudioTitle.Text = "Audio Title:";
+            // 
+            // txtAudioTitle
+            // 
+            this.txtAudioTitle.Location = new System.Drawing.Point(90, 74);
+            this.txtAudioTitle.Name = "txtAudioTitle";
+            this.txtAudioTitle.Size = new System.Drawing.Size(206, 20);
+            this.txtAudioTitle.TabIndex = 7;
+            // 
             // btnBrowse
             // 
             this.btnBrowse.Location = new System.Drawing.Point(300, 40);
@@ -476,22 +493,6 @@
             this.btnManageGroups.Text = "Управление группами";
             this.btnManageGroups.UseVisualStyleBackColor = true;
             this.btnManageGroups.Click += new System.EventHandler(this.btnManageGroups_Click);
-            // 
-            // lblAudioTitle
-            // 
-            this.lblAudioTitle.AutoSize = true;
-            this.lblAudioTitle.Location = new System.Drawing.Point(10, 77);
-            this.lblAudioTitle.Name = "lblAudioTitle";
-            this.lblAudioTitle.Size = new System.Drawing.Size(60, 13);
-            this.lblAudioTitle.TabIndex = 8;
-            this.lblAudioTitle.Text = "Audio Title:";
-            // 
-            // txtAudioTitle
-            // 
-            this.txtAudioTitle.Location = new System.Drawing.Point(90, 74);
-            this.txtAudioTitle.Name = "txtAudioTitle";
-            this.txtAudioTitle.Size = new System.Drawing.Size(206, 20);
-            this.txtAudioTitle.TabIndex = 7;
             // 
             // ManageAudioDlg
             // 

@@ -81,7 +81,7 @@
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(129, 210);
+            this.btnClose.Location = new System.Drawing.Point(135, 210);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 7;
@@ -515,9 +515,9 @@
             this.lblTopicWidth.AutoSize = true;
             this.lblTopicWidth.Location = new System.Drawing.Point(138, 9);
             this.lblTopicWidth.Name = "lblTopicWidth";
-            this.lblTopicWidth.Size = new System.Drawing.Size(65, 13);
+            this.lblTopicWidth.Size = new System.Drawing.Size(79, 13);
             this.lblTopicWidth.TabIndex = 52;
-            this.lblTopicWidth.Text = "Topic width:";
+            this.lblTopicWidth.Text = "Ширина темы:";
             // 
             // mm2
             // 
@@ -574,7 +574,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(216, 243);
+            this.ClientSize = new System.Drawing.Size(222, 243);
             this.Controls.Add(this.mm6);
             this.Controls.Add(this.mm5);
             this.Controls.Add(this.mm4);

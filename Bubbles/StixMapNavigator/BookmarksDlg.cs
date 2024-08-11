@@ -17,7 +17,7 @@ namespace Bubbles
 
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "GlobalBookmarks.htm");
+            helpProvider1.SetHelpKeyword(this, "Bookmarks.htm");
 
             Text = Utils.getString("BookmarksDlg.Title");
             btnNewGroup.Text = Utils.getString("BookmarksDlg.btnNewGroup");
@@ -82,7 +82,7 @@ namespace Bubbles
 
         private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "GlobalBookmarks.htm");
+            Help.ShowHelp(this, helpProvider1.HelpNamespace, HelpNavigator.Topic, "Bookmarks.htm");
         }
 
         private void btnNewGroup_Click(object sender, EventArgs e)

@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Image = System.Drawing.Image;
 
@@ -70,6 +71,9 @@ namespace Bubbles
             MapTitle.Width = (int)(dgv.Width * 0.3);
             aLength.Width = (int)(dgv.Width * 0.08);
             aSize.Width = (int)(dgv.Width * 0.09);
+
+            this.MinimumSize = new Size((int)(this.Width / 2), this.Height / 2);
+            this.MaximumSize = new Size(this.Width, Screen.AllScreens.Max(s => s.Bounds.Height));
 
             Init();
         }

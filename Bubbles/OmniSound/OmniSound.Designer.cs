@@ -33,7 +33,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.txtRecordName = new System.Windows.Forms.TextBox();
             this.btnAddToTopic = new System.Windows.Forms.Button();
-            this.cbRecords = new System.Windows.Forms.ComboBox();
+            this.cbRecordings = new System.Windows.Forms.ComboBox();
             this.btnRecord = new System.Windows.Forms.PictureBox();
             this.btnPlay = new System.Windows.Forms.PictureBox();
             this.btnPause = new System.Windows.Forms.PictureBox();
@@ -113,15 +113,15 @@
             this.btnAddToTopic.UseVisualStyleBackColor = true;
             this.btnAddToTopic.Click += new System.EventHandler(this.btnAddToTopic_Click);
             // 
-            // cbRecords
+            // cbRecordings
             // 
-            this.cbRecords.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbRecords.FormattingEnabled = true;
-            this.cbRecords.Location = new System.Drawing.Point(14, 92);
-            this.cbRecords.Name = "cbRecords";
-            this.cbRecords.Size = new System.Drawing.Size(178, 21);
-            this.cbRecords.Sorted = true;
-            this.cbRecords.TabIndex = 11;
+            this.cbRecordings.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbRecordings.FormattingEnabled = true;
+            this.cbRecordings.Location = new System.Drawing.Point(14, 92);
+            this.cbRecordings.Name = "cbRecordings";
+            this.cbRecordings.Size = new System.Drawing.Size(178, 21);
+            this.cbRecordings.Sorted = true;
+            this.cbRecordings.TabIndex = 11;
             // 
             // btnRecord
             // 
@@ -290,32 +290,32 @@
             this.o_help});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.ShowImageMargin = false;
-            this.contextMenuStrip1.Size = new System.Drawing.Size(156, 114);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(135, 92);
             // 
             // o_manage
             // 
             this.o_manage.Name = "o_manage";
-            this.o_manage.Size = new System.Drawing.Size(155, 22);
+            this.o_manage.Size = new System.Drawing.Size(134, 22);
             this.o_manage.Text = "Manage Audios";
             // 
             // o_recordtype
             // 
             this.o_recordtype.CheckOnClick = true;
             this.o_recordtype.Name = "o_recordtype";
-            this.o_recordtype.Size = new System.Drawing.Size(155, 22);
+            this.o_recordtype.Size = new System.Drawing.Size(134, 22);
             this.o_recordtype.Tag = "false";
             this.o_recordtype.Text = "System Sound";
             // 
             // o_newgroup
             // 
             this.o_newgroup.Name = "o_newgroup";
-            this.o_newgroup.Size = new System.Drawing.Size(155, 22);
+            this.o_newgroup.Size = new System.Drawing.Size(134, 22);
             this.o_newgroup.Text = "Add New Group";
             // 
             // o_help
             // 
             this.o_help.Name = "o_help";
-            this.o_help.Size = new System.Drawing.Size(155, 22);
+            this.o_help.Size = new System.Drawing.Size(134, 22);
             this.o_help.Text = "Help";
             // 
             // pictureBox1
@@ -512,7 +512,7 @@
             this.Controls.Add(this.btnPlay);
             this.Controls.Add(this.btnRecord);
             this.Controls.Add(this.btnAddToTopic);
-            this.Controls.Add(this.cbRecords);
+            this.Controls.Add(this.cbRecordings);
             this.Controls.Add(this.chAttachment);
             this.Controls.Add(this.panelRecordName);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -555,7 +555,7 @@
         private System.Windows.Forms.Button btnSaveRecord;
         private System.Windows.Forms.Button btnCancelRecord;
         private System.Windows.Forms.ToolTip toolTip1;
-        public System.Windows.Forms.ComboBox cbRecords;
+        public System.Windows.Forms.ComboBox cbRecordings;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.CheckBox chAttachment;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;

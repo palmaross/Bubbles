@@ -37,7 +37,8 @@ namespace Bubbles
             toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.PasteNotes.tooltip"));
             toolTip1.SetToolTip(UnformatText, Utils.getString("TextOpsStix.unformate.tooltip"));
             toolTip1.SetToolTip(pReplace, Utils.getString("TextOpsStix.pReplace.tooltip"));
-            toolTip1.SetToolTip(pTopicWidth, Utils.getString("TextOpsStix.pTopicWidth.tooltip"));
+            toolTip1.SetToolTip(pTopicWidth, 
+                String.Format(Utils.getString("TextOpsStix.pTopicWidth.tooltip"), TopicWidthsDlg.mainwidth));
 
             toolTip1.SetToolTip(OptionTextFormat, Utils.getString("TextOpsStix.workwith.unformatted"));
             toolTip1.SetToolTip(OptionReplaceInsert, Utils.getString("textops.contextmenu.insert2"));
@@ -885,7 +886,6 @@ namespace Bubbles
         public void PopulateTopicWidths()
         {
             cmsTopicWidths.Items.Clear();
-
 
             ToolStripItem tsi = new ToolStripLabel(Utils.getString("TextOpsStix.TopicWidth.Label"));
             tsi.Font = new Font(tsi.Font, FontStyle.Bold);

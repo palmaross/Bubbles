@@ -314,7 +314,7 @@
             this.cmsTopicWidths.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.cmsTopicWidths.Name = "cmsTopicWidths";
             this.cmsTopicWidths.ShowImageMargin = false;
-            this.cmsTopicWidths.Size = new System.Drawing.Size(156, 26);
+            this.cmsTopicWidths.Size = new System.Drawing.Size(36, 4);
             // 
             // myToolTip1
             // 
@@ -371,7 +371,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.PictureBox PasteNotes;
         private System.Windows.Forms.PictureBox pCopyTopicText;
@@ -391,8 +390,9 @@
         private System.Windows.Forms.Panel panelOptions;
         public System.Windows.Forms.PictureBox OptionSourceLink;
         public System.Windows.Forms.PictureBox OptionInternalLinks;
-        private System.Windows.Forms.PictureBox pTopicWidth;
         private System.Windows.Forms.ContextMenuStrip cmsTopicWidths;
         private MyToolTip myToolTip1;
+        public System.Windows.Forms.PictureBox pTopicWidth;
+        public System.Windows.Forms.ToolTip toolTip1;
     }
 }

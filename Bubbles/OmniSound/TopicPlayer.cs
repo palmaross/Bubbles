@@ -5,12 +5,13 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using NAudio.Wave;
+using System.Data;
 
 namespace Bubbles
 {
     public partial class TopicPlayer : Form
     {
-        public TopicPlayer(Rectangle omniButton, string trackName, string topicGuid)
+        public TopicPlayer(Rectangle omniButton)
         {
             InitializeComponent();
 
@@ -18,7 +19,8 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "TopicPlayer.htm");
 
-            toolTip1.SetToolTip(pictureHandle, Utils.getString("TopicPlayer.Title") + Utils.getString("HeadIcon.tooltip.tips"));
+            myToolTip1.SetToolTip(pictureHandle, Utils.getString("TopicPlayer.Title") +
+                Utils.getString("TopicPlayer.description") + Utils.getString("HeadIcon.tooltip.tips"));
             toolTip1.SetToolTip(btnPause, Utils.getString("TopicPlayer.btnPause") + Utils.getString("TopicPlayer.btnPausePlay"));
             toolTip1.SetToolTip(btnPlay, Utils.getString("TopicPlayer.btnPlay") + Utils.getString("TopicPlayer.btnPausePlay"));
             toolTip1.SetToolTip(pVolume, Utils.getString("TopicPlayer.pVolume"));
@@ -39,15 +41,12 @@ namespace Bubbles
             SoundTopicsList = (tsi as ToolStripMenuItem).DropDown;
             InitSoundTopicsList();
 
-            lblTitle.Tag = topicGuid;
-
             StixUtils.SetCommonContextMenu(cmsManage, StixUtils.typeTopicPlayer);
             cmsManage.ItemClicked += ContextMenuStrip1_ItemClicked;
             SoundTopicsList.ItemClicked += ContextMenuStrip1_ItemClicked;
             cmsPlayPauseButtons.ItemClicked += ContextMenuStrip1_ItemClicked;
 
             toolTip1.SetToolTip(lblTitle, Utils.getString("TopicPlayer.lblTrack"));
-            lblTitle.Text = trackName;
             lblTitle.Location = tbTrack.Location;
 
             OmniButton = omniButton;
@@ -147,7 +146,7 @@ namespace Bubbles
                     if (tText.Length > 50) tText = tText.Substring(0, 50);
 
                     ToolStripItem tsi = SoundTopicsList.Items.Add(tText);
-                    tsi.Name = "SoundTopic";
+                    tsi.Name = "AudioTopic";
                     tsi.Tag = t.Guid;
                 }
             }
@@ -157,15 +156,9 @@ namespace Bubbles
         {
             if (e.ClickedItem.Name == "GoToTopic")
             {
-                Topic t = MMUtils.ActiveDocument.FindByGuid((string)lblTitle.Tag) as Topic;
-                if (t != null)
-                {
-                    t.SelectOnly(); t.SnapIntoView();
-                    StixUtils.ActivateMindManager();
-                    t = null;
-                }
+                ShowPlayingTopic();
             }
-            if (e.ClickedItem.Name == "SoundTopic")
+            if (e.ClickedItem.Name == "AudioTopic") // Audio topics in the map
             {
                 Topic t = MMUtils.ActiveDocument.FindByGuid(e.ClickedItem.Tag.ToString()) as Topic;
                 if (t != null)
@@ -410,6 +403,36 @@ namespace Bubbles
 
             StixMain.m_OmniSound.outputDevice.Volume = tbVolume.Value / 100f;
             lblClock.Text = "Volume  " + tbVolume.Value;
+        }
+
+        void ShowPlayingTopic()
+        {
+            var audiofile = StixMain.m_OmniSound.audioFile;
+            if (audiofile != null)
+            {
+                using (StixDB db = new StixDB())
+                {
+                    DataTable dt = db.ExecuteQuery("select * from AUDIOS where path=`" + audiofile.FileName + "`");
+                    if (dt.Rows.Count > 0 &&
+                        !String.IsNullOrEmpty(dt.Rows[0]["mappath"].ToString())) // audio note is not attached to a topic
+                    {
+                        Document doc = Utils.GetOrOpenDocument(dt.Rows[0]["mappath"].ToString(), true);
+                        if (doc != null)
+                        {
+                            Topic t = doc.FindByGuid(dt.Rows[0]["topicguid"].ToString()) as Topic;
+                            if (t != null)
+                            {
+                                t.SelectOnly();
+                                t.SnapIntoView();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        private void lblTitle_MouseDown(object sender, MouseEventArgs e)
+        {
+            ShowPlayingTopic();
         }
     }
 }

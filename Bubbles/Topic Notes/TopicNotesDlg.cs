@@ -362,6 +362,9 @@ namespace Bubbles
                     {
                         SaveNotes(PreviewPage);
                     }
+
+                    PreviewPage.AccessibleName = "";
+                    UpdateSaveButtons();
                 }
 
                 if (PreviewPage.Controls.OfType<WebBrowser>().Count() > 0)
@@ -908,13 +911,10 @@ namespace Bubbles
 
         void InitCollectionsAndFolders(bool collections = true, bool folders = true)
         {
+            ToolStripItem tsi;
             if (collections)
             {
                 Collections.Items.Clear();
-
-                ToolStripItem tsi = Collections.Items.Add(Utils.getString("button.refresh"));
-                tsi.Name = "RefreshCollections";
-                Collections.Items.Add(new ToolStripSeparator());
 
                 foreach (MapShortcutCollection collection in MMUtils.MindManager.MapShortcutCollections)
                 {
@@ -934,16 +934,16 @@ namespace Bubbles
                         tsi.Name = "mappath";
                     }
                 }
+
+                Collections.Items.Add(new ToolStripSeparator());
+                tsi = Collections.Items.Add(Utils.getString("button.refresh"));
+                tsi.Name = "RefreshCollections";
             }
 
             if (folders)
             {
                 Folders.Items.Clear();
                 Dictionary<string, string> _Folders = GetMyFolders();
-
-                ToolStripItem tsi = Folders.Items.Add(Utils.getString("button.refresh"));
-                tsi.Name = "RefreshFolders";
-                Folders.Items.Add(new ToolStripSeparator());
 
                 Folders.Visible = true;
                 foreach (var folder in _Folders)
@@ -964,6 +964,10 @@ namespace Bubbles
                         tsi.Name = "mappath";
                     }
                 }
+
+                Folders.Items.Add(new ToolStripSeparator());
+                tsi = Folders.Items.Add(Utils.getString("button.refresh"));
+                tsi.Name = "RefreshFolders";
             }
         }
 

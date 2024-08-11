@@ -229,17 +229,17 @@ namespace Bubbles
             
             if (m_OmniSound.Visible) // Select record in OmniSound window
             {
-                foreach (var item in m_OmniSound.cbRecords.Items)
+                foreach (var item in m_OmniSound.cbRecordings.Items)
                 {
                     if ((item as AudioItem).Path == audioPath)
-                        m_OmniSound.cbRecords.SelectedItem = item;
+                        m_OmniSound.cbRecordings.SelectedItem = item;
                 }
             }
             else
             {
                 if (m_TopicPlayer == null || m_TopicPlayer.IsDisposed)
                 {
-                    m_TopicPlayer = new TopicPlayer(OmniStixButton.Bounds, trackName, topicGuid);
+                    m_TopicPlayer = new TopicPlayer(OmniStixButton.Bounds);
                     m_TopicPlayer.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
                 }
 
@@ -502,10 +502,10 @@ namespace Bubbles
                 string path = MMUtils.ActiveDocument.FullName.ToLower();
                 if (!t.Notes.IsEmpty)
                 {
-                    if (!StixMain.MapTopicsWithNotes.Keys.Contains(path))
+                    if (!MapTopicsWithNotes.Keys.Contains(path))
                         MapTopicsWithNotes[path]
                             = new Dictionary<string, bool> { { t.Guid, false } };
-                    else
+                    else if (!MapTopicsWithNotes[path].Keys.Contains(t.Guid))
                         MapTopicsWithNotes[path].Add(t.Guid, false);
                 }
             }
@@ -1001,9 +1001,6 @@ namespace Bubbles
                         case "numWidth5":
                             TopicWidthsDlg.widths[4] = _value;
                             TopicWidthsDlg.checkstate[4] = _checked; break;
-                        case "numWidth6":
-                            TopicWidthsDlg.widths[5] = _value;
-                            TopicWidthsDlg.checkstate[5] = _checked; break;
                         case "numAuto1":
                             AutoWidthsDlg.checkstate[0] = _checked;
                             AutoWidthsDlg.chars[0] = chars;

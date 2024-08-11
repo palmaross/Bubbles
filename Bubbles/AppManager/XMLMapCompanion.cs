@@ -61,7 +61,18 @@ namespace Bubbles.AppManager
                     return topic.NotesHtml();
                 }
             }
-            return "";
+            // Process floating topics
+            _allTopics = m_doc.DocumentElement.SelectNodes("//ap:FloatingTopics/ap:Topic/@OId", NSManager);
+            foreach (XmlNode _node in _allTopics)
+            {
+                if (_node.Value == guid)
+                {
+                    var topic = new XMLTopicCompanion((_node as XmlAttribute).OwnerElement, NSManager, this);
+                    return topic.NotesHtml();
+                }
+            }
+
+            return null;
         }
 
         /// <summary>

@@ -177,6 +177,11 @@ namespace Bubbles
             try { SF_StixBase = Convert.ToInt32(numStixBase.Text.Trim('%').Trim());
             } catch { SF_StixBase = 100; }
 
+            if (StixMain.m_StixBase.scaleFactor != SF_StixBase)
+            {
+                StixMain.m_StixBase.ScaleStick(StixMain.m_StixBase.scaleFactor, SF_StixBase);
+            }
+
             foreach (var pair in StixMain.STICKS)
             {
                 Form stick = pair.Value;
@@ -184,9 +189,6 @@ namespace Bubbles
 
                 switch (stick.Name)
                 {
-                    case StixUtils.typebase:
-                        (stick as StartMenu).ScaleStick((stick as StartMenu).scaleFactor, SF_StixBase);
-                        break;
                     case StixUtils.typeicons:
                         (stick as StixIcons).ScaleStick((stick as StixIcons).scaleFactor, SF_Stix);
                         break;

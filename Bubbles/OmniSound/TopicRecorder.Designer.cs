@@ -38,6 +38,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.btnStop = new System.Windows.Forms.PictureBox();
+            this.myToolTip1 = new Bubbles.MyToolTip();
             ((System.ComponentModel.ISupportInitialize)(this.btnRecord)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnPause)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnRecordEmpty)).BeginInit();
@@ -111,6 +112,11 @@
             this.btnStop.Tag = "record";
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
+            // myToolTip1
+            // 
+            this.myToolTip1.OwnerDraw = true;
+            this.myToolTip1.ShowAlways = true;
+            // 
             // TopicRecorder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -147,5 +153,6 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.HelpProvider helpProvider1;
         public System.Windows.Forms.PictureBox btnStop;
+        private MyToolTip myToolTip1;
     }
 }

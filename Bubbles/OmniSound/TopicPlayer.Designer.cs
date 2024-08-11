@@ -49,6 +49,7 @@
             this.menuReplay = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.lblTitle = new Bubbles.TickerLabel();
+            this.myToolTip1 = new Bubbles.MyToolTip();
             ((System.ComponentModel.ISupportInitialize)(this.btnPause)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbTrack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbVolume)).BeginInit();
@@ -238,6 +239,12 @@
             this.lblTitle.Size = new System.Drawing.Size(88, 18);
             this.lblTitle.TabIndex = 82;
             this.lblTitle.Text = "tickerLabel1";
+            this.lblTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lblTitle_MouseDown);
+            // 
+            // myToolTip1
+            // 
+            this.myToolTip1.OwnerDraw = true;
+            this.myToolTip1.ShowAlways = true;
             // 
             // TopicPlayer
             // 
@@ -298,5 +305,6 @@
         private System.Windows.Forms.ToolStripMenuItem menuReplay;
         private System.Windows.Forms.Timer timer1;
         public TickerLabel lblTitle;
+        private MyToolTip myToolTip1;
     }
 }

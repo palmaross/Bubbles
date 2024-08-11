@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Bubbles
@@ -85,15 +82,10 @@ namespace Bubbles
                     " where name=`" + numWidth5.Name + "`");
                 widths[4] = (int)numWidth5.Value; checkstate[4] = cbm5.Checked;
                 if (cbm5.Checked && !stixwidths.Contains((int)numWidth5.Value)) stixwidths.Add((int)numWidth5.Value);
-                db.ExecuteNonQuery("update TOPICWIDTHS set " +
-                    "_value=" + numWidth6.Value + ", " +
-                    "_checked=" + (cbm6.Checked ? 1 : 0) +
-                    " where name=`" + numWidth6.Name + "`");
-                widths[5] = (int)numWidth6.Value; checkstate[5] = cbm6.Checked;
-                if (cbm6.Checked && !stixwidths.Contains((int)numWidth6.Value)) stixwidths.Add((int)numWidth6.Value);
             }
 
             stixwidths = stixwidths.OrderBy(i => i).ToList();
+            (form as StixTextOps).toolTip1.SetToolTip((form as StixTextOps).pTopicWidth, String.Format(Utils.getString("TextOpsStix.pTopicWidth.tooltip"), mainwidth));
             (form as StixTextOps).PopulateTopicWidths();
         }
 
@@ -105,8 +97,8 @@ namespace Bubbles
         public Form form;
 
         public static int mainwidth = 64;
-        public static List<int> widths = new List<int>() { 100, 150, 200, 250, 200, 200};
+        public static List<int> widths = new List<int>() { 100, 150, 200, 250, 200};
         public static List<int> stixwidths = new List<int>();
-        public static List<bool> checkstate = new List<bool>() { true, true, true, true, false, false };
+        public static List<bool> checkstate = new List<bool>() { true, true, true, true, false };
     }
 }

@@ -59,9 +59,9 @@ namespace Bubbles
             cm_closemenu.Text = Utils.getString("button.close");
 
             TopicPlayer.Text = Utils.getString("TopicPlayer.Title");
-            TopicPlayer.ToolTipText = Utils.getString("TopicPlayer.tooltip");
+            TopicPlayer.ToolTipText = Utils.getString("TopicPlayer.description").TrimStart('\n');
             TopicRecorder.Text = Utils.getString("TopicRecorder.Title");
-            TopicRecorder.ToolTipText = Utils.getString("TopicRecorder.tooltip");
+            TopicRecorder.ToolTipText = Utils.getString("TopicRecorder.description").TrimStart('\n');
 
             ManageAudio.Text = Utils.getString("ManageAudioDlg.title");
             ManageAudio.ToolTipText = Utils.getString("ManageAudio.tooltip");
@@ -441,7 +441,7 @@ namespace Bubbles
             {
                 if (StixMain.m_TopicPlayer == null || StixMain.m_TopicPlayer.IsDisposed)
                 {
-                    StixMain.m_TopicPlayer = new TopicPlayer(StixMain.OmniStixButton.Bounds, "", "");
+                    StixMain.m_TopicPlayer = new TopicPlayer(StixMain.OmniStixButton.Bounds);
                     StixMain.m_TopicPlayer.btnPlay.Visible = true;
                     StixMain.m_TopicPlayer.btnPlay.Location = StixMain.m_TopicPlayer.btnPause.Location;
                 }

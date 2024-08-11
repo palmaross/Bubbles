@@ -15,11 +15,12 @@ namespace Bubbles
         {
             InitializeComponent();
 
-            toolTip1.SetToolTip(pictureHandle, Utils.getString("TopicRecorder.Title") + Utils.getString("HeadIcon.topicrecorder.tooltip"));
+            myToolTip1.SetToolTip(pictureHandle, Utils.getString("TopicRecorder.Title") +
+                Utils.getString("TopicRecorder.description") + Utils.getString("HeadIcon.topicrecorder.tooltip"));
             toolTip1.SetToolTip(btnRecord, Utils.getString("TopicRecorder.btnRecord"));
             toolTip1.SetToolTip(btnPause, Utils.getString("TopicRecorder.btnPause"));
             toolTip1.SetToolTip(btnRecordEmpty, Utils.getString("TopicRecorder.btnRecord"));
-            toolTip1.SetToolTip(btnStop, Utils.getString("OmniSound.btnStop.tooltip"));
+            toolTip1.SetToolTip(btnStop, Utils.getString("TopicRecorder.btnStop"));
 
             OmniButton = omniButton;
             ThisSize = this.Size;

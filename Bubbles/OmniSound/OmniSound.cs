@@ -8,8 +8,6 @@ using Mindjet.MindManager.Interop;
 using AppManager;
 using NAudio.Wave;
 using System.Data;
-using System.Drawing;
-using System.Net.Mail;
 
 namespace Bubbles
 {
@@ -114,7 +112,7 @@ namespace Bubbles
 
         private void cbGroups_SelectedIndexChanged(object sender, EventArgs e)
         {
-            cbRecords.Items.Clear();
+            cbRecordings.Items.Clear();
             int groupID = (cbGroups.SelectedItem as AudioGroup).ID;
 
             using (StixDB db = new StixDB())
@@ -122,12 +120,12 @@ namespace Bubbles
                 DataTable dt = db.ExecuteQuery("select * from AUDIOS where groupID=" + groupID + " order by title");
 
                 foreach (DataRow row in dt.Rows)
-                    cbRecords.Items.Add(new AudioItem(Convert.ToInt32(row["id"]), 
+                    cbRecordings.Items.Add(new AudioItem(Convert.ToInt32(row["id"]), 
                         row["title"].ToString(), row["path"].ToString()));
             }
 
-            if (cbRecords.Items.Count > 0)
-                cbRecords.SelectedIndex = 0;
+            if (cbRecordings.Items.Count > 0)
+                cbRecordings.SelectedIndex = 0;
         }
 
         private void btnMore_Click(object sender, EventArgs e)
@@ -363,6 +361,7 @@ namespace Bubbles
             if (outputDevice.PlaybackState != PlaybackState.Stopped) // Stop playing
             {
                 outputDevice.Stop();
+                aTrack.Value = 0;
             }
         }
 
@@ -497,8 +496,8 @@ namespace Bubbles
             string filename = FilePath;
             if (FilePath == "") // FilePath - called from TopicPlayer
             {
-                if (cbRecords.Items.Count > 0 && cbRecords.SelectedIndex >= 0)
-                    filename = (cbRecords.SelectedItem as AudioItem).Path;
+                if (cbRecordings.Items.Count > 0 && cbRecordings.SelectedIndex >= 0)
+                    filename = (cbRecordings.SelectedItem as AudioItem).Path;
                 else
                     return;
             }
@@ -532,14 +531,22 @@ namespace Bubbles
 
             if (StixMain.m_TopicPlayer != null && StixMain.m_TopicPlayer.Visible)
             {
-                StixMain.m_TopicPlayer.tbTrack.Value = 0;
-                StixMain.m_TopicPlayer.tbTrack.Maximum = (int)ts.TotalSeconds;
+                using (StixDB db = new StixDB())
+                {
+                    DataTable dt = db.ExecuteQuery("select * from AUDIOS where path=`" + filename + "`");
+                    if (dt.Rows.Count > 0 &&
+                        !String.IsNullOrEmpty(dt.Rows[0]["mappath"].ToString())) // audio note is not attached to a topic
+                    {
+                        StixMain.m_TopicPlayer.tbTrack.Value = 0;
+                        StixMain.m_TopicPlayer.tbTrack.Maximum = (int)ts.TotalSeconds;
 
-                StixMain.m_TopicPlayer.lblTitle.Text = TrackName;
-                if (TrackName == "")
-                    StixMain.m_TopicPlayer.lblTitle.Text = Path.GetFileNameWithoutExtension(filename);
-                StixMain.m_TopicPlayer.btnPause.Visible = true;
-                StixMain.m_TopicPlayer.btnPlay.Visible = false;
+                        StixMain.m_TopicPlayer.lblTitle.Text = TrackName;
+                        if (TrackName == "")
+                            StixMain.m_TopicPlayer.lblTitle.Text = Path.GetFileNameWithoutExtension(filename);
+                        StixMain.m_TopicPlayer.btnPause.Visible = true;
+                        StixMain.m_TopicPlayer.btnPlay.Visible = false;
+                    }
+                }
             }
 
             outputDevice.Play();
@@ -642,8 +649,8 @@ namespace Bubbles
                 _w.Execute();
             }
 
-            int i = cbRecords.Items.Add(new AudioItem(id, recordName, filename));
-            cbRecords.SelectedIndex = i;
+            int i = cbRecordings.Items.Add(new AudioItem(id, recordName, filename));
+            cbRecordings.SelectedIndex = i;
             panelRecordName.Visible = false;
             t = null;
         }
@@ -683,10 +690,18 @@ namespace Bubbles
 
                 if (StixMain.m_TopicPlayer != null && StixMain.m_TopicPlayer.Visible)
                 {
-                    if (!StixMain.m_TopicPlayer.pPosition.Visible) // not busy with Volume text 
-                        StixMain.m_TopicPlayer.lblClock.Text = playClock + AudioLength;
+                    using (StixDB db = new StixDB())
+                    {
+                        DataTable dt = db.ExecuteQuery("select * from AUDIOS where path=`" + audioFile.FileName + "`");
+                        if (dt.Rows.Count > 0 &&
+                            !String.IsNullOrEmpty(dt.Rows[0]["mappath"].ToString())) // audio note is not attached to a topic
+                        {
+                            if (!StixMain.m_TopicPlayer.pPosition.Visible) // not busy with Volume text 
+                                StixMain.m_TopicPlayer.lblClock.Text = playClock + AudioLength;
 
-                    StixMain.m_TopicPlayer.tbTrack.Value = (int)audioFile.CurrentTime.TotalSeconds;
+                            StixMain.m_TopicPlayer.tbTrack.Value = (int)audioFile.CurrentTime.TotalSeconds;
+                        }
+                    }
                 }
             }
         }
@@ -713,7 +728,7 @@ namespace Bubbles
             if (!(MMUtils.SelectedTopic() is Topic _t))
                 return;
 
-            if (cbRecords.Items.Count == 0) return;
+            if (cbRecordings.Items.Count == 0) return;
 
             if (MMUtils.ActiveDocument.Path == "")
             {
@@ -729,7 +744,7 @@ namespace Bubbles
                 return;
             }
 
-            int id = (cbRecords.SelectedItem as AudioItem).ID;
+            int id = (cbRecordings.SelectedItem as AudioItem).ID;
 
             using (StixDB db = new StixDB())
                 db.ExecuteNonQuery("update AUDIOS set " +
@@ -740,7 +755,7 @@ namespace Bubbles
             string a_guid = "";
             if (chAttachment.Checked) // Add attachment
             {
-                var attach = _t.Attachments.Add((cbRecords.SelectedItem as AudioItem).Path);
+                var attach = _t.Attachments.Add((cbRecordings.SelectedItem as AudioItem).Path);
                 a_guid = "###" + attach.Guid;
             }
 
