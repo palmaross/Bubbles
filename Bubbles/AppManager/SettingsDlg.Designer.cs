@@ -47,12 +47,6 @@
             this.lblStix = new System.Windows.Forms.Label();
             this.cbStix = new System.Windows.Forms.ComboBox();
             this.cbStixBase = new System.Windows.Forms.ComboBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.QTR_Progress = new System.Windows.Forms.CheckBox();
-            this.QTR_Priority = new System.Windows.Forms.CheckBox();
-            this.QTR_Effort = new System.Windows.Forms.CheckBox();
-            this.QTR_Resources = new System.Windows.Forms.CheckBox();
-            this.QTR_Dates = new System.Windows.Forms.CheckBox();
             this.FaviconsToolStix = new System.Windows.Forms.CheckBox();
             this.FaviconsLinksWindow = new System.Windows.Forms.CheckBox();
             this.chOpenInOmniBrowser = new System.Windows.Forms.CheckBox();
@@ -60,14 +54,13 @@
             this.btnManageAutoWidth = new System.Windows.Forms.LinkLabel();
             this.gbRunAtStart.SuspendLayout();
             this.gbScaleFactor.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(236, 448);
+            this.btnClose.Location = new System.Drawing.Point(236, 363);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 1;
@@ -78,7 +71,7 @@
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSave.Location = new System.Drawing.Point(155, 448);
+            this.btnSave.Location = new System.Drawing.Point(155, 363);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 3;
@@ -171,7 +164,7 @@
             this.gbScaleFactor.Controls.Add(this.lblStix);
             this.gbScaleFactor.Controls.Add(this.cbStix);
             this.gbScaleFactor.Controls.Add(this.cbStixBase);
-            this.gbScaleFactor.Location = new System.Drawing.Point(12, 161);
+            this.gbScaleFactor.Location = new System.Drawing.Point(12, 158);
             this.gbScaleFactor.Name = "gbScaleFactor";
             this.gbScaleFactor.Size = new System.Drawing.Size(299, 78);
             this.gbScaleFactor.TabIndex = 17;
@@ -262,82 +255,13 @@
             this.cbStixBase.TabIndex = 11;
             this.cbStixBase.SelectedIndexChanged += new System.EventHandler(this.cbStix_SelectedIndexChanged);
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.QTR_Progress);
-            this.groupBox1.Controls.Add(this.QTR_Priority);
-            this.groupBox1.Controls.Add(this.QTR_Effort);
-            this.groupBox1.Controls.Add(this.QTR_Resources);
-            this.groupBox1.Controls.Add(this.QTR_Dates);
-            this.groupBox1.Location = new System.Drawing.Point(12, 250);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(299, 68);
-            this.groupBox1.TabIndex = 18;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Quick Task Remove Defaults";
-            // 
-            // QTR_Progress
-            // 
-            this.QTR_Progress.AutoSize = true;
-            this.QTR_Progress.Checked = true;
-            this.QTR_Progress.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.QTR_Progress.Location = new System.Drawing.Point(121, 21);
-            this.QTR_Progress.Name = "QTR_Progress";
-            this.QTR_Progress.Size = new System.Drawing.Size(67, 17);
-            this.QTR_Progress.TabIndex = 21;
-            this.QTR_Progress.Text = "Progress";
-            this.QTR_Progress.UseVisualStyleBackColor = true;
-            // 
-            // QTR_Priority
-            // 
-            this.QTR_Priority.AutoSize = true;
-            this.QTR_Priority.Location = new System.Drawing.Point(215, 21);
-            this.QTR_Priority.Name = "QTR_Priority";
-            this.QTR_Priority.Size = new System.Drawing.Size(57, 17);
-            this.QTR_Priority.TabIndex = 20;
-            this.QTR_Priority.Text = "Priority";
-            this.QTR_Priority.UseVisualStyleBackColor = true;
-            // 
-            // QTR_Effort
-            // 
-            this.QTR_Effort.AutoSize = true;
-            this.QTR_Effort.Location = new System.Drawing.Point(121, 44);
-            this.QTR_Effort.Name = "QTR_Effort";
-            this.QTR_Effort.Size = new System.Drawing.Size(51, 17);
-            this.QTR_Effort.TabIndex = 19;
-            this.QTR_Effort.Text = "Effort";
-            this.QTR_Effort.UseVisualStyleBackColor = true;
-            // 
-            // QTR_Resources
-            // 
-            this.QTR_Resources.AutoSize = true;
-            this.QTR_Resources.Location = new System.Drawing.Point(13, 44);
-            this.QTR_Resources.Name = "QTR_Resources";
-            this.QTR_Resources.Size = new System.Drawing.Size(77, 17);
-            this.QTR_Resources.TabIndex = 17;
-            this.QTR_Resources.Text = "Resources";
-            this.QTR_Resources.UseVisualStyleBackColor = true;
-            // 
-            // QTR_Dates
-            // 
-            this.QTR_Dates.AutoSize = true;
-            this.QTR_Dates.Checked = true;
-            this.QTR_Dates.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.QTR_Dates.Location = new System.Drawing.Point(13, 19);
-            this.QTR_Dates.Name = "QTR_Dates";
-            this.QTR_Dates.Size = new System.Drawing.Size(54, 17);
-            this.QTR_Dates.TabIndex = 16;
-            this.QTR_Dates.Text = "Dates";
-            this.QTR_Dates.UseVisualStyleBackColor = true;
-            // 
             // FaviconsToolStix
             // 
-            this.FaviconsToolStix.AutoSize = true;
             this.FaviconsToolStix.Checked = true;
             this.FaviconsToolStix.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.FaviconsToolStix.Location = new System.Drawing.Point(13, 330);
+            this.FaviconsToolStix.Location = new System.Drawing.Point(10, 244);
             this.FaviconsToolStix.Name = "FaviconsToolStix";
-            this.FaviconsToolStix.Size = new System.Drawing.Size(235, 17);
+            this.FaviconsToolStix.Size = new System.Drawing.Size(297, 30);
             this.FaviconsToolStix.TabIndex = 22;
             this.FaviconsToolStix.Text = "Show favicons for Web links on the ToolStix";
             this.FaviconsToolStix.UseVisualStyleBackColor = true;
@@ -347,7 +271,7 @@
             this.FaviconsLinksWindow.AutoSize = true;
             this.FaviconsLinksWindow.Checked = true;
             this.FaviconsLinksWindow.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.FaviconsLinksWindow.Location = new System.Drawing.Point(13, 353);
+            this.FaviconsLinksWindow.Location = new System.Drawing.Point(10, 273);
             this.FaviconsLinksWindow.Name = "FaviconsLinksWindow";
             this.FaviconsLinksWindow.Size = new System.Drawing.Size(242, 17);
             this.FaviconsLinksWindow.TabIndex = 23;
@@ -356,10 +280,9 @@
             // 
             // chOpenInOmniBrowser
             // 
-            this.chOpenInOmniBrowser.AutoSize = true;
-            this.chOpenInOmniBrowser.Location = new System.Drawing.Point(13, 382);
+            this.chOpenInOmniBrowser.Location = new System.Drawing.Point(10, 295);
             this.chOpenInOmniBrowser.Name = "chOpenInOmniBrowser";
-            this.chOpenInOmniBrowser.Size = new System.Drawing.Size(284, 17);
+            this.chOpenInOmniBrowser.Size = new System.Drawing.Size(297, 30);
             this.chOpenInOmniBrowser.TabIndex = 24;
             this.chOpenInOmniBrowser.Text = "ToolStix: open web-links in the OmniBrowser by default";
             this.chOpenInOmniBrowser.UseVisualStyleBackColor = true;
@@ -367,7 +290,7 @@
             // chTopicAutoWidth
             // 
             this.chTopicAutoWidth.AutoSize = true;
-            this.chTopicAutoWidth.Location = new System.Drawing.Point(13, 410);
+            this.chTopicAutoWidth.Location = new System.Drawing.Point(10, 330);
             this.chTopicAutoWidth.Name = "chTopicAutoWidth";
             this.chTopicAutoWidth.Size = new System.Drawing.Size(181, 17);
             this.chTopicAutoWidth.TabIndex = 25;
@@ -377,7 +300,7 @@
             // btnManageAutoWidth
             // 
             this.btnManageAutoWidth.AutoSize = true;
-            this.btnManageAutoWidth.Location = new System.Drawing.Point(197, 411);
+            this.btnManageAutoWidth.Location = new System.Drawing.Point(194, 331);
             this.btnManageAutoWidth.Name = "btnManageAutoWidth";
             this.btnManageAutoWidth.Size = new System.Drawing.Size(107, 13);
             this.btnManageAutoWidth.TabIndex = 26;
@@ -391,13 +314,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(322, 480);
+            this.ClientSize = new System.Drawing.Size(322, 395);
             this.Controls.Add(this.btnManageAutoWidth);
             this.Controls.Add(this.chTopicAutoWidth);
             this.Controls.Add(this.chOpenInOmniBrowser);
             this.Controls.Add(this.FaviconsLinksWindow);
             this.Controls.Add(this.FaviconsToolStix);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.gbScaleFactor);
             this.Controls.Add(this.gbRunAtStart);
             this.Controls.Add(this.btnSave);
@@ -415,8 +337,6 @@
             this.gbRunAtStart.PerformLayout();
             this.gbScaleFactor.ResumeLayout(false);
             this.gbScaleFactor.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -441,12 +361,6 @@
         private System.Windows.Forms.ComboBox cbStixBase;
         private System.Windows.Forms.ComboBox cbBoxes;
         private System.Windows.Forms.Button btnTestScale;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.CheckBox QTR_Dates;
-        private System.Windows.Forms.CheckBox QTR_Progress;
-        private System.Windows.Forms.CheckBox QTR_Priority;
-        private System.Windows.Forms.CheckBox QTR_Effort;
-        private System.Windows.Forms.CheckBox QTR_Resources;
         private System.Windows.Forms.CheckBox FaviconsToolStix;
         private System.Windows.Forms.CheckBox FaviconsLinksWindow;
         private System.Windows.Forms.CheckBox chOpenInOmniBrowser;

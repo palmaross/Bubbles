@@ -13,6 +13,7 @@ using System.Net;
 using Image = System.Drawing.Image;
 using System.Text.RegularExpressions;
 using System.Text;
+using System.Data;
 
 namespace Bubbles
 {
@@ -609,6 +610,72 @@ namespace Bubbles
             else return html;
         }
 
+        public static bool FreeVersionLimitExceeded(string stix, bool message = true)
+        {
+            if (!IsFree()) return false;
+            string limits = ""; DataTable dt;
+
+            using (StixDB db = new StixDB())
+            {
+                switch (stix)
+                {
+                    case StixUtils.typeOmniSound:
+                        limits = getString("limitation.omnisound");
+                        break;
+                    case StixUtils.typeicons:
+                        limits = getString("limitation.iconstix");
+                        break;
+                    case "addicon":
+                        limits = getString("limitation.addicontool");
+                        break;
+                    case StixUtils.typetaskinfo:
+                        limits = getString("limitation.taskinfo") + getString("limitation.endrestriction");
+                        break;
+                    case StixUtils.typemapnavigator:
+                        limits = getString("limitation.navigator") + getString("limitation.endrestriction");
+                        break;
+                    case "mapnavigator":
+                        limits = getString("limitation.navigator2");
+                        break;
+                    case StixUtils.typetools:
+                        limits = getString("limitation.toolstix");
+                        break;
+                    case "runtool":
+                        limits = getString("limitation.runtool");
+                        break;
+                    case StixUtils.typeaddtopic:
+                        limits = getString("limitation.topicstix") + getString("limitation.endrestriction");
+                        break;
+                    case "pastetopics":
+                        limits = getString("limitation.pastetopics");
+                        break;
+                    case StixUtils.typetextops:
+                        limits = getString("limitation.pasteoptions");
+                        break;
+                    case StixUtils.typeformat:
+                        limits = getString("limitation.formatstix");
+                        break;
+                    case "bookmarks":
+                        limits = getString("limitation.bookmarks") + getString("limitation.endrestriction");
+                        break;
+                    case "topicnoteslookin":
+                        limits = getString("limitation.topicnoteslookin");
+                        break;
+                    case "topicnotes":
+                        limits = getString("limitation.topicnotes");
+                        break;
+                    case "links":
+                        limits = getString("limitation.links");
+                        break;
+                }
+            }
+
+            if (message) MessageBox.Show(limits, getString("FreeVersionLimitation"), 
+                MessageBoxButtons.OK, MessageBoxIcon.Hand);
+
+            return true;
+        }
+
         /// <summary>
         /// Save copy of a map and get its path.
         /// </summary>
@@ -650,6 +717,20 @@ namespace Bubbles
             //}
             // 30 sec. passed, document was not opened, so...
             //return null;
+        }
+
+        /// <summary>
+        /// Check if Active Document is null or if there are no selected topics
+        /// </summary>
+        /// <param name="checkSelection">True - check if there are selected topics</param>
+        /// <returns></returns>
+        public static bool ActiveDocumentOrSelectionNull(bool checkSelection = true)
+        {
+            if (MMUtils.ActiveDocument == null) return true;
+            if (checkSelection && (MMUtils.ActiveDocument.Selection.OfType<Topic>() == null ||
+                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0))
+                return true;
+            return false;
         }
 
         public static void InitMarkersList(Topic t)

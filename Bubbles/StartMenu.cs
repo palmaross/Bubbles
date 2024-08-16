@@ -145,6 +145,9 @@ namespace Bubbles
         {
             if (e.ClickedItem == o_Navigator)
             {
+                if (Utils.FreeVersionLimitExceeded("mapnavigator"))
+                    return;
+
                 if (StixMain.m_MapNavigatorDlg == null)
                 {
                     StixMain.m_MapNavigatorDlg = new MapNavigatorDlg();
@@ -162,6 +165,9 @@ namespace Bubbles
             }
             else if (e.ClickedItem == o_Resources)
             {
+                if (Utils.FreeVersionLimitExceeded(StixUtils.typetaskinfo))
+                    return;
+
                 if (StixMain.m_Resources == null)
                     StixMain.m_Resources = new ResourcesDlg();
 
@@ -254,9 +260,7 @@ namespace Bubbles
                     MMUtils.licenseKeyStartsWith = "OS";
 
                     using (aboutDlg dlg = new aboutDlg())
-                    {
                         dlg.ShowDialog();
-                    }
 
                     string licenseStatus = PRLicenseManager.licenseStatus;
                     if (Utils.licenseStatus != licenseStatus)
@@ -487,9 +491,17 @@ namespace Bubbles
             form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            timer1.Stop();
+            StixClicked = false;
+        }
+
+        public bool StixClicked;
         public void BaseIcon_MouseClick(object sender, MouseEventArgs e)
         {
-            if (StixMain.OmniStixButton.OmniButtonHovered) return;
+            if (StixMain.OmniStixButton.OmniButtonHovered) return; // To prevent click on Stix, when user clicks the Omni button.
+            StixClicked = true; timer1.Start();
 
             string stickType; string defaultName;
             PictureBox pb = sender as PictureBox;
@@ -696,7 +708,8 @@ namespace Bubbles
 
         private void cms_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            var tsi = e.ClickedItem; if (tsi == null) return;
+            var tsi = e.ClickedItem; 
+            if (tsi == null || tsi.Tag == null) return;
 
             string[] parts = tsi.Tag.ToString().Split(':');
             string type = parts[1];
@@ -711,6 +724,12 @@ namespace Bubbles
             }
         }
 
+
+        /// <summary>
+        /// Select Icon and Tool Stix panels 
+        /// </summary>
+        /// <param name="type">Icon or Tool</param>
+        /// <returns></returns>
         ContextMenuStrip GetStixContextMenu(string type)
         {
             ContextMenuStrip cms = new ContextMenuStrip();
@@ -720,11 +739,19 @@ namespace Bubbles
             {
                 DataTable dt = db.ExecuteQuery("select * from STIX where type=`" + type + "`");
 
+                int i = 1;
                 foreach (DataRow row in dt.Rows)
                 {
                     ToolStripItem tsi = new ToolStripMenuItem(row["name"].ToString());
                     tsi.Tag = row["id"] + ":" + type;
                     cms.Items.Add(tsi);
+
+                    if (Utils.FreeVersionLimitExceeded(type, false) && i++ > 1)
+                    {
+                        tsi.Tag = null;
+                        tsi.ToolTipText = Utils.getString("FreeVersionLimitation") + Utils.getString("limitation.endrestriction");
+                        tsi.ForeColor = SystemColors.ControlDark;
+                    }
                 }
             }
             return cms;
@@ -772,6 +799,9 @@ namespace Bubbles
 
         private void boxQuickTopics_MouseDown(object sender, MouseEventArgs e)
         {
+            if (Utils.FreeVersionLimitExceeded(StixUtils.typetaskinfo))
+                return;
+
             if (StixMain.m_QuickTopics == null || StixMain.m_QuickTopics.IsDisposed)
             {
                 StixMain.m_QuickTopics = new QuickTopicsDlg();

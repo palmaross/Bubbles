@@ -270,9 +270,9 @@
             // 
             this.btnGetTopicNotes.Location = new System.Drawing.Point(9, 6);
             this.btnGetTopicNotes.Name = "btnGetTopicNotes";
-            this.btnGetTopicNotes.Size = new System.Drawing.Size(110, 23);
+            this.btnGetTopicNotes.Size = new System.Drawing.Size(124, 23);
             this.btnGetTopicNotes.TabIndex = 25;
-            this.btnGetTopicNotes.Text = "Get Topic Notes";
+            this.btnGetTopicNotes.Text = "Вынести примечания";
             this.btnGetTopicNotes.UseVisualStyleBackColor = true;
             this.btnGetTopicNotes.Click += new System.EventHandler(this.btnGetTopicNotes_Click);
             // 
@@ -412,6 +412,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 25);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.ShowToolTips = true;
             this.tabControl1.Size = new System.Drawing.Size(453, 240);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.TabIndex = 14;
@@ -436,7 +437,7 @@
             this.PreviewPage.Location = new System.Drawing.Point(4, 26);
             this.PreviewPage.Name = "PreviewPage";
             this.PreviewPage.Padding = new System.Windows.Forms.Padding(3);
-            this.PreviewPage.Size = new System.Drawing.Size(445, 216);
+            this.PreviewPage.Size = new System.Drawing.Size(445, 210);
             this.PreviewPage.TabIndex = 0;
             this.PreviewPage.Text = "tabPage1";
             this.PreviewPage.UseVisualStyleBackColor = true;

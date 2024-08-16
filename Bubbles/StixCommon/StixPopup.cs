@@ -164,12 +164,10 @@ namespace Bubbles
 
         private void pDeleteAllIcons_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-                return;
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
 
             foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                if (t.UserIcons.Count > 0)
-                    t.UserIcons.RemoveAll();
+                if (t.UserIcons.Count > 0) t.UserIcons.RemoveAll();
         }
 
         private void pFontItalic_Click(object sender, EventArgs e)
@@ -191,8 +189,7 @@ namespace Bubbles
 
         private void pProgress_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-                return;
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
 
             PictureBox pb = sender as PictureBox;
             int value = Convert.ToInt32(pb.Name.Substring(1));
@@ -212,8 +209,7 @@ namespace Bubbles
 
         private void pPriority_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-                return;
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
 
             PictureBox pb = sender as PictureBox;
             int value = Convert.ToInt32(pb.Name.Substring(3));

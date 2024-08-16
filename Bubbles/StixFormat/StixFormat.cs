@@ -60,7 +60,6 @@ namespace Bubbles
 
             // Context menu
             contextMenuStrip1.ItemClicked += ContextMenuStrip1_ItemClicked;
-            BI_color.Text = Utils.getString("stixformat.contextmenu.color");
             clear_all.Text = Utils.getString("stixformat.contextmenu.clear_all");
             clear_textformat.Text = Utils.getString("stixformat.contextmenu.clear_textformat");
             clear_textcolor.Text = Utils.getString("stixformat.contextmenu.clear_textcolor");
@@ -68,26 +67,12 @@ namespace Bubbles
 
             StixUtils.SetCommonContextMenu(contextMenuStrip1, StixUtils.typeformat);
 
-            fontcolor1.MouseClick += Icon_Click;
-            fontcolor2.MouseClick += Icon_Click;
-            fontcolor3.MouseClick += Icon_Click;
-            fillcolor1.MouseClick += Icon_Click;
-            fillcolor2.MouseClick += Icon_Click;
-            fillcolor3.MouseClick += Icon_Click;
-
             fontcolor1.Tag = Utils.getRegistry("fontcolor1", "#ffff0000");
             fontcolor2.Tag = Utils.getRegistry("fontcolor2", "#ff0000ff");
             fontcolor3.Tag = Utils.getRegistry("fontcolor3", "#ff00aa55");
             fillcolor1.Tag = Utils.getRegistry("fillcolor1", "#ffffffa8");
             fillcolor2.Tag = Utils.getRegistry("fillcolor2", "#ffaeffae");
             fillcolor3.Tag = Utils.getRegistry("fillcolor3", "#ffb0ffff");
-
-            fontcolor1.Paint += pVisualStatus_Paint;
-            fontcolor2.Paint += pVisualStatus_Paint;
-            fontcolor3.Paint += pVisualStatus_Paint;
-            fillcolor1.Paint += pVisualStatus_Paint;
-            fillcolor2.Paint += pVisualStatus_Paint;
-            fillcolor3.Paint += pVisualStatus_Paint;
 
             pictureHandle.MouseDoubleClick += (sender, e) => this.Hide();
             pictureHandle.MouseDown += PictureHandle_MouseDown;
@@ -142,7 +127,7 @@ namespace Bubbles
                 Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid);
         }
 
-        private void pVisualStatus_Paint(object sender, PaintEventArgs e)
+        private void ColorButton_Paint(object sender, PaintEventArgs e)
         {
             PictureBox p = sender as PictureBox;
             Color c = ColorTranslator.FromHtml(p.Tag.ToString());
@@ -160,7 +145,6 @@ namespace Bubbles
             foreach (ToolStripItem item in contextMenuStrip1.Items)
                 item.Visible = true;
 
-            BI_color.Visible = false;
             clear_all.Visible = false;
             clear_textformat.Visible = false;
             clear_textcolor.Visible = false;
@@ -179,22 +163,10 @@ namespace Bubbles
             base.OnMouseDown(e);
         }
 
+
         private void ContextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Name == "BI_color")
-            {
-                colorDialog1.FullOpen = true;
-                if (colorDialog1.ShowDialog() == DialogResult.Cancel)
-                    return;
-
-                Color c = colorDialog1.Color;
-                selectedIcon.Tag = string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", c.A, c.R, c.G, c.B).ToLower();
-                // "#ffffffff"
-
-                Utils.setRegistry(selectedIcon.Name, selectedIcon.Tag.ToString());
-                selectedIcon.Invalidate(); // change the picture color
-            }
-            else if (e.ClickedItem.Name == "BI_close")
+            if (e.ClickedItem.Name == "BI_close")
             {
                 StixMain.STICKS.Remove((int)this.Tag);
                 this.Close();
@@ -280,14 +252,16 @@ namespace Bubbles
         /// <summary>
         /// Click on the text and fill color pictures
         /// </summary>
-        private void Icon_Click(object sender, MouseEventArgs e)
+        private void Color_Click(object sender, MouseEventArgs e)
         {
             selectedIcon = sender as PictureBox;
 
+            if (!selectedIcon.Name.EndsWith("1") && Utils.FreeVersionLimitExceeded(StixUtils.typeformat))
+                return;
+
             if (e.Button == MouseButtons.Left)
             {
-                if (MMUtils.ActiveDocument == null)
-                    return;
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
 
                 int value = Convert.ToInt32(selectedIcon.Tag.ToString().TrimStart('#'), 16);
 
@@ -304,11 +278,17 @@ namespace Bubbles
             }
             else if (e.Button == MouseButtons.Right)
             {
-                foreach (ToolStripItem item in contextMenuStrip1.Items)
-                    item.Visible = false;
+                colorDialog1.FullOpen = true;
+                colorDialog1.Color = ColorTranslator.FromHtml(selectedIcon.Tag.ToString());
+                if (colorDialog1.ShowDialog() == DialogResult.Cancel)
+                    return;
 
-                contextMenuStrip1.Items["BI_color"].Visible = true;
-                contextMenuStrip1.Show(Cursor.Position);
+                Color c = colorDialog1.Color;
+                selectedIcon.Tag = string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", c.A, c.R, c.G, c.B).ToLower();
+                // "#ffffffff"
+
+                Utils.setRegistry(selectedIcon.Name, selectedIcon.Tag.ToString());
+                selectedIcon.Invalidate(); // change the picture color
             }
         }
 

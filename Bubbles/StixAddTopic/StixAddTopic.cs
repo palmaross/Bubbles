@@ -302,6 +302,8 @@ namespace Bubbles
 
         private void AddTopics(MT_TemplateItem item, string topicName, string topicType)
         {
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
+
             TopicsToAdd.Clear();
 
             List<string> pattern = item.Pattern.Split(new string[] { "###" }, StringSplitOptions.None).ToList();
@@ -401,6 +403,8 @@ namespace Bubbles
 
         private void pAddMultiple_MouseClick(object sender, MouseEventArgs e)
         {
+            if (Utils.FreeVersionLimitExceeded(StixUtils.typeaddtopic)) return;
+
             if (e.Button == MouseButtons.Left)
             {
                 foreach (ToolStripItem item in cmsAddMultiple.Items)
@@ -426,10 +430,10 @@ namespace Bubbles
         /// <param name="topictype">Which topic perform the operation with</param>
         void AddTopic(string topictype)
         {
-            if (MMUtils.ActiveDocument == null) return;
-            if (MMUtils.ActiveDocument.Selection.PrimaryTopic == null) return;
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
 
             string topicText = TopicText.Text;
+            if (TopicText.ForeColor == SystemColors.ControlDark) topicText = "";
             transTopicType = topictype;
 
             // Create TopicsToAdd list (for adding multiple topics)
@@ -478,6 +482,8 @@ namespace Bubbles
 
         public void AddTopics(Document pDocument)
         {
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
+
             if (TopicsToAdd.Count > 1 && transTopicType == "nexttopic")
                 TopicsToAdd = TopicsToAdd.Reverse<string>().ToList();
 
@@ -512,6 +518,12 @@ namespace Bubbles
 
         private void chIncrement_CheckedChanged(object sender, EventArgs e)
         {
+            if (Utils.FreeVersionLimitExceeded(StixUtils.typeaddtopic, chIncrement.Checked))
+            {
+                chIncrement.Checked = false;
+                return;
+            }
+
             if (chIncrement.Checked)
                 chIncrement.Font = new Font(chIncrement.Font, FontStyle.Bold);
             else

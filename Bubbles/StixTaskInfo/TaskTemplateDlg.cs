@@ -43,6 +43,9 @@ namespace Bubbles
 
             toolTip1.SetToolTip(numStartDate, Utils.getString("TaskTemplateDlg.numDate.tooltip"));
             toolTip1.SetToolTip(numDueDate, Utils.getString("TaskTemplateDlg.numDate.tooltip"));
+            toolTip1.SetToolTip(GNew, Utils.getString("ResourcesDlg.NewGroup"));
+            toolTip1.SetToolTip(GEdit, Utils.getString("ResourcesDlg.RenameGroup"));
+            toolTip1.SetToolTip(GDelete, Utils.getString("ResourcesDlg.DeleteGroup"));
             toolTip1.SetToolTip(New, Utils.getString("TaskTemplateDlg.New.tooltip"));
             toolTip1.SetToolTip(Edit, Utils.getString("TaskTemplateDlg.Edit.tooltip"));
             toolTip1.SetToolTip(Delete, Utils.getString("TaskTemplateDlg.Delete.tooltip"));

@@ -166,6 +166,8 @@ namespace Bubbles
 
             IconGroupsDropDown.Items.Add(new ToolStripSeparator());
 
+            if (MMUtils.ActiveDocument == null) return;
+
             foreach (MapMarkerGroup mmg in MMUtils.ActiveDocument.MapMarkerGroups)
             {
                 if (mmg.Type == MmMapMarkerGroupType.mmMapMarkerGroupTypeIcon)
@@ -262,8 +264,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_removeallfromtopic")
             {
-                if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-                    return;
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
 
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                     if (t.UserIcons.Count > 0)
@@ -300,6 +301,8 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "IconGroup")
             {
+                if (Utils.ActiveDocumentOrSelectionNull(false)) return;
+
                 if ((Boolean)ReplaceIcons.Tag == true) // Remove icons from Stix
                 {
                     Icons.Clear();
@@ -367,6 +370,9 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_newstick")
             {
+                if (Utils.FreeVersionLimitExceeded(StixUtils.typeicons))
+                    return;
+
                 string name = StixUtils.GetName(this, orientation, StixUtils.typestick, "", true);
                 if (name != "")
                 {
@@ -412,12 +418,6 @@ namespace Bubbles
                     string name = Path.GetFileNameWithoutExtension(pair.Value);
                     if (name.StartsWith("pripro")) name = "";
                     NewIcon(pair.Value, name, "end");
-                }
-
-                if (!String.IsNullOrEmpty(_dlg.iconPath))
-                {
-                    string name = Path.GetFileNameWithoutExtension(_dlg.iconPath);
-                    NewIcon(_dlg.iconPath, name, "end");
                 }
             }
         }
@@ -508,8 +508,10 @@ namespace Bubbles
             }
 
             IconItem item = new IconItem(iconName, fileName, order, iconPath);
-            using (StixDB db = new StixDB())
-                db.AddIcon(iconName, fileName, order, (int)this.Tag);
+
+            if (!Utils.FreeVersionLimitExceeded("addicon"))
+                using (StixDB db = new StixDB())
+                    db.AddIcon(iconName, fileName, order, (int)this.Tag);
 
             Icons.Insert(order - 1, item);
             for (int i = 0; i < Icons.Count; i++)
@@ -547,8 +549,7 @@ namespace Bubbles
 
             if (e.Button == MouseButtons.Left)
             {
-                if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0) 
-                    return;
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
 
                 IconItem item = selectedIcon.Tag as IconItem;
                 string fileName = item.FileName;

@@ -32,7 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StixFormat));
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.BI_color = new System.Windows.Forms.ToolStripMenuItem();
             this.clear_all = new System.Windows.Forms.ToolStripMenuItem();
             this.clear_textformat = new System.Windows.Forms.ToolStripMenuItem();
             this.clear_textcolor = new System.Windows.Forms.ToolStripMenuItem();
@@ -88,20 +87,13 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.BI_color,
             this.clear_all,
             this.clear_textformat,
             this.clear_textcolor,
             this.clear_fillcolor});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.ShowImageMargin = false;
-            this.contextMenuStrip1.Size = new System.Drawing.Size(163, 114);
-            // 
-            // BI_color
-            // 
-            this.BI_color.Name = "BI_color";
-            this.BI_color.Size = new System.Drawing.Size(162, 22);
-            this.BI_color.Text = "Цвет...";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(163, 92);
             // 
             // clear_all
             // 
@@ -220,6 +212,8 @@
             this.fontcolor2.TabIndex = 83;
             this.fontcolor2.TabStop = false;
             this.fontcolor2.Tag = "1";
+            this.fontcolor2.Paint += new System.Windows.Forms.PaintEventHandler(this.ColorButton_Paint);
+            this.fontcolor2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Color_Click);
             // 
             // fontcolor1
             // 
@@ -230,6 +224,8 @@
             this.fontcolor1.TabIndex = 84;
             this.fontcolor1.TabStop = false;
             this.fontcolor1.Tag = "1";
+            this.fontcolor1.Paint += new System.Windows.Forms.PaintEventHandler(this.ColorButton_Paint);
+            this.fontcolor1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Color_Click);
             // 
             // fontcolor3
             // 
@@ -240,6 +236,8 @@
             this.fontcolor3.TabIndex = 85;
             this.fontcolor3.TabStop = false;
             this.fontcolor3.Tag = "1";
+            this.fontcolor3.Paint += new System.Windows.Forms.PaintEventHandler(this.ColorButton_Paint);
+            this.fontcolor3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Color_Click);
             // 
             // fillcolor2
             // 
@@ -250,6 +248,8 @@
             this.fillcolor2.TabIndex = 86;
             this.fillcolor2.TabStop = false;
             this.fillcolor2.Tag = "1";
+            this.fillcolor2.Paint += new System.Windows.Forms.PaintEventHandler(this.ColorButton_Paint);
+            this.fillcolor2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Color_Click);
             // 
             // fillcolor1
             // 
@@ -260,6 +260,8 @@
             this.fillcolor1.TabIndex = 87;
             this.fillcolor1.TabStop = false;
             this.fillcolor1.Tag = "1";
+            this.fillcolor1.Paint += new System.Windows.Forms.PaintEventHandler(this.ColorButton_Paint);
+            this.fillcolor1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Color_Click);
             // 
             // fillcolor3
             // 
@@ -270,10 +272,12 @@
             this.fillcolor3.TabIndex = 88;
             this.fillcolor3.TabStop = false;
             this.fillcolor3.Tag = "1";
+            this.fillcolor3.Paint += new System.Windows.Forms.PaintEventHandler(this.ColorButton_Paint);
+            this.fillcolor3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Color_Click);
             // 
             // lblTextColor
             // 
-            this.lblTextColor.Location = new System.Drawing.Point(142, 0);
+            this.lblTextColor.Location = new System.Drawing.Point(142, 1);
             this.lblTextColor.Name = "lblTextColor";
             this.lblTextColor.Size = new System.Drawing.Size(85, 13);
             this.lblTextColor.TabIndex = 89;
@@ -282,7 +286,7 @@
             // 
             // lblFillColor
             // 
-            this.lblFillColor.Location = new System.Drawing.Point(214, 0);
+            this.lblFillColor.Location = new System.Drawing.Point(214, 1);
             this.lblFillColor.Name = "lblFillColor";
             this.lblFillColor.Size = new System.Drawing.Size(82, 13);
             this.lblFillColor.TabIndex = 90;
@@ -422,7 +426,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.PictureBox Manage;
-        private System.Windows.Forms.ToolStripMenuItem BI_color;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.PictureBox pFontDecrease;
         private System.Windows.Forms.PictureBox pFontIncrease;

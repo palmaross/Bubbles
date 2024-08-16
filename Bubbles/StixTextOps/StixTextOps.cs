@@ -117,7 +117,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "ManualWidth")
             {
-                if (MMUtils.ActiveDocument == null) return;
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
 
                 int width = Convert.ToInt32(e.ClickedItem.Tag);
                 if (width > 10)
@@ -171,22 +171,18 @@ namespace Bubbles
 
         private void PasteLink_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument != null &&
-                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0 &&
-                Clipboard.ContainsText())
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
+
+            if (Clipboard.ContainsText())
             {
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                {
-                    t.Hyperlinks.AddHyperlink(System.Windows.Forms.Clipboard.GetText());
-                }
+                    t.Hyperlinks.AddHyperlink(Clipboard.GetText());
             }
         }
 
         private void PasteNotes_MouseClick(object sender, MouseEventArgs e)
         {
-            if (MMUtils.ActiveDocument == null || !Clipboard.ContainsText() ||
-                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-                return;
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
 
             SelectedTopics.Clear();
             SelectedTopics.AddRange(MMUtils.ActiveDocument.Selection.OfType<Topic>());
@@ -299,6 +295,8 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
+
                 if (OptionTextFormat.Tag.ToString() == "unformatted")
                 {
                     string text = "";
@@ -344,9 +342,7 @@ namespace Bubbles
                 StixUtils.GetLinks(OptionSourceLink.Tag.ToString() == "yes", 
                     OptionInternalLinks.Tag.ToString() == "yes");
 
-                if (MMUtils.ActiveDocument == null || !Clipboard.ContainsText() ||
-                    MMUtils.ActiveDocument.Selection.PrimaryTopic == null)
-                    return;
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
 
                 replace = OptionReplaceInsert.Tag.ToString() == "replace";
 
@@ -471,6 +467,8 @@ namespace Bubbles
         public void PasteOperations_Tick(object sender, EventArgs e)
         {
             PasteOperations.Stop();
+
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
 
             if (pasteOperation == "pastetotopic" || pasteOperation == "topicnotes")
                 PasteToTopic(MMUtils.ActiveDocument);
@@ -649,13 +647,12 @@ namespace Bubbles
 
         private void UnformatText_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument != null)
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
+
+            foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
             {
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                {
-                    t.Font.SetAutomatic(63);
-                    t.TextColor.SetAutomatic();
-                }
+                t.Font.SetAutomatic(63);
+                t.TextColor.SetAutomatic();
             }
         }
 
@@ -675,12 +672,17 @@ namespace Bubbles
             }
             else if (e.Button == MouseButtons.Right)
             {
+                if (Utils.FreeVersionLimitExceeded("pastetopics"))
+                    return;
+
                 StixUtils.ShowCommandPopup(this, orientation, StixUtils.typetextops, "paste", scaleFactor);
             }
         }
 
         public void PasteTopic(string topicType)
         {
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
+
             transTopicType = topicType;
             SelectedTopics.Clear(); TopicsToAdd.Clear();
             SelectedTopics.AddRange(MMUtils.ActiveDocument.Selection.OfType<Topic>());
@@ -763,6 +765,8 @@ namespace Bubbles
 
         public void PasteTopics(Document pDocument)
         {
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
+
             if (TopicsToAdd.Count > 1 && transTopicType == "nexttopic")
                 TopicsToAdd = TopicsToAdd.Reverse<string>().ToList();
 
@@ -791,6 +795,9 @@ namespace Bubbles
 
         private void OptionButton_MouseClick(object sender, MouseEventArgs e)
         {
+            if (Utils.FreeVersionLimitExceeded(StixUtils.typetextops))
+                return;
+
             if (e.Button == MouseButtons.Left)
             {
                 if (sender == OptionTextFormat)
@@ -923,6 +930,8 @@ namespace Bubbles
 
         private void Mtb_KeyDown(object sender, KeyEventArgs e)
         {
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
+
             ToolStripTextBox tb = sender as ToolStripTextBox;
             if (e.KeyCode == Keys.Enter)
             {
@@ -946,13 +955,16 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (MMUtils.ActiveDocument == null) return;
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
 
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                     t.Shape.TextWidth = TopicWidthsDlg.mainwidth;
             }
             else if (e.Button == MouseButtons.Right)
             {
+                if (Utils.FreeVersionLimitExceeded(StixUtils.typetextops))
+                    return;
+
                 foreach (ToolStripItem item in cmsTopicWidths.Items)
                     item.Visible = true;
 

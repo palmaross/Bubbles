@@ -223,7 +223,7 @@ namespace Bubbles
 
         private void btnAddLinkToTopic_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument == null) return;
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
 
             foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                 t.Hyperlinks.AddHyperlink(txtAddressBar.Text);
@@ -231,6 +231,8 @@ namespace Bubbles
 
         private void btnSaveLink_Click(object sender, EventArgs e)
         {
+            if (Utils.FreeVersionLimitExceeded("links")) return;
+
             if (StixMain.m_NewLink == null || StixMain.m_NewLink.IsDisposed)
             {
                 StixMain.m_NewLink = new NewLinkDlg();
@@ -275,27 +277,25 @@ namespace Bubbles
 
         private void btnAddAsSubtopic_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument.Selection.PrimaryTopic == null)
-                return;
-
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
             selectedText = "";
             InitializeWebView3Async();
         }
 
         private void btnAddToTopicNotes_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument.Selection.PrimaryTopic == null)
-                return;
-
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
             selectedText = "";
             InitializeWebView3Async(true);
         }
 
         /// <summary>
-        /// Get selected text from webpage
+        /// Get selected text from webpage and paste to topic notes
         /// </summary>
         private async void InitializeWebView3Async(bool notes = false)
         {
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
+
             TabPage _page = tabControl1.SelectedTab;
             BrowserTab bt = (BrowserTab)_page.Tag;
             selectedText = await bt.ExecuteScriptAsync("window.getSelection().toString()");

@@ -85,6 +85,12 @@ namespace Bubbles
             TaskInfoEffort = cmsRemoveTaskInfo.Items.Add(Utils.getString("taskinfo.numEffort.tooltip"));
             (TaskInfoEffort as ToolStripMenuItem).CheckOnClick = true;
 
+            cmsRemoveTaskInfo.Items.Add(new ToolStripSeparator());
+
+            ToolStripItem RemoveDefaults = cmsRemoveTaskInfo.Items.Add(Utils.getString("taskinfo.removedefaults"));
+            RemoveDefaults.ToolTipText = Utils.getString("taskinfo.removedefaults.tooltip");
+            RemoveDefaults.Click += RemoveDefaults_Click;
+
             SetQuickTaskDefault();
 
             cmsRemoveTaskInfo.ItemClicked += ContextMenu_ItemClicked;
@@ -150,6 +156,20 @@ namespace Bubbles
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
             ScaleStick(100F, scaleFactor);
         }
+
+        /// <summary>
+        /// Save Quick Task Remove Defaults
+        /// </summary>
+        private void RemoveDefaults_Click(object sender, EventArgs e)
+        {
+            string defaults = "dates:" + ((TaskInfoDates as ToolStripMenuItem).Checked ? "1" : "0") + ";";
+            defaults += "priority:" + ((TaskInfoPriority as ToolStripMenuItem).Checked ? "1" : "0") + ";";
+            defaults += "progress:" + ((TaskInfoProgress as ToolStripMenuItem).Checked ? "1" : "0") + ";";
+            defaults += "resources:" + ((TaskInfoResources as ToolStripMenuItem).Checked ? "1" : "0") + ";";
+            defaults += "effort:" + ((TaskInfoEffort as ToolStripMenuItem).Checked ? "1" : "0");
+            Utils.setRegistry("QuickTaskRemoveDefaults", defaults);
+        }
+
         ToolStripItem TaskInfoDates, TaskInfoProgress, TaskInfoPriority, TaskInfoResources, TaskInfoEffort;
 
         private void StixTaskInfo_Load(object sender, EventArgs e)
@@ -307,6 +327,8 @@ namespace Bubbles
         {
             if (e.KeyCode == Keys.Enter)
             {
+                if (MMUtils.ActiveDocument == null) return;
+
                 ToolStripTextBox tb = sender as ToolStripTextBox;
 
                 string _resources = tb.Text.Trim();
@@ -356,16 +378,7 @@ namespace Bubbles
         public void PopulateQuickTopics(bool fromQuicTopics = false)
         {
             cmsTaskTemplates.Items.Clear();
-
-            ToolStripItem tsi = cmsTaskTemplates.Items.Add(Utils.getString("taskinfo.quicktask.manage"));
-            tsi.Name = "ManageTaskTemplates";
-            StixUtils.SetContextMenuImage(tsi, "manage.png");
-
-            tsi = cmsTaskTemplates.Items.Add(Utils.getString("taskinfo.quicktask.qtaskslist"));
-            tsi.Name = "QuickTaskList";
-            StixUtils.SetContextMenuImage(tsi, "list.png");
-
-            cmsTaskTemplates.Items.Add(new ToolStripSeparator());
+            ToolStripItem tsi;
 
             using (StixDB db = new StixDB())
             {
@@ -378,6 +391,7 @@ namespace Bubbles
                 if (StixMain.m_QuickTopics != null && StixMain.m_QuickTopics.Visible && !fromQuicTopics)
                     StixMain.m_QuickTopics.treeView1.Nodes.Clear();
 
+                int i = 1;
                 foreach (var group in groups)
                 {
                     ToolStripDropDown dd = null;
@@ -481,11 +495,28 @@ namespace Bubbles
                             tsi.Tag = item; tsi.Name = "TaskTemplate";
                         }
 
+                        if (Utils.IsFree() && i++ > 1)
+                        {
+                            tsi.Enabled = false;
+                            tsi.ForeColor = SystemColors.ControlDark;
+                            tsi.ToolTipText = Utils.getString("FreeVersionLimitation") + Utils.getString("limitation.endrestriction");
+                        }
+
                         if (StixMain.m_QuickTopics != null && StixMain.m_QuickTopics.Visible && !fromQuicTopics)
                             groupNode.Nodes.Add(item.Name).Tag = item;
                     }
                 }
             }
+
+            cmsTaskTemplates.Items.Add(new ToolStripSeparator());
+
+            tsi = cmsTaskTemplates.Items.Add(Utils.getString("taskinfo.quicktask.manage"));
+            tsi.Name = "ManageTaskTemplates";
+            StixUtils.SetContextMenuImage(tsi, "manage.png");
+
+            tsi = cmsTaskTemplates.Items.Add(Utils.getString("taskinfo.quicktask.qtaskslist"));
+            tsi.Name = "QuickTaskList";
+            StixUtils.SetContextMenuImage(tsi, "list.png");
         }
 
         private void ResourceTextBox_MouseDown(object sender, MouseEventArgs e)
@@ -501,6 +532,9 @@ namespace Bubbles
         {
             if (e.ClickedItem.Name == "ResourceBox")
             {
+                if (Utils.FreeVersionLimitExceeded(StixUtils.typetaskinfo))
+                    return;
+
                 if (StixMain.m_Resources == null)
                     StixMain.m_Resources = new ResourcesDlg();
 
@@ -520,9 +554,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "RemoveResources")
             {
-                if (MMUtils.ActiveDocument == null ||
-                    MMUtils.ActiveDocument.Selection.PrimaryTopic == null)
-                    return;
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
 
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                 {
@@ -531,9 +563,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "cm_resource")
             {
-                if (MMUtils.ActiveDocument == null ||
-                    MMUtils.ActiveDocument.Selection.PrimaryTopic == null)
-                    return;
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
 
                 string res = e.ClickedItem.Text;
 
@@ -551,6 +581,8 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "TaskTemplate")
             {
+                if (MMUtils.ActiveDocument == null) return;
+
                 QuickTopic = e.ClickedItem.Tag as QuickTopicItem;
 
                 Transaction _tr = MMUtils.ActiveDocument.NewTransaction(Utils.getString("QuickTask.transaction.name"));
@@ -567,6 +599,9 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "QuickTaskList")
             {
+                if (Utils.FreeVersionLimitExceeded(StixUtils.typetaskinfo))
+                    return;
+
                 if (StixMain.m_QuickTopics == null || StixMain.m_QuickTopics.IsDisposed)
                 {
                     StixMain.m_QuickTopics = new QuickTopicsDlg();
@@ -579,8 +614,7 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name.StartsWith("Dates_"))
             {
-                if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-                    return;
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
 
                 DateTime startdate = DateTime.Now.Date, duedate = DateTime.Now.Date;
                 bool both = false;
@@ -690,8 +724,7 @@ namespace Bubbles
 
         private void p100_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-                return;
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
 
             bool alltopicshaveicon = true;
             foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
@@ -710,8 +743,7 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-                    return;
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
 
                 bool alltopicshaveicon = true;
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
@@ -735,8 +767,7 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-                    return;
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
 
                 bool alltopicshaveicon = true;
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
@@ -790,12 +821,11 @@ namespace Bubbles
             PictureBox pb = sender as PictureBox;
             pStartDate.Select(0, 0); pDueDate.Select(0, 0);
 
-            if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-                return;
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
 
             string fromstick = pStartDate.Text;
             DateTime dt = (DateTime)pStartDate.Tag;
-            if (pb.Name == "pTopicDueDate")
+            if (pb.Name == "pDueDateToggle")
                 dt = (DateTime)pDueDate.Tag;
 
             if (dt == null) return;
@@ -806,22 +836,22 @@ namespace Bubbles
             {
                 if (setdate) // set date to topic
                 {
-                    if (pb.Name == "pTopicStartDate")
+                    if (pb.Name == "pStartDateToggle")
                     {
-                        t.Task.StartDate = (DateTime)dt;
+                        t.Task.StartDate = dt;
                         pStartDateToggle.Image = Image.FromFile(Utils.ImagesPath + "topic_setdate_active.png");
 
                     }
                     else
                     {
-                        t.Task.DueDate = (DateTime)dt;
+                        t.Task.DueDate = dt;
                         pDueDateToggle.Image = Image.FromFile(Utils.ImagesPath + "topic_setdate_active.png");
 
                     }
                 }
                 else // remove date from topic
                 {
-                    if (pb.Name == "pTopicStartDate")
+                    if (pb.Name == "pStartDateToggle")
                     {
                         t.Task.StartDate = MMUtils.NULLDATE;
                         pStartDateToggle.Image = Image.FromFile(Utils.ImagesPath + "topic_setdate_noactive.png");
@@ -976,12 +1006,14 @@ namespace Bubbles
 
         private void numDuration_ValueChanged(object sender, EventArgs e)
         {
+            if (MMUtils.ActiveDocument == null) return;
+
             if ((sender as NumericUpDown) == numDuration)
             {
                 if (MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 1 && !stickDuration)
                     return; // Duration for multiple topics = 0
 
-                if (MMUtils.ActiveDocument != null && MMUtils.ActiveDocument.Selection.PrimaryTopic != null)
+                if (MMUtils.ActiveDocument.Selection.PrimaryTopic != null)
                 {
                     stickDuration = true; // do not set numDuration value in Bubbles.onObjectChanged event
 
@@ -1060,25 +1092,24 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (MMUtils.ActiveDocument != null && MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0)
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
+
+                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                 {
-                    foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                    {
-                        if ((TaskInfoDates as ToolStripMenuItem).Checked) {
-                            t.Task.StartDate = MMUtils.NULLDATE; t.Task.DueDate = MMUtils.NULLDATE; }
+                    if ((TaskInfoDates as ToolStripMenuItem).Checked) {
+                        t.Task.StartDate = MMUtils.NULLDATE; t.Task.DueDate = MMUtils.NULLDATE; }
 
-                        if ((TaskInfoProgress as ToolStripMenuItem).Checked)
-                            t.Task.Complete = -1;
+                    if ((TaskInfoProgress as ToolStripMenuItem).Checked)
+                        t.Task.Complete = -1;
 
-                        if ((TaskInfoPriority as ToolStripMenuItem).Checked)
-                            t.Task.Priority = 0;
+                    if ((TaskInfoPriority as ToolStripMenuItem).Checked)
+                        t.Task.Priority = 0;
 
-                        if ((TaskInfoResources as ToolStripMenuItem).Checked)
-                            t.Task.Resources = "";
+                    if ((TaskInfoResources as ToolStripMenuItem).Checked)
+                        t.Task.Resources = "";
 
-                        if ((TaskInfoEffort as ToolStripMenuItem).Checked &&
-                            t.Task.HasEffort) Utils.DeleteEffort(t);
-                    }
+                    if ((TaskInfoEffort as ToolStripMenuItem).Checked &&
+                        t.Task.HasEffort) Utils.DeleteEffort(t);
                 }
             }
             else if (e.Button == MouseButtons.Right)
@@ -1092,6 +1123,8 @@ namespace Bubbles
 
         private void pQuickTask_MouseClick(object sender, MouseEventArgs e)
         {
+            if (MMUtils.ActiveDocument == null) return;
+
             if (e.Button == MouseButtons.Left)
             {
                 Transaction _tr = MMUtils.ActiveDocument.NewTransaction(Utils.getString("QuickTask.transaction.name"));
@@ -1110,8 +1143,7 @@ namespace Bubbles
 
         public void SetQuickTopic(Document pDocument)
         {
-            if (MMUtils.ActiveDocument == null ||
-                MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0) return;
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
 
             string startdate = "", duedate = "";
             if (QuickTopic.Dates != "")

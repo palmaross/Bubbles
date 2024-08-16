@@ -67,11 +67,6 @@ namespace Bubbles
 
             this.Paint += BookmarkListDlg_Paint; // paint the border
 
-            //if (!StixMapNavigator.DocumentPositions.Keys.Contains(MMUtils.ActiveDocument.Guid))
-            //    StixMapNavigator.DocumentPositions.Add(MMUtils.ActiveDocument.Guid, new List<PositionItem>());
-            //if (!StixMapNavigator.DocumentBookmarks.Keys.Contains(MMUtils.ActiveDocument.Guid))
-            //    StixMapNavigator.DocumentBookmarks.Add(MMUtils.ActiveDocument.Guid, new List<BookmarkItem>());
-
             Init();
         }
 
@@ -121,7 +116,8 @@ namespace Bubbles
 
             if (deleteall) // delete all bookmarks clicked
             {
-                StixMapNavigator.DocumentBookmarks[MMUtils.ActiveDocument.Guid].Clear();
+                if (MMUtils.ActiveDocument == null)
+                    StixMapNavigator.DocumentBookmarks[MMUtils.ActiveDocument.Guid].Clear();
             }
             else // Fill bokkmarks list
             {
@@ -167,7 +163,8 @@ namespace Bubbles
 
             if (deleteall && !fromStix) // delete all positions clicked
             {
-                StixMapNavigator.DocumentPositions[MMUtils.ActiveDocument.Guid].Clear();
+                if (MMUtils.ActiveDocument != null)
+                    StixMapNavigator.DocumentPositions[MMUtils.ActiveDocument.Guid].Clear();
             }
             else // Init/Update positions list
             {
@@ -266,11 +263,14 @@ namespace Bubbles
 
         private void lblCentralTopic_Click(object sender, EventArgs e)
         {
+            if (MMUtils.ActiveDocument == null) return;
             MMUtils.ActiveDocument.CentralTopic.CenterInView();
         }
 
         private void listMainTopics_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (Utils.ActiveDocumentOrSelectionNull(false)) return;
+
             if (listMainTopics.SelectedItem == null) return;
 
             BookmarkItem item = (BookmarkItem)listMainTopics.SelectedItem;
@@ -292,6 +292,8 @@ namespace Bubbles
 
         private void listPositions_MouseUp(object sender, MouseEventArgs e)
         {
+            if (Utils.ActiveDocumentOrSelectionNull(false)) return;
+
             int index = listPositions.IndexFromPoint(e.Location); // index of list item
             if (index < 0) return; // empty place clicked
 
@@ -368,6 +370,8 @@ namespace Bubbles
 
         private void DeletePosition_Click(object sender, EventArgs e)
         {
+            if (Utils.ActiveDocumentOrSelectionNull(false)) return;
+
             PositionItem item = (PositionItem)listPositions.SelectedItem;
             StixMapNavigator.DocumentPositions[MMUtils.ActiveDocument.Guid].Remove(item);
             InitPositions();
@@ -402,6 +406,8 @@ namespace Bubbles
 
         private void linkDeleteAllBookmarks_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            if (Utils.ActiveDocumentOrSelectionNull(false)) return;
+
             if (MessageBox.Show(Utils.getString("bookmarks.confirm.deletebookmarks"), "",
                 MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
@@ -418,6 +424,7 @@ namespace Bubbles
         private void DeleteBookmark_Click(object sender, EventArgs e)
         {
             if (listBookmarks.SelectedItem == null) return;
+            if (Utils.ActiveDocumentOrSelectionNull(false)) return;
 
             BookmarkItem _item = listBookmarks.SelectedItem as BookmarkItem;
             if (_item != null)
@@ -446,6 +453,8 @@ namespace Bubbles
                 BookmarkItem item = (BookmarkItem)listBookmarks.SelectedItem;
                 if (item == null) return;
 
+                if (MMUtils.ActiveDocument == null) return;
+                
                 Topic t = MMUtils.ActiveDocument.FindByGuid(item.TopicGuid) as Topic;
                 if (t == null)
                 {

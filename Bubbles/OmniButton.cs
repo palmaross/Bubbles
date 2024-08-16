@@ -30,7 +30,8 @@ namespace Bubbles
 
         private void Rounded_MouseHover(object sender, EventArgs e)
         {
-            if (StixMain.m_StixBase.Visible) { return; }
+            if (StixMain.m_StixBase.Visible) return;
+            if (StixMain.m_StixBase.StixClicked) return;
 
             int X = this.Location.X - ((StixMain.m_StixBase.Width - this.Width) / 2);
             StixMain.m_StixBase.Location = new Point(X, this.Location.Y - StixMain.m_StixBase.Height);
@@ -107,6 +108,8 @@ namespace Bubbles
             // Check if the Resource group is changed
             if (StixMain.m_Resources != null && StixMain.m_Resources.Visible)
             {
+                if (Utils.ActiveDocumentOrSelectionNull(false)) return;
+
                 MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
                 List<string> MapResources = new List<string>();
                 MapResources.AddRange(StixMain.m_Resources.MapResources.Keys);

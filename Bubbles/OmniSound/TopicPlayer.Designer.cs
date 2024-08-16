@@ -82,10 +82,10 @@
             // 
             this.tbTrack.AutoSize = false;
             this.tbTrack.BackColor = System.Drawing.Color.Plum;
-            this.tbTrack.Location = new System.Drawing.Point(130, 8);
+            this.tbTrack.Location = new System.Drawing.Point(144, 8);
             this.tbTrack.Maximum = 10000;
             this.tbTrack.Name = "tbTrack";
-            this.tbTrack.Size = new System.Drawing.Size(88, 18);
+            this.tbTrack.Size = new System.Drawing.Size(90, 18);
             this.tbTrack.TabIndex = 29;
             this.tbTrack.Visible = false;
             this.tbTrack.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tbTrack_MouseDown);
@@ -97,7 +97,7 @@
             this.tbVolume.Location = new System.Drawing.Point(117, 26);
             this.tbVolume.Maximum = 100;
             this.tbVolume.Name = "tbVolume";
-            this.tbVolume.Size = new System.Drawing.Size(88, 18);
+            this.tbVolume.Size = new System.Drawing.Size(90, 18);
             this.tbVolume.TabIndex = 28;
             this.tbVolume.TickFrequency = 10;
             this.tbVolume.Value = 50;
@@ -107,7 +107,7 @@
             // pVolume
             // 
             this.pVolume.Image = ((System.Drawing.Image)(resources.GetObject("pVolume.Image")));
-            this.pVolume.Location = new System.Drawing.Point(222, 6);
+            this.pVolume.Location = new System.Drawing.Point(238, 6);
             this.pVolume.Name = "pVolume";
             this.pVolume.Size = new System.Drawing.Size(20, 20);
             this.pVolume.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -144,7 +144,7 @@
             this.Manage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Manage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Manage.Image = ((System.Drawing.Image)(resources.GetObject("Manage.Image")));
-            this.Manage.Location = new System.Drawing.Point(245, 6);
+            this.Manage.Location = new System.Drawing.Point(261, 6);
             this.Manage.Name = "Manage";
             this.Manage.Size = new System.Drawing.Size(20, 20);
             this.Manage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -169,10 +169,10 @@
             this.lblClock.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblClock.Location = new System.Drawing.Point(53, 8);
             this.lblClock.Name = "lblClock";
-            this.lblClock.Size = new System.Drawing.Size(76, 18);
+            this.lblClock.Size = new System.Drawing.Size(90, 18);
             this.lblClock.TabIndex = 80;
             this.lblClock.Text = "                      ";
-            this.lblClock.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblClock.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // cmsManage
             // 
@@ -236,9 +236,8 @@
             this.lblTitle.ForeColor = System.Drawing.SystemColors.Window;
             this.lblTitle.Location = new System.Drawing.Point(65, 4);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(88, 18);
+            this.lblTitle.Size = new System.Drawing.Size(90, 18);
             this.lblTitle.TabIndex = 82;
-            this.lblTitle.Text = "tickerLabel1";
             this.lblTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lblTitle_MouseDown);
             // 
             // myToolTip1
@@ -251,7 +250,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(269, 32);
+            this.ClientSize = new System.Drawing.Size(285, 32);
             this.Controls.Add(this.btnPlay);
             this.Controls.Add(this.pTitle);
             this.Controls.Add(this.lblTitle);

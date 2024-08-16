@@ -839,7 +839,7 @@ namespace Bubbles
             tsi = cms.Items.Add(Utils.getString("stix.contextmenu.scale"));
             tsi.Name = "BI_scale";
             tsi.ImageScaling = ToolStripItemImageScaling.None;
-            tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "remember.png"), cmiSize);
+            tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "scale.png"), cmiSize);
 
             cms.Items.Add(new ToolStripSeparator());
 
@@ -979,7 +979,8 @@ namespace Bubbles
             typeicons = "StixIcons", typetaskinfo = "StixTaskInfo", 
             typeformat = "StixFormat", typetools = "StixTools", typemapnavigator = "StixMapNavigator",
             typeaddtopic = "StixAddTopic", typetextops = "StixTextOps", typeorganizer = "StixOrganizer",
-            typeTopicPlayer = "TopicPlayer", typeLego = "StixLego";
+            typeTopicPlayer = "TopicPlayer", typeLego = "StixLego",
+            typeOmniSound = "OmniSound";
 
         public static int stickLength;
         public static int icondist;

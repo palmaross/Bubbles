@@ -44,10 +44,14 @@ namespace Bubbles
 
             //// Context menu ////
 
+            ER_edit.Text = Utils.getString("button.edit");
             TM_edit.Text = Utils.getString("button.edit");
+            StixUtils.SetContextMenuImage(ER_edit, "edit.png");
             StixUtils.SetContextMenuImage(TM_edit, "edit.png");
 
+            ER_delete.Text = Utils.getString("button.remove");
             TM_delete.Text = Utils.getString("button.remove");
+            StixUtils.SetContextMenuImage(ER_delete, "deleteall.png");
             StixUtils.SetContextMenuImage(TM_delete, "deleteall.png");
 
             TM_omnibrowser.Text = Utils.getString("LinksDlg.omnibrowser");
@@ -70,6 +74,7 @@ namespace Bubbles
             StixUtils.SetCommonContextMenu(cmsManage, StixUtils.typetools);
 
             cmsTool.ItemClicked += ContextMenuTool_ItemClicked;
+            cmsEditRemove.ItemClicked += ContextMenuTool_ItemClicked;
             cmsManage.ItemClicked += ContextMenuManage_ItemClicked;
             ////////////////// end Context menu
 
@@ -172,7 +177,7 @@ namespace Bubbles
 
         private void ContextMenuTool_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Name == "TM_edit")
+            if (e.ClickedItem == TM_edit || e.ClickedItem == ER_edit)
             {
                 ToolItem item = (ToolItem)selectedIcon.Tag;
                 if (item == null) return;
@@ -241,7 +246,7 @@ namespace Bubbles
                     }
                 }
             }
-            else if (e.ClickedItem.Name == "TM_delete")
+            else if (e.ClickedItem == TM_delete || e.ClickedItem == ER_delete)
             {
                 StixUtils.Tools.Clear(); StixUtils.Tools.AddRange(Tools);
                 StixUtils.DeleteIcon(selectedIcon, (int)this.Tag, StixUtils.typetools);
@@ -305,6 +310,9 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "BI_newstick")
             {
+                if (Utils.FreeVersionLimitExceeded(StixUtils.typetools))
+                    return;
+
                 string name = StixUtils.GetName(this, orientation, StixUtils.typestick, "", true);
                 if (name != "")
                 {
@@ -363,8 +371,10 @@ namespace Bubbles
                 type = Utils.GetFileType(toolPath);
 
             ToolItem item = new ToolItem(toolTitle, toolPath, type, order, tooltip);
-            using (StixDB db = new StixDB())
-                db.AddTool(toolTitle, tooltip, toolPath, type, order, (int)this.Tag);
+
+            if (!Utils.FreeVersionLimitExceeded("addicon"))
+                using (StixDB db = new StixDB())
+                    db.AddTool(toolTitle, tooltip, toolPath, type, order, (int)this.Tag);
 
             Tools.Insert(order - 1, item);
             for (int i = 0; i < Tools.Count; i++)
@@ -431,21 +441,22 @@ namespace Bubbles
                 foreach (ToolStripItem item in cmsTool.Items)
                     item.Visible = true;
 
-                if (icon.Path != "OT_CloseAll")
-                {
-                    TM_closeoptions.Visible = false;
-                    toolStripSeparator1.Visible = false;
-                }
-                if (!icon.Path.StartsWith("http") && !icon.Path.StartsWith("www"))
-                {
-                    TM_omnibrowser.Visible = false;
-                    TM_externalbrowser.Visible = false;
-                    toolStripSeparator1.Visible = false;
-                }
                 if (icon.Path == "OT_CloseAll" || icon.Path.StartsWith("http") || icon.Path.StartsWith("www"))
-                    toolStripSeparator1.Visible = true;
+                {
+                    if (icon.Path == "OT_CloseAll")
+                    {
+                        TM_omnibrowser.Visible = false;
+                        TM_externalbrowser.Visible = false;
+                    }
+                    else
+                        TM_closeoptions.Visible = false;
 
-                cmsTool.Show(Cursor.Position);
+                    cmsTool.Show(Cursor.Position);
+                }
+                else
+                {
+                    cmsEditRemove.Show(Cursor.Position);
+                }
             }
         }
 

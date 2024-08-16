@@ -50,6 +50,7 @@ namespace Bubbles
             toolTip1.SetToolTip(chAttachment, Utils.getString("OmniSound.chAttachment.tooltip"));
 
             btnClose.Text = Utils.getString("button.close");
+            o_manage.Text = Utils.getString("ManageAudioDlg.title");
             o_help.Text = Utils.getString("button.help");
             o_recordtype.Text = Utils.getString("OmniSound.o_recordsystem");
             o_newgroup.Text = Utils.getString("OmniSound.newgroup");
@@ -231,7 +232,10 @@ namespace Bubbles
 
         private void btnRecord_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument.Path == "")
+            if (Utils.FreeVersionLimitExceeded(StixUtils.typeOmniSound))
+                return;
+
+            if (MMUtils.ActiveDocument != null && MMUtils.ActiveDocument.Path == "") 
             {
                 if (MessageBox.Show(Utils.getString("OmniStix.SaveMap.warning"), "",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
@@ -725,8 +729,8 @@ namespace Bubbles
 
         private void btnAddToTopic_Click(object sender, EventArgs e)
         {
-            if (!(MMUtils.SelectedTopic() is Topic _t))
-                return;
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
+            if (!(MMUtils.SelectedTopic() is Topic _t)) return;
 
             if (cbRecordings.Items.Count == 0) return;
 

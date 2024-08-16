@@ -136,7 +136,7 @@
             // 
             this.lblChangeIcon.AutoSize = true;
             this.lblChangeIcon.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblChangeIcon.Location = new System.Drawing.Point(119, 144);
+            this.lblChangeIcon.Location = new System.Drawing.Point(117, 144);
             this.lblChangeIcon.Name = "lblChangeIcon";
             this.lblChangeIcon.Size = new System.Drawing.Size(169, 13);
             this.lblChangeIcon.TabIndex = 40;

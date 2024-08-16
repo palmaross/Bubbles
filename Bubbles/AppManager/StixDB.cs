@@ -350,7 +350,6 @@ namespace Bubbles
 
             AddTool(Utils.getString("tools.closeall"), Utils.getString("tools.closeall.tooltip"), "OT_CloseAll", "tool-closemaps.png", 0, 0);
             AddTool(Utils.getString("tools.saveall"), Utils.getString("tools.saveall.tooltip"), "OT_SaveAll", "tool-saveall.png", 0, 0);
-            AddTool(Utils.getString("tools.mapcontent"), Utils.getString("tools.mapcontent.tooltip"), "OT_MapContent", "tool-mapcontent.png", 0, 0);
             AddTool(Utils.getString("tools.readonlytopic"), Utils.getString("tools.readonlytopic.tooltip"), 
                 Utils.m_dataPath + "ToolStixApps\\read-only-topic.mmbas", "tool-locktopic.png", 0, 0);
 

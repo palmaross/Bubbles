@@ -90,8 +90,7 @@ namespace Bubbles
 
         private void ListBox1_MouseClick(object sender, MouseEventArgs e)
         {
-            if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-                return;
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
 
             if (e.Button == MouseButtons.Left)
             {

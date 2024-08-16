@@ -119,6 +119,8 @@ namespace Bubbles
             ListMapResources.Items.Clear();
             MapResources.Clear();
 
+            if (MMUtils.ActiveDocument == null) return;
+
             MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
             foreach (MapMarker mm in mg)
             {
@@ -255,6 +257,8 @@ namespace Bubbles
             // Remove selected resources from topic
             else if (e.ClickedItem.Name == "mi_remove")
             {
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
+
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                 {
                     if (String.IsNullOrEmpty(t.Task.Resources))
@@ -286,7 +290,7 @@ namespace Bubbles
             if (e.ClickedItem.Name == "mi_delete")
             {
                 // Delete resources from Map Index
-                if (lv == ListMapResources)
+                if (lv == ListMapResources && MMUtils.ActiveDocument != null)
                 {
                     if (MessageBox.Show(Utils.getString("ResourcesDlg.delete.map"), "",
                         MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
@@ -361,7 +365,7 @@ namespace Bubbles
                         ri.aColor = colorHEX; item.Tag = ri;
 
                         // Change resource color in the Map Index
-                        if (lv == ListMapResources)
+                        if (lv == ListMapResources && MMUtils.ActiveDocument != null)
                         {
                             MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
                             foreach (MapMarker mm in mg)
@@ -397,6 +401,7 @@ namespace Bubbles
 
         void AddResourcesToMap(Dictionary<string, string> resources)
         {
+            if (MMUtils.ActiveDocument == null) return;
             MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
 
             foreach (var res in resources)
@@ -502,6 +507,8 @@ namespace Bubbles
                     {
                         if (lv == ListMapResources)
                         {
+                            if (MMUtils.ActiveDocument == null) return;
+
                             MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
 
                             bool found = false;
@@ -580,24 +587,23 @@ namespace Bubbles
 
             if (e.Button == MouseButtons.Left && lv.SelectedItems.Count == 1)
             {
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
+
                 if ((ModifierKeys & Keys.Control) == Keys.Control ||
                     (ModifierKeys & Keys.Shift) == Keys.Shift ||
                     lv.SelectedItems[0] == null)
                     return;
 
-                if (MMUtils.ActiveDocument.Selection.PrimaryTopic != null)
+                Dictionary<string, string> resources = new Dictionary<string, string>();
+                foreach (ListViewItem item in lv.SelectedItems)
                 {
-                    Dictionary<string, string> resources = new Dictionary<string, string>();
-                    foreach (ListViewItem item in lv.SelectedItems)
-                    {
-                        ResourceItem res = item.Tag as ResourceItem;
-                        resources.Add(res.Name, res.aColor);
-                    }
-                    AddResourcesToMap(resources);
-
-                    string[] listResources = new string[] { lv.SelectedItems[0].Text };
-                    SetResources(listResources);
+                    ResourceItem res = item.Tag as ResourceItem;
+                    resources.Add(res.Name, res.aColor);
                 }
+                AddResourcesToMap(resources);
+
+                string[] listResources = new string[] { lv.SelectedItems[0].Text };
+                SetResources(listResources);
             }
             else if (e.Button == MouseButtons.Right) // ContextMenu
             {
@@ -714,8 +720,7 @@ namespace Bubbles
         /// <param name="addforced">if command is from context menu</param>
         private void SetResources(string[] listResources, bool addforced = false)
         {
-            if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-                return;
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
 
             // Get string for replace
             string resources = "";
@@ -876,6 +881,8 @@ namespace Bubbles
             }
             else // Add to the topic and to the Map Index
             {
+                if (MMUtils.ActiveDocument == null) return;
+
                 // Add to topics
                 if (MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0)
                 {
@@ -1080,6 +1087,7 @@ namespace Bubbles
         private void ListResources_AfterLabelEdit(object sender, LabelEditEventArgs e)
         {
             if (e.Label == null) return;
+            if (MMUtils.ActiveDocument == null) return;
 
             ListView lv = sender as ListView;
             string oldName = lv.SelectedItems[0].Text.Trim();
@@ -1198,14 +1206,10 @@ namespace Bubbles
 
         private void btnRemoveResources_Click(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument == null ||
-                    MMUtils.ActiveDocument.Selection.PrimaryTopic == null)
-                return;
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
 
             foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-            {
                 t.Task.Resources = "";
-            }
         }
 
         private void cbResourceGroup_MouseDown(object sender, MouseEventArgs e)

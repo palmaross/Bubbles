@@ -25,12 +25,6 @@ namespace Bubbles
             lblBoxes.Text = Utils.getString("SettingsDlg.lblBoxes");
             btnTestScale.Text = Utils.getString("SettingsDlg.btnTestScale");
 
-            QTR_Dates.Text = Utils.getString("taskinfo.Dates");
-            QTR_Progress.Text = Utils.getString("SettingsDlg.QTR_Progress");
-            QTR_Priority.Text = Utils.getString("SettingsDlg.QTR_Priority");
-            QTR_Resources.Text = Utils.getString("taskinfo.Resources");
-            QTR_Effort.Text = Utils.getString("taskinfo.numEffort.tooltip");
-
             FaviconsToolStix.Text = Utils.getString("SettingsDlg.FaviconsToolStix");
             toolTip1.SetToolTip(FaviconsToolStix, Utils.getString("SettingsDlg.favicon"));
             FaviconsLinksWindow.Text = Utils.getString("SettingsDlg.FaviconsLinksWindow");
@@ -62,24 +56,6 @@ namespace Bubbles
                     cbSelectAll.Checked = true;
             }
 
-            // Fill Quick Task Remove Defaults
-            string qtr_defaults = Utils.getRegistry("QuickTaskRemoveDefaults", "");
-            if (qtr_defaults != "")
-            {
-                string[] parts = qtr_defaults.Split(';');
-                foreach (string part in parts)
-                {
-                    string[] parts2 = part.Split(':');
-                    switch (parts2[0])
-                    {
-                        case "dates": QTR_Dates.Checked = parts2[1] == "1"; break;
-                        case "progress": QTR_Progress.Checked = parts2[1] == "1"; break;
-                        case "priority": QTR_Priority.Checked = parts2[1] == "1"; break;
-                        case "resources": QTR_Resources.Checked = parts2[1] == "1"; break;
-                        case "effort": QTR_Effort.Checked = parts2[1] == "1"; break;
-                    }
-                }
-            }
 
             // Fill Scale Factor
             numStix.Text = stixScaleFactor.ToString() + "%";
@@ -89,6 +65,9 @@ namespace Bubbles
             FaviconsLinksWindow.Checked = Utils.getRegistry("FaviconsLinksWindow", "1") == "1";
 
             chTopicAutoWidth.Checked = Utils.getRegistry("TopicAutoWidth", "0") == "1";
+
+            if (Utils.FreeVersionLimitExceeded(StixUtils.typetextops, false))
+                chTopicAutoWidth.Enabled = false;
 
             this.HelpButtonClicked += this_HelpButtonClicked;
         }
@@ -115,14 +94,6 @@ namespace Bubbles
             btnTestScale_Click(null, null);
             Utils.setRegistry("ScaleFactor_Stix", stixScaleFactor.ToString());
             Utils.setRegistry("ScaleFactor_StixBase", stixbaseScaleFactor.ToString());
-
-            // Save Quick Task Remove Defaults
-            string defaults = "dates:" + (QTR_Dates.Checked ? "1" : "0") + ";";
-            defaults += "priority:" + (QTR_Priority.Checked ? "1" : "0") + ";";
-            defaults += "progress:" + (QTR_Progress.Checked ? "1" : "0") + ";";
-            defaults += "resources:" + (QTR_Resources.Checked ? "1" : "0") + ";";
-            defaults += "effort:" + (QTR_Effort.Checked ? "1" : "0");
-            Utils.setRegistry("QuickTaskRemoveDefaults", defaults);
 
             if (StixMain.m_TaskInfo.Visible)
                 StixMain.m_TaskInfo.SetQuickTaskDefault();

@@ -16,6 +16,7 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "SearchTopics.htm");
 
+            lblTitle.Text = Utils.getString("SearchTextDlg.title");
             rbtnContains.Text = Utils.getString("SearchTextDlg.rbtnContains");
             rbtnStartsWith.Text = Utils.getString("SearchTextDlg.rbtnStartsWith");
             pClose.Text = Utils.getString("button.close");
@@ -55,6 +56,11 @@ namespace Bubbles
 
         private void listTopics_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (Utils.ActiveDocumentOrSelectionNull(false))
+            {
+                listTopics.Items.Clear(); return;
+            }
+
             TopicItem item = listTopics.SelectedItem as TopicItem;
 
             Topic t = MMUtils.ActiveDocument.FindByGuid(item.TopicGuid) as Topic;
@@ -64,18 +70,17 @@ namespace Bubbles
             }
         }
 
-        private void txtSearch_TextChanged(object sender, EventArgs e)
+        public void txtSearch_TextChanged(object sender, EventArgs e)
         {
             listTopics.Items.Clear();
+
+            if (MMUtils.ActiveDocument == null) return;
 
             if (txtSearch.Text.Trim().Length > 1)
             {
                 string search = txtSearch.Text.ToLower();
 
-                if (topics == null)
-                    topics = MMUtils.ActiveDocument.Range(MmRange.mmRangeAllTopics);
-
-                foreach (Topic t in topics)
+                foreach (Topic t in MMUtils.ActiveDocument.Range(MmRange.mmRangeAllTopics))
                 {
                     if (rbtnContains.Checked)
                     {
@@ -148,8 +153,6 @@ namespace Bubbles
             }
         }
         #endregion
-
-        Range topics;
 
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;

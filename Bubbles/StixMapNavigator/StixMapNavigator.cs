@@ -139,6 +139,7 @@ namespace Bubbles
         public void InitMainTopicsContextMenu(bool fromList = false)
         {
             cmsMainTopics.Items.Clear();
+            if (MMUtils.ActiveDocument == null) return;
 
             ToolStripItem tsi = new ToolStripLabel(Utils.getString("bookmarks.maintopics"));
             tsi.Font = new Font(cmsMainTopics.Font, FontStyle.Bold);
@@ -175,6 +176,8 @@ namespace Bubbles
         public void InitBookmarksContextMenu(bool fromList = false, bool deleteall = false)
         {
             cmsBookmarks.Items.Clear();
+
+            if (MMUtils.ActiveDocument == null) return;
 
             ToolStripItem tsi = new ToolStripLabel(Utils.getString("bookmarks.ebookmarks"));
             tsi.Font = new Font(cmsMainTopics.Font, FontStyle.Bold);
@@ -266,7 +269,9 @@ namespace Bubbles
 
             if (deleteall) // delete all positions clicked
             {
-                if (!fromList)
+                if (MMUtils.ActiveDocument == null) return;
+
+                if (!fromList && DocumentPositions.ContainsKey(MMUtils.ActiveDocument.Guid))
                     DocumentPositions[MMUtils.ActiveDocument.Guid].Clear();
             }
             else
@@ -274,7 +279,7 @@ namespace Bubbles
                 if (MMUtils.ActiveDocument == null) return;
 
                 // Fill positions
-                if (DocumentPositions.Keys.Contains(MMUtils.ActiveDocument.Guid))
+                if (DocumentPositions.ContainsKey(MMUtils.ActiveDocument.Guid))
                 {
                     foreach (PositionItem item in DocumentPositions[MMUtils.ActiveDocument.Guid])
                     {
@@ -310,6 +315,8 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
+                if (MMUtils.ActiveDocument == null) return;
+
                 string topicGuid = (sender as ToolStripMenuItem).Tag.ToString();
 
                 Topic t = MMUtils.ActiveDocument.FindByGuid(topicGuid) as Topic;
@@ -357,9 +364,12 @@ namespace Bubbles
                 }
                 // Add bookmark bookmark to topic
                 t.GetAttributes(ATTR_NAMESPACE).SetAttributeValue(ATTR_BOOKMARKED, "1");
+
                 // Reinit bookmark list (menu)
-                DocumentBookmarks.Remove(MMUtils.ActiveDocument.Guid);
+                if (DocumentBookmarks.ContainsKey(MMUtils.ActiveDocument.Guid))
+                    DocumentBookmarks.Remove(MMUtils.ActiveDocument.Guid);
                 InitBookmarksContextMenu();
+
                 // Show menu
                 cmsBookmarks.Show(this.Left + pBookmarkList.Location.X, this.Bottom);
 
@@ -381,6 +391,8 @@ namespace Bubbles
 
         private void DeleteBookmark_Click(object sender, EventArgs e)
         {
+            if (MMUtils.ActiveDocument == null) return;
+
             string topicGuid = (sender as ToolStripItem).Tag.ToString();
             if (!String.IsNullOrEmpty(topicGuid))
             {
@@ -388,6 +400,9 @@ namespace Bubbles
                 if (t != null)
                 {
                     t.GetAttributes(ATTR_NAMESPACE).DeleteAttribute(ATTR_BOOKMARKED);
+
+                    if (!DocumentBookmarks.ContainsKey(MMUtils.ActiveDocument.Guid)) return;
+
                     var item = DocumentBookmarks[MMUtils.ActiveDocument.Guid].Find(x => x.TopicGuid == topicGuid);
                     if (item != null)
                     {
@@ -406,7 +421,8 @@ namespace Bubbles
             if (MessageBox.Show(Utils.getString("bookmarks.confirm.deletebookmarks"), "",
                 MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                DocumentBookmarks.Remove(MMUtils.ActiveDocument.Guid);
+                if (DocumentBookmarks.ContainsKey(MMUtils.ActiveDocument.Guid))
+                    DocumentBookmarks.Remove(MMUtils.ActiveDocument.Guid);
 
                 foreach (Topic t in MMUtils.ActiveDocument.Range(MmRange.mmRangeAllTopics))
                 {
@@ -537,12 +553,19 @@ namespace Bubbles
             // Delete all positions.
             else if (e.ClickedItem.Name == "b_DeleteAllPositions")
             {
-                DocumentPositions[MMUtils.ActiveDocument.Guid].Clear();
-                InitPositions(false, true);
+                if (MMUtils.ActiveDocument != null)
+                {
+                    if (DocumentPositions.Keys.Contains(MMUtils.ActiveDocument.Guid))
+                        DocumentPositions[MMUtils.ActiveDocument.Guid].Clear();
+                    InitPositions(false, true);
+                }
             }
             // Open MapNavigator Window.
             else if (e.ClickedItem.Name == "MNWindow")
             {
+                if (Utils.FreeVersionLimitExceeded("mapnavigator"))
+                    return;
+
                 if (StixMain.m_MapNavigatorDlg == null)
                 {
                     StixMain.m_MapNavigatorDlg = new MapNavigatorDlg();
@@ -594,6 +617,7 @@ namespace Bubbles
                 pb.Image = pPosition_empty; pb.Tag = "";
                 toolTip1.SetToolTip(pb, Utils.getString("bookmarks.addposition.tooltip"));
 
+                if (MMUtils.ActiveDocument == null) return;
                 var item = DocumentPositions[MMUtils.ActiveDocument.Guid].Find(x => x.Number == number);
                 if (item != null)
                     DocumentPositions[MMUtils.ActiveDocument.Guid].Remove(item);
@@ -640,6 +664,8 @@ namespace Bubbles
 
         private void MainTopicMenu_Click(object sender, EventArgs e)
         {
+            if (Utils.ActiveDocumentOrSelectionNull(false)) return;
+
             string guid = (sender as ToolStripItem).Tag.ToString();
 
             if (!String.IsNullOrEmpty(guid))
@@ -666,6 +692,10 @@ namespace Bubbles
                 PositionItem item = pb.Tag as PositionItem;
                 if (item == null) // Empty position clicked. Add position
                 {
+                    if (Convert.ToInt32(pb.Name.Substring(1, 1)) > 1 &&
+                        Utils.FreeVersionLimitExceeded(StixUtils.typemapnavigator))
+                        return;
+
                     AddPosition(Convert.ToInt32(pb.Name.Substring(1,1))); // position number
                 }
                 else // Select positionmarked topic
@@ -705,10 +735,9 @@ namespace Bubbles
 
         public void AddPosition(int number)
         {
-            if (MMUtils.ActiveDocument == null) return;
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
 
             Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
-            if (t == null) return;
 
             string topictext = t.Text;
             if (topictext.Length > 80) topictext = topictext.Substring(0, 80);
@@ -758,6 +787,9 @@ namespace Bubbles
 
         private void pBookmarkList_MouseHover(object sender, EventArgs e)
         {
+            if (Utils.FreeVersionLimitExceeded(StixUtils.typemapnavigator))
+                return;
+
             foreach (ToolStripItem item in cmsBookmarks.Items)
                 item.Visible = true;
 
@@ -766,6 +798,9 @@ namespace Bubbles
 
         public void BookmarkList_MouseClick(object sender, MouseEventArgs e)
         {
+            if (Utils.FreeVersionLimitExceeded(StixUtils.typemapnavigator))
+                return;
+
             foreach (ToolStripItem item in cmsBookmarks.Items)
                 item.Visible = true;
 

@@ -584,6 +584,9 @@ namespace Bubbles
 
         public void RunTool(string path)
         {
+            if (Utils.FreeVersionLimitExceeded("runtool"))
+                return;
+
             try
             {
                 if (path.StartsWith("OT_")) // Omni function

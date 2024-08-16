@@ -37,8 +37,7 @@ namespace Bubbles
         {
             if (this.AccessibleName != null)
             {
-                if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-                    return;
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
 
                 DateTime dt = dateTimePicker1.Value.Date.AddHours(8);
 
@@ -67,8 +66,7 @@ namespace Bubbles
 
         private void dateTimePicker1_CloseUp(object sender, EventArgs e)
         {
-            if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0)
-                return;
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
 
             DateTime dt = dateTimePicker1.Value.Date.AddHours(8);
 

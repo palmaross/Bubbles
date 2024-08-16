@@ -109,7 +109,7 @@
             this.btnAddToTopic.Name = "btnAddToTopic";
             this.btnAddToTopic.Size = new System.Drawing.Size(84, 23);
             this.btnAddToTopic.TabIndex = 9;
-            this.btnAddToTopic.Text = "Add to Topic";
+            this.btnAddToTopic.Text = "Доб. на тему";
             this.btnAddToTopic.UseVisualStyleBackColor = true;
             this.btnAddToTopic.Click += new System.EventHandler(this.btnAddToTopic_Click);
             // 
@@ -495,7 +495,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(202, 202);
-            this.Controls.Add(this.panelNewGroup);
             this.Controls.Add(this.btnMore);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.cbGroups);
@@ -515,6 +514,7 @@
             this.Controls.Add(this.cbRecordings);
             this.Controls.Add(this.chAttachment);
             this.Controls.Add(this.panelRecordName);
+            this.Controls.Add(this.panelNewGroup);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "OmniSound";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;

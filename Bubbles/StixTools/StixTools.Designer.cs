@@ -46,15 +46,19 @@
             this.TM_omnibrowser = new System.Windows.Forms.ToolStripMenuItem();
             this.TM_externalbrowser = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.myToolTip1 = new Bubbles.MyToolTip();
+            this.cmsEditRemove = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ER_edit = new System.Windows.Forms.ToolStripMenuItem();
+            this.ER_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.TM_edit = new System.Windows.Forms.ToolStripMenuItem();
             this.TM_delete = new System.Windows.Forms.ToolStripMenuItem();
-            this.myToolTip1 = new Bubbles.MyToolTip();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ToolList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).BeginInit();
             this.cmsTool.SuspendLayout();
+            this.cmsEditRemove.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -193,6 +197,31 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(203, 6);
             // 
+            // myToolTip1
+            // 
+            this.myToolTip1.OwnerDraw = true;
+            this.myToolTip1.ShowAlways = true;
+            // 
+            // cmsEditRemove
+            // 
+            this.cmsEditRemove.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ER_edit,
+            this.ER_delete});
+            this.cmsEditRemove.Name = "cmsEditRemove";
+            this.cmsEditRemove.Size = new System.Drawing.Size(118, 48);
+            // 
+            // ER_edit
+            // 
+            this.ER_edit.Name = "ER_edit";
+            this.ER_edit.Size = new System.Drawing.Size(117, 22);
+            this.ER_edit.Text = "Edit";
+            // 
+            // ER_delete
+            // 
+            this.ER_delete.Name = "ER_delete";
+            this.ER_delete.Size = new System.Drawing.Size(117, 22);
+            this.ER_delete.Text = "Remove";
+            // 
             // TM_edit
             // 
             this.TM_edit.Name = "TM_edit";
@@ -203,12 +232,7 @@
             // 
             this.TM_delete.Name = "TM_delete";
             this.TM_delete.Size = new System.Drawing.Size(206, 22);
-            this.TM_delete.Text = "Удалить";
-            // 
-            // myToolTip1
-            // 
-            this.myToolTip1.OwnerDraw = true;
-            this.myToolTip1.ShowAlways = true;
+            this.TM_delete.Text = "Delete";
             // 
             // StixTools
             // 
@@ -234,6 +258,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ToolList)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pIconDist)).EndInit();
             this.cmsTool.ResumeLayout(false);
+            this.cmsEditRemove.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -250,8 +275,6 @@
         private System.Windows.Forms.PictureBox ToolList;
         private System.Windows.Forms.PictureBox pIconDist;
         private System.Windows.Forms.ContextMenuStrip cmsTool;
-        private System.Windows.Forms.ToolStripMenuItem TM_edit;
-        private System.Windows.Forms.ToolStripMenuItem TM_delete;
         private System.Windows.Forms.ToolStripMenuItem TM_closeoptions;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem c_activemap;
@@ -259,5 +282,10 @@
         private System.Windows.Forms.ToolStripMenuItem TM_omnibrowser;
         private System.Windows.Forms.ToolStripMenuItem TM_externalbrowser;
         private MyToolTip myToolTip1;
+        private System.Windows.Forms.ContextMenuStrip cmsEditRemove;
+        private System.Windows.Forms.ToolStripMenuItem ER_edit;
+        private System.Windows.Forms.ToolStripMenuItem ER_delete;
+        private System.Windows.Forms.ToolStripMenuItem TM_edit;
+        private System.Windows.Forms.ToolStripMenuItem TM_delete;
     }
 }

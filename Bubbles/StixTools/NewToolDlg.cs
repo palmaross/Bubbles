@@ -17,6 +17,7 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "ToolStix.htm#newtool");
 
+            Text = Utils.getString("NewToolDlg.Title");
             lblSpecifyPath.Text = Utils.getString("NewToolDlg.lblSpecifyPath");
             lblToolName.Text = Utils.getString("NewToolDlg.lblTitle");
             lblTooltip.Text = Utils.getString("NewToolDlg.lblTooltip");
@@ -24,7 +25,7 @@ namespace Bubbles
             lblToolIcon.Text = Utils.getString("NewToolDlg.lblToolIcon");
             lblTip.Text = Utils.getString("NewToolDlg.lblTip");
             chAddToDatabase.Text = Utils.getString("NewToolDlg.chAddToDatabase");
-            toolTip1.SetToolTip(chAddToDatabase, "NewToolDlg.chAddToDatabase.tooltip");
+            toolTip1.SetToolTip(chAddToDatabase, Utils.getString("NewToolDlg.chAddToDatabase.tooltip"));
             btnAddTool.Text = Utils.getString("button.add");
             btnClose.Text = Utils.getString("button.close");
 

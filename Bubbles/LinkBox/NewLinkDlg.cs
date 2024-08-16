@@ -5,7 +5,6 @@ using System.Data;
 using System.IO;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Security.Policy;
 
 namespace Bubbles
 {
@@ -48,6 +47,8 @@ namespace Bubbles
 
         public void FillGroups()
         {
+            cbLinkGroup.Items.Clear();
+
             using (StixDB db = new StixDB())
             {
                 DataTable dt = db.ExecuteQuery("select * from LINKGROUPS order by name");

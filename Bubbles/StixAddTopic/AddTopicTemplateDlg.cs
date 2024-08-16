@@ -122,6 +122,8 @@ namespace Bubbles
 
         private void btnAddTopics_Click(object sender, EventArgs e)
         {
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
+
             TopicList.Clear();
 
             if (rbtnTopics.Checked)

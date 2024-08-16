@@ -213,6 +213,7 @@
             // 
             // cbAddToStix
             // 
+            this.cbAddToStix.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cbAddToStix.FormattingEnabled = true;
             this.cbAddToStix.Location = new System.Drawing.Point(132, 471);
             this.cbAddToStix.Name = "cbAddToStix";

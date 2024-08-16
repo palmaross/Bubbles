@@ -65,7 +65,7 @@ namespace Bubbles
             tbVolume.Scroll += (s, a) =>
             {
                 StixMain.m_OmniSound.outputDevice.Volume = tbVolume.Value / 100f;
-                lblClock.Text = "Volume  " + tbVolume.Value;
+                lblClock.Text = Utils.getString("TopicPlayer.Volume") + " " + tbVolume.Value;
                 if (StixMain.m_OmniSound.Visible)
                     StixMain.m_OmniSound.Volume.Value = tbVolume.Value;
             };
@@ -136,6 +136,7 @@ namespace Bubbles
         public void InitSoundTopicsList()
         {
             SoundTopicsList.Items.Clear();
+            if (Utils.ActiveDocumentOrSelectionNull(false)) return;
 
             foreach (Topic t in MMUtils.ActiveDocument.Range(MmRange.mmRangeAllTopics))
             {
@@ -160,6 +161,8 @@ namespace Bubbles
             }
             if (e.ClickedItem.Name == "AudioTopic") // Audio topics in the map
             {
+                if (Utils.ActiveDocumentOrSelectionNull(false)) return;
+
                 Topic t = MMUtils.ActiveDocument.FindByGuid(e.ClickedItem.Tag.ToString()) as Topic;
                 if (t != null)
                 {
@@ -281,6 +284,8 @@ namespace Bubbles
 
         private void btnPlay_Click()
         {
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
+
             if (StixMain.m_OmniSound.outputDevice.PlaybackState == PlaybackState.Stopped)
             {
                 Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
@@ -291,22 +296,6 @@ namespace Bubbles
             {
                 StixMain.m_OmniSound.pause = true;
                 StixMain.m_OmniSound.btnPause_Click(null, null);
-            }
-        }
-
-        private void lblTrack_Click(object sender, EventArgs e)
-        {
-            if (lblClock.Tag == null) return;
-
-            string tGuid = lblClock.Tag.ToString();
-            if (tGuid != "")
-            {
-                Topic t = MMUtils.ActiveDocument.FindByGuid(tGuid) as Topic;
-
-                if (t != null)
-                {
-                    t.SelectOnly(); t.SnapIntoView();
-                }
             }
         }
 
@@ -364,7 +353,7 @@ namespace Bubbles
                 tbVolume.BringToFront();
                 tbVolume.Visible = true;
 
-            lblClock.Text = "Volume  " + tbVolume.Value;
+            lblClock.Text = Utils.getString("TopicPlayer.Volume") + " " + tbVolume.Value;
         }
 
         ToolStripDropDown SoundTopicsList;
@@ -402,7 +391,7 @@ namespace Bubbles
             tbVolume.Value = Convert.ToInt32(dblValue);
 
             StixMain.m_OmniSound.outputDevice.Volume = tbVolume.Value / 100f;
-            lblClock.Text = "Volume  " + tbVolume.Value;
+            lblClock.Text = Utils.getString("TopicPlayer.Volume") + " " + tbVolume.Value;
         }
 
         void ShowPlayingTopic()

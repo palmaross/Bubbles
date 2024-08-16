@@ -36,7 +36,7 @@
             this.pClose = new System.Windows.Forms.PictureBox();
             this.panelHead = new System.Windows.Forms.Panel();
             this.pHelp = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblTitle = new System.Windows.Forms.Label();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             ((System.ComponentModel.ISupportInitialize)(this.pClose)).BeginInit();
             this.panelHead.SuspendLayout();
@@ -107,7 +107,7 @@
             // 
             this.panelHead.BackColor = System.Drawing.Color.Moccasin;
             this.panelHead.Controls.Add(this.pHelp);
-            this.panelHead.Controls.Add(this.label1);
+            this.panelHead.Controls.Add(this.lblTitle);
             this.panelHead.Controls.Add(this.pClose);
             this.panelHead.Location = new System.Drawing.Point(1, 1);
             this.panelHead.Name = "panelHead";
@@ -126,16 +126,16 @@
             this.pHelp.TabStop = false;
             this.pHelp.Click += new System.EventHandler(this.pHelp_Click);
             // 
-            // label1
+            // lblTitle
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.label1.Location = new System.Drawing.Point(1, 2);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(89, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Search Topics";
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.lblTitle.Location = new System.Drawing.Point(1, 2);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(89, 13);
+            this.lblTitle.TabIndex = 5;
+            this.lblTitle.Text = "Search Topics";
             // 
             // SearchTextDlg
             // 
@@ -165,12 +165,12 @@
 
         private System.Windows.Forms.RadioButton rbtnContains;
         private System.Windows.Forms.RadioButton rbtnStartsWith;
-        private System.Windows.Forms.ListBox listTopics;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.PictureBox pClose;
         private System.Windows.Forms.Panel panelHead;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.PictureBox pHelp;
         private System.Windows.Forms.HelpProvider helpProvider1;
+        public System.Windows.Forms.ListBox listTopics;
     }
 }

@@ -169,7 +169,7 @@ namespace Bubbles
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0) return;
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
 
                 QuickTopicItem QuickTask = e.Node.Tag as QuickTopicItem;
                 if (QuickTask == null) return; // group clicked

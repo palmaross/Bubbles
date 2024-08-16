@@ -1068,7 +1068,7 @@
             // lblQTopic
             // 
             this.lblQTopic.AutoSize = true;
-            this.lblQTopic.Location = new System.Drawing.Point(8, 45);
+            this.lblQTopic.Location = new System.Drawing.Point(8, 44);
             this.lblQTopic.Name = "lblQTopic";
             this.lblQTopic.Size = new System.Drawing.Size(82, 13);
             this.lblQTopic.TabIndex = 126;

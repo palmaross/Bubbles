@@ -2,6 +2,7 @@
 using NAudio.Wave;
 using PRAManager;
 using System;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -73,8 +74,13 @@ namespace Bubbles
 
         private void btnRecord_MouseClick(object sender, MouseEventArgs e)
         {
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
+
             if (e.Button == MouseButtons.Left)
             {
+                if (Utils.FreeVersionLimitExceeded(StixUtils.typeOmniSound))
+                    return;
+
                 if (MMUtils.ActiveDocument.Path == "")
                 {
                     MessageBox.Show(Utils.getString("OmniStix.SaveMap"), "",
@@ -85,7 +91,7 @@ namespace Bubbles
                 if (StixMain.m_OmniSound.writer == null)
                 {
                     Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
-                    if (t == null) return;
+                    if (t == null) return; // todo message to user
 
                     if (t.ContainsControlStripType(StixMain.SOUNDSTRIP_URI))
                     {
@@ -143,6 +149,7 @@ namespace Bubbles
                 dlg.ShowDialog(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
 
+            if (Utils.ActiveDocumentOrSelectionNull(false)) return;
             MMUtils.ActiveDocument.Save();
         }
 

@@ -72,6 +72,7 @@
             this.o_SearchTopics = new System.Windows.Forms.ToolStripMenuItem();
             this.o_TopicNotes = new System.Windows.Forms.ToolStripMenuItem();
             this.myToolTip1 = new Bubbles.MyToolTip();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.stxAddTopics)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxTextOps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxFormat)).BeginInit();
@@ -484,6 +485,11 @@
             this.myToolTip1.OwnerDraw = true;
             this.myToolTip1.ShowAlways = true;
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // StartMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -573,5 +579,6 @@
         private System.Windows.Forms.ToolStripMenuItem o_TopicNotes;
         public System.Windows.Forms.PictureBox pMyTooltipOffset;
         private MyToolTip myToolTip1;
+        private System.Windows.Forms.Timer timer1;
     }
 }

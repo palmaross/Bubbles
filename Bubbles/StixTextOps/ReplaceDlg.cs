@@ -51,6 +51,7 @@ namespace Bubbles
 
         private void btnReplace_Click(object sender, EventArgs e)
         {
+            if (MMUtils.ActiveDocument == null) return;
             string text1 = txtText1.Text; string text2 = txtText2.Text;
 
             if (linkMore.Tag.ToString() == "Max") // replace step by step

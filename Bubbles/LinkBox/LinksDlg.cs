@@ -4,10 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace Bubbles
 {
@@ -216,6 +213,8 @@ namespace Bubbles
             }
             else if (e.ClickedItem.Name == "g_AddLink" || e.ClickedItem.Name == "m_NewLink" || e.ClickedItem.Name == "m_Modify")
             {
+                if (Utils.FreeVersionLimitExceeded("links")) return;
+
                 if (StixMain.m_NewLink == null || StixMain.m_NewLink.IsDisposed)
                 {
                     StixMain.m_NewLink = new NewLinkDlg();

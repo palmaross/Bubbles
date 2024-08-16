@@ -63,6 +63,9 @@ namespace Bubbles
                     "", "", "",
                     this);
 
+            PRLicenseManager.Get().StartManager();
+            Utils.licenseStatus = PRLicenseManager.licenseStatus;
+
             m_Snippets = new StixSnippets();
             m_OmniSound = new OmniSound();
             m_StixBase = new StartMenu();
@@ -153,6 +156,8 @@ namespace Bubbles
 
         public static void Play()
         {
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
+
             Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
             if (t == null) return;
 
@@ -286,6 +291,9 @@ namespace Bubbles
 
         private void m_cmdTopicAudioNote_Click()
         {
+            if (Utils.FreeVersionLimitExceeded(StixUtils.typeOmniSound))
+                return;
+
             if (MMUtils.ActiveDocument.Path == "")
             {
                 MessageBox.Show(Utils.getString("OmniStix.SaveMap"));
@@ -355,6 +363,9 @@ namespace Bubbles
             }
             if (map == null)
             {
+                if (m_topicNotes.listTopics.Nodes.Count > 0 && Utils.FreeVersionLimitExceeded("topicnotes"))
+                    return;
+
                 map = m_topicNotes.listTopics.Nodes.Add(mappath, MMUtils.ActiveDocument.CentralTopic.Text, 0);
                 map.NodeFont = new Font(m_topicNotes.listTopics.Font, FontStyle.Bold);
                 map.Text = map.Text;
@@ -413,6 +424,8 @@ namespace Bubbles
         /// <param name="doc"></param>
         public static void UpdateTopicNotes(Document doc, List<string> topics = null)
         {
+            if (Utils.ActiveDocumentOrSelectionNull(false)) return;
+
             if (topics == null)
             {
                 topics = new List<string>();
@@ -484,6 +497,9 @@ namespace Bubbles
             if (m_Resources != null && m_Resources.Visible) m_Resources.InitCurrentMapResources();
             if (m_TaskInfo.Visible) m_TaskInfo.PopulateResources();
             if (m_TopicPlayer != null && m_TopicPlayer.Visible) m_TopicPlayer.InitSoundTopicsList();
+
+            if (m_SearchText != null && m_SearchText.Visible)
+                m_SearchText.txtSearch_TextChanged(null, null);
 
             foreach (var form in STICKS.Values)
             {
@@ -780,6 +796,8 @@ namespace Bubbles
 
         public static void SetDates2()
         {
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
+
             Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
             if (t == null) return;
 
@@ -1041,6 +1059,11 @@ namespace Bubbles
             StixUtils.AutoTopicWidths = awidths.OrderByDescending(key => key.Key).ToDictionary(pair => pair.Key, pair => pair.Value);
             StixUtils.MinAutoTopicWidth = StixUtils.AutoTopicWidths.Keys.Last();
             StixUtils.TopicAutoWidth = Utils.getRegistry("TopicAutoWidth", "0") == "1";
+            if (Utils.FreeVersionLimitExceeded(StixUtils.typetextops, false))
+            {
+                if (StixUtils.TopicAutoWidth) Utils.setRegistry("TopicAutoWidth", "0");
+                StixUtils.TopicAutoWidth = false;
+            }
         }
 
         public override void SubMenuButtonCallbackUpdateState(ref bool pEnabled, ref bool pChecked, SubMenuButtonData aData)

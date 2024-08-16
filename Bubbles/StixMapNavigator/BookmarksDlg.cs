@@ -50,7 +50,9 @@ namespace Bubbles
                     // Add group.
                     TreeNode node = treeView1.Nodes.Add("group", dr["name"].ToString());
                     node.Tag = new GroupNode(Convert.ToInt32(dr["id"]), dr["name"].ToString());
+
                     if (Convert.ToInt32(dr["id"]) == 1) singlebookmarks = node;
+
                     node.ImageIndex = 0;
                     node.SelectedImageIndex = node.IsExpanded ? 1 : 0;
 
@@ -65,6 +67,12 @@ namespace Bubbles
                             _dr["topicguid"].ToString(), Convert.ToInt32(_dr["groupID"]));
                         _node.ImageIndex = 2;
                         _node.SelectedImageIndex = 2;
+
+                        if (Utils.IsFree() && singlebookmarks != node)
+                        {
+                            _node.Tag = null;
+                            _node.ForeColor = SystemColors.ControlDark;
+                        }
                     }
                 }
             }
@@ -152,6 +160,8 @@ namespace Bubbles
                 }
                 else if (action == "addbookmark")
                 {
+                    if (Utils.ActiveDocumentOrSelectionNull()) return;
+
                     GroupNode group = treeView1.SelectedNode.Tag as GroupNode;
                     DataTable dt = db.ExecuteQuery("select * from BOOKMARKS where name=`" + name +
                         "` and groupID=" + group.ID + "");
@@ -239,10 +249,14 @@ namespace Bubbles
 
         private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
+            if (e.Node.Tag == null && Utils.FreeVersionLimitExceeded("bookmarks")) return;
+
             if (e.Button == MouseButtons.Left)
             {
                 if (e.Node.Name == "bookmark")
                 {
+                    if (e.Node.Tag == null) return;
+
                     BookmarkNode bn = e.Node.Tag as BookmarkNode;
                     string mapPath = bn.MapPath;
                     string topicGuid = bn.TopicGuid;
@@ -342,12 +356,12 @@ namespace Bubbles
 
         private void b_addBookmark_Click(object sender, EventArgs e)
         {
-            Topic t = MMUtils.ActiveDocument.Selection.PrimaryTopic;
-            if (t == null) return;
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
+            if (Utils.FreeVersionLimitExceeded("bookmarks")) return;
 
             lblGroupBookmark.Text = Utils.getString("BookmarksDlg.bookmarkname");
             btnAction.Text = Utils.getString("BookmarksDlg.addbookmark");
-            string text = t.Text;
+            string text = MMUtils.ActiveDocument.Selection.PrimaryTopic.Text;
             if (text.Length > 35) text = text.Substring(0, 35);
             txtGroupBookmark.Text = text;
             btnAction.Tag = "addbookmark";

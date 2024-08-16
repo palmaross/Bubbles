@@ -4,7 +4,6 @@ using Mindjet.MindManager.Interop;
 using PRAManager;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -32,7 +31,11 @@ namespace Bubbles
             toolTip1.SetToolTip(pBrowse, Utils.getString("TopicNotesDlg.Browse"));
             linkSearchOptions.Text = Utils.getString("TopicNotesDlg.linkSearchOptions");
             btnSearch.Text = Utils.getString("button.search");
+            cbSearchedText.Text = Utils.getString("TopicNotesDlg.cbSearchedText");
+            cbSearchedText.ForeColor = SystemColors.ControlDark;
+            toolTip1.SetToolTip(cbSearchedText, Utils.getString("TopicNotesDlg.cbSearchedText.tooltip"));
 
+            btnNewTab.Text = Utils.getString("TopicNotesDlg.btnNewTab");
             btnGetTopicNotes.Text = Utils.getString("topiccontextmenu.notes.detach");
             toolTip1.SetToolTip(btnSaveOne, Utils.getString("TopicNotesDlg.btnSaveOne"));
             toolTip1.SetToolTip(btnSaveAll, Utils.getString("TopicNotesDlg.btnSaveAll"));
@@ -130,8 +133,30 @@ namespace Bubbles
             this.Activated += This_Activated;
             this.Deactivate += This_Deactivated;
 
+            cbSearchedText.GotFocus += CbSearchedText_GotFocus;
+            cbSearchedText.LostFocus += CbSearchedText_LostFocus;
+
             cbFontFamily.SelectedIndex = 0;
         }
+
+        private void CbSearchedText_GotFocus(object sender, EventArgs e)
+        {
+            if (cbSearchedText.ForeColor == SystemColors.ControlDark)
+            {
+                cbSearchedText.ForeColor = SystemColors.WindowText;
+                cbSearchedText.Text = "";
+            }
+        }
+
+        private void CbSearchedText_LostFocus(object sender, EventArgs e)
+        {
+            if (cbSearchedText.Text == "")
+            {
+                cbSearchedText.ForeColor = SystemColors.ControlDark;
+                cbSearchedText.Text = Utils.getString("TopicNotesDlg.cbSearchedText");
+            }
+        }
+
         ToolStripDropDown Collections;
         ToolStripDropDown CollectionMaps;
         ToolStripDropDown Folders;
@@ -341,6 +366,7 @@ namespace Bubbles
                 tabControl1.TabPages.Add(tp);
                 tp.AccessibleName = "";
                 tp.Controls.Add(wb);
+                tp.ToolTipText = selectednode.Text;
                 tabControl1.SelectTab(tp);
             }
             else // Open in the Preview page
@@ -376,6 +402,7 @@ namespace Bubbles
                 PreviewPage.AccessibleName = "";
                 PreviewPage.Controls.Add(wb);
                 PreviewPage.Text = item.TopicName;
+                PreviewPage.ToolTipText = item.TopicName;
                 tabControl1.SelectTab(PreviewPage);
             }
 
@@ -502,6 +529,8 @@ namespace Bubbles
         /// <summary>Add selected topics with notes to this window.</summary>
         private void btnGetTopicNotes_Click(object sender, EventArgs e)
         {
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
+
             TreeNode map = null, node = null;
             string mappath = MMUtils.ActiveDocument.FullName.ToLower();
             foreach (TreeNode _node in listTopics.Nodes)
@@ -513,6 +542,9 @@ namespace Bubbles
             }
             if (map == null)
             {
+                if (listTopics.Nodes.Count > 0 && Utils.FreeVersionLimitExceeded("topicnotes"))
+                    return;
+
                 map = listTopics.Nodes.Add(mappath, MMUtils.ActiveDocument.CentralTopic.Text, 0);
                 map.NodeFont = new Font(listTopics.Font, FontStyle.Bold);
                 map.Text = map.Text;
@@ -895,6 +927,7 @@ namespace Bubbles
 
         public void AddToNotes()
         {
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
             if (tabControl1.SelectedTab.Controls.OfType<WebBrowser>().Count() == 0) return;
 
             string html = editor.Selection.htmlText;
@@ -1036,6 +1069,9 @@ namespace Bubbles
 
         private void CmsLookIn_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
+            if (e.ClickedItem != LookInCurrenMap && Utils.FreeVersionLimitExceeded("topicnoteslookin"))
+                return;
+
             if (e.ClickedItem == LookInCurrenMap)
             {
                 cbFindIn.Text = LookInCurrenMap.Text;
@@ -1176,7 +1212,8 @@ namespace Bubbles
 
             if (lookin == "currentMap") // Search for notes in the current map
             {
-                map = SearchNotesInMap(searchedText, MMUtils.ActiveDocument.FullName, "1 / 1");
+                if (MMUtils.ActiveDocument != null)
+                    map = SearchNotesInMap(searchedText, MMUtils.ActiveDocument.FullName, "1 / 1");
             }
             else if (lookin == "openMaps") // Search for notes in the all open maps
             {
