@@ -278,6 +278,8 @@ namespace Bubbles
             // tags - "state;group:tag;group:tag"
             // properties - "state;name:value:type;name:value:type;name:value:type"
 
+            // state: "checked", "checkedred", "uncheckedred"
+
             // Add Topic templates
             m_db.ExecuteNonQuery("CREATE TABLE ADDTOPIC_TEMPLATES(id INTEGER PRIMARY KEY, " +
                 "templateName text, topicName text, pattern text, topicType text, " +

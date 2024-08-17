@@ -194,7 +194,7 @@ namespace Bubbles
 
         private void TopicNotesDlg_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!MMClose) // If MM closed we wan't show ask user about closing this window
+            if (!MMClose && listTopics.Nodes.Count > 0) // If MM closed we wan't show ask user about closing this window
             {
                 if (MessageBox.Show(Utils.getString("TopicNotesDlg.closewindow"), "",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
@@ -205,7 +205,7 @@ namespace Bubbles
             m_progressDlg.Destroy();
             StixMain.OmniTopics.Clear();
 
-            InterceptKeys.ReleaseHook(); // Important!
+            InterceptKeys.ReleaseHook(); // Important! Release keys hook!
         }
         public bool MMClose = false;
 

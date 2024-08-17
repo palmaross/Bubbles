@@ -474,7 +474,7 @@ namespace Bubbles
                         string resources = row["resources"].ToString(); parts = resources.Split(':');
                         if (parts.Length > 1) { resourcesState = parts[0]; resources = parts[1]; }
 
-                        string tags = row["tags"].ToString(); parts = tags.Split(':');
+                        string tags = row["tags"].ToString(); parts = tags.Split(new[] { ';' }, 2);
                         if (parts.Length > 1) { tagsState = parts[0]; tags = parts[1]; }
 
                         QuickTopicItem item = new QuickTopicItem(row["name"].ToString(), Convert.ToInt32(row["id"]), Convert.ToInt32(row["groupID"]),
@@ -1229,19 +1229,27 @@ namespace Bubbles
 
                 if (QuickTopic.TagsState != "")
                 {
-                    if (QuickTopic.TagsState.Contains("red"))
+                    if (QuickTopic.TagsState.Contains("red") && t.TextLabels.Count > 0)
                         t.TextLabels.RemoveAll();
 
                     if (QuickTopic.TagsState.StartsWith("checked"))
                     {
-                        string[] tags = QuickTopic.Tags.Split(';');
-                        string[] tag1 = tags[0].Split(':');
-                        MapMarkers.AddTagToTopic(t, tag1[1], "", tag1[0], "");
+                        string[] tags = QuickTopic.Tags.Split(';'); // tag1;tag2
+                        string[] tag1 = tags[0].Split(':'); // group:tag or tag without group
+                        string tagname = tag1.Length == 1 ? tag1[0] : tag1[1];
+                        string groupname = tag1.Length == 1 ? "" : tag1[0];
+
+                        if (tagname != "")
+                            MapMarkers.AddTagToTopic(t, tagname, "", groupname, "");
 
                         if (tags.Length > 1)
                         {
                             string[] tag2 = tags[1].Split(':');
-                            MapMarkers.AddTagToTopic(t, tag2[1], "", tag2[0], "");
+                            tagname = tag2.Length == 1 ? tag2[0] : tag2[1];
+                            groupname = tag2.Length == 1 ? "" : tag2[0];
+
+                            if (tagname != "")
+                                MapMarkers.AddTagToTopic(t, tagname, "", groupname, "");
                         }
                     }
                 }

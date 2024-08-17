@@ -767,19 +767,28 @@ namespace Bubbles
             }
             else if (draggedFiles != null)
             {
+                path = draggedFiles[0];
                 if (aTools != null)
                 {
                     foreach (var item in aTools) // проверим, есть ли в стике значок с этим путем
-                    if (item.Path == draggedFiles[0]) // yes, exists
+                    if (item.Path == path) // yes, exists
                     { MessageBox.Show(Utils.getString("stix.iconexists")); return ""; }
                 }
                 if (aIcons != null)
                 {
+                    string filename = Path.GetFileNameWithoutExtension(path);
+                    if (Utils.StockIconDupes.ContainsKey(filename))
+                    {
+                        // Icon is a double of the stock icon. Replace it with the stock icon!
+                        string _path = MMUtils.MindManager.GetPath(MmDirectory.mmDirectoryIcons);
+                        filename = Utils.StockIconDupes[filename];
+                        path = _path + filename + ".ico";
+                    }
+
                     foreach (var item in aIcons) // проверим, есть ли в стике значок с этим путем
-                        if (item.Path == draggedFiles[0]) // yes, exists
+                        if (item.Path == path) // yes, exists
                         { MessageBox.Show(Utils.getString("stix.iconexists")); return ""; }
                 }
-                path = draggedFiles[0];
                 title = Path.GetFileNameWithoutExtension(path);
             }
             return title;

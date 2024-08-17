@@ -713,6 +713,7 @@ namespace Bubbles
             {
                 string path = null;
                 string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+
                 string title = StixUtils.Handle_DragDrop(ref path, draggedFiles, Icons, null);
 
                 if (title == "") return;
@@ -817,6 +818,67 @@ namespace Bubbles
         #endregion
 
         #region stock icon enumaration
+
+        public static string StockIconDupes(string name)
+        {
+            switch (name)
+            {
+                case "time_15": return "clock";
+                case "singles_calendar": return "calendar";
+                case "documents_7": return "letter";
+                case "symbol_04": return "email";
+                case "singles_mailbox": return "mailbox";
+                case "singles_megaphone": return "megaphone";
+                case "singles_house": return "house";
+                case "singles_id_card": return "rolodex";
+                case "singles_dollar": return "dollar";
+                case "currencycurrency_3": return "euro";
+                case "signs_01": return "traffic-lights-red";
+                case "set_user_blue": return "resource1";
+                case "set_user_red": return "resource2";
+                case "singles_lock": return "padlock-locked";
+                case "singles_unlocked": return "padlock-unlocked";
+                case "arrowsarrow_19": return "arrow-up";
+                case "arrowsarrow_25": return "arrow-right";
+                case "arrowsarrow_02": return "two-end-arrow";
+                case "singles_phone": return "cellphone";
+                case "singles_camera": return "camera";
+                case "signs_11": return "stop";
+                case "signs_08": return "exclamation-mark";
+                case "feedback_q": return "question-mark";
+                case "feedback_10": return "thumbs-up";
+                case "time_03": return "hourglass";
+                case "singles_alarm": return "emergency";
+                case "signs_09": return "no-entry";
+                case "singles_bomb": return "bomb";
+                case "singles_key": return "key";
+                case "singles_glasses": return "glasses";
+                case "singles_gavel": return "judge-hammer";
+                case "singles_rocket": return "rocket";
+                case "singles_scale": return "scales";
+                case "arrowsarrow_07": return "redo";
+                case "singles_light_bulb": return "lightbulb";
+                case "singles_coffee_2": return "coffee-cup";
+                case "singles_foot_print": return "two-feet";
+                case "singles_handshake": return "meeting";
+                case "singles_note": return "note";
+                case "feedback_12": return "thumbs-down";
+                case "arrowsarrow_24": return "arrow-left";
+                case "arrowsarrow_22": return "arrow-down";
+                case "singles_book_2": return "book";
+                case "singles_magnifying_glass": return "magnifying-glass";
+                case "documents_6": return "folder";
+                case "flag-black": return "flag-black";
+                case "flag-blue": return "flag-blue";
+                case "flag-green": return "flag-green";
+                case "flag-grey": return "flag-grey";
+                case "flag-orange": return "flag-orange";
+                case "flag-purple": return "flag-purple";
+                case "flag-red": return "flag-red";
+                case "flag-yellow": return "flag-yellow";
+                default: return "";
+            }
+        }
 
         /// <summary>
         /// Gets stock icon enumaration

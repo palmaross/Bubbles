@@ -595,14 +595,24 @@ namespace Bubbles
                 }
                 if (item.Tags != "")
                 {
-                    string[] tags = item.Tags.Split(';');
-                    string[] parts1 = tags[0].Split(':');
-                    txtTagGroup1.Text = parts1[0]; txtTag1.Text = parts1[1];
+                    string[] tags = item.Tags.Split(';'); // tag1;tag2
+                    string[] tag1 = tags[0].Split(':'); // group:tag or tag
 
-                    if (tags.Length == 2)
+                    if (tag1.Length == 1)
+                        txtTag1.Text = tag1[0];
+                    else {
+                        txtTagGroup1.Text = tag1[0]; txtTag1.Text = tag1[1]; }
+
+                    if (tags.Length == 2 && tags[1] != "")
                     {
-                        string[] parts2 = tags[1].Split(':');
-                        txtTagGroup2.Text = parts2[0]; txtTag2.Text = parts2[1];
+                        string[] tag2 = tags[1].Split(':');
+
+                        if (tag2.Length == 1)
+                            txtTag2.Text = tag2[0];
+                        else
+                        {
+                            txtTagGroup2.Text = tag2[0]; txtTag2.Text = tag2[1];
+                        }
                     }
                 }
                 else
@@ -671,15 +681,21 @@ namespace Bubbles
             item.Dates = startdate + ";" + duedate;
 
             string tag1 = "", tag2 = "", tags = "";
-            if (txtTagGroup1.Text != "" && txtTag1.Text != "")
-                tag1 = txtTagGroup1.Text.Trim() + ":" + txtTag1.Text.Trim();
+            if (txtTag1.Text.Trim() != "")
+            {
+                if (txtTagGroup1.Text.Trim() != "") tag1 = txtTagGroup1.Text.Trim() + ":";
+                tag1 += txtTag1.Text.Trim();
+            }
             else
             {
                 txtTagGroup1.Text = ""; txtTag1.Text = "";
             }
 
-            if (txtTagGroup2.Text != "" && txtTag2.Text != "")
-                tag2 = txtTagGroup2.Text.Trim() + ":" + txtTag2.Text.Trim();
+            if (txtTag2.Text.Trim() != "")
+            {
+                if (txtTagGroup2.Text.Trim() != "") tag2 = txtTagGroup2.Text.Trim() + ":";
+                tag2 += txtTag2.Text.Trim();
+            }
             else
             {
                 txtTagGroup2.Text = ""; txtTag2.Text = "";
@@ -1010,7 +1026,7 @@ namespace Bubbles
                 string resources = row["resources"].ToString(); parts = resources.Split(':');
                 if (parts.Length > 1) { resourcesState = parts[0]; resources = parts[1]; ch4Resources.Tag = resourcesState; }
 
-                string tags = row["tags"].ToString(); parts = tags.Split(':');
+                string tags = row["tags"].ToString(); parts = tags.Split(new[] { ';' }, 2 );
                 if (parts.Length > 1) { tagsState = parts[0]; tags = parts[1]; ch4Tags.Tag = tagsState; }
 
                 QuickTopicItem item = new QuickTopicItem(row["name"].ToString(), Convert.ToInt32(row["id"]), Convert.ToInt32(row["groupID"]),

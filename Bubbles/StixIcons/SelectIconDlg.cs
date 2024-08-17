@@ -37,6 +37,8 @@ namespace Bubbles
             ListDirectory(treeView1, path);
 
             this.HelpButtonClicked += this_HelpButtonClicked;
+            sel_offset = pOffset.Width;
+            locX = sel_offset; locY = sel_offset;
         }
 
         private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
@@ -112,6 +114,7 @@ namespace Bubbles
         void treeView1_AfterSelect(object o, TreeViewEventArgs e)
         {
             panel1.Controls.Clear();
+            SelectedIcons.Clear();
             string path = e.Node.Tag.ToString();
 
             if (path == "PP") // Priority & Progress icons
@@ -141,7 +144,7 @@ namespace Bubbles
 
                     if (i == 6) // 6 icons in row
                     {
-                        locX = 0;
+                        locX = sel_offset;
                         locY += pBox.Height + space;
                         i = 0;
                     }
@@ -149,8 +152,8 @@ namespace Bubbles
                         locX += pBox.Width + space;
                 }
             }
-            locX = 0;
-            locY = 0;
+            locX = sel_offset;
+            locY = sel_offset;
         }
 
         private void Icon_MouseClick(object sender, MouseEventArgs e)
@@ -159,13 +162,30 @@ namespace Bubbles
             iconPath = icon.Name;
             string filename;
 
+            if (icon.Name == "selected") // Click on the selected icon mark.
+            {
+                ((PictureBox)icon.Tag).Tag = null; // remove tag from icon
+                SelectedIcons.Remove((PictureBox)icon.Tag); // remove icon from SelectedIcons
+                panel1.Controls.Remove(icon); // remove icon check mark
+                return;
+            }
+
             if (iconPath.StartsWith("pr")) // Priority or Progress icon
             {
                 filename = "pripro" + iconPath;
                 iconPath = Utils.dllPath + "Images\\" + iconPath + ".png";
             }
             else
+            {
                 filename = Path.GetFileNameWithoutExtension(iconPath);
+                if (Utils.StockIconDupes.ContainsKey(filename))
+                {
+                    // Icon is a double of the stock icon. Replace it with the stock icon!
+                    string path = MMUtils.MindManager.GetPath(MmDirectory.mmDirectoryIcons);
+                    filename = Utils.StockIconDupes[filename];
+                    iconPath = path + filename + ".ico";
+                }
+            }
 
             foreach (var _filename in FileNames) // проверим, есть ли в пузыре этот значок
             {
@@ -180,32 +200,38 @@ namespace Bubbles
                 }
             }
 
-            if (From == "IconStix") // Dialog is called from IconStix
+            if (From == "IconStix") // Dialog is called from IconStix. User can select mutiple icons.
             {
+                PictureBox selected = new PictureBox(); selected.Name = "selected";
+                selected.Image = Image.FromFile(Utils.m_imagesPath + "icon_selected.png");
+                selected.Size = pSelected.Size; selected.SizeMode = PictureBoxSizeMode.Zoom;
+
                 if (ModifierKeys == Keys.Control)
                 {
                     if (SelectedIcons.Keys.Contains(icon))
                     {
-                        SelectedIcons.Remove(icon);
-                        icon.BackColor = SystemColors.Control;
+                        panel1.Controls.Remove((PictureBox)icon.Tag);
+                        SelectedIcons.Remove(icon); icon.Tag = null;
                         return;
                     }
-                    else
-                        SelectedIcons.Add(icon, iconPath);
-
-                    icon.BackColor = SystemColors.Highlight;
                 }
                 else
                 {
+                    bool sel = icon.Tag is PictureBox;
                     foreach (PictureBox pb in SelectedIcons.Keys.Reverse())
                     {
-                        pb.BackColor = SystemColors.Control;
+                        panel1.Controls.Remove((PictureBox)pb.Tag);
                         SelectedIcons.Remove(pb);
+                        pb.Tag = null;
                     }
-
-                    icon.BackColor = SystemColors.Highlight;
-                    SelectedIcons.Add(icon, iconPath);
+                    if (sel) return;
                 }
+
+                SelectedIcons.Add(icon, iconPath);
+                icon.Tag = selected; selected.Tag = icon;
+                selected.MouseClick += Icon_MouseClick;
+                selected.Location = new Point(icon.Location.X - pOffset.Width, icon.Location.Y - pOffset.Width);
+                panel1.Controls.Add(selected); selected.BringToFront();
             }
             else // This dialog is called from TaskTemplate dialog
                 DialogResult = DialogResult.OK;
@@ -230,6 +256,7 @@ namespace Bubbles
         bool topdir = true;
         int locX = 0;
         int locY = 0;
+        int sel_offset;
         int space = 0;
 
         /// <summary>Full path to icon file</summary>

@@ -186,12 +186,12 @@ namespace Bubbles
                     string path = fi.FullName;
                     string signature = MMUtils.MindManager.Utilities.GetCustomIconSignature(path);
 
+                    // Icon is a double of the stock icon.
                     if (StockIconsDupes.Keys.Contains(signature))
                     {
-                        string stockicon = "stock" + Path.GetFileNameWithoutExtension(path);
-                        MmStockIcon MMstockicon = StixIcons.StockIconFromString(stockicon);
-                        if (!StockIcons.Keys.Contains(stockicon))
-                            StockIcons.Add(stockicon, MMstockicon);
+                        string stockicon = Path.GetFileNameWithoutExtension(path);
+                        if (!StockIconDupes.ContainsKey(Path.GetFileNameWithoutExtension(path)))
+                            StockIconDupes.Add(stockicon, StixIcons.StockIconDupes(stockicon));
                     }
                     else if (!CustomIcons.Keys.Contains(signature))
                         CustomIcons.Add(signature, path);
@@ -774,6 +774,12 @@ namespace Bubbles
 		public static string m_defaultDataPath, m_dataPath, m_localDataPath, m_iconDB, m_imagesPath;
 
         public static Dictionary<string, string> StockIconsDupes = new Dictionary<string, string>();
+
+        /// <summary>
+        /// Key - dupname, Value - stockname
+        /// </summary>
+        public static Dictionary<string, string> StockIconDupes = new Dictionary<string, string>();
+
         public static Dictionary<string, MmStockIcon> StockIcons = new Dictionary<string, MmStockIcon>();
         /// <summary>
         /// signature, path

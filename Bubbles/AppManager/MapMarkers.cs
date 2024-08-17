@@ -13,9 +13,14 @@ namespace Bubbles
             if (aTopic == null)
                 return false;
 
-            MapMarkerGroup _mmg = GetMapMarkerGroup(groupName, groupID, true, mutex);
-            if (_mmg == null)
-                return false;
+            MapMarkerGroup _mmg = null;
+
+            if (groupName == "") // Common tag group!
+                _mmg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeSingleTextLabel);
+            else
+                _mmg = GetMapMarkerGroup(groupName, groupID, true, mutex);
+
+            if (_mmg == null) return false;
 
             string groupId = _mmg.GroupId;
 
