@@ -24,11 +24,15 @@ namespace Bubbles
             btnClose.Text = Utils.getString("button.close");
             btnCancel.Text = Utils.getString("button.cancel");
 
+            b_addBookmark.Text = Utils.getString("BookmarksDlg.addbookmark");
+            b_renameGroup.Text = Utils.getString("BookmarksDlg.renamegroup");
+            b_deleteGroup.Text = Utils.getString("BookmarksDlg.delete_group");
+            b_renameBookmark.Text = Utils.getString("BookmarksDlg.renamebookmark");
+            b_deleteBookmark.Text = Utils.getString("BookmarksDlg.delete_bookmark");
+
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
             this.ResizeRedraw = true;
-
-            //treeView1.Sorted = true;
 
             imageList1.ImageSize = p1.Size;
             Image img1 = Image.FromFile(Utils.m_imagesPath + "folder.png");

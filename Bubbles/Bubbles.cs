@@ -134,6 +134,12 @@ namespace Bubbles
             stopPlayTimer = new Timer() { Interval = 500 };
             stopPlayTimer.Tick += StopPlayTimer_Tick;
 
+            int interval = Convert.ToInt32(Utils.getRegistry("SaveMaps", "5"));
+            saveMapsTimer = new Timer() { Interval = interval };
+            saveMapsTimer.Tick += SaveMapsTimer_Tick;
+            if (Utils.getRegistry("SaveMapsEnabled", "0") == "1")
+                saveMapsTimer.Start();
+
             m_ReplaceDlg = new ReplaceDlg();
 
             if (MMUtils.ActiveDocument != null)
@@ -263,6 +269,15 @@ namespace Bubbles
         {
             stopPlayTimer.Stop();
         }
+
+        private void SaveMapsTimer_Tick(object sender, EventArgs e)
+        {
+            saveMapsTimer.Stop();
+            foreach (Document doc in MMUtils.MindManager.VisibleDocuments)
+                if (doc.IsModified) doc.Save();
+            saveMapsTimer.Start();
+        }
+        
 
         /// <summary>
         /// Hide command popup if cursor position is out of stick or popup bounds
@@ -1294,6 +1309,10 @@ namespace Bubbles
 
             StixUtils.TopicWidthList.Clear();
 
+            saveMapsTimer.Stop();
+            saveMapsTimer.Tick -= SaveMapsTimer_Tick;
+            saveMapsTimer.Dispose(); saveMapsTimer = null;
+
             m_OmniSound.Destroy();
 
             m_bCreated = false;
@@ -1341,6 +1360,7 @@ namespace Bubbles
 
         Timer HidePopup = new Timer();
         public static Timer stopPlayTimer = new Timer();
+        public static Timer saveMapsTimer = new Timer();
 
         static ToolTip tt = new ToolTip() { ShowAlways = true, AutoPopDelay = 3000 };
 

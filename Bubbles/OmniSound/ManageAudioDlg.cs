@@ -39,7 +39,7 @@ namespace Bubbles
 
             lblAddToGroup.Text = Utils.getString("ManageAudioDlg.lblAddToGroup");
             lblPathToAudio.Text = Utils.getString("ManageAudioDlg.lblPathToAudio");
-            lblAudioTitle.Text = Utils.getString("ManageAudioDlg.AudioTitle");
+            lblAudioTitle.Text = Utils.getString("ManageAudioDlg.AudioTitle2");
             btnAddFile.Text = Utils.getString("button.add");
             btnCancel.Text = Utils.getString("button.cancel");
 
@@ -56,6 +56,8 @@ namespace Bubbles
             m_OpenInFolder.Text = Utils.getString("ManageAudioDlg.btnOpenFile");
             m_OpenInMap.Text = Utils.getString("ManageAudioDlg.btnOpenMap");
             m_Delete.Text = Utils.getString("button.delete");
+            m_Play.Text = Utils.getString("ManageAudioDlg.m_Play");
+            m_Rename.Text = Utils.getString("ManageAudioDlg.m_Rename");
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
@@ -351,6 +353,7 @@ namespace Bubbles
 
                     ag = new AudioGroup(name, id);
                     int i = cbGroups.Items.Add(ag); cbGroupsManage.Items.Add(ag);
+                    cbGroupsManage.SelectedIndex = i;
                     StixMain.m_OmniSound.InitAudioFiles();
                 }
                 else if (btnSave.Tag.ToString() == "RenameGroup")
@@ -359,11 +362,16 @@ namespace Bubbles
                 
                     cbGroupsManage.Items.Remove(ag);
                     cbGroups.Items.Remove(ag);
-                    ag.Name = name; 
+                    string oldname = ag.Name; ag.Name = name; 
                     int i = cbGroupsManage.Items.Add(ag);
                     cbGroups.Items.Add(ag);
                     cbGroupsManage.SelectedIndex = i;
                     StixMain.m_OmniSound.InitAudioFiles();
+                    foreach (DataGridViewRow row in dgv.Rows)
+                    {
+                        if (row.Cells["GroupID"].Value.ToString() == ag.ID.ToString())
+                            row.Cells["Group"].Value = name;
+                    }
                 }
                 lblGroupName.Visible = false;
                 txtGroupName.Visible = false;

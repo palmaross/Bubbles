@@ -483,9 +483,7 @@
     <None Include="I18n.default.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="I18n.ini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="I18n.ini" />
     <None Include="packages.config" />
     <None Include="OmniStix.chm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

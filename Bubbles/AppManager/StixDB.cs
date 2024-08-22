@@ -10,7 +10,7 @@ namespace Bubbles
 
         protected static string _getDatabaseName()
         {
-            string path = Utils.m_defaultDataPath;
+            string path = Utils.m_dataPath;
             return path + "stix.db";
         }
 

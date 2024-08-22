@@ -196,9 +196,9 @@
             // cbLinkGroup
             // 
             this.cbLinkGroup.FormattingEnabled = true;
-            this.cbLinkGroup.Location = new System.Drawing.Point(93, 103);
+            this.cbLinkGroup.Location = new System.Drawing.Point(98, 103);
             this.cbLinkGroup.Name = "cbLinkGroup";
-            this.cbLinkGroup.Size = new System.Drawing.Size(310, 21);
+            this.cbLinkGroup.Size = new System.Drawing.Size(305, 21);
             this.cbLinkGroup.TabIndex = 35;
             // 
             // btnBrowse

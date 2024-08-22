@@ -449,7 +449,7 @@
             this.cmsRemoveTaskInfo.Name = "cmsRemoveTskInfo";
             this.cmsRemoveTaskInfo.ShowCheckMargin = true;
             this.cmsRemoveTaskInfo.ShowImageMargin = false;
-            this.cmsRemoveTaskInfo.Size = new System.Drawing.Size(61, 4);
+            this.cmsRemoveTaskInfo.Size = new System.Drawing.Size(181, 26);
             // 
             // cmsResources
             // 

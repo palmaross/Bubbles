@@ -615,7 +615,7 @@
             this.MinimizeBox = false;
             this.Name = "AutoWidthsDlg";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "TopicWidthDlg";
+            this.Text = "Управление шириной тем";
             ((System.ComponentModel.ISupportInitialize)(this.numAuto1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numAuto2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numChars1)).EndInit();

@@ -1,7 +1,12 @@
 ﻿using PRAManager;
 using System;
 using System.Data;
+using System.IO.Compression;
+using System.IO;
 using System.Windows.Forms;
+using System.Diagnostics;
+using System.Drawing;
+using Microsoft.Win32;
 
 namespace Bubbles
 {
@@ -34,6 +39,17 @@ namespace Bubbles
             chTopicAutoWidth.Text = Utils.getString("SettingsDlg.chTopicAutoWidth");
             toolTip1.SetToolTip(chTopicAutoWidth, Utils.getString("TextOpsStix.MMAutoWidth.tooltip"));
             btnManageAutoWidth.Text = Utils.getString("SettingsDlg.btnManageAutoWidth");
+            chSaveMaps.Text = Utils.getString("SettingsDlg.chSaveMaps");
+            lblMin.Text = Utils.getString("SettingsDlg.lblMin");
+            numSaveMaps.Location = new Point(chSaveMaps.Location.X + chSaveMaps.Width + p1.Width, numSaveMaps.Location.Y);
+            lblMin.Location = new Point(numSaveMaps.Location.X + numSaveMaps.Width + p1.Width, lblMin.Location.Y);
+
+            btnShare.Text = Utils.getString("SettingsDlg.btnShare");
+            lblSharedPath.Text = Utils.getString("SettingsDlg.lblSharedPath");
+            linkSystemPath.Text = Utils.getString("SettingsDlg.linkSystemPath");
+            linkExport.Text = Utils.getString("SettingsDlg.linkExport");
+            linkImport.Text = Utils.getString("SettingsDlg.linkImport");
+            toolTip1.SetToolTip(btnBrowse, Utils.getString("SettingsDlg.btnBrowse"));
 
             btnSave.Text = Utils.getString("button.save");
             btnClose.Text = Utils.getString("button.close");
@@ -70,6 +86,13 @@ namespace Bubbles
                 chTopicAutoWidth.Enabled = false;
 
             this.HelpButtonClicked += this_HelpButtonClicked;
+
+            thisHeight = this.Height;
+            this.Height -= panelShare.Height;
+
+            string datapath = Utils.getRegistry("DataPath", "");
+            if (datapath == "") datapath = Utils.m_defaultDataPath;
+            txtDataPath.Text = datapath;
         }
 
         private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
@@ -103,6 +126,42 @@ namespace Bubbles
             Utils.setRegistry("OpenLinksInOmniBrowser", chOpenInOmniBrowser.Checked ? "1" : "0");
 
             Utils.setRegistry("TopicAutoWidth", chTopicAutoWidth.Checked ? "1" : "0");
+            Utils.setRegistry("SaveMapsEnabled", chSaveMaps.Checked ? "1" : "0");
+            StixMain.saveMapsTimer.Interval = (int)numSaveMaps.Value;
+            if (!chSaveMaps.Checked) StixMain.saveMapsTimer.Stop();
+            if (chSaveMaps.Checked && !StixMain.saveMapsTimer.Enabled) StixMain.saveMapsTimer.Start();
+
+            string _dataPath = txtDataPath.Text.Trim();
+            if (_dataPath == "") return;
+
+            if (_dataPath.ToLower() != Utils.m_dataPath.ToLower())
+            {
+                // Need to copy files
+                DialogResult _rc = MessageBox.Show(
+                    Utils.getString("commonoptions.copyfile.settings.caption"),
+                    Utils.getString("commonoptions.copyfile.title"),
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                bool pathChanged = true;
+                if (_rc == DialogResult.Yes)
+                {
+                    if (!MMUtils.XCopy(Utils.m_dataPath, _dataPath))
+                    {
+                        // copy failed
+                        txtDataPath.Text = Utils.getRegistry("DataPath", Utils.m_defaultDataPath);
+                        pathChanged = false;
+                        MessageBox.Show(Utils.getString("commonoptions.copyfile.error.caption"),
+                            Utils.getString("commonoptions.copyfile.error.title"));
+                    }
+                }
+                if (pathChanged)
+                {
+                    Utils.m_dataPath = _dataPath + "\\";
+
+                    // Check if DataPath is default
+                    Utils.setRegistry("DataPath", _dataPath != Utils.m_defaultDataPath ? _dataPath + "\\" : "");
+                }
+            }
         }
 
         private void cbSelectAll_CheckedChanged(object sender, EventArgs e)
@@ -213,9 +272,204 @@ namespace Bubbles
             numStix_KeyDown(sender, null);
         }
 
+        private void btnShare_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (panelShare.Visible)
+            {
+                panelShare.Visible = false;
+                this.Height -= panelShare.Height;
+            }
+            else
+            {
+                panelShare.Visible = true;
+                this.Height = thisHeight;
+            }
+        }
+
         float stixScaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
         float stixbaseScaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_StixBase", "100"));
         float boxesScaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Boxes", "100"));
+        int thisHeight;
+
+        private void linkExport_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (Utils.IsFree())
+            {
+                MessageBox.Show(Utils.getString("license.limitations.freelight.common"),
+                    Utils.getString("FreeVersionLimitation"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+
+            string _tempPath = Path.GetTempPath() + "PalmaRoss\\ExportImport";
+            MMUtils.DeleteDirectory(_tempPath);
+            Directory.CreateDirectory(_tempPath);
+
+            // Ask user for path to save zip file
+            folderBrowserDialog1.ShowNewFolderButton = true;
+            folderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyDocuments;
+            folderBrowserDialog1.Description = Utils.getString("commonoptions.export.selectfolder");
+
+            if (folderBrowserDialog1.ShowDialog(this) == DialogResult.Cancel)
+                return;
+
+            string zipFile = folderBrowserDialog1.SelectedPath + "\\OmniStix Settigs.zip";
+            if (File.Exists(zipFile)) File.Delete(zipFile);
+
+            YCopy(Utils.m_dataPath, _tempPath);
+
+            // Create registry file
+            ExportRegKey("HKEY_CURRENT_USER\\Software\\PalmaRoss\\OmniStix", _tempPath + "\\OmniStix.reg");
+
+            try
+            {
+                ZipFile.CreateFromDirectory(_tempPath, zipFile);
+            }
+            catch (Exception _e)
+            {
+                MessageBox.Show(Utils.getString("commonoptions.export.ziperror.text") + _e.Message,
+                                Utils.getString("commonoptions.export.ziperror.caption"));
+                return;
+            }
+
+            MessageBox.Show(String.Format(Utils.getString("commonoptions.export.success.text"), zipFile),
+                                          Utils.getString("commonoptions.export.success.caption"));
+            MMUtils.DeleteDirectory(_tempPath);
+        }
+
+        private void linkImport_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (Utils.IsFree())
+            {
+                MessageBox.Show(Utils.getString("license.limitations.freelight.common"),
+                    Utils.getString("license.limitations.freelight.title"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+
+            string _tempPath = Path.GetTempPath() + "PalmaRoss\\ExportImport";
+            MMUtils.DeleteDirectory(_tempPath);
+            Directory.CreateDirectory(_tempPath);
+
+            // Ask user for path to zip file
+            openFileDialog1.Filter = "Zip files (*.zip)|*.zip|All files (*.*)|*.*";
+            openFileDialog1.DefaultExt = "zip";
+            openFileDialog1.Title = Utils.getString("commonoptions.import.selectfolder");
+
+            if (openFileDialog1.ShowDialog(this) == DialogResult.Cancel)
+                return;
+            string zipFile = openFileDialog1.FileName;
+
+            try
+            {
+                ZipFile.ExtractToDirectory(zipFile, _tempPath);
+            }
+            catch (Exception _e)
+            {
+                MessageBox.Show(Utils.getString("commonoptions.import.ziperror.text") + _e.Message,
+                                Utils.getString("commonoptions.export.ziperror.caption"));
+                return;
+            }
+
+            YCopy(_tempPath, Utils.m_dataPath);
+
+            ImportRegKey(Utils.m_dataPath + "\\OmniStix.reg");
+            // TODO какие-то значения подправить?
+            Utils.setRegistry("DataPath", Utils.m_dataPath);
+
+            MMUtils.DeleteDirectory(_tempPath);
+            File.Delete(Utils.m_dataPath + "\\OmniStix.reg");
+
+            MessageBox.Show(Utils.getString("commonoptions.import.success.text"),
+                Utils.getString("commonoptions.export.success.caption"));
+        }
+
+        private void YCopy(string aSrcFolder, string aDstFolder)
+        {
+            if (!Directory.Exists(aSrcFolder))
+                return;
+
+            if (!Directory.Exists(aDstFolder))
+                return;
+
+            // Create subdirectory structure in destination    
+            foreach (string dir in Directory.GetDirectories(aSrcFolder, "*", SearchOption.AllDirectories))
+            {
+                Directory.CreateDirectory(Path.Combine(aDstFolder, dir.Substring(aSrcFolder.Length)));
+            }
+            foreach (string file_name in Directory.GetFiles(aSrcFolder, "*", SearchOption.AllDirectories))
+            {
+                File.Copy(file_name, Path.Combine(aDstFolder, file_name.Substring(aSrcFolder.Length)), true);
+            }
+        }
+
+        private void ExportRegKey(string RegKey, string SavePath)
+        {
+            string path = "\"" + SavePath + "\"";
+            string key = "\"" + RegKey + "\"";
+
+            Process proc = new Process();
+            try
+            {
+                proc.StartInfo.FileName = "regedit.exe";
+                proc.StartInfo.UseShellExecute = false;
+                proc = Process.Start("regedit.exe", "/e " + path + " " + key + "");
+
+                if (proc != null) proc.WaitForExit();
+            }
+            finally
+            {
+                if (proc != null) proc.Dispose();
+            }
+        }
+
+        private void ImportRegKey(string aPath)
+        {
+            Process proc = new Process();
+            try
+            {
+                proc.StartInfo.FileName = "reg.exe";
+                proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                proc.StartInfo.CreateNoWindow = true;
+                proc.StartInfo.UseShellExecute = false;
+
+                proc.StartInfo.Arguments = "import " + aPath;
+                proc.Start();
+
+                if (proc != null) proc.WaitForExit();
+            }
+            finally
+            {
+                if (proc != null) proc.Dispose();
+            }
+        }
+
+        private void btnBrowse_Click(object sender, EventArgs e)
+        {
+            if (Utils.IsFree())
+            {
+                MessageBox.Show(Utils.getString("license.limitations.freelight.common"),
+                    Utils.getString("license.limitations.freelight.title"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+
+            folderBrowserDialog1.ShowNewFolderButton = true;
+            folderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer;
+            folderBrowserDialog1.Description = Utils.getString("commonoptions.path.settings.browse.dialog_desc");
+
+            if (folderBrowserDialog1.ShowDialog(this) == DialogResult.OK)
+            {
+                string path = folderBrowserDialog1.SelectedPath;
+                if (!path.EndsWith("OmniStix")) path += "\\OmniStix";
+                txtDataPath.Text = path;
+            }
+        }
+
+        private void linkSystemPath_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            txtDataPath.Text = Utils.m_defaultDataPath;
+        }
     }
 
     public class ConfigItem

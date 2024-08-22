@@ -46,14 +46,10 @@ namespace Bubbles
             m_localDataPath = MMUtils.m_localDataPath;
             m_imagesPath = MMUtils.m_imagesPath;
 
-            m_dataPath = getRegistry("DataPath");
+            m_dataPath = getRegistry("DataPath", "");
 
             if (m_dataPath == "")
                 m_dataPath = m_defaultDataPath;
-            else
-            {
-
-            }            
 
             string path = MMUtils.MindManager.GetPath(MmDirectory.mmDirectoryIcons);
             DirectoryInfo di = new DirectoryInfo(path);

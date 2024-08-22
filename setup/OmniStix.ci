@@ -1206,7 +1206,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <_ >
                                  <valname >version</>
                                  <regtype >str</>
-                                 <value >1.0.6.7</>
+                                 <value >1.0.7.0</>
                                  <if ></>
                                  <comm ></>
                               </>
@@ -2015,8 +2015,8 @@ Please try further.</>
          </>
          <_ >
             <varname >version</>
-            <value1 >1.0.6.7</>
-            <value2 >1.0.6.7</>
+            <value1 >1.0.7.0</>
+            <value2 >1.0.7.0</>
             <value3 ></>
             <value4 ></>
             <value5 ></>

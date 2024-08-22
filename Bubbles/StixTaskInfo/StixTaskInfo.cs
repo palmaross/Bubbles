@@ -409,6 +409,7 @@ namespace Bubbles
                         tsi.Tag = group.Key;
                         dd = (tsi as ToolStripMenuItem).DropDown;
                         (dd as ToolStripDropDownMenu).ShowImageMargin = false;
+                        dd.ItemClicked += ContextMenu_ItemClicked;
                     }
 
                     dt = db.ExecuteQuery("select * from QUICKTOPICTEMPLATES " +
