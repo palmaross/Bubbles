@@ -316,7 +316,7 @@ namespace Bubbles
             string zipFile = folderBrowserDialog1.SelectedPath + "\\OmniStix Settigs.zip";
             if (File.Exists(zipFile)) File.Delete(zipFile);
 
-            YCopy(Utils.m_dataPath, _tempPath);
+            YCopy(Utils.m_dataPath.TrimEnd('\\'), _tempPath);
 
             // Create registry file
             ExportRegKey("HKEY_CURRENT_USER\\Software\\PalmaRoss\\OmniStix", _tempPath + "\\OmniStix.reg");
@@ -395,11 +395,11 @@ namespace Bubbles
             // Create subdirectory structure in destination    
             foreach (string dir in Directory.GetDirectories(aSrcFolder, "*", SearchOption.AllDirectories))
             {
-                Directory.CreateDirectory(Path.Combine(aDstFolder, dir.Substring(aSrcFolder.Length)));
+                Directory.CreateDirectory(Path.Combine(aDstFolder, dir.Substring(aSrcFolder.Length + 1)));
             }
             foreach (string file_name in Directory.GetFiles(aSrcFolder, "*", SearchOption.AllDirectories))
             {
-                File.Copy(file_name, Path.Combine(aDstFolder, file_name.Substring(aSrcFolder.Length)), true);
+                File.Copy(file_name, Path.Combine(aDstFolder, file_name.Substring(aSrcFolder.Length + 1)), true);
             }
         }
 

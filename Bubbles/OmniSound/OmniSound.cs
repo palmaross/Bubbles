@@ -121,8 +121,14 @@ namespace Bubbles
                 DataTable dt = db.ExecuteQuery("select * from AUDIOS where groupID=" + groupID + " order by title");
 
                 foreach (DataRow row in dt.Rows)
-                    cbRecordings.Items.Add(new AudioItem(Convert.ToInt32(row["id"]), 
-                        row["title"].ToString(), row["path"].ToString()));
+                {
+                    string path = row["path"].ToString();
+                    if (path == Path.GetFileName(path)) // file name, not a path
+                        path = Utils.m_dataPath + "SoundDB\\" + path;
+
+                    cbRecordings.Items.Add(new AudioItem(Convert.ToInt32(row["id"]),
+                        row["title"].ToString(), path));
+                }
             }
 
             if (cbRecordings.Items.Count > 0)
@@ -537,7 +543,11 @@ namespace Bubbles
             {
                 using (StixDB db = new StixDB())
                 {
-                    DataTable dt = db.ExecuteQuery("select * from AUDIOS where path=`" + filename + "`");
+                    string path = filename;
+                    if (path.Contains(Utils.m_dataPath + "SoundDB"))
+                        path = Path.GetFileName(path);
+
+                    DataTable dt = db.ExecuteQuery("select * from AUDIOS where path=`" + path + "`");
                     if (dt.Rows.Count > 0 &&
                         !String.IsNullOrEmpty(dt.Rows[0]["mappath"].ToString())) // audio note is not attached to a topic
                     {
@@ -636,7 +646,7 @@ namespace Bubbles
             int id = 0;
             using (StixDB db = new StixDB())
             {
-                db.AddAudio(recordName, filename, mappath, maptitle, topicguid, groupID);
+                db.AddAudio(recordName, Path.GetFileName(filename), mappath, maptitle, topicguid, groupID);
                 DataTable dt = db.ExecuteQuery("SELECT last_insert_rowid()");
                 if (dt.Rows.Count > 0) id = Convert.ToInt32(dt.Rows[0][0]);
             }
@@ -696,7 +706,11 @@ namespace Bubbles
                 {
                     using (StixDB db = new StixDB())
                     {
-                        DataTable dt = db.ExecuteQuery("select * from AUDIOS where path=`" + audioFile.FileName + "`");
+                        string path = audioFile.FileName;
+                        if (path.Contains(Utils.m_dataPath + "SoundDB"))
+                            path = Path.GetFileName(path);
+
+                        DataTable dt = db.ExecuteQuery("select * from AUDIOS where path=`" + path + "`");
                         if (dt.Rows.Count > 0 &&
                             !String.IsNullOrEmpty(dt.Rows[0]["mappath"].ToString())) // audio note is not attached to a topic
                         {

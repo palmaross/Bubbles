@@ -205,11 +205,9 @@ namespace Bubbles
         private void this_Paint(object sender, PaintEventArgs e)
         {
             if (scaleFactor < 125) return;
-            int width = 1;
-            //if (scaleFactor > 200) width = 2;
             ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle,
-                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid,
-                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid);
+                Color.Gray, 1, ButtonBorderStyle.Solid, Color.Gray, 1, ButtonBorderStyle.Solid,
+                Color.Gray, 1, ButtonBorderStyle.Solid, Color.Gray, 1, ButtonBorderStyle.Solid);
         }
 
         private void This_MouseClick(object sender, MouseEventArgs e)

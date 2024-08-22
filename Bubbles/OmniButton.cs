@@ -92,7 +92,6 @@ namespace Bubbles
                 ButtonMoved || // user moved the Start Menu
                 MMBounds != Utils.MMBounds) // MindManager position was changed
             {
-                MMBase.TRACE("start button");
                 ButtonMoved = false;
                 // Get screen (location of the screen where the center of MindManager is located)
                 Point rec = Utils.MMScreen(MMUtils.MindManager.Left + MMUtils.MindManager.Width / 2,

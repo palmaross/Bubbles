@@ -156,6 +156,9 @@ namespace Bubbles
                 foreach (DataRow row in dt.Rows)
                 {
                     string path = row["path"].ToString();
+                    if (path == Path.GetFileName(path)) // file name, not a path
+                        path = Utils.m_dataPath + "SoundDB\\" + path;
+
                     if (File.Exists(path))
                     {
                         AddToTable(Convert.ToInt32(row["id"]), Convert.ToInt32(row["groupID"]), row["title"].ToString(),

@@ -209,20 +209,25 @@ namespace Bubbles
                 return;
             }
 
-            if (audioPath != "" && attachGuid != "")
+            string path = audioPath;
+            if (audioPath == Path.GetFileName(audioPath)) // file name, not a path
+                path = Utils.m_dataPath + "SoundDB\\" + audioPath;
+
+            if (audioPath != "" && attachGuid != "") // audio attachment on topic
             {
-                foreach (Attachment attach in t.Attachments)
+                foreach (Attachment attach in t.Attachments) // save attached file to SoundDB folder
                 {
                     if (attach.Guid == attachGuid)
                     {
-                        audioPath = Utils.m_dataPath + "SoundDB\\" + attach.FileName;
+                        path = Utils.m_dataPath + "SoundDB\\" + attach.FileName;
 
-                        if (!File.Exists(audioPath))
-                            attach.SaveAs(audioPath);
+                        if (!File.Exists(path))
+                            attach.SaveAs(path);
                     }
                 }
             }
-            Play(audioPath, title, t.Guid);
+
+            Play(path, title, t.Guid);
         }
 
         public static void Play(string audioPath, string title = "", string topicGuid = "")
@@ -1115,6 +1120,7 @@ namespace Bubbles
                     using (StixDB db = new StixDB())
                     {
                         string audioPath = _t.GetAttributes(SOUNDSTRIP_URI).GetAttributeValue(AUDIO_PATH);
+                        // parts = id###path
                         string[] parts = audioPath.Split(new string[] { "###" }, StringSplitOptions.None);
                         try {
                             id = Convert.ToInt32(parts[0]);
@@ -1133,7 +1139,7 @@ namespace Bubbles
                         if (parts.Length > 1)
                             attachGuid = parts[1];
 
-                        audioPath = ""; int groupID = 1;
+                        audioPath = ""; int groupID = 1; string filename = "";
                         DataTable dt = db.ExecuteQuery("select * from AUDIOS where id=" + id + "");
 
                         if (dt.Rows.Count > 0)
@@ -1144,9 +1150,13 @@ namespace Bubbles
 
                         if (dr == DialogResult.Yes) // delete file
                         {
-                            if (File.Exists(audioPath)) File.Delete(audioPath);
+                            string path = audioPath;
+                            if (audioPath == Path.GetFileName(audioPath)) // file name, not a path
+                                path = Utils.m_dataPath + "SoundDB\\" + audioPath;
+
+                            if (File.Exists(path)) File.Delete(path);
                             // Delete from database
-                            db.ExecuteNonQuery("delete from AUDIOS where path=`" + audioPath + "`");
+                            db.ExecuteNonQuery("delete from AUDIOS where path=`" + path + "`");
                         }
                         else // move audio to the General group
                         {

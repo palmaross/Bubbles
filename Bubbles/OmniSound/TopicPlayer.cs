@@ -399,9 +399,13 @@ namespace Bubbles
             var audiofile = StixMain.m_OmniSound.audioFile;
             if (audiofile != null)
             {
+                string path = audiofile.FileName;
+                if (path.Contains(Utils.m_dataPath + "SoundDB"))
+                    path = System.IO.Path.GetFileName(path);
+
                 using (StixDB db = new StixDB())
                 {
-                    DataTable dt = db.ExecuteQuery("select * from AUDIOS where path=`" + audiofile.FileName + "`");
+                    DataTable dt = db.ExecuteQuery("select * from AUDIOS where path=`" + path + "`");
                     if (dt.Rows.Count > 0 &&
                         !String.IsNullOrEmpty(dt.Rows[0]["mappath"].ToString())) // audio note is not attached to a topic
                     {
