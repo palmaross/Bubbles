@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Clipboard = System.Windows.Forms.Clipboard;
+using Color = System.Drawing.Color;
 
 namespace Bubbles
 {
@@ -977,6 +978,31 @@ namespace Bubbles
             }
 
             return pos;
+        }
+
+        public static bool ScaleStick(Form form, float fromScale, float toScale)
+        {
+            if (fromScale == toScale) return true;
+            if (toScale < 100 || toScale > 300) return true;
+
+            float scale = 100F / fromScale;
+
+            if (scale != 1)
+                form.Scale(new SizeF(scale, scale)); // reset to 100%
+
+            if (toScale != 100)
+                form.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
+
+            return false;
+        }
+
+        public static void PaintStix(Form form, float scaleFactor, PaintEventArgs e)
+        {
+            if (scaleFactor < 125) return;
+            int width = 1;
+            ControlPaint.DrawBorder(e.Graphics, form.ClientRectangle,
+                Color.DarkGray, width, ButtonBorderStyle.Solid, Color.DarkGray, width, ButtonBorderStyle.Solid,
+                Color.DarkGray, width, ButtonBorderStyle.Solid, Color.DarkGray, width, ButtonBorderStyle.Solid);
         }
 
         public static List<IconItem> Icons = new List<IconItem>();

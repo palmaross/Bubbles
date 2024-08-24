@@ -138,8 +138,8 @@ namespace Bubbles
             Manage.Click += Manage_Click; // "Manage" icon's context menu
 
             // Apply scale factor
-            this.Paint += this_Paint; // paint the border depending on scale factor
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
+            this.Paint += (o, e) => StixUtils.PaintStix(this, scaleFactor, e);
             ScaleStick(100F, scaleFactor);
         }
 
@@ -181,33 +181,10 @@ namespace Bubbles
 
         public void ScaleStick(float fromScale, float toScale)
         {
-            if (fromScale == toScale) return;
-            if (toScale < 100 || toScale > 267) return;
-
-            float scale = 100F / fromScale;
             scaleFactor = toScale;
-
-            if (scale != 1)
-            {
-                this.Scale(new SizeF(scale, scale)); // reset to 100%
-                StixUtils.icondist = pIconDist.Width;
-                MinLength = (int)(MinLength * scale);
-            }
-
-            if (toScale != 100)
-            {
-                this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
-                StixUtils.icondist = pIconDist.Width;
-                MinLength = (int)(MinLength * (toScale / 100));
-            }
-        }
-
-        private void this_Paint(object sender, PaintEventArgs e)
-        {
-            if (scaleFactor < 125) return;
-            ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle,
-                Color.Gray, 1, ButtonBorderStyle.Solid, Color.Gray, 1, ButtonBorderStyle.Solid,
-                Color.Gray, 1, ButtonBorderStyle.Solid, Color.Gray, 1, ButtonBorderStyle.Solid);
+            if (StixUtils.ScaleStick(this, fromScale, toScale)) return;
+            StixUtils.icondist = pIconDist.Width;
+            MinLength = (int)(MinLength * (toScale / 100));
         }
 
         private void This_MouseClick(object sender, MouseEventArgs e)

@@ -129,6 +129,8 @@ namespace Bubbles
 
             MMBounds = new Rectangle(MMUtils.MindManager.Left, MMUtils.MindManager.Top, MMUtils.MindManager.Width, MMUtils.MindManager.Height);
 
+            scalingFactor = ScalingFactor.GetScalingFactor();
+
             InitStartedMaps();
         }
 
@@ -791,6 +793,8 @@ namespace Bubbles
         public static readonly List<string> Excel = new List<string> { ".xls", ".xlsx", ".xlsm" };
 
         public static System.Drawing.Color header = System.Drawing.Color.Moccasin;
+
+        public static float scalingFactor = 1.0f;
     }
 
     class ScalingFactor

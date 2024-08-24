@@ -180,13 +180,17 @@ namespace Bubbles
                     tool.Tag = item;
                 }
 
+                string path = item.Path;
+                if (path.StartsWith(Utils.m_dataPath + "ToolStixApps"))
+                    path = Path.GetFileName(path);
+
                 using (StixDB db = new StixDB())
                 {
                     db.ExecuteNonQuery("update TOOLS set " +
                         "title=`" + item.Title + "`, " +
                         "tooltip=`" + item.Tooltip + "`, " +
                         "type=`" + item.Type + "` " +
-                        "where path=`" + item.Path + "`"
+                        "where path=`" + path + "`"
                         );
                 }
 
@@ -247,9 +251,13 @@ namespace Bubbles
 
             item.Title = newName;
 
+            string path = item.Path;
+            if (path.StartsWith(Utils.m_dataPath + "ToolStixApps"))
+                path = Path.GetFileName(path);
+
             using (StixDB db = new StixDB())
                 db.ExecuteNonQuery("update TOOLS set title=`" + newName +
-                    "` where path =`" + item.Path + "`");
+                    "` where path =`" + path + "`");
 
             // Process changes on the open Stix
             foreach (var pair in StixMain.STICKS)
@@ -367,7 +375,11 @@ namespace Bubbles
             {
                 if (dr["stixID"].ToString() == "0")
                 {
-                    ToolItem item = new ToolItem(dr["title"].ToString(), dr["path"].ToString(), dr["type"].ToString(), 0, dr["tooltip"].ToString());
+                    string path = dr["path"].ToString();
+                    if (path == Path.GetFileName(path))
+                        path = Utils.m_dataPath + "ToolStixApps\\" + path;
+
+                    ToolItem item = new ToolItem(dr["title"].ToString(), path, dr["type"].ToString(), 0, dr["tooltip"].ToString());
                     ListViewItem lv = listOmniTools.Items.Add(dr["title"].ToString());
                     lv.Tag = item;
                     if (dr["tooltip"].ToString() != "")
@@ -518,7 +530,11 @@ namespace Bubbles
                         done = false;
                         foreach (DataRow dr in dt.Rows)
                         {
-                            if (dr["path"].ToString() == _item.Path)
+                            string path = dr["path"].ToString();
+                            if (path == Path.GetFileName(path))
+                                path = Utils.m_dataPath + "ToolStixApps\\" + path;
+
+                            if (path == _item.Path)
                                 done = true; break;
                         }
                         if (done) continue; // Stix has tool. Do not add to database.

@@ -79,7 +79,7 @@ namespace Bubbles
             Manage.Click += Manage_Click;
 
             // Apply scale factor
-            this.Paint += this_Paint; // paint the border depending on scale factor
+            this.Paint += (o, e) => StixUtils.PaintStix(this, scaleFactor, e);
 
             fsize = lblTextColor.Font.Size;
             ffsize = numFontSize.Font.Size;
@@ -95,17 +95,8 @@ namespace Bubbles
         
         public void ScaleStick(float fromScale, float toScale)
         {
-            if (fromScale == toScale) return;
-            if (toScale < 100 || toScale > 267) return;
-
-            float scale = 100F / fromScale;
             scaleFactor = toScale;
-
-            if (scale != 1)
-                this.Scale(new SizeF(scale, scale)); // reset to 100%
-
-            if (toScale != 100)
-                this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
+            if (StixUtils.ScaleStick(this, fromScale, toScale)) return;
 
             float _fsize = fsize * (toScale / 100);
             float _ffsize = ffsize * (toScale / 100);
@@ -116,16 +107,6 @@ namespace Bubbles
             numFontSize.Font = new Font(numFontSize.Font.FontFamily, _ffsize);
         }
         float fsize, ffsize;
-
-        private void this_Paint(object sender, PaintEventArgs e)
-        {
-            if (scaleFactor < 125) return;
-            int width = 1;
-            //if (scaleFactor > 200) width = 2;
-            ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle,
-                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid,
-                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid);
-        }
 
         private void ColorButton_Paint(object sender, PaintEventArgs e)
         {

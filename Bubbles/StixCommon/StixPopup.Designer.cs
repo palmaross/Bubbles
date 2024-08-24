@@ -113,19 +113,17 @@
             this.panelH.Controls.Add(this.pRemember);
             this.panelH.Controls.Add(this.pRotate);
             this.panelH.Controls.Add(this.pCollapse);
-            this.panelH.Location = new System.Drawing.Point(6, 6);
-            this.panelH.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panelH.Location = new System.Drawing.Point(3, 3);
             this.panelH.Name = "panelH";
-            this.panelH.Size = new System.Drawing.Size(256, 38);
+            this.panelH.Size = new System.Drawing.Size(128, 20);
             this.panelH.TabIndex = 0;
             // 
             // p2
             // 
             this.p2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.p2.Location = new System.Drawing.Point(168, 4);
-            this.p2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.p2.Location = new System.Drawing.Point(84, 2);
             this.p2.Name = "p2";
-            this.p2.Size = new System.Drawing.Size(32, 31);
+            this.p2.Size = new System.Drawing.Size(16, 16);
             this.p2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.p2.TabIndex = 7;
             this.p2.TabStop = false;
@@ -134,10 +132,9 @@
             // p1
             // 
             this.p1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.p1.Location = new System.Drawing.Point(128, 4);
-            this.p1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.p1.Location = new System.Drawing.Point(64, 2);
             this.p1.Name = "p1";
-            this.p1.Size = new System.Drawing.Size(32, 31);
+            this.p1.Size = new System.Drawing.Size(16, 16);
             this.p1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.p1.TabIndex = 6;
             this.p1.TabStop = false;
@@ -148,10 +145,9 @@
             this.pClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pClose.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pClose.Image = ((System.Drawing.Image)(resources.GetObject("pClose.Image")));
-            this.pClose.Location = new System.Drawing.Point(220, 4);
-            this.pClose.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pClose.Location = new System.Drawing.Point(110, 2);
             this.pClose.Name = "pClose";
-            this.pClose.Size = new System.Drawing.Size(32, 31);
+            this.pClose.Size = new System.Drawing.Size(16, 16);
             this.pClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pClose.TabIndex = 5;
             this.pClose.TabStop = false;
@@ -161,10 +157,9 @@
             // 
             this.pRemember.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pRemember.Image = ((System.Drawing.Image)(resources.GetObject("pRemember.Image")));
-            this.pRemember.Location = new System.Drawing.Point(80, 6);
-            this.pRemember.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pRemember.Location = new System.Drawing.Point(40, 3);
             this.pRemember.Name = "pRemember";
-            this.pRemember.Size = new System.Drawing.Size(28, 27);
+            this.pRemember.Size = new System.Drawing.Size(14, 14);
             this.pRemember.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pRemember.TabIndex = 4;
             this.pRemember.TabStop = false;
@@ -174,10 +169,9 @@
             // 
             this.pRotate.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pRotate.Image = ((System.Drawing.Image)(resources.GetObject("pRotate.Image")));
-            this.pRotate.Location = new System.Drawing.Point(44, 6);
-            this.pRotate.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pRotate.Location = new System.Drawing.Point(22, 3);
             this.pRotate.Name = "pRotate";
-            this.pRotate.Size = new System.Drawing.Size(28, 27);
+            this.pRotate.Size = new System.Drawing.Size(14, 14);
             this.pRotate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pRotate.TabIndex = 3;
             this.pRotate.TabStop = false;
@@ -187,10 +181,9 @@
             // 
             this.pCollapse.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pCollapse.Image = ((System.Drawing.Image)(resources.GetObject("pCollapse.Image")));
-            this.pCollapse.Location = new System.Drawing.Point(4, 4);
-            this.pCollapse.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pCollapse.Location = new System.Drawing.Point(2, 2);
             this.pCollapse.Name = "pCollapse";
-            this.pCollapse.Size = new System.Drawing.Size(32, 31);
+            this.pCollapse.Size = new System.Drawing.Size(16, 16);
             this.pCollapse.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pCollapse.TabIndex = 1;
             this.pCollapse.TabStop = false;
@@ -203,10 +196,9 @@
             // 
             this.pDeleteAllIcons.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pDeleteAllIcons.Image = ((System.Drawing.Image)(resources.GetObject("pDeleteAllIcons.Image")));
-            this.pDeleteAllIcons.Location = new System.Drawing.Point(40, 4);
-            this.pDeleteAllIcons.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pDeleteAllIcons.Location = new System.Drawing.Point(20, 2);
             this.pDeleteAllIcons.Name = "pDeleteAllIcons";
-            this.pDeleteAllIcons.Size = new System.Drawing.Size(32, 31);
+            this.pDeleteAllIcons.Size = new System.Drawing.Size(16, 16);
             this.pDeleteAllIcons.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pDeleteAllIcons.TabIndex = 9;
             this.pDeleteAllIcons.TabStop = false;
@@ -217,10 +209,9 @@
             // 
             this.p25.Cursor = System.Windows.Forms.Cursors.Hand;
             this.p25.Image = ((System.Drawing.Image)(resources.GetObject("p25.Image")));
-            this.p25.Location = new System.Drawing.Point(44, 6);
-            this.p25.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.p25.Location = new System.Drawing.Point(22, 3);
             this.p25.Name = "p25";
-            this.p25.Size = new System.Drawing.Size(32, 31);
+            this.p25.Size = new System.Drawing.Size(16, 16);
             this.p25.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.p25.TabIndex = 17;
             this.p25.TabStop = false;
@@ -231,10 +222,9 @@
             // 
             this.pPR3.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pPR3.Image = ((System.Drawing.Image)(resources.GetObject("pPR3.Image")));
-            this.pPR3.Location = new System.Drawing.Point(44, 6);
-            this.pPR3.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pPR3.Location = new System.Drawing.Point(22, 3);
             this.pPR3.Name = "pPR3";
-            this.pPR3.Size = new System.Drawing.Size(32, 31);
+            this.pPR3.Size = new System.Drawing.Size(16, 16);
             this.pPR3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pPR3.TabIndex = 24;
             this.pPR3.TabStop = false;
@@ -243,20 +233,18 @@
             // 
             // panelCommonMin
             // 
-            this.panelCommonMin.Location = new System.Drawing.Point(6, 56);
-            this.panelCommonMin.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panelCommonMin.Location = new System.Drawing.Point(3, 29);
             this.panelCommonMin.Name = "panelCommonMin";
-            this.panelCommonMin.Size = new System.Drawing.Size(176, 38);
+            this.panelCommonMin.Size = new System.Drawing.Size(88, 20);
             this.panelCommonMin.TabIndex = 1;
             // 
             // pFontItalic
             // 
             this.pFontItalic.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pFontItalic.Image = ((System.Drawing.Image)(resources.GetObject("pFontItalic.Image")));
-            this.pFontItalic.Location = new System.Drawing.Point(146, 4);
-            this.pFontItalic.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pFontItalic.Location = new System.Drawing.Point(73, 2);
             this.pFontItalic.Name = "pFontItalic";
-            this.pFontItalic.Size = new System.Drawing.Size(32, 31);
+            this.pFontItalic.Size = new System.Drawing.Size(16, 16);
             this.pFontItalic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pFontItalic.TabIndex = 12;
             this.pFontItalic.TabStop = false;
@@ -266,10 +254,9 @@
             // 
             this.pBookmarkList.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pBookmarkList.Image = ((System.Drawing.Image)(resources.GetObject("pBookmarkList.Image")));
-            this.pBookmarkList.Location = new System.Drawing.Point(110, 4);
-            this.pBookmarkList.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pBookmarkList.Location = new System.Drawing.Point(55, 2);
             this.pBookmarkList.Name = "pBookmarkList";
-            this.pBookmarkList.Size = new System.Drawing.Size(32, 31);
+            this.pBookmarkList.Size = new System.Drawing.Size(16, 16);
             this.pBookmarkList.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pBookmarkList.TabIndex = 11;
             this.pBookmarkList.TabStop = false;
@@ -278,10 +265,9 @@
             // 
             this.pNewBookmark.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pNewBookmark.Image = ((System.Drawing.Image)(resources.GetObject("pNewBookmark.Image")));
-            this.pNewBookmark.Location = new System.Drawing.Point(76, 6);
-            this.pNewBookmark.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pNewBookmark.Location = new System.Drawing.Point(38, 3);
             this.pNewBookmark.Name = "pNewBookmark";
-            this.pNewBookmark.Size = new System.Drawing.Size(30, 29);
+            this.pNewBookmark.Size = new System.Drawing.Size(15, 15);
             this.pNewBookmark.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pNewBookmark.TabIndex = 10;
             this.pNewBookmark.TabStop = false;
@@ -290,10 +276,9 @@
             // 
             this.pNewIcon.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pNewIcon.Image = ((System.Drawing.Image)(resources.GetObject("pNewIcon.Image")));
-            this.pNewIcon.Location = new System.Drawing.Point(4, 4);
-            this.pNewIcon.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pNewIcon.Location = new System.Drawing.Point(2, 2);
             this.pNewIcon.Name = "pNewIcon";
-            this.pNewIcon.Size = new System.Drawing.Size(32, 31);
+            this.pNewIcon.Size = new System.Drawing.Size(16, 16);
             this.pNewIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pNewIcon.TabIndex = 8;
             this.pNewIcon.TabStop = false;
@@ -308,19 +293,17 @@
             this.panelOther.Controls.Add(this.pNewBookmark);
             this.panelOther.Controls.Add(this.pFontItalic);
             this.panelOther.Controls.Add(this.pBookmarkList);
-            this.panelOther.Location = new System.Drawing.Point(276, 6);
-            this.panelOther.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panelOther.Location = new System.Drawing.Point(138, 3);
             this.panelOther.Name = "panelOther";
-            this.panelOther.Size = new System.Drawing.Size(310, 38);
+            this.panelOther.Size = new System.Drawing.Size(155, 20);
             this.panelOther.TabIndex = 2;
             // 
             // pictureBox2
             // 
             this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox2.Location = new System.Drawing.Point(254, 4);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pictureBox2.Location = new System.Drawing.Point(127, 2);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(32, 31);
+            this.pictureBox2.Size = new System.Drawing.Size(16, 16);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 15;
             this.pictureBox2.TabStop = false;
@@ -328,10 +311,9 @@
             // pictureBox1
             // 
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox1.Location = new System.Drawing.Point(218, 4);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pictureBox1.Location = new System.Drawing.Point(109, 2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(32, 31);
+            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;
@@ -340,10 +322,9 @@
             // 
             this.NextTopic.Cursor = System.Windows.Forms.Cursors.Hand;
             this.NextTopic.Image = ((System.Drawing.Image)(resources.GetObject("NextTopic.Image")));
-            this.NextTopic.Location = new System.Drawing.Point(4, 4);
-            this.NextTopic.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.NextTopic.Location = new System.Drawing.Point(2, 2);
             this.NextTopic.Name = "NextTopic";
-            this.NextTopic.Size = new System.Drawing.Size(40, 38);
+            this.NextTopic.Size = new System.Drawing.Size(20, 20);
             this.NextTopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.NextTopic.TabIndex = 9;
             this.NextTopic.TabStop = false;
@@ -353,10 +334,9 @@
             // 
             this.TopicBefore.Cursor = System.Windows.Forms.Cursors.Hand;
             this.TopicBefore.Image = ((System.Drawing.Image)(resources.GetObject("TopicBefore.Image")));
-            this.TopicBefore.Location = new System.Drawing.Point(56, 4);
-            this.TopicBefore.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.TopicBefore.Location = new System.Drawing.Point(28, 2);
             this.TopicBefore.Name = "TopicBefore";
-            this.TopicBefore.Size = new System.Drawing.Size(40, 38);
+            this.TopicBefore.Size = new System.Drawing.Size(20, 20);
             this.TopicBefore.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.TopicBefore.TabIndex = 10;
             this.TopicBefore.TabStop = false;
@@ -366,10 +346,9 @@
             // 
             this.ParentTopic.Cursor = System.Windows.Forms.Cursors.Hand;
             this.ParentTopic.Image = ((System.Drawing.Image)(resources.GetObject("ParentTopic.Image")));
-            this.ParentTopic.Location = new System.Drawing.Point(108, 4);
-            this.ParentTopic.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.ParentTopic.Location = new System.Drawing.Point(54, 2);
             this.ParentTopic.Name = "ParentTopic";
-            this.ParentTopic.Size = new System.Drawing.Size(40, 38);
+            this.ParentTopic.Size = new System.Drawing.Size(20, 20);
             this.ParentTopic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ParentTopic.TabIndex = 11;
             this.ParentTopic.TabStop = false;
@@ -379,10 +358,9 @@
             // 
             this.Callout.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Callout.Image = ((System.Drawing.Image)(resources.GetObject("Callout.Image")));
-            this.Callout.Location = new System.Drawing.Point(158, 4);
-            this.Callout.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.Callout.Location = new System.Drawing.Point(79, 2);
             this.Callout.Name = "Callout";
-            this.Callout.Size = new System.Drawing.Size(40, 38);
+            this.Callout.Size = new System.Drawing.Size(20, 20);
             this.Callout.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Callout.TabIndex = 13;
             this.Callout.TabStop = false;
@@ -395,27 +373,24 @@
             this.panelPasteTopic.Controls.Add(this.ParentTopic);
             this.panelPasteTopic.Controls.Add(this.TopicBefore);
             this.panelPasteTopic.Controls.Add(this.NextTopic);
-            this.panelPasteTopic.Location = new System.Drawing.Point(194, 56);
-            this.panelPasteTopic.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panelPasteTopic.Location = new System.Drawing.Point(97, 29);
             this.panelPasteTopic.Name = "panelPasteTopic";
-            this.panelPasteTopic.Size = new System.Drawing.Size(200, 46);
+            this.panelPasteTopic.Size = new System.Drawing.Size(100, 24);
             this.panelPasteTopic.TabIndex = 2;
             // 
             // p11
             // 
-            this.p11.Location = new System.Drawing.Point(356, 56);
-            this.p11.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.p11.Location = new System.Drawing.Point(178, 29);
             this.p11.Name = "p11";
-            this.p11.Size = new System.Drawing.Size(32, 6);
+            this.p11.Size = new System.Drawing.Size(16, 3);
             this.p11.TabIndex = 3;
             this.p11.TabStop = false;
             // 
             // panelAddTopic
             // 
-            this.panelAddTopic.Location = new System.Drawing.Point(194, 113);
-            this.panelAddTopic.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panelAddTopic.Location = new System.Drawing.Point(97, 59);
             this.panelAddTopic.Name = "panelAddTopic";
-            this.panelAddTopic.Size = new System.Drawing.Size(256, 38);
+            this.panelAddTopic.Size = new System.Drawing.Size(128, 20);
             this.panelAddTopic.TabIndex = 2;
             // 
             // panelProgress
@@ -428,20 +403,18 @@
             this.panelProgress.Controls.Add(this.p35);
             this.panelProgress.Controls.Add(this.p25);
             this.panelProgress.Controls.Add(this.p75);
-            this.panelProgress.Location = new System.Drawing.Point(10, 163);
-            this.panelProgress.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panelProgress.Location = new System.Drawing.Point(5, 85);
             this.panelProgress.Name = "panelProgress";
-            this.panelProgress.Size = new System.Drawing.Size(280, 42);
+            this.panelProgress.Size = new System.Drawing.Size(140, 22);
             this.panelProgress.TabIndex = 3;
             // 
             // p50
             // 
             this.p50.Cursor = System.Windows.Forms.Cursors.Hand;
             this.p50.Image = ((System.Drawing.Image)(resources.GetObject("p50.Image")));
-            this.p50.Location = new System.Drawing.Point(122, 6);
-            this.p50.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.p50.Location = new System.Drawing.Point(61, 3);
             this.p50.Name = "p50";
-            this.p50.Size = new System.Drawing.Size(32, 31);
+            this.p50.Size = new System.Drawing.Size(16, 16);
             this.p50.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.p50.TabIndex = 19;
             this.p50.TabStop = false;
@@ -451,10 +424,9 @@
             // 
             this.p90.Cursor = System.Windows.Forms.Cursors.Hand;
             this.p90.Image = ((System.Drawing.Image)(resources.GetObject("p90.Image")));
-            this.p90.Location = new System.Drawing.Point(242, 6);
-            this.p90.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.p90.Location = new System.Drawing.Point(121, 3);
             this.p90.Name = "p90";
-            this.p90.Size = new System.Drawing.Size(32, 31);
+            this.p90.Size = new System.Drawing.Size(16, 16);
             this.p90.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.p90.TabIndex = 22;
             this.p90.TabStop = false;
@@ -464,10 +436,9 @@
             // 
             this.p65.Cursor = System.Windows.Forms.Cursors.Hand;
             this.p65.Image = ((System.Drawing.Image)(resources.GetObject("p65.Image")));
-            this.p65.Location = new System.Drawing.Point(162, 6);
-            this.p65.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.p65.Location = new System.Drawing.Point(81, 3);
             this.p65.Name = "p65";
-            this.p65.Size = new System.Drawing.Size(32, 31);
+            this.p65.Size = new System.Drawing.Size(16, 16);
             this.p65.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.p65.TabIndex = 20;
             this.p65.TabStop = false;
@@ -477,10 +448,9 @@
             // 
             this.p10.Cursor = System.Windows.Forms.Cursors.Hand;
             this.p10.Image = ((System.Drawing.Image)(resources.GetObject("p10.Image")));
-            this.p10.Location = new System.Drawing.Point(4, 6);
-            this.p10.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.p10.Location = new System.Drawing.Point(2, 3);
             this.p10.Name = "p10";
-            this.p10.Size = new System.Drawing.Size(32, 31);
+            this.p10.Size = new System.Drawing.Size(16, 16);
             this.p10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.p10.TabIndex = 16;
             this.p10.TabStop = false;
@@ -490,10 +460,9 @@
             // 
             this.p35.Cursor = System.Windows.Forms.Cursors.Hand;
             this.p35.Image = ((System.Drawing.Image)(resources.GetObject("p35.Image")));
-            this.p35.Location = new System.Drawing.Point(84, 8);
-            this.p35.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.p35.Location = new System.Drawing.Point(42, 3);
             this.p35.Name = "p35";
-            this.p35.Size = new System.Drawing.Size(30, 29);
+            this.p35.Size = new System.Drawing.Size(16, 16);
             this.p35.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.p35.TabIndex = 18;
             this.p35.TabStop = false;
@@ -503,10 +472,9 @@
             // 
             this.p75.Cursor = System.Windows.Forms.Cursors.Hand;
             this.p75.Image = ((System.Drawing.Image)(resources.GetObject("p75.Image")));
-            this.p75.Location = new System.Drawing.Point(202, 6);
-            this.p75.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.p75.Location = new System.Drawing.Point(101, 3);
             this.p75.Name = "p75";
-            this.p75.Size = new System.Drawing.Size(32, 31);
+            this.p75.Size = new System.Drawing.Size(16, 16);
             this.p75.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.p75.TabIndex = 21;
             this.p75.TabStop = false;
@@ -518,20 +486,18 @@
             this.panelPriority.Controls.Add(this.pPR3);
             this.panelPriority.Controls.Add(this.pPR2);
             this.panelPriority.Controls.Add(this.pPR4);
-            this.panelPriority.Location = new System.Drawing.Point(316, 163);
-            this.panelPriority.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panelPriority.Location = new System.Drawing.Point(158, 85);
             this.panelPriority.Name = "panelPriority";
-            this.panelPriority.Size = new System.Drawing.Size(160, 42);
+            this.panelPriority.Size = new System.Drawing.Size(80, 22);
             this.panelPriority.TabIndex = 3;
             // 
             // pPR5
             // 
             this.pPR5.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pPR5.Image = ((System.Drawing.Image)(resources.GetObject("pPR5.Image")));
-            this.pPR5.Location = new System.Drawing.Point(122, 6);
-            this.pPR5.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pPR5.Location = new System.Drawing.Point(62, 3);
             this.pPR5.Name = "pPR5";
-            this.pPR5.Size = new System.Drawing.Size(32, 31);
+            this.pPR5.Size = new System.Drawing.Size(16, 16);
             this.pPR5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pPR5.TabIndex = 26;
             this.pPR5.TabStop = false;
@@ -541,10 +507,9 @@
             // 
             this.pPR2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pPR2.Image = ((System.Drawing.Image)(resources.GetObject("pPR2.Image")));
-            this.pPR2.Location = new System.Drawing.Point(4, 6);
-            this.pPR2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pPR2.Location = new System.Drawing.Point(2, 3);
             this.pPR2.Name = "pPR2";
-            this.pPR2.Size = new System.Drawing.Size(32, 31);
+            this.pPR2.Size = new System.Drawing.Size(16, 16);
             this.pPR2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pPR2.TabIndex = 23;
             this.pPR2.TabStop = false;
@@ -554,10 +519,9 @@
             // 
             this.pPR4.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pPR4.Image = ((System.Drawing.Image)(resources.GetObject("pPR4.Image")));
-            this.pPR4.Location = new System.Drawing.Point(84, 8);
-            this.pPR4.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pPR4.Location = new System.Drawing.Point(42, 3);
             this.pPR4.Name = "pPR4";
-            this.pPR4.Size = new System.Drawing.Size(30, 29);
+            this.pPR4.Size = new System.Drawing.Size(16, 16);
             this.pPR4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pPR4.TabIndex = 25;
             this.pPR4.TabStop = false;
@@ -565,7 +529,7 @@
             // 
             // StixPopup
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panelPriority);
             this.Controls.Add(this.panelProgress);
@@ -575,9 +539,8 @@
             this.Controls.Add(this.panelPasteTopic);
             this.Controls.Add(this.panelH);
             this.Controls.Add(this.panelCommonMin);
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "StixPopup";
-            this.Size = new System.Drawing.Size(702, 427);
+            this.Size = new System.Drawing.Size(351, 222);
             this.panelH.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();

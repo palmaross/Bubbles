@@ -65,10 +65,10 @@ namespace Bubbles
 
             pictureHandle.MouseDown += PictureHandle_MouseDown;
             pictureHandle.MouseDoubleClick += (sender, e) => this.Hide();
-            this.Paint += this_Paint; // paint the border depending on scale factor
+            this.Paint += (o, e) => StixUtils.PaintStix(this, scaleFactor, e);
 
             // Apply scale factor
-            fsize = TopicText.Font.Size; ffsize = chIncrement.Font.Size;
+            fsize = TopicText.Font.Size;
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
             ScaleStick(100F, scaleFactor);
         }
@@ -93,21 +93,10 @@ namespace Bubbles
 
         public void ScaleStick(float fromScale, float toScale)
         {
-            if (fromScale == toScale) return;
-            if (toScale < 100 || toScale > 267) return;
-
-            float scale = 100F / fromScale;
             scaleFactor = toScale;
-
-            if (scale != 1)
-                this.Scale(new SizeF(scale, scale)); // reset to 100%
-
-            if (toScale != 100)
-                this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
+            if (StixUtils.ScaleStick(this, fromScale, toScale)) return;
 
             float _fsize = fsize * (toScale / 100);
-            float _ffsize = ffsize * (toScale / 100);
-
             numUpDown.Font = new Font(numUpDown.Font.FontFamily, _fsize);
             TopicText.Font = new Font(numUpDown.Font.FontFamily, _fsize);
             chIncrement.Font = new Font(numUpDown.Font.FontFamily, _fsize);
@@ -115,17 +104,7 @@ namespace Bubbles
             if (orientation == "H") { RealLength = this.Width; }
             else RealLength = (int)(InitialLength * (toScale / 100));
         }
-        float fsize, ffsize;
-
-        private void this_Paint(object sender, PaintEventArgs e)
-        {
-            if (scaleFactor < 125) return;
-            int width = 1;
-            //if (scaleFactor > 200) width = 2;
-            ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle,
-                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid,
-                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid);
-        }
+        float fsize;
 
         void PopulateAddMultipleMenu()
         {

@@ -85,8 +85,10 @@ namespace Bubbles
                 DataTable dt = db.ExecuteQuery("select * from TOOLS where stixID=" + ID + " order by _order");
                 foreach (DataRow row in dt.Rows)
                 {
-                    string title = row["title"].ToString();
                     string path = row["path"].ToString();
+                    if (path == Path.GetFileName(path))
+                        path = Utils.m_dataPath + "ToolStixApps\\" + path;
+                    string title = row["title"].ToString();
                     string type = row["type"].ToString();
                     string tooltip = row["tooltip"].ToString();
                     int order = Convert.ToInt32(row["_order"].ToString());
@@ -108,7 +110,7 @@ namespace Bubbles
             pictureHandle.MouseDoubleClick += (sender, e) => this.Hide();
 
             // Apply scale factor
-            this.Paint += this_Paint; // paint the border depending on scale factor
+            this.Paint += (o, e) => StixUtils.PaintStix(this, scaleFactor, e);
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
             ScaleStick(100F, scaleFactor);
 
@@ -127,35 +129,10 @@ namespace Bubbles
 
         public void ScaleStick(float fromScale, float toScale)
         {
-            if (fromScale == toScale) return;
-            if (toScale < 100 || toScale > 267) return;
-
-            float scale = 100F / fromScale;
             scaleFactor = toScale;
-
-            if (scale != 1)
-            {
-                this.Scale(new SizeF(scale, scale)); // reset to 100%
-                StixUtils.icondist = pIconDist.Width;
-                MinLength = (int)(MinLength * scale);
-            }
-
-            if (toScale != 100)
-            {
-                this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
-                StixUtils.icondist = pIconDist.Width;
-                MinLength = (int)(MinLength * (toScale / 100));
-            }
-        }
-
-        private void this_Paint(object sender, PaintEventArgs e)
-        {
-            if (scaleFactor < 125) return;
-            int width = 1;
-            //if (scaleFactor > 200) width = 2;
-            ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle,
-                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid,
-                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid);
+            if (StixUtils.ScaleStick(this, fromScale, toScale)) return;
+            StixUtils.icondist = pIconDist.Width;
+            MinLength = (int)(MinLength * (toScale / 100));
         }
 
         private void Manage_Click(object sender, EventArgs e)
@@ -207,6 +184,8 @@ namespace Bubbles
 
                 // Proccess tool icon
                 string filename = Path.GetFileName(iconPath);
+                string path = Utils.m_dataPath + "AppIconDB\\" + filename;
+
                 if (item.Type != filename)
                 {
                     if (filename.StartsWith("tool-"))
@@ -214,7 +193,6 @@ namespace Bubbles
                     else
                         item.Type = "tool-" + filename;
 
-                    string path = Utils.m_dataPath + "AppIconDB\\" + filename;
                     if (!File.Exists(path))
                         File.Copy(iconPath, path);
 
@@ -222,6 +200,9 @@ namespace Bubbles
                 }
 
                 selectedIcon.Tag = item;
+                path = item.Path;
+                if (path.StartsWith(Utils.m_dataPath + "ToolStixApps"))
+                    path = Path.GetFileName(path);
 
                 using (StixDB db = new StixDB())
                 {
@@ -231,7 +212,7 @@ namespace Bubbles
                         "title=`" + item.Title + "`, " +
                         "tooltip=`" + item.Tooltip + "`, " +
                         "type=`" + item.Type + "` " +
-                        "where path=`" + item.Path + "`"
+                        "where path=`" + path + "`"
                         );
                     }
                     else
@@ -241,7 +222,7 @@ namespace Bubbles
                             "title=`" + item.Title + "`, " +
                             "tooltip=`" + item.Tooltip + "`, " +
                             "type=`" + item.Type + "` " +
-                            "where path=`" + item.Path + "` and stixID=" + (int)this.Tag
+                            "where path=`" + path + "` and stixID=" + (int)this.Tag
                             + "");
                     }
                 }

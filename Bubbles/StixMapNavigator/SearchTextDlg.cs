@@ -31,6 +31,11 @@ namespace Bubbles
 
             this.MouseDown += SearchTextDlg_MouseDown;
             panelHead.MouseDown += SearchTextDlg_MouseDown;
+
+            if (Utils.scalingFactor == 1)
+            {
+                listTopics.Width -= 1; listTopics.Height -= 1;
+            }
         }
 
         private void pHelp_Click(object sender, EventArgs e)

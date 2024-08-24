@@ -68,34 +68,15 @@ namespace Bubbles
             PasteOperations.Tick += PasteOperations_Tick;
 
             // Apply scale factor
-            this.Paint += this_Paint; // paint the border depending on scale factor
+            this.Paint += (o, e) => StixUtils.PaintStix(this, scaleFactor, e);
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
             ScaleStick(100F, scaleFactor);
         }
 
         public void ScaleStick(float fromScale, float toScale)
         {
-            if (fromScale == toScale) return;
-            if (toScale < 100 || toScale > 267) return;
-
-            float scale = 100F / fromScale;
             scaleFactor = toScale;
-
-            if (scale != 1)
-                this.Scale(new SizeF(scale, scale)); // reset to 100%
-
-            if (toScale != 100)
-                this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
-        }
-
-        private void this_Paint(object sender, PaintEventArgs e)
-        {
-            if (scaleFactor < 125) return;
-            int width = 1;
-            //if (scaleFactor > 200) width = 2;
-            ControlPaint.DrawBorder(e.Graphics, this.ClientRectangle,
-                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid,
-                Color.Black, width, ButtonBorderStyle.Solid, Color.Black, width, ButtonBorderStyle.Solid);
+            if (StixUtils.ScaleStick(this, fromScale, toScale)) return;
         }
 
         private void PictureHandle_MouseDown(object sender, MouseEventArgs e)

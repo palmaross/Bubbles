@@ -90,9 +90,9 @@ namespace Bubbles
                 this.Hide();
             };
 
-            MinLength = this.Width;
             fsize = lblClock.Font.Size;
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
+            this.Paint += (o, e) => StixUtils.PaintStix(this, scaleFactor, e);
             ScaleStick(100F, scaleFactor);
         }
         Rectangle OmniButton;
@@ -107,27 +107,10 @@ namespace Bubbles
 
         public void ScaleStick(float fromScale, float toScale)
         {
-            if (fromScale == toScale) return;
-            if (toScale < 100 || toScale > 267) return;
-
-            float scale = 100F / fromScale;
             scaleFactor = toScale;
+            if (StixUtils.ScaleStick(this, fromScale, toScale)) return;
+
             float _fsize = fsize * (toScale / 100);
-
-            if (scale != 1)
-            {
-                this.Scale(new SizeF(scale, scale)); // reset to 100%
-                //StixUtils.icondist = pIconDist.Width;
-                MinLength = (int)(MinLength * scale);
-            }
-
-            if (toScale != 100)
-            {
-                this.Scale(new SizeF(toScale / 100, toScale / 100)); // scale
-                //StixUtils.icondist = pIconDist.Width;
-                MinLength = (int)(MinLength * (toScale / 100));
-            }
-
             lblClock.Font = new Font(lblClock.Font.FontFamily, _fsize);
             lblTitle.Font = new Font(lblClock.Font.FontFamily, _fsize);
         }
@@ -358,7 +341,6 @@ namespace Bubbles
 
         ToolStripDropDown SoundTopicsList;
         public float scaleFactor = 100;
-        int MinLength;
 
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;

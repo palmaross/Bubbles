@@ -52,7 +52,7 @@
             "150%",
             "200%",
             "250%",
-            "267%"});
+            "300%"});
             this.cbSfactor.Location = new System.Drawing.Point(6, 5);
             this.cbSfactor.Name = "cbSfactor";
             this.cbSfactor.Size = new System.Drawing.Size(56, 21);
