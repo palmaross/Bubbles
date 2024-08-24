@@ -26,6 +26,7 @@ namespace Bubbles
             OmniButton = omniButton;
             ThisSize = this.Size;
 
+            int thisHeight = this.Height;
             // Rounded corners
             var attribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
             var preference = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
@@ -35,6 +36,7 @@ namespace Bubbles
                 DwmSetWindowAttribute(this.Handle, attribute, ref preference, sizeof(uint));
             }
             catch { }
+            this.Height = thisHeight;
 
             pictureHandle.MouseDown += (sender, e) => // move the stick
             {
@@ -58,6 +60,7 @@ namespace Bubbles
             };
 
             btnRecordEmpty.Location = btnRecord.Location;
+            this.Paint += (o, e) => StixUtils.PaintStix(this, 1, e, true);
         }
 
         private void TopicRecorder_Load(object sender, EventArgs e)

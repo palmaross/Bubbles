@@ -174,7 +174,7 @@
             // 
             this.lblChars1.AutoSize = true;
             this.lblChars1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblChars1.Location = new System.Drawing.Point(76, 36);
+            this.lblChars1.Location = new System.Drawing.Point(79, 36);
             this.lblChars1.Name = "lblChars1";
             this.lblChars1.Size = new System.Drawing.Size(33, 13);
             this.lblChars1.TabIndex = 16;
@@ -184,7 +184,7 @@
             // 
             this.lblChars2.AutoSize = true;
             this.lblChars2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblChars2.Location = new System.Drawing.Point(76, 60);
+            this.lblChars2.Location = new System.Drawing.Point(79, 60);
             this.lblChars2.Name = "lblChars2";
             this.lblChars2.Size = new System.Drawing.Size(33, 13);
             this.lblChars2.TabIndex = 19;
@@ -253,7 +253,7 @@
             // 
             this.lblChars3.AutoSize = true;
             this.lblChars3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblChars3.Location = new System.Drawing.Point(76, 86);
+            this.lblChars3.Location = new System.Drawing.Point(79, 86);
             this.lblChars3.Name = "lblChars3";
             this.lblChars3.Size = new System.Drawing.Size(33, 13);
             this.lblChars3.TabIndex = 25;
@@ -504,7 +504,7 @@
             // 
             this.mm1.AutoSize = true;
             this.mm1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mm1.Location = new System.Drawing.Point(181, 36);
+            this.mm1.Location = new System.Drawing.Point(183, 35);
             this.mm1.Name = "mm1";
             this.mm1.Size = new System.Drawing.Size(26, 13);
             this.mm1.TabIndex = 51;
@@ -523,7 +523,7 @@
             // 
             this.mm2.AutoSize = true;
             this.mm2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mm2.Location = new System.Drawing.Point(181, 60);
+            this.mm2.Location = new System.Drawing.Point(183, 60);
             this.mm2.Name = "mm2";
             this.mm2.Size = new System.Drawing.Size(26, 13);
             this.mm2.TabIndex = 53;
@@ -533,7 +533,7 @@
             // 
             this.mm3.AutoSize = true;
             this.mm3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mm3.Location = new System.Drawing.Point(181, 85);
+            this.mm3.Location = new System.Drawing.Point(183, 85);
             this.mm3.Name = "mm3";
             this.mm3.Size = new System.Drawing.Size(26, 13);
             this.mm3.TabIndex = 54;
@@ -543,7 +543,7 @@
             // 
             this.mm6.AutoSize = true;
             this.mm6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mm6.Location = new System.Drawing.Point(181, 174);
+            this.mm6.Location = new System.Drawing.Point(183, 174);
             this.mm6.Name = "mm6";
             this.mm6.Size = new System.Drawing.Size(26, 13);
             this.mm6.TabIndex = 57;
@@ -553,7 +553,7 @@
             // 
             this.mm5.AutoSize = true;
             this.mm5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mm5.Location = new System.Drawing.Point(181, 149);
+            this.mm5.Location = new System.Drawing.Point(183, 149);
             this.mm5.Name = "mm5";
             this.mm5.Size = new System.Drawing.Size(26, 13);
             this.mm5.TabIndex = 56;
@@ -563,7 +563,7 @@
             // 
             this.mm4.AutoSize = true;
             this.mm4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mm4.Location = new System.Drawing.Point(181, 125);
+            this.mm4.Location = new System.Drawing.Point(183, 125);
             this.mm4.Name = "mm4";
             this.mm4.Size = new System.Drawing.Size(26, 13);
             this.mm4.TabIndex = 55;

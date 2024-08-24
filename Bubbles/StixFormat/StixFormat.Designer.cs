@@ -277,7 +277,7 @@
             // 
             // lblTextColor
             // 
-            this.lblTextColor.Location = new System.Drawing.Point(142, 1);
+            this.lblTextColor.Location = new System.Drawing.Point(141, 1);
             this.lblTextColor.Name = "lblTextColor";
             this.lblTextColor.Size = new System.Drawing.Size(85, 13);
             this.lblTextColor.TabIndex = 89;
@@ -286,9 +286,9 @@
             // 
             // lblFillColor
             // 
-            this.lblFillColor.Location = new System.Drawing.Point(214, 1);
+            this.lblFillColor.Location = new System.Drawing.Point(216, 1);
             this.lblFillColor.Name = "lblFillColor";
-            this.lblFillColor.Size = new System.Drawing.Size(82, 13);
+            this.lblFillColor.Size = new System.Drawing.Size(78, 13);
             this.lblFillColor.TabIndex = 90;
             this.lblFillColor.Text = "Цвет темы";
             this.lblFillColor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

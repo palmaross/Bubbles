@@ -6,9 +6,9 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using WindowsInput;
-using Color = System.Drawing.Color;
 
 namespace Bubbles
 {
@@ -24,6 +24,12 @@ namespace Bubbles
             helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "AddTopicStix.htm");
+
+            if (Utils.scalingFactor == 1)
+            {
+                numUpDown.Width += 1;
+                numUpDown.Location = new Point(numUpDown.Location.X - 1, numUpDown.Location.Y);
+            }
 
             RealLength = this.Width; InitialLength = this.Width;
             HL1 = numUpDown.Location.X;

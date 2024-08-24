@@ -996,10 +996,11 @@ namespace Bubbles
             return false;
         }
 
-        public static void PaintStix(Form form, float scaleFactor, PaintEventArgs e)
+        public static void PaintStix(Form form, float scaleFactor, PaintEventArgs e, bool omnisound = false)
         {
-            if (scaleFactor < 125) return;
+            if (scaleFactor < 125 && !omnisound) return;
             int width = 1;
+            if (omnisound && scaleFactor > 125) width = 2;
             ControlPaint.DrawBorder(e.Graphics, form.ClientRectangle,
                 Color.DarkGray, width, ButtonBorderStyle.Solid, Color.DarkGray, width, ButtonBorderStyle.Solid,
                 Color.DarkGray, width, ButtonBorderStyle.Solid, Color.DarkGray, width, ButtonBorderStyle.Solid);

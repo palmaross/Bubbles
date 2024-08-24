@@ -9,7 +9,6 @@ using System.Windows.Forms;
 using WindowsInput;
 using WindowsInput.Native;
 using Clipboard = System.Windows.Forms.Clipboard;
-using Color = System.Drawing.Color;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Bubbles
@@ -885,12 +884,8 @@ namespace Bubbles
                 tsi.Name = "ManualWidth"; tsi.Tag = width.ToString();
             }
 
-            //tsi = new ToolStripLabel(Utils.getString("TextOpsStix.TopicWidth.Label2"));
-            //tsi.ToolTipText = Utils.getString("TextOpsStix.TopicWidth.tooltip");
-            //cmsTopicWidths.Items.Add(tsi);
-
             ToolStripTextBox mtb = new ToolStripTextBox();
-            mtb.Width = Manage.Width * 2;
+            mtb.Width = pReplace.Width * 2;
             mtb.BorderStyle = BorderStyle.FixedSingle;
             mtb.ToolTipText = Utils.getString("TextOpsStix.TopicWidth.tooltip");
             mtb.KeyDown += Mtb_KeyDown;

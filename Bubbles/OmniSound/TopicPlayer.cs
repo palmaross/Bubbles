@@ -52,6 +52,7 @@ namespace Bubbles
             OmniButton = omniButton;
             lblClock.Text = lblClock.Text = "00:00 / 00:00";
 
+            int thisHeight = this.Height;
             // Rounded corners
             var attribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
             var preference = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
@@ -61,6 +62,8 @@ namespace Bubbles
                 DwmSetWindowAttribute(this.Handle, attribute, ref preference, sizeof(uint));
             }
             catch { }
+
+            this.Height = thisHeight;
 
             tbVolume.Scroll += (s, a) =>
             {
@@ -92,7 +95,7 @@ namespace Bubbles
 
             fsize = lblClock.Font.Size;
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
-            this.Paint += (o, e) => StixUtils.PaintStix(this, scaleFactor, e);
+            this.Paint += (o, e) => StixUtils.PaintStix(this, scaleFactor, e, true);
             ScaleStick(100F, scaleFactor);
         }
         Rectangle OmniButton;

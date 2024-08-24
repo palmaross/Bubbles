@@ -36,7 +36,6 @@
             this.tbVolume = new System.Windows.Forms.TrackBar();
             this.pVolume = new System.Windows.Forms.PictureBox();
             this.pPosition = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.Manage = new System.Windows.Forms.PictureBox();
             this.pictureHandle = new System.Windows.Forms.PictureBox();
             this.lblClock = new System.Windows.Forms.Label();
@@ -55,7 +54,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.tbVolume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pVolume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pPosition)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pTitle)).BeginInit();
@@ -66,7 +64,7 @@
             // btnPause
             // 
             this.btnPause.Image = ((System.Drawing.Image)(resources.GetObject("btnPause.Image")));
-            this.btnPause.Location = new System.Drawing.Point(25, 5);
+            this.btnPause.Location = new System.Drawing.Point(25, 4);
             this.btnPause.Name = "btnPause";
             this.btnPause.Size = new System.Drawing.Size(24, 24);
             this.btnPause.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -82,7 +80,7 @@
             // 
             this.tbTrack.AutoSize = false;
             this.tbTrack.BackColor = System.Drawing.Color.Plum;
-            this.tbTrack.Location = new System.Drawing.Point(144, 9);
+            this.tbTrack.Location = new System.Drawing.Point(144, 8);
             this.tbTrack.Maximum = 10000;
             this.tbTrack.Name = "tbTrack";
             this.tbTrack.Size = new System.Drawing.Size(90, 18);
@@ -107,7 +105,7 @@
             // pVolume
             // 
             this.pVolume.Image = ((System.Drawing.Image)(resources.GetObject("pVolume.Image")));
-            this.pVolume.Location = new System.Drawing.Point(238, 7);
+            this.pVolume.Location = new System.Drawing.Point(238, 6);
             this.pVolume.Name = "pVolume";
             this.pVolume.Size = new System.Drawing.Size(20, 20);
             this.pVolume.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -128,23 +126,12 @@
             this.pPosition.Visible = false;
             this.pPosition.Click += new System.EventHandler(this.pPosition_Click);
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(88, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(20, 20);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 32;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Visible = false;
-            // 
             // Manage
             // 
             this.Manage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Manage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Manage.Image = ((System.Drawing.Image)(resources.GetObject("Manage.Image")));
-            this.Manage.Location = new System.Drawing.Point(261, 7);
+            this.Manage.Location = new System.Drawing.Point(261, 6);
             this.Manage.Name = "Manage";
             this.Manage.Size = new System.Drawing.Size(20, 20);
             this.Manage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -156,7 +143,7 @@
             // 
             this.pictureHandle.BackColor = System.Drawing.Color.Transparent;
             this.pictureHandle.Image = ((System.Drawing.Image)(resources.GetObject("pictureHandle.Image")));
-            this.pictureHandle.Location = new System.Drawing.Point(0, 3);
+            this.pictureHandle.Location = new System.Drawing.Point(0, 0);
             this.pictureHandle.Name = "pictureHandle";
             this.pictureHandle.Size = new System.Drawing.Size(24, 24);
             this.pictureHandle.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -167,7 +154,7 @@
             // 
             this.lblClock.BackColor = System.Drawing.Color.Cornsilk;
             this.lblClock.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblClock.Location = new System.Drawing.Point(53, 9);
+            this.lblClock.Location = new System.Drawing.Point(53, 8);
             this.lblClock.Name = "lblClock";
             this.lblClock.Size = new System.Drawing.Size(90, 18);
             this.lblClock.TabIndex = 80;
@@ -257,7 +244,6 @@
             this.Controls.Add(this.lblClock);
             this.Controls.Add(this.pictureHandle);
             this.Controls.Add(this.Manage);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.pPosition);
             this.Controls.Add(this.pVolume);
             this.Controls.Add(this.tbTrack);
@@ -274,7 +260,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.tbVolume)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pVolume)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pPosition)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHandle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pTitle)).EndInit();
@@ -289,7 +274,6 @@
         private System.Windows.Forms.PictureBox pVolume;
         public System.Windows.Forms.TrackBar tbTrack;
         public System.Windows.Forms.TrackBar tbVolume;
-        private System.Windows.Forms.PictureBox pictureBox1;
         public System.Windows.Forms.PictureBox Manage;
         public System.Windows.Forms.PictureBox pictureHandle;
         public System.Windows.Forms.Label lblClock;

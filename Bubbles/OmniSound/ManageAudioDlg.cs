@@ -69,10 +69,10 @@ namespace Bubbles
             dgv.CellEndEdit += Dgv_CellEndEdit;
 
             Group.Width = (int)(dgv.Width * 0.22);
-            AudioTitle.Width = (int)(dgv.Width * 0.28);
-            MapTitle.Width = (int)(dgv.Width * 0.28);
+            AudioTitle.Width = (int)(dgv.Width * 0.27);
+            MapTitle.Width = (int)(dgv.Width * 0.27);
             aLength.Width = (int)(dgv.Width * 0.08);
-            aSize.Width = (int)(dgv.Width * 0.11);
+            aSize.Width = (int)(dgv.Width * 0.13);
 
             this.MinimumSize = new Size((int)(this.Width / 2), this.Height / 2);
             this.MaximumSize = new Size(this.Width, Screen.AllScreens.Max(s => s.Bounds.Height));

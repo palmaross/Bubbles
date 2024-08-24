@@ -349,7 +349,7 @@
             0,
             0});
             this.numSaveMaps.Name = "numSaveMaps";
-            this.numSaveMaps.Size = new System.Drawing.Size(24, 20);
+            this.numSaveMaps.Size = new System.Drawing.Size(32, 20);
             this.numSaveMaps.TabIndex = 28;
             this.numSaveMaps.Value = new decimal(new int[] {
             5,

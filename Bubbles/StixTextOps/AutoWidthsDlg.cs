@@ -40,6 +40,8 @@ namespace Bubbles
                     num.Value = chars[i];
                 else
                     num.Value = lengths[i++];
+
+                if (Utils.scalingFactor == 1) { num.Width += 4; }
             }
             i = 0;
             foreach (CheckBox ch in this.Controls.OfType<CheckBox>())

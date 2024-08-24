@@ -47,11 +47,11 @@
             this.linkDeleteAllPositions = new System.Windows.Forms.LinkLabel();
             this.listPositions = new System.Windows.Forms.ListBox();
             this.panelControls = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pRefresh = new System.Windows.Forms.PictureBox();
             this.pDraw = new System.Windows.Forms.PictureBox();
             this.p1 = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.btnClose)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnHelp)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -59,10 +59,10 @@
             this.tabBookmarks.SuspendLayout();
             this.tabNavigation.SuspendLayout();
             this.panelControls.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pRefresh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pDraw)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // listBookmarks
@@ -102,7 +102,7 @@
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClose.Image = ((System.Drawing.Image)(resources.GetObject("btnClose.Image")));
-            this.btnClose.Location = new System.Drawing.Point(211, 1);
+            this.btnClose.Location = new System.Drawing.Point(217, 1);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(16, 16);
             this.btnClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -115,7 +115,7 @@
             this.btnHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnHelp.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnHelp.Image = ((System.Drawing.Image)(resources.GetObject("btnHelp.Image")));
-            this.btnHelp.Location = new System.Drawing.Point(191, 1);
+            this.btnHelp.Location = new System.Drawing.Point(197, 1);
             this.btnHelp.Name = "btnHelp";
             this.btnHelp.Size = new System.Drawing.Size(16, 16);
             this.btnHelp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -136,7 +136,7 @@
             this.tabControl1.Location = new System.Drawing.Point(1, 20);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(230, 117);
+            this.tabControl1.Size = new System.Drawing.Size(242, 117);
             this.tabControl1.TabIndex = 82;
             this.tabControl1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabControl1_DrawItem);
             // 
@@ -150,7 +150,7 @@
             this.tabMain.Location = new System.Drawing.Point(4, 24);
             this.tabMain.Name = "tabMain";
             this.tabMain.Padding = new System.Windows.Forms.Padding(3);
-            this.tabMain.Size = new System.Drawing.Size(222, 89);
+            this.tabMain.Size = new System.Drawing.Size(234, 89);
             this.tabMain.TabIndex = 0;
             this.tabMain.Text = "Main Topics";
             // 
@@ -178,7 +178,7 @@
             this.listMainTopics.ItemHeight = 15;
             this.listMainTopics.Location = new System.Drawing.Point(1, 16);
             this.listMainTopics.Name = "listMainTopics";
-            this.listMainTopics.Size = new System.Drawing.Size(222, 73);
+            this.listMainTopics.Size = new System.Drawing.Size(234, 73);
             this.listMainTopics.TabIndex = 1;
             this.listMainTopics.SelectedIndexChanged += new System.EventHandler(this.listMainTopics_SelectedIndexChanged);
             // 
@@ -279,8 +279,19 @@
             this.panelControls.Controls.Add(this.btnClose);
             this.panelControls.Location = new System.Drawing.Point(1, 1);
             this.panelControls.Name = "panelControls";
-            this.panelControls.Size = new System.Drawing.Size(230, 18);
+            this.panelControls.Size = new System.Drawing.Size(236, 18);
             this.panelControls.TabIndex = 83;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(1, 1);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 87;
+            this.pictureBox1.TabStop = false;
             // 
             // pRefresh
             // 
@@ -310,7 +321,7 @@
             // 
             this.p1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.p1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.p1.Location = new System.Drawing.Point(147, 10);
+            this.p1.Location = new System.Drawing.Point(153, 10);
             this.p1.Name = "p1";
             this.p1.Size = new System.Drawing.Size(3, 16);
             this.p1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -323,31 +334,19 @@
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblTitle.Location = new System.Drawing.Point(25, 1);
+            this.lblTitle.Location = new System.Drawing.Point(20, 1);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(107, 15);
             this.lblTitle.TabIndex = 83;
             this.lblTitle.Text = "Map Navigation";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(1, 1);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 87;
-            this.pictureBox1.TabStop = false;
-            // 
             // MapNavigatorDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(232, 138);
+            this.ClientSize = new System.Drawing.Size(238, 138);
             this.Controls.Add(this.panelControls);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -365,10 +364,10 @@
             this.tabNavigation.PerformLayout();
             this.panelControls.ResumeLayout(false);
             this.panelControls.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pRefresh)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pDraw)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }

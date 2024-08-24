@@ -193,7 +193,7 @@
             // 
             // numUpDown
             // 
-            this.numUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numUpDown.Location = new System.Drawing.Point(231, 5);
             this.numUpDown.Minimum = new decimal(new int[] {
             1,
@@ -201,7 +201,7 @@
             0,
             0});
             this.numUpDown.Name = "numUpDown";
-            this.numUpDown.Size = new System.Drawing.Size(30, 21);
+            this.numUpDown.Size = new System.Drawing.Size(30, 20);
             this.numUpDown.TabIndex = 101;
             this.numUpDown.Tag = "1";
             this.numUpDown.Value = new decimal(new int[] {
@@ -212,11 +212,10 @@
             // 
             // TopicText
             // 
-            this.TopicText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TopicText.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TopicText.Location = new System.Drawing.Point(158, 5);
-            this.TopicText.Multiline = true;
             this.TopicText.Name = "TopicText";
-            this.TopicText.Size = new System.Drawing.Size(70, 21);
+            this.TopicText.Size = new System.Drawing.Size(70, 20);
             this.TopicText.TabIndex = 102;
             this.TopicText.Tag = "1";
             this.TopicText.WordWrap = false;

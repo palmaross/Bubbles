@@ -278,7 +278,8 @@ namespace Bubbles
             }
             else // Select appropiate node
             {
-                if ((wbItem)tp.Controls.OfType<WebBrowser>().First().Tag != null)
+                if (tp.Controls.OfType<WebBrowser>().Count() > 0 && 
+                    (wbItem)tp.Controls.OfType<WebBrowser>().First().Tag != null)
                 {
                     TreeNode node = ((wbItem)tp.Controls.OfType<WebBrowser>().First().Tag).Node;
                     listTopics.SelectedNode = node;
