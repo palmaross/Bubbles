@@ -38,9 +38,11 @@
             this.pHelp = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pClose)).BeginInit();
             this.panelHead.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pHelp)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // rbtnContains
@@ -106,6 +108,7 @@
             // panelHead
             // 
             this.panelHead.BackColor = System.Drawing.Color.Moccasin;
+            this.panelHead.Controls.Add(this.pictureBox1);
             this.panelHead.Controls.Add(this.pHelp);
             this.panelHead.Controls.Add(this.lblTitle);
             this.panelHead.Controls.Add(this.pClose);
@@ -131,11 +134,22 @@
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.lblTitle.Location = new System.Drawing.Point(1, 2);
+            this.lblTitle.Location = new System.Drawing.Point(20, 2);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(89, 13);
             this.lblTitle.TabIndex = 5;
             this.lblTitle.Text = "Search Topics";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(1, 1);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 7;
+            this.pictureBox1.TabStop = false;
             // 
             // SearchTextDlg
             // 
@@ -156,6 +170,7 @@
             this.panelHead.ResumeLayout(false);
             this.panelHead.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pHelp)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -172,5 +187,6 @@
         private System.Windows.Forms.PictureBox pHelp;
         private System.Windows.Forms.HelpProvider helpProvider1;
         public System.Windows.Forms.ListBox listTopics;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

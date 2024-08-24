@@ -83,7 +83,7 @@
             // 
             this.txtTopicText.Location = new System.Drawing.Point(79, 48);
             this.txtTopicText.Name = "txtTopicText";
-            this.txtTopicText.Size = new System.Drawing.Size(237, 20);
+            this.txtTopicText.Size = new System.Drawing.Size(240, 20);
             this.txtTopicText.TabIndex = 1;
             this.txtTopicText.TextChanged += new System.EventHandler(this.txtTopicText_TextChanged);
             this.txtTopicText.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtTopicText_KeyUp);
@@ -93,7 +93,7 @@
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(241, 368);
+            this.btnClose.Location = new System.Drawing.Point(245, 368);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 20;
@@ -121,7 +121,7 @@
             this.panelNewTemplate.Controls.Add(this.lblTemplateName);
             this.panelNewTemplate.Location = new System.Drawing.Point(12, 49);
             this.panelNewTemplate.Name = "panelNewTemplate";
-            this.panelNewTemplate.Size = new System.Drawing.Size(304, 96);
+            this.panelNewTemplate.Size = new System.Drawing.Size(308, 96);
             this.panelNewTemplate.TabIndex = 31;
             this.panelNewTemplate.Visible = false;
             // 
@@ -209,7 +209,7 @@
             this.cbTemplates.FormattingEnabled = true;
             this.cbTemplates.Location = new System.Drawing.Point(11, 11);
             this.cbTemplates.Name = "cbTemplates";
-            this.cbTemplates.Size = new System.Drawing.Size(228, 21);
+            this.cbTemplates.Size = new System.Drawing.Size(232, 21);
             this.cbTemplates.Sorted = true;
             this.cbTemplates.TabIndex = 28;
             this.cbTemplates.SelectedIndexChanged += new System.EventHandler(this.cbTemplates_SelectedIndexChanged);
@@ -221,7 +221,7 @@
             this.grAdd.Controls.Add(this.Subtopic);
             this.grAdd.Location = new System.Drawing.Point(11, 307);
             this.grAdd.Name = "grAdd";
-            this.grAdd.Size = new System.Drawing.Size(304, 51);
+            this.grAdd.Size = new System.Drawing.Size(308, 51);
             this.grAdd.TabIndex = 35;
             this.grAdd.TabStop = false;
             this.grAdd.Text = "Добавить";
@@ -230,7 +230,7 @@
             // 
             this.NextTopic.ImageKey = "cpAddTopic.png";
             this.NextTopic.ImageList = this.imageList1;
-            this.NextTopic.Location = new System.Drawing.Point(93, 18);
+            this.NextTopic.Location = new System.Drawing.Point(95, 18);
             this.NextTopic.Name = "NextTopic";
             this.NextTopic.Size = new System.Drawing.Size(104, 24);
             this.NextTopic.TabIndex = 20;
@@ -250,9 +250,9 @@
             // 
             this.TopicBefore.ImageKey = "cpAddBefore.png";
             this.TopicBefore.ImageList = this.imageList1;
-            this.TopicBefore.Location = new System.Drawing.Point(200, 18);
+            this.TopicBefore.Location = new System.Drawing.Point(199, 18);
             this.TopicBefore.Name = "TopicBefore";
-            this.TopicBefore.Size = new System.Drawing.Size(103, 24);
+            this.TopicBefore.Size = new System.Drawing.Size(108, 24);
             this.TopicBefore.TabIndex = 19;
             this.TopicBefore.Text = "Topic Before";
             this.TopicBefore.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -265,7 +265,7 @@
             this.Subtopic.ImageList = this.imageList1;
             this.Subtopic.Location = new System.Drawing.Point(6, 18);
             this.Subtopic.Name = "Subtopic";
-            this.Subtopic.Size = new System.Drawing.Size(84, 24);
+            this.Subtopic.Size = new System.Drawing.Size(88, 24);
             this.Subtopic.TabIndex = 18;
             this.Subtopic.TabStop = true;
             this.Subtopic.Text = "Subtopic";
@@ -301,7 +301,7 @@
             this.grTemplate.Controls.Add(this.rbtnUseIncrement);
             this.grTemplate.Location = new System.Drawing.Point(11, 79);
             this.grTemplate.Name = "grTemplate";
-            this.grTemplate.Size = new System.Drawing.Size(304, 54);
+            this.grTemplate.Size = new System.Drawing.Size(308, 54);
             this.grTemplate.TabIndex = 38;
             this.grTemplate.TabStop = false;
             this.grTemplate.Text = "Шаблон:";
@@ -321,7 +321,7 @@
             this.txtCustom.Location = new System.Drawing.Point(11, 139);
             this.txtCustom.Multiline = true;
             this.txtCustom.Name = "txtCustom";
-            this.txtCustom.Size = new System.Drawing.Size(304, 156);
+            this.txtCustom.Size = new System.Drawing.Size(308, 156);
             this.txtCustom.TabIndex = 39;
             this.txtCustom.Visible = false;
             // 
@@ -329,7 +329,7 @@
             // 
             this.Rename.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Rename.Image = ((System.Drawing.Image)(resources.GetObject("Rename.Image")));
-            this.Rename.Location = new System.Drawing.Point(270, 11);
+            this.Rename.Location = new System.Drawing.Point(274, 11);
             this.Rename.Name = "Rename";
             this.Rename.Size = new System.Drawing.Size(20, 20);
             this.Rename.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -341,7 +341,7 @@
             // 
             this.Delete.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Delete.Image = ((System.Drawing.Image)(resources.GetObject("Delete.Image")));
-            this.Delete.Location = new System.Drawing.Point(295, 11);
+            this.Delete.Location = new System.Drawing.Point(299, 11);
             this.Delete.Name = "Delete";
             this.Delete.Size = new System.Drawing.Size(20, 20);
             this.Delete.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -353,7 +353,7 @@
             // 
             this.New.Cursor = System.Windows.Forms.Cursors.Hand;
             this.New.Image = ((System.Drawing.Image)(resources.GetObject("New.Image")));
-            this.New.Location = new System.Drawing.Point(245, 11);
+            this.New.Location = new System.Drawing.Point(249, 11);
             this.New.Name = "New";
             this.New.Size = new System.Drawing.Size(20, 20);
             this.New.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -388,13 +388,13 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(328, 401);
+            this.ClientSize = new System.Drawing.Size(332, 401);
+            this.Controls.Add(this.txtCustom);
             this.Controls.Add(this.lblSaved);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.Rename);
             this.Controls.Add(this.Delete);
             this.Controls.Add(this.New);
-            this.Controls.Add(this.txtCustom);
             this.Controls.Add(this.p1);
             this.Controls.Add(this.cbTemplates);
             this.Controls.Add(this.btnAddTopics);

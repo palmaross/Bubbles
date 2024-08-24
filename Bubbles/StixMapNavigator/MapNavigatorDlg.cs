@@ -34,8 +34,6 @@ namespace Bubbles
             toolTip1.SetToolTip(btnHelp, Utils.getString("button.help"));
             toolTip1.SetToolTip(pRefresh, Utils.getString("MapNavigatorDlg.refresh"));
 
-            //tabNavigation.ima
-
             // ListBox item context menu
             contextMenuStrip = new ContextMenuStrip();
 
@@ -65,6 +63,10 @@ namespace Bubbles
             listBookmarks.DrawItem += listBookmarks_DrawItem;
             listPositions.DrawItem += listBookmarks_DrawItem;
 
+            if (Utils.scalingFactor == 1)
+            {
+                tabControl1.Width -= 1; tabControl1.Height -= 1;
+            }
             this.Paint += BookmarkListDlg_Paint; // paint the border
 
             Init();

@@ -53,7 +53,7 @@
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(0, 0);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(300, 147);
+            this.listBox1.Size = new System.Drawing.Size(310, 147);
             this.listBox1.TabIndex = 0;
             // 
             // panelIncrement
@@ -65,7 +65,7 @@
             this.panelIncrement.Controls.Add(this.lblStart);
             this.panelIncrement.Controls.Add(this.numStart);
             this.panelIncrement.Cursor = System.Windows.Forms.Cursors.Default;
-            this.panelIncrement.Location = new System.Drawing.Point(251, 1);
+            this.panelIncrement.Location = new System.Drawing.Point(261, 1);
             this.panelIncrement.Name = "panelIncrement";
             this.panelIncrement.Size = new System.Drawing.Size(46, 113);
             this.panelIncrement.TabIndex = 1;
@@ -143,13 +143,13 @@
             this.panelMore.Controls.Add(this.chBoxNumPosition);
             this.panelMore.Location = new System.Drawing.Point(1, 113);
             this.panelMore.Name = "panelMore";
-            this.panelMore.Size = new System.Drawing.Size(296, 31);
+            this.panelMore.Size = new System.Drawing.Size(306, 31);
             this.panelMore.TabIndex = 2;
             this.panelMore.Visible = false;
             // 
             // numStep
             // 
-            this.numStep.Location = new System.Drawing.Point(99, 8);
+            this.numStep.Location = new System.Drawing.Point(99, 10);
             this.numStep.Minimum = new decimal(new int[] {
             99,
             0,
@@ -168,7 +168,7 @@
             // lblStep
             // 
             this.lblStep.AutoSize = true;
-            this.lblStep.Location = new System.Drawing.Point(3, 11);
+            this.lblStep.Location = new System.Drawing.Point(3, 10);
             this.lblStep.Name = "lblStep";
             this.lblStep.Size = new System.Drawing.Size(94, 13);
             this.lblStep.TabIndex = 15;
@@ -187,7 +187,7 @@
             // 
             // p1
             // 
-            this.p1.Location = new System.Drawing.Point(251, 1);
+            this.p1.Location = new System.Drawing.Point(261, 1);
             this.p1.Name = "p1";
             this.p1.Size = new System.Drawing.Size(16, 16);
             this.p1.TabIndex = 37;
@@ -203,7 +203,7 @@
             this.Controls.Add(this.panelIncrement);
             this.Controls.Add(this.listBox1);
             this.Name = "TopicTemplatePreview";
-            this.Size = new System.Drawing.Size(300, 147);
+            this.Size = new System.Drawing.Size(310, 147);
             this.panelIncrement.ResumeLayout(false);
             this.panelIncrement.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numFinish)).EndInit();

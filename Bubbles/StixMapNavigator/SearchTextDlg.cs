@@ -34,7 +34,8 @@ namespace Bubbles
 
             if (Utils.scalingFactor == 1)
             {
-                listTopics.Width -= 1; listTopics.Height -= 1;
+                listTopics.Width -= 2; listTopics.Height -= 2;
+                txtSearch.Location = new Point(txtSearch.Location.X - 2, txtSearch.Location.Y - 1);
             }
         }
 
