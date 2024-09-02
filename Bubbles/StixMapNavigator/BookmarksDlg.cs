@@ -45,7 +45,7 @@ namespace Bubbles
             imageList1.Images.Add(img2);
             imageList1.Images.Add(img3);
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Bookmarks"))
             {
                 DataTable dt = db.ExecuteQuery("select * from BOOKMARKGROUPS order by name");
 
@@ -114,7 +114,7 @@ namespace Bubbles
 
             string action = btnAction.Tag.ToString();
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Bookmarks"))
             {
 
                 if (action == "addgroup" || action == "renamegroup")
@@ -402,7 +402,7 @@ namespace Bubbles
                     return;
             }
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Bookmarks"))
             {
                 db.ExecuteNonQuery("delete from BOOKMARKS where groupID=" + gn.ID + "");
                 db.ExecuteNonQuery("delete from BOOKMARKGROUPS where id=" + gn.ID + "");
@@ -427,7 +427,7 @@ namespace Bubbles
             {
                 treeView1.SelectedNode.Remove();
 
-                using (StixDB db = new StixDB())
+                using (StixDB db = new StixDB("Bookmarks"))
                 {
                     db.ExecuteNonQuery("delete from BOOKMARKS where groupID=" + bn.GroupID + 
                         " and name=`" + bn.BookmarkName + "`");

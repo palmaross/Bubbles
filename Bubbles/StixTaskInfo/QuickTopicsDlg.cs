@@ -59,7 +59,7 @@ namespace Bubbles
                     if (MessageBox.Show(Utils.getString("TaskTemplateDlg.deletegroup.question"), "",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
-                        using (StixDB db = new StixDB())
+                        using (StixDB db = new StixDB("QuickTopics"))
                         {
                             db.ExecuteNonQuery("delete from QUICKTOPICTEMPLATES " +
                                 "where groupID=" + (int)treeView1.SelectedNode.Tag + "");
@@ -75,7 +75,7 @@ namespace Bubbles
                     if (MessageBox.Show(Utils.getString("TaskTemplateDlg.delete.question"), "",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
-                        using (StixDB db = new StixDB())
+                        using (StixDB db = new StixDB("QuickTopics"))
                         {
                             db.ExecuteNonQuery("delete from QUICKTOPICTEMPLATES " +
                                 "where id=" + ((QuickTopicItem)treeView1.SelectedNode.Tag).ID + "");
@@ -109,7 +109,7 @@ namespace Bubbles
             TreeNode selected = treeView1.SelectedNode;
             bool group = selected.Parent == null;
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("QuickTopics"))
             {
                 if (group)
                 {
@@ -285,7 +285,7 @@ namespace Bubbles
                     {
                         if (!copy) draggedNode.Remove();
 
-                        using (StixDB db = new StixDB())
+                        using (StixDB db = new StixDB("QuickTopics"))
                         {
                             if (GroupIsDragged)
                             {
@@ -350,7 +350,7 @@ namespace Bubbles
                 }
             }
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("QuickTopics"))
             {
                 int i = 1;
 

@@ -36,7 +36,7 @@ namespace Bubbles
                 panelSave.Visible = true;
                 lblCount.Visible = false;
 
-                using (StixDB db = new StixDB())
+                using (StixDB db = new StixDB("Audio"))
                 {
                     DataTable dt = db.ExecuteQuery("select * from AUDIOGROUPS order by name");
                     foreach (DataRow row in dt.Rows)
@@ -80,6 +80,18 @@ namespace Bubbles
         private void btnSave_Click(object sender, EventArgs e)
         {
             string filename = txtName.Text.Trim();
+            string outputFolder = Utils.m_dataPath + "SoundDB";
+            DirectoryInfo di = new DirectoryInfo(outputFolder);
+
+            foreach (FileInfo fi in di.GetFiles())
+            {
+                if (Path.GetFileNameWithoutExtension(fi.Name.ToLower()) == filename.ToLower())
+                {
+                    if (MessageBox.Show(Utils.getString("OmniSound.recordexists"), "",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning) == DialogResult.No)
+                        return;
+                }
+            }
 
             if (!(MMUtils.SelectedTopic() is Topic _t)) return;
             if (filename == "") return;
@@ -105,7 +117,7 @@ namespace Bubbles
             string name = txtGroupName.Text.Trim();
             if (name == "") return;
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Audio"))
             {
                 DataTable dt = db.ExecuteQuery("select * from AUDIOGROUPS where name=`" + name + "`");
                 if (dt.Rows.Count > 0)

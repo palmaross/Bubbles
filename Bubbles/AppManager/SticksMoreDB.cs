@@ -3,7 +3,7 @@ using System;
 
 namespace Bubbles
 {
-    internal class SticksMoreDB : DatabaseWrapper
+    internal class SticksMoreDB : DatabaseWrapper2
     {
         public override string ToString() => "StixMore Database";
 

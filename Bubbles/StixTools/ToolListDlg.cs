@@ -25,7 +25,7 @@ namespace Bubbles
 
             imageList1.ImageSize = imageSize.Size;
 
-            imageList1.Images.Add("audio", Image.FromFile(Utils.ImagesPath + "audio.ico"));
+            imageList1.Images.Add("Audio", Image.FromFile(Utils.ImagesPath + "audio.ico"));
             imageList1.Images.Add("exe", Image.FromFile(Utils.ImagesPath + "ms_exe.png"));
             imageList1.Images.Add("file", Image.FromFile(Utils.ImagesPath + "ms_file.png"));
             imageList1.Images.Add("image", Image.FromFile(Utils.ImagesPath + "ms_img.png"));

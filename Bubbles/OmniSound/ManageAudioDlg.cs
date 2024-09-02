@@ -137,7 +137,7 @@ namespace Bubbles
 
         void Init()
         {
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Audio"))
             {
                 DataTable dt = db.ExecuteQuery("select * from AUDIOGROUPS");
                 foreach (DataRow row in dt.Rows)
@@ -263,7 +263,7 @@ namespace Bubbles
             {
                 int id = Convert.ToInt32(dgv.Rows[e.RowIndex].Cells["ID"].Value);
 
-                using (StixDB db = new StixDB())
+                using (StixDB db = new StixDB("Audio"))
                 {
                     if (column == "AudioTitle")
                         db.ExecuteNonQuery("update AUDIOS " +
@@ -272,6 +272,9 @@ namespace Bubbles
                         db.ExecuteNonQuery("update AUDIOS " +
                             "set maptitle=`" + cellNewValue + "` where id=" + id);
                 }
+
+                if (StixMain.m_OmniSound != null && StixMain.m_OmniSound.Visible)
+                    StixMain.m_OmniSound.InitAudioFiles();
             }
             cellOldValue = "";
         }
@@ -317,7 +320,7 @@ namespace Bubbles
             
             int groupID = ag.ID;
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Audio"))
             {
                 db.ExecuteNonQuery("delete from AUDIOGROUPS where id=" + groupID + "");
                 db.ExecuteNonQuery("delete from AUDIOS where groupID=" + groupID + "");
@@ -339,7 +342,7 @@ namespace Bubbles
             AudioGroup ag = cbGroupsManage.SelectedItem as AudioGroup;
 
             string _name = Utils.VS(name);
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Audio"))
             {
                 DataTable dt = db.ExecuteQuery("select * from AUDIOGROUPS where name=`" + name + "`");
                 if (dt.Rows.Count > 0)
@@ -407,7 +410,7 @@ namespace Bubbles
             int groupID = (cbGroups.SelectedItem as AudioGroup).ID;
             string title = Path.GetFileNameWithoutExtension(path);
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Audio"))
             {
                 db.AddAudio(title, path, "", "", "", groupID);
 
@@ -449,7 +452,7 @@ namespace Bubbles
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Audio"))
             {
                 foreach (DataGridViewRow row in dgv.SelectedRows)
                 {
@@ -481,6 +484,10 @@ namespace Bubbles
 
         private void dgv_DoubleClick(object sender, EventArgs e)
         {
+            if (dgv.SelectedRows[0].Cells["AudioTitle"].IsInEditMode ||
+                dgv.SelectedRows[0].Cells["MapTitle"].IsInEditMode)
+                return;
+
             btnPlay_Click(null, null);
         }
 

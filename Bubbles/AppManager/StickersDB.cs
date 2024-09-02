@@ -2,7 +2,7 @@
 
 namespace Bubbles
 {
-    internal class StickersDB : DatabaseWrapper
+    internal class StickersDB : DatabaseWrapper2
     {
         public override string ToString() => "Stickers Database";
 

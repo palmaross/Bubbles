@@ -46,7 +46,7 @@ namespace Bubbles
         private void btnSave_Click(object sender, EventArgs e)
         {
             stixwidths.Clear();
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Misc"))
             {
                 db.ExecuteNonQuery("update TOPICWIDTHS set " +
                     "_value=" + numMainWidth.Value +

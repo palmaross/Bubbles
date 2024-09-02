@@ -255,6 +255,7 @@ namespace Bubbles
             btnPlay.Location = btnPause.Location;
             btnPause.Visible = false;
             lblClock.Text = "00:00 / 00:00";
+            tbTrack.Value = 0;
             lblTitle.Visible = true; lblTitle.Text = ""; lblTitle.BringToFront();
             pVolume.Visible = true;
         }
@@ -388,7 +389,7 @@ namespace Bubbles
                 if (path.Contains(Utils.m_dataPath + "SoundDB"))
                     path = System.IO.Path.GetFileName(path);
 
-                using (StixDB db = new StixDB())
+                using (StixDB db = new StixDB("Audio"))
                 {
                     DataTable dt = db.ExecuteQuery("select * from AUDIOS where path=`" + path + "`");
                     if (dt.Rows.Count > 0 &&

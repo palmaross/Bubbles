@@ -482,13 +482,13 @@ namespace Bubbles
 
         private void Stickers_MouseClick(object sender, MouseEventArgs e)
         {
-            StickerDummy form = new StickerDummy(
-                new StickerItem(0, "\nHello!", "#515151", "#B9B9F9", "Verdana", 9, 0, "0",
-                "hello1.png:" +
-                StickerDummy.DummyStickerImageX + ":" + StickerDummy.DummyStickerImageY + ":" +
-                Stickers.Width + ":" + Stickers.Height, "center", "sticker"), new Point(0, 0));
+            //StickerDummy form = new StickerDummy(
+            //    new StickerItem(0, "\nHello!", "#515151", "#B9B9F9", "Verdana", 9, 0, "0",
+            //    "hello1.png:" +
+            //    StickerDummy.DummyStickerImageX + ":" + StickerDummy.DummyStickerImageY + ":" +
+            //    Stickers.Width + ":" + Stickers.Height, "center", "sticker"), new Point(0, 0));
 
-            form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            //form.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -590,8 +590,8 @@ namespace Bubbles
                     form = new StixAddTopic(id, orientation, name); break;
                 case StixUtils.typetextops:
                     form = new StixTextOps(id, orientation, name); break;
-                case StixUtils.typeorganizer:
-                    form = new StixOrganizer(id, orientation, name); break;
+                //case StixUtils.typeorganizer:
+                //    form = new StixOrganizer(id, orientation, name); break;
             }
 
             form.Location = GetStickLocation(location, form.Size);
@@ -661,12 +661,12 @@ namespace Bubbles
 
             if (id == 0) // The very first stick
             {
-                using (StixDB db = new StixDB())
+                using (StixDB db = new StixDB("Stix"))
                 {
                     // create "My Icons" stick
                     name = Utils.getString(type + ".tooltip");
                     id = Utils.GetRandom();
-                    db.AddStix(id, name, type, 0, "H", "");
+                    db.AddStix(name, type, 0, "H", "");
                 }
             }
             return 1;
@@ -682,7 +682,7 @@ namespace Bubbles
         /// </returns>
         private int GetStick(string type, int id, ref string location, ref string orientation, ref string name)
         {
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Stix"))
             {
                 DataTable dt;
                 if (id != 0)
@@ -735,7 +735,7 @@ namespace Bubbles
             ContextMenuStrip cms = new ContextMenuStrip();
             cms.ShowImageMargin = false;
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Stix"))
             {
                 DataTable dt = db.ExecuteQuery("select * from STIX where type=`" + type + "`");
 

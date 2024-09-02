@@ -58,7 +58,7 @@ namespace Bubbles
             List<int> mwidths = new List<int>();
             Dictionary<int, int> awidths = new Dictionary<int, int>();
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Misc"))
             {
                 db.ExecuteNonQuery("update TOPICWIDTHS set " +
                     "chars=" + numChars1.Value + ", " +

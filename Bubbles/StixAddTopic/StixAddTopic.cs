@@ -118,7 +118,7 @@ namespace Bubbles
             
             ToolStripItem tsi = null;
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("AddTopics"))
             {
                 DataTable dt = db.ExecuteQuery("select * from ADDTOPIC_TEMPLATES order by templateName");
 

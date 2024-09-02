@@ -14,6 +14,8 @@ using Image = System.Drawing.Image;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Data;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+using System.Security.Cryptography;
 
 namespace Bubbles
 {
@@ -72,6 +74,8 @@ namespace Bubbles
 
             try
             {
+                if (!Directory.Exists(m_dataPath + "Databases"))
+                    Directory.CreateDirectory(m_dataPath + "Databases");
                 if (!Directory.Exists(m_dataPath + "IconDB"))
                     Directory.CreateDirectory(m_dataPath + "IconDB");
                 if (!Directory.Exists(m_dataPath + "FaviconDB"))
@@ -131,7 +135,153 @@ namespace Bubbles
 
             scalingFactor = ScalingFactor.GetScalingFactor();
 
+            InitDatabases();
             InitStartedMaps();
+        }
+
+        static void InitDatabases()
+        {
+            string dbPath = m_dataPath + "Databases\\";
+            int iconStixId = 1, toolStixId = 3;
+
+            if (!File.Exists(dbPath + "Stix.db"))
+            {
+                Random r = new Random();
+                
+                using (StixDB db = new StixDB("Stix"))
+                {
+                    db.AddStix(getString("StixIcons.tooltip"), StixUtils.typeicons, 0, "H", "");
+                    db.AddStix(getString("StixTaskInfo.tooltip"), StixUtils.typetaskinfo, 0, "H", "");
+                    db.AddStix(getString("StixTools.tooltip"), StixUtils.typetools, 0, "H", "");
+                    db.AddStix(getString("StixMapNavigator.tooltip"), StixUtils.typemapnavigator, 0, "H", "");
+                    db.AddStix(getString("StixAddTopic.tooltip"), StixUtils.typeaddtopic, 0, "H", "");
+                    db.AddStix(getString("StixTextOps.tooltip"), StixUtils.typetextops, 0, "H", "");
+                    db.AddStix(getString("StixFormat.tooltip"), StixUtils.typeformat, 0, "H", "");
+                }
+            }
+            else
+            {
+                using (StixDB db = new StixDB("Stix"))
+                {
+                    DataTable dt = db.ExecuteQuery("select * from STIX");
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        switch (dr["type"].ToString())
+                        {
+                            case StixUtils.typeicons:
+                                if (iconStixId == 0) iconStixId = Convert.ToInt32(dr["id"]); break;
+                        }
+                    }
+                }
+            }
+
+            if (!File.Exists(dbPath + "Icons.db"))
+            {
+                using (StixDB db = new StixDB("Icons"))
+                {
+                    db.AddIcon(getString("icons.firststick.icon1"), "stockexclamation-mark", 1, iconStixId);
+                    db.AddIcon(getString("icons.firststick.icon2"), "stockquestion-mark", 2, iconStixId);
+                }
+            }
+
+            if (!File.Exists(dbPath + "Links.db"))
+            {
+                using (StixDB db = new StixDB("Links"))
+                {
+                    db.AddLinkGroup(getString("LinksDlg.commongroup"), 0, 1);
+                    db.AddLinkGroup("Group 1", 0, 2);
+                    db.AddLinkGroup("Group 1.1", 2, 1);
+                    db.AddLinkGroup("Group 1.2", 2, 2);
+
+#if VENDOR_OL
+                    db.AddLink(getString("tools.demo1.title"), "http://www.olympic-limited.co.uk/", "http", "", "", 1);
+#else
+                    db.AddLink(getString("tools.demo1.title"), "https://palmaross.com/", "http", "", "", 1);
+#endif
+                    db.AddLink(getString("tools.demo2.title"), dllPath + "OmniStix.chm", "chm", "", "", 1);
+                    db.AddLink(getString("tools.demo4.title"), "https://www.youtube.com/watch?v=U92A8H2rK2I", "youtube", "", "", 1);
+                }
+            }
+
+            if (!File.Exists(dbPath + "Tools.db"))
+            {
+                using (StixDB db = new StixDB("Tools"))
+                {
+                    // Add to ToolStix
+                    db.AddTool(getString("tools.demo2.title"), "", dllPath + "OmniStix.chm", "chm", 2, toolStixId);
+                    db.AddTool(getString("tools.notepad"), "", "WT_Microsoft.WindowsNotepad_8wekyb3d8bbwe!App", "tool-winnotepad.png", 3, toolStixId);
+                    // Add to ToolDB
+                    db.AddTool(getString("tools.closeall"), getString("tools.closeall.tooltip"), "OT_CloseAll", "tool-closemaps.png", 0, 0);
+                    db.AddTool(getString("tools.saveall"), getString("tools.saveall.tooltip"), "OT_SaveAll", "tool-saveall.png", 0, 0);
+                    db.AddTool(getString("tools.readonlytopic"), getString("tools.readonlytopic.tooltip"),
+                        "read-only-topic.mmbas", "tool-locktopic.png", 0, 0);
+                }
+            }
+
+            if (!File.Exists(dbPath + "Resources.db"))
+            {
+                using (StixDB db = new StixDB("Resources"))
+                {
+                    db.AddResourceGroup(getString("taskinfo.database.resourcegroup1"));
+                    db.AddResourceGroup(getString("taskinfo.database.resourcegroup2"));
+                    db.AddResource(getString("taskinfo.database.resources.res1"), "", 1);
+                    db.AddResource(getString("taskinfo.database.resources.res2"), "", 1);
+                    db.AddResource(getString("taskinfo.database.resources.res3"), "#ff80ff80", 2);
+                    db.AddResource(getString("taskinfo.database.resources.res4"), "#ffffff80", 2);
+                }
+            }
+
+            if (!File.Exists(dbPath + "Audio.db"))
+            {
+                using (StixDB db = new StixDB("Audio"))
+                    db.AddAudioGroup(getString("OmniSound.defaultgroup"));
+            }
+
+            if (!File.Exists(dbPath + "Bookmarks.db"))
+            {
+                using (StixDB db = new StixDB("Bookmarks"))
+                    db.AddBookmarkGroup(Utils.getString("BookmarksDlg.defaultgroup"));
+            }
+
+            if (!File.Exists(dbPath + "QuickTopics.db"))
+            {
+                using (StixDB db = new StixDB("QuickTopics"))
+                {
+                    db.AddQuickTopicGroup(getString("quicktopic.favorites"), 1);
+                    db.AddQuickTopicTemplate(getString("quicktask.template.default"), 1, 1, "", "checked:0", "", "checked:checked$$$rel:today:1;rel:today:1", "", "", "", "", "");
+                    db.AddQuickTopicTemplate(getString("quicktask.template.important"), 1, 2, "", "", "checked:1", "checked:checked$$$rel:today:1;rel:today:1", "", "", "", "", "");
+                    db.AddQuickTopicTemplate(getString("quicktask.template.completed"), 1, 3, "", "checked:100", "", ":checked$$$;rel:today:1", "", "", "", "", "");
+                }
+            }
+
+            if (!File.Exists(dbPath + "AddTopics.db"))
+            {
+                using (StixDB db = new StixDB("AddTopics"))
+                {
+
+                    // Add ADDTOPIC_TEMPLATES
+                    db.AddPattern(getString("Template.Day"), getString("Template.Day") + " ", "increment###1,10,1,end", "subtopic");
+                    db.AddPattern(getString("Template.Month"), getString("Template.January") + " ", "increment###1,31,1,end", "subtopic");
+                    db.AddPattern(getString("Template.Task"), getString("Template.Task") + " ", "increment###1,5,1,end", "subtopic");
+                    db.AddPattern(getString("Template.WeekDays"), "", getString("Template.WeekDays.lang"), "subtopic");
+                }
+            }
+
+            if (!File.Exists(dbPath + "Misc.db"))
+            {
+                using (StixDB db = new StixDB("Misc"))
+                {
+                    db.AddTopicWidth("numMainWidth", 0, 64, 1);
+                    // stix widths
+                    db.AddTopicWidth("numWidth1", 0, 100, 1); db.AddTopicWidth("numWidth2", 0, 120, 1);
+                    db.AddTopicWidth("numWidth3", 0, 150, 1); db.AddTopicWidth("numWidth4", 0, 180, 1);
+                    db.AddTopicWidth("numWidth5", 0, 200, 0); db.AddTopicWidth("numWidth6", 0, 200, 0);
+                    // auto widths
+                    db.AddTopicWidth("numAuto1", 500, 200, 1); db.AddTopicWidth("numAuto2", 200, 160, 1);
+                    db.AddTopicWidth("numAuto3", 150, 120, 1); db.AddTopicWidth("numAuto4", 150, 120, 0);
+                    db.AddTopicWidth("numAuto5", 150, 120, 0); db.AddTopicWidth("numAuto6", 150, 120, 0);
+                }
+            }
         }
 
         static void InitStartedMaps()
@@ -517,7 +667,7 @@ namespace Bubbles
             switch (type)
             {
                 case "html": return html;
-                case "audio": return audio;
+                case "Audio": return audio;
                 case "excel": return excel;
                 case "exe": return exe;
                 case "image": return image;
@@ -545,7 +695,7 @@ namespace Bubbles
                 return "http";
             }
             else if (Audio.Contains(ext))
-                return "audio";
+                return "Audio";
             else if (Video.Contains(ext))
                 return "video";
             else if (Word.Contains(ext))
@@ -611,61 +761,58 @@ namespace Bubbles
         public static bool FreeVersionLimitExceeded(string stix, bool message = true)
         {
             if (!IsFree()) return false;
-            string limits = ""; DataTable dt;
+            string limits = "";
 
-            using (StixDB db = new StixDB())
+            switch (stix)
             {
-                switch (stix)
-                {
-                    case StixUtils.typeOmniSound:
-                        limits = getString("limitation.omnisound");
-                        break;
-                    case StixUtils.typeicons:
-                        limits = getString("limitation.iconstix");
-                        break;
-                    case "addicon":
-                        limits = getString("limitation.addicontool");
-                        break;
-                    case StixUtils.typetaskinfo:
-                        limits = getString("limitation.taskinfo") + getString("limitation.endrestriction");
-                        break;
-                    case StixUtils.typemapnavigator:
-                        limits = getString("limitation.navigator") + getString("limitation.endrestriction");
-                        break;
-                    case "mapnavigator":
-                        limits = getString("limitation.navigator2");
-                        break;
-                    case StixUtils.typetools:
-                        limits = getString("limitation.toolstix");
-                        break;
-                    case "runtool":
-                        limits = getString("limitation.runtool");
-                        break;
-                    case StixUtils.typeaddtopic:
-                        limits = getString("limitation.topicstix") + getString("limitation.endrestriction");
-                        break;
-                    case "pastetopics":
-                        limits = getString("limitation.pastetopics");
-                        break;
-                    case StixUtils.typetextops:
-                        limits = getString("limitation.pasteoptions");
-                        break;
-                    case StixUtils.typeformat:
-                        limits = getString("limitation.formatstix");
-                        break;
-                    case "bookmarks":
-                        limits = getString("limitation.bookmarks") + getString("limitation.endrestriction");
-                        break;
-                    case "topicnoteslookin":
-                        limits = getString("limitation.topicnoteslookin");
-                        break;
-                    case "topicnotes":
-                        limits = getString("limitation.topicnotes");
-                        break;
-                    case "links":
-                        limits = getString("limitation.links");
-                        break;
-                }
+                case StixUtils.typeOmniSound:
+                    limits = getString("limitation.omnisound");
+                    break;
+                case StixUtils.typeicons:
+                    limits = getString("limitation.iconstix");
+                    break;
+                case "addicon":
+                    limits = getString("limitation.addicontool");
+                    break;
+                case StixUtils.typetaskinfo:
+                    limits = getString("limitation.taskinfo") + getString("limitation.endrestriction");
+                    break;
+                case StixUtils.typemapnavigator:
+                    limits = getString("limitation.navigator") + getString("limitation.endrestriction");
+                    break;
+                case "mapnavigator":
+                    limits = getString("limitation.navigator2");
+                    break;
+                case StixUtils.typetools:
+                    limits = getString("limitation.toolstix");
+                    break;
+                case "runtool":
+                    limits = getString("limitation.runtool");
+                    break;
+                case StixUtils.typeaddtopic:
+                    limits = getString("limitation.topicstix") + getString("limitation.endrestriction");
+                    break;
+                case "pastetopics":
+                    limits = getString("limitation.pastetopics");
+                    break;
+                case StixUtils.typetextops:
+                    limits = getString("limitation.pasteoptions");
+                    break;
+                case StixUtils.typeformat:
+                    limits = getString("limitation.formatstix");
+                    break;
+                case "bookmarks":
+                    limits = getString("limitation.bookmarks") + getString("limitation.endrestriction");
+                    break;
+                case "topicnoteslookin":
+                    limits = getString("limitation.topicnoteslookin");
+                    break;
+                case "topicnotes":
+                    limits = getString("limitation.topicnotes");
+                    break;
+                case "links":
+                    limits = getString("limitation.links");
+                    break;
             }
 
             if (message) MessageBox.Show(limits, getString("FreeVersionLimitation"), 

@@ -237,6 +237,7 @@ namespace Bubbles
             cmsResources.Items.Clear();
             ToolStripItem tsi;
 
+            // Resources from current map
             MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
             foreach (MapMarker mm in mg)
             {
@@ -270,7 +271,59 @@ namespace Bubbles
             tsi = new ToolStripLabel("");
             tsi.Font = new Font("Arial", 1);
             cmsResources.Items.Add(tsi);
-            //cmsResources.Items.Add(new ToolStripSeparator());
+            cmsResources.Items.Add(new ToolStripSeparator());
+
+            // Resources from database
+            using (StixDB db = new StixDB("Resources"))
+            {
+
+                tsi = cmsResources.Items.Add(Utils.getString("ResourcesDlg.allresources"));
+                ToolStripDropDown dd = (tsi as ToolStripMenuItem).DropDown;
+                (dd as ToolStripDropDownMenu).ShowImageMargin = false;
+                dd.ItemClicked += ContextMenu_ItemClicked;
+                
+                tsi.Font = new Font(tsi.Font, FontStyle.Italic);
+
+                DataTable dt = db.ExecuteQuery("select * from RESOURCES order by name");
+
+                List<string> resources = new List<string>();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    if (resources.Contains(dr["name"].ToString())) continue;
+
+                    resources.Add(dr["name"].ToString());
+                    var res = dd.Items.Add(dr["name"].ToString());
+                    res.Font = new Font(tsi.Font, FontStyle.Regular);
+                    res.Name = "cm_resource"; res.Tag = dr["color"].ToString();
+
+                    if (res.Tag.ToString() != "")
+                        res.BackColor = ColorTranslator.FromHtml(res.Tag.ToString());
+                }
+
+                // Fill Resource Groups
+                dt = db.ExecuteQuery("select * from RESOURCEGROUPS order by name");
+                foreach (DataRow dr in dt.Rows)
+                {
+                    tsi = cmsResources.Items.Add(dr["name"].ToString());
+                    dd = (tsi as ToolStripMenuItem).DropDown;
+                    (dd as ToolStripDropDownMenu).ShowImageMargin = false;
+                    tsi.Font = new Font(tsi.Font, FontStyle.Italic);
+                    dd.ItemClicked += ContextMenu_ItemClicked;
+
+                    DataTable _dt = db.ExecuteQuery("select * from RESOURCES " +
+                    "where groupID=" + Convert.ToInt32(dr["id"]) + " order by name");
+
+                    foreach (DataRow _dr in _dt.Rows)
+                    {
+                        var res = dd.Items.Add(_dr["name"].ToString());
+                        res.Font = new Font(tsi.Font, FontStyle.Regular);
+                        res.Name = "cm_resource"; res.Tag = _dr["color"].ToString();
+                        if (res.Tag.ToString() != "")
+                            res.BackColor = ColorTranslator.FromHtml(res.Tag.ToString());
+                    }
+                }
+            }
+
             cmsResources.Items.Add(new ToolStripSeparator());
 
             tsi = cmsResources.Items.Add(Utils.getString("taskinfo.resources.delete"));
@@ -361,7 +414,7 @@ namespace Bubbles
             cmsTaskTemplates.Items.Clear();
             ToolStripItem tsi;
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("QuickTopics"))
             {
                 // Get groups
                 DataTable dt = db.ExecuteQuery("select * from QUICKTOPICGROUPS order by _order");
@@ -548,6 +601,28 @@ namespace Bubbles
                 if (Utils.ActiveDocumentOrSelectionNull()) return;
 
                 string res = e.ClickedItem.Text;
+
+                // Check if resource exists in the map.
+                MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
+                bool found = false;
+                foreach (MapMarker _res in mg)
+                    if (_res.Label == res) { found = true; break; }
+
+                // Resource not found, add it to the map.
+                if (!found)
+                {
+                    MapMarker mmm = mg.AddResourceMarker(res);
+                    // Set color
+                    if (e.ClickedItem.Tag != null && e.ClickedItem.Tag.ToString() != "")
+                    {
+                        try
+                        {
+                            int i = int.Parse(e.ClickedItem.Tag.ToString().Substring(1), System.Globalization.NumberStyles.HexNumber);
+                            mmm.Color.SetValue(i);
+                        }
+                        catch { }
+                    }
+                }
 
                 foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
                 {

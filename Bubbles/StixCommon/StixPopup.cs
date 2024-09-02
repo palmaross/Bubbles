@@ -128,9 +128,9 @@ namespace Bubbles
                 case StixUtils.typetextops:
                     (stick as StixTextOps).Rotate();
                     break;
-                case StixUtils.typeorganizer:
-                    (stick as StixOrganizer).Rotate();
-                    break;
+                //case StixUtils.typeorganizer:
+                //    (stick as StixOrganizer).Rotate();
+                //    break;
             }
         }
 

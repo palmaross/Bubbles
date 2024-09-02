@@ -55,7 +55,7 @@ namespace Bubbles
             btnClose.Text = Utils.getString("button.close");
 
             // Fill stix list
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Stix"))
             {
                 DataTable dt = db.ExecuteQuery("select * from STIX order by type");
                 bool allselected = true;
@@ -102,7 +102,7 @@ namespace Bubbles
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Stix"))
             {
                 // Save to database starting stix
                 foreach (ListViewItem item in listRunAtStart.Items)

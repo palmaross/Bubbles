@@ -94,7 +94,7 @@ namespace Bubbles
 		public static MapMarkerGroup GetIconGroup(string groupName, string groupID = "", 
             bool aCreateNew = true, bool mutex = false, bool askuser = true)
         {
-            if (Utils.ActiveDocumentOrSelectionNull()) return null;
+            if (Utils.ActiveDocumentOrSelectionNull(false)) return null;
 
             MapMarkerGroup mgroup = null;
 
@@ -221,7 +221,7 @@ namespace Bubbles
         public static bool GetIcon(MmStockIcon aIcon, string signature, string iconName, string path,
             string groupName = "", bool mutex = false, bool addtomap = false)
         {
-            if (Utils.ActiveDocumentOrSelectionNull()) return false;
+            if (MMUtils.ActiveDocument == null) return false;
 
             foreach (MapMarkerGroup mg in MMUtils.ActiveDocument.MapMarkerGroups)
             {
@@ -300,7 +300,7 @@ namespace Bubbles
         /// <returns></returns>
         static MapMarkerGroup GetIconGroup(string groupName, bool mutex, bool createNew = false)
         {
-            if (Utils.ActiveDocumentOrSelectionNull()) return null;
+            if (MMUtils.ActiveDocument == null) return null;
 
             foreach (MapMarkerGroup mg in MMUtils.ActiveDocument.MapMarkerGroups)
             {

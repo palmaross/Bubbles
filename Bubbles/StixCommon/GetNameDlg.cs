@@ -52,7 +52,7 @@ namespace Bubbles
             }
 
             // Check if name exists
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Stix"))
             {
                 if (stick)
                 {

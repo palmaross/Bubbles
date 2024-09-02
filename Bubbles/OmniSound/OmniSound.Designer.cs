@@ -495,6 +495,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(202, 202);
+            this.Controls.Add(this.panelRecordName);
             this.Controls.Add(this.btnMore);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.cbGroups);
@@ -513,7 +514,6 @@
             this.Controls.Add(this.btnAddToTopic);
             this.Controls.Add(this.cbRecordings);
             this.Controls.Add(this.chAttachment);
-            this.Controls.Add(this.panelRecordName);
             this.Controls.Add(this.panelNewGroup);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "OmniSound";

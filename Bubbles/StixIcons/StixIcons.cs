@@ -79,7 +79,7 @@ namespace Bubbles
 
             if (ID != 0) // if id = 0 - new stick is creating, ignore this step
             {
-                using (StixDB db = new StixDB())
+                using (StixDB db = new StixDB("Icons"))
                 {
                     // Check if there is a group or no
                     DataTable dt = db.ExecuteQuery("select * from STIX where id=" + ID + "");
@@ -265,8 +265,8 @@ namespace Bubbles
 
                             if (item.FileName.StartsWith("stock"))
                                 stockicon = StockIconFromString(item.FileName);
-                            else
-                                signature = item.FileName;
+                            else {
+                                stockicon = 0; signature = item.FileName; }
 
                             MapMarkers.GetIcon(stockicon, signature, item.IconName, item.Path, 
                                 dlg.txtGroupName.Text.Trim(), dlg.cbMutEx.Checked, true);
@@ -321,7 +321,7 @@ namespace Bubbles
                     toolTip1.SetToolTip(selectedIcon, name);
 
                     // Change title in the database
-                    using (StixDB db = new StixDB())
+                    using (StixDB db = new StixDB("Icons"))
                         db.ExecuteNonQuery("update ICONS set name=`" + name + "` where filename=`" +
                             item.Path + "` and stixID=" + (int)this.Tag + "");
                 }
@@ -485,7 +485,7 @@ namespace Bubbles
             IconItem item = new IconItem(iconName, fileName, order, iconPath);
 
             if (!Utils.FreeVersionLimitExceeded("addicon"))
-                using (StixDB db = new StixDB())
+                using (StixDB db = new StixDB("Icons"))
                     db.AddIcon(iconName, fileName, order, (int)this.Tag);
 
             Icons.Insert(order - 1, item);

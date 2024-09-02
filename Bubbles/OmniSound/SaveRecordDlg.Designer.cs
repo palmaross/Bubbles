@@ -31,6 +31,12 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SaveRecordDlg));
             this.panelSave = new System.Windows.Forms.Panel();
+            this.panelNewGroup = new System.Windows.Forms.Panel();
+            this.btnCancelGroup = new System.Windows.Forms.Button();
+            this.btnAddGroup = new System.Windows.Forms.Button();
+            this.txtGroupName = new System.Windows.Forms.TextBox();
+            this.lblGroupName = new System.Windows.Forms.Label();
+            this.btnNewGroup = new System.Windows.Forms.PictureBox();
             this.lblGroup = new System.Windows.Forms.Label();
             this.cbGroups = new System.Windows.Forms.ComboBox();
             this.chCloseRecorder = new System.Windows.Forms.CheckBox();
@@ -41,15 +47,9 @@
             this.lblRecordName = new System.Windows.Forms.Label();
             this.lblCount = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.btnNewGroup = new System.Windows.Forms.PictureBox();
-            this.panelNewGroup = new System.Windows.Forms.Panel();
-            this.btnCancelGroup = new System.Windows.Forms.Button();
-            this.btnAddGroup = new System.Windows.Forms.Button();
-            this.txtGroupName = new System.Windows.Forms.TextBox();
-            this.lblGroupName = new System.Windows.Forms.Label();
             this.panelSave.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.btnNewGroup)).BeginInit();
             this.panelNewGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.btnNewGroup)).BeginInit();
             this.SuspendLayout();
             // 
             // panelSave
@@ -70,6 +70,67 @@
             this.panelSave.Size = new System.Drawing.Size(200, 168);
             this.panelSave.TabIndex = 0;
             this.panelSave.Visible = false;
+            // 
+            // panelNewGroup
+            // 
+            this.panelNewGroup.BackColor = System.Drawing.Color.PapayaWhip;
+            this.panelNewGroup.Controls.Add(this.btnCancelGroup);
+            this.panelNewGroup.Controls.Add(this.btnAddGroup);
+            this.panelNewGroup.Controls.Add(this.txtGroupName);
+            this.panelNewGroup.Controls.Add(this.lblGroupName);
+            this.panelNewGroup.Location = new System.Drawing.Point(5, 23);
+            this.panelNewGroup.Name = "panelNewGroup";
+            this.panelNewGroup.Size = new System.Drawing.Size(190, 81);
+            this.panelNewGroup.TabIndex = 125;
+            this.panelNewGroup.Visible = false;
+            // 
+            // btnCancelGroup
+            // 
+            this.btnCancelGroup.Location = new System.Drawing.Point(109, 52);
+            this.btnCancelGroup.Name = "btnCancelGroup";
+            this.btnCancelGroup.Size = new System.Drawing.Size(75, 23);
+            this.btnCancelGroup.TabIndex = 3;
+            this.btnCancelGroup.Text = "Cancel";
+            this.btnCancelGroup.UseVisualStyleBackColor = true;
+            this.btnCancelGroup.Click += new System.EventHandler(this.btnCancelGroup_Click);
+            // 
+            // btnAddGroup
+            // 
+            this.btnAddGroup.Location = new System.Drawing.Point(6, 52);
+            this.btnAddGroup.Name = "btnAddGroup";
+            this.btnAddGroup.Size = new System.Drawing.Size(75, 23);
+            this.btnAddGroup.TabIndex = 2;
+            this.btnAddGroup.Text = "Add";
+            this.btnAddGroup.UseVisualStyleBackColor = true;
+            this.btnAddGroup.Click += new System.EventHandler(this.btnAddGroup_Click);
+            // 
+            // txtGroupName
+            // 
+            this.txtGroupName.Location = new System.Drawing.Point(6, 24);
+            this.txtGroupName.Name = "txtGroupName";
+            this.txtGroupName.Size = new System.Drawing.Size(178, 20);
+            this.txtGroupName.TabIndex = 1;
+            // 
+            // lblGroupName
+            // 
+            this.lblGroupName.AutoSize = true;
+            this.lblGroupName.Location = new System.Drawing.Point(6, 6);
+            this.lblGroupName.Name = "lblGroupName";
+            this.lblGroupName.Size = new System.Drawing.Size(70, 13);
+            this.lblGroupName.TabIndex = 0;
+            this.lblGroupName.Text = "Group Name:";
+            // 
+            // btnNewGroup
+            // 
+            this.btnNewGroup.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnNewGroup.Image = ((System.Drawing.Image)(resources.GetObject("btnNewGroup.Image")));
+            this.btnNewGroup.Location = new System.Drawing.Point(172, 23);
+            this.btnNewGroup.Name = "btnNewGroup";
+            this.btnNewGroup.Size = new System.Drawing.Size(20, 20);
+            this.btnNewGroup.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.btnNewGroup.TabIndex = 124;
+            this.btnNewGroup.TabStop = false;
+            this.btnNewGroup.Click += new System.EventHandler(this.btnNewGroup_Click);
             // 
             // lblGroup
             // 
@@ -100,6 +161,7 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(117, 140);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -161,67 +223,6 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // btnNewGroup
-            // 
-            this.btnNewGroup.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnNewGroup.Image = ((System.Drawing.Image)(resources.GetObject("btnNewGroup.Image")));
-            this.btnNewGroup.Location = new System.Drawing.Point(172, 23);
-            this.btnNewGroup.Name = "btnNewGroup";
-            this.btnNewGroup.Size = new System.Drawing.Size(20, 20);
-            this.btnNewGroup.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.btnNewGroup.TabIndex = 124;
-            this.btnNewGroup.TabStop = false;
-            this.btnNewGroup.Click += new System.EventHandler(this.btnNewGroup_Click);
-            // 
-            // panelNewGroup
-            // 
-            this.panelNewGroup.BackColor = System.Drawing.Color.PapayaWhip;
-            this.panelNewGroup.Controls.Add(this.btnCancelGroup);
-            this.panelNewGroup.Controls.Add(this.btnAddGroup);
-            this.panelNewGroup.Controls.Add(this.txtGroupName);
-            this.panelNewGroup.Controls.Add(this.lblGroupName);
-            this.panelNewGroup.Location = new System.Drawing.Point(5, 23);
-            this.panelNewGroup.Name = "panelNewGroup";
-            this.panelNewGroup.Size = new System.Drawing.Size(190, 81);
-            this.panelNewGroup.TabIndex = 125;
-            this.panelNewGroup.Visible = false;
-            // 
-            // btnCancelGroup
-            // 
-            this.btnCancelGroup.Location = new System.Drawing.Point(109, 52);
-            this.btnCancelGroup.Name = "btnCancelGroup";
-            this.btnCancelGroup.Size = new System.Drawing.Size(75, 23);
-            this.btnCancelGroup.TabIndex = 3;
-            this.btnCancelGroup.Text = "Cancel";
-            this.btnCancelGroup.UseVisualStyleBackColor = true;
-            this.btnCancelGroup.Click += new System.EventHandler(this.btnCancelGroup_Click);
-            // 
-            // btnAddGroup
-            // 
-            this.btnAddGroup.Location = new System.Drawing.Point(6, 52);
-            this.btnAddGroup.Name = "btnAddGroup";
-            this.btnAddGroup.Size = new System.Drawing.Size(75, 23);
-            this.btnAddGroup.TabIndex = 2;
-            this.btnAddGroup.Text = "Add";
-            this.btnAddGroup.UseVisualStyleBackColor = true;
-            this.btnAddGroup.Click += new System.EventHandler(this.btnAddGroup_Click);
-            // 
-            // txtGroupName
-            // 
-            this.txtGroupName.Location = new System.Drawing.Point(6, 24);
-            this.txtGroupName.Name = "txtGroupName";
-            this.txtGroupName.Size = new System.Drawing.Size(178, 20);
-            this.txtGroupName.TabIndex = 1;
-            // 
-            // lblGroupName
-            // 
-            this.lblGroupName.AutoSize = true;
-            this.lblGroupName.Location = new System.Drawing.Point(6, 6);
-            this.lblGroupName.Name = "lblGroupName";
-            this.lblGroupName.Size = new System.Drawing.Size(70, 13);
-            this.lblGroupName.TabIndex = 0;
-            this.lblGroupName.Text = "Group Name:";
-            // 
             // SaveRecordDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -237,9 +238,9 @@
             this.Text = "SaveRecordDlg";
             this.panelSave.ResumeLayout(false);
             this.panelSave.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.btnNewGroup)).EndInit();
             this.panelNewGroup.ResumeLayout(false);
             this.panelNewGroup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.btnNewGroup)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

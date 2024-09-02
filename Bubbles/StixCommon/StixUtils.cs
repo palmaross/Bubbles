@@ -45,20 +45,20 @@ namespace Bubbles
 
                 if (oldname != "") // rename stick or icon or tool
                 {
-                    using (StixDB db = new StixDB())
+                    int stixID = (int)form.Tag;
+                    if (stick) // rename stick
                     {
-                        int stixID = (int)form.Tag;
-                        if (stick) // rename stick
-                        {
+                        using (StixDB db = new StixDB("Stix"))
                             db.ExecuteNonQuery("update STIX set name=`" + name + "` where id=" + stixID + "");
-                        }
-                        else if (type == typeicons)
+                    }
+                    else if (type == typeicons)
+                        using (StixDB db = new StixDB("Icons"))
                             db.ExecuteNonQuery("update ICONS set name=`" + name +
                                 "` where stixID=" + stixID + " and name =`" + oldname + "`");
-                        else if (type == typetools)
+                    else if (type == typetools)
+                        using (StixDB db = new StixDB("Tools"))
                             db.ExecuteNonQuery("update TOOLS set title=`" + name +
                                 "` where stixID=" + stixID + " and title =`" + oldname + "`");
-                    }
                 }
                 return name;
             }
@@ -66,9 +66,9 @@ namespace Bubbles
 
         public static void CreateStick(Form newForm, string stickname, string sticktype)
         {
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Stix"))
             {
-                db.AddStix((int)newForm.Tag, stickname, sticktype, 0, "H", "");
+                db.AddStix(stickname, sticktype, 0, "H", "");
 
                 newForm.Location = StixMain.m_StixBase.GetStickLocation("", newForm.Size);
                 StixMain.STICKS.Add((int)newForm.Tag, newForm);
@@ -143,7 +143,7 @@ namespace Bubbles
             Point screenXY = Utils.MMScreen(MMUtils.MindManager.Left + MMUtils.MindManager.Width / 2,
                 MMUtils.MindManager.Top + MMUtils.MindManager.Height / 2);
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Stix"))
             {
                 string location = "";
                 DataTable dt = db.ExecuteQuery("select * from STIX where id=" + id + "");
@@ -199,19 +199,21 @@ namespace Bubbles
 
             if (sticktype == typetools) stickLength += icondist;
 
-            using (StixDB db = new StixDB())
+            if (deleteall) // Clean stix and database
             {
-                if (deleteall) // Clean stix and database
-                {
-                    if (sticktype == typeicons)
+                if (sticktype == typeicons)
+                    using (StixDB db = new StixDB("Icons"))
                         db.ExecuteNonQuery("delete from ICONS where stixID =" + (int)form.Tag + "");
-                    else if (sticktype == typetools)
+                else if (sticktype == typetools)
+                    using (StixDB db = new StixDB("Tools"))
                         db.ExecuteNonQuery("delete from TOOLS where stixID =" + (int)form.Tag + "");
-                }
-                else // Add icons to stick
+            }
+            else // Add icons to stick
+            {
+                int k = 0;
+                if (sticktype == typeicons)
                 {
-                    int k = 0;
-                    if (sticktype == typeicons)
+                    using (StixDB db = new StixDB("Icons"))
                     {
                         foreach (var item in Icons)
                         {
@@ -220,7 +222,10 @@ namespace Bubbles
                             db.ExecuteNonQuery("update ICONS set _order=" + item.Order + " where stixID=" + (int)form.Tag + " and filename =`" + item.FileName + "`");
                         }
                     }
-                    else if (sticktype == typetools)
+                }
+                else if (sticktype == typetools)
+                {
+                    using (StixDB db = new StixDB("Tools"))
                     {
                         foreach (var item in Tools)
                         {
@@ -340,7 +345,7 @@ namespace Bubbles
                 for (int i = 0; i < Icons.Count; i++)
                     Icons[i].Order = i + 1;
 
-                using (StixDB db = new StixDB())
+                using (StixDB db = new StixDB("Icons"))
                     db.ExecuteNonQuery("delete from ICONS where stixID=" + id + " and filename=`" + filename + "`");
             }
             else if (type == typetools)
@@ -356,7 +361,7 @@ namespace Bubbles
                 for (int i = 0; i < Tools.Count; i++)
                     Tools[i].Order = i + 1;
 
-                using (StixDB db = new StixDB())
+                using (StixDB db = new StixDB("Tools"))
                     db.ExecuteNonQuery("delete from TOOLS where stixID=" + id + " and path=`" + filename + "`");
             }
         }
@@ -368,26 +373,27 @@ namespace Bubbles
                 MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
                 return false;
 
-            using (StixDB db = new StixDB())
+            // Delete icons that belong to this stick and clear context menu of this button
+            if (type == typeicons)
             {
-                // Delete icons that belong to this stick and clear context menu of this button
-                if (type == typeicons)
-                {
+                using (StixDB db = new StixDB("Icons"))
                     db.ExecuteNonQuery("delete from ICONS where stixID=" + id + "");
-                    if (StixMain.m_StixBase.cmsIcons.Items.Count > 0)
-                        StixMain.m_StixBase.cmsIcons.Items.Clear();
-                }
-                else if (type == typetools)
-                {
-                    db.ExecuteNonQuery("delete from TOOLS where stixID=" + id + "");
-                    if (StixMain.m_StixBase.cmsTools.Items.Count > 0)
-                        StixMain.m_StixBase.cmsTools.Items.Clear();
-                }
-
-                // Delete the stick
-                db.ExecuteNonQuery("delete from STIX where id=" + id + "");
-                StixMain.STICKS.Remove(id);
+                if (StixMain.m_StixBase.cmsIcons.Items.Count > 0)
+                    StixMain.m_StixBase.cmsIcons.Items.Clear();
             }
+            else if (type == typetools)
+            {
+                using (StixDB db = new StixDB("Tools"))
+                    db.ExecuteNonQuery("delete from TOOLS where stixID=" + id + "");
+                if (StixMain.m_StixBase.cmsTools.Items.Count > 0)
+                    StixMain.m_StixBase.cmsTools.Items.Clear();
+            }
+
+            // Delete the stick
+            using (StixDB db = new StixDB("Stix"))
+                db.ExecuteNonQuery("delete from STIX where id=" + id + "");
+            StixMain.STICKS.Remove(id);
+
             return true;
         }
 

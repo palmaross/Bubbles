@@ -197,7 +197,9 @@ namespace Bubbles
             if (ManageTools != null || (chAddToDatabase.Visible && chAddToDatabase.Checked))
             {
                 // Add to database
-                using (StixDB db = new StixDB())
+                if (toolPath.StartsWith(Utils.m_dataPath + "ToolStixApps"))
+                    toolPath = Path.GetFileName(toolPath); // Make path relative
+                using (StixDB db = new StixDB("Tools"))
                     db.AddTool(title, tooltip, toolPath, pIcon.Tag.ToString(), 0, 0);
 
                 // Add to the ManageTools window

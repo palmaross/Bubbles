@@ -8,6 +8,7 @@ using Mindjet.MindManager.Interop;
 using AppManager;
 using NAudio.Wave;
 using System.Data;
+using System.Text;
 
 namespace Bubbles
 {
@@ -98,7 +99,7 @@ namespace Bubbles
             cbGroups.Items.Clear();
             cbGroupsSave.Items.Clear();
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Audio"))
             {
                 DataTable dt = db.ExecuteQuery("select * from AUDIOGROUPS order by name");
                 foreach (DataRow row in dt.Rows)
@@ -116,7 +117,7 @@ namespace Bubbles
             cbRecordings.Items.Clear();
             int groupID = (cbGroups.SelectedItem as AudioGroup).ID;
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Audio"))
             {
                 DataTable dt = db.ExecuteQuery("select * from AUDIOS where groupID=" + groupID + " order by title");
 
@@ -200,7 +201,7 @@ namespace Bubbles
             string name = txtGroupName.Text.Trim();
             if (name == "") return;
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Audio"))
             {
                 DataTable dt = db.ExecuteQuery("select * from AUDIOGROUPS where name=`" + name + "`");
                 if (dt.Rows.Count > 0)
@@ -541,7 +542,7 @@ namespace Bubbles
 
             if (StixMain.m_TopicPlayer != null && StixMain.m_TopicPlayer.Visible)
             {
-                using (StixDB db = new StixDB())
+                using (StixDB db = new StixDB("Audio"))
                 {
                     string path = filename;
                     if (path.Contains(Utils.m_dataPath + "SoundDB"))
@@ -586,24 +587,12 @@ namespace Bubbles
 
             timer1.Stop();
             lblClock.Text = "00:00 / 00:00";
+            aTrack.Value = 0;
             StixMain.playingtopicguid = "";
         }
 
         public void SaveRecord(string recordName, int groupID, bool addtotopic, bool attachment)
         {
-            string outputFolder = Utils.m_dataPath + "SoundDB";
-            DirectoryInfo di = new DirectoryInfo(outputFolder);
-
-            foreach (FileInfo fi in di.GetFiles())
-            {
-                if (Path.GetFileNameWithoutExtension(fi.Name.ToLower()) == recordName.ToLower())
-                {
-                    if (MessageBox.Show(Utils.getString("OmniSound.recordexists"), "",
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
-                        return;
-                }
-            }
-
             string filename = Utils.m_dataPath + "SoundDB\\" + recordName + ".mp3";
             string wavFile = Utils.m_dataPath + "SoundDB\\" + recordName + ".wav";
             string recordedWavFile = Utils.m_dataPath + "SoundDB\\record.wav";
@@ -644,7 +633,7 @@ namespace Bubbles
             }
 
             int id = 0;
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Audio"))
             {
                 db.AddAudio(recordName, Path.GetFileName(filename), mappath, maptitle, topicguid, groupID);
                 DataTable dt = db.ExecuteQuery("SELECT last_insert_rowid()");
@@ -704,7 +693,7 @@ namespace Bubbles
 
                 if (StixMain.m_TopicPlayer != null && StixMain.m_TopicPlayer.Visible)
                 {
-                    using (StixDB db = new StixDB())
+                    using (StixDB db = new StixDB("Audio"))
                     {
                         string path = audioFile.FileName;
                         if (path.Contains(Utils.m_dataPath + "SoundDB"))
@@ -727,8 +716,21 @@ namespace Bubbles
         private void btnSaveRecord_Click(object sender, EventArgs e)
         {
             int groupID = (cbGroupsSave.SelectedItem as AudioGroup).ID;
+            string recordName = txtRecordName.Text.Trim();
+            if (recordName == "") return;
 
-            if (txtRecordName.Text.Trim() == "") return;
+            string outputFolder = Utils.m_dataPath + "SoundDB";
+            DirectoryInfo di = new DirectoryInfo(outputFolder);
+
+            foreach (FileInfo fi in di.GetFiles())
+            {
+                if (Path.GetFileNameWithoutExtension(fi.Name.ToLower()) == recordName.ToLower())
+                {
+                    if (MessageBox.Show(Utils.getString("OmniSound.recordexists"), "",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning) == DialogResult.No)
+                        return;
+                }
+            }
 
             SaveRecord(txtRecordName.Text.Trim(), groupID, chAddToTopic.Checked, chAttachmentSave.Checked);
             panelRecordName.Visible = false;
@@ -764,7 +766,7 @@ namespace Bubbles
 
             int id = (cbRecordings.SelectedItem as AudioItem).ID;
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Audio"))
                 db.ExecuteNonQuery("update AUDIOS set " +
                     "mappath=`" + MMUtils.ActiveDocument.FullName + "`, " +
                     "maptitle=`" + MMUtils.ActiveDocument.CentralTopic.Text + "`, " +

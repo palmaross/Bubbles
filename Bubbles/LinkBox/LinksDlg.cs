@@ -56,7 +56,6 @@ namespace Bubbles
             this.DoubleBuffered = true;
             this.ResizeRedraw = true;
 
-            dataGridView1.CellMouseClick += DataGridView1_CellMouseClick;
             //dataGridView1.Columns[0].CellTemplate = new MyDataGridViewImageCell();
             this.HelpButtonClicked += this_HelpButtonClicked;
 
@@ -98,7 +97,7 @@ namespace Bubbles
             treeView1.Nodes.Clear();
             TreeNode root = new TreeNode(Utils.getString("LinksDlg.AllGroups"));
             root.Tag = 0; treeView1.Nodes.Add(root);
-            db = new StixDB();
+            db = new StixDB("Links");
 
             DataTable dt = db.ExecuteQuery("select * from LINKGROUPS where parentID = 0 order by _order");
 
@@ -196,7 +195,7 @@ namespace Bubbles
                     List<int> list = new List<int>();
                     GetGroupIds(treeView1.SelectedNode, ref list);
 
-                    using (StixDB _db = new StixDB())
+                    using (StixDB _db = new StixDB("Links"))
                     {
                         foreach (int id in list)
                             _db.ExecuteNonQuery("delete from LINKS where groupID=" + id + "");
@@ -277,7 +276,7 @@ namespace Bubbles
                 if (MessageBox.Show(Utils.getString("LinksDlg.deletelinks"), "",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
-                    using (StixDB _db = new StixDB())
+                    using (StixDB _db = new StixDB("Links"))
                     {
                         foreach (DataGridViewRow row in dataGridView1.SelectedRows)
                         {
@@ -432,7 +431,7 @@ namespace Bubbles
         {
             string name = txtEditNode.Text.Trim();
 
-            using (StixDB _db = new StixDB())
+            using (StixDB _db = new StixDB("Links"))
             {
                 DataTable dt = _db.ExecuteQuery("select * from LINKGROUPS where name=`" + name + "`");
                 if (dt.Rows.Count > 0)
@@ -476,7 +475,12 @@ namespace Bubbles
         /// </summary>
         private void DataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-
+            if (e.RowIndex < 0 && e.ColumnIndex == 0)
+            {
+                //sortby = "CnSortByType";
+                //thenby = "CnFileName";
+                SortByType();
+            }
         }
 
         private void SortByType()
@@ -633,7 +637,7 @@ namespace Bubbles
                 LinkTitle.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
 
-            using (StixDB _db = new StixDB())
+            using (StixDB _db = new StixDB("Links"))
             {
                 Dictionary<int, string> groups = new Dictionary<int, string>();
                 DataTable dt = _db.ExecuteQuery("select * from LINKGROUPS");
@@ -931,7 +935,7 @@ namespace Bubbles
 
                     treeView1.SelectedNode = m_dragNode;
 
-                    using (StixDB _db = new StixDB())
+                    using (StixDB _db = new StixDB("Links"))
                     {
                         // Update parentID of dragged node.
                         _db.ExecuteNonQuery("update LINKGROUPS set parentID=" + parentID + " where id=" + (int)m_dragNode.Tag + "");
@@ -974,7 +978,7 @@ namespace Bubbles
                 int groupID = (int)targetNode.Tag;
                 if (groupID == 0) return; // "All Links" group. to do
 
-                using (StixDB _db = new StixDB())
+                using (StixDB _db = new StixDB("Links"))
                 {
                     foreach (DataGridViewRow row in selectedRows)
                     {
@@ -1032,7 +1036,7 @@ namespace Bubbles
             int groupID = (int)row.Cells["GroupID"].Value;
             string path = (string)row.Cells["LinkPath"].Value;
 
-            using (StixDB _db = new StixDB())
+            using (StixDB _db = new StixDB("Links"))
             {
                 _db.ExecuteNonQuery("update LINKS set comment=`" + comment +
                     "` where path =`" + path + "` and groupID=`" + groupID + "`");
@@ -1150,10 +1154,10 @@ namespace Bubbles
 
             string by = LinksDlg.sortby;
             string thenby = LinksDlg.thenby;
-            string value1 = DataGridViewRow1.Cells[by].Value.ToString();
-            string value2 = DataGridViewRow2.Cells[by].Value.ToString();
-            string thenvalue1 = DataGridViewRow1.Cells[thenby].Value.ToString();
-            string thenvalue2 = DataGridViewRow2.Cells[thenby].Value.ToString();
+            string value1 = DataGridViewRow1.Cells["SortByImage"].Value.ToString();
+            string value2 = DataGridViewRow2.Cells["SortByImage"].Value.ToString();
+            string thenvalue1 = DataGridViewRow1.Cells["LinkTitle"].Value.ToString();
+            string thenvalue2 = DataGridViewRow2.Cells["LinkTitle"].Value.ToString();
 
             // Try to sort based on the sortby column
             int CompareResult = String.Compare(value1, value2);

@@ -118,7 +118,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppManager\AlfaChanges.cs" />
     <Compile Include="AppManager\DragHelper.cs" />
     <Compile Include="AppManager\MapMarkers.cs" />
     <Compile Include="AppManager\ProgressDlg.cs">
@@ -133,7 +132,6 @@
     <Compile Include="AppManager\SettingsDlg.Designer.cs">
       <DependentUpon>SettingsDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppManager\StickersDB.cs" />
     <Compile Include="AppManager\StixDB.cs" />
     <Compile Include="AppManager\TransactionWrapper.cs" />
     <Compile Include="AppManager\Utils.cs" />
@@ -210,38 +208,11 @@
     <Compile Include="OmniSound\TopicRecorder.Designer.cs">
       <DependentUpon>TopicRecorder.cs</DependentUpon>
     </Compile>
-    <Compile Include="Organizer\SnippetsDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Organizer\SnippetsDlg.Designer.cs">
-      <DependentUpon>SnippetsDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Organizer\StixOrganizer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Organizer\StixOrganizer.Designer.cs">
-      <DependentUpon>StixOrganizer.cs</DependentUpon>
-    </Compile>
     <Compile Include="StartMenu.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="StartMenu.Designer.cs">
       <DependentUpon>StartMenu.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stickers\SelectImageDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Stickers\SelectImageDlg.Designer.cs">
-      <DependentUpon>SelectImageDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stickers\SizeablePictureBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Stickers\StickerDummy.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Stickers\StickerDummy.Designer.cs">
-      <DependentUpon>StickerDummy.cs</DependentUpon>
     </Compile>
     <Compile Include="StixAddTopic\AddTopicTemplateDlg.cs">
       <SubType>Form</SubType>
@@ -415,41 +386,10 @@
     </Compile>
     <Compile Include="OmniStix22.cs" />
     <Compile Include="AssemblyInfo22.cs" />
-    <Compile Include="Organizer\ManageNoteGroups.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Organizer\ManageNoteGroups.Designer.cs">
-      <DependentUpon>ManageNoteGroups.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Organizer\ManageNoteMarkers.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Organizer\ManageNoteMarkers.Designer.cs">
-      <DependentUpon>ManageNoteMarkers.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Organizer\ManageNoteTags.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Organizer\ManageNoteTags.Designer.cs">
-      <DependentUpon>ManageNoteTags.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Organizer\NoteDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Organizer\NoteDlg.Designer.cs">
-      <DependentUpon>NoteDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="AppManager\SticksMoreDB.cs" />
-    <Compile Include="Organizer\NotesDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Organizer\NotesDlg.Designer.cs">
-      <DependentUpon>NotesDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Topic Notes\HtmlEditor.cs" />
     <Compile Include="Topic Notes\TopicNotesDlg.cs">
@@ -971,39 +911,12 @@
     <EmbeddedResource Include="OmniSound\TopicRecorder.resx">
       <DependentUpon>TopicRecorder.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Organizer\ManageNoteGroups.resx">
-      <DependentUpon>ManageNoteGroups.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Organizer\ManageNoteMarkers.resx">
-      <DependentUpon>ManageNoteMarkers.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Organizer\ManageNoteTags.resx">
-      <DependentUpon>ManageNoteTags.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Organizer\NoteDlg.resx">
-      <DependentUpon>NoteDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Organizer\SnippetsDlg.resx">
-      <DependentUpon>SnippetsDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Organizer\StixOrganizer.resx">
-      <DependentUpon>StixOrganizer.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Organizer\NotesDlg.resx">
-      <DependentUpon>NotesDlg.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="StartMenu.resx">
       <DependentUpon>StartMenu.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stickers\SelectImageDlg.resx">
-      <DependentUpon>SelectImageDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stickers\StickerDummy.resx">
-      <DependentUpon>StickerDummy.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StixAddTopic\AddTopicTemplateDlg.resx">
       <DependentUpon>AddTopicTemplateDlg.cs</DependentUpon>

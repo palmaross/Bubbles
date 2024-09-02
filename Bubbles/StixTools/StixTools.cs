@@ -80,13 +80,14 @@ namespace Bubbles
 
             Utils.InitIcons();
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Tools"))
             {
                 DataTable dt = db.ExecuteQuery("select * from TOOLS where stixID=" + ID + " order by _order");
                 foreach (DataRow row in dt.Rows)
                 {
                     string path = row["path"].ToString();
-                    if (path == Path.GetFileName(path))
+                    if (!path.StartsWith("WT_") && !path.StartsWith("OT_") &&
+                        path == Path.GetFileName(path)) // Relative path to the ToolStixApps folder
                         path = Utils.m_dataPath + "ToolStixApps\\" + path;
                     string title = row["title"].ToString();
                     string type = row["type"].ToString();
@@ -204,7 +205,7 @@ namespace Bubbles
                 if (path.StartsWith(Utils.m_dataPath + "ToolStixApps"))
                     path = Path.GetFileName(path);
 
-                using (StixDB db = new StixDB())
+                using (StixDB db = new StixDB("Tools"))
                 {
                     if (changeInDatabase)
                     {
@@ -354,8 +355,12 @@ namespace Bubbles
             ToolItem item = new ToolItem(toolTitle, toolPath, type, order, tooltip);
 
             if (!Utils.FreeVersionLimitExceeded("addicon"))
-                using (StixDB db = new StixDB())
+            {
+                if (toolPath.StartsWith(Utils.m_dataPath + "ToolStixApps"))
+                    toolPath = Path.GetFileName(toolPath); // Make path relative
+                using (StixDB db = new StixDB("Tools"))
                     db.AddTool(toolTitle, tooltip, toolPath, type, order, (int)this.Tag);
+            }
 
             Tools.Insert(order - 1, item);
             for (int i = 0; i < Tools.Count; i++)

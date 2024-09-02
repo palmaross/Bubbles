@@ -87,7 +87,7 @@ namespace Bubbles
             cbEffortUnits.Items.Add(Utils.getString("task.durationunits.month"));
             cbEffortUnits.SelectedIndex = 1;
 
-            db = new StixDB();
+            db = new StixDB("QuickTopics");
 
             foreach (PictureBox pb in this.Controls.OfType<PictureBox>())
             {

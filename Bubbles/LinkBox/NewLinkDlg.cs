@@ -49,7 +49,7 @@ namespace Bubbles
         {
             cbLinkGroup.Items.Clear();
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Links"))
             {
                 DataTable dt = db.ExecuteQuery("select * from LINKGROUPS order by name");
                 foreach (DataRow dr in dt.Rows)
@@ -253,7 +253,7 @@ namespace Bubbles
             if (txtComment.Text != "" && txtComment.Text != Utils.getString("NewLinkDlg.txtComment"))
                 comment = txtComment.Text;
 
-            using (StixDB _db = new StixDB())
+            using (StixDB _db = new StixDB("Links"))
             {
                 DataTable dt = _db.ExecuteQuery("select * from LINKS " +
                     "where groupID=" + groupID + " and path=`" + link + "`");

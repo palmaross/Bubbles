@@ -4,25 +4,28 @@ using PRAManager;
 
 namespace StixAppManager
 {
-	using Community.CsharpSqlite;
+    using Bubbles;
+    using Community.CsharpSqlite;
+    using System.Xml.Linq;
+    using static Community.CsharpSqlite.Sqlite3;
 
-    internal class DatabaseWrapper : Object, IDisposable
+	internal class DatabaseWrapper : Object, IDisposable
 	{
 		public virtual string getDatabaseName()
 		{
 			return MMUtils.getDataPath("AppManager") + "database.db";
 		}
 
-		public virtual void CreateDatabase()
+		public virtual void CreateDatabase(string db)
 		{
 			//m_db.OpenDatabase(getDatabaseName());
 		}
 
-        public virtual void OpenDatabase()
-        {
-        }
+		public virtual void OpenDatabase()
+		{
+		}
 
-		public virtual void ValidateDatabase(int aTablesCount =-1)
+		public virtual void ValidateDatabase(int aTablesCount = -1)
 		{
 			System.Collections.ArrayList _tables = m_db.GetTables();
 			if (_tables.Count == 0)
@@ -33,18 +36,21 @@ namespace StixAppManager
 				throw (new Exception("DatabaseWrapper: validation failed!"));
 			m_db.ExecuteNonQuery("BEGIN EXCLUSIVE");
 			m_db.ExecuteNonQuery("END");
-// 			for (int i = 0; i < aTablesCount; i++)
-// 			{
-// 				String _query = "select * from " + _tables[i].ToString();
-// 				System.Data.DataTable _table = m_db.ExecuteQuery(_query);
-// 			}
+			// 			for (int i = 0; i < aTablesCount; i++)
+			// 			{
+			// 				String _query = "select * from " + _tables[i].ToString();
+			// 				System.Data.DataTable _table = m_db.ExecuteQuery(_query);
+			// 			}
 		}
 
-		public DatabaseWrapper()
+        static string db;
+        public DatabaseWrapper(string db)
 		{
-			string _dbName = getDatabaseName();
-			bool _needToCreate = !System.IO.File.Exists(_dbName);
-            m_db = DatabaseContainer.Get(this.ToString(), _dbName);
+            string dbName = "OmniStix " + db; 
+			string dbFile = Utils.m_dataPath + "DataBases\\" + db + ".db";
+            bool _needToCreate = !System.IO.File.Exists(dbFile);
+
+            m_db = DatabaseContainer.Get(dbName, dbFile);
 			if (! _needToCreate)
 				try
 				{
@@ -62,7 +68,7 @@ namespace StixAppManager
 				// Create db structures
 				try
 				{
-					CreateDatabase();
+					CreateDatabase(db);
 				}
 				catch (Exception _e)
 				{
@@ -132,7 +138,7 @@ namespace StixAppManager
 			{
 				System.IO.File.Delete(getDatabaseName());
                 m_db.OpenDatabase(getDatabaseName());
-				CreateDatabase();
+				CreateDatabase(db);
 			}
 			catch (Exception _e)
 			{
@@ -171,9 +177,9 @@ namespace StixAppManager
 				{
 					// Dispose managed resources.
 				}
-				// Call the appropriate methods to clean up unmanaged resources here.
-				// If disposing is false, only the following code is executed.
-                DatabaseContainer.Forget(this.ToString());
+                // Call the appropriate methods to clean up unmanaged resources here.
+                // If disposing is false, only the following code is executed.
+                DatabaseContainer.Forget("OmniStix " + db);
 				//m_db = null;
 				// Note disposing has been done.
 				m_disposed = true;
@@ -182,7 +188,7 @@ namespace StixAppManager
 
 		public override string ToString()
 		{
-			return "GoogleCalendar Database";
+			return "OmniStix Database";
 		}
 
         protected SQLiteDatabase m_db = null;

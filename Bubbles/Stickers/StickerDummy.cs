@@ -200,7 +200,7 @@ namespace Bubbles
             ToolStripMenuItem Reminders = contextMenuMain.Items["CM_Reminders"] as ToolStripMenuItem;
             ToolStripItem item = null;
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Stickers"))
             {
                 DataTable dt = db.ExecuteQuery("select * from STICKERS");
                 foreach (DataRow row in dt.Rows)
@@ -266,7 +266,7 @@ namespace Bubbles
             {
                 int template = e.ClickedItem.Name == "template" ? 1 : 0;
                 StickerDummy form = null;// new StickerDummy(null);
-                using (StixDB db = new StixDB())
+                using (StixDB db = new StixDB("Stickers"))
                 {
                     DataTable dt = db.ExecuteQuery("select * from STICKERS where id=`" + e.ClickedItem.Text + "` and template=" + template + "");
                     if (dt.Rows.Count > 0)
@@ -660,7 +660,7 @@ namespace Bubbles
                 Utils.getString("stickers.deletesticker.title"), 
                 MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                using (StixDB db = new StixDB())
+                using (StixDB db = new StixDB("Stickers"))
                     db.ExecuteNonQuery("delete from STICKERS where id=" + Convert.ToInt32(this.Tag) + "");
 
                 this.Close();

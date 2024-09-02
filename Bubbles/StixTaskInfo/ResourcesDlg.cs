@@ -148,7 +148,7 @@ namespace Bubbles
             ListDBResources.Items.Clear();
             cbResourceGroup.Items.Clear();
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Resources"))
             {
                 // Fill Resource Groups
                 ResourceGroup gitem = new ResourceGroup(0, Utils.getString("ResourcesDlg.allresources"));
@@ -202,7 +202,7 @@ namespace Bubbles
                     MessageBox.Show(String.Format(Utils.getString("ResourcesDlg.delete.group"), g.Name),
                     "", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
-                    using (StixDB db = new StixDB())
+                    using (StixDB db = new StixDB("Resources"))
                     {
                         db.ExecuteNonQuery("delete from RESOURCES where groupID=" + g.GroupID + "");
                         db.ExecuteNonQuery("delete from RESOURCEGROUPS where id=" + g.GroupID + "");
@@ -314,7 +314,7 @@ namespace Bubbles
                     ResourceGroup g = cbResourceGroup.SelectedItem as ResourceGroup;
                     int groupID = g.GroupID;
 
-                    using (StixDB db = new StixDB())
+                    using (StixDB db = new StixDB("Resources"))
                     {
                         foreach (string res in listResources)
                         {
@@ -343,7 +343,7 @@ namespace Bubbles
                 string colorHEX = string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", c.A, c.R, c.G, c.B).ToLower();
                 if (colorHEX == "#ffffffff") colorHEX = ""; // white, no color
 
-                using (StixDB db = new StixDB())
+                using (StixDB db = new StixDB("Resources"))
                 {
                     foreach (ListViewItem item in lv.SelectedItems)
                     {
@@ -501,7 +501,7 @@ namespace Bubbles
                 Utils.getString("pasteresources.clipboard.title"),
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                using (StixDB db = new StixDB())
+                using (StixDB db = new StixDB("Resources"))
                 {
                     foreach (var res in resources)
                     {
@@ -803,7 +803,7 @@ namespace Bubbles
                             }
                         }
 
-                        using (StixDB db = new StixDB())
+                        using (StixDB db = new StixDB("Resources"))
                         {
                             DataTable dt = db.ExecuteQuery("select from RESOURCEGROUPS where name=`" + newName + "`");
                             if (dt.Rows.Count > 0)
@@ -827,7 +827,7 @@ namespace Bubbles
                         string newName = txtNewResourceDB.Text.Trim();
                         if (newName == "" || newName == g.Name) return;
 
-                        using (StixDB db = new StixDB())
+                        using (StixDB db = new StixDB("Resources"))
                         {
                             DataTable dt = db.ExecuteQuery("select * from RESOURCEGROUPS where name=`" + newName + "`");
                             if (dt.Rows.Count > 0)
@@ -936,7 +936,7 @@ namespace Bubbles
         {
             ListViewItem lvi; ResourceItem item;
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Resources"))
             {
                 DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
                     "where name=`" + name + "` and groupID=" + groupID + "");
@@ -1119,7 +1119,7 @@ namespace Bubbles
             {
                 ResourceItem res = lv.SelectedItems[0].Tag as ResourceItem;
 
-                using (StixDB db = new StixDB())
+                using (StixDB db = new StixDB("Resources"))
                 {
                     DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
                         "where name=`" + newName + "`");
@@ -1160,7 +1160,7 @@ namespace Bubbles
 
             ResourceGroup group = cbResourceGroup.SelectedItem as ResourceGroup;
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Resources"))
             {
                 DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
                     "where groupID=" + group.GroupID + " order by name");

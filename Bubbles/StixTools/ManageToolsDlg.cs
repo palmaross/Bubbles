@@ -53,7 +53,7 @@ namespace Bubbles
             this.FormClosing += WindowsToolsDlg_FormClosing;
             this.HelpButtonClicked += this_HelpButtonClicked;
             imageList1.ImageSize = p1.Size;
-            db = new StixDB();
+            db = new StixDB("Tools");
 
             Utils.InitIcons();
             Init();
@@ -103,7 +103,7 @@ namespace Bubbles
                     }
                     else // remove from Omni list and database
                     {
-                        using (StixDB db = new StixDB())
+                        using (StixDB db = new StixDB("Tools"))
                         {
                             foreach (ListViewItem item in selectedItems)
                             {
@@ -184,7 +184,7 @@ namespace Bubbles
                 if (path.StartsWith(Utils.m_dataPath + "ToolStixApps"))
                     path = Path.GetFileName(path);
 
-                using (StixDB db = new StixDB())
+                using (StixDB db = new StixDB("Tools"))
                 {
                     db.ExecuteNonQuery("update TOOLS set " +
                         "title=`" + item.Title + "`, " +
@@ -255,7 +255,7 @@ namespace Bubbles
             if (path.StartsWith(Utils.m_dataPath + "ToolStixApps"))
                 path = Path.GetFileName(path);
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Tools"))
                 db.ExecuteNonQuery("update TOOLS set title=`" + newName +
                     "` where path =`" + path + "`");
 
@@ -455,7 +455,7 @@ namespace Bubbles
             cbAddToStix.Items.Clear();
 
             // Get ToolStix from database
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Stix"))
             {
                 DataTable dt = db.ExecuteQuery("select * from STIX where type=`" + StixUtils.typetools + "`");
 
@@ -523,16 +523,18 @@ namespace Bubbles
                 {
                     DataTable dt = db.ExecuteQuery("select * from TOOLS where stixID=" + stixID + "");
                     int count = dt.Rows.Count + 1;
+                    string path;
 
                     // Check if Stix has this tool already
-                    if (count > 1)
+                    if (count > 1) // 1 - Stix doesn't have tools yet
                     {
                         done = false;
                         foreach (DataRow dr in dt.Rows)
                         {
-                            string path = dr["path"].ToString();
-                            if (path == Path.GetFileName(path))
-                                path = Utils.m_dataPath + "ToolStixApps\\" + path;
+                            path = dr["path"].ToString();
+                            if (!path.StartsWith("WT_") && !path.StartsWith("OT_") && 
+                                path == Path.GetFileName(path)) // Relative path to the ToolStixApps folder
+                                path = Utils.m_dataPath + "ToolStixApps\\" + path; // Make the absolute
 
                             if (path == _item.Path)
                                 done = true; break;
@@ -540,7 +542,10 @@ namespace Bubbles
                         if (done) continue; // Stix has tool. Do not add to database.
                     }
 
-                    db.AddTool(_item.Title, _item.Tooltip, _item.Path, _item.Type, count, stixID);
+                    path = _item.Path;
+                    if (path.StartsWith(Utils.m_dataPath + "ToolStixApps"))
+                        path = Path.GetFileName(path); // Make path relative
+                    db.AddTool(_item.Title, _item.Tooltip, path, _item.Type, count, stixID);
                 }
             }
         }

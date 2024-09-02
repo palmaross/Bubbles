@@ -40,7 +40,7 @@ namespace Bubbles
             m_menus = new DynamicMenus();
 
             m_controlStrip = MMUtils.MindManager.ControlStripTypeRegistry.RegisterControlStripType(SOUNDSTRIP_URI, Utils.m_imagesPath + "audio.ico", true);
-            m_controlStrip.FriendlyName = "Playback";
+            m_controlStrip.FriendlyName = Utils.getString("topic.playbackicon");
             Controls _stripControls = m_controlStrip.ContextMenu;
             m_controlStripCommand = MMUtils.MindManager.Commands.Add(Utils.Registered_AddinName, "omnistix.controlstrip.audiocommand");
             m_controlStripCommand.UpdateState += new ICommandEvents_UpdateStateEventHandler(m_controlStripCommand_UpdateState);
@@ -66,7 +66,7 @@ namespace Bubbles
             PRLicenseManager.Get().StartManager();
             Utils.licenseStatus = PRLicenseManager.licenseStatus;
 
-            m_Snippets = new StixSnippets();
+            //m_Snippets = new StixSnippets();
             m_OmniSound = new OmniSound();
             m_StixBase = new StartMenu();
             m_TaskInfo = new StixTaskInfo(0, "H");
@@ -76,13 +76,13 @@ namespace Bubbles
 
             m_bCreated = true;
 
-            using (StickerDummy dlg = new StickerDummy(null, new Point(0, 0)))
-            {
-                StickerDummy.DummyStickerWidth = dlg.Width;
-                StickerDummy.DummyStickerHeight = dlg.Height;
-                StickerDummy.DummyStickerImageX = dlg.pStickerImage.Location.X;
-                StickerDummy.DummyStickerImageY = dlg.pStickerImage.Location.Y;
-            }
+            //using (StickerDummy dlg = new StickerDummy(null, new Point(0, 0)))
+            //{
+            //    StickerDummy.DummyStickerWidth = dlg.Width;
+            //    StickerDummy.DummyStickerHeight = dlg.Height;
+            //    StickerDummy.DummyStickerImageX = dlg.pStickerImage.Location.X;
+            //    StickerDummy.DummyStickerImageY = dlg.pStickerImage.Location.Y;
+            //}
 
             InitializeTopicWidthDlg();
             OmniTools.GetAppIcons();
@@ -90,7 +90,7 @@ namespace Bubbles
             OmniStixButton.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
 
             DataTable dt;
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Stix"))
                 dt = db.ExecuteQuery("select * from STIX order by type");
 
             foreach (DataRow dr in dt.Rows)
@@ -192,7 +192,7 @@ namespace Bubbles
 
             audioPath = ""; string title = "";
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Audio"))
             {
                 DataTable dt = db.ExecuteQuery("select * from AUDIOS where id=" + id + "");
 
@@ -1010,7 +1010,7 @@ namespace Bubbles
         {
             Dictionary<int, int> awidths = new Dictionary<int, int>();
 
-            using (StixDB db = new StixDB())
+            using (StixDB db = new StixDB("Misc"))
             {
                 DataTable dtWidths = db.ExecuteQuery("select * from TOPICWIDTHS");
 
@@ -1117,7 +1117,7 @@ namespace Bubbles
                     if (!_t.ContainsControlStripType(SOUNDSTRIP_URI)) return;
 
                     int id = 0; string attachGuid = "";
-                    using (StixDB db = new StixDB())
+                    using (StixDB db = new StixDB("Audio"))
                     {
                         string audioPath = _t.GetAttributes(SOUNDSTRIP_URI).GetAttributeValue(AUDIO_PATH);
                         // parts = id###path
@@ -1196,10 +1196,10 @@ namespace Bubbles
             }
             catch { }
 
-            if (m_Snippets.Visible)
-                m_Snippets.Hide();
-            m_Snippets.Dispose();
-            m_Snippets = null;
+            //if (m_Snippets.Visible)
+            //    m_Snippets.Hide();
+            //m_Snippets.Dispose();
+            //m_Snippets = null;
 
             if (StixMapNavigator.DocumentBookmarks != null && StixMapNavigator.DocumentBookmarks.Count > 0)
             {
@@ -1277,11 +1277,11 @@ namespace Bubbles
             m_StixBase.Dispose();
             m_StixBase = null;
 
-            if (m_Notes != null)
-            {
-                m_Notes.Dispose();
-                m_Notes = null;
-            }
+            //if (m_Notes != null)
+            //{
+            //    m_Notes.Dispose();
+            //    m_Notes = null;
+            //}
 
             foreach (var stick in STICKS)
             {
@@ -1333,7 +1333,7 @@ namespace Bubbles
         public static OmniButton OmniStixButton = new OmniButton();
         public const string AUDIO_PATH = "OMNIAUDIO_PATH";
 
-        public static StixSnippets m_Snippets = null;
+        //public static StixSnippets m_Snippets = null;
 
         public static StixMapNavigator m_MapNavigator;
         public static MapNavigatorDlg m_MapNavigatorDlg;
@@ -1352,7 +1352,7 @@ namespace Bubbles
 
         public static StixTaskInfo m_TaskInfo;
 
-        public static Organizer.NotesDlg m_Notes;
+        //public static Organizer.NotesDlg m_Notes;
 
         public static ReplaceDlg m_ReplaceDlg;
 

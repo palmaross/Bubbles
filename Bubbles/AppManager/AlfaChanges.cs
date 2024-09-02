@@ -27,10 +27,10 @@ namespace StixAppManager
                     string newdb = MMUtils.m_defaultDataPath + "bubbles.db";
                     File.Move(MMUtils.m_defaultDataPath + "bubbles.db", MMUtils.m_defaultDataPath + "bubbles_old.db");
 
-                    OldDashboardDB db_old = new OldDashboardDB(); // get old db
+                    OldDashboardDB db_old = null;// new OldDashboardDB(); // get old db
 
                     //BubblesDB.defaults = false;
-                    StixDB db_new = new StixDB(); // create new db without values
+                    StixDB db_new = new StixDB(""); // create new db without values
 
                     // https://tableplus.com/blog/2018/07/sqlite-how-to-copy-table-to-another-database.html
 
@@ -66,10 +66,10 @@ namespace StixAppManager
             MMUtils.setRegistry("", "v7_1Changes", "1");
         }
     }
- 
-    internal class OldDashboardDB : DatabaseWrapper
+
+    internal class OldDashboardDB
     {
-        public override string getDatabaseName() => Utils.m_defaultDataPath + "bubbles_old.db";
+        //public override string getDatabaseName() => Utils.m_defaultDataPath + "bubbles_old.db";
 
         public override string ToString()
         {
