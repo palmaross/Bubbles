@@ -1,4 +1,5 @@
 ﻿using Mindjet.MindManager.Interop;
+using NAudio.Wave;
 using PRAManager;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Clipboard = System.Windows.Forms.Clipboard;
 using Color = System.Drawing.Color;
 
 namespace Bubbles
@@ -21,21 +23,18 @@ namespace Bubbles
             helpProvider1.SetHelpKeyword(this, "TaskInfoResources.htm");
 
             lblTitle.Text = Utils.getString("taskinfo.Resources");
-            txtCurrentMap.Text = Utils.getString("ResourcesDlg.dummytext");
-            toolTip1.SetToolTip(txtCurrentMap, Utils.getString("ResourcesDlg.addnewresource.curmap.tooltip"));
-            txtCurrentMap.ForeColor = SystemColors.GrayText;
-            txtNewResourceDB.Text = Utils.getString("ResourcesDlg.dummytext");
-            toolTip1.SetToolTip(txtNewResourceDB, Utils.getString("ResourcesDlg.addnewresource.db.tooltip"));
-            txtNewResourceDB.ForeColor = SystemColors.GrayText;
+            txtNewResource.Text = Utils.getString("ResourcesDlg.dummytext");
+            toolTip1.SetToolTip(txtNewResource, Utils.getString("ResourcesDlg.addnewresource.curmap.tooltip"));
+            txtNewResource.ForeColor = SystemColors.GrayText;
+            txtNewGroup.Text = Utils.getString("ResourcesDlg.newgroup");
+            toolTip1.SetToolTip(txtNewGroup, Utils.getString("ResourcesDlg.addnewresource.db.tooltip"));
+            txtNewGroup.ForeColor = SystemColors.GrayText;
 
             toolTip1.SetToolTip(pHelp, Utils.getString("button.help"));
             toolTip1.SetToolTip(pClose, Utils.getString("button.close"));
 
-            btnRemoveResources.Text = Utils.getString("taskinfo.resources.delete");
-            toolTip1.SetToolTip(btnRemoveResources, Utils.getString("taskinfo.resources.delete.tooltip"));
-            lblCurrentMap.Text = Utils.getString("ResourcesDlg.lblCurrentMap");
-
-            //lblGroupName.Text = Utils.getString("ResourcesDlg.lblGroupName");
+            tabPage1.Text = Utils.getString("ResourcesDlg.lblCurrentMap");
+            tabPage2.Text = Utils.getString("ResourcesDlg.database");
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
@@ -44,46 +43,41 @@ namespace Bubbles
             thisHeight = this.Height;
             panel1.BackColor = Utils.header;
 
-            ListDBResources.Columns.Add("", 0, HorizontalAlignment.Left);
-            ListDBResources.HeaderStyle = ColumnHeaderStyle.None;
-            ListDBResources.Columns[0].Width = ListDBResources.Width - 4 - SystemInformation.VerticalScrollBarWidth;
-
-            ListMapResources.Columns.Add("", 0, HorizontalAlignment.Left);
-            ListMapResources.HeaderStyle = ColumnHeaderStyle.None;
-            ListMapResources.Columns[0].Width = ListMapResources.Width - 4 - SystemInformation.VerticalScrollBarWidth;
-
             // Context menu
             cmsResource.ItemClicked += ContextMenu_ItemClicked;
-            cmsMore.ItemClicked += ContextMenu_ItemClicked;
+            cmsGroup.ItemClicked += ContextMenu_ItemClicked;
 
-            mi_addtotopic.Text = Utils.getString("ResourcesDlg.menuAddToTopic");
-            mi_remove.Text = Utils.getString("ResourcesDlg.menuRemoveFromTopic");
-            mi_addtomap.Text = Utils.getString("ResourcesDlg.menuAddToMap");
-            mi_addtomap.ToolTipText = Utils.getString("ResourcesDlg.menuAddToMap.tooltip");
-            mi_rename.Text = Utils.getString("button.rename");
-            mi_delete.Text = Utils.getString("button.delete");
-            mi_color.Text = Utils.getString("stixformat.contextmenu.color");
-            mi_copy.Text = Utils.getString("button.copy");
-            mi_cut.Text = Utils.getString("button.cut");
+            r_addtotopic.Text = Utils.getString("ResourcesDlg.menuAddToTopic");
+            r_remove.Text = Utils.getString("ResourcesDlg.menuRemoveFromTopic");
+            r_addtomap.Text = Utils.getString("ResourcesDlg.menuAddToMap");
+            r_addtomap.ToolTipText = Utils.getString("ResourcesDlg.menuAddToMap.tooltip");
+            r_rename.Text = Utils.getString("button.rename");
+            r_delete.Text = Utils.getString("button.delete");
+            r_color.Text = Utils.getString("stixformat.contextmenu.color");
+            r_copy.Text = Utils.getString("button.copy");
+            r_copyall.Text = Utils.getString("ResourcesDlg.CopyAll");
+            rg_copyall.Text = Utils.getString("ResourcesDlg.CopyAll");
+            r_cut.Text = Utils.getString("button.cut");
 
-            mm_new.Text = Utils.getString("ResourcesDlg.NewGroup");
-            mm_rename.Text = Utils.getString("ResourcesDlg.RenameGroup");
-            mm_delete.Text = Utils.getString("ResourcesDlg.DeleteGroup");
-            mm_addtomap.Text = Utils.getString("ResourcesDlg.menuAddToMap");
-            mm_addtomap.ToolTipText = Utils.getString("ResourcesDlg.menuAddToMap.group.tooltip");
-            mm_paste.Text = Utils.getString("ResourcesDlg.Paste");
-            mm_pastefromclipboard.Text = Utils.getString("ResourcesDlg.PasteClipboard");
+            g_newresource.Text = Utils.getString("ResourcesDlg.NewResource");
+            g_rename.Text = Utils.getString("ResourcesDlg.RenameGroup");
+            g_delete.Text = Utils.getString("ResourcesDlg.DeleteGroup");
+            g_addtomap.Text = Utils.getString("ResourcesDlg.menuAddToMap");
+            g_addtomap.ToolTipText = Utils.getString("ResourcesDlg.menuAddToMap.group.tooltip");
+            g_paste.Text = Utils.getString("ResourcesDlg.Paste");
+            g_pastefromclipboard.Text = Utils.getString("ResourcesDlg.PasteClipboard");
 
             this.Paint += this_Paint; // paint form border
             this.MinimumSize = new Size(this.Width, this.Height / 2);
             this.MaximumSize = new Size(this.Width, Screen.AllScreens.Max(s => s.Bounds.Height));
 
+            treeViewCM.Sorted = true;
+            treeViewDB.Sorted = true;
             InitCurrentMapResources();
             InitDataBaseResources();
 
             StixUtils.ActivateMindManager();
 
-            splitContainer.Paint += SplitContainer_Paint;
             this.ResizeEnd += ResourcesDlg_ResizeEnd;
         }
 
@@ -92,31 +86,9 @@ namespace Bubbles
             this.Refresh(); // to reset splitter
         }
 
-        private void SplitContainer_Paint(object sender, PaintEventArgs e)
-        {
-            SplitContainer s = sender as SplitContainer;
-            s.SplitterWidth = splitter.Height;
-
-            if (s != null)
-            {
-                int gripLineWidth = splitter.Width;
-                // Fill Splitter rectangle
-                e.Graphics.FillRectangle(SystemBrushes.Control,
-                    s.SplitterRectangle.X, s.SplitterDistance, s.SplitterRectangle.Width, s.SplitterWidth);
-                // Draw gripper dots in center
-                Pen _dashedPen = new Pen(Color.Black, splitter.Height / 3);
-                _dashedPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-                e.Graphics.DrawLine(_dashedPen,
-                    (s.SplitterRectangle.Width / 2) - (gripLineWidth / 2),
-                    s.SplitterDistance + s.SplitterWidth / 2,
-                    (s.SplitterRectangle.Width / 2) + (gripLineWidth / 2),
-                    s.SplitterDistance + s.SplitterWidth / 2);
-            }
-        }
-
         public void InitCurrentMapResources()
         {
-            ListMapResources.Items.Clear();
+            treeViewCM.Nodes.Clear();
             MapResources.Clear();
 
             if (MMUtils.ActiveDocument == null) return;
@@ -128,8 +100,8 @@ namespace Bubbles
                 if (color == "#0") color = "";
 
                 ResourceItem item = new ResourceItem(mm.Label, color, 0);
+                var res = treeViewCM.Nodes.Add(mm.Label); res.Tag = item;
 
-                var res = ListMapResources.Items.Add(mm.Label); res.Tag = item;
                 if (color != "")
                 {
                     Color c = ColorTranslator.FromHtml(color);
@@ -145,257 +117,292 @@ namespace Bubbles
 
         public void InitDataBaseResources()
         {
-            ListDBResources.Items.Clear();
-            cbResourceGroup.Items.Clear();
+            treeViewDB.Nodes.Clear();
 
             using (StixDB db = new StixDB("Resources"))
             {
-                // Fill Resource Groups
-                ResourceGroup gitem = new ResourceGroup(0, Utils.getString("ResourcesDlg.allresources"));
-                cbResourceGroup.Items.Add(gitem);
+                treeViewDB.Nodes.Clear();
+                TreeNode root = new TreeNode(Utils.getString("ResourcesDlg.allresources"));
+                root.Tag = 0; treeViewDB.Nodes.Add(root);
+                root.NodeFont = new Font(treeViewDB.Font, FontStyle.Bold);
 
-                DataTable dt = db.ExecuteQuery("select * from RESOURCEGROUPS order by name");
-
-                foreach (DataRow dr in dt.Rows)
+                List<string> resources = new List<string>();
+                DataTable dt = db.ExecuteQuery("select * from RESOURCES order by name");
+                foreach (DataRow res in dt.Rows)
                 {
-                    gitem = new ResourceGroup(Convert.ToInt32(dr["id"]), dr["name"].ToString());
-                    cbResourceGroup.Items.Add(gitem);
+                    string resource = res["name"].ToString();
+                    if (resources.Contains(resource)) continue;
+
+                    string color = res["color"].ToString();
+                    ResourceItem item = new ResourceItem(resource, color, Convert.ToInt32(res["groupID"]));
+                    TreeNode _node = root.Nodes.Add(resource);
+                    resources.Add(resource);
+                    _node.Tag = item;
                 }
 
-                if (cbResourceGroup.Items.Count > 0)
-                    cbResourceGroup.SelectedIndex = 0;
+                dt = db.ExecuteQuery("select * from RESOURCEGROUPS order by name");
+                foreach (DataRow dr in dt.Rows)
+                {
+                    TreeNode node = treeViewDB.Nodes.Add(dr["name"].ToString());
+                    node.Tag = Convert.ToInt32(dr["id"]);
+                    node.NodeFont = new Font(treeViewDB.Font, FontStyle.Bold);
+
+                    dt = db.ExecuteQuery("select * from RESOURCES where groupID=" + (int)node.Tag + " order by name");
+                    foreach (DataRow res in dt.Rows)
+                    {
+                        string color = res["color"].ToString();
+                        ResourceItem item = new ResourceItem(res["name"].ToString(), color, Convert.ToInt32(res["groupID"]));
+                        TreeNode _node = node.Nodes.Add(res["name"].ToString());
+                        _node.Tag = item;
+
+                        if (color != "")
+                        {
+                            _node.BackColor = ColorTranslator.FromHtml(color);
+                            Color c = _node.BackColor;
+                            int cc = (int)Math.Sqrt(c.R * c.R * .299 + c.G * c.G * .587 + c.B * c.B * .114);
+                            if (cc > 130) _node.ForeColor = SystemColors.WindowText;
+                            else _node.ForeColor = SystemColors.Window;
+                        }
+                    }
+                }
+
+                treeViewDB.SelectedNode = root;
             }
         }
 
         private void ContextMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            ListView lv = selectedList;
+            TreeView tv = treeViewDB;
+            if (currentMap) tv = treeViewCM;
+            GetSelectedNodes(tv);
 
-            // New group.
-            if (e.ClickedItem.Name == "mm_new")
+            TreeNode group = null; int groupID = 0;
+            if (!currentMap)
             {
-                txtNewResourceDB.BackColor = SystemColors.GradientInactiveCaption;
-                txtNewResourceDB.Text = Utils.getString("ResourcesDlg.group.dummytext");
-                txtNewResourceDB.Font = new Font(txtNewResourceDB.Font, FontStyle.Bold);
-                txtNewResourceDB.ForeColor = SystemColors.GrayText;
-                txtNewResourceDB.Tag = "new";
-                txtNewResourceDB.Enabled = true;
-                btnClose.Visible = true;
+                group = treeViewDB.SelectedNode;
+                if (group == null) group = SelectedNodes[0];
+
+                if (group != null)
+                {
+                    if (group.Parent != null) group = group.Parent; // resource selected
+                    groupID = Convert.ToInt32(group.Tag);
+                }
             }
-            // Rename group.
-            else if (e.ClickedItem.Name == "mm_rename")
+
+            // Add new resource to a group.
+            if (e.ClickedItem == g_newresource)
             {
-                ResourceGroup g = cbResourceGroup.SelectedItem as ResourceGroup;
-                txtNewResourceDB.BackColor = SystemColors.GradientInactiveCaption;
-                txtNewResourceDB.Text = g.Name + " (2)";
-                txtNewResourceDB.Font = new Font(txtNewResourceDB.Font, FontStyle.Bold);
-                txtNewResourceDB.ForeColor = SystemColors.WindowText;
-                txtNewResourceDB.Tag = "rename";
-                btnClose.Visible = true;
+                if (group == null) return;
+                ResourceItem item = new ResourceItem(Utils.getString("ResourcesDlg.NewResource"), "", groupID);
+                TreeNode node = group.Nodes.Add(item.Name);
+                treeViewDB.SelectedNode.Expand();
+                treeViewDB.SelectedNode.Checked = false;
+                treeViewDB.SelectedNode = node;
+                tv.LabelEdit = true;
+                node.BeginEdit();
+            }    
+            // Rename group.
+            else if (e.ClickedItem == g_rename)
+            {
+                tv.LabelEdit = true;
+                tv.SelectedNode.BeginEdit();
             }
             // Delete group.
-            else if (e.ClickedItem.Name == "mm_delete")
+            else if (e.ClickedItem == g_delete)
             {
-                ResourceGroup g = cbResourceGroup.SelectedItem as ResourceGroup;
-
-                if (lv.Items.Count == 0 ||
-                    MessageBox.Show(String.Format(Utils.getString("ResourcesDlg.delete.group"), g.Name),
+                if (MessageBox.Show(String.Format(Utils.getString("ResourcesDlg.delete.group"), group.Text),
                     "", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     using (StixDB db = new StixDB("Resources"))
                     {
-                        db.ExecuteNonQuery("delete from RESOURCES where groupID=" + g.GroupID + "");
-                        db.ExecuteNonQuery("delete from RESOURCEGROUPS where id=" + g.GroupID + "");
+                        db.ExecuteNonQuery("delete from RESOURCES where groupID=" + groupID + "");
+                        db.ExecuteNonQuery("delete from RESOURCEGROUPS where id=" + groupID + "");
                     }
 
-                    cbResourceGroup.Items.Remove(g);
-                    if (cbResourceGroup.Items.Count > 0) 
-                        cbResourceGroup.SelectedIndex = 0;
+                    treeViewDB.SelectedNode.Remove();
+                    treeViewDB.SelectedNode = treeViewDB.Nodes[0];
                 }
             }
             // Add all group's resources to Map Index
-            else if (e.ClickedItem.Name == "mm_addtomap")
+            else if (e.ClickedItem == g_addtomap)
             {
                 Dictionary<string, string> _resources = new Dictionary<string, string>();
-                foreach (ListViewItem item in lv.Items)
+                foreach (TreeNode node in group.Nodes)
                 {
-                    ResourceItem res = item.Tag as ResourceItem;
+                    ResourceItem res = node.Tag as ResourceItem;
                     _resources.Add(res.Name, res.aColor);
                 }
                 AddResourcesToMap(_resources);
             }
-            // Paste copied resources to map or to group.
-            else if (e.ClickedItem.Name == "mm_paste")
+            // Paste copied resources to the map or to the selected group.
+            else if (e.ClickedItem == g_paste)
             {
-                PasteResources(lv);
+                PasteResources(tv);
             }
-            // Paste from clipboard to map or to group.
-            else if (e.ClickedItem.Name == "mm_pastefromclipboard")
+            // Paste from clipboard to the map or to the selected group.
+            else if (e.ClickedItem == g_pastefromclipboard)
             {
-                PasteResources(lv, true); return;
+                PasteResources(tv, true); return;
             }
-
-            if (lv == null) return;
-
-            string[] listResources = new string[lv.SelectedItems.Count];
-            for (int i = 0; i < lv.SelectedItems.Count; i++)
-                listResources[i] = lv.SelectedItems[i].Text;
-
-            Dictionary<string, string> resources = new Dictionary<string, string>();
-            foreach (ListViewItem item in lv.SelectedItems)
+            else // Resource context menu item clicked
             {
-                ResourceItem res = item.Tag as ResourceItem;
-                resources.Add(res.Name, res.aColor);
-            }
+                Dictionary<string, string> resources = new Dictionary<string, string>();
+                string[] listResources = new string[SelectedNodes.Count];
 
-            // Add selected resources to topic
-            if (e.ClickedItem.Name == "mi_addtotopic")
-            {
-                AddResourcesToMap(resources);
-                SetResources(listResources, true);
-            }
-            // Remove selected resources from topic
-            else if (e.ClickedItem.Name == "mi_remove")
-            {
-                if (Utils.ActiveDocumentOrSelectionNull()) return;
+                for (int i = 0; i < SelectedNodes.Count; i++)
+                    listResources[i] = SelectedNodes[i].Text;
 
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                foreach (var item in SelectedNodes)
                 {
-                    if (String.IsNullOrEmpty(t.Task.Resources))
-                        continue;
-
-                    List<string> taskResources = t.Task.Resources.Split(',').Select(x => x.Trim()).ToList();
-
-                    foreach (string resource in listResources)
-                        taskResources.Remove(resource);
-
-                    if (taskResources.Count == 0)
-                        t.Task.Resources = "";
-                    else
-                        t.Task.Resources = string.Join(",", taskResources);
-                }
-            }
-            // Add selected resource to Map Index
-            else if (e.ClickedItem.Name == "mi_addtomap")
-            {
-                AddResourcesToMap(resources);
-            }
-            // Rename selected resource
-            else if (e.ClickedItem.Name == "mi_rename")
-            {
-                selectedItem.ListView.LabelEdit = true;
-                selectedItem.BeginEdit();
-            }
-            // Delete selected resources from map or database
-            if (e.ClickedItem.Name == "mi_delete")
-            {
-                // Delete resources from Map Index
-                if (lv == ListMapResources && MMUtils.ActiveDocument != null)
-                {
-                    if (MessageBox.Show(Utils.getString("ResourcesDlg.delete.map"), "",
-                        MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
-                        return;
-
-                    MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
-                    foreach (MapMarker mm in mg)
+                    if (item.Tag != null)
                     {
-                        if (listResources.Contains(mm.Label))
-                            mm.Delete();
+                        ResourceItem res = item.Tag as ResourceItem;
+                        resources.Add(res.Name, res.aColor);
                     }
                 }
-                // Delete resources from database
-                else if (lv == ListDBResources)
+
+                // Add selected resources to topic
+                if (e.ClickedItem == r_addtotopic)
                 {
-                    DialogResult rc = MessageBox.Show(Utils.getString("ResourcesDlg.delete.map"), "",
-                        MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                    AddResourcesToMap(resources);
+                    SetResources(listResources, true);
+                }
+                // Remove selected resources from topic
+                else if (e.ClickedItem == r_remove)
+                {
+                    if (Utils.ActiveDocumentOrSelectionNull()) return;
 
-                    if (rc == DialogResult.Cancel) return;
+                    foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                    {
+                        if (String.IsNullOrEmpty(t.Task.Resources))
+                            continue;
 
-                    ResourceGroup g = cbResourceGroup.SelectedItem as ResourceGroup;
-                    int groupID = g.GroupID;
+                        List<string> taskResources = t.Task.Resources.Split(',').Select(x => x.Trim()).ToList();
+
+                        foreach (string resource in listResources)
+                            taskResources.Remove(resource);
+
+                        if (taskResources.Count == 0)
+                            t.Task.Resources = "";
+                        else
+                            t.Task.Resources = string.Join(",", taskResources);
+                    }
+                }
+                // Add selected resource to Map Index
+                else if (e.ClickedItem == r_addtomap)
+                {
+                    AddResourcesToMap(resources);
+                }
+                // Rename selected resource
+                else if (e.ClickedItem == r_rename)
+                {
+                    if (tv.SelectedNode == null) return;
+                    tv.LabelEdit = true;
+                    tv.SelectedNode.BeginEdit();
+                }
+                // Delete selected resources from map or database
+                if (e.ClickedItem == r_delete)
+                {
+                    DeleteResources(listResources, currentMap, groupID);
+                }
+                // Set/change resource color
+                if (e.ClickedItem == r_color)
+                {
+                    colorDialog1.FullOpen = true;
+                    if (colorDialog1.ShowDialog() == DialogResult.Cancel)
+                        return;
+
+                    Color c = colorDialog1.Color;
+                    string colorHEX = string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", c.A, c.R, c.G, c.B).ToLower();
+                    if (colorHEX == "#ffffffff") colorHEX = ""; // white, no color
 
                     using (StixDB db = new StixDB("Resources"))
                     {
-                        foreach (string res in listResources)
+                        foreach (TreeNode item in SelectedNodes)
                         {
-                            if (rc == DialogResult.Yes) // delete from database
-                                db.ExecuteNonQuery("delete from RESOURCES " + 
-                                    "where name=`" + res + "`");
-                            else // delete from selected group
-                                db.ExecuteNonQuery("delete from RESOURCES " +
-                                    "where name=`" + res + "` and groupID=" + groupID + "");
-                        }
-                    }
-                }
+                            ResourceItem ri = item.Tag as ResourceItem;
 
-                // Remove items from list.
-                foreach (ListViewItem item in lv.SelectedItems)
-                    lv.Items.Remove(item);
-            }
-            // Set/change resource color
-            if (e.ClickedItem.Name == "mi_color")
-            {
-                colorDialog1.FullOpen = true;
-                if (colorDialog1.ShowDialog() == DialogResult.Cancel)
-                    return;
+                            if (item.BackColor == c) continue;
 
-                Color c = colorDialog1.Color;
-                string colorHEX = string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", c.A, c.R, c.G, c.B).ToLower();
-                if (colorHEX == "#ffffffff") colorHEX = ""; // white, no color
-
-                using (StixDB db = new StixDB("Resources"))
-                {
-                    foreach (ListViewItem item in lv.SelectedItems)
-                    {
-                        ResourceItem ri = item.Tag as ResourceItem;
-
-                        if (item.BackColor == c) continue;
-
-                        if (colorHEX == "") { 
-                            item.BackColor = SystemColors.Window;
-                            item.ForeColor = SystemColors.WindowText;
-                        }
-                        else {
-                            item.BackColor = ColorTranslator.FromHtml(colorHEX);
-                            int cc = (int)Math.Sqrt(c.R * c.R * .299 + c.G * c.G * .587 + c.B * c.B * .114);
-                            if (cc > 130) item.ForeColor = SystemColors.WindowText;
-                            else item.ForeColor = SystemColors.Window;
-                        }
-
-                        ri.aColor = colorHEX; item.Tag = ri;
-
-                        // Change resource color in the Map Index
-                        if (lv == ListMapResources && MMUtils.ActiveDocument != null)
-                        {
-                            MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
-                            foreach (MapMarker mm in mg)
+                            if (colorHEX == "")
                             {
-                                if (ri.Name == mm.Label)
-                                {
-                                    if (colorHEX == "")
-                                    {
-                                        if (mm.Color.Value == 0) continue;
-                                        mm.Color.SetValue(0); continue;
-                                    }
+                                item.BackColor = SystemColors.Window;
+                                item.ForeColor = SystemColors.WindowText;
+                            }
+                            else
+                            {
+                                item.BackColor = ColorTranslator.FromHtml(colorHEX);
+                                int cc = (int)Math.Sqrt(c.R * c.R * .299 + c.G * c.G * .587 + c.B * c.B * .114);
+                                if (cc > 130) item.ForeColor = SystemColors.WindowText;
+                                else item.ForeColor = SystemColors.Window;
+                            }
 
-                                    int i = int.Parse(colorHEX.Substring(1), System.Globalization.NumberStyles.HexNumber);
-                                    if (mm.Color.Value != i) mm.Color.SetValue(i);
+                            ri.aColor = colorHEX; item.Tag = ri;
+
+                            // Change resource color in the Map Index
+                            if (currentMap && MMUtils.ActiveDocument != null)
+                            {
+                                MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
+                                foreach (MapMarker mm in mg)
+                                {
+                                    if (ri.Name == mm.Label)
+                                    {
+                                        if (colorHEX == "")
+                                        {
+                                            if (mm.Color.Value == 0) continue;
+                                            mm.Color.SetValue(0); continue;
+                                        }
+
+                                        int i = int.Parse(colorHEX.Substring(1), System.Globalization.NumberStyles.HexNumber);
+                                        if (mm.Color.Value != i) mm.Color.SetValue(i);
+                                    }
                                 }
                             }
-                        }
-                        // Change resource color in the Database
-                        else if (lv == ListDBResources)
-                        {
-                            db.ExecuteNonQuery("update RESOURCES set color=`" + colorHEX +
-                                "` where name=`" + ri.Name + "` and groupID=" + ri.GroupID + "");
+                            // Change resource color in the Database
+                            else if (!currentMap)
+                            {
+                                db.ExecuteNonQuery("update RESOURCES set color=`" + colorHEX +
+                                    "` where name=`" + ri.Name + "` and groupID=" + ri.GroupID + "");
+                            }
                         }
                     }
                 }
-            }
-            // Copy/Cut selected resource
-            else if (e.ClickedItem.Name == "mi_copy" || e.ClickedItem.Name == "mi_cut")
-            {
-                CopyCutResources(lv, e.ClickedItem.Name == "mi_cut");
+                // Copy/Cut selected resource
+                else if (e.ClickedItem == r_copy || e.ClickedItem == r_cut)
+                {
+                    CopyCutResources(tv, e.ClickedItem == r_cut);
+                }
+                else if (e.ClickedItem == r_copyall || e.ClickedItem == rg_copyall)
+                {
+                    CopiedResources.Clear();
+                    string _resources = "";
+
+                    if (currentMap)
+                    {
+                        foreach (TreeNode node in treeViewCM.Nodes)
+                        {
+                            ResourceItem res = node.Tag as ResourceItem;
+                            CopiedResources.Add(res);
+                            _resources += res.Name + "\r\n";
+                        }
+                    }
+                    else
+                    {
+                        foreach (TreeNode node in treeViewDB.SelectedNode.Nodes)
+                        {
+                            ResourceItem res = node.Tag as ResourceItem;
+                            CopiedResources.Add(res);
+                            _resources += res.Name + "\r\n";
+                        }
+                    }
+
+                    if (_resources == "") return;
+                    _resources = _resources.TrimEnd('\r', '\n');
+                    Clipboard.SetText(_resources);
+
+                    string message = Utils.getString("ResourcesDlg.copy.success");
+                    MMUtils.MindManager.NotificationsDialog.ShowNotification("", message, MmNotificationsDialogOptions.mmNotificationsDialogOptionsAutoClose);
+                }
             }
         }
 
@@ -428,36 +435,106 @@ namespace Bubbles
             }
         }
 
-        void CopyCutResources(ListView lv, bool cut)
+        void CopyCutResources(TreeView tv, bool cut)
         {
-            if (lv.SelectedItems.Count == 0) return;
+            GetSelectedNodes(tv);
+            if (SelectedNodes.Count == 0) return;
             CopiedResources.Clear();
             string resources = "";
 
-            foreach (ListViewItem item in lv.SelectedItems)
+            foreach (TreeNode node in SelectedNodes)
             {
-                ResourceItem res = item.Tag as ResourceItem;
+                ResourceItem res = node.Tag as ResourceItem;
                 CopiedResources.Add(res);
                 resources += res.Name + "\r\n";
 
-                if (cut) item.Remove();
+                if (cut)
+                {
+                    node.Remove();
+                    // todo delete from database!
+                }
             }
 
             resources = resources.TrimEnd('\r', '\n');
-            System.Windows.Forms.Clipboard.SetText(resources);
+            Clipboard.SetText(resources);
 
             string message = Utils.getString("ResourcesDlg.copy.success");
             MMUtils.MindManager.NotificationsDialog.ShowNotification("", message, MmNotificationsDialogOptions.mmNotificationsDialogOptionsAutoClose);
         }
 
-        void PasteResources(ListView lv, bool clipboard = false)
+        void DeleteResources(string[] listResources, bool currentMap, int groupID = 0)
+        {
+            TreeView tv = currentMap ? treeViewCM : treeViewDB;
+            GetSelectedNodes(tv);
+
+            // Delete resources from Map Index
+            if (currentMap && MMUtils.ActiveDocument != null)
+            {
+                if (MessageBox.Show(Utils.getString("ResourcesDlg.delete.map"), "",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                    return;
+
+                MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
+                foreach (MapMarker mm in mg)
+                {
+                    if (listResources.Contains(mm.Label)) mm.Delete();
+                }
+                // Remove resources from list.
+                foreach (TreeNode node in SelectedNodes)
+                    node.Remove();
+                SelectedNodes.Clear();
+            }
+            // Delete resources from database
+            else if (!currentMap)
+            {
+                DialogResult rc = MessageBox.Show(Utils.getString("ResourcesDlg.delete.database"), "",
+                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+                if (rc == DialogResult.Cancel) return;
+
+                bool fromall = false;
+                using (StixDB db = new StixDB("Resources"))
+                {
+                    foreach (TreeNode res in SelectedNodes)
+                    {
+                        if (rc == DialogResult.Yes) // delete from all groups
+                        {
+                            db.ExecuteNonQuery("delete from RESOURCES " +
+                                "where name=`" + res.Text + "`");
+                            fromall = true;
+                        }
+                        else // delete from selected group
+                        {
+                            if (res.Parent != null)
+                            {
+                                try
+                                {
+                                    groupID = Convert.ToInt32(res.Parent.Tag);
+                                    db.ExecuteNonQuery("delete from RESOURCES " +
+                                        "where name=`" + res.Text + "` and groupID=" + groupID + "");
+                                } catch { }
+                            }
+                        }
+                    }
+                }
+
+                if (fromall) 
+                    InitDataBaseResources();
+                else
+                    foreach (TreeNode node in SelectedNodes) node.Remove();
+
+                SelectedNodes.Clear();
+            }
+        }
+
+        void PasteResources(TreeView tv, bool clipboard = false)
         {
             string show = "", group = ""; int groupID = 0;
             List<ResourceItem> resources = new List<ResourceItem>();
 
             if (clipboard)
             {
-                string text = System.Windows.Forms.Clipboard.GetText().Trim();
+                string text = Clipboard.GetText().Trim();
                 if (text == "") {
                     MessageBox.Show(Utils.getString("pasteresources.clipboard.empty")); return; }
 
@@ -486,14 +563,15 @@ namespace Bubbles
             }
 
             string where = Utils.getString("pasteresources.preview.curmap");
-            if (lv == ListDBResources)
+            if (tv == treeViewDB)
             {
-                ResourceGroup item = cbResourceGroup.SelectedItem as ResourceGroup;
-                if (item.GroupID == 0)  {
+                group = treeViewDB.SelectedNode.Text;
+                groupID = Convert.ToInt32(treeViewDB.SelectedNode.Tag);
+
+                if (groupID == 0)  {
                     MessageBox.Show(Utils.getString("pasteresources.group.error")); return;
                 }
 
-                groupID = item.GroupID; group = item.Name;
                 where = String.Format(Utils.getString("pasteresources.preview.group"), group);
             }
 
@@ -505,7 +583,7 @@ namespace Bubbles
                 {
                     foreach (var res in resources)
                     {
-                        if (lv == ListMapResources)
+                        if (tv == treeViewCM)
                         {
                             if (MMUtils.ActiveDocument == null) return;
 
@@ -542,11 +620,11 @@ namespace Bubbles
 
                             // Add to list
                             bool found = false;
-                            foreach (ListViewItem item in ListDBResources.Items)
+                            foreach (TreeNode item in treeViewDB.SelectedNode.Nodes)
                                 if (item.Text == res.Name) found = true;
                             if (found) continue;
 
-                            ListViewItem lvi = ListDBResources.Items.Add(res.Name);
+                            TreeNode lvi = treeViewDB.SelectedNode.Nodes.Add(res.Name);
                             res.GroupID = groupID; lvi.Tag = res;
 
                             if (res.aColor != "")
@@ -579,125 +657,200 @@ namespace Bubbles
             this.Hide();
         }
 
-        private void listResources_MouseClick(object sender, MouseEventArgs e)
+        private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            ListView lv = sender as ListView;
-            selectedList = lv;
-            lv.LabelEdit = false;
-
-            if (e.Button == MouseButtons.Left && lv.SelectedItems.Count == 1)
+            if (unselect)
             {
-                if (Utils.ActiveDocumentOrSelectionNull()) return;
+                (sender as TreeView).SelectedNode = null;
+                unselect = false;
+            }
+            else
+                e.Node.Checked = true;
+        }
 
-                if ((ModifierKeys & Keys.Control) == Keys.Control ||
-                    (ModifierKeys & Keys.Shift) == Keys.Shift ||
-                    lv.SelectedItems[0] == null)
+        bool unselect = false;
+        private void treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            TreeView tv = sender as TreeView;
+            currentMap = tv == treeViewCM;
+
+            tv.LabelEdit = false;
+
+            if (e.Button == MouseButtons.Left)
+            {
+                if ((ModifierKeys & Keys.Control) == Keys.Control) // multiple nodes selection
+                {
+                    // Unselect group nodes if there are selected. Multiple selection is for the resources only, not for groups.
+                    if (!currentMap)
+                        foreach (TreeNode node in tv.Nodes)
+                            node.Checked = false;
+
+                    if (e.Node.Parent == null && !currentMap) {
+                        unselect = true; return; } // group clicked
+
+                    if (e.Node.Checked)
+                        e.Node.Checked = false;
+                    else
+                        e.Node.Checked = true;
+
+                    unselect = true;
                     return;
+                }
+                else // A normal click. Unselected all nodes and select clicked one.
+                {
+                    UnselectNodes(tv);
+                    e.Node.Checked = true;
 
+                    if (e.Node.Parent == null && !currentMap) return; // group clicked
+                }
+
+                if (currentMap && Utils.ActiveDocumentOrSelectionNull()) return;
+
+                GetSelectedNodes(tv);
                 Dictionary<string, string> resources = new Dictionary<string, string>();
-                foreach (ListViewItem item in lv.SelectedItems)
+
+                foreach (TreeNode item in SelectedNodes)
                 {
                     ResourceItem res = item.Tag as ResourceItem;
                     resources.Add(res.Name, res.aColor);
                 }
                 AddResourcesToMap(resources);
 
-                string[] listResources = new string[] { lv.SelectedItems[0].Text };
+                string[] listResources = new string[] { e.Node.Text };
                 SetResources(listResources);
             }
             else if (e.Button == MouseButtons.Right) // ContextMenu
             {
-                if (lv.SelectedItems.Count == 0)
+                GetSelectedNodes(tv);
+
+                if (!SelectedNodes.Contains(e.Node)) // Clicking on the non-selected node.
                 {
+                    UnselectNodes(tv);
+                    tv.SelectedNode = e.Node;
+                    e.Node.Checked = true;
+                    SelectedNodes.Add(e.Node);
+                }
+
+                if (!currentMap && e.Node.Parent == null) // Group selected. Show group context menu.
+                {
+                    foreach (ToolStripItem item in cmsGroup.Items)
+                        item.Visible = true;
+
+                    bool commongroup = Convert.ToInt32(e.Node.Tag) == 0;
+
+                    if (CopiedResources.Count == 0 || commongroup) g_paste.Visible = false;
+                    if (!Clipboard.ContainsText() || commongroup) g_pastefromclipboard.Visible = false;
+                    if (commongroup)
+                    {
+                        g_delete.Visible = false; g_newresource.Visible = false; g_rename.Visible = false;
+                    }
+
+                    g_pastefromclipboard.ToolTipText = Utils.getString("ResourcesDlg.PasteToGroup.tooltip");
+                    cmsGroup.Show(Cursor.Position);
+                }
+                else // Resource selected. Show resource context menu.
+                {
+                    if (MMUtils.ActiveDocument == null) return;
+
                     foreach (ToolStripItem item in cmsResource.Items)
-                        item.Visible = false;
+                        item.Visible = true;
 
-                    mm_paste.Visible = true;
+                    if (SelectedNodes.Count > 1) r_rename.Visible = false;
+
+                    if (MMUtils.ActiveDocument.Selection.PrimaryTopic == null) // There are not selected topics.
+                    {
+                        r_addtotopic.Visible = false;
+                        r_remove.Visible = false;
+                    }
+
+                    if (currentMap)
+                    {
+                        r_addtomap.Visible = false;
+                        r_cut.Visible = false;
+                    }
+                    else // resources in the groups
+                    {
+                        r_copyall.Visible = false;
+
+                        if (Convert.ToInt32(e.Node.Parent.Tag) == 0) // All Resources group
+                        {
+                            r_delete.Visible = false;
+                            r_color.Visible = false;
+                            r_cut.Visible = false;
+                        }
+                    }
+
                     cmsResource.Show(Cursor.Position);
-                    return;
                 }
-
-                // Get selected item
-                for (int i = 0; i < lv.Items.Count; i++)
-                {
-                    var rectangle = lv.GetItemRect(i);
-                    if (rectangle.Contains(e.Location))
-                    {
-                        selectedItem = lv.Items[i];
-                        break;
-                    }
-                }
-
-                // Show context menu
-                foreach (ToolStripItem item in cmsResource.Items)
-                    item.Visible = true;
-
-                if (lv == ListMapResources)
-                {
-                    mi_addtomap.Visible = false;
-                    mi_cut.Visible = false;
-                }
-                else if (lv == ListDBResources)
-                {
-                    ResourceGroup rg = cbResourceGroup.SelectedItem as ResourceGroup;
-                    if (rg.GroupID == 0)
-                    {
-                        mi_delete.Visible = false;
-                        mi_cut.Visible = false;
-                        mi_color.Visible = false;
-                    }
-                }
-
-                if (lv.SelectedItems.Count > 1)
-                    mi_rename.Visible = false;
-
-                cmsResource.Show(Cursor.Position);
             }
         }
 
-        private void ResourceList_KeyUp(object sender, KeyEventArgs e)
+        void UnselectNodes(TreeView tv)
         {
-            ListView lv = sender as ListView;
+            foreach (TreeNode node in tv.Nodes)
+            {
+                node.Checked = false;
+
+                foreach (TreeNode _node in node.Nodes)
+                    _node.Checked = false;
+            }
+            SelectedNodes.Clear();
+            tv.SelectedNode = null;
+        }
+
+        /// <summary>
+        /// Detect click on the treeview blank area. 
+        /// Show the paste items from the context menu for a current map.
+        /// </summary>
+        private void treeView_MouseDown(object sender, MouseEventArgs e)
+        {
+            TreeView tv = sender as TreeView;
+            currentMap = tv == treeViewCM;
+
+            if (tv.HitTest(e.Location).Node == null) // click on the empty space
+            {
+                UnselectNodes(tv);
+
+                if (e.Button == MouseButtons.Right && currentMap)
+                {
+                    foreach (ToolStripItem item in cmsGroup.Items)
+                        item.Visible = false;
+
+                    rg_copyall.Visible = true;
+                    g_paste.Visible = true;
+                    g_pastefromclipboard.Visible = true;
+
+                    cmsGroup.Show(Cursor.Position);
+                }
+                unselect = true;
+            }
+        }
+
+        private void treeView_KeyUp(object sender, KeyEventArgs e)
+        {
+            TreeView tv = sender as TreeView;
+            currentMap = tv == treeViewCM;
+            GetSelectedNodes(tv);
+            string[] listResources = new string[SelectedNodes.Count];
+
+            for (int i = 0; i < SelectedNodes.Count; i++)
+                listResources[i] = SelectedNodes[i].Text;
 
             // Delete selected resources.
             if (e.KeyCode == Keys.Delete)
             {
-                int k = lv.SelectedItems.Count;
-
-                string message = Utils.getString("ResourcesDlg.delete.map");
-                if (lv.Name == "ListDBResources")
-                    message = Utils.getString("ResourcesDlg.delete.database");
-
-                if (MessageBox.Show(message, Utils.getString("ResourcesDlg.delete.title"),
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    foreach (ListViewItem item in lv.SelectedItems)
-                    {
-                        ResourceItem res = item.Tag as ResourceItem;
-
-                        if (lv.Name == "ListDBResources") // delete from DB
-                        {
-
-                        }
-                        else // delete from Map Index (= from map)
-                        {
-
-                        }
-
-                        item.Remove(); // delete resource from list
-                    }
-                }
+                DeleteResources(listResources, currentMap);
             }
             // Copy/Cut selected resources.
             else if (e.KeyCode == Keys.C || e.KeyCode == Keys.X)
             {
                 if (ModifierKeys == Keys.Control)
-                    CopyCutResources(lv, e.KeyCode == Keys.X);
+                    CopyCutResources(tv, e.KeyCode == Keys.X);
             }
             // Set selected resources. Edit mode?
             else if (e.KeyCode == Keys.Enter)
             {
-                foreach (ListViewItem item in lv.SelectedItems)
+                foreach (TreeNode item in SelectedNodes)
                 {
 
                 }
@@ -705,12 +858,15 @@ namespace Bubbles
             // Select all resources
             else if (e.KeyCode == Keys.A)
             {
-                if (ModifierKeys == Keys.Control)
+                if (ModifierKeys == Keys.Control && tv == treeViewCM)
                 {
-                    foreach (ListViewItem item in lv.Items)
-                        item.Selected = true;
+                    foreach (TreeNode node in tv.Nodes)
+                        node.Checked = true;
                 }
             }
+
+            e.Handled = true; // to avoid the "ding" sound
+            e.SuppressKeyPress = true;
         }
 
         /// <summary>
@@ -773,208 +929,137 @@ namespace Bubbles
         /// <summary>
         /// Enter key assigns resource(s) to selected topic(s)
         /// </summary>
-        private void txtResources_KeyDown(object sender, KeyEventArgs e)
+        private void txtNewResource_KeyDown(object sender, KeyEventArgs e)
         {
-            TextBox tb = sender as TextBox;
-
             if (e.KeyCode == Keys.Enter)
             {
-                // New Resource add to topics and map.
-                if (tb.Tag.ToString() == "resource")
-                {
-                    ResourceEnter_Click(sender, null);
-                }
-                // New Group add. Or rename group.
-                else
-                {
-                    if (tb.Tag.ToString() == "new")
-                    {
-                        ResourceGroup item;
-
-                        string newName = txtNewResourceDB.Text.Trim();
-                        if (newName == "") return;
-
-                        if (cbResourceGroup.Items.Count > 0)
-                        {
-                            if (cbResourceGroup.SelectedItem != null)
-                            {
-                                item = cbResourceGroup.SelectedItem as ResourceGroup;
-                                if (newName == item.Name) return;
-                            }
-                        }
-
-                        using (StixDB db = new StixDB("Resources"))
-                        {
-                            DataTable dt = db.ExecuteQuery("select from RESOURCEGROUPS where name=`" + newName + "`");
-                            if (dt.Rows.Count > 0)
-                            {
-                                MessageBox.Show(Utils.getString("ResourcesDlg.groupexists")); return;
-                            }
-                            db.AddResourceGroup(newName);
-                        }
-
-                        // Close group mode of the txtNewResourceDB.
-                        btnClose_Click(null, null);
-
-                        // Reinit combobox and select new group.
-                        InitDataBaseResources();
-                        cbResourceGroup.SelectedIndex = cbResourceGroup.FindStringExact(newName);
-                    }
-                    else if (tb.Tag.ToString() == "rename")
-                    {
-                        ResourceGroup g = cbResourceGroup.SelectedItem as ResourceGroup;
-
-                        string newName = txtNewResourceDB.Text.Trim();
-                        if (newName == "" || newName == g.Name) return;
-
-                        using (StixDB db = new StixDB("Resources"))
-                        {
-                            DataTable dt = db.ExecuteQuery("select * from RESOURCEGROUPS where name=`" + newName + "`");
-                            if (dt.Rows.Count > 0)
-                            {
-                                MessageBox.Show(Utils.getString("ResourcesDlg.groupexists"));
-                                txtNewResourceDB.Text = g.Name + " (2)";
-                                return;
-                            }
-
-                            db.ExecuteNonQuery("update RESOURCEGROUPS set name=`" + newName + "` where id=" + g.GroupID + "");
-                        }
-
-                        // Close group mode of the txtNewResourceDB.
-                        btnClose_Click(null, null);
-
-                        // Reinit combobox and select renamed group.
-                        InitDataBaseResources();
-                        cbResourceGroup.SelectedIndex = cbResourceGroup.FindStringExact(newName);
-                    }
-                }
+                // Add new Resource(s) to the topics and map.
+                AddResourceToMap();
 
                 e.Handled = true; // to avoid the "ding" sound
                 e.SuppressKeyPress = true;
             }
-            if (e.KeyCode == Keys.Escape)
+        }
+
+        private void txtNewGroup_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
             {
-                
+                string newName = txtNewGroup.Text.Trim();
+                if (newName == "") return;
+
+                using (StixDB db = new StixDB("Resources"))
+                {
+                    DataTable dt = db.ExecuteQuery("select from RESOURCEGROUPS where name=`" + newName + "`");
+                    if (dt.Rows.Count > 0)
+                    {
+                        MessageBox.Show(Utils.getString("ResourcesDlg.groupexists")); return;
+                    }
+
+                    db.AddResourceGroup(newName);
+                    // Get created group id
+                    int groupID = 1;
+                    dt = db.ExecuteQuery("SELECT last_insert_rowid()");
+                    if (dt.Rows.Count > 0) groupID = Convert.ToInt32(dt.Rows[0][0]);
+                    TreeNode node = treeViewDB.Nodes.Add(newName);
+                    node.Tag = groupID;
+                    node.NodeFont = new Font(treeViewDB.Font, FontStyle.Bold);
+                }
+                e.Handled = true; // to avoid the "ding" sound
+                e.SuppressKeyPress = true;
             }
         }
 
         /// <summary>
-        /// Add to 
+        /// Add resource to topic
         /// </summary>
-        private void ResourceEnter_Click(object sender, EventArgs e)
+        private void AddResourceToMap()
         {
-            TextBox tb = sender as TextBox;
-
-            string _resources = tb.Text.Trim();
+            string _resources = txtNewResource.Text.Trim();
             if (_resources == "") return;
 
             string[] resources = _resources.Split(',').Select(x => x.Trim()).ToArray();
 
-            if (tb == txtNewResourceDB) // add new resource(s) to the database
+            if (MMUtils.ActiveDocument == null) return;
+
+            // Add to topics
+            if (MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0)
             {
-                ResourceGroup group = cbResourceGroup.SelectedItem as ResourceGroup;
+                // Assign resource(s) to topic(s)
+                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                {
+                    string[] topicResources = t.Task.Resources.Split(',').Select(x => x.Trim()).ToArray();
+                    string[] newResources = topicResources.Union(resources).ToArray();
 
-                foreach (string res in resources)
-                    NewResource(res, group.GroupID);
+                    string result = "";
+                    foreach (string res in newResources)
+                        result += res + ",";
+                    result = result.TrimEnd(',');
 
-                tb.Text = "";
+                    t.Task.Resources = result;
+                }
             }
-            else // Add to the topic and to the Map Index
+
+            // Add to Map Index
+            MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
+            foreach (string res in resources)
             {
-                if (MMUtils.ActiveDocument == null) return;
+                bool found = false;
+                foreach (MapMarker mm in mg)
+                    if (mm.Label == res) found = true;
 
-                // Add to topics
-                if (MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() > 0)
+                if (!found)
+                    mg.AddResourceMarker(res);
+            }
+
+            txtNewResource.Text = "";
+
+            // Add resource to the list
+            foreach (string res in resources)
+            {
+                bool found = false;
+                foreach (TreeNode resource in treeViewCM.Nodes)
                 {
-                    // Assign resource(s) to topic(s)
-                    foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                    if (resource.Text == res)
                     {
-                        string[] topicResources = t.Task.Resources.Split(',').Select(x => x.Trim()).ToArray();
-                        string[] newResources = topicResources.Union(resources).ToArray();
-
-                        string result = "";
-                        foreach (string res in newResources)
-                            result += res + ",";
-                        result = result.TrimEnd(',');
-
-                        t.Task.Resources = result;
+                        found = true; break;
                     }
                 }
-
-                // Add to Map Index
-                MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
-                foreach (string res in resources)
+                if (!found)
                 {
-                    bool found = false;
-                    foreach (MapMarker mm in mg)
-                        if (mm.Label == res) found = true;
-
-                    if (!found)
-                        mg.AddResourceMarker(res);
-                }
-
-                tb.Text = "";
-
-                // Add resource to the list
-                foreach (string res in resources)
-                {
-                    bool found = false;
-                    foreach (ListViewItem resource in ListMapResources.Items)
-                    {
-                        if (resource.Text == res)
-                        {
-                            found = true; break;
-                        }
-                    }
-                    if (!found)
-                        ListMapResources.Items.Add(res);
+                    ResourceItem _res = new ResourceItem(res, "", 0);
+                    treeViewCM.Nodes.Add(res).Tag = _res;
                 }
             }
         }
-
-        private void NewResource(string name, int groupID)
-        {
-            ListViewItem lvi; ResourceItem item;
-
-            using (StixDB db = new StixDB("Resources"))
-            {
-                DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
-                    "where name=`" + name + "` and groupID=" + groupID + "");
-
-                if (dt.Rows.Count > 0) return;
-
-                db.AddResource(name, "", groupID);
-
-                item = new ResourceItem(name, "", groupID);
-
-                lvi = ListDBResources.Items.Add(item.Name);
-                lvi.Tag = item;
-            }
-        }
-
         #region Manage Groups
-
-        /// <summary>
-        /// Toggle txtNewResourceDB to resource mode.
-        /// </summary>
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            txtNewResourceDB.BackColor = Color.White;
-            txtNewResourceDB.Text = Utils.getString("ResourcesDlg.dummytext");
-            toolTip1.SetToolTip(txtNewResourceDB, Utils.getString("ResourcesDlg.addnewresource.db.tooltip"));
-            txtNewResourceDB.ForeColor = SystemColors.GrayText;
-            txtNewResourceDB.Font = new Font(txtNewResourceDB.Font, FontStyle.Regular);
-            btnClose.Visible = false;
-            txtNewResourceDB.Tag = "resource";
-        }
 
         #endregion
 
+        void GetSelectedNodes(TreeView tv)
+        {
+            SelectedNodes.Clear();
+
+            foreach (TreeNode node in tv.Nodes)
+            {
+                if (tv == treeViewCM && (node.IsSelected || node.Checked))
+                    SelectedNodes.Add(node);
+
+                if (tv == treeViewDB)
+                {
+                    foreach (TreeNode _node in node.Nodes)
+                        if (_node.IsSelected || _node.Checked)
+                            SelectedNodes.Add(_node);
+                }
+            }
+        }
+
         public Dictionary<string, string> MapResources = new Dictionary<string, string>();
         List<ResourceItem> CopiedResources = new List<ResourceItem>();
+        List<TreeNode> SelectedNodes = new List<TreeNode>();
 
-        ListViewItem selectedItem = null;
-        ListView selectedList = null;
+        TreeNode selectedItem = null;
+        bool currentMap = true;
         public int thisHeight;
 
         public const int WM_NCLBUTTONDOWN = 0xA1;
@@ -1049,52 +1134,59 @@ namespace Bubbles
         }
         #endregion
 
-        private void txtResources_Leave(object sender, EventArgs e)
+        private void txtAddNew_Leave(object sender, EventArgs e)
         {
             TextBox tb = sender as TextBox;
 
-            if (tb.Tag.ToString() == "resource")
-            {
-                if (tb.Text.Trim() == "")
-                {
-                    tb.Text = Utils.getString("ResourcesDlg.dummytext");
-                    tb.ForeColor = SystemColors.GrayText;
-                }
-            }
-            else
-            {
-                btnClose_Click(null, null);
-            }
+            if (tb.Text.Trim() == "")
+                tb.ForeColor = SystemColors.GrayText;
+
+            if (tb == txtNewResource)
+                tb.Text = Utils.getString("ResourcesDlg.dummytext");
+            else if (tb == txtNewGroup)
+                tb.Text = Utils.getString("ResourcesDlg.newgroup");
         }
 
-        private void txtResources_Enter(object sender, EventArgs e)
+        private void txtAddNew_Enter(object sender, EventArgs e)
         {
             TextBox tb = sender as TextBox;
 
-            if (tb.Tag.ToString() != "rename" && tb.ForeColor == SystemColors.GrayText)
+            if (tb.ForeColor == SystemColors.GrayText)
             {
                 tb.Text = "";
                 tb.ForeColor = SystemColors.WindowText;
             }
         }
 
-        private void ListMapResources_Leave(object sender, EventArgs e)
+        private void treeView_Leave(object sender, EventArgs e)
         {
-            ListView lv = sender as ListView;
-            lv.LabelEdit = false;
+            TreeView tv = sender as TreeView;
+            tv.LabelEdit = false;
         }
 
-        private void ListResources_AfterLabelEdit(object sender, LabelEditEventArgs e)
+        private void treeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            if (e.Label == null) return;
-            if (MMUtils.ActiveDocument == null) return;
+            if (e.Label == null) 
+            {
+                e.CancelEdit = true; 
+                if (e.Node.Tag == null) e.Node.Remove(); 
+                return; 
+            }
 
-            ListView lv = sender as ListView;
-            string oldName = lv.SelectedItems[0].Text.Trim();
+            TreeView tv = sender as TreeView;
+            currentMap = tv == treeViewCM;
+
+            if (MMUtils.ActiveDocument == null && currentMap) return;
+
+            string oldName = e.Node.Text.Trim();
             string newName = e.Label.Trim();
+            bool rename = false;
+
+            if (newName == "") {
+                e.CancelEdit = true; e.Node.Remove(); return; }
 
             // Rename resource in the map
-            if (lv == ListMapResources)
+            if (currentMap)
             {
                 MapMarker mmm = null;
 
@@ -1114,148 +1206,142 @@ namespace Bubbles
                 // Change resource name in the Map Index
                 if (mmm != null) mmm.Label = newName;
             }
-            // Rename resource in the database 
-            else if (lv == ListDBResources)
+            // Rename resource or group in the database 
+            else if (!currentMap)
             {
-                ResourceItem res = lv.SelectedItems[0].Tag as ResourceItem;
-
                 using (StixDB db = new StixDB("Resources"))
                 {
-                    DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
-                        "where name=`" + newName + "`");
-
-                    if (dt.Rows.Count > 0)
+                    if (e.Node.Parent == null) // rename group
                     {
-                        MessageBox.Show(Utils.getString("ResourcesDlg.resourceexists"));
-                        e.CancelEdit = true;
-                        return; // Resource already exists
+                        DataTable dt = db.ExecuteQuery("select * from RESOURCEGROUPS " +
+                            "where name=`" + newName + "`");
+
+                        if (dt.Rows.Count > 0)
+                        {
+                            MessageBox.Show(Utils.getString("ResourcesDlg.groupexists"));
+                            e.CancelEdit = true;
+                            return; // Group already exists
+                        }
+
+                        db.ExecuteNonQuery("update RESOURCEGROUPS set name=`" + newName +
+                            "` where name=`" + oldName + "`");
                     }
-
-                    res.Name = newName; lv.SelectedItems[0].Tag = res;
-
-                    db.ExecuteNonQuery("update RESOURCES set name=`" + newName +
-                        "` where name=`" + oldName + "`");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Show the tip to cancel editing
-        /// </summary>
-        private void ListResources_BeforeLabelEdit(object sender, LabelEditEventArgs e)
-        {
-            ListView lv = sender as ListView;
-
-            Point p = new Point(pClose.Height, this.PointToClient(Cursor.Position).Y - p11.Height);
-            if (lv == ListDBResources)
-                p = new Point(pClose.Height, this.PointToClient(Cursor.Position).Y - p11.Width);
-            
-            ToolTip tip = new ToolTip();
-            tip.Show("ESC to cancel edit", this, p, 2000);
-        }
-
-        private void cbDataBaseResources_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ListDBResources.Items.Clear();
-
-            ResourceGroup group = cbResourceGroup.SelectedItem as ResourceGroup;
-
-            using (StixDB db = new StixDB("Resources"))
-            {
-                DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
-                    "where groupID=" + group.GroupID + " order by name");
-
-                if (group.GroupID == 0)
-                    dt = db.ExecuteQuery("select * from RESOURCES order by name");
-
-                foreach (DataRow dr in dt.Rows)
-                {
-                    ResourceItem res = new ResourceItem(
-                        dr["name"].ToString(), dr["color"].ToString(), Convert.ToInt32(dr["groupID"]));
-
-                    if (ResourceExists(res)) continue;
-
-                    var lvi = ListDBResources.Items.Add(res.Name); lvi.Tag = res;
-                    if (res.aColor != "")
+                    else // add new or rename resource
                     {
-                        Color c = ColorTranslator.FromHtml(res.aColor);
-                        lvi.BackColor = c;
-                        int cc = (int)Math.Sqrt(c.R * c.R * .299 + c.G * c.G * .587 + c.B * c.B * .114);
-                        if (cc > 130) lvi.ForeColor = SystemColors.WindowText;
-                        else lvi.ForeColor = SystemColors.Window;
+                        ResourceItem item;
+                        if (e.Node.Tag == null) // add new resource
+                        {
+                            int groupID = Convert.ToInt32(e.Node.Parent.Tag);
+                            DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
+                            "where name=`" + newName + "` and groupID=" + groupID + "");
+
+                            if (dt.Rows.Count > 0)
+                            {
+                                MessageBox.Show(Utils.getString("ResourcesDlg.resourceexists"));
+                                e.CancelEdit = true;
+                                return; // Resource in this group already exists
+                            }
+
+                            // Add resource to All Resources node
+                            dt = db.ExecuteQuery("select * from RESOURCES " + "where name=`" + newName + "`");
+                            item = new ResourceItem(newName, "", groupID);
+                            if (dt.Rows.Count == 0)
+                                treeViewDB.Nodes[0].Nodes.Add(newName).Tag = item;
+
+                            db.AddResource(newName, "", groupID);
+                            e.Node.Tag = item;
+                        }
+                        else // rename resource
+                        {
+                            rename = true;
+                            item = e.Node.Tag as ResourceItem;
+
+                            DataTable dt = db.ExecuteQuery("select * from RESOURCES " +
+                                "where name=`" + newName + "`");
+
+                            if (dt.Rows.Count > 0)
+                            {
+                                MessageBox.Show(Utils.getString("ResourcesDlg.resourceexists"));
+                                e.CancelEdit = true;
+                                return; // Resource already exists
+                            }
+
+                            item.Name = newName; e.Node.Tag = item;
+                            db.ExecuteNonQuery("update RESOURCES set name=`" + newName +
+                                "` where name=`" + oldName + "`");
+                        }
+                        e.Node.Text = newName;
                     }
                 }
             }
 
-            if (group.GroupID == 0 && txtNewResourceDB.Tag.ToString() == "resource")
-                txtNewResourceDB.Enabled = false;
+            if (rename)
+                InitDataBaseResources();
             else
-                txtNewResourceDB.Enabled = true;
+                tv.Sort();
+
+            treeViewDB.SelectedNode = e.Node;
+            tv.LabelEdit = false;
         }
 
-        bool ResourceExists(ResourceItem res)
+        void SortNode(TreeNode node)
         {
-            foreach (ListViewItem item in ListDBResources.Items)
+            List<String> sorted = new List<string>();
+            List<TreeNode> nodes = new List<TreeNode>();
+
+            foreach (TreeNode child in node.Nodes)
             {
-                ResourceItem ri = item.Tag as ResourceItem;
-                if (ri.Name == res.Name && ri.aColor == res.aColor)
-                    return true;
+                sorted.Add(child.Text);
+                nodes.Add(child);
             }
-            return false;
-        }
 
-        private void btnRemoveResources_Click(object sender, EventArgs e)
-        {
-            if (Utils.ActiveDocumentOrSelectionNull()) return;
+            sorted.Sort();
 
-            foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
-                t.Task.Resources = "";
-        }
-
-        private void cbResourceGroup_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
+            int i = 0;
+            foreach (string s in sorted)
             {
-                selectedList = ListDBResources;
-                ResourceGroup g = cbResourceGroup.SelectedItem as ResourceGroup;
-
-                foreach (ToolStripItem item in cmsMore.Items)
-                    item.Visible = false;
-
-                if (g.GroupID == 0)
+                foreach (TreeNode _node in nodes)
                 {
-                    mm_new.Visible = true;
+                    if (_node.Text == s)
+                    {
+                        _node.Remove();
+                        node.Nodes.Insert(i++, _node);
+                    }
                 }
-                else
-                {
-                    foreach (ToolStripItem item in cmsMore.Items)
-                        item.Visible = true;
-                    mm_pastefromclipboard.ToolTipText = Utils.getString("ResourcesDlg.PasteToGroup.tooltip");
-                }
-
-                cmsMore.Show(Cursor.Position);
-                return;
             }
         }
 
-        private void lblCurrentMap_MouseClick(object sender, MouseEventArgs e)
+        private void treeView_DrawNode(object sender, DrawTreeNodeEventArgs e)
         {
-            selectedList = ListMapResources;
+            if (!e.Node.IsVisible) return;
 
-            foreach (ToolStripItem item in cmsMore.Items)
-                item.Visible = false;
+            Font nodeFont = e.Node.NodeFont;
+            if (nodeFont == null) nodeFont = e.Node.TreeView.Font;
+            
+            Color backColor = e.Node.BackColor;
+            if (backColor == null || backColor == SystemColors.HotTrack) backColor = e.Node.TreeView.BackColor;
+            
+            Color foreColor = e.Node.ForeColor;
+            if (foreColor == null) foreColor = e.Node.TreeView.ForeColor;
 
-            mm_paste.Visible = true;
-            mm_pastefromclipboard.Visible = true;
-            mm_pastefromclipboard.ToolTipText = Utils.getString("ResourcesDlg.PasteToMap.tooltip");
+            if (e.Node.Checked)
+            {
+                using (SolidBrush br = new SolidBrush(SystemColors.HotTrack))
+                    e.Graphics.FillRectangle(br, e.Node.Bounds);
 
-            cmsMore.Show(Cursor.Position);
-            return;
-        }
+                //using (SolidBrush br = new SolidBrush(SystemColors.Window))
+                    TextRenderer.DrawText(e.Graphics, e.Node.Text, nodeFont, e.Bounds, SystemColors.Window);
+                    // e.Graphics.DrawString(e.Node.Text, e.Node.TreeView.Font, br, e.Bounds);
+            }
+            else
+            {
+                using (SolidBrush br = new SolidBrush(backColor))
+                    e.Graphics.FillRectangle(br, e.Node.Bounds);
 
-        private void p11_Click(object sender, EventArgs e)
-        {
-
+                //using (SolidBrush br = new SolidBrush(SystemColors.WindowText))
+                    TextRenderer.DrawText(e.Graphics, e.Node.Text, nodeFont, e.Bounds, foreColor);
+                    //e.Graphics.DrawString(e.Node.Text, e.Node.TreeView.Font, br, e.Bounds);
+            }
         }
     }
 

@@ -253,6 +253,13 @@ namespace Bubbles
         {
             if (e.ClickedItem.Name == "NewTool")
             {
+                if (Utils.IsFree())
+                {
+                    MessageBox.Show(Utils.getString("limitation.newtool"), 
+                        Utils.getString("FreeVersionLimitation"));
+                    return;
+                }
+
                 using (NewToolDlg dlg = new NewToolDlg(null, this))
                 {
                     dlg.Location = StixUtils.GetChildLocation(this, dlg.Bounds, orientation);

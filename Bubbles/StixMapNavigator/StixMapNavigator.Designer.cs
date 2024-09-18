@@ -135,7 +135,7 @@
             // pMain
             // 
             this.pMain.Image = ((System.Drawing.Image)(resources.GetObject("pMain.Image")));
-            this.pMain.Location = new System.Drawing.Point(55, 3);
+            this.pMain.Location = new System.Drawing.Point(54, 3);
             this.pMain.Name = "pMain";
             this.pMain.Size = new System.Drawing.Size(24, 24);
             this.pMain.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -164,7 +164,7 @@
             // 
             this.B1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.B1.Image = ((System.Drawing.Image)(resources.GetObject("B1.Image")));
-            this.B1.Location = new System.Drawing.Point(113, 5);
+            this.B1.Location = new System.Drawing.Point(114, 5);
             this.B1.Name = "B1";
             this.B1.Size = new System.Drawing.Size(20, 20);
             this.B1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -176,7 +176,7 @@
             // 
             this.B2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.B2.Image = ((System.Drawing.Image)(resources.GetObject("B2.Image")));
-            this.B2.Location = new System.Drawing.Point(137, 5);
+            this.B2.Location = new System.Drawing.Point(138, 5);
             this.B2.Name = "B2";
             this.B2.Size = new System.Drawing.Size(20, 20);
             this.B2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -188,7 +188,7 @@
             // 
             this.B3.Cursor = System.Windows.Forms.Cursors.Hand;
             this.B3.Image = ((System.Drawing.Image)(resources.GetObject("B3.Image")));
-            this.B3.Location = new System.Drawing.Point(161, 5);
+            this.B3.Location = new System.Drawing.Point(162, 5);
             this.B3.Name = "B3";
             this.B3.Size = new System.Drawing.Size(20, 20);
             this.B3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -200,7 +200,7 @@
             // 
             this.B4.Cursor = System.Windows.Forms.Cursors.Hand;
             this.B4.Image = ((System.Drawing.Image)(resources.GetObject("B4.Image")));
-            this.B4.Location = new System.Drawing.Point(185, 5);
+            this.B4.Location = new System.Drawing.Point(186, 5);
             this.B4.Name = "B4";
             this.B4.Size = new System.Drawing.Size(20, 20);
             this.B4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -212,7 +212,7 @@
             // 
             this.B5.Cursor = System.Windows.Forms.Cursors.Hand;
             this.B5.Image = ((System.Drawing.Image)(resources.GetObject("B5.Image")));
-            this.B5.Location = new System.Drawing.Point(209, 5);
+            this.B5.Location = new System.Drawing.Point(210, 5);
             this.B5.Name = "B5";
             this.B5.Size = new System.Drawing.Size(20, 20);
             this.B5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -224,9 +224,9 @@
             // 
             this.pBookmarkList.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pBookmarkList.Image = ((System.Drawing.Image)(resources.GetObject("pBookmarkList.Image")));
-            this.pBookmarkList.Location = new System.Drawing.Point(84, 5);
+            this.pBookmarkList.Location = new System.Drawing.Point(85, 3);
             this.pBookmarkList.Name = "pBookmarkList";
-            this.pBookmarkList.Size = new System.Drawing.Size(20, 20);
+            this.pBookmarkList.Size = new System.Drawing.Size(24, 24);
             this.pBookmarkList.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pBookmarkList.TabIndex = 95;
             this.pBookmarkList.TabStop = false;

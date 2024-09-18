@@ -105,9 +105,12 @@ namespace Bubbles
             if (cbGroups.Items.Count > 0)
                 cbGroups.SelectedIndex = 0;
 
-            dt = db.ExecuteQuery("select * from RESOURCES order by name");
-            foreach (DataRow row in dt.Rows)
-                cbResources.Items.Add(row["name"]);
+            using (StixDB _db = new StixDB("Resources"))
+            {
+                dt = _db.ExecuteQuery("select * from RESOURCES order by name");
+                foreach (DataRow row in dt.Rows)
+                    cbResources.Items.Add(row["name"]);
+            }
 
             if (cbResources.Items.Count > 0)
                 cbResources.SelectedIndex = 0;

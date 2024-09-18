@@ -273,57 +273,59 @@ namespace Bubbles
             cmsResources.Items.Add(tsi);
             cmsResources.Items.Add(new ToolStripSeparator());
 
-            // Resources from database
-            using (StixDB db = new StixDB("Resources"))
+            if (!Utils.IsFree())
             {
-
-                tsi = cmsResources.Items.Add(Utils.getString("ResourcesDlg.allresources"));
-                ToolStripDropDown dd = (tsi as ToolStripMenuItem).DropDown;
-                (dd as ToolStripDropDownMenu).ShowImageMargin = false;
-                dd.ItemClicked += ContextMenu_ItemClicked;
-                
-                tsi.Font = new Font(tsi.Font, FontStyle.Italic);
-
-                DataTable dt = db.ExecuteQuery("select * from RESOURCES order by name");
-
-                List<string> resources = new List<string>();
-                foreach (DataRow dr in dt.Rows)
+                // Resources from database
+                using (StixDB db = new StixDB("Resources"))
                 {
-                    if (resources.Contains(dr["name"].ToString())) continue;
 
-                    resources.Add(dr["name"].ToString());
-                    var res = dd.Items.Add(dr["name"].ToString());
-                    res.Font = new Font(tsi.Font, FontStyle.Regular);
-                    res.Name = "cm_resource"; res.Tag = dr["color"].ToString();
-
-                    if (res.Tag.ToString() != "")
-                        res.BackColor = ColorTranslator.FromHtml(res.Tag.ToString());
-                }
-
-                // Fill Resource Groups
-                dt = db.ExecuteQuery("select * from RESOURCEGROUPS order by name");
-                foreach (DataRow dr in dt.Rows)
-                {
-                    tsi = cmsResources.Items.Add(dr["name"].ToString());
-                    dd = (tsi as ToolStripMenuItem).DropDown;
+                    tsi = cmsResources.Items.Add(Utils.getString("ResourcesDlg.allresources"));
+                    ToolStripDropDown dd = (tsi as ToolStripMenuItem).DropDown;
                     (dd as ToolStripDropDownMenu).ShowImageMargin = false;
-                    tsi.Font = new Font(tsi.Font, FontStyle.Italic);
                     dd.ItemClicked += ContextMenu_ItemClicked;
 
-                    DataTable _dt = db.ExecuteQuery("select * from RESOURCES " +
-                    "where groupID=" + Convert.ToInt32(dr["id"]) + " order by name");
+                    tsi.Font = new Font(tsi.Font, FontStyle.Italic);
 
-                    foreach (DataRow _dr in _dt.Rows)
+                    DataTable dt = db.ExecuteQuery("select * from RESOURCES order by name");
+
+                    List<string> resources = new List<string>();
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        var res = dd.Items.Add(_dr["name"].ToString());
+                        if (resources.Contains(dr["name"].ToString())) continue;
+
+                        resources.Add(dr["name"].ToString());
+                        var res = dd.Items.Add(dr["name"].ToString());
                         res.Font = new Font(tsi.Font, FontStyle.Regular);
-                        res.Name = "cm_resource"; res.Tag = _dr["color"].ToString();
+                        res.Name = "cm_resource"; res.Tag = dr["color"].ToString();
+
                         if (res.Tag.ToString() != "")
                             res.BackColor = ColorTranslator.FromHtml(res.Tag.ToString());
                     }
+
+                    // Fill Resource Groups
+                    dt = db.ExecuteQuery("select * from RESOURCEGROUPS order by name");
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        tsi = cmsResources.Items.Add(dr["name"].ToString());
+                        dd = (tsi as ToolStripMenuItem).DropDown;
+                        (dd as ToolStripDropDownMenu).ShowImageMargin = false;
+                        tsi.Font = new Font(tsi.Font, FontStyle.Italic);
+                        dd.ItemClicked += ContextMenu_ItemClicked;
+
+                        DataTable _dt = db.ExecuteQuery("select * from RESOURCES " +
+                        "where groupID=" + Convert.ToInt32(dr["id"]) + " order by name");
+
+                        foreach (DataRow _dr in _dt.Rows)
+                        {
+                            var res = dd.Items.Add(_dr["name"].ToString());
+                            res.Font = new Font(tsi.Font, FontStyle.Regular);
+                            res.Name = "cm_resource"; res.Tag = _dr["color"].ToString();
+                            if (res.Tag.ToString() != "")
+                                res.BackColor = ColorTranslator.FromHtml(res.Tag.ToString());
+                        }
+                    }
                 }
             }
-
             cmsResources.Items.Add(new ToolStripSeparator());
 
             tsi = cmsResources.Items.Add(Utils.getString("taskinfo.resources.delete"));

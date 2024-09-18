@@ -322,7 +322,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                      </>
                   </>
                </>
-               <_ tag = 0 id = if expanded = 0 >
+               <_ tag = 0 id = if expanded = 2 >
                   <children >
                      <_ tag = 0 id = message expanded = 2 >
                         <children >
@@ -459,7 +459,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                      <rows >
                         <_ >
                            <varname >Pathregkey</>
-                           <value >Software\PalmaRoss\WowStix</>
+                           <value >Software\PalmaRoss\OmniStix</>
                            <if ></>
                            <comm ></>
                         </>
@@ -1206,7 +1206,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <_ >
                                  <valname >version</>
                                  <regtype >str</>
-                                 <value >1.0.7.3</>
+                                 <value >1.0.7.5</>
                                  <if ></>
                                  <comm ></>
                               </>
@@ -2015,8 +2015,8 @@ Please try further.</>
          </>
          <_ >
             <varname >version</>
-            <value1 >1.0.7.3</>
-            <value2 >1.0.7.3</>
+            <value1 >1.0.7.5</>
+            <value2 >1.0.7.5</>
             <value3 ></>
             <value4 ></>
             <value5 ></>

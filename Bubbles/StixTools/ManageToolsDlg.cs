@@ -552,6 +552,13 @@ namespace Bubbles
 
         private void btnNewTool_Click(object sender, EventArgs e)
         {
+            if (Utils.IsFree())
+            {
+                MessageBox.Show(Utils.getString("limitation.newtool"),
+                    Utils.getString("FreeVersionLimitation"));
+                return;
+            }
+
             using (NewToolDlg dlg = new NewToolDlg(this, null))
             {
                 dlg.Location = this.Location;

@@ -320,6 +320,7 @@ namespace Bubbles
 
             // Create registry file
             ExportRegKey("HKEY_CURRENT_USER\\Software\\PalmaRoss\\OmniStix", _tempPath + "\\OmniStix.reg");
+            ExportRegKey("HKEY_CURRENT_USER\\Software\\PalmaRoss\\OmniStix", _tempPath + "\\OmniStix.reg");
 
             try
             {

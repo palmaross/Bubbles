@@ -315,9 +315,9 @@
             // 
             this.cbResources.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.cbResources.FormattingEnabled = true;
-            this.cbResources.Location = new System.Drawing.Point(228, 272);
+            this.cbResources.Location = new System.Drawing.Point(185, 272);
             this.cbResources.Name = "cbResources";
-            this.cbResources.Size = new System.Drawing.Size(117, 21);
+            this.cbResources.Size = new System.Drawing.Size(160, 21);
             this.cbResources.TabIndex = 28;
             this.cbResources.SelectedIndexChanged += new System.EventHandler(this.cbResources_SelectedIndexChanged);
             // 

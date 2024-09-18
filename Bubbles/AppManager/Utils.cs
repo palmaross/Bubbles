@@ -16,6 +16,7 @@ using System.Text;
 using System.Data;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using System.Security.Cryptography;
+using System.Threading;
 
 namespace Bubbles
 {
@@ -804,11 +805,11 @@ namespace Bubbles
                 case "bookmarks":
                     limits = getString("limitation.bookmarks") + getString("limitation.endrestriction");
                     break;
-                case "topicnoteslookin":
-                    limits = getString("limitation.topicnoteslookin");
-                    break;
                 case "topicnotes":
                     limits = getString("limitation.topicnotes");
+                    break;
+                case "topic2notes":
+                    limits = getString("limitation.topic2notes");
                     break;
                 case "links":
                     limits = getString("limitation.links");
@@ -876,6 +877,18 @@ namespace Bubbles
                 MMUtils.ActiveDocument.Selection.OfType<Topic>().Count() == 0))
                 return true;
             return false;
+        }
+
+        public static void ShowNotification(System.Windows.Forms.Control control, string message, int sec = 3)
+        {
+            control.BackColor = SystemColors.Info;
+            control.Visible = true;
+            control.BringToFront();
+
+            Thread.Sleep(sec);
+
+            for (int i = 0; i < 10; i++)
+                control.BackColor = System.Drawing.Color.FromArgb(i, SystemColors.Info);
         }
 
         public static void InitMarkersList(Topic t)

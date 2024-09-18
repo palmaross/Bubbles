@@ -135,6 +135,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppManager\DatabaseWrapper2.cs" />
+    <Compile Include="AppManager\NotificationPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AppManager\NotificationPanel.Designer.cs">
+      <DependentUpon>NotificationPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="AppManager\ProgressDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1129,6 +1135,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AppManager\NotificationPanel.resx">
+      <DependentUpon>NotificationPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AppManager\ProgressDlg.resx">
       <DependentUpon>ProgressDlg.cs</DependentUpon>
     </EmbeddedResource>

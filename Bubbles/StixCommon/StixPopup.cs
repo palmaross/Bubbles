@@ -15,9 +15,9 @@ namespace Bubbles
         {
             InitializeComponent();
 
-            helpProvider1.HelpNamespace = Utils.dllPath + "WowStix.chm";
+            helpProvider1.HelpNamespace = Utils.dllPath + "OmniStix.chm";
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
-            helpProvider1.SetHelpKeyword(this, "IconStick.htm");
+            helpProvider1.SetHelpKeyword(this, "IconStix.htm");
 
             pRotate.Tag = Utils.getString("stix.contextmenu.rotate");
             pRemember.Tag = Utils.getString("stix.contextmenu.remember");

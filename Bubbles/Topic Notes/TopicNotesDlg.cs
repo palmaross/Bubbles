@@ -532,6 +532,10 @@ namespace Bubbles
         {
             if (Utils.ActiveDocumentOrSelectionNull()) return;
 
+            if (listTopics.Nodes.Count > 0 && listTopics.Nodes[0].Nodes.Count > 1 && 
+                Utils.FreeVersionLimitExceeded("topic2notes"))
+                return;
+
             TreeNode map = null, node = null;
             string mappath = MMUtils.ActiveDocument.FullName.ToLower();
             foreach (TreeNode _node in listTopics.Nodes)
@@ -576,7 +580,7 @@ namespace Bubbles
                 node = map.Nodes.Add(topictext);
                 node.Tag = item;
 
-                if (StixMain.OmniTopics.Keys.Contains(mappath))
+                if (StixMain.OmniTopics.Keys.Contains(mappath) && !StixMain.OmniTopics[mappath].Keys.Contains(t.Guid))
                     StixMain.OmniTopics[mappath].Add(t.Guid, node);
                 else
                     StixMain.OmniTopics[mappath] = new Dictionary<string, TreeNode> { { t.Guid, node } };
@@ -1070,9 +1074,6 @@ namespace Bubbles
 
         private void CmsLookIn_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem != LookInCurrenMap && Utils.FreeVersionLimitExceeded("topicnoteslookin"))
-                return;
-
             if (e.ClickedItem == LookInCurrenMap)
             {
                 cbFindIn.Text = LookInCurrenMap.Text;
@@ -1209,7 +1210,7 @@ namespace Bubbles
                 }
             }
 
-            m_progressDlg.Show(); int maps = 0, i = 1; ;
+            m_progressDlg.Show(); int maps = 0, i = 1;
 
             if (lookin == "currentMap") // Search for notes in the current map
             {
@@ -1310,6 +1311,26 @@ namespace Bubbles
                 listTopics.SelectedNode = map.Nodes[0];
             else if (listTopics.Nodes.Count > 0)
                 listTopics.SelectedNode = listTopics.Nodes[0];
+
+            int total = listTopics.GetNodeCount(true);
+
+            if (total > 3 && Utils.IsFree())
+            {
+                int mapcount = listTopics.Nodes.Count;
+                total -= mapcount;
+
+                MessageBox.Show(String.Format(Utils.getString("limitation.topic2notes2"), total, mapcount), 
+                    Utils.getString("FreeVersionLimitation"));
+
+                TreeNode first = listTopics.Nodes[0];
+                listTopics.Nodes.Clear();
+                listTopics.Nodes.Add(first);
+
+                for (int k = first.Nodes.Count - 1; k > 1; k--)
+                {
+                    listTopics.Nodes[0].Nodes[k].Remove();
+                }
+            }
         }
         Dictionary<TreeNode, string> MyNodes = new Dictionary<TreeNode, string>();
 
