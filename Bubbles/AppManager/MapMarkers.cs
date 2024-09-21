@@ -168,14 +168,17 @@ namespace Bubbles
                     }
                     if (color != "")
                     {
+#if !MINDJET20
                         int c = int.Parse(color.Substring(1), NumberStyles.HexNumber);
                         tag.Color.SetValue(c);
+#endif
                     }
                 }
                 catch { MessageBox.Show("Problem with adding tag"); return false; }
             }
             else if (changeColor) // tag exists. Check for tag color
             {
+#if !MINDJET20
                 int tagColor = tag.Color.Value;
 
                 if (color == "")
@@ -189,6 +192,7 @@ namespace Bubbles
                     if (tagColor != c)
                         tag.Color.SetValue(c);
                 }
+#endif
             }
             return true;
         }

@@ -217,6 +217,7 @@ namespace Bubbles
             {
                 foreach (Attachment attach in t.Attachments) // save attached file to SoundDB folder
                 {
+#if !MINDJET20
                     if (attach.Guid == attachGuid)
                     {
                         path = Utils.m_dataPath + "SoundDB\\" + attach.FileName;
@@ -224,6 +225,7 @@ namespace Bubbles
                         if (!File.Exists(path))
                             attach.SaveAs(path);
                     }
+#endif
                 }
             }
 

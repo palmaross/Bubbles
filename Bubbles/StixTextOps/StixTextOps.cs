@@ -218,7 +218,9 @@ namespace Bubbles
                 {
                     if (OptionTextFormat.Tag.ToString() == "formatted")
                     {
+#if !MINDJET20
                         t.Notes.AppendRtf(rtf);
+#endif
                     }
                     else // unformatted text
                     {

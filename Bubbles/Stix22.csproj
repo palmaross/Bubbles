@@ -37,7 +37,7 @@
   <PropertyGroup />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-OL|AnyCPU'">
     <OutputPath>bin\Release-OL\</OutputPath>
-    <DefineConstants>MINDJET22, VENDOR-OL</DefineConstants>
+    <DefineConstants>MINDJET22, VENDOR_OL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Community.CsharpSqlite4">

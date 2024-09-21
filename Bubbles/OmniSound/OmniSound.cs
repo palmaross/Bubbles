@@ -641,8 +641,10 @@ namespace Bubbles
             }
 
             string a_guid = "";
+#if !MINDJET20
             if (attachment && t != null)
                 a_guid = "###" + t.Attachments.Add(filename).Guid;
+#endif
 
             if (addtotopic && t != null)
             {
@@ -776,7 +778,9 @@ namespace Bubbles
             if (chAttachment.Checked) // Add attachment
             {
                 var attach = _t.Attachments.Add((cbRecordings.SelectedItem as AudioItem).Path);
+#if !MINDJET20
                 a_guid = "###" + attach.Guid;
+#endif
             }
 
             // Add strip icon.

@@ -345,6 +345,7 @@ namespace Bubbles
                                 MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
                                 foreach (MapMarker mm in mg)
                                 {
+#if !MINDJET20
                                     if (ri.Name == mm.Label)
                                     {
                                         if (colorHEX == "")
@@ -356,6 +357,7 @@ namespace Bubbles
                                         int i = int.Parse(colorHEX.Substring(1), System.Globalization.NumberStyles.HexNumber);
                                         if (mm.Color.Value != i) mm.Color.SetValue(i);
                                     }
+#endif
                                 }
                             }
                             // Change resource color in the Database
@@ -429,8 +431,10 @@ namespace Bubbles
                 // Set color
                 if (res.Value != "")
                 {
+#if !MINDJET20
                     int i = int.Parse(res.Value.Substring(1), System.Globalization.NumberStyles.HexNumber);
                     mmm.Color.SetValue(i);
+#endif
                 }
             }
         }
@@ -605,8 +609,10 @@ namespace Bubbles
                             // Set color
                             if (res.aColor != "")
                             {
+#if !MINDJET20
                                 int i = int.Parse(res.aColor.Substring(1), System.Globalization.NumberStyles.HexNumber);
                                 mmm.Color.SetValue(i);
+#endif
                             }
                         }
                         else // Paste to selected group

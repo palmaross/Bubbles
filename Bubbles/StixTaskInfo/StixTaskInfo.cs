@@ -241,7 +241,10 @@ namespace Bubbles
             MapMarkerGroup mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeResource);
             foreach (MapMarker mm in mg)
             {
-                string color = "#" + mm.Color.Value.ToString("X");
+                string color = "#0";
+#if !MINDJET20
+                color = "#" + mm.Color.Value.ToString("X");
+#endif
                 if (color == "#0") color = "";
 
                 tsi = cmsResources.Items.Add(mm.Label);
@@ -617,12 +620,14 @@ namespace Bubbles
                     // Set color
                     if (e.ClickedItem.Tag != null && e.ClickedItem.Tag.ToString() != "")
                     {
+#if !MINDJET20
                         try
                         {
                             int i = int.Parse(e.ClickedItem.Tag.ToString().Substring(1), System.Globalization.NumberStyles.HexNumber);
                             mmm.Color.SetValue(i);
                         }
                         catch { }
+#endif
                     }
                 }
 

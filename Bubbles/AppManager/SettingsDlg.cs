@@ -126,6 +126,7 @@ namespace Bubbles
             Utils.setRegistry("OpenLinksInOmniBrowser", chOpenInOmniBrowser.Checked ? "1" : "0");
 
             Utils.setRegistry("TopicAutoWidth", chTopicAutoWidth.Checked ? "1" : "0");
+            StixUtils.TopicAutoWidth = chTopicAutoWidth.Checked;
             Utils.setRegistry("SaveMapsEnabled", chSaveMaps.Checked ? "1" : "0");
             StixMain.saveMapsTimer.Interval = (int)numSaveMaps.Value;
             if (!chSaveMaps.Checked) StixMain.saveMapsTimer.Stop();
