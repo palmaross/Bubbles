@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.txtEditNode = new System.Windows.Forms.TextBox();
             this.pSize = new System.Windows.Forms.PictureBox();
@@ -116,7 +116,7 @@
             this.txtEditNode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtEditNode.Location = new System.Drawing.Point(12, 12);
             this.txtEditNode.Name = "txtEditNode";
-            this.txtEditNode.Size = new System.Drawing.Size(121, 20);
+            this.txtEditNode.Size = new System.Drawing.Size(121, 21);
             this.txtEditNode.TabIndex = 17;
             this.txtEditNode.Visible = false;
             this.txtEditNode.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtEditNode_KeyUp);
@@ -173,14 +173,14 @@
             this.dataGridView1.AllowUserToResizeColumns = false;
             this.dataGridView1.AllowUserToResizeRows = false;
             this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightCyan;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.LightCyan;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.LinkImage,
@@ -196,10 +196,10 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle6;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(482, 234);
+            this.dataGridView1.Size = new System.Drawing.Size(482, 233);
             this.dataGridView1.TabIndex = 21;
             this.dataGridView1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView1_CellMouseClick);
             this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
@@ -219,8 +219,8 @@
             // 
             // LinkTitle
             // 
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.LinkTitle.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.LinkTitle.DefaultCellStyle = dataGridViewCellStyle5;
             this.LinkTitle.FillWeight = 101.7739F;
             this.LinkTitle.HeaderText = "Title";
             this.LinkTitle.Name = "LinkTitle";
@@ -271,10 +271,10 @@
             // 
             this.txtLink.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.txtLink.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.txtLink.Location = new System.Drawing.Point(0, 257);
+            this.txtLink.Location = new System.Drawing.Point(0, 256);
             this.txtLink.Name = "txtLink";
             this.txtLink.ReadOnly = true;
-            this.txtLink.Size = new System.Drawing.Size(482, 20);
+            this.txtLink.Size = new System.Drawing.Size(482, 21);
             this.txtLink.TabIndex = 4;
             // 
             // txtComment
@@ -306,7 +306,7 @@
             this.rbtnOmniBrowser.AutoSize = true;
             this.rbtnOmniBrowser.Location = new System.Drawing.Point(273, 3);
             this.rbtnOmniBrowser.Name = "rbtnOmniBrowser";
-            this.rbtnOmniBrowser.Size = new System.Drawing.Size(90, 17);
+            this.rbtnOmniBrowser.Size = new System.Drawing.Size(103, 19);
             this.rbtnOmniBrowser.TabIndex = 20;
             this.rbtnOmniBrowser.Text = "Omni Browser";
             this.rbtnOmniBrowser.UseVisualStyleBackColor = true;
@@ -317,7 +317,7 @@
             this.rbtnExternalApp.Checked = true;
             this.rbtnExternalApp.Location = new System.Drawing.Point(112, 3);
             this.rbtnExternalApp.Name = "rbtnExternalApp";
-            this.rbtnExternalApp.Size = new System.Drawing.Size(135, 17);
+            this.rbtnExternalApp.Size = new System.Drawing.Size(152, 19);
             this.rbtnExternalApp.TabIndex = 19;
             this.rbtnExternalApp.TabStop = true;
             this.rbtnExternalApp.Text = "Внешнее приложение";
@@ -329,7 +329,7 @@
             this.lblOpenIn.AutoSize = true;
             this.lblOpenIn.Location = new System.Drawing.Point(3, 5);
             this.lblOpenIn.Name = "lblOpenIn";
-            this.lblOpenIn.Size = new System.Drawing.Size(75, 13);
+            this.lblOpenIn.Size = new System.Drawing.Size(86, 15);
             this.lblOpenIn.TabIndex = 18;
             this.lblOpenIn.Text = "Открывать в:";
             // 
@@ -471,7 +471,8 @@
             // 
             // LinksDlg
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(645, 321);
             this.Controls.Add(this.splitContainer1);
@@ -502,7 +503,6 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.TextBox txtLink;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblOpenIn;
@@ -545,5 +545,6 @@
         private System.Windows.Forms.ToolStripMenuItem g_AddGroupBelow;
         private System.Windows.Forms.ToolStripMenuItem g_AddChildGroup;
         private System.Windows.Forms.Panel panelMinimized;
+        public System.Windows.Forms.TreeView treeView1;
     }
 }

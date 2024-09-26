@@ -192,6 +192,8 @@ namespace Bubbles
             float s = fi.Length / 1000F;
             string size = ((float)Math.Round(s, 2)).ToString();
 
+            row.DefaultCellStyle.Font = new Font(dgv.Font.FontFamily, Utils.WindowFontSize * 0.75F);
+
             row.Cells["Group"].Value = Groups[group];
             row.Cells["AudioTitle"].Value = title;
             row.Cells["MapTitle"].Value = map;

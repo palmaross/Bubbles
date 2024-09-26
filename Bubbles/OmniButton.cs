@@ -65,7 +65,7 @@ namespace Bubbles
 
             if (!DesignMode)
             {
-                drawTimer.Interval = 1000;
+                drawTimer.Interval = 2000;
                 drawTimer.Tick += DrawForm;
                 drawTimer.Start();
             }

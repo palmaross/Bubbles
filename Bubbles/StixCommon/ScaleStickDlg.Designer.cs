@@ -34,10 +34,11 @@
             // 
             // numSfactor
             // 
+            this.numSfactor.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numSfactor.Location = new System.Drawing.Point(7, 6);
             this.numSfactor.Mask = "000%";
             this.numSfactor.Name = "numSfactor";
-            this.numSfactor.Size = new System.Drawing.Size(39, 20);
+            this.numSfactor.Size = new System.Drawing.Size(39, 21);
             this.numSfactor.TabIndex = 12;
             this.numSfactor.Text = "100";
             this.numSfactor.ValidatingType = typeof(int);
@@ -45,6 +46,7 @@
             // 
             // cbSfactor
             // 
+            this.cbSfactor.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbSfactor.FormattingEnabled = true;
             this.cbSfactor.Items.AddRange(new object[] {
             "100%",
@@ -55,7 +57,7 @@
             "300%"});
             this.cbSfactor.Location = new System.Drawing.Point(6, 5);
             this.cbSfactor.Name = "cbSfactor";
-            this.cbSfactor.Size = new System.Drawing.Size(56, 21);
+            this.cbSfactor.Size = new System.Drawing.Size(56, 23);
             this.cbSfactor.TabIndex = 13;
             this.cbSfactor.SelectedIndexChanged += new System.EventHandler(this.cbStixBase_SelectedIndexChanged);
             // 
@@ -64,7 +66,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Thistle;
-            this.ClientSize = new System.Drawing.Size(67, 29);
+            this.ClientSize = new System.Drawing.Size(67, 30);
             this.Controls.Add(this.numSfactor);
             this.Controls.Add(this.cbSfactor);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;

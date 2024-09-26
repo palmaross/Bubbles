@@ -45,6 +45,12 @@ namespace Bubbles
             imageList1.Images.Add(img2);
             imageList1.Images.Add(img3);
 
+            int fontsize = (int)treeView1.Font.Size;
+            if (Utils.WindowFontSize != fontsize)
+            {
+                treeView1.Font = new Font(treeView1.Font.FontFamily, Utils.WindowFontSize * 0.75F);
+            }
+
             using (StixDB db = new StixDB("Bookmarks"))
             {
                 DataTable dt = db.ExecuteQuery("select * from BOOKMARKGROUPS order by name");

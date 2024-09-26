@@ -68,9 +68,10 @@
             // 
             // txtTitle
             // 
+            this.txtTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTitle.Location = new System.Drawing.Point(91, 6);
             this.txtTitle.Name = "txtTitle";
-            this.txtTitle.Size = new System.Drawing.Size(205, 20);
+            this.txtTitle.Size = new System.Drawing.Size(205, 21);
             this.txtTitle.TabIndex = 5;
             // 
             // lblToolName

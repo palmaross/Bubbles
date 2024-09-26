@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -42,6 +41,12 @@ namespace Bubbles
 
             string ipath = Utils.m_dataPath + "AppIconDB\\";
             ListViewItem lv;
+
+            int fontsize = (int)listView1.Font.Size;
+            if (Utils.WindowFontSize != fontsize)
+            {
+                listView1.Font = new Font(listView1.Font.FontFamily, Utils.WindowFontSize * 0.75F);
+            }
 
             foreach (var item in Tools)
             {

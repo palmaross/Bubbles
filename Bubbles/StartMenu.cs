@@ -475,9 +475,9 @@ namespace Bubbles
 
         private void BoxSources_Click(object sender, EventArgs e)
         {
-            StixMain.m_AllSources = null;
-            StixMain.m_AllSources = new LinksDlg();
-            StixMain.m_AllSources.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+            StixMain.m_Links = null;
+            StixMain.m_Links = new LinksDlg();
+            StixMain.m_Links.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
         }
 
         private void Stickers_MouseClick(object sender, MouseEventArgs e)
@@ -807,6 +807,10 @@ namespace Bubbles
                 StixMain.m_QuickTopics = new QuickTopicsDlg();
                 StixMain.m_QuickTopics.Location = StixUtils.GetChildLocation(this, StixMain.m_QuickTopics.Bounds, "H");
                 StixMain.m_QuickTopics.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+
+
+                if (StixMain.m_TaskInfo == null)
+                    StixMain.m_TaskInfo = new StixTaskInfo(0, "H");
 
                 StixMain.m_TaskInfo.PopulateQuickTopics();
 

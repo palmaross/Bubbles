@@ -67,10 +67,28 @@ namespace Bubbles
             {
                 tabControl1.Width -= 1; tabControl1.Height -= 1;
             }
+
             this.Paint += BookmarkListDlg_Paint; // paint the border
 
+            defaultHeight = this.Height;
+            defaultItemHeight = listPositions.ItemHeight;
+            int fontsize = (int)listMainTopics.Font.Size;
+            if (Utils.WindowFontSize != fontsize)
+            {
+                listMainTopics.Font = new Font(listMainTopics.Font.FontFamily, Utils.WindowFontSize * 0.75F);
+                listBookmarks.Font = new Font(listBookmarks.Font.FontFamily, Utils.WindowFontSize * 0.75F);
+                listPositions.Font = new Font(listPositions.Font.FontFamily, Utils.WindowFontSize * 0.75F);
+            }
+
             Init();
+
+            // Get listbox item height and adjust form height depending on listPositions height
+            int itemHeight = (int)this.CreateGraphics().MeasureString("0", listPositions.Font, TextRenderer.MeasureText("0", new Font(listPositions.Font.FontFamily, Utils.WindowFontSize * 0.75F))).Height;
+            int diff = (itemHeight - (int)(defaultItemHeight * Utils.scalingFactor)) * listPositions.Items.Count;
+            this.Height += diff + 1;
         }
+        public int defaultHeight;
+        public int defaultItemHeight;
 
         private void PanelControls_MouseDown(object sender, MouseEventArgs e)
         {
@@ -101,10 +119,10 @@ namespace Bubbles
             if (MMUtils.ActiveDocument == null) return;
 
             Topic cTopic = MMUtils.ActiveDocument.CentralTopic;
-            lblCentralTopic.Text = cTopic.Text;
+            lblCentralTopic.Text = cTopic.Text.Replace("\n", " ").Trim();
 
             foreach (Topic t in cTopic.AllSubTopics)
-                listMainTopics.Items.Add(new BookmarkItem(t.Text.Trim(), t.Guid));
+                listMainTopics.Items.Add(new BookmarkItem(t.Text.Replace("\n", " ").Trim(), t.Guid));
 
             cTopic = null;
 
@@ -198,7 +216,7 @@ namespace Bubbles
                     _t.IsMainTopic ? Main :
                     _t.IsFloatingTopic ? Floating : Normal;
 
-                BookmarkItem item = new BookmarkItem(_t.Text.Trim(), _t.Guid, topictype);
+                BookmarkItem item = new BookmarkItem(_t.Text.Replace("\n", " ").Trim(), _t.Guid, topictype);
                 StixMapNavigator.Bookmarks.Add(item);
                 listBookmarks.Items.Add(item);
             }

@@ -165,16 +165,16 @@
             // 
             this.cbQuickTopics.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbQuickTopics.FormattingEnabled = true;
-            this.cbQuickTopics.Location = new System.Drawing.Point(93, 40);
+            this.cbQuickTopics.Location = new System.Drawing.Point(99, 40);
             this.cbQuickTopics.Name = "cbQuickTopics";
-            this.cbQuickTopics.Size = new System.Drawing.Size(176, 21);
+            this.cbQuickTopics.Size = new System.Drawing.Size(176, 23);
             this.cbQuickTopics.TabIndex = 2;
             this.cbQuickTopics.SelectedIndexChanged += new System.EventHandler(this.cbTaskTemplates_SelectedIndexChanged);
             // 
             // pProgress
             // 
             this.pProgress.Image = ((System.Drawing.Image)(resources.GetObject("pProgress.Image")));
-            this.pProgress.Location = new System.Drawing.Point(111, 100);
+            this.pProgress.Location = new System.Drawing.Point(117, 100);
             this.pProgress.Name = "pProgress";
             this.pProgress.Size = new System.Drawing.Size(16, 16);
             this.pProgress.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -196,7 +196,7 @@
             // pPriority
             // 
             this.pPriority.Image = ((System.Drawing.Image)(resources.GetObject("pPriority.Image")));
-            this.pPriority.Location = new System.Drawing.Point(111, 126);
+            this.pPriority.Location = new System.Drawing.Point(117, 126);
             this.pPriority.Name = "pPriority";
             this.pPriority.Size = new System.Drawing.Size(16, 16);
             this.pPriority.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -209,30 +209,30 @@
             // 
             this.dtpStartDate.Location = new System.Drawing.Point(111, 136);
             this.dtpStartDate.Name = "dtpStartDate";
-            this.dtpStartDate.Size = new System.Drawing.Size(196, 20);
+            this.dtpStartDate.Size = new System.Drawing.Size(196, 21);
             this.dtpStartDate.TabIndex = 9;
             this.dtpStartDate.Visible = false;
             // 
             // cbStartDatePeriod
             // 
             this.cbStartDatePeriod.FormattingEnabled = true;
-            this.cbStartDatePeriod.Location = new System.Drawing.Point(111, 160);
+            this.cbStartDatePeriod.Location = new System.Drawing.Point(118, 160);
             this.cbStartDatePeriod.Name = "cbStartDatePeriod";
-            this.cbStartDatePeriod.Size = new System.Drawing.Size(158, 21);
+            this.cbStartDatePeriod.Size = new System.Drawing.Size(158, 23);
             this.cbStartDatePeriod.TabIndex = 13;
             // 
             // cbDueDatePeriod
             // 
             this.cbDueDatePeriod.FormattingEnabled = true;
-            this.cbDueDatePeriod.Location = new System.Drawing.Point(111, 185);
+            this.cbDueDatePeriod.Location = new System.Drawing.Point(118, 185);
             this.cbDueDatePeriod.Name = "cbDueDatePeriod";
-            this.cbDueDatePeriod.Size = new System.Drawing.Size(158, 21);
+            this.cbDueDatePeriod.Size = new System.Drawing.Size(158, 23);
             this.cbDueDatePeriod.TabIndex = 14;
             // 
             // pIcon
             // 
             this.pIcon.Image = ((System.Drawing.Image)(resources.GetObject("pIcon.Image")));
-            this.pIcon.Location = new System.Drawing.Point(111, 303);
+            this.pIcon.Location = new System.Drawing.Point(118, 303);
             this.pIcon.Name = "pIcon";
             this.pIcon.Size = new System.Drawing.Size(16, 16);
             this.pIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -244,7 +244,7 @@
             // lblChangeIcon
             // 
             this.lblChangeIcon.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblChangeIcon.Location = new System.Drawing.Point(182, 298);
+            this.lblChangeIcon.Location = new System.Drawing.Point(189, 298);
             this.lblChangeIcon.Name = "lblChangeIcon";
             this.lblChangeIcon.Size = new System.Drawing.Size(165, 26);
             this.lblChangeIcon.TabIndex = 11;
@@ -252,40 +252,40 @@
             // 
             // txtResources
             // 
-            this.txtResources.Location = new System.Drawing.Point(110, 273);
+            this.txtResources.Location = new System.Drawing.Point(117, 273);
             this.txtResources.Name = "txtResources";
-            this.txtResources.Size = new System.Drawing.Size(216, 20);
+            this.txtResources.Size = new System.Drawing.Size(216, 21);
             this.txtResources.TabIndex = 13;
             // 
             // txtTagGroup1
             // 
-            this.txtTagGroup1.Location = new System.Drawing.Point(110, 347);
+            this.txtTagGroup1.Location = new System.Drawing.Point(117, 347);
             this.txtTagGroup1.Name = "txtTagGroup1";
-            this.txtTagGroup1.Size = new System.Drawing.Size(115, 20);
+            this.txtTagGroup1.Size = new System.Drawing.Size(114, 21);
             this.txtTagGroup1.TabIndex = 15;
             // 
             // txtTag1
             // 
-            this.txtTag1.Location = new System.Drawing.Point(233, 347);
+            this.txtTag1.Location = new System.Drawing.Point(238, 347);
             this.txtTag1.Name = "txtTag1";
-            this.txtTag1.Size = new System.Drawing.Size(115, 20);
+            this.txtTag1.Size = new System.Drawing.Size(114, 21);
             this.txtTag1.TabIndex = 16;
             // 
             // lblTagGroup
             // 
             this.lblTagGroup.AutoSize = true;
-            this.lblTagGroup.Location = new System.Drawing.Point(110, 330);
+            this.lblTagGroup.Location = new System.Drawing.Point(117, 328);
             this.lblTagGroup.Name = "lblTagGroup";
-            this.lblTagGroup.Size = new System.Drawing.Size(45, 13);
+            this.lblTagGroup.Size = new System.Drawing.Size(50, 15);
             this.lblTagGroup.TabIndex = 22;
             this.lblTagGroup.Text = "Группа:";
             // 
             // lblTag
             // 
             this.lblTag.AutoSize = true;
-            this.lblTag.Location = new System.Drawing.Point(231, 330);
+            this.lblTag.Location = new System.Drawing.Point(238, 328);
             this.lblTag.Name = "lblTag";
-            this.lblTag.Size = new System.Drawing.Size(28, 13);
+            this.lblTag.Size = new System.Drawing.Size(29, 15);
             this.lblTag.TabIndex = 23;
             this.lblTag.Text = "Тег:";
             // 
@@ -303,7 +303,7 @@
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.Location = new System.Drawing.Point(270, 404);
+            this.btnClose.Location = new System.Drawing.Point(276, 404);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(76, 23);
             this.btnClose.TabIndex = 27;
@@ -314,25 +314,26 @@
             // cbResources
             // 
             this.cbResources.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.cbResources.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbResources.FormattingEnabled = true;
-            this.cbResources.Location = new System.Drawing.Point(185, 272);
+            this.cbResources.Location = new System.Drawing.Point(192, 272);
             this.cbResources.Name = "cbResources";
-            this.cbResources.Size = new System.Drawing.Size(160, 21);
+            this.cbResources.Size = new System.Drawing.Size(160, 23);
             this.cbResources.TabIndex = 28;
             this.cbResources.SelectedIndexChanged += new System.EventHandler(this.cbResources_SelectedIndexChanged);
             // 
             // txtTag2
             // 
-            this.txtTag2.Location = new System.Drawing.Point(233, 371);
+            this.txtTag2.Location = new System.Drawing.Point(238, 371);
             this.txtTag2.Name = "txtTag2";
-            this.txtTag2.Size = new System.Drawing.Size(115, 20);
+            this.txtTag2.Size = new System.Drawing.Size(114, 21);
             this.txtTag2.TabIndex = 30;
             // 
             // txtTagGroup2
             // 
-            this.txtTagGroup2.Location = new System.Drawing.Point(110, 371);
+            this.txtTagGroup2.Location = new System.Drawing.Point(117, 371);
             this.txtTagGroup2.Name = "txtTagGroup2";
-            this.txtTagGroup2.Size = new System.Drawing.Size(115, 20);
+            this.txtTagGroup2.Size = new System.Drawing.Size(114, 21);
             this.txtTagGroup2.TabIndex = 29;
             // 
             // p25
@@ -363,7 +364,7 @@
             // 
             // pStartPlace
             // 
-            this.pStartPlace.Location = new System.Drawing.Point(328, 161);
+            this.pStartPlace.Location = new System.Drawing.Point(335, 161);
             this.pStartPlace.Name = "pStartPlace";
             this.pStartPlace.Size = new System.Drawing.Size(16, 16);
             this.pStartPlace.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -373,7 +374,7 @@
             // 
             // pDuePlace
             // 
-            this.pDuePlace.Location = new System.Drawing.Point(328, 185);
+            this.pDuePlace.Location = new System.Drawing.Point(335, 185);
             this.pDuePlace.Name = "pDuePlace";
             this.pDuePlace.Size = new System.Drawing.Size(16, 16);
             this.pDuePlace.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -383,7 +384,7 @@
             // 
             // numStartDate
             // 
-            this.numStartDate.Location = new System.Drawing.Point(274, 160);
+            this.numStartDate.Location = new System.Drawing.Point(281, 160);
             this.numStartDate.Maximum = new decimal(new int[] {
             31,
             0,
@@ -395,7 +396,7 @@
             0,
             0});
             this.numStartDate.Name = "numStartDate";
-            this.numStartDate.Size = new System.Drawing.Size(32, 20);
+            this.numStartDate.Size = new System.Drawing.Size(32, 21);
             this.numStartDate.TabIndex = 47;
             this.numStartDate.Value = new decimal(new int[] {
             1,
@@ -405,7 +406,7 @@
             // 
             // numDueDate
             // 
-            this.numDueDate.Location = new System.Drawing.Point(274, 185);
+            this.numDueDate.Location = new System.Drawing.Point(281, 185);
             this.numDueDate.Maximum = new decimal(new int[] {
             31,
             0,
@@ -417,7 +418,7 @@
             0,
             0});
             this.numDueDate.Name = "numDueDate";
-            this.numDueDate.Size = new System.Drawing.Size(32, 20);
+            this.numDueDate.Size = new System.Drawing.Size(32, 21);
             this.numDueDate.TabIndex = 48;
             this.numDueDate.Value = new decimal(new int[] {
             1,
@@ -427,9 +428,9 @@
             // 
             // dtpDueDate
             // 
-            this.dtpDueDate.Location = new System.Drawing.Point(111, 199);
+            this.dtpDueDate.Location = new System.Drawing.Point(117, 199);
             this.dtpDueDate.Name = "dtpDueDate";
-            this.dtpDueDate.Size = new System.Drawing.Size(196, 20);
+            this.dtpDueDate.Size = new System.Drawing.Size(196, 21);
             this.dtpDueDate.TabIndex = 49;
             this.dtpDueDate.Visible = false;
             // 
@@ -437,7 +438,7 @@
             // 
             this.Edit.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Edit.Image = ((System.Drawing.Image)(resources.GetObject("Edit.Image")));
-            this.Edit.Location = new System.Drawing.Point(299, 40);
+            this.Edit.Location = new System.Drawing.Point(306, 40);
             this.Edit.Name = "Edit";
             this.Edit.Size = new System.Drawing.Size(20, 20);
             this.Edit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -449,7 +450,7 @@
             // 
             this.Delete.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Delete.Image = ((System.Drawing.Image)(resources.GetObject("Delete.Image")));
-            this.Delete.Location = new System.Drawing.Point(324, 40);
+            this.Delete.Location = new System.Drawing.Point(331, 40);
             this.Delete.Name = "Delete";
             this.Delete.Size = new System.Drawing.Size(20, 20);
             this.Delete.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -461,7 +462,7 @@
             // 
             this.New.Cursor = System.Windows.Forms.Cursors.Hand;
             this.New.Image = ((System.Drawing.Image)(resources.GetObject("New.Image")));
-            this.New.Location = new System.Drawing.Point(274, 40);
+            this.New.Location = new System.Drawing.Point(281, 40);
             this.New.Name = "New";
             this.New.Size = new System.Drawing.Size(20, 20);
             this.New.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -507,7 +508,7 @@
             // 
             this.txtTemplateName.Location = new System.Drawing.Point(6, 25);
             this.txtTemplateName.Name = "txtTemplateName";
-            this.txtTemplateName.Size = new System.Drawing.Size(236, 20);
+            this.txtTemplateName.Size = new System.Drawing.Size(236, 21);
             this.txtTemplateName.TabIndex = 1;
             // 
             // lblItemName
@@ -515,7 +516,7 @@
             this.lblItemName.AutoSize = true;
             this.lblItemName.Location = new System.Drawing.Point(4, 7);
             this.lblItemName.Name = "lblItemName";
-            this.lblItemName.Size = new System.Drawing.Size(79, 13);
+            this.lblItemName.Size = new System.Drawing.Size(89, 15);
             this.lblItemName.TabIndex = 0;
             this.lblItemName.Text = "Имя шаблона:";
             // 
@@ -617,7 +618,7 @@
             // pIconDefault
             // 
             this.pIconDefault.Image = ((System.Drawing.Image)(resources.GetObject("pIconDefault.Image")));
-            this.pIconDefault.Location = new System.Drawing.Point(291, 325);
+            this.pIconDefault.Location = new System.Drawing.Point(293, 325);
             this.pIconDefault.Name = "pIconDefault";
             this.pIconDefault.Size = new System.Drawing.Size(16, 16);
             this.pIconDefault.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -628,7 +629,7 @@
             // pCalendar
             // 
             this.pCalendar.Image = ((System.Drawing.Image)(resources.GetObject("pCalendar.Image")));
-            this.pCalendar.Location = new System.Drawing.Point(310, 161);
+            this.pCalendar.Location = new System.Drawing.Point(317, 161);
             this.pCalendar.Name = "pCalendar";
             this.pCalendar.Size = new System.Drawing.Size(16, 16);
             this.pCalendar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -639,7 +640,7 @@
             // pPeriod
             // 
             this.pPeriod.Image = ((System.Drawing.Image)(resources.GetObject("pPeriod.Image")));
-            this.pPeriod.Location = new System.Drawing.Point(310, 185);
+            this.pPeriod.Location = new System.Drawing.Point(317, 185);
             this.pPeriod.Name = "pPeriod";
             this.pPeriod.Size = new System.Drawing.Size(16, 16);
             this.pPeriod.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -709,9 +710,9 @@
             // 
             // txtTopicText
             // 
-            this.txtTopicText.Location = new System.Drawing.Point(111, 73);
+            this.txtTopicText.Location = new System.Drawing.Point(117, 73);
             this.txtTopicText.Name = "txtTopicText";
-            this.txtTopicText.Size = new System.Drawing.Size(235, 20);
+            this.txtTopicText.Size = new System.Drawing.Size(235, 21);
             this.txtTopicText.TabIndex = 95;
             // 
             // lblTopicText
@@ -719,7 +720,7 @@
             this.lblTopicText.AutoSize = true;
             this.lblTopicText.Location = new System.Drawing.Point(30, 75);
             this.lblTopicText.Name = "lblTopicText";
-            this.lblTopicText.Size = new System.Drawing.Size(61, 13);
+            this.lblTopicText.Size = new System.Drawing.Size(66, 15);
             this.lblTopicText.TabIndex = 96;
             this.lblTopicText.Tag = "";
             this.lblTopicText.Text = "Topic Text:";
@@ -730,7 +731,7 @@
             this.lblProgress.AutoSize = true;
             this.lblProgress.Location = new System.Drawing.Point(30, 102);
             this.lblProgress.Name = "lblProgress";
-            this.lblProgress.Size = new System.Drawing.Size(51, 13);
+            this.lblProgress.Size = new System.Drawing.Size(59, 15);
             this.lblProgress.TabIndex = 97;
             this.lblProgress.Tag = "";
             this.lblProgress.Text = "Progress:";
@@ -765,7 +766,7 @@
             this.lblPriority.AutoSize = true;
             this.lblPriority.Location = new System.Drawing.Point(30, 128);
             this.lblPriority.Name = "lblPriority";
-            this.lblPriority.Size = new System.Drawing.Size(41, 13);
+            this.lblPriority.Size = new System.Drawing.Size(47, 15);
             this.lblPriority.TabIndex = 100;
             this.lblPriority.Tag = "";
             this.lblPriority.Text = "Priority:";
@@ -786,9 +787,9 @@
             // lblStartDate
             // 
             this.lblStartDate.AutoSize = true;
-            this.lblStartDate.Location = new System.Drawing.Point(30, 163);
+            this.lblStartDate.Location = new System.Drawing.Point(30, 162);
             this.lblStartDate.Name = "lblStartDate";
-            this.lblStartDate.Size = new System.Drawing.Size(74, 13);
+            this.lblStartDate.Size = new System.Drawing.Size(84, 15);
             this.lblStartDate.TabIndex = 102;
             this.lblStartDate.Tag = "";
             this.lblStartDate.Text = "Дата начала:";
@@ -797,9 +798,9 @@
             // lblDueDate
             // 
             this.lblDueDate.AutoSize = true;
-            this.lblDueDate.Location = new System.Drawing.Point(30, 190);
+            this.lblDueDate.Location = new System.Drawing.Point(30, 189);
             this.lblDueDate.Name = "lblDueDate";
-            this.lblDueDate.Size = new System.Drawing.Size(56, 13);
+            this.lblDueDate.Size = new System.Drawing.Size(62, 15);
             this.lblDueDate.TabIndex = 103;
             this.lblDueDate.Tag = "";
             this.lblDueDate.Text = "Due Date:";
@@ -820,9 +821,9 @@
             // lblResources
             // 
             this.lblResources.AutoSize = true;
-            this.lblResources.Location = new System.Drawing.Point(30, 277);
+            this.lblResources.Location = new System.Drawing.Point(30, 276);
             this.lblResources.Name = "lblResources";
-            this.lblResources.Size = new System.Drawing.Size(61, 13);
+            this.lblResources.Size = new System.Drawing.Size(69, 15);
             this.lblResources.TabIndex = 105;
             this.lblResources.Tag = "";
             this.lblResources.Text = "Resources:";
@@ -843,9 +844,9 @@
             // lblIcon
             // 
             this.lblIcon.AutoSize = true;
-            this.lblIcon.Location = new System.Drawing.Point(30, 304);
+            this.lblIcon.Location = new System.Drawing.Point(30, 303);
             this.lblIcon.Name = "lblIcon";
-            this.lblIcon.Size = new System.Drawing.Size(36, 13);
+            this.lblIcon.Size = new System.Drawing.Size(39, 15);
             this.lblIcon.TabIndex = 107;
             this.lblIcon.Tag = "";
             this.lblIcon.Text = "Icons:";
@@ -866,9 +867,9 @@
             // lblTags
             // 
             this.lblTags.AutoSize = true;
-            this.lblTags.Location = new System.Drawing.Point(30, 361);
+            this.lblTags.Location = new System.Drawing.Point(30, 360);
             this.lblTags.Name = "lblTags";
-            this.lblTags.Size = new System.Drawing.Size(34, 13);
+            this.lblTags.Size = new System.Drawing.Size(37, 15);
             this.lblTags.TabIndex = 109;
             this.lblTags.Tag = "";
             this.lblTags.Text = "Tags:";
@@ -901,9 +902,9 @@
             // lblEffort
             // 
             this.lblEffort.AutoSize = true;
-            this.lblEffort.Location = new System.Drawing.Point(30, 242);
+            this.lblEffort.Location = new System.Drawing.Point(30, 241);
             this.lblEffort.Name = "lblEffort";
-            this.lblEffort.Size = new System.Drawing.Size(82, 13);
+            this.lblEffort.Size = new System.Drawing.Size(93, 15);
             this.lblEffort.TabIndex = 112;
             this.lblEffort.Tag = "";
             this.lblEffort.Text = "Трудозатраты:";
@@ -911,22 +912,23 @@
             // 
             // cbEffortUnits
             // 
+            this.cbEffortUnits.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbEffortUnits.FormattingEnabled = true;
-            this.cbEffortUnits.Location = new System.Drawing.Point(165, 237);
+            this.cbEffortUnits.Location = new System.Drawing.Point(172, 237);
             this.cbEffortUnits.Name = "cbEffortUnits";
-            this.cbEffortUnits.Size = new System.Drawing.Size(104, 21);
+            this.cbEffortUnits.Size = new System.Drawing.Size(104, 23);
             this.cbEffortUnits.TabIndex = 111;
             // 
             // numEffort
             // 
-            this.numEffort.Location = new System.Drawing.Point(111, 238);
+            this.numEffort.Location = new System.Drawing.Point(118, 238);
             this.numEffort.Maximum = new decimal(new int[] {
             240,
             0,
             0,
             0});
             this.numEffort.Name = "numEffort";
-            this.numEffort.Size = new System.Drawing.Size(32, 20);
+            this.numEffort.Size = new System.Drawing.Size(35, 21);
             this.numEffort.TabIndex = 114;
             this.numEffort.Value = new decimal(new int[] {
             1,
@@ -936,7 +938,7 @@
             // 
             // numDuration
             // 
-            this.numDuration.Location = new System.Drawing.Point(111, 212);
+            this.numDuration.Location = new System.Drawing.Point(118, 212);
             this.numDuration.Maximum = new decimal(new int[] {
             240,
             0,
@@ -948,7 +950,7 @@
             0,
             0});
             this.numDuration.Name = "numDuration";
-            this.numDuration.Size = new System.Drawing.Size(32, 20);
+            this.numDuration.Size = new System.Drawing.Size(35, 21);
             this.numDuration.TabIndex = 118;
             this.numDuration.Value = new decimal(new int[] {
             1,
@@ -971,9 +973,9 @@
             // lblDuration
             // 
             this.lblDuration.AutoSize = true;
-            this.lblDuration.Location = new System.Drawing.Point(30, 216);
+            this.lblDuration.Location = new System.Drawing.Point(30, 215);
             this.lblDuration.Name = "lblDuration";
-            this.lblDuration.Size = new System.Drawing.Size(83, 13);
+            this.lblDuration.Size = new System.Drawing.Size(95, 15);
             this.lblDuration.TabIndex = 116;
             this.lblDuration.Tag = "";
             this.lblDuration.Text = "Длительность:";
@@ -981,16 +983,17 @@
             // 
             // cbDurationUnits
             // 
+            this.cbDurationUnits.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbDurationUnits.FormattingEnabled = true;
-            this.cbDurationUnits.Location = new System.Drawing.Point(165, 211);
+            this.cbDurationUnits.Location = new System.Drawing.Point(172, 211);
             this.cbDurationUnits.Name = "cbDurationUnits";
-            this.cbDurationUnits.Size = new System.Drawing.Size(104, 21);
+            this.cbDurationUnits.Size = new System.Drawing.Size(104, 23);
             this.cbDurationUnits.TabIndex = 115;
             // 
             // pIcon2
             // 
             this.pIcon2.Image = ((System.Drawing.Image)(resources.GetObject("pIcon2.Image")));
-            this.pIcon2.Location = new System.Drawing.Point(135, 303);
+            this.pIcon2.Location = new System.Drawing.Point(142, 303);
             this.pIcon2.Name = "pIcon2";
             this.pIcon2.Size = new System.Drawing.Size(16, 16);
             this.pIcon2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -1001,7 +1004,7 @@
             // pIcon3
             // 
             this.pIcon3.Image = ((System.Drawing.Image)(resources.GetObject("pIcon3.Image")));
-            this.pIcon3.Location = new System.Drawing.Point(159, 303);
+            this.pIcon3.Location = new System.Drawing.Point(166, 303);
             this.pIcon3.Name = "pIcon3";
             this.pIcon3.Size = new System.Drawing.Size(16, 16);
             this.pIcon3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -1013,7 +1016,7 @@
             // 
             this.GEdit.Cursor = System.Windows.Forms.Cursors.Hand;
             this.GEdit.Image = ((System.Drawing.Image)(resources.GetObject("GEdit.Image")));
-            this.GEdit.Location = new System.Drawing.Point(299, 12);
+            this.GEdit.Location = new System.Drawing.Point(306, 12);
             this.GEdit.Name = "GEdit";
             this.GEdit.Size = new System.Drawing.Size(20, 20);
             this.GEdit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -1025,7 +1028,7 @@
             // 
             this.GDelete.Cursor = System.Windows.Forms.Cursors.Hand;
             this.GDelete.Image = ((System.Drawing.Image)(resources.GetObject("GDelete.Image")));
-            this.GDelete.Location = new System.Drawing.Point(324, 12);
+            this.GDelete.Location = new System.Drawing.Point(331, 12);
             this.GDelete.Name = "GDelete";
             this.GDelete.Size = new System.Drawing.Size(20, 20);
             this.GDelete.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -1037,7 +1040,7 @@
             // 
             this.GNew.Cursor = System.Windows.Forms.Cursors.Hand;
             this.GNew.Image = ((System.Drawing.Image)(resources.GetObject("GNew.Image")));
-            this.GNew.Location = new System.Drawing.Point(274, 12);
+            this.GNew.Location = new System.Drawing.Point(281, 12);
             this.GNew.Name = "GNew";
             this.GNew.Size = new System.Drawing.Size(20, 20);
             this.GNew.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -1049,9 +1052,9 @@
             // 
             this.cbGroups.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbGroups.FormattingEnabled = true;
-            this.cbGroups.Location = new System.Drawing.Point(93, 12);
+            this.cbGroups.Location = new System.Drawing.Point(99, 12);
             this.cbGroups.Name = "cbGroups";
-            this.cbGroups.Size = new System.Drawing.Size(176, 21);
+            this.cbGroups.Size = new System.Drawing.Size(176, 23);
             this.cbGroups.TabIndex = 121;
             this.cbGroups.SelectedIndexChanged += new System.EventHandler(this.cbGroups_SelectedIndexChanged);
             // 
@@ -1060,7 +1063,7 @@
             this.lblGroup.AutoSize = true;
             this.lblGroup.Location = new System.Drawing.Point(8, 17);
             this.lblGroup.Name = "lblGroup";
-            this.lblGroup.Size = new System.Drawing.Size(39, 13);
+            this.lblGroup.Size = new System.Drawing.Size(44, 15);
             this.lblGroup.TabIndex = 125;
             this.lblGroup.Tag = "";
             this.lblGroup.Text = "Group:";
@@ -1070,17 +1073,16 @@
             this.lblQTopic.AutoSize = true;
             this.lblQTopic.Location = new System.Drawing.Point(8, 44);
             this.lblQTopic.Name = "lblQTopic";
-            this.lblQTopic.Size = new System.Drawing.Size(82, 13);
+            this.lblQTopic.Size = new System.Drawing.Size(94, 15);
             this.lblQTopic.TabIndex = 126;
             this.lblQTopic.Tag = "";
             this.lblQTopic.Text = "Быстрая тема:";
             // 
             // TaskTemplateDlg
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(358, 439);
-            this.Controls.Add(this.panelTemplateName);
+            this.ClientSize = new System.Drawing.Size(364, 439);
             this.Controls.Add(this.lblQTopic);
             this.Controls.Add(this.lblGroup);
             this.Controls.Add(this.GEdit);
@@ -1158,6 +1160,8 @@
             this.Controls.Add(this.lblChangeValue);
             this.Controls.Add(this.pProgress);
             this.Controls.Add(this.cbQuickTopics);
+            this.Controls.Add(this.panelTemplateName);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.HelpButton = true;
             this.MaximizeBox = false;

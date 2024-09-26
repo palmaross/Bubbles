@@ -123,7 +123,7 @@ namespace Bubbles
 
             foreach (Topic t in MMUtils.ActiveDocument.CentralTopic.AllSubTopics)
             {
-                string topicText = t.Text;
+                string topicText = t.Text.Replace("\n", " ").Trim();
                 if (topicText.Length > 50) topicText = topicText.Substring(0, 50);
 
                 tsi = cmsMainTopics.Items.Add(topicText);
@@ -272,7 +272,7 @@ namespace Bubbles
 
             }
             if (StixMain.m_MapNavigatorDlg != null && !fromList)
-                StixMain.m_MapNavigatorDlg.Init(true, deleteall);
+                StixMain.m_MapNavigatorDlg.InitPositions(true, deleteall);
         }
 
         /// <summary>
@@ -414,7 +414,7 @@ namespace Bubbles
         {
             if (_t.GetAttributes(ATTR_NAMESPACE).HasAttribute(ATTR_BOOKMARKED))
             {
-                string ttext = _t.Text;
+                string ttext = _t.Text.Replace("\n", " ").Trim();
                 if (ttext.Length > 100) ttext = _t.Text.Substring(0, 100);
 
                 string topictype =
@@ -553,8 +553,10 @@ namespace Bubbles
                             StixUtils.GetChildLocation(this, StixMain.m_MapNavigatorDlg.Bounds, orientation, "bookmarks");
                     }
                     StixMain.m_MapNavigatorDlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+                    StixMain.m_MapNavigatorDlg.Init();
                 }
-                StixMain.m_MapNavigatorDlg.Init();
+                else
+                    StixMain.m_MapNavigatorDlg.Init();
             }
             else if (e.ClickedItem.Name == "BI_close")
             {

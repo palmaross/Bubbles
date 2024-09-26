@@ -98,9 +98,10 @@
             // 
             // txtRecordName
             // 
+            this.txtRecordName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtRecordName.Location = new System.Drawing.Point(6, 66);
             this.txtRecordName.Name = "txtRecordName";
-            this.txtRecordName.Size = new System.Drawing.Size(178, 20);
+            this.txtRecordName.Size = new System.Drawing.Size(178, 21);
             this.txtRecordName.TabIndex = 8;
             // 
             // btnAddToTopic
@@ -116,10 +117,11 @@
             // cbRecordings
             // 
             this.cbRecordings.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbRecordings.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbRecordings.FormattingEnabled = true;
             this.cbRecordings.Location = new System.Drawing.Point(14, 92);
             this.cbRecordings.Name = "cbRecordings";
-            this.cbRecordings.Size = new System.Drawing.Size(178, 21);
+            this.cbRecordings.Size = new System.Drawing.Size(178, 23);
             this.cbRecordings.Sorted = true;
             this.cbRecordings.TabIndex = 11;
             // 
@@ -198,10 +200,11 @@
             // 
             // cbGroupsSave
             // 
+            this.cbGroupsSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbGroupsSave.FormattingEnabled = true;
             this.cbGroupsSave.Location = new System.Drawing.Point(6, 20);
             this.cbGroupsSave.Name = "cbGroupsSave";
-            this.cbGroupsSave.Size = new System.Drawing.Size(155, 21);
+            this.cbGroupsSave.Size = new System.Drawing.Size(155, 23);
             this.cbGroupsSave.Sorted = true;
             this.cbGroupsSave.TabIndex = 83;
             // 
@@ -406,10 +409,11 @@
             // cbGroups
             // 
             this.cbGroups.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbGroups.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbGroups.FormattingEnabled = true;
             this.cbGroups.Location = new System.Drawing.Point(14, 70);
             this.cbGroups.Name = "cbGroups";
-            this.cbGroups.Size = new System.Drawing.Size(178, 21);
+            this.cbGroups.Size = new System.Drawing.Size(178, 23);
             this.cbGroups.Sorted = true;
             this.cbGroups.TabIndex = 82;
             this.cbGroups.SelectedIndexChanged += new System.EventHandler(this.cbGroups_SelectedIndexChanged);
@@ -495,7 +499,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(202, 202);
-            this.Controls.Add(this.panelRecordName);
             this.Controls.Add(this.btnMore);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.cbGroups);
@@ -515,6 +518,7 @@
             this.Controls.Add(this.cbRecordings);
             this.Controls.Add(this.chAttachment);
             this.Controls.Add(this.panelNewGroup);
+            this.Controls.Add(this.panelRecordName);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "OmniSound";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;

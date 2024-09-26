@@ -166,7 +166,7 @@
             this.txtNewResource.ForeColor = System.Drawing.SystemColors.GrayText;
             this.txtNewResource.Location = new System.Drawing.Point(3, 3);
             this.txtNewResource.Name = "txtNewResource";
-            this.txtNewResource.Size = new System.Drawing.Size(156, 21);
+            this.txtNewResource.Size = new System.Drawing.Size(164, 21);
             this.txtNewResource.TabIndex = 8;
             this.txtNewResource.Tag = "resource";
             this.txtNewResource.Text = "New";
@@ -351,7 +351,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 24);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(162, 204);
+            this.tabPage1.Size = new System.Drawing.Size(170, 204);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Текущая карта";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -362,7 +362,7 @@
             this.treeViewCM.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText;
             this.treeViewCM.Location = new System.Drawing.Point(3, 24);
             this.treeViewCM.Name = "treeViewCM";
-            this.treeViewCM.Size = new System.Drawing.Size(156, 177);
+            this.treeViewCM.Size = new System.Drawing.Size(164, 177);
             this.treeViewCM.TabIndex = 9;
             this.treeViewCM.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeView_AfterLabelEdit);
             this.treeViewCM.DrawNode += new System.Windows.Forms.DrawTreeNodeEventHandler(this.treeView_DrawNode);
@@ -480,12 +480,12 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TreeView treeViewDB;
         private System.Windows.Forms.TextBox txtNewGroup;
-        private System.Windows.Forms.TreeView treeViewCM;
         private System.Windows.Forms.ToolStripMenuItem r_copyall;
         private System.Windows.Forms.ToolStripMenuItem rg_copyall;
         private System.Windows.Forms.ToolStripMenuItem g_newresource;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        public System.Windows.Forms.TreeView treeViewDB;
+        public System.Windows.Forms.TreeView treeViewCM;
     }
 }

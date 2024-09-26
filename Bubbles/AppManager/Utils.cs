@@ -58,7 +58,7 @@ namespace Bubbles
             DirectoryInfo di = new DirectoryInfo(path);
 
             // Get stock icons.
-            foreach (FileInfo fi in di.GetFiles())
+            foreach (FileInfo fi in di.GetFiles()) // perf!
             {
                 string _path = fi.FullName;
                 string signature = MMUtils.MindManager.Utilities.GetCustomIconSignature(_path);
@@ -71,7 +71,7 @@ namespace Bubbles
                 StockIcons.Add(stockicon, MMstockicon);
             }
 
-            GetCustomIcons(di);
+            GetCustomIcons(di);  // perf!
 
             try
             {
@@ -137,7 +137,7 @@ namespace Bubbles
             scalingFactor = ScalingFactor.GetScalingFactor();
 
             InitDatabases();
-            InitStartedMaps();
+            InitStartedMaps(); // perf!
         }
 
         static void InitDatabases()
@@ -326,6 +326,7 @@ namespace Bubbles
             html = Image.FromFile(ImagesPath + "ms_html.png");
         }
 
+        // Get custom mm icons. Check for stock icons dupes. 
         static void GetCustomIcons(DirectoryInfo directoryInfo)
         {
             foreach (var directory in directoryInfo.GetDirectories())
@@ -955,6 +956,7 @@ namespace Bubbles
         public static System.Drawing.Color header = System.Drawing.Color.Moccasin;
 
         public static float scalingFactor = 1.0f;
+        public static int WindowFontSize = 12;
     }
 
     class ScalingFactor

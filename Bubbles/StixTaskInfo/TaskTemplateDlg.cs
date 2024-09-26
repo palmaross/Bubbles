@@ -764,7 +764,8 @@ namespace Bubbles
 
         private void TaskTemplateDlg_FormClosing(object sender, FormClosingEventArgs e)
         {
-            StixMain.m_TaskInfo.PopulateQuickTopics();
+            if (StixMain.m_TaskInfo != null && StixMain.m_TaskInfo.Visible)
+                StixMain.m_TaskInfo.PopulateQuickTopics();
         }
 
         private void pProgress_Click(object sender, EventArgs e)

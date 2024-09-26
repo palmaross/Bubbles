@@ -79,6 +79,13 @@ namespace Bubbles
             StixUtils.ActivateMindManager();
 
             this.ResizeEnd += ResourcesDlg_ResizeEnd;
+
+            int fontsize = (int)treeViewCM.Font.Size;
+            if (Utils.WindowFontSize != fontsize)
+            {
+                treeViewCM.Font = new Font(treeViewCM.Font.FontFamily, Utils.WindowFontSize * 0.75F);
+                treeViewDB.Font = new Font(treeViewDB.Font.FontFamily, Utils.WindowFontSize * 0.75F);
+            }
         }
 
         private void ResourcesDlg_ResizeEnd(object sender, EventArgs e)

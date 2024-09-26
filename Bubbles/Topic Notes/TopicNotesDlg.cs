@@ -137,6 +137,12 @@ namespace Bubbles
             cbSearchedText.LostFocus += CbSearchedText_LostFocus;
 
             cbFontFamily.SelectedIndex = 0;
+
+            int fontsize = (int)listTopics.Font.Size;
+            if (Utils.WindowFontSize != fontsize)
+            {
+                listTopics.Font = new Font(listTopics.Font.FontFamily, Utils.WindowFontSize * 0.75F);
+            }
         }
 
         private void CbSearchedText_GotFocus(object sender, EventArgs e)

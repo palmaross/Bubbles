@@ -62,6 +62,12 @@ namespace Bubbles
             this.MinimumSize = panelMinimized.Size;
             this.ResizeEnd += LinksDlg_ResizeEnd;
 
+            int fontsize = (int)treeView1.Font.Size;
+            if (Utils.WindowFontSize != fontsize)
+            {
+                treeView1.Font = new Font(treeView1.Font.FontFamily, Utils.WindowFontSize * 0.75F);
+            }
+
             Utils.InitIcons();
             Init();
         }
@@ -134,8 +140,7 @@ namespace Bubbles
         public void AddToTable(string title, string path, string groupName, string comment, int groupID)
         {
             string imageType = Utils.GetFileType(path);
-            Image img = null;
-            string faviconDB = Utils.m_dataPath + "FaviconDB\\";
+            Image img;
 
             if (imageType == "exe")
             {
@@ -160,6 +165,7 @@ namespace Bubbles
 
             int rowId = dataGridView1.Rows.Add();
             DataGridViewRow row = dataGridView1.Rows[rowId];
+            row.DefaultCellStyle.Font = new Font(dataGridView1.Font.FontFamily, Utils.WindowFontSize * 0.75F);
 
             row.Cells["LinkImage"].Value = img;
             row.Cells["LinkTitle"].Value = title;

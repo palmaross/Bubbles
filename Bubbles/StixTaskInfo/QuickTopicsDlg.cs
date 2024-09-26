@@ -36,6 +36,12 @@ namespace Bubbles
             this.MouseDown += QuickTopicsDlg_MouseDown;
             panelHead.MouseDown += QuickTopicsDlg_MouseDown;
             lblTitle.MouseDown += QuickTopicsDlg_MouseDown;
+
+            int fontsize = (int)treeView1.Font.Size;
+            if (Utils.WindowFontSize != fontsize)
+            {
+                treeView1.Font = new Font(treeView1.Font.FontFamily, Utils.WindowFontSize * 0.75F);
+            }
         }
 
         private void pHelp_Click(object sender, EventArgs e)
@@ -57,8 +63,9 @@ namespace Bubbles
                     }
 
                     if (MessageBox.Show(Utils.getString("TaskTemplateDlg.deletegroup.question"), "",
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                        return;
+
                         using (StixDB db = new StixDB("QuickTopics"))
                         {
                             db.ExecuteNonQuery("delete from QUICKTOPICTEMPLATES " +
@@ -68,21 +75,23 @@ namespace Bubbles
                                 "where id=" + (int)treeView1.SelectedNode.Tag + "");
                         }
                         treeView1.SelectedNode.Remove();
-                    }
                 }
                 else // Template
                 {
                     if (MessageBox.Show(Utils.getString("TaskTemplateDlg.delete.question"), "",
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                        return;
+
                         using (StixDB db = new StixDB("QuickTopics"))
                         {
                             db.ExecuteNonQuery("delete from QUICKTOPICTEMPLATES " +
                                 "where id=" + ((QuickTopicItem)treeView1.SelectedNode.Tag).ID + "");
                         }
                         treeView1.SelectedNode.Remove();
-                    }
                 }
+
+                if (StixMain.m_TaskInfo != null && StixMain.m_TaskInfo.Visible)
+                    StixMain.m_TaskInfo.PopulateQuickTopics(true);
             }
             else if (e.ClickedItem == m_Rename)
             {
@@ -144,7 +153,7 @@ namespace Bubbles
 
             if (!group) selected.Parent.Expand();
 
-            if (StixMain.m_TaskInfo.Visible)
+            if (StixMain.m_TaskInfo != null && StixMain.m_TaskInfo.Visible)
                 StixMain.m_TaskInfo.PopulateQuickTopics(true);
         }
 
@@ -173,11 +182,11 @@ namespace Bubbles
                 QuickTopicItem QuickTask = e.Node.Tag as QuickTopicItem;
                 if (QuickTask == null) return; // group clicked
 
-                StixMain.m_TaskInfo.QuickTopic = QuickTask;
+                StixTaskInfo.QuickTopic = QuickTask;
 
                 Transaction _tr = MMUtils.ActiveDocument.NewTransaction(Utils.getString("QuickTask.transaction.name"));
                 _tr.IsUndoable = true;
-                _tr.Execute += new ITransactionEvents_ExecuteEventHandler(StixMain.m_TaskInfo.SetQuickTopic);
+                _tr.Execute += new ITransactionEvents_ExecuteEventHandler(StixTaskInfo.SetQuickTopic);
                 _tr.Start();
             }
             else if (e.Button == MouseButtons.Right)
@@ -396,6 +405,9 @@ namespace Bubbles
                     }
                 }
             }
+
+            if (StixMain.m_TaskInfo != null && StixMain.m_TaskInfo.Visible)
+                StixMain.m_TaskInfo.PopulateQuickTopics(true);
         }
         #endregion
 

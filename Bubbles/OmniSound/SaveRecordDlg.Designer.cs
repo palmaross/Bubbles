@@ -55,7 +55,6 @@
             // panelSave
             // 
             this.panelSave.BackColor = System.Drawing.SystemColors.Control;
-            this.panelSave.Controls.Add(this.panelNewGroup);
             this.panelSave.Controls.Add(this.btnNewGroup);
             this.panelSave.Controls.Add(this.lblGroup);
             this.panelSave.Controls.Add(this.cbGroups);
@@ -65,6 +64,7 @@
             this.panelSave.Controls.Add(this.chAttachment);
             this.panelSave.Controls.Add(this.txtName);
             this.panelSave.Controls.Add(this.lblRecordName);
+            this.panelSave.Controls.Add(this.panelNewGroup);
             this.panelSave.Location = new System.Drawing.Point(1, 1);
             this.panelSave.Name = "panelSave";
             this.panelSave.Size = new System.Drawing.Size(200, 168);
@@ -106,9 +106,10 @@
             // 
             // txtGroupName
             // 
+            this.txtGroupName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtGroupName.Location = new System.Drawing.Point(6, 24);
             this.txtGroupName.Name = "txtGroupName";
-            this.txtGroupName.Size = new System.Drawing.Size(178, 20);
+            this.txtGroupName.Size = new System.Drawing.Size(178, 21);
             this.txtGroupName.TabIndex = 1;
             // 
             // lblGroupName
@@ -143,18 +144,20 @@
             // 
             // cbGroups
             // 
+            this.cbGroups.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbGroups.FormattingEnabled = true;
             this.cbGroups.Location = new System.Drawing.Point(6, 23);
             this.cbGroups.Name = "cbGroups";
-            this.cbGroups.Size = new System.Drawing.Size(161, 21);
+            this.cbGroups.Size = new System.Drawing.Size(161, 23);
             this.cbGroups.TabIndex = 6;
             // 
             // chCloseRecorder
             // 
             this.chCloseRecorder.AutoSize = true;
+            this.chCloseRecorder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chCloseRecorder.Location = new System.Drawing.Point(6, 117);
             this.chCloseRecorder.Name = "chCloseRecorder";
-            this.chCloseRecorder.Size = new System.Drawing.Size(129, 17);
+            this.chCloseRecorder.Size = new System.Drawing.Size(144, 19);
             this.chCloseRecorder.TabIndex = 5;
             this.chCloseRecorder.Text = "Close Topic Recorder";
             this.chCloseRecorder.UseVisualStyleBackColor = true;
@@ -183,18 +186,20 @@
             // chAttachment
             // 
             this.chAttachment.AutoSize = true;
+            this.chAttachment.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chAttachment.Location = new System.Drawing.Point(6, 96);
             this.chAttachment.Name = "chAttachment";
-            this.chAttachment.Size = new System.Drawing.Size(102, 17);
+            this.chAttachment.Size = new System.Drawing.Size(111, 19);
             this.chAttachment.TabIndex = 2;
             this.chAttachment.Text = "Add Attachment";
             this.chAttachment.UseVisualStyleBackColor = true;
             // 
             // txtName
             // 
+            this.txtName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtName.Location = new System.Drawing.Point(6, 67);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(186, 20);
+            this.txtName.Size = new System.Drawing.Size(186, 21);
             this.txtName.TabIndex = 1;
             // 
             // lblRecordName
@@ -229,8 +234,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(202, 170);
-            this.Controls.Add(this.lblCount);
             this.Controls.Add(this.panelSave);
+            this.Controls.Add(this.lblCount);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "SaveRecordDlg";
             this.ShowInTaskbar = false;

@@ -7,6 +7,8 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Drawing;
 using Microsoft.Win32;
+using Bubbles.Properties;
+using Mindjet.MindManager.Interop;
 
 namespace Bubbles
 {
@@ -41,8 +43,7 @@ namespace Bubbles
             btnManageAutoWidth.Text = Utils.getString("SettingsDlg.btnManageAutoWidth");
             chSaveMaps.Text = Utils.getString("SettingsDlg.chSaveMaps");
             lblMin.Text = Utils.getString("SettingsDlg.lblMin");
-            numSaveMaps.Location = new Point(chSaveMaps.Location.X + chSaveMaps.Width + p1.Width, numSaveMaps.Location.Y);
-            lblMin.Location = new Point(numSaveMaps.Location.X + numSaveMaps.Width + p1.Width, lblMin.Location.Y);
+            lblFontSize.Text = Utils.getString("SettingsDlg.lblFontSize");
 
             btnShare.Text = Utils.getString("SettingsDlg.btnShare");
             lblSharedPath.Text = Utils.getString("SettingsDlg.lblSharedPath");
@@ -72,7 +73,6 @@ namespace Bubbles
                     cbSelectAll.Checked = true;
             }
 
-
             // Fill Scale Factor
             numStix.Text = stixScaleFactor.ToString() + "%";
             numStixBase.Text = stixbaseScaleFactor.ToString() + "%";
@@ -93,6 +93,8 @@ namespace Bubbles
             string datapath = Utils.getRegistry("DataPath", "");
             if (datapath == "") datapath = Utils.m_defaultDataPath;
             txtDataPath.Text = datapath;
+
+            numFontSize.Value = Utils.WindowFontSize;
         }
 
         private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
@@ -118,7 +120,7 @@ namespace Bubbles
             Utils.setRegistry("ScaleFactor_Stix", stixScaleFactor.ToString());
             Utils.setRegistry("ScaleFactor_StixBase", stixbaseScaleFactor.ToString());
 
-            if (StixMain.m_TaskInfo.Visible)
+            if (StixMain.m_TaskInfo != null && StixMain.m_TaskInfo.Visible)
                 StixMain.m_TaskInfo.SetQuickTaskDefault();
 
             Utils.setRegistry("FaviconsToolStix", FaviconsToolStix.Checked ? "1" : "0");
@@ -127,6 +129,15 @@ namespace Bubbles
 
             Utils.setRegistry("TopicAutoWidth", chTopicAutoWidth.Checked ? "1" : "0");
             StixUtils.TopicAutoWidth = chTopicAutoWidth.Checked;
+
+            Utils.WindowFontSize = (int)numFontSize.Value;
+            if (Utils.getRegistry("WindowFontSize", "12") != numFontSize.Value.ToString())
+            {
+                Utils.setRegistry("WindowFontSize", numFontSize.Value.ToString());
+                Utils.WindowFontSize = (int)numFontSize.Value;
+                ApplyFont((int)numFontSize.Value);
+            }
+
             Utils.setRegistry("SaveMapsEnabled", chSaveMaps.Checked ? "1" : "0");
             StixMain.saveMapsTimer.Interval = (int)numSaveMaps.Value;
             if (!chSaveMaps.Checked) StixMain.saveMapsTimer.Stop();
@@ -471,6 +482,64 @@ namespace Bubbles
         private void linkSystemPath_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             txtDataPath.Text = Utils.m_defaultDataPath;
+        }
+
+        void ApplyFont(int size)
+        {
+            if (StixMain.m_Resources != null && StixMain.m_Resources.Visible)
+            {
+                StixMain.m_Resources.treeViewCM.Font = 
+                    new Font(StixMain.m_Resources.treeViewCM.Font.FontFamily, size * 0.75F);
+                StixMain.m_Resources.treeViewDB.Font = 
+                    new Font(StixMain.m_Resources.treeViewDB.Font.FontFamily, size * 0.75F);
+            }
+            if (StixMain.m_Links != null && StixMain.m_Links.Visible)
+            {
+                StixMain.m_Links.treeView1.Font = 
+                    new Font(StixMain.m_Links.dataGridView1.Font.FontFamily, size * 0.75F);
+                foreach (DataGridViewRow r in StixMain.m_Links.dataGridView1.Rows)
+                    r.DefaultCellStyle.Font = new Font(StixMain.m_Links.dataGridView1.Font.FontFamily, size * 72 / 96F);
+            }
+            if (StixMain.m_QuickTopics != null && StixMain.m_QuickTopics.Visible)
+            {
+                StixMain.m_QuickTopics.treeView1.Font =
+                    new Font(StixMain.m_QuickTopics.treeView1.Font.FontFamily, size * 0.75F);
+            }
+            if (StixMain.m_ManageAudio != null && StixMain.m_ManageAudio.Visible)
+            {
+                foreach (DataGridViewRow r in StixMain.m_ManageAudio.dgv.Rows)
+                    r.DefaultCellStyle.Font = new Font(StixMain.m_ManageAudio.dgv.Font.FontFamily, size * 0.75F);
+            }
+            if (StixMain.m_Bookmarks != null && StixMain.m_Bookmarks.Visible)
+            {
+                StixMain.m_Bookmarks.treeView1.Font =
+                    new Font(StixMain.m_Bookmarks.treeView1.Font.FontFamily, size * 0.75F);
+            }
+            if (StixMain.m_MapNavigatorDlg != null && StixMain.m_MapNavigatorDlg.Visible)
+            {
+                StixMain.m_MapNavigatorDlg.listMainTopics.Font =
+                    new Font(StixMain.m_MapNavigatorDlg.listMainTopics.Font.FontFamily, size * 0.75F);
+                StixMain.m_MapNavigatorDlg.listBookmarks.Font =
+                    new Font(StixMain.m_MapNavigatorDlg.listBookmarks.Font.FontFamily, size * 0.75F);
+                StixMain.m_MapNavigatorDlg.listPositions.Font =
+                    new Font(StixMain.m_MapNavigatorDlg.listPositions.Font.FontFamily, size * 0.75F);
+
+                // Get listbox item height and adjust form height depending on listPositions height
+                ListBox lp = StixMain.m_MapNavigatorDlg.listPositions;
+                int itemHeight = (int)this.CreateGraphics().MeasureString("0", lp.Font, TextRenderer.MeasureText("0", new Font(lp.Font.FontFamily, Utils.WindowFontSize * 0.75F))).Height;
+                int diff = (itemHeight - (int)(StixMain.m_MapNavigatorDlg.defaultItemHeight * Utils.scalingFactor)) * lp.Items.Count;
+                StixMain.m_MapNavigatorDlg.Height = StixMain.m_MapNavigatorDlg.defaultHeight + diff + 1;
+            }
+            if (StixMain.m_topicNotes != null && StixMain.m_topicNotes.Visible)
+            {
+                StixMain.m_topicNotes.listTopics.Font =
+                    new Font(StixMain.m_topicNotes.listTopics.Font.FontFamily, size * 0.75F);
+                foreach (TreeNode node in StixMain.m_topicNotes.listTopics.Nodes)
+                {
+                    node.NodeFont = new Font(node.NodeFont.FontFamily, size * 0.75F, FontStyle.Bold);
+                    node.Text = node.Text;
+                }
+            }
         }
     }
 

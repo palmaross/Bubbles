@@ -38,7 +38,7 @@
             // lblGroupName
             // 
             this.lblGroupName.AutoSize = true;
-            this.lblGroupName.Location = new System.Drawing.Point(9, 10);
+            this.lblGroupName.Location = new System.Drawing.Point(9, 9);
             this.lblGroupName.Name = "lblGroupName";
             this.lblGroupName.Size = new System.Drawing.Size(68, 13);
             this.lblGroupName.TabIndex = 0;
@@ -46,9 +46,10 @@
             // 
             // txtGroupName
             // 
+            this.txtGroupName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtGroupName.Location = new System.Drawing.Point(12, 26);
             this.txtGroupName.Name = "txtGroupName";
-            this.txtGroupName.Size = new System.Drawing.Size(174, 20);
+            this.txtGroupName.Size = new System.Drawing.Size(174, 21);
             this.txtGroupName.TabIndex = 1;
             // 
             // cbMutEx

@@ -65,19 +65,21 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.panelShare = new System.Windows.Forms.Panel();
-            this.p1 = new System.Windows.Forms.PictureBox();
+            this.lblFontSize = new System.Windows.Forms.Label();
+            this.numFontSize = new System.Windows.Forms.NumericUpDown();
+            this.lblPx = new System.Windows.Forms.Label();
             this.gbRunAtStart.SuspendLayout();
             this.gbScaleFactor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSaveMaps)).BeginInit();
             this.panelShare.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.p1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numFontSize)).BeginInit();
             this.SuspendLayout();
             // 
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(274, 488);
+            this.btnClose.Location = new System.Drawing.Point(274, 518);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 1;
@@ -88,7 +90,7 @@
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSave.Location = new System.Drawing.Point(10, 488);
+            this.btnSave.Location = new System.Drawing.Point(10, 518);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 3;
@@ -316,13 +318,13 @@
             // 
             // btnManageAutoWidth
             // 
-            this.btnManageAutoWidth.Location = new System.Drawing.Point(201, 331);
+            this.btnManageAutoWidth.AutoSize = true;
+            this.btnManageAutoWidth.Location = new System.Drawing.Point(223, 331);
             this.btnManageAutoWidth.Name = "btnManageAutoWidth";
-            this.btnManageAutoWidth.Size = new System.Drawing.Size(145, 13);
+            this.btnManageAutoWidth.Size = new System.Drawing.Size(107, 13);
             this.btnManageAutoWidth.TabIndex = 26;
             this.btnManageAutoWidth.TabStop = true;
             this.btnManageAutoWidth.Text = "Manage Auto-Widths";
-            this.btnManageAutoWidth.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.btnManageAutoWidth.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.btnManageAutoWidth_LinkClicked);
             // 
             // chSaveMaps
@@ -330,14 +332,14 @@
             this.chSaveMaps.AutoSize = true;
             this.chSaveMaps.Location = new System.Drawing.Point(10, 359);
             this.chSaveMaps.Name = "chSaveMaps";
-            this.chSaveMaps.Size = new System.Drawing.Size(135, 17);
+            this.chSaveMaps.Size = new System.Drawing.Size(209, 17);
             this.chSaveMaps.TabIndex = 27;
-            this.chSaveMaps.Text = "Save open maps every";
+            this.chSaveMaps.Text = "Сохранять открытые карты каждые";
             this.chSaveMaps.UseVisualStyleBackColor = true;
             // 
             // numSaveMaps
             // 
-            this.numSaveMaps.Location = new System.Drawing.Point(151, 357);
+            this.numSaveMaps.Location = new System.Drawing.Point(226, 357);
             this.numSaveMaps.Maximum = new decimal(new int[] {
             60,
             0,
@@ -360,7 +362,7 @@
             // lblMin
             // 
             this.lblMin.AutoSize = true;
-            this.lblMin.Location = new System.Drawing.Point(190, 360);
+            this.lblMin.Location = new System.Drawing.Point(264, 360);
             this.lblMin.Name = "lblMin";
             this.lblMin.Size = new System.Drawing.Size(26, 13);
             this.lblMin.TabIndex = 20;
@@ -419,7 +421,7 @@
             // btnShare
             // 
             this.btnShare.AutoSize = true;
-            this.btnShare.Location = new System.Drawing.Point(10, 386);
+            this.btnShare.Location = new System.Drawing.Point(10, 416);
             this.btnShare.Name = "btnShare";
             this.btnShare.Size = new System.Drawing.Size(79, 13);
             this.btnShare.TabIndex = 7;
@@ -451,27 +453,61 @@
             this.panelShare.Controls.Add(this.linkImport);
             this.panelShare.Controls.Add(this.linkSystemPath);
             this.panelShare.Controls.Add(this.linkExport);
-            this.panelShare.Location = new System.Drawing.Point(10, 402);
+            this.panelShare.Location = new System.Drawing.Point(10, 432);
             this.panelShare.Name = "panelShare";
             this.panelShare.Size = new System.Drawing.Size(345, 77);
             this.panelShare.TabIndex = 34;
             this.panelShare.Visible = false;
             // 
-            // p1
+            // lblFontSize
             // 
-            this.p1.Location = new System.Drawing.Point(242, 360);
-            this.p1.Name = "p1";
-            this.p1.Size = new System.Drawing.Size(6, 10);
-            this.p1.TabIndex = 35;
-            this.p1.TabStop = false;
+            this.lblFontSize.AutoSize = true;
+            this.lblFontSize.Location = new System.Drawing.Point(9, 389);
+            this.lblFontSize.Name = "lblFontSize";
+            this.lblFontSize.Size = new System.Drawing.Size(137, 13);
+            this.lblFontSize.TabIndex = 20;
+            this.lblFontSize.Text = "Font Size in dialog windows";
+            // 
+            // numFontSize
+            // 
+            this.numFontSize.Location = new System.Drawing.Point(226, 387);
+            this.numFontSize.Maximum = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            this.numFontSize.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numFontSize.Name = "numFontSize";
+            this.numFontSize.Size = new System.Drawing.Size(32, 20);
+            this.numFontSize.TabIndex = 36;
+            this.numFontSize.Value = new decimal(new int[] {
+            12,
+            0,
+            0,
+            0});
+            // 
+            // lblPx
+            // 
+            this.lblPx.AutoSize = true;
+            this.lblPx.Location = new System.Drawing.Point(264, 389);
+            this.lblPx.Name = "lblPx";
+            this.lblPx.Size = new System.Drawing.Size(21, 13);
+            this.lblPx.TabIndex = 37;
+            this.lblPx.Text = "px.";
             // 
             // SettingsDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(360, 521);
-            this.Controls.Add(this.p1);
+            this.ClientSize = new System.Drawing.Size(360, 551);
+            this.Controls.Add(this.lblPx);
+            this.Controls.Add(this.numFontSize);
+            this.Controls.Add(this.lblFontSize);
             this.Controls.Add(this.panelShare);
             this.Controls.Add(this.btnShare);
             this.Controls.Add(this.lblMin);
@@ -502,7 +538,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numSaveMaps)).EndInit();
             this.panelShare.ResumeLayout(false);
             this.panelShare.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.p1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numFontSize)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -545,6 +581,8 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.Panel panelShare;
-        private System.Windows.Forms.PictureBox p1;
+        private System.Windows.Forms.Label lblFontSize;
+        private System.Windows.Forms.NumericUpDown numFontSize;
+        private System.Windows.Forms.Label lblPx;
     }
 }

@@ -1205,7 +1205,7 @@ namespace Bubbles
             }
         }
 
-        public void SetQuickTopic(Document pDocument)
+        public static void SetQuickTopic(Document pDocument)
         {
             if (Utils.ActiveDocumentOrSelectionNull()) return;
 
@@ -1320,7 +1320,7 @@ namespace Bubbles
             }
         }
 
-        void SetIcon(string fileName, Topic t)
+        static void SetIcon(string fileName, Topic t)
         {
             if (fileName.StartsWith("stock"))
             {
@@ -1403,7 +1403,7 @@ namespace Bubbles
 
         string orientation = "H";
 
-        public QuickTopicItem QuickTopic = null;
+        public static QuickTopicItem QuickTopic = null;
         string daterightclick = "";
 
         public float scaleFactor = 100;

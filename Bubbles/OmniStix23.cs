@@ -68,13 +68,13 @@
                 if (MMUtils.DoNotStartAddin)
                     return;
 
-                Utils.Init();
+                Utils.Init(); // 900 - 1300ms. Getting stock and custom icons.
 
                 PRMapCompanion.DocumentStorage.Init();
 
                 // Start interface
                 m_Stix = new StixMain();
-                m_Stix.Create();
+                m_Stix.Create(); // ~1500ms
             }
             catch (Exception e)
             {

@@ -105,9 +105,10 @@
             // txtLink
             // 
             this.txtLink.ContextMenuStrip = this.TextBoxMenu;
+            this.txtLink.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtLink.Location = new System.Drawing.Point(16, 25);
             this.txtLink.Name = "txtLink";
-            this.txtLink.Size = new System.Drawing.Size(356, 20);
+            this.txtLink.Size = new System.Drawing.Size(356, 21);
             this.txtLink.TabIndex = 29;
             this.txtLink.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtLink_KeyUp);
             this.txtLink.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.txtLink_MouseDoubleClick);
@@ -137,9 +138,10 @@
             // 
             // txtTitle
             // 
+            this.txtTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTitle.Location = new System.Drawing.Point(16, 71);
             this.txtTitle.Name = "txtTitle";
-            this.txtTitle.Size = new System.Drawing.Size(388, 20);
+            this.txtTitle.Size = new System.Drawing.Size(388, 21);
             this.txtTitle.TabIndex = 27;
             this.txtTitle.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.txtTitle_MouseDoubleClick);
             // 
@@ -195,10 +197,11 @@
             // 
             // cbLinkGroup
             // 
+            this.cbLinkGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbLinkGroup.FormattingEnabled = true;
             this.cbLinkGroup.Location = new System.Drawing.Point(98, 103);
             this.cbLinkGroup.Name = "cbLinkGroup";
-            this.cbLinkGroup.Size = new System.Drawing.Size(305, 21);
+            this.cbLinkGroup.Size = new System.Drawing.Size(305, 23);
             this.cbLinkGroup.TabIndex = 35;
             // 
             // btnBrowse
@@ -224,6 +227,7 @@
             // 
             // txtComment
             // 
+            this.txtComment.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtComment.ForeColor = System.Drawing.SystemColors.GrayText;
             this.txtComment.Location = new System.Drawing.Point(16, 136);
             this.txtComment.Multiline = true;

@@ -130,6 +130,7 @@
             // 
             // cbFontFamily
             // 
+            this.cbFontFamily.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbFontFamily.FormattingEnabled = true;
             this.cbFontFamily.Items.AddRange(new object[] {
             "Arial",
@@ -141,7 +142,7 @@
             "Verdana"});
             this.cbFontFamily.Location = new System.Drawing.Point(159, 1);
             this.cbFontFamily.Name = "cbFontFamily";
-            this.cbFontFamily.Size = new System.Drawing.Size(100, 21);
+            this.cbFontFamily.Size = new System.Drawing.Size(100, 23);
             this.cbFontFamily.TabIndex = 9;
             this.cbFontFamily.SelectedIndexChanged += new System.EventHandler(this.cbFontFamily_SelectedIndexChanged);
             this.cbFontFamily.TextChanged += new System.EventHandler(this.cbFontFamily_TextChanged);
@@ -214,6 +215,7 @@
             // 
             // numFontSize
             // 
+            this.numFontSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numFontSize.Location = new System.Drawing.Point(424, 6);
             this.numFontSize.Maximum = new decimal(new int[] {
             96,
@@ -226,7 +228,7 @@
             0,
             0});
             this.numFontSize.Name = "numFontSize";
-            this.numFontSize.Size = new System.Drawing.Size(29, 20);
+            this.numFontSize.Size = new System.Drawing.Size(31, 21);
             this.numFontSize.TabIndex = 9;
             this.numFontSize.Value = new decimal(new int[] {
             12,
@@ -380,10 +382,10 @@
             // listTopics
             // 
             this.listTopics.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listTopics.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listTopics.Location = new System.Drawing.Point(0, 23);
+            this.listTopics.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listTopics.Location = new System.Drawing.Point(0, 25);
             this.listTopics.Name = "listTopics";
-            this.listTopics.Size = new System.Drawing.Size(163, 242);
+            this.listTopics.Size = new System.Drawing.Size(163, 240);
             this.listTopics.TabIndex = 11;
             this.listTopics.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.listTopics_AfterSelect);
             this.listTopics.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.listTopics_NodeMouseClick);
@@ -393,10 +395,11 @@
             // 
             this.btnNewTab.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnNewTab.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNewTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNewTab.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnNewTab.Location = new System.Drawing.Point(0, 0);
             this.btnNewTab.Name = "btnNewTab";
-            this.btnNewTab.Size = new System.Drawing.Size(163, 23);
+            this.btnNewTab.Size = new System.Drawing.Size(163, 25);
             this.btnNewTab.TabIndex = 27;
             this.btnNewTab.Text = "Open in a New Tab";
             this.btnNewTab.UseVisualStyleBackColor = true;
@@ -408,6 +411,7 @@
             this.tabControl1.Controls.Add(this.PreviewPage);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl1.ItemSize = new System.Drawing.Size(150, 22);
             this.tabControl1.Location = new System.Drawing.Point(0, 25);
             this.tabControl1.Name = "tabControl1";
@@ -493,10 +497,11 @@
             // 
             // cbSearchedText
             // 
+            this.cbSearchedText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbSearchedText.FormattingEnabled = true;
             this.cbSearchedText.Location = new System.Drawing.Point(289, 5);
             this.cbSearchedText.Name = "cbSearchedText";
-            this.cbSearchedText.Size = new System.Drawing.Size(169, 21);
+            this.cbSearchedText.Size = new System.Drawing.Size(169, 23);
             this.cbSearchedText.TabIndex = 12;
             this.cbSearchedText.TextChanged += new System.EventHandler(this.cbSearchedText_TextChanged);
             // 
@@ -513,10 +518,11 @@
             // 
             // cbFindIn
             // 
+            this.cbFindIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbFindIn.FormattingEnabled = true;
             this.cbFindIn.Location = new System.Drawing.Point(64, 5);
             this.cbFindIn.Name = "cbFindIn";
-            this.cbFindIn.Size = new System.Drawing.Size(196, 21);
+            this.cbFindIn.Size = new System.Drawing.Size(196, 23);
             this.cbFindIn.TabIndex = 7;
             this.cbFindIn.Click += new System.EventHandler(this.cbFindIn_Click);
             // 

@@ -72,9 +72,10 @@
             // 
             // txtText1
             // 
+            this.txtText1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtText1.Location = new System.Drawing.Point(66, 45);
             this.txtText1.Name = "txtText1";
-            this.txtText1.Size = new System.Drawing.Size(182, 20);
+            this.txtText1.Size = new System.Drawing.Size(182, 21);
             this.txtText1.TabIndex = 2;
             // 
             // labelWith
@@ -88,9 +89,10 @@
             // 
             // txtText2
             // 
+            this.txtText2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtText2.Location = new System.Drawing.Point(66, 79);
             this.txtText2.Name = "txtText2";
-            this.txtText2.Size = new System.Drawing.Size(182, 20);
+            this.txtText2.Size = new System.Drawing.Size(182, 21);
             this.txtText2.TabIndex = 4;
             // 
             // btnReplace

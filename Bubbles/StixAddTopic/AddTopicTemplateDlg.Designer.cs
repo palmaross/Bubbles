@@ -81,9 +81,10 @@
             // 
             // txtTopicText
             // 
+            this.txtTopicText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTopicText.Location = new System.Drawing.Point(79, 48);
             this.txtTopicText.Name = "txtTopicText";
-            this.txtTopicText.Size = new System.Drawing.Size(240, 20);
+            this.txtTopicText.Size = new System.Drawing.Size(240, 21);
             this.txtTopicText.TabIndex = 1;
             this.txtTopicText.TextChanged += new System.EventHandler(this.txtTopicText_TextChanged);
             this.txtTopicText.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtTopicText_KeyUp);
@@ -147,9 +148,10 @@
             // 
             // txtTemplateName
             // 
+            this.txtTemplateName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTemplateName.Location = new System.Drawing.Point(26, 28);
             this.txtTemplateName.Name = "txtTemplateName";
-            this.txtTemplateName.Size = new System.Drawing.Size(252, 20);
+            this.txtTemplateName.Size = new System.Drawing.Size(252, 21);
             this.txtTemplateName.TabIndex = 31;
             // 
             // lblTemplateName
@@ -175,9 +177,10 @@
             // 
             this.rbtnUseIncrement.AutoSize = true;
             this.rbtnUseIncrement.Checked = true;
-            this.rbtnUseIncrement.Location = new System.Drawing.Point(218, 22);
+            this.rbtnUseIncrement.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbtnUseIncrement.Location = new System.Drawing.Point(224, 22);
             this.rbtnUseIncrement.Name = "rbtnUseIncrement";
-            this.rbtnUseIncrement.Size = new System.Drawing.Size(72, 17);
+            this.rbtnUseIncrement.Size = new System.Drawing.Size(80, 19);
             this.rbtnUseIncrement.TabIndex = 26;
             this.rbtnUseIncrement.TabStop = true;
             this.rbtnUseIncrement.Text = "Increment";
@@ -206,10 +209,11 @@
             // cbTemplates
             // 
             this.cbTemplates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbTemplates.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbTemplates.FormattingEnabled = true;
             this.cbTemplates.Location = new System.Drawing.Point(11, 11);
             this.cbTemplates.Name = "cbTemplates";
-            this.cbTemplates.Size = new System.Drawing.Size(232, 21);
+            this.cbTemplates.Size = new System.Drawing.Size(232, 23);
             this.cbTemplates.Sorted = true;
             this.cbTemplates.TabIndex = 28;
             this.cbTemplates.SelectedIndexChanged += new System.EventHandler(this.cbTemplates_SelectedIndexChanged);
@@ -284,11 +288,12 @@
             // rbtnCustom
             // 
             this.rbtnCustom.AutoSize = true;
+            this.rbtnCustom.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rbtnCustom.Location = new System.Drawing.Point(110, 22);
             this.rbtnCustom.Name = "rbtnCustom";
-            this.rbtnCustom.Size = new System.Drawing.Size(60, 17);
+            this.rbtnCustom.Size = new System.Drawing.Size(112, 19);
             this.rbtnCustom.TabIndex = 37;
-            this.rbtnCustom.Text = "Custom";
+            this.rbtnCustom.Text = "Произвольный";
             this.rbtnCustom.UseVisualStyleBackColor = true;
             this.rbtnCustom.CheckedChanged += new System.EventHandler(this.TemplateType_CheckedChanged);
             // 
@@ -301,7 +306,7 @@
             this.grTemplate.Controls.Add(this.rbtnUseIncrement);
             this.grTemplate.Location = new System.Drawing.Point(11, 79);
             this.grTemplate.Name = "grTemplate";
-            this.grTemplate.Size = new System.Drawing.Size(308, 54);
+            this.grTemplate.Size = new System.Drawing.Size(312, 54);
             this.grTemplate.TabIndex = 38;
             this.grTemplate.TabStop = false;
             this.grTemplate.Text = "Шаблон:";
@@ -309,15 +314,17 @@
             // lblTopics
             // 
             this.lblTopics.AutoSize = true;
+            this.lblTopics.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTopics.Location = new System.Drawing.Point(65, 23);
             this.lblTopics.Name = "lblTopics";
-            this.lblTopics.Size = new System.Drawing.Size(35, 13);
+            this.lblTopics.Size = new System.Drawing.Size(39, 15);
             this.lblTopics.TabIndex = 17;
             this.lblTopics.Text = "topics";
             this.lblTopics.Click += new System.EventHandler(this.lblTopics_Click);
             // 
             // txtCustom
             // 
+            this.txtCustom.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtCustom.Location = new System.Drawing.Point(11, 139);
             this.txtCustom.Multiline = true;
             this.txtCustom.Name = "txtCustom";

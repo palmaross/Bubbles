@@ -78,7 +78,7 @@
             this.listBookmarks.IntegralHeight = false;
             this.listBookmarks.Location = new System.Drawing.Point(1, 2);
             this.listBookmarks.Name = "listBookmarks";
-            this.listBookmarks.Size = new System.Drawing.Size(212, 70);
+            this.listBookmarks.Size = new System.Drawing.Size(226, 70);
             this.listBookmarks.TabIndex = 0;
             this.listBookmarks.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listBookmarks_MouseUp);
             // 
@@ -136,7 +136,7 @@
             this.tabControl1.Location = new System.Drawing.Point(1, 20);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(242, 117);
+            this.tabControl1.Size = new System.Drawing.Size(236, 117);
             this.tabControl1.TabIndex = 82;
             this.tabControl1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabControl1_DrawItem);
             // 
@@ -150,7 +150,7 @@
             this.tabMain.Location = new System.Drawing.Point(4, 24);
             this.tabMain.Name = "tabMain";
             this.tabMain.Padding = new System.Windows.Forms.Padding(3);
-            this.tabMain.Size = new System.Drawing.Size(234, 89);
+            this.tabMain.Size = new System.Drawing.Size(228, 89);
             this.tabMain.TabIndex = 0;
             this.tabMain.Text = "Main Topics";
             // 
@@ -178,7 +178,7 @@
             this.listMainTopics.ItemHeight = 15;
             this.listMainTopics.Location = new System.Drawing.Point(1, 16);
             this.listMainTopics.Name = "listMainTopics";
-            this.listMainTopics.Size = new System.Drawing.Size(234, 73);
+            this.listMainTopics.Size = new System.Drawing.Size(226, 73);
             this.listMainTopics.TabIndex = 1;
             this.listMainTopics.SelectedIndexChanged += new System.EventHandler(this.listMainTopics_SelectedIndexChanged);
             // 
@@ -191,7 +191,7 @@
             this.tabBookmarks.Location = new System.Drawing.Point(4, 24);
             this.tabBookmarks.Name = "tabBookmarks";
             this.tabBookmarks.Padding = new System.Windows.Forms.Padding(3);
-            this.tabBookmarks.Size = new System.Drawing.Size(222, 89);
+            this.tabBookmarks.Size = new System.Drawing.Size(228, 89);
             this.tabBookmarks.TabIndex = 1;
             this.tabBookmarks.Text = "Bookmarks";
             this.tabBookmarks.UseVisualStyleBackColor = true;
@@ -230,7 +230,7 @@
             this.tabNavigation.Location = new System.Drawing.Point(4, 24);
             this.tabNavigation.Name = "tabNavigation";
             this.tabNavigation.Padding = new System.Windows.Forms.Padding(3);
-            this.tabNavigation.Size = new System.Drawing.Size(222, 89);
+            this.tabNavigation.Size = new System.Drawing.Size(228, 89);
             this.tabNavigation.TabIndex = 2;
             this.tabNavigation.Text = "Navigation";
             this.tabNavigation.UseVisualStyleBackColor = true;
@@ -261,7 +261,7 @@
             this.listPositions.ItemHeight = 15;
             this.listPositions.Location = new System.Drawing.Point(3, 18);
             this.listPositions.Name = "listPositions";
-            this.listPositions.Size = new System.Drawing.Size(206, 71);
+            this.listPositions.Size = new System.Drawing.Size(226, 71);
             this.listPositions.TabIndex = 1;
             this.listPositions.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listPositions_MouseUp);
             // 

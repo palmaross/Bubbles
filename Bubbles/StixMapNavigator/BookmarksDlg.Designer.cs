@@ -58,6 +58,7 @@
             this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.treeView1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.treeView1.ImageIndex = 0;
             this.treeView1.ImageList = this.imageList1;
             this.treeView1.Location = new System.Drawing.Point(2, 2);
@@ -142,9 +143,10 @@
             // 
             // txtGroupBookmark
             // 
+            this.txtGroupBookmark.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtGroupBookmark.Location = new System.Drawing.Point(10, 25);
             this.txtGroupBookmark.Name = "txtGroupBookmark";
-            this.txtGroupBookmark.Size = new System.Drawing.Size(212, 20);
+            this.txtGroupBookmark.Size = new System.Drawing.Size(212, 21);
             this.txtGroupBookmark.TabIndex = 0;
             this.txtGroupBookmark.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtNewGroup_KeyUp);
             // 
@@ -238,8 +240,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.Button btnNewGroup;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.HelpProvider helpProvider1;
@@ -257,5 +257,6 @@
         private System.Windows.Forms.ToolStripMenuItem b_renameGroup;
         private System.Windows.Forms.ToolStripMenuItem b_deleteGroup;
         private System.Windows.Forms.PictureBox p1;
+        public System.Windows.Forms.TreeView treeView1;
     }
 }

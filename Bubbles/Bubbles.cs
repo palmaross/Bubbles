@@ -69,7 +69,6 @@ namespace Bubbles
             //m_Snippets = new StixSnippets();
             m_OmniSound = new OmniSound();
             m_StixBase = new StartMenu();
-            m_TaskInfo = new StixTaskInfo(0, "H");
             commandPopup.Tag = 0; // Tag is a stick ID
 
             DocumentStorage.Subscribe(this);
@@ -88,6 +87,8 @@ namespace Bubbles
             OmniTools.GetAppIcons();
 
             OmniStixButton.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
+
+            Utils.WindowFontSize = Convert.ToInt32(Utils.getRegistry("WindowFontSize", "12"));
 
             DataTable dt;
             using (StixDB db = new StixDB("Stix"))
@@ -513,16 +514,22 @@ namespace Bubbles
 
         public override void onDocumentActivated(MMEventArgs aArgs)
         {
+            // max. 150ms if there are many main topics
             if (m_MapNavigator != null && m_MapNavigator.Visible) m_MapNavigator.Init();
             else if (m_MapNavigatorDlg != null && m_MapNavigatorDlg.Visible) m_MapNavigatorDlg.Init();
-            
+
+            // max. 60ms + ~2 ms for each resource in the Map Index. Average 100 ms.
             if (m_Resources != null && m_Resources.Visible) m_Resources.InitCurrentMapResources();
-            if (m_TaskInfo.Visible) m_TaskInfo.PopulateResources();
+            if (m_TaskInfo != null && m_TaskInfo.Visible) m_TaskInfo.PopulateResources();
+
+            // max. 50 ms (> 2000 topics)
             if (m_TopicPlayer != null && m_TopicPlayer.Visible) m_TopicPlayer.InitSoundTopicsList();
 
+            // ~50ms + depends on results count.  Eg., 30 results is ~600ms. It's not an xml search!
             if (m_SearchText != null && m_SearchText.Visible)
                 m_SearchText.txtSearch_TextChanged(null, null);
 
+            // max. 5 ms.
             foreach (var form in STICKS.Values)
             {
                 if (form.Name == "StixIcons")
@@ -797,7 +804,7 @@ namespace Bubbles
 
         public static void SetDates()
         {
-            if (!m_TaskInfo.Visible) return;
+            if (m_TaskInfo == null || !m_TaskInfo.Visible) return;
 
             // No topics selected. Disable Task Info stick controls
             if (MMUtils.ActiveDocument == null || MMUtils.ActiveDocument.Selection.PrimaryTopic == null)
@@ -1237,11 +1244,11 @@ namespace Bubbles
                 m_Resources = null;
             }
 
-            if (m_AllSources != null)
+            if (m_Links != null)
             {
-                m_AllSources.Hide();
-                m_AllSources.Dispose();
-                m_AllSources = null;
+                m_Links.Hide();
+                m_Links.Dispose();
+                m_Links = null;
             }
 
             if (m_topicNotes != null)
@@ -1350,7 +1357,7 @@ namespace Bubbles
         public static BrowserDlg OmniBrowser = null;
 
         public static ResourcesDlg m_Resources;
-        public static LinksDlg m_AllSources;
+        public static LinksDlg m_Links;
 
         public static StixTaskInfo m_TaskInfo;
 
