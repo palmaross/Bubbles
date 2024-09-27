@@ -71,21 +71,20 @@ namespace Bubbles
             this.MinimumSize = new Size(this.Width, this.Height / 2);
             this.MaximumSize = new Size(this.Width, Screen.AllScreens.Max(s => s.Bounds.Height));
 
-            treeViewCM.Sorted = true;
-            treeViewDB.Sorted = true;
-            InitCurrentMapResources();
-            InitDataBaseResources();
-
-            StixUtils.ActivateMindManager();
-
-            this.ResizeEnd += ResourcesDlg_ResizeEnd;
-
             int fontsize = (int)treeViewCM.Font.Size;
             if (Utils.WindowFontSize != fontsize)
             {
                 treeViewCM.Font = new Font(treeViewCM.Font.FontFamily, Utils.WindowFontSize * 0.75F);
                 treeViewDB.Font = new Font(treeViewDB.Font.FontFamily, Utils.WindowFontSize * 0.75F);
             }
+
+            treeViewCM.Sorted = true;
+            InitCurrentMapResources();
+            InitDataBaseResources();
+
+            StixUtils.ActivateMindManager();
+
+            this.ResizeEnd += ResourcesDlg_ResizeEnd;
         }
 
         private void ResourcesDlg_ResizeEnd(object sender, EventArgs e)
@@ -131,7 +130,8 @@ namespace Bubbles
                 treeViewDB.Nodes.Clear();
                 TreeNode root = new TreeNode(Utils.getString("ResourcesDlg.allresources"));
                 root.Tag = 0; treeViewDB.Nodes.Add(root);
-                root.NodeFont = new Font(treeViewDB.Font, FontStyle.Bold);
+                //root.NodeFont = new Font(treeViewDB.Font, FontStyle.Bold);
+                //root.Text = root.Text;
 
                 List<string> resources = new List<string>();
                 DataTable dt = db.ExecuteQuery("select * from RESOURCES order by name");
@@ -152,7 +152,8 @@ namespace Bubbles
                 {
                     TreeNode node = treeViewDB.Nodes.Add(dr["name"].ToString());
                     node.Tag = Convert.ToInt32(dr["id"]);
-                    node.NodeFont = new Font(treeViewDB.Font, FontStyle.Bold);
+                    //node.NodeFont = new Font(treeViewDB.Font, FontStyle.Bold);
+                    //node.Text = node.Text;
 
                     dt = db.ExecuteQuery("select * from RESOURCES where groupID=" + (int)node.Tag + " order by name");
                     foreach (DataRow res in dt.Rows)
@@ -172,7 +173,6 @@ namespace Bubbles
                         }
                     }
                 }
-
                 treeViewDB.SelectedNode = root;
             }
         }
@@ -976,7 +976,7 @@ namespace Bubbles
                     if (dt.Rows.Count > 0) groupID = Convert.ToInt32(dt.Rows[0][0]);
                     TreeNode node = treeViewDB.Nodes.Add(newName);
                     node.Tag = groupID;
-                    node.NodeFont = new Font(treeViewDB.Font, FontStyle.Bold);
+                    //node.NodeFont = new Font(treeViewDB.Font, FontStyle.Bold);
                 }
                 e.Handled = true; // to avoid the "ding" sound
                 e.SuppressKeyPress = true;
@@ -1288,10 +1288,19 @@ namespace Bubbles
                 }
             }
 
+            TreeNode firstnode = tv.Nodes[0];
+
             if (rename)
                 InitDataBaseResources();
             else
                 tv.Sort();
+
+            if (!currentMap && firstnode.Index != 0)
+            {
+                tv.Sorted = false;
+                firstnode.Remove();
+                tv.Nodes.Insert(0, firstnode);
+            }
 
             treeViewDB.SelectedNode = e.Node;
             tv.LabelEdit = false;

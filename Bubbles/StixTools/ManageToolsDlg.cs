@@ -215,7 +215,7 @@ namespace Bubbles
             else if (e.ClickedItem == t_run)
             {
                 ToolItem item = selectedList.SelectedItems[0].Tag as ToolItem;
-                RunTool(item.Path);
+                RunTool(item.Path, item.Title);
             }
             else if (e.ClickedItem == t_copytoomni)
             {
@@ -376,7 +376,7 @@ namespace Bubbles
                 if (dr["stixID"].ToString() == "0")
                 {
                     string path = dr["path"].ToString();
-                    if (path == Path.GetFileName(path))
+                    if (!path.StartsWith("OT_") && path == Path.GetFileName(path))
                         path = Utils.m_dataPath + "ToolStixApps\\" + path;
 
                     ToolItem item = new ToolItem(dr["title"].ToString(), path, dr["type"].ToString(), 0, dr["tooltip"].ToString());
@@ -601,16 +601,16 @@ namespace Bubbles
         private void listWindowsApps_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             ToolItem item = listWindowsApps.SelectedItems[0].Tag as ToolItem;
-            RunTool(item.Path);
+            RunTool(item.Path, item.Title);
         }
 
         private void listOmniTools_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             ToolItem item = listOmniTools.SelectedItems[0].Tag as ToolItem;
-            RunTool(item.Path);
+            RunTool(item.Path, item.Title);
         }
 
-        public void RunTool(string path)
+        public void RunTool(string path, string tool)
         {
             if (Utils.FreeVersionLimitExceeded("runtool"))
                 return;
@@ -633,10 +633,10 @@ namespace Bubbles
             {
                 if (!path.StartsWith("OT_") && !File.Exists(path)) // file not exists
                 {
-                    MessageBox.Show(Utils.getString("tools.run.filenotfound.1"));
+                    MessageBox.Show(String.Format(Utils.getString("tools.run.filenotfound.1"), path));
                 }
                 else // unknown reason
-                    MessageBox.Show(Utils.getString("tools.run.error"));
+                    MessageBox.Show(String.Format(Utils.getString("tools.run.error"), tool));
             }
         }
     }

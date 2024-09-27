@@ -33,6 +33,8 @@
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pOffset = new System.Windows.Forms.PictureBox();
+            this.pSelected = new System.Windows.Forms.PictureBox();
             this.panelPP = new System.Windows.Forms.Panel();
             this.pr1 = new System.Windows.Forms.PictureBox();
             this.pro75 = new System.Windows.Forms.PictureBox();
@@ -53,9 +55,10 @@
             this.btnBrowse = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
-            this.pSelected = new System.Windows.Forms.PictureBox();
-            this.pOffset = new System.Windows.Forms.PictureBox();
+            this.pImageSize = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pOffset)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pSelected)).BeginInit();
             this.panelPP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pr1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pro75)).BeginInit();
@@ -69,8 +72,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pro100)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pSpace)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pSelected)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pOffset)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pImageSize)).BeginInit();
             this.SuspendLayout();
             // 
             // treeView1
@@ -93,6 +95,7 @@
             // panel1
             // 
             this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.pImageSize);
             this.panel1.Controls.Add(this.pOffset);
             this.panel1.Controls.Add(this.pSelected);
             this.panel1.Controls.Add(this.panelPP);
@@ -102,6 +105,24 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(153, 326);
             this.panel1.TabIndex = 1;
+            // 
+            // pOffset
+            // 
+            this.pOffset.Location = new System.Drawing.Point(7, 95);
+            this.pOffset.Name = "pOffset";
+            this.pOffset.Size = new System.Drawing.Size(2, 10);
+            this.pOffset.TabIndex = 98;
+            this.pOffset.TabStop = false;
+            this.pOffset.Visible = false;
+            // 
+            // pSelected
+            // 
+            this.pSelected.Location = new System.Drawing.Point(7, 79);
+            this.pSelected.Name = "pSelected";
+            this.pSelected.Size = new System.Drawing.Size(10, 10);
+            this.pSelected.TabIndex = 97;
+            this.pSelected.TabStop = false;
+            this.pSelected.Visible = false;
             // 
             // panelPP
             // 
@@ -313,23 +334,15 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // pSelected
+            // pImageSize
             // 
-            this.pSelected.Location = new System.Drawing.Point(7, 79);
-            this.pSelected.Name = "pSelected";
-            this.pSelected.Size = new System.Drawing.Size(10, 10);
-            this.pSelected.TabIndex = 97;
-            this.pSelected.TabStop = false;
-            this.pSelected.Visible = false;
-            // 
-            // pOffset
-            // 
-            this.pOffset.Location = new System.Drawing.Point(7, 95);
-            this.pOffset.Name = "pOffset";
-            this.pOffset.Size = new System.Drawing.Size(2, 10);
-            this.pOffset.TabIndex = 98;
-            this.pOffset.TabStop = false;
-            this.pOffset.Visible = false;
+            this.pImageSize.Location = new System.Drawing.Point(68, 155);
+            this.pImageSize.Name = "pImageSize";
+            this.pImageSize.Size = new System.Drawing.Size(14, 14);
+            this.pImageSize.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pImageSize.TabIndex = 99;
+            this.pImageSize.TabStop = false;
+            this.pImageSize.Visible = false;
             // 
             // SelectIconDlg
             // 
@@ -355,6 +368,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Add Icon";
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pOffset)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pSelected)).EndInit();
             this.panelPP.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pr1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pro75)).EndInit();
@@ -368,8 +383,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pro100)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pSpace)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pSelected)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pOffset)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pImageSize)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -402,5 +416,6 @@
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.PictureBox pSelected;
         private System.Windows.Forms.PictureBox pOffset;
+        private System.Windows.Forms.PictureBox pImageSize;
     }
 }

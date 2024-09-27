@@ -69,6 +69,7 @@ namespace Bubbles
             //m_Snippets = new StixSnippets();
             m_OmniSound = new OmniSound();
             m_StixBase = new StartMenu();
+            Utils.scalingFactor = Utils.GetScalingFactor(m_StixBase.Height);
             commandPopup.Tag = 0; // Tag is a stick ID
 
             DocumentStorage.Subscribe(this);

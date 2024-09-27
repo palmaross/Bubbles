@@ -32,6 +32,8 @@ namespace Bubbles
             {
                 if (num.Name == "numMainWidth") continue;
                 num.Value = widths[i++];
+
+                if (Utils.scalingFactor < 1.5) { num.Width += 4; }
             }
             i = 0;
             foreach (CheckBox ch in this.Controls.OfType<CheckBox>())

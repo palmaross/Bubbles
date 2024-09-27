@@ -134,10 +134,25 @@ namespace Bubbles
 
             MMBounds = new Rectangle(MMUtils.MindManager.Left, MMUtils.MindManager.Top, MMUtils.MindManager.Width, MMUtils.MindManager.Height);
 
-            scalingFactor = ScalingFactor.GetScalingFactor();
+            //scalingFactor = ScalingFactor.GetScalingFactor();
 
             InitDatabases();
             InitStartedMaps(); // perf!
+        }
+
+        public static float GetScalingFactor(int actual)
+        {
+            scalingFactor = actual / 70F; // 70 is StartMenu height at 100% scaling factor
+            if (scalingFactor < 1.1) scalingFactor = 1;
+            else if (scalingFactor > 1.1 && scalingFactor < 1.3) scalingFactor = 1.25F;
+            else if (scalingFactor > 1.4 && scalingFactor < 1.6) scalingFactor = 1.5F;
+            else if (scalingFactor > 1.7 && scalingFactor < 1.85) scalingFactor = 1.75F;
+            else if (scalingFactor > 1.85 && scalingFactor < 2.1) scalingFactor = 2F;
+            else if (scalingFactor > 2.1 && scalingFactor < 2.3) scalingFactor = 2.25F;
+            else if (scalingFactor > 2.4 && scalingFactor < 2.6) scalingFactor = 2.5F;
+            else if (scalingFactor > 2.7 && scalingFactor < 2.9) scalingFactor = 2.75F;
+            else if (scalingFactor > 2.9 && scalingFactor < 3.15) scalingFactor = 3F;
+            return scalingFactor;
         }
 
         static void InitDatabases()
@@ -210,7 +225,7 @@ namespace Bubbles
                 {
                     // Add to ToolStix
                     db.AddTool(getString("tools.demo2.title"), "", dllPath + "OmniStix.chm", "chm", 2, toolStixId);
-                    db.AddTool(getString("tools.notepad"), "", "WT_Microsoft.WindowsNotepad_8wekyb3d8bbwe!App", "tool-winnotepad.png", 3, toolStixId);
+                    db.AddTool(getString("tools.notepad"), "", "c:\\Windows\\System32\\notepad.exe", "tool-winnotepad.png", 3, toolStixId);
                     // Add to ToolDB
                     db.AddTool(getString("tools.closeall"), getString("tools.closeall.tooltip"), "OT_CloseAll", "tool-closemaps.png", 0, 0);
                     db.AddTool(getString("tools.saveall"), getString("tools.saveall.tooltip"), "OT_SaveAll", "tool-saveall.png", 0, 0);

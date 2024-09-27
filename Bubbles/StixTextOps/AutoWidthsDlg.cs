@@ -16,7 +16,7 @@ namespace Bubbles
             helpProvider1.SetHelpNavigator(this, HelpNavigator.Topic);
             helpProvider1.SetHelpKeyword(this, "manage_topic_widths.htm");
 
-            Text = Utils.getString("TopicWidthDlg.Title");
+            Text = Utils.getString("AutoWidthsDlg.Title");
             lblTextMore.Text = Utils.getString("TopicWidthDlg.lblTextMore");
             lblTopicWidth.Text = Utils.getString("TopicWidthDlg.lblTopicWidth");
 
@@ -41,7 +41,7 @@ namespace Bubbles
                 else
                     num.Value = lengths[i++];
 
-                if (Utils.scalingFactor == 1) { num.Width += 4; }
+                if (Utils.scalingFactor < 1.5) { num.Width += 4; }
             }
             i = 0;
             foreach (CheckBox ch in this.Controls.OfType<CheckBox>())

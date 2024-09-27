@@ -492,11 +492,16 @@ namespace Bubbles
                     new Font(StixMain.m_Resources.treeViewCM.Font.FontFamily, size * 0.75F);
                 StixMain.m_Resources.treeViewDB.Font = 
                     new Font(StixMain.m_Resources.treeViewDB.Font.FontFamily, size * 0.75F);
+                //foreach (TreeNode node in StixMain.m_Resources.treeViewDB.Nodes)
+                //{
+                //    node.NodeFont = new Font(StixMain.m_Resources.treeViewDB.Font, FontStyle.Bold);
+                //    node.Text = node.Text;
+                //}
             }
             if (StixMain.m_Links != null && StixMain.m_Links.Visible)
             {
                 StixMain.m_Links.treeView1.Font = 
-                    new Font(StixMain.m_Links.dataGridView1.Font.FontFamily, size * 0.75F);
+                    new Font(StixMain.m_Links.treeView1.Font.FontFamily, size * 0.75F);
                 foreach (DataGridViewRow r in StixMain.m_Links.dataGridView1.Rows)
                     r.DefaultCellStyle.Font = new Font(StixMain.m_Links.dataGridView1.Font.FontFamily, size * 72 / 96F);
             }

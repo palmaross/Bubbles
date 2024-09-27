@@ -58,7 +58,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(227, 135);
+            this.btnCancel.Location = new System.Drawing.Point(240, 135);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 6;
@@ -71,7 +71,7 @@
             this.txtTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTitle.Location = new System.Drawing.Point(91, 6);
             this.txtTitle.Name = "txtTitle";
-            this.txtTitle.Size = new System.Drawing.Size(205, 21);
+            this.txtTitle.Size = new System.Drawing.Size(220, 21);
             this.txtTitle.TabIndex = 5;
             // 
             // lblToolName
@@ -96,7 +96,7 @@
             // 
             this.txtTooltip.Location = new System.Drawing.Point(10, 82);
             this.txtTooltip.Name = "txtTooltip";
-            this.txtTooltip.Size = new System.Drawing.Size(286, 20);
+            this.txtTooltip.Size = new System.Drawing.Size(302, 20);
             this.txtTooltip.TabIndex = 32;
             // 
             // pIcon
@@ -158,7 +158,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(312, 168);
+            this.ClientSize = new System.Drawing.Size(326, 168);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnPages);
             this.Controls.Add(this.btnOK);

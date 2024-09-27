@@ -119,7 +119,7 @@
             this.cbRecordings.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbRecordings.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbRecordings.FormattingEnabled = true;
-            this.cbRecordings.Location = new System.Drawing.Point(14, 92);
+            this.cbRecordings.Location = new System.Drawing.Point(14, 94);
             this.cbRecordings.Name = "cbRecordings";
             this.cbRecordings.Size = new System.Drawing.Size(178, 23);
             this.cbRecordings.Sorted = true;

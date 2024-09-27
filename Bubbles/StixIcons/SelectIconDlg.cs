@@ -30,6 +30,7 @@ namespace Bubbles
             if (filenames != null) FileNames = filenames;
             From = from;
 
+            imageList1.ImageSize = pImageSize.Size;
             imageList1.Images.Add(Image.FromFile(Utils.ImagesPath + "folder.png"));
             space = pSpace.Width;
 
@@ -39,6 +40,8 @@ namespace Bubbles
             this.HelpButtonClicked += this_HelpButtonClicked;
             sel_offset = pOffset.Width;
             locX = sel_offset; locY = sel_offset;
+            if (Utils.scalingFactor < 2)
+                treeView1.ItemHeight = 15;
         }
 
         private void this_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)

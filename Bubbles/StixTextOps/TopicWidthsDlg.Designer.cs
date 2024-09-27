@@ -96,7 +96,7 @@
             // 
             // numWidth1
             // 
-            this.numWidth1.Location = new System.Drawing.Point(29, 69);
+            this.numWidth1.Location = new System.Drawing.Point(28, 69);
             this.numWidth1.Maximum = new decimal(new int[] {
             500,
             0,
@@ -118,7 +118,7 @@
             // 
             // numWidth2
             // 
-            this.numWidth2.Location = new System.Drawing.Point(88, 69);
+            this.numWidth2.Location = new System.Drawing.Point(87, 69);
             this.numWidth2.Maximum = new decimal(new int[] {
             500,
             0,
@@ -140,7 +140,7 @@
             // 
             // numWidth3
             // 
-            this.numWidth3.Location = new System.Drawing.Point(146, 69);
+            this.numWidth3.Location = new System.Drawing.Point(145, 69);
             this.numWidth3.Maximum = new decimal(new int[] {
             500,
             0,
@@ -162,7 +162,7 @@
             // 
             // numWidth4
             // 
-            this.numWidth4.Location = new System.Drawing.Point(205, 69);
+            this.numWidth4.Location = new System.Drawing.Point(204, 69);
             this.numWidth4.Maximum = new decimal(new int[] {
             500,
             0,
@@ -184,7 +184,7 @@
             // 
             // numWidth5
             // 
-            this.numWidth5.Location = new System.Drawing.Point(264, 69);
+            this.numWidth5.Location = new System.Drawing.Point(263, 69);
             this.numWidth5.Maximum = new decimal(new int[] {
             500,
             0,
@@ -209,7 +209,7 @@
             this.cbm1.AutoSize = true;
             this.cbm1.Checked = true;
             this.cbm1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbm1.Location = new System.Drawing.Point(12, 71);
+            this.cbm1.Location = new System.Drawing.Point(11, 71);
             this.cbm1.Name = "cbm1";
             this.cbm1.Size = new System.Drawing.Size(15, 14);
             this.cbm1.TabIndex = 40;
@@ -220,7 +220,7 @@
             this.cbm2.AutoSize = true;
             this.cbm2.Checked = true;
             this.cbm2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbm2.Location = new System.Drawing.Point(71, 71);
+            this.cbm2.Location = new System.Drawing.Point(70, 71);
             this.cbm2.Name = "cbm2";
             this.cbm2.Size = new System.Drawing.Size(15, 14);
             this.cbm2.TabIndex = 42;
@@ -231,7 +231,7 @@
             this.cbm3.AutoSize = true;
             this.cbm3.Checked = true;
             this.cbm3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbm3.Location = new System.Drawing.Point(129, 71);
+            this.cbm3.Location = new System.Drawing.Point(128, 71);
             this.cbm3.Name = "cbm3";
             this.cbm3.Size = new System.Drawing.Size(15, 14);
             this.cbm3.TabIndex = 44;
@@ -242,7 +242,7 @@
             this.cbm4.AutoSize = true;
             this.cbm4.Checked = true;
             this.cbm4.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbm4.Location = new System.Drawing.Point(187, 71);
+            this.cbm4.Location = new System.Drawing.Point(186, 71);
             this.cbm4.Name = "cbm4";
             this.cbm4.Size = new System.Drawing.Size(15, 14);
             this.cbm4.TabIndex = 46;
@@ -251,7 +251,7 @@
             // cbm5
             // 
             this.cbm5.AutoSize = true;
-            this.cbm5.Location = new System.Drawing.Point(246, 71);
+            this.cbm5.Location = new System.Drawing.Point(245, 71);
             this.cbm5.Name = "cbm5";
             this.cbm5.Size = new System.Drawing.Size(15, 14);
             this.cbm5.TabIndex = 48;

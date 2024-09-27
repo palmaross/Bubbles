@@ -238,7 +238,7 @@ namespace Bubbles
                 this.Height = thisHeight - minSize.Width;
                 rtb.Visible = false;
                 linkMore.Text = Utils.getString("ReplaceDlg.linkMore1");
-                btnReplace.Width = btnSkip.Width + btnSkip.Height;
+                //btnReplace.Width = btnSkip.Width + btnSkip.Height;
                 btnReplace.Text = Utils.getString("ReplaceDlg.btnReplace1");
                 btnSkip.Visible = false;
                 lblTopicCount.Visible = false;
