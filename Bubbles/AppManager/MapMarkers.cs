@@ -8,38 +8,49 @@ namespace Bubbles
 {
     internal class MapMarkers
     {
+        /// <summary>
+        /// Add tag to a topic by tag name and group name. If group name == "", it's a General Tags group.
+        /// If tag not exists in the map, create tag group and tag.
+        /// </summary>
+        /// <param name="aTopic">Topic to add tag</param>
+        /// <param name="tagName">Tag name</param>
+        /// <param name="tagID">Tag Id</param>
+        /// <param name="groupName">Tag group name</param>
+        /// <param name="groupID">Tag group Id</param>
+        /// <param name="tagColor">Tag color</param>
+        /// <param name="mutex">True = mutually exclusive group</param>
+        /// <returns>True if tag was added, otherwise - False</returns>
         public static bool AddTagToTopic(Topic aTopic, string tagName, string tagID, string groupName, string groupID, string tagColor = "", bool mutex = false)
         {
             if (aTopic == null)
                 return false;
 
-            MapMarkerGroup _mmg = null;
+            MapMarkerGroup _mmg;
 
-            if (groupName == "") // Common tag group!
+            if (groupName == "") // General Tags group!
                 _mmg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeSingleTextLabel);
             else
-                _mmg = GetMapMarkerGroup(groupName, groupID, true, mutex);
+                _mmg = GetMapMarkerGroup(groupName, groupID, true, mutex); // Create if not exists.
 
             if (_mmg == null) return false;
 
             string groupId = _mmg.GroupId;
 
-            // if group doesn't have this tag, add it to group
+            // If the group doesn't have this tag, add it to group.
             if (!AddTextLabelMarkerToGroup(_mmg, tagName, tagID, tagColor))
                 return false;
 
             try
             {
-                // add tag to the topic
+                // Add tag to the topic.
                 aTopic.TextLabels.AddTextLabelFromGroup(tagName, groupId);
                 return true;
             }
-            catch { }
-            return false;
+            catch { return false; }
         }
 
         /// <summary>
-        /// Get or add MapMarkerGroup (only text label group)
+        /// Get MapMarkerGroup (only text label group). If not exists, can be created.
         /// </summary>
         /// <param name="aDocument"></param>
         /// <param name="groupName">Name of marker group</param>
@@ -84,15 +95,14 @@ namespace Bubbles
         }
 
         /// <summary>
-        /// Get or add MapMarkerGroup (icon group)
+        /// Get or add Icon Group
         /// </summary>
-        /// <param name="aDocument"></param>
         /// <param name="groupName">Name of icon group</param>
         /// <param name="aCreateNew">if to create marker group if not found</param>
         /// <param name="mutex">If group must be MutuallyExclusive</param>
         /// <returns>MapMarkerGroup</returns>
 		public static MapMarkerGroup GetIconGroup(string groupName, string groupID = "", 
-            bool aCreateNew = true, bool mutex = false, bool askuser = true)
+            bool aCreateNew = true, bool mutex = false)
         {
             if (Utils.ActiveDocumentOrSelectionNull(false)) return null;
 
@@ -140,7 +150,7 @@ namespace Bubbles
         }
 
         /// <summary>
-        /// Adds marker (tag or resource) to Marker Group
+        /// Adds text marker (tag or resource) to Marker Group
         /// </summary>
         /// <param name="mg">Marker Group to add marker</param>
         /// <param name="tagName">marker name</param>
@@ -153,7 +163,7 @@ namespace Bubbles
 
             MapMarker tag = GetTagFromGroup(mg, tagName);
 
-            if (tag == null) // There is no marker in the group
+            if (tag == null) // There is no given marker in the group. Create.
             {
                 try
                 {
@@ -198,11 +208,11 @@ namespace Bubbles
         }
 
         /// <summary>
-        /// Check if given tag group contains tag
+        /// Check if the tag group contains tag.
         /// </summary>
         /// <param name="group"></param>
         /// <param name="tagName"></param>
-        /// <returns>True if tag group contains tag</returns>
+        /// <returns>MapMarker object</returns>
         public static MapMarker GetTagFromGroup(MapMarkerGroup group, string tagName)
         {
             foreach (MapMarker mm in group)
@@ -214,7 +224,7 @@ namespace Bubbles
         }
 
         /// <summary>
-        /// Check if icon exists in the Map Index. If not, add icon to Map Index
+        /// Check if icon exists in the Map Index. If not, can be added to Map Index.
         /// </summary>
         /// <param name="aIcon">Stock Icon to check</param>
         /// <param name="signature">Custom Icon signature</param>
@@ -254,7 +264,7 @@ namespace Bubbles
                                 break;
                             }
                         }
-                        else // custom icon
+                        else if (icon.Icon.Type == MmIconType.mmIconTypeCustom) // custom icon
                         {
                             if (icon.Icon.CustomIconSignature == signature)
                             {
@@ -284,7 +294,7 @@ namespace Bubbles
             if (groupName == "")
                 _mg = MMUtils.ActiveDocument.MapMarkerGroups.GetMandatoryMarkerGroup(MmMapMarkerGroupType.mmMapMarkerGroupTypeSingleIcon);
             else
-                _mg = GetIconGroup(groupName, mutex, true);
+                _mg = GetIconGroup(groupName, "", true, mutex);
 
             if (_mg != null)
             {
@@ -297,34 +307,7 @@ namespace Bubbles
         }
 
         /// <summary>
-        /// Get icon group or create one.
-        /// </summary>
-        /// <param name="groupName">Group name</param>
-        /// <param name="mutex"></param>
-        /// <returns></returns>
-        static MapMarkerGroup GetIconGroup(string groupName, bool mutex, bool createNew = false)
-        {
-            if (MMUtils.ActiveDocument == null) return null;
-
-            foreach (MapMarkerGroup mg in MMUtils.ActiveDocument.MapMarkerGroups)
-            {
-                if (mg.Type == MmMapMarkerGroupType.mmMapMarkerGroupTypeIcon)
-                    if (mg.Name == groupName) return mg;
-            }
-
-            // Group doesn't exist. Create group.
-            if (createNew)
-            {
-                MapMarkerGroup _mg = MMUtils.ActiveDocument.MapMarkerGroups.AddIconMarkerGroup(groupName);
-                if (_mg != null)
-                    _mg.MutuallyExclusive = mutex;
-                return _mg;
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Delete or leave icon in the icon group
+        /// Delete or leave icon in the icon group.
         /// </summary>
         /// <param name="mg">Marker group where icon is located.</param>
         /// <param name="groupName">User marker group name.</param>

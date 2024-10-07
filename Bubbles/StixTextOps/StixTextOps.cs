@@ -466,7 +466,6 @@ namespace Bubbles
         }
         public static List<Topic> PastedTopics = new List<Topic>();
         public static List<Topic> SelectedTopics = new List<Topic>();
-        List<string> TopicLinks = new List<string>();
         static string pasteOperation = "";
 
         public void PasteToTopic(Document pDocument)
@@ -538,7 +537,7 @@ namespace Bubbles
 
             if (onetopic) // Merge text from pasted topics
             {
-                foreach (Topic t in StixTextOps.PastedTopics)
+                foreach (Topic t in PastedTopics)
                 {
                     //move cursor to the end
                     rtb.Select(rtb.TextLength, 0);
@@ -548,12 +547,12 @@ namespace Bubbles
             }
 
             if (onetopic) // Delete pasted topics
-                foreach (Topic t in StixTextOps.PastedTopics.Reverse<Topic>())
+                foreach (Topic t in PastedTopics.Reverse<Topic>())
                     t.Delete();
 
             // Paste resulting (above) text to the selected topics
             int p = 0, i = 0; // selected topics count
-            foreach (Topic t in StixTextOps.SelectedTopics)
+            foreach (Topic t in SelectedTopics)
             {
                 p++; i++;
                 Topic frameTopic = null;

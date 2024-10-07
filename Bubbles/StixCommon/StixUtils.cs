@@ -514,17 +514,18 @@ namespace Bubbles
                     MMUtils.ActiveDocument.Selection.Cut();
                     newTopic.SelectOnly();
 
-#if MINDJET23
-                    // Paste copied topics. In MM23 Selection.Paste() doesn't work!
-                    ActivateMindManager();
-                    InputSimulator sim = new InputSimulator();
-                    sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
-                    // Text will be pasted after this (and previous) method is finished!!
-#else
+                    // Paste copied topics. 
+                    try
                     {
-                        MMUtils.ActiveDocument.Selection.Paste();
+                        MMUtils.ActiveDocument.Selection.Paste(); 
                     }
-#endif
+                    catch // In MM23 Selection.Paste() doesn't work!
+                    {
+                        ActivateMindManager();
+                        InputSimulator sim = new InputSimulator();
+                        sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
+                        // Text will be pasted after this (and previous) method is finished!!
+                    }
                 }
             }
             return newTopic;
@@ -672,65 +673,6 @@ namespace Bubbles
         }
         public static List<string> Links = new List<string>();
         public static string SourceURL = "";
-
-
-
-        /// <summary>
-        /// Add or paste topic to a certain position (next topic, topic before, etc.) relative to given topic
-        /// </summary>
-        /// <param name="t">Given (selected) topic</param>
-        /// <param name="topicType">"subtopic", "next", "before", "parent", "callout"</param>
-        /// <param name="text">Topic text</param>
-        /// <param name="links">Topic links</param>
-        /// <param name="rtf">If the topic text is formatted</param>
-        public static Topic PasteTopic(Topic t, string topicType, string text, List<string> links, bool rtf = false)
-        {
-            Topic newTopic;
-
-            if (topicType == "subtopic")
-                newTopic = t.AllSubTopics.Add();
-            else if (topicType == "Callout")
-                newTopic = t.AllCalloutTopics.Add();
-            else // next topic, topic before or parent topic
-                newTopic = t.ParentTopic.AllSubTopics.Add();
-
-            if (rtf)
-                newTopic.Title.TextRTF = text;
-            else
-                newTopic.Text = text;
-
-            if (topicType != "subtopic" && topicType != "Callout")
-            {
-                // Get given topic index in the branch
-                int i = 1;
-                foreach (Topic _t in t.ParentTopic.AllSubTopics)
-                {
-                    if (_t == t) break; i++;
-                }
-                if (topicType == "nexttopic") i++; // Otherwise, add topic before
-
-                t.ParentTopic.AllSubTopics.Insert(newTopic, i);
-
-                if (topicType == "ParentTopic")
-                {
-                    MMUtils.ActiveDocument.Selection.Cut();
-                    newTopic.SelectOnly();
-
-#if MINDJET23
-                    // Paste copied topics. In MM23 Selection.Paste() doesn't work!
-                    ActivateMindManager();
-                    InputSimulator sim = new InputSimulator();
-                    sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
-                    // Text will be pasted after this (and previous) method is finished!!
-#else
-                    {
-                        MMUtils.ActiveDocument.Selection.Paste();
-                    }
-#endif
-                }
-            }
-            return newTopic;
-        }
 
         public static bool ActivateMindManager()
         {

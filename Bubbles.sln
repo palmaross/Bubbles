@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stix20", "Bubbles\Stix20.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stix21", "Bubbles\Stix21.csproj", "{24AE213B-9941-40D9-B779-ECBB5D65EC70}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stix24", "Bubbles\Stix24.csproj", "{796435BB-2988-4675-B4CA-1F1B59AEC734}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,18 @@ Global
 		{24AE213B-9941-40D9-B779-ECBB5D65EC70}.Release-OL|Any CPU.Build.0 = Release-OL|Any CPU
 		{24AE213B-9941-40D9-B779-ECBB5D65EC70}.Release-OL|x86.ActiveCfg = Release-OL|Win32
 		{24AE213B-9941-40D9-B779-ECBB5D65EC70}.Release-OL|x86.Build.0 = Release-OL|Win32
+		{796435BB-2988-4675-B4CA-1F1B59AEC734}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{796435BB-2988-4675-B4CA-1F1B59AEC734}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{796435BB-2988-4675-B4CA-1F1B59AEC734}.Debug|x86.ActiveCfg = Debug|Win32
+		{796435BB-2988-4675-B4CA-1F1B59AEC734}.Debug|x86.Build.0 = Debug|Win32
+		{796435BB-2988-4675-B4CA-1F1B59AEC734}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{796435BB-2988-4675-B4CA-1F1B59AEC734}.Release|Any CPU.Build.0 = Release|Any CPU
+		{796435BB-2988-4675-B4CA-1F1B59AEC734}.Release|x86.ActiveCfg = Release|Win32
+		{796435BB-2988-4675-B4CA-1F1B59AEC734}.Release|x86.Build.0 = Release|Win32
+		{796435BB-2988-4675-B4CA-1F1B59AEC734}.Release-OL|Any CPU.ActiveCfg = Release-OL|Any CPU
+		{796435BB-2988-4675-B4CA-1F1B59AEC734}.Release-OL|Any CPU.Build.0 = Release-OL|Any CPU
+		{796435BB-2988-4675-B4CA-1F1B59AEC734}.Release-OL|x86.ActiveCfg = Release-OL|Win32
+		{796435BB-2988-4675-B4CA-1F1B59AEC734}.Release-OL|x86.Build.0 = Release-OL|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

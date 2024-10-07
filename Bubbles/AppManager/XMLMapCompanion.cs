@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Xml;
 
 namespace Bubbles.AppManager
@@ -109,14 +107,15 @@ namespace Bubbles.AppManager
                     m_floatingTopics.Add(_node.Value, new XMLTopicCompanion((_node as XmlAttribute).OwnerElement, NSManager, this));
                 }
             }
-#if DEBUG
             catch (Exception _e)
             {
+#if DEBUG
                 System.Windows.Forms.MessageBox.Show("Exception: " + _e.Message + "\r\nSource: " + _e.Source + "\r\nStack: " + _e.StackTrace);
-            }
 #else
-			catch { return false; }
+			    return false;
 #endif
+            }
+
             return true;
         }
 

@@ -268,7 +268,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                   <dlgtext ></>
                   <if ></>
                </>
-               <_ tag = 0 id = regget >
+               <_ tag = 0 id = regget disabled = 1 >
                   <desc ></>
                   <root >locmach</>
                   <subkey >Software\Mindjet\MindManager\20\Settings</>
@@ -339,6 +339,23 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                <_ tag = 0 id = regget >
                   <desc ></>
                   <root >locmach</>
+                  <subkey >Software\Mindjet\MindManager\24\Settings</>
+                  <wow64 >0</>
+                  <reglist >
+                     <rows >
+                        <_ >
+                           <valname >ProductVersionMajor</>
+                           <varname >mm24x32major</>
+                           <defval >4</>
+                           <if ></>
+                           <comm ></>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ tag = 0 id = regget disabled = 1 >
+                  <desc ></>
+                  <root >locmach</>
                   <subkey >Software\Mindjet\MindManager\20\Settings</>
                   <wow64 >1</>
                   <reglist >
@@ -397,6 +414,23 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                         <_ >
                            <valname >ProductVersionMajor</>
                            <varname >mm23x64major</>
+                           <defval >4</>
+                           <if ></>
+                           <comm ></>
+                        </>
+                     </>
+                  </>
+               </>
+               <_ tag = 0 id = regget >
+                  <desc ></>
+                  <root >locmach</>
+                  <subkey >Software\Mindjet\MindManager\24\Settings</>
+                  <wow64 >1</>
+                  <reglist >
+                     <rows >
+                        <_ >
+                           <valname >ProductVersionMajor</>
+                           <varname >mm24x64major</>
                            <defval >4</>
                            <if ></>
                            <comm ></>
@@ -431,11 +465,11 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                         <length ></>
                      </>
                   </>
-                  <desc >Найден только MindManager версии ниже 20</>
+                  <desc >Найден только MindManager версии ниже 21</>
                   <else ></>
                   <condlist >
                      <rows >
-                        <_ >
+                        <_ disabled = 1 >
                            <varname >mm20x32major</>
                            <iftype >noteq</>
                            <not >0</>
@@ -468,6 +502,14 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            <comm ></>
                         </>
                         <_ >
+                           <varname >mm24x32major</>
+                           <iftype >noteq</>
+                           <not >0</>
+                           <value >24</>
+                           <orand >and</>
+                           <comm ></>
+                        </>
+                        <_ disabled = 1 >
                            <varname >mm20x64major</>
                            <iftype >noteq</>
                            <not >0</>
@@ -496,6 +538,14 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            <iftype >noteq</>
                            <not >0</>
                            <value >23</>
+                           <orand >and</>
+                           <comm ></>
+                        </>
+                        <_ >
+                           <varname >mm24x64major</>
+                           <iftype >noteq</>
+                           <not >0</>
+                           <value >24</>
                            <orand >and</>
                            <comm ></>
                         </>
@@ -677,7 +727,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                         <srclist >
                            <rows rel = unpack >
                               <_ >
-                                 <filename >d:\repos\Common\*.*</>
+                                 <filename >d:\repos\Common\common\*.*</>
                                  <recurse >0</>
                                  <justfile >0</>
                                  <emptydir >0</>
@@ -701,8 +751,33 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                         <runas >norm</>
                         <if ></>
                      </>
-                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                     <_ tag = 0 id = if expanded = 0 disabled = 1 >
                         <children >
+                           <_ tag = 0 id = unpack >
+                              <desc ></>
+                              <comptype >default</>
+                              <ratio >r5</>
+                              <solid >1</>
+                              <path >custom</>
+                              <custpath >$progfiles$\Palmaross\Common</>
+                              <ifexist >over</>
+                              <if ></>
+                              <srclist >
+                                 <rows >
+                                    <_ >
+                                       <filename >d:\repos\Common\$commondll$\PalmaRossCommon20.dll</>
+                                       <recurse >0</>
+                                       <justfile >1</>
+                                       <emptydir >0</>
+                                       <exclude ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                              <varlist >
+                                 <rows ></>
+                              </>
+                           </>
                            <_ tag = 0 id = run >
                               <desc >PalmaRossCommon22.dlll - в GAC</>
                               <path >custom</>
@@ -740,6 +815,31 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                      </>
                      <_ tag = 0 id = if expanded = 2 disabled = 0 >
                         <children >
+                           <_ tag = 0 id = unpack >
+                              <desc ></>
+                              <comptype >default</>
+                              <ratio >r5</>
+                              <solid >1</>
+                              <path >custom</>
+                              <custpath >$progfiles$\Palmaross\Common</>
+                              <ifexist >over</>
+                              <if ></>
+                              <srclist >
+                                 <rows >
+                                    <_ >
+                                       <filename >d:\repos\Common\$commondll$\PalmaRossCommon21.dll</>
+                                       <recurse >0</>
+                                       <justfile >1</>
+                                       <emptydir >0</>
+                                       <exclude ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                              <varlist >
+                                 <rows ></>
+                              </>
+                           </>
                            <_ tag = 0 id = run >
                               <desc >PalmaRossCommon22.dlll - в GAC</>
                               <path >custom</>
@@ -777,6 +877,31 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                      </>
                      <_ tag = 0 id = if expanded = 2 disabled = 0 >
                         <children >
+                           <_ tag = 0 id = unpack >
+                              <desc ></>
+                              <comptype >default</>
+                              <ratio >r5</>
+                              <solid >1</>
+                              <path >custom</>
+                              <custpath >$progfiles$\Palmaross\Common</>
+                              <ifexist >over</>
+                              <if ></>
+                              <srclist >
+                                 <rows >
+                                    <_ >
+                                       <filename >d:\repos\Common\$commondll$\PalmaRossCommon22.dll</>
+                                       <recurse >0</>
+                                       <justfile >1</>
+                                       <emptydir >0</>
+                                       <exclude ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                              <varlist >
+                                 <rows ></>
+                              </>
+                           </>
                            <_ tag = 0 id = run >
                               <desc >PalmaRossCommon22.dlll - в GAC</>
                               <path >custom</>
@@ -814,6 +939,31 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                      </>
                      <_ tag = 0 id = if expanded = 2 disabled = 0 >
                         <children >
+                           <_ tag = 0 id = unpack >
+                              <desc ></>
+                              <comptype >default</>
+                              <ratio >r5</>
+                              <solid >1</>
+                              <path >custom</>
+                              <custpath >$progfiles$\Palmaross\Common</>
+                              <ifexist >over</>
+                              <if ></>
+                              <srclist >
+                                 <rows >
+                                    <_ >
+                                       <filename >d:\repos\Common\$commondll$\PalmaRossCommon23.dll</>
+                                       <recurse >0</>
+                                       <justfile >1</>
+                                       <emptydir >0</>
+                                       <exclude ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                              <varlist >
+                                 <rows ></>
+                              </>
+                           </>
                            <_ tag = 0 id = run >
                               <desc >PalmaRossCommon22.dlll - в GAC</>
                               <path >custom</>
@@ -843,6 +993,68 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                                  <iftype >equal</>
                                  <not >0</>
                                  <value >23</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                        <children >
+                           <_ tag = 0 id = unpack >
+                              <desc ></>
+                              <comptype >default</>
+                              <ratio >r5</>
+                              <solid >1</>
+                              <path >custom</>
+                              <custpath >$progfiles$\Palmaross\Common</>
+                              <ifexist >over</>
+                              <if ></>
+                              <srclist >
+                                 <rows >
+                                    <_ >
+                                       <filename >d:\repos\Common\$commondll$\PalmaRossCommon24.dll</>
+                                       <recurse >0</>
+                                       <justfile >1</>
+                                       <emptydir >0</>
+                                       <exclude ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                              <varlist >
+                                 <rows ></>
+                              </>
+                           </>
+                           <_ tag = 0 id = run >
+                              <desc >PalmaRossCommon22.dlll - в GAC</>
+                              <path >custom</>
+                              <name >$progfiles$\PalmaRoss\Common\gacutil.exe</>
+                              <cmdline >/nologo /silent /i "$progfiles$\PalmaRoss\Common\PalmaRossCommon24.dll"</>
+                              <work >default</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >norm</>
+                              <if ></>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >mm24x32major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >24</>
+                                 <orand >or</>
+                                 <comm ></>
+                              </>
+                              <_ >
+                                 <varname >mm24x64major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >24</>
                                  <orand >and</>
                                  <comm ></>
                               </>
@@ -914,7 +1126,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                         <if ></>
                         <nofiles >1</>
                      </>
-                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                     <_ tag = 0 id = if expanded = 0 disabled = 1 >
                         <children >
                            <_ tag = 0 id = unpack >
                               <desc ></>
@@ -1150,7 +1362,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            </>
                         </>
                      </>
-                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
                         <children >
                            <_ tag = 0 id = unpack >
                               <desc ></>
@@ -1268,7 +1480,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            </>
                         </>
                      </>
-                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
                         <children >
                            <_ tag = 0 id = unpack >
                               <desc ></>
@@ -1386,7 +1598,125 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            </>
                         </>
                      </>
-                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
+                        <children >
+                           <_ tag = 0 id = unpack >
+                              <desc ></>
+                              <comptype >default</>
+                              <ratio >r5</>
+                              <solid >1</>
+                              <path >inst</>
+                              <custpath ></>
+                              <ifexist >overnewer</>
+                              <if ></>
+                              <srclist >
+                                 <rows >
+                                    <_ >
+                                       <filename >d:\repos\Bubbles\setup\$appname$\OmniStix24.dll</>
+                                       <recurse >0</>
+                                       <justfile >1</>
+                                       <emptydir >0</>
+                                       <exclude ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                              <varlist >
+                                 <rows ></>
+                              </>
+                           </>
+                           <_ tag = 0 id = regset disabled = 0 >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\24\AddIns\OmniStix24.Connect</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >Description</>
+                                       <regtype >str</>
+                                       <value >OmniStix Add-in for MindManager 24</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                    <_ >
+                                       <valname >FriendlyName</>
+                                       <regtype >str</>
+                                       <value >OmniStix</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                    <_ >
+                                       <valname >LoadBehavior</>
+                                       <regtype >num</>
+                                       <value >2</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = regset disabled = 0 >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\24\AddIns\OmniStix24.Connect</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >Description</>
+                                       <regtype >str</>
+                                       <value >OmniStix Add-in for MindManager 24</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                    <_ >
+                                       <valname >FriendlyName</>
+                                       <regtype >str</>
+                                       <value >OmniStix</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                    <_ >
+                                       <valname >LoadBehavior</>
+                                       <regtype >num</>
+                                       <value >3</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = run disabled = 0 >
+                              <desc ></>
+                              <path >inst</>
+                              <name >regasm.exe</>
+                              <cmdline >/codebase /nologo /silent OmniStix24.dll</>
+                              <work >inst</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >hide</>
+                              <if ></>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >mm24x32major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >24</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 disabled = 1 >
                         <children >
                            <_ tag = 0 id = unpack >
                               <desc ></>
@@ -1491,7 +1821,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            </>
                         </>
                      </>
-                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
                         <children >
                            <_ tag = 0 id = unpack >
                               <desc ></>
@@ -1596,7 +1926,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            </>
                         </>
                      </>
-                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
                         <children >
                            <_ tag = 0 id = unpack >
                               <desc ></>
@@ -1701,7 +2031,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            </>
                         </>
                      </>
-                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
                         <children >
                            <_ tag = 0 id = unpack >
                               <desc ></>
@@ -1806,6 +2136,111 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            </>
                         </>
                      </>
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
+                        <children >
+                           <_ tag = 0 id = unpack >
+                              <desc ></>
+                              <comptype >default</>
+                              <ratio >r5</>
+                              <solid >1</>
+                              <path >inst</>
+                              <custpath ></>
+                              <ifexist >overnewer</>
+                              <if ></>
+                              <srclist >
+                                 <rows >
+                                    <_ >
+                                       <filename >d:\repos\Bubbles\setup\$appname$\OmniStix24.dll</>
+                                       <recurse >0</>
+                                       <justfile >1</>
+                                       <emptydir >0</>
+                                       <exclude ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                              <varlist >
+                                 <rows ></>
+                              </>
+                           </>
+                           <_ tag = 0 id = regset disabled = 0 >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\24\AddIns\OmniStix24.Connect</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >Description</>
+                                       <regtype >str</>
+                                       <value >OmniStix Add-in for MindManager 24</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                    <_ >
+                                       <valname >FriendlyName</>
+                                       <regtype >str</>
+                                       <value >OmniStix</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                    <_ >
+                                       <valname >LoadBehavior</>
+                                       <regtype >num</>
+                                       <value >2</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = run disabled = 0 >
+                              <desc ></>
+                              <path >inst</>
+                              <name >regasm.exe</>
+                              <cmdline >/codebase /nologo /silent OmniStix24.dll</>
+                              <work >inst</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >hide</>
+                              <if ></>
+                           </>
+                           <_ tag = 0 id = run disabled = 0 >
+                              <desc ></>
+                              <path >inst</>
+                              <name >regasm64.exe</>
+                              <cmdline >/codebase /nologo /silent OmniStix24.dll</>
+                              <work >inst</>
+                              <defwork ></>
+                              <wait >1</>
+                              <runas >hide</>
+                              <if ></>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >os64</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >1</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                              <_ >
+                                 <varname >mm24x64major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >24</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
                      <_ tag = 0 id = regset >
                         <desc ></>
                         <root >curuser</>
@@ -1841,7 +2276,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <_ >
                                  <valname >version</>
                                  <regtype >str</>
-                                 <value >1.0.8.0</>
+                                 <value >1.0.9.0</>
                                  <if ></>
                                  <comm ></>
                               </>
@@ -1909,7 +2344,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                      <_ tag = 0 id = regget >
                         <desc >Путь к MindManager.exe 22x64</>
                         <root >locmach</>
-                        <subkey >Software\Mindjet\MindManager\23\Installer</>
+                        <subkey >Software\Mindjet\MindManager\24\Installer</>
                         <wow64 >1</>
                         <reglist >
                            <rows >
@@ -1926,7 +2361,77 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                      <_ tag = 0 id = if expanded = 2 >
                         <children >
                            <_ tag = 0 id = regget >
-                              <desc >Путь к MindManager.exe 22x32</>
+                              <desc >Путь к MindManager.exe 24x32</>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\24\Installer</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >MainDir</>
+                                       <varname >MMPath</>
+                                       <defval >4</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                           </>
+                        </>
+                        <desc >Если путь не определен</>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >MMPath</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >4</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 2 >
+                        <children >
+                           <_ tag = 0 id = regget >
+                              <desc >Путь к MindManager.exe 23x64</>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\23\Installer</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows >
+                                    <_ >
+                                       <valname >MainDir</>
+                                       <varname >MMPath</>
+                                       <defval >4</>
+                                       <if ></>
+                                       <comm ></>
+                                    </>
+                                 </>
+                              </>
+                           </>
+                        </>
+                        <desc >Если путь не определен</>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >MMPath</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >4</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 2 >
+                        <children >
+                           <_ tag = 0 id = regget >
+                              <desc >Путь к MindManager.exe 23x32</>
                               <root >locmach</>
                               <subkey >Software\Mindjet\MindManager\23\Installer</>
                               <wow64 >0</>
@@ -2339,7 +2844,41 @@ Please try further.</>
                            </>
                         </>
                      </>
-                     <_ tag = 0 id = if expanded = 2 >
+                     <_ tag = 0 id = regget >
+                        <desc ></>
+                        <root >locmach</>
+                        <subkey >Software\Mindjet\MindManager\24\Settings</>
+                        <wow64 >0</>
+                        <reglist >
+                           <rows >
+                              <_ >
+                                 <valname >ProductVersionMajor</>
+                                 <varname >mm24x32major</>
+                                 <defval >4</>
+                                 <if ></>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = regget >
+                        <desc ></>
+                        <root >locmach</>
+                        <subkey >Software\Mindjet\MindManager\24\Settings</>
+                        <wow64 >1</>
+                        <reglist >
+                           <rows >
+                              <_ >
+                                 <valname >ProductVersionMajor</>
+                                 <varname >mm24x64major</>
+                                 <defval >4</>
+                                 <if ></>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 >
                         <children >
                            <_ tag = 0 id = regdel >
                               <desc ></>
@@ -2390,7 +2929,7 @@ Please try further.</>
                            </>
                         </>
                      </>
-                     <_ tag = 0 id = if expanded = 2 >
+                     <_ tag = 0 id = if expanded = 0 >
                         <children >
                            <_ tag = 0 id = regdel >
                               <desc ></>
@@ -2449,7 +2988,7 @@ Please try further.</>
                            </>
                         </>
                      </>
-                     <_ tag = 0 id = if expanded = 2 >
+                     <_ tag = 0 id = if expanded = 0 >
                         <children >
                            <_ tag = 0 id = regdel >
                               <desc ></>
@@ -2500,7 +3039,7 @@ Please try further.</>
                            </>
                         </>
                      </>
-                     <_ tag = 0 id = if expanded = 2 >
+                     <_ tag = 0 id = if expanded = 0 >
                         <children >
                            <_ tag = 0 id = regdel >
                               <desc ></>
@@ -2615,57 +3154,6 @@ Please try further.</>
                            <_ tag = 0 id = regdel >
                               <desc ></>
                               <root >curuser</>
-                              <subkey >Software\Mindjet\MindManager\23\User Interface\Custom\OmniStix23.Connect</>
-                              <subdel >1</>
-                              <wow64 >0</>
-                              <reglist >
-                                 <rows ></>
-                              </>
-                              <subemptydel >0</>
-                           </>
-                           <_ tag = 0 id = regdel >
-                              <desc ></>
-                              <root >curuser</>
-                              <subkey >Software\Mindjet\MindManager\23\AddIns\OmniStix23.Connect</>
-                              <subdel >1</>
-                              <wow64 >0</>
-                              <reglist >
-                                 <rows ></>
-                              </>
-                              <subemptydel >0</>
-                           </>
-                           <_ tag = 0 id = regdel >
-                              <desc ></>
-                              <root >locmach</>
-                              <subkey >Software\Mindjet\MindManager\23\AddIns\OmniStix23.Connect</>
-                              <subdel >1</>
-                              <wow64 >0</>
-                              <reglist >
-                                 <rows ></>
-                              </>
-                              <subemptydel >0</>
-                           </>
-                        </>
-                        <desc ></>
-                        <else ></>
-                        <condlist >
-                           <rows >
-                              <_ >
-                                 <varname >mm23x32major</>
-                                 <iftype >equal</>
-                                 <not >0</>
-                                 <value >23</>
-                                 <orand >and</>
-                                 <comm ></>
-                              </>
-                           </>
-                        </>
-                     </>
-                     <_ tag = 0 id = if expanded = 0 >
-                        <children >
-                           <_ tag = 0 id = regdel >
-                              <desc ></>
-                              <root >curuser</>
                               <subkey >Software\Mindjet\MindManager\22\User Interface\Custom\OmniStix22.Connect</>
                               <subdel >1</>
                               <wow64 >0</>
@@ -2749,6 +3237,57 @@ Please try further.</>
                               <root >locmach</>
                               <subkey >Software\Mindjet\MindManager\23\AddIns\OmniStix23.Connect</>
                               <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >mm23x32major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >23</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 >
+                        <children >
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\23\User Interface\Custom\OmniStix23.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\23\AddIns\OmniStix23.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\23\AddIns\OmniStix23.Connect</>
+                              <subdel >1</>
                               <wow64 >1</>
                               <reglist >
                                  <rows ></>
@@ -2773,6 +3312,116 @@ Please try further.</>
                                  <iftype >equal</>
                                  <not >0</>
                                  <value >23</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 >
+                        <children >
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\24\User Interface\Custom\OmniStix24.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\24\AddIns\OmniStix24.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\24\AddIns\OmniStix24.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >mm24x32major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >24</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                           </>
+                        </>
+                     </>
+                     <_ tag = 0 id = if expanded = 0 >
+                        <children >
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\24\User Interface\Custom\OmniStix24.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >curuser</>
+                              <subkey >Software\Mindjet\MindManager\24\AddIns\OmniStix24.Connect</>
+                              <subdel >1</>
+                              <wow64 >0</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                           <_ tag = 0 id = regdel >
+                              <desc ></>
+                              <root >locmach</>
+                              <subkey >Software\Mindjet\MindManager\24\AddIns\OmniStix24.Connect</>
+                              <subdel >1</>
+                              <wow64 >1</>
+                              <reglist >
+                                 <rows ></>
+                              </>
+                              <subemptydel >0</>
+                           </>
+                        </>
+                        <desc ></>
+                        <else ></>
+                        <condlist >
+                           <rows >
+                              <_ >
+                                 <varname >os64</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >1</>
+                                 <orand >and</>
+                                 <comm ></>
+                              </>
+                              <_ >
+                                 <varname >mm24x64major</>
+                                 <iftype >equal</>
+                                 <not >0</>
+                                 <value >24</>
                                  <orand >and</>
                                  <comm ></>
                               </>
@@ -2937,9 +3586,32 @@ Please try further.</>
             <value20 ></>
          </>
          <_ >
+            <varname >commondll</>
+            <value1 >PalmaRossCommon</>
+            <value2 >PalmaRossCommonOL</>
+            <value3 ></>
+            <value4 ></>
+            <value5 ></>
+            <value6 ></>
+            <value7 ></>
+            <value8 ></>
+            <value9 ></>
+            <value10 ></>
+            <value11 ></>
+            <value12 ></>
+            <value13 ></>
+            <value14 ></>
+            <value15 ></>
+            <value16 ></>
+            <value17 ></>
+            <value18 ></>
+            <value19 ></>
+            <value20 ></>
+         </>
+         <_ >
             <varname >version</>
-            <value1 >1.0.8.0</>
-            <value2 >1.0.8.0</>
+            <value1 >1.0.9.0</>
+            <value2 >1.0.9.0</>
             <value3 ></>
             <value4 ></>
             <value5 ></>

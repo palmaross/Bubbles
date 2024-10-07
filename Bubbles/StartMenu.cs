@@ -650,7 +650,10 @@ namespace Bubbles
                 if (stick.Key == id)
                 {
                     if (stick.Value.Visible)
+                    {
+                        StixUtils.ActivateMindManager();
                         MessageBox.Show(Utils.getString("sticks.stickalreadyrunning"));
+                    }
                     else
                         stick.Value.Show();
                     return 2;

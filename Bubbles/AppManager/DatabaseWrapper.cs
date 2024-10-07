@@ -6,8 +6,6 @@ namespace StixAppManager
 {
     using Bubbles;
     using Community.CsharpSqlite;
-    using System.Xml.Linq;
-    using static Community.CsharpSqlite.Sqlite3;
 
 	internal class DatabaseWrapper : Object, IDisposable
 	{

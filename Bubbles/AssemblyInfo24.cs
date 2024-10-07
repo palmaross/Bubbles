@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("PalmaRoss")]
-[assembly: AssemblyProduct("OmniStix Add-In for MindManager 20")]
+[assembly: AssemblyProduct("OmniStix Add-In for MindManager 24")]
 [assembly: AssemblyCopyright("Copyright © 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(true)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("93BC7464-9ADC-433A-B57F-94FBABB7B544")]
+[assembly: Guid("ECDAC0B9-DD4B-40B0-B65D-FD3D401DC0D9")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -98,9 +98,9 @@
     <Reference Include="NAudio.WinMM, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.WinMM.2.2.1\lib\netstandard2.0\NAudio.WinMM.dll</HintPath>
     </Reference>
-    <Reference Include="PalmaRossCommon21, Version=1.0.0.0, Culture=neutral, PublicKeyToken=057dcba4e358e84f, processorArchitecture=MSIL">
+    <Reference Include="PalmaRossCommon21, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6cb823ce3bdfe48c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Common\PalmaRossCommon21.dll</HintPath>
+      <HintPath>..\..\Common\PalmaRossCommon\PalmaRossCommon21.dll</HintPath>
     </Reference>
     <Reference Include="PopupControl">
       <HintPath>..\..\DLLs\PopupControl.dll</HintPath>
@@ -134,7 +134,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppManager\DatabaseWrapper2.cs" />
     <Compile Include="AppManager\NotificationPanel.cs">
       <SubType>Form</SubType>
     </Compile>

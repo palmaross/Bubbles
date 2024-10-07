@@ -47,9 +47,7 @@ namespace Bubbles
 
             int fontsize = (int)treeView1.Font.Size;
             if (Utils.WindowFontSize != fontsize)
-            {
                 treeView1.Font = new Font(treeView1.Font.FontFamily, Utils.WindowFontSize * 0.75F);
-            }
 
             using (StixDB db = new StixDB("Bookmarks"))
             {

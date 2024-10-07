@@ -63,6 +63,8 @@ namespace Bubbles
                     "", "", "",
                     this);
 
+            MMUtils.licenseKeyStartsWith = "OS";
+            PRLicenseManager.m_this = null;
             PRLicenseManager.Get().StartManager();
             Utils.licenseStatus = PRLicenseManager.licenseStatus;
 

@@ -13,9 +13,7 @@ using System.Net;
 using Image = System.Drawing.Image;
 using System.Text.RegularExpressions;
 using System.Text;
-using System.Data;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
-using System.Security.Cryptography;
+using System.Data; 
 using System.Threading;
 
 namespace Bubbles
@@ -24,7 +22,7 @@ namespace Bubbles
     {
         public static void ErrorToSupport(string error)
         {
-            System.Windows.Forms.MessageBox.Show(error + "\r\n\r\n" +
+            MessageBox.Show(error + "\r\n\r\n" +
                 getString("calendar.fatalerror.text"),
                 getString("calendar.fatalerror.caption"),
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -39,7 +37,6 @@ namespace Bubbles
         {
             FriendlyAddinName = "OmniStix";
             I18n = MMUtils._hashtable;
-            I18n_common = MMUtils._hashtableCommon;
             ImagesPath = MMUtils.m_imagesPath;
             dllPath = MMUtils.m_dllPath;
             Language = MMUtils.Language;
@@ -72,6 +69,7 @@ namespace Bubbles
             }
 
             GetCustomIcons(di);  // perf!
+            StockIconsDupes.Clear();
 
             try
             {
@@ -126,15 +124,12 @@ namespace Bubbles
                 if (!CustomIcons.Keys.Contains(signature))
                     CustomIcons.Add(signature, fi.FullName);
             }
-            StockIconsDupes.Clear();
 
             List<string> files = new List<string>(Directory.EnumerateFiles(m_localDataPath));
             foreach (string file in files)
                 File.Delete(file);
 
             MMBounds = new Rectangle(MMUtils.MindManager.Left, MMUtils.MindManager.Top, MMUtils.MindManager.Width, MMUtils.MindManager.Height);
-
-            //scalingFactor = ScalingFactor.GetScalingFactor();
 
             InitDatabases();
             InitStartedMaps(); // perf!
@@ -274,7 +269,6 @@ namespace Bubbles
             {
                 using (StixDB db = new StixDB("AddTopics"))
                 {
-
                     // Add ADDTOPIC_TEMPLATES
                     db.AddPattern(getString("Template.Day"), getString("Template.Day") + " ", "increment###1,10,1,end", "subtopic");
                     db.AddPattern(getString("Template.Month"), getString("Template.January") + " ", "increment###1,31,1,end", "subtopic");
@@ -397,12 +391,6 @@ namespace Bubbles
             return MMUtils.getString(name);
         }
 
-        public static string getCommonString(string name)
-        {
-            MMUtils._hashtableCommon = I18n_common;
-            return MMUtils.getCommonString(name);
-        }
-
         public static Document GetOrOpenDocument(string path, bool activate = false, bool visible = true)
         {
             foreach (Document doc in MMUtils.MindManager.AllDocuments)
@@ -429,8 +417,8 @@ namespace Bubbles
 		/// Return True if a certain percent of a rectangle is shown across the 
 		/// total screen area of all monitors, otherwise return False.
 		/// </summary>
-		/// <param name="RecLocation"></param>
-		/// <param name="RecSize"></param>
+		/// <param name="RecLocation">Stix location</param>
+		/// <param name="RecSize">Stix size</param>
 		/// <param name="MinPercentOnScreen"></param>
 		/// <returns>False if form is totally off screen</returns>
 		public static bool StickIsOnScreen(Point RecLocation, Size RecSize, double MinPercentOnScreen = 1)
@@ -451,6 +439,12 @@ namespace Bubbles
             return PixelsVisible >= (Rec.Width * Rec.Height) * MinPercentOnScreen;
         }
 
+        /// <summary>
+        /// Screen location where MindManager window is located
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public static Point MMScreen(int x, int y)
         {
             foreach (Screen Scr in Screen.AllScreens)
@@ -462,17 +456,11 @@ namespace Bubbles
             return new Point();
         }
 
-        public static bool _IsOnMMWindow(Point StickLocation, Size StixSize)
-        {
-            if (StickLocation.X + StixSize.Width < MMUtils.MindManager.Left || // stick is totally to the left
-                StickLocation.X > MMUtils.MindManager.Left + MMUtils.MindManager.Width) // stick is totally to the right
-                return false;
-            if (StickLocation.Y + StixSize.Height < MMUtils.MindManager.Top || // stick is totally above
-                StickLocation.Y > MMUtils.MindManager.Top + MMUtils.MindManager.Height) // stick is totally below
-                return false;
-            return true;
-        }
-
+        /// <summary>
+        /// Check if Stix is located within MindManager window.
+        /// </summary>
+        /// <param name="rec">Stix bounds</param>
+        /// <returns></returns>
         public static bool IsOnMMWindow(Rectangle rec)
         {
             if (rec.X + rec.Width < MMUtils.MindManager.Left || // stick is totally to the left
@@ -571,7 +559,6 @@ namespace Bubbles
 
             foreach (XmlNode node in topicXML)
             {
-
                 foreach (XmlNode _node in node.ChildNodes)
                 {
                     if (_node.Name == "ap:Task")
@@ -588,6 +575,16 @@ namespace Bubbles
 
             t.Xml = topicXML.InnerXml;
         }
+
+        public static void InitMarkersList(Topic t)
+        {
+            topicXML = new XmlDocument();
+            topicXML.LoadXml(t.Xml);
+            NSManager = new XmlNamespaceManager(topicXML.NameTable);
+            NSManager.AddNamespace("ap", "http://schemas.mindjet.com/MindManager/Application/2003");
+        }
+        protected static XmlNamespaceManager NSManager;
+        protected static XmlDocument topicXML;
 
         public static string GetWebPageTitle(string url)
         {
@@ -739,31 +736,11 @@ namespace Bubbles
                 return "file";
         }
 
-        public static void GetWindowsTools()
-        {
-            string path = GetTool("Microsoft.WindowsCalculator", "CalculatorApp.exe");
-            if (path != "")
-                WindowsTools.Add("Calculator", path);
-        }
-
-        static string GetTool(string windowsName, string appName)
-        {
-            DirectoryInfo root = new DirectoryInfo("C:\\Program Files\\WindowsApps\\");
-
-            foreach (DirectoryInfo di in root.GetDirectories()) 
-            { 
-                if (di.Name.StartsWith(windowsName))
-                {
-                    foreach (FileInfo fi in di.GetFiles())
-                    {
-                        if (fi.Name == appName)
-                            return fi.FullName;
-                    }
-                }
-            }
-            return "";
-        }
-
+        /// <summary>
+        /// Remove invalid (for topic notes) html tags in the topic notes.
+        /// </summary>
+        /// <param name="html">Given HTML</param>
+        /// <returns></returns>
         public static string ClearTopicNotes(string html)
         {
             int i = html.IndexOf("<head>");
@@ -839,53 +816,21 @@ namespace Bubbles
         }
 
         /// <summary>
-        /// Save copy of a map and get its path.
+        /// Save copy of a map and get the path of this copy.
         /// </summary>
         /// <returns>Path of given document copy</returns>
         public static string GetMapCopy(Document doc)
         {
             string aName = MMUtils.nowUnixTimestamp() + ".mmap"; // temp map
-            string path = Utils.m_localDataPath + aName;
+            string path = m_localDataPath + aName;
             doc.SaveAs(path, true); // save it to temp directory
             return path;
-
-            // Wait document to be active, as opening is asyncronous thing.
-            //long _now = MMUtils.GetTimestamp();
-            //bool mapopening = false;
-
-            //while ((MMUtils.GetTimestamp() - _now) < 30)
-            //{
-            //    int _ts = (int)(MMUtils.GetTimestamp() - _now);
-            //    if (_ts > 30) _ts = 30;
-
-            //    try { System.Windows.Forms.Application.DoEvents(); }
-            //    catch { }
-
-            //    if (File.Exists(path) && !mapopening) // map has been saved
-            //    {
-            //        if (!mapopening) // open it (if not opened already)
-            //        {
-            //            MMUtils.MindManager.AllDocuments.Open(path, "", false);
-            //            mapopening = true;
-            //        }
-
-            //        // Try to locate document
-            //        foreach (Document _doc in MMUtils.MindManager.AllDocuments)
-            //        {
-            //            if (_doc.Name == aName)
-            //                return _doc;
-            //        }
-            //    }
-            //}
-            // 30 sec. passed, document was not opened, so...
-            //return null;
         }
 
         /// <summary>
         /// Check if Active Document is null or if there are no selected topics
         /// </summary>
         /// <param name="checkSelection">True - check if there are selected topics</param>
-        /// <returns></returns>
         public static bool ActiveDocumentOrSelectionNull(bool checkSelection = true)
         {
             if (MMUtils.ActiveDocument == null) return true;
@@ -907,21 +852,8 @@ namespace Bubbles
                 control.BackColor = System.Drawing.Color.FromArgb(i, SystemColors.Info);
         }
 
-        public static void InitMarkersList(Topic t)
-        {
-            topicXML = new XmlDocument();
-            topicXML.LoadXml(t.Xml);
-            NSManager = new XmlNamespaceManager(topicXML.NameTable);
-            NSManager.AddNamespace("ap", "http://schemas.mindjet.com/MindManager/Application/2003");
-        }
-        protected static XmlNamespaceManager NSManager;
-        protected static XmlDocument topicXML;
-
-        /// <summary>
-        /// Hashtable of localization file (I18n.ini)
-        /// </summary>
+        /// <summary> Hashtable of localization file</summary>
         public static System.Collections.Hashtable I18n;
-        public static System.Collections.Hashtable I18n_common;
 
         public static string ImagesPath = "";
         public static string dllPath = "";
@@ -939,25 +871,17 @@ namespace Bubbles
 
         public static Rectangle MMBounds;
 
-        /// <summary>
-        /// Name, Path
-        /// </summary>
-        public static Dictionary<string, string> WindowsTools = new Dictionary<string, string>();
-
         /// <summary>Path with last backslash!</summary>
 		public static string m_defaultDataPath, m_dataPath, m_localDataPath, m_iconDB, m_imagesPath;
 
         public static Dictionary<string, string> StockIconsDupes = new Dictionary<string, string>();
 
-        /// <summary>
-        /// Key - dupname, Value - stockname
-        /// </summary>
+        /// <summary>Key: dupname, Value: stockname</summary>
         public static Dictionary<string, string> StockIconDupes = new Dictionary<string, string>();
 
         public static Dictionary<string, MmStockIcon> StockIcons = new Dictionary<string, MmStockIcon>();
-        /// <summary>
-        /// signature, path
-        /// </summary>
+
+        /// <summary>Key: signature, Value: path</summary>
         public static Dictionary<string, string> CustomIcons = new Dictionary<string, string>();
 
         public static Image audio, excel, exe, file, image, macros, map, pdf, txt, video, http, word, youtube, chm, html;

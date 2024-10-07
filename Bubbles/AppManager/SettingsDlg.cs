@@ -6,9 +6,6 @@ using System.IO;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Drawing;
-using Microsoft.Win32;
-using Bubbles.Properties;
-using Mindjet.MindManager.Interop;
 
 namespace Bubbles
 {
@@ -29,7 +26,6 @@ namespace Bubbles
             gbScaleFactor.Text = Utils.getString("SettingsDlg.gbScaleFactor");
             lblStix.Text = Utils.getString("SettingsDlg.lblStix");
             lblStixBase.Text = Utils.getString("SettingsDlg.lblStixBase");
-            lblBoxes.Text = Utils.getString("SettingsDlg.lblBoxes");
             btnTestScale.Text = Utils.getString("SettingsDlg.btnTestScale");
 
             FaviconsToolStix.Text = Utils.getString("SettingsDlg.FaviconsToolStix");
@@ -55,7 +51,7 @@ namespace Bubbles
             btnSave.Text = Utils.getString("button.save");
             btnClose.Text = Utils.getString("button.close");
 
-            // Fill stix list
+            // Fill Stix list
             using (StixDB db = new StixDB("Stix"))
             {
                 DataTable dt = db.ExecuteQuery("select * from STIX order by type");
@@ -196,8 +192,6 @@ namespace Bubbles
                 numStix.Text = cbStix.Text;
             else if (cb == cbStixBase)
                 numStixBase.Text = cbStixBase.Text;
-            else if (cb == cbBoxes)
-                numBoxes.Text = cbBoxes.Text;
         }
 
         private void btnManageAutoWidth_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -300,7 +294,6 @@ namespace Bubbles
 
         float stixScaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
         float stixbaseScaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_StixBase", "100"));
-        float boxesScaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Boxes", "100"));
         int thisHeight;
 
         private void linkExport_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -490,44 +483,49 @@ namespace Bubbles
             {
                 StixMain.m_Resources.treeViewCM.Font = 
                     new Font(StixMain.m_Resources.treeViewCM.Font.FontFamily, size * 0.75F);
+                StixMain.m_Resources.treeViewCM.Refresh();
                 StixMain.m_Resources.treeViewDB.Font = 
                     new Font(StixMain.m_Resources.treeViewDB.Font.FontFamily, size * 0.75F);
-                //foreach (TreeNode node in StixMain.m_Resources.treeViewDB.Nodes)
-                //{
-                //    node.NodeFont = new Font(StixMain.m_Resources.treeViewDB.Font, FontStyle.Bold);
-                //    node.Text = node.Text;
-                //}
+                StixMain.m_Resources.treeViewDB.Refresh();
             }
             if (StixMain.m_Links != null && StixMain.m_Links.Visible)
             {
                 StixMain.m_Links.treeView1.Font = 
                     new Font(StixMain.m_Links.treeView1.Font.FontFamily, size * 0.75F);
+                StixMain.m_Links.treeView1.Refresh();
                 foreach (DataGridViewRow r in StixMain.m_Links.dataGridView1.Rows)
                     r.DefaultCellStyle.Font = new Font(StixMain.m_Links.dataGridView1.Font.FontFamily, size * 72 / 96F);
+                StixMain.m_Links.dataGridView1.Refresh();
             }
             if (StixMain.m_QuickTopics != null && StixMain.m_QuickTopics.Visible)
             {
                 StixMain.m_QuickTopics.treeView1.Font =
                     new Font(StixMain.m_QuickTopics.treeView1.Font.FontFamily, size * 0.75F);
+                StixMain.m_QuickTopics.treeView1.Refresh();
             }
             if (StixMain.m_ManageAudio != null && StixMain.m_ManageAudio.Visible)
             {
                 foreach (DataGridViewRow r in StixMain.m_ManageAudio.dgv.Rows)
                     r.DefaultCellStyle.Font = new Font(StixMain.m_ManageAudio.dgv.Font.FontFamily, size * 0.75F);
+                StixMain.m_ManageAudio.dgv.Refresh();
             }
             if (StixMain.m_Bookmarks != null && StixMain.m_Bookmarks.Visible)
             {
                 StixMain.m_Bookmarks.treeView1.Font =
                     new Font(StixMain.m_Bookmarks.treeView1.Font.FontFamily, size * 0.75F);
+                StixMain.m_Bookmarks.treeView1.Refresh();
             }
             if (StixMain.m_MapNavigatorDlg != null && StixMain.m_MapNavigatorDlg.Visible)
             {
                 StixMain.m_MapNavigatorDlg.listMainTopics.Font =
                     new Font(StixMain.m_MapNavigatorDlg.listMainTopics.Font.FontFamily, size * 0.75F);
+                StixMain.m_MapNavigatorDlg.listMainTopics.Refresh();
                 StixMain.m_MapNavigatorDlg.listBookmarks.Font =
                     new Font(StixMain.m_MapNavigatorDlg.listBookmarks.Font.FontFamily, size * 0.75F);
+                StixMain.m_MapNavigatorDlg.listBookmarks.Refresh();
                 StixMain.m_MapNavigatorDlg.listPositions.Font =
                     new Font(StixMain.m_MapNavigatorDlg.listPositions.Font.FontFamily, size * 0.75F);
+                StixMain.m_MapNavigatorDlg.listPositions.Refresh();
 
                 // Get listbox item height and adjust form height depending on listPositions height
                 ListBox lp = StixMain.m_MapNavigatorDlg.listPositions;
@@ -544,6 +542,7 @@ namespace Bubbles
                     node.NodeFont = new Font(node.NodeFont.FontFamily, size * 0.75F, FontStyle.Bold);
                     node.Text = node.Text;
                 }
+                StixMain.m_topicNotes.listTopics.Refresh();
             }
         }
     }

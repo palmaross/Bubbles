@@ -64,9 +64,7 @@ namespace Bubbles
             listPositions.DrawItem += listBookmarks_DrawItem;
 
             if (Utils.scalingFactor == 1)
-            {
                 tabControl1.Width -= 1; tabControl1.Height -= 1;
-            }
 
             this.Paint += BookmarkListDlg_Paint; // paint the border
 

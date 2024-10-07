@@ -100,7 +100,7 @@
     </Reference>
     <Reference Include="PalmaRossCommon23, Version=1.0.0.0, Culture=neutral, PublicKeyToken=057dcba4e358e84f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Common\PalmaRossCommon23.dll</HintPath>
+      <HintPath>..\..\Common\PalmaRossCommon\PalmaRossCommon23.dll</HintPath>
     </Reference>
     <Reference Include="PopupControl">
       <HintPath>..\..\DLLs\PopupControl.dll</HintPath>
@@ -134,7 +134,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppManager\DatabaseWrapper2.cs" />
     <Compile Include="AppManager\NotificationPanel.cs">
       <SubType>Form</SubType>
     </Compile>
