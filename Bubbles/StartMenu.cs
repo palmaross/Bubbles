@@ -4,7 +4,9 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Threading;
 
 namespace Bubbles
 {
@@ -81,6 +83,9 @@ namespace Bubbles
             o_TopicNotes.Text = Utils.getString("TopicNotesDlg.title");
             o_TopicNotes.ToolTipText = Utils.getString("Box.TopicNotes.tooltip");
             StixUtils.SetContextMenuImage(o_TopicNotes, "notes_detach.png");
+            o_SendToMap.Text = Utils.getString("SendToMapDlg.Title");
+            o_SendToMap.ToolTipText = Utils.getString("SendToMapDlg.tooltip");
+            StixUtils.SetContextMenuImage(o_SendToMap, "notes_detach.png");
             cmsMisc.ItemClicked += CmsMisc_ItemClicked;
 
             Color c = ColorTranslator.FromHtml("#e0e5ed");
@@ -208,6 +213,14 @@ namespace Bubbles
 
                 if (StixMain.m_topicNotes.Height < StixMain.m_topicNotes.panelMinimized.Height + 10)
                     StixMain.m_topicNotes.Bounds = StixMain.m_topicNotes.WindowExpanded;
+            }
+            else if (e.ClickedItem == o_SendToMap)
+            {
+                if (StixMain.m_sendToMap == null || StixMain.m_sendToMap.IsDisposed)
+                    StixMain.m_sendToMap = new SendToMapDlg();
+
+                if (!StixMain.m_sendToMap.Visible)
+                    StixMain.m_sendToMap.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
         }
 

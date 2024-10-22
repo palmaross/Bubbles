@@ -1,21 +1,26 @@
-﻿using Mindjet.MindManager.Interop;
+﻿using HtmlAgilityPack;
+using Mindjet.MindManager.Interop;
+using mshtml;
 using PRAManager;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using WindowsInput;
 using WindowsInput.Native;
 using Clipboard = System.Windows.Forms.Clipboard;
+using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Bubbles
 {
     internal partial class StixTextOps : Form
     {
-        public StixTextOps(int ID, string _orientation, string stickname)
+        public StixTextOps(int ID, string _orientation, string stickname = "")
         {
             InitializeComponent();
 
@@ -70,7 +75,10 @@ namespace Bubbles
             this.Paint += (o, e) => StixUtils.PaintStix(this, scaleFactor, e);
             scaleFactor = Convert.ToInt32(Utils.getRegistry("ScaleFactor_Stix", "100"));
             ScaleStick(100F, scaleFactor);
+
+            editor = new HtmlEditor(WB, "<p>Some text</p>");
         }
+        HtmlEditor editor;
 
         public void ScaleStick(float fromScale, float toScale)
         {
@@ -169,72 +177,214 @@ namespace Bubbles
 
             replace = OptionReplaceInsert.Tag.ToString() == "replace";
 
-            // If there are affected by MM API bug topic notes, update them
+            // If there are affected by MM23 API bug topic notes, update them
             if (!replace)
                 StixMain.UpdateTopicNotes(MMUtils.ActiveDocument);
 
             string rtf = Clipboard.GetText(TextDataFormat.Rtf);
+            string html = Clipboard.GetText(TextDataFormat.Html).Replace("Â", "");
+            string plain = Clipboard.GetText(TextDataFormat.UnicodeText);
 
-            StixUtils.GetLinks(OptionSourceLink.Tag.ToString() == "yes",
-                OptionInternalLinks.Tag.ToString() == "yes");
-
-            if (OptionTextFormat.Tag.ToString() == "formatted" && String.IsNullOrEmpty(rtf))
-            {
-                // we have to make the rtf through the copying Clipboard to the topic
-                pastetext = true;
-                pasteOperation = "topicnotes";
-                PastedTopics.Clear();
-
-                StixUtils.ActivateMindManager();
-                SelectedTopics[0].SelectOnly(); // get first of the selected topics
-                PasteOperations.Start(); // start timer to process formatted text
-                                         // paste from clipboard (in MM23 Selection.Paste() doesn't work!)
-                sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
-                return;
-            }
-
-            ProcessTopicNotes(rtf);
+            ProcessTopicNotes(plain, html, rtf);
         }
 
-        void ProcessTopicNotes(string rtf)
+        public string AdjustPixels(string html)
         {
-            Topic topictoselect = null; 
-            bool affected = false; falsealarm = true;
+            //IEnumerable<int> result = AllIndexesOf(html, "px");
+            int idx = 0;
+            //foreach (int i in result)
+            do
+            {
+                idx = html.IndexOf("px", idx);
+
+                if (idx == -1) break;
+
+                if (html.Substring(idx + 2, 1) != " " && html.Substring(idx + 2, 1) != ";")
+                {
+                    idx += 2;
+                    continue; // it's not a pixels
+                }
+
+                int k = idx; bool found = false; float px;
+                do
+                {
+                    string number = html.Substring(k-- - 1, 1);
+                    if (number == " " || number == ":")
+                    {
+                        found = true; k++; break;
+                    }
+                }
+                while (k > 0);
+
+                if (found)
+                {
+                    if (float.TryParse(html.Substring(k, idx - k), out px) && px != 0) // it's a number
+                    {
+                        html = html.Substring(0, k) + (px * Utils.scalingFactor).ToString() + html.Substring(idx);
+                    }
+                }
+
+                idx += 2;
+            }
+            while (idx < html.Length);
+
+            return html;
+        }
+
+        public static IEnumerable<int> AllIndexesOf(string str, string searchstring)
+        {
+            int minIndex = str.IndexOf(searchstring);
+            while (minIndex != -1)
+            {
+                yield return minIndex;
+                minIndex = str.IndexOf(searchstring, minIndex + searchstring.Length);
+            }
+        }
+
+        void ProcessTopicNotes(string plain, string html, string rtf)
+        {
+            Topic topictoselect = null;
+            bool affected = false;
+            //bool sourceproccessed = true, linksproccessed = true;
+            bool aPlain = false, aHtml = false, aWord = false, aPdf = false;
+            bool isPlain = false, failed = false;
+            falsealarm = true; 
 
             foreach (Topic t in SelectedTopics)
             {
-                if (replace) // replace topic notes text with text from Clipboard
+                if (OptionTextFormat.Tag.ToString() == "formatted")
                 {
-                    if (OptionTextFormat.Tag.ToString() == "formatted")
-                        t.Notes.TextRTF = rtf;
+                    if (html != "" && rtf == "") // from web
+                    {
+                        html = ParseClipboardHtml(false, ref isPlain);
+                        aHtml = true;
+                    }
+                    else if (rtf != "") // from word or pdf
+                    {
+                        //t.Notes.TextRTF = rtf;
+
+                        if (html != "") // from word
+                            aWord = true;
+                        else // from PDF
+                        {
+                            aPdf = true;
+                            //sourceproccessed = false; linksproccessed = false;
+                        }
+                    }
                     else
-                        t.Notes.Text = Clipboard.GetText(TextDataFormat.UnicodeText);
-
-                    affected = AddLinksToTopicNotes(t);
-                    t.Notes.Commit();
-                    topictoselect = t;
+                        aPlain = true;                    
                 }
-                else // insert text at the end
+                else // replace topic notes with plain text
                 {
-                    if (OptionTextFormat.Tag.ToString() == "formatted")
+                    // If preserve internal links
+                    if (OptionInternalLinks.Tag.ToString() == "yes" || OptionSourceLink.Tag.ToString() == "yes")
                     {
-#if !MINDJET20
-                        t.Notes.AppendRtf(rtf);
-#endif
+                        if (html != "") // web or word
+                        {
+                            html = ParseClipboardHtml(true, ref isPlain);
+                            if (rtf == "" || !isPlain) aHtml = true;
+                            if (isPlain) aPlain = true;
+                        }
+                        else // plain or PDF
+                        {
+                            if (rtf == "") aPlain = true;
+                            else aPdf = true;
+                            //sourceproccessed = false; linksproccessed = false;
+                        }
                     }
-                    else // unformatted text
-                    {
-                        t.Notes.CursorPosition = -1;
-                        t.Notes.Insert("\r\n" + Clipboard.GetText(TextDataFormat.UnicodeText));
-                    }
-
-                    AddLinksToTopicNotes(t);
-                    t.Notes.Commit();
-                    topictoselect = t;
-                    affected = true;
+                    else // no links
+                        aPlain = true;
                 }
+
+                if (replace || t.Notes.IsEmpty) // replace topic notes
+                {
+                    // From web. Source and links already proccessed
+                    if (aHtml)
+                    {
+                        string mm = @"<!DOCTYPE html PUBLIC ""-//W3C//DTD XHTML 1.0 Transitional//EN""          ""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd""><html  xmlns=""http://www.w3.org/1999/xhtml"">";
+                        string result = mm + html + "</html>";
+                        try
+                        {
+                            t.Notes.TextXHTML = result;
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(Utils.getString("TextOpsStix.pastenotes.failed"));
+                            failed = true;
+                        }
+                    }
+                    // From Word.
+                    else if (aWord)
+                    {
+                        t.Notes.TextRTF = rtf;
+
+                        // Proccess source link
+                        if (OptionSourceLink.Tag.ToString() == "yes")
+                            AppendToTopicNotes(t);
+                    }
+                    else if (aPdf)
+                    {
+                        t.Notes.TextRTF = rtf;
+                    }
+                    else if (aPlain)
+                    {
+                        t.Notes.Text = plain;
+                    }
+                }
+                else // append to topic notes
+                {
+                    // From web. Source and links already proccessed
+                    if (aHtml)
+                    {
+                        AppendToTopicNotes(t, html, false);
+                    }
+                    else if (aWord)
+                    {
+                        string _rtf = t.Notes.TextRTF;
+#if !MINDJET20
+                        falsealarm = false;
+                        t.Notes.AppendRtf(rtf);
+                        affected = true;
+#endif
+                        // Proccess source link
+                        if (OptionSourceLink.Tag.ToString() == "yes")
+                            AppendToTopicNotes(t);
+                    }
+                    else if (aPdf)
+                    {
+                        falsealarm = false;
+                        t.Notes.AppendRtf(rtf);
+                        affected = true;
+                    }
+                    else if (aPlain)
+                    {
+                        string notes = "";
+                        if (t.Notes.IsPlainTextOnly)
+                        {
+                            notes = t.Notes.Text;
+                            t.Notes.Text = notes + "\r\n" + plain;
+                        }
+                        else
+                        {
+                            notes = t.Notes.TextXHTML.Replace("</html>", "");
+                            plain = "<p>" + plain.Replace("\r\n", "</p><p>") + "</p>";
+                            t.Notes.TextXHTML = notes + plain + "</html>";
+                        }
+                    }
+                }
+
+                //if (!linksproccessed || !sourceproccessed) // rtf or plain
+                //{
+                //    StixUtils.GetLinks(OptionSourceLink.Tag.ToString() == "yes", OptionInternalLinks.Tag.ToString() == "yes");
+                //    affected = AddLinksToTopicNotes(t, !linksproccessed);
+                //}
+
+                t.Notes.Commit();
+                topictoselect = t;
+
                 StixMain.MarkOrAddTopicToBugList(t, affected);
-            }
+                if (failed) break;
+            } // end foreach topic
 
             if (topictoselect != null)
             {
@@ -245,7 +395,226 @@ namespace Bubbles
         }
         public static bool falsealarm = false;
 
-        bool AddLinksToTopicNotes(Topic t)
+        void AppendToTopicNotes(Topic t, string _html = "", bool source = true)
+        {
+            string html = t.Notes.TextXHTML.Replace("</html>", "");
+
+            if (_html != "") html += _html;
+
+            if (OptionSourceLink.Tag.ToString() == "yes" && source)
+            {
+                StixUtils.GetSourceURL(Clipboard.GetText(TextDataFormat.Html));
+                if (StixUtils.SourceURL != "")
+                {
+                    html += "<p><a href=\"" + StixUtils.SourceURL + "\"><font color=\"red\">" +
+                        Utils.getString("TextOpsStix.AddNotes.Source") + "</font></a></p>";
+                }
+            }
+            try
+            {
+                t.Notes.TextXHTML = html + "</html>";
+            }
+            catch
+            {
+                MessageBox.Show(Utils.getString("TextOpsStix.pastenotes.failed"));
+            }
+
+            falsealarm = true;
+        }
+
+        /// <summary>
+        /// Parse/clean clipboard html. Option - convert to plain and add links. 
+        /// </summary>
+        /// <param name="plainwithlinks"></param>
+        /// <returns>Clean html or plain html with links</returns>
+        string ParseClipboardHtml(bool plainwithlinks, ref bool isPlain)
+        {
+            // Clean Stix browser
+            editor.SelectAll();
+            editor.Delete();
+
+            // Paste html from clipboard to Stix browser
+            IHTMLTxtRange rng = editor.doc.selection.createRange();
+            rng.execCommand("Paste", false, null);
+            // Get clean html
+            string html = WB.Document.Body.InnerHtml;
+
+            HtmlDocument htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(html);
+
+            try
+            {
+                var form_nodes = htmlDoc.DocumentNode.SelectNodes("//*[name()='form']")?.ToList();
+                if (form_nodes != null)
+                {
+                    foreach (var form_node in form_nodes)
+                        form_node.Remove();
+                }
+            } 
+            catch { }
+
+            var img_nodes = htmlDoc.DocumentNode.SelectNodes("//*[name()='img']")?.ToList();
+            if (img_nodes != null)
+            {
+                foreach (var img_node in img_nodes)
+                {
+                    foreach (var attr in img_node.Attributes.Reverse())
+                    {
+                        if (attr.Name == "srcset")
+                            attr.Remove();
+                    }
+                }
+            }
+
+            var a_nodes = htmlDoc.DocumentNode.SelectNodes("//*[name()='a']")?.ToList();
+            if (a_nodes != null)
+            {
+                foreach (var a_node in a_nodes)
+                {
+                    foreach (var attr in a_node.Attributes.Reverse())
+                    {
+                        if (attr.Name == "name")
+                        {
+                            a_node.Remove();
+                            break;
+                        }
+                    }
+                }
+            }
+
+            var _nodes = htmlDoc.DocumentNode.SelectNodes("//*[name()='div']")?.ToList();
+            if (_nodes != null)
+            {
+                List<string> tags = new List<string>() { "div" };
+                html = RemoveDivs(htmlDoc, tags);
+                //foreach (var node in _nodes)
+                //{
+                //    try { htmlDoc.DocumentNode.RemoveChild(node, true); }
+                //    catch { }
+                //}
+            }
+            else
+                html = htmlDoc.DocumentNode.OuterHtml;
+
+            // Adjust font size to scaling factor
+            html = AdjustPixels(html);
+
+            if (html.EndsWith("<p><br></p>"))
+                html = html.Replace("<p><br></p>", "");
+
+            if (plainwithlinks)
+            {
+                //// Convert to plain text with hyperlinks ////
+
+                List<string> links = new List<string>();
+
+                if (OptionInternalLinks.Tag.ToString() == "yes")
+                {
+                    // getting the non-anchor nodes
+                    var nodes = htmlDoc.DocumentNode.SelectNodes("//*[name()='a']")?.ToList();
+
+                    if (nodes == null)
+                        isPlain = true;
+                    else
+                    {
+                        // replacing with the inner html
+                        foreach (var node in nodes)
+                        {
+                            HtmlNode rep = node.Clone();
+                            string url = "";
+                            foreach (var atr in rep.Attributes.Reverse())
+                            {
+                                if (atr.Name == "href") url = atr.Value;
+                                else atr.Remove();
+                            }
+
+                            if (rep.InnerHtml.StartsWith("<img")) // image with hyperlink
+                                rep.InnerHtml = "***" + "[picture]" + "###";
+                            else
+                                rep.InnerHtml = "***" + rep.InnerText + "###";
+
+                            links.Add(rep.InnerHtml + url);
+                            node.ParentNode.ReplaceChild(rep, node);
+                        }
+
+                        // and getting the output
+                        var output = htmlDoc.DocumentNode.OuterHtml;
+                        WB.Document.Body.InnerHtml = output;
+                    }
+                }
+                else
+                    isPlain = true;
+
+                // Get plain text
+                editor.SelectAll();
+                rng = editor.doc.selection.createRange();
+                string plain = rng.text;//.Replace("\r\n\r\n", "\r\n");
+
+                // And convert it to html
+                html = "<p>" + plain.Replace("\r\n", "</p><p>") + "</p>";
+
+                if (OptionInternalLinks.Tag.ToString() == "yes")
+                {
+                    // Add links
+                    foreach (var link in links)
+                    {
+                        string[] pair = link.Split(new string[] { "###" }, StringSplitOptions.None);
+                        string title = pair[0] + "###";
+                        string url = "<a href=\"" + pair[1] + "\">" + pair[0].Substring(3) + "</a>";
+
+                        var regex = new Regex(Regex.Escape(title));
+                        html = regex.Replace(html, url, 1);
+                    }
+                }
+                else
+                    isPlain = true;
+            }
+
+            if (OptionSourceLink.Tag.ToString() == "yes")
+            {
+                StixUtils.GetSourceURL(Clipboard.GetText(TextDataFormat.Html));
+                if (StixUtils.SourceURL != "")
+                {
+                    html += "<p><a href=\"" + StixUtils.SourceURL + "\"><font color=\"red\">" +
+                        Utils.getString("TextOpsStix.AddNotes.Source") + "</font></a></p>";
+                    isPlain = false;
+                }
+            }
+
+            return html;
+        }
+
+        string RemoveDivs(HtmlDocument htmlDoc, List<string> tagNames)
+        {
+            var tags = (from tag in htmlDoc.DocumentNode.Descendants()
+                        where tagNames.Contains(tag.Name)
+                        select tag).Reverse();
+
+            // find formatting tags
+            foreach (var item in tags)
+            {
+                if (item.PreviousSibling == null)
+                {
+                    // Prepend children to parent node in reverse order
+                    foreach (HtmlNode node in item.ChildNodes.Reverse())
+                        item.ParentNode.PrependChild(node);
+                }
+                else
+                {
+                    // Insert children after previous sibling
+                    foreach (HtmlNode node in item.ChildNodes)
+                        item.ParentNode.InsertAfter(node, item.PreviousSibling);
+                }
+
+                // remove from tree
+                item.Remove();
+            }
+
+            // return transformed html
+            return htmlDoc.DocumentNode.WriteContentTo().Trim();
+        }
+
+        bool AddLinksToTopicNotes(Topic t, bool links = true)
         {
             t.Notes.CursorPosition = -1; bool affected = false;
 
@@ -254,7 +623,7 @@ namespace Bubbles
                 t.Notes.InsertTextHyperlink(StixUtils.SourceURL, Utils.getString("TextOpsStix.AddNotes.Source"));
                 affected = true;
             }
-            if (StixUtils.Links.Count > 0)
+            if (StixUtils.Links.Count > 0 && links)
             {
                 affected = true; int i = 1;
                 foreach (string link in StixUtils.Links)
@@ -311,6 +680,7 @@ namespace Bubbles
 
         public static bool pastetext = false;
         static bool replace = false;
+
         /// <summary>
         /// Paste text from clipboard to the selected topics
         /// </summary>
@@ -452,7 +822,7 @@ namespace Bubbles
 
             if (Utils.ActiveDocumentOrSelectionNull()) return;
 
-            if (pasteOperation == "pastetotopic" || pasteOperation == "topicnotes")
+            if (pasteOperation == "pastetotopic")
                 PasteToTopic(MMUtils.ActiveDocument);
             else if (pasteOperation == "pasteastopic")
                 PasteAsTopic();
@@ -484,11 +854,6 @@ namespace Bubbles
             // Delete pasted topics
             foreach (Topic t in PastedTopics.Reverse<Topic>())
                 t.Delete();
-
-            if (pasteOperation == "topicnotes") // Paste to Notes
-            {
-                ProcessTopicNotes(rtb.Rtf); return;
-            }
 
             // Paste resulting (above) text to the selected topics
             foreach (Topic t in SelectedTopics)
@@ -774,26 +1139,29 @@ namespace Bubbles
                 StixUtils.SetTopicWidth();
         }
 
-        private void OptionButton_MouseClick(object sender, MouseEventArgs e)
+        public void OptionButton_MouseClick(object sender, MouseEventArgs e)
         {
             if (Utils.FreeVersionLimitExceeded(StixUtils.typetextops))
                 return;
 
             if (e.Button == MouseButtons.Left)
             {
-                if (sender == OptionTextFormat)
+                if (sender == OptionTextFormat || sender == StixMain.m_sendToMap.OptionTextFormat)
                 {
-                    if (OptionTextFormat.Tag.ToString() == "formatted")
+                    PictureBox pb = sender == OptionTextFormat ? OptionTextFormat : StixMain.m_sendToMap.OptionTextFormat;
+                    toolTip1 = sender == OptionTextFormat ? toolTip1 : StixMain.m_sendToMap.toolTip1;
+
+                    if (pb.Tag.ToString() == "formatted")
                     {
-                        OptionTextFormat.Tag = "unformatted";
-                        OptionTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "unformattedText.png");
-                        toolTip1.SetToolTip(OptionTextFormat, Utils.getString("TextOpsStix.workwith.unformatted"));
+                        pb.Tag = "unformatted";
+                        pb.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "unformattedText.png");
+                        toolTip1.SetToolTip(pb, Utils.getString("TextOpsStix.workwith.unformatted"));
                     }
                     else
                     {
-                        OptionTextFormat.Tag = "formatted";
-                        OptionTextFormat.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "formattedText.png");
-                        toolTip1.SetToolTip(OptionTextFormat, Utils.getString("TextOpsStix.workwith.formatted"));
+                        pb.Tag = "formatted";
+                        pb.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "formattedText.png");
+                        toolTip1.SetToolTip(pb, Utils.getString("TextOpsStix.workwith.formatted"));
                     }
                 }
                 else if (sender == OptionReplaceInsert)
@@ -967,5 +1335,14 @@ namespace Bubbles
         InputSimulator sim = new InputSimulator();
 
         public static Timer PasteOperations = new Timer();
+
+        private void WB_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+        {
+            if (!(e.Url.ToString().Equals("about:blank", StringComparison.InvariantCultureIgnoreCase)))
+            {
+                System.Diagnostics.Process.Start(e.Url.ToString());
+                e.Cancel = true;
+            }
+        }
     }
 }

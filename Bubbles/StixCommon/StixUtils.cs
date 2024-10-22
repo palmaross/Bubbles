@@ -606,7 +606,6 @@ namespace Bubbles
         /// </summary>
         public static void GetLinks(bool source_link, bool internal_links)
         {
-            bool aWord = false;
             Links.Clear(); SourceURL = "";
 
             if (!source_link && !internal_links) return;
@@ -617,31 +616,9 @@ namespace Bubbles
 
             if (!String.IsNullOrEmpty(html)) // from html page or from WORD document
             {
-                // Get source url and detect if it's a word document
-
-                //Word.Application WordObj;
-                //WordObj = (Word.Application)Marshal.GetActiveObject("Word.Application");
-                //List<string> doc_list = new List<string>();
-                //for (int q = 0; q < WordObj.Windows.Count; q++)
-                //{
-                //    object idx = q + 1;
-                //    Word.Window WinObj = WordObj.Windows.get_Item(ref idx);
-                //    doc_list.Add(WinObj.Document.FullName);
-                //}
-
-                //string docPath = WordObj.ActiveDocument.FullName;
-
-                int i = html.IndexOf("SourceURL:");
-                if (i > 0) // yes, there is a source url
+                if (source_link)
                 {
-                    i += 10; // skip the "SourceURL:"
-                    int k = html.IndexOf("\r\n", i);
-                    if (k > 0) SourceURL = html.Substring(i, k - i);
-
-                    if (!source_link || SourceURL.ToLower().EndsWith(".doc") || SourceURL.ToLower().EndsWith(".docx"))
-                    {
-                        SourceURL = ""; aWord = true;
-                    }
+                    GetSourceURL(html);
                 }
 
                 // Get links from code. <a href="">
@@ -657,6 +634,7 @@ namespace Bubbles
             // Get links from rtf (but not from MSWord!) or plain text
             if (internal_links)
             {
+                bool aWord = rtf != "" && html != "";
                 if (!String.IsNullOrEmpty(rtf) && !aWord)
                     text = rtf;
 
@@ -673,6 +651,18 @@ namespace Bubbles
         }
         public static List<string> Links = new List<string>();
         public static string SourceURL = "";
+
+        public static void GetSourceURL(string html)
+        {
+            SourceURL = "";
+            int i = html.IndexOf("SourceURL:");
+            if (i > 0) // yes, there is a source url
+            {
+                i += 10; // skip the "SourceURL:"
+                int k = html.IndexOf("\r\n", i);
+                if (k > 0) SourceURL = html.Substring(i, k - i);
+            }
+        }
 
         public static bool ActivateMindManager()
         {

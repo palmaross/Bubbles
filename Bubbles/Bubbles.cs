@@ -1284,6 +1284,13 @@ namespace Bubbles
                 m_ManageAudio = null;
             }
 
+            if (m_sendToMap != null && m_sendToMap.Visible)
+            {
+                m_sendToMap.Hide();
+                m_sendToMap.Dispose();
+                m_sendToMap = null;
+            }
+
             if (m_StixBase.Visible)
                 m_StixBase.Hide();
             m_StixBase.Dispose();
@@ -1361,6 +1368,8 @@ namespace Bubbles
 
         public static ResourcesDlg m_Resources;
         public static LinksDlg m_Links;
+        public static SendToMapDlg m_sendToMap;
+        public static StixTextOps m_stixText;
 
         public static StixTaskInfo m_TaskInfo;
 

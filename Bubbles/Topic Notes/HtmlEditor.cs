@@ -28,7 +28,8 @@ namespace Bubbles
                 contentDiv = doc.getElementsByTagName("div")[0];
                 contentDiv.innerHtml = htmlContent;
 
-                StixMain.m_topicNotes.SelectonChanged(webBrowser);
+                if (StixMain.m_topicNotes != null)
+                    StixMain.m_topicNotes.SelectonChanged(webBrowser);
                 //webBrowser.Document.AttachEventHandler("onselectionchange", SelectionChanged);
 
                 // Detach the event handler before attaching

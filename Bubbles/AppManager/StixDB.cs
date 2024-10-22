@@ -12,6 +12,8 @@ namespace Bubbles
             {
                 case "Audio":
                     dbName = "OmniStix Audio"; dbFile = "audio.db"; break;
+                //case "SendToMap":
+                //    dbName = "OmniStix SendToMap"; dbFile = "sentomap.db"; break;
             }
         }
 
@@ -209,6 +211,28 @@ namespace Bubbles
                 );
         }
 
+        public void SendToMapAddGroup(string name)
+        {
+            m_db.ExecuteNonQuery("insert into AUDIOGROUPS values(NULL, `"
+                + name + "`, "
+                + "'', 0"
+                + ");"
+                );
+        }
+
+        public void SendToMapAdd(string mapName, string mapPath, string topicGuid, string topicName, int groupID = 1)
+        {
+            m_db.ExecuteNonQuery("insert into SENDTOMAP values(`"
+                + mapName + "`, `"
+                + mapPath + "`, `"
+                + topicGuid + "`, `"
+                + topicName + "`, "
+                + groupID + ", "
+                + "'', 0"
+                + ");"
+                );
+        }
+
         public override void CreateDatabase(string dbFile)
         {
             Random r = new Random();
@@ -324,6 +348,14 @@ namespace Bubbles
                     // "custom###topic1###topic2###topic3###etc..."
                     // "increment###start,end,step,position"
                     // topicType: "subtopic", "nexttopic" or "topicbefore"
+                    m_db.ExecuteNonQuery("END");
+                    break;
+                case "SendToMap":
+                    m_db.ExecuteNonQuery("CREATE TABLE SENDTOMAPGROUPS(id INTEGER PRIMARY KEY, groupName text, " +
+                        "reserved1 text, reserved2 integer);");
+                    m_db.ExecuteNonQuery("CREATE TABLE SENDTOMAP(" +
+                        "mappath text, mapname text, topicguid text, topicname text, groupID integer, " +
+                        "reserved1 text, reserved2 integer);");
                     m_db.ExecuteNonQuery("END");
                     break;
                 case "Misc":

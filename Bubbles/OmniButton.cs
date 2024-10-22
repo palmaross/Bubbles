@@ -102,6 +102,21 @@ namespace Bubbles
                 int Y = MMUtils.MindManager.Top;
                 if (Y < rec.Y) Y = rec.Y; // correct MindManager top position when MM is maximized
                 this.Location = new Point(X, Y);
+
+                if (SendToMapDlg.MMHidden)
+                    this.Left -= this.Width;
+                else
+                {
+                    if (MMUtils.MindManager.WindowState == MmWindowState.mmWindowStateNormal &&
+                        StixMain.m_sendToMap != null && StixMain.m_sendToMap.Visible &&
+                        SendToMapDlg.MMHidding != true)
+                    {
+                        MMUtils.MindManager.Width = SendToMapDlg.MMWIdth; 
+                        MMUtils.MindManager.Height = SendToMapDlg.MMHeight;
+                        MMUtils.MindManager.Top = SendToMapDlg.MMTop; 
+                        MMUtils.MindManager.Left = SendToMapDlg.MMLeft;
+                    }
+                }
             }
 
             // Check if the Resource group is changed

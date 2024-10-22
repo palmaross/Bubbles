@@ -73,6 +73,7 @@
             this.o_TopicNotes = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.myToolTip1 = new Bubbles.MyToolTip();
+            this.o_SendToMap = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.stxAddTopics)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxTextOps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxFormat)).BeginInit();
@@ -452,32 +453,33 @@
             this.o_Resources,
             this.o_Navigator,
             this.o_SearchTopics,
-            this.o_TopicNotes});
+            this.o_TopicNotes,
+            this.o_SendToMap});
             this.cmsMisc.Name = "cmsMisc";
-            this.cmsMisc.Size = new System.Drawing.Size(146, 92);
+            this.cmsMisc.Size = new System.Drawing.Size(181, 136);
             // 
             // o_Resources
             // 
             this.o_Resources.Name = "o_Resources";
-            this.o_Resources.Size = new System.Drawing.Size(145, 22);
+            this.o_Resources.Size = new System.Drawing.Size(180, 22);
             this.o_Resources.Text = "Resources";
             // 
             // o_Navigator
             // 
             this.o_Navigator.Name = "o_Navigator";
-            this.o_Navigator.Size = new System.Drawing.Size(145, 22);
+            this.o_Navigator.Size = new System.Drawing.Size(180, 22);
             this.o_Navigator.Text = "Navigator";
             // 
             // o_SearchTopics
             // 
             this.o_SearchTopics.Name = "o_SearchTopics";
-            this.o_SearchTopics.Size = new System.Drawing.Size(145, 22);
+            this.o_SearchTopics.Size = new System.Drawing.Size(180, 22);
             this.o_SearchTopics.Text = "Search Topics";
             // 
             // o_TopicNotes
             // 
             this.o_TopicNotes.Name = "o_TopicNotes";
-            this.o_TopicNotes.Size = new System.Drawing.Size(145, 22);
+            this.o_TopicNotes.Size = new System.Drawing.Size(180, 22);
             this.o_TopicNotes.Text = "Topic Notes";
             // 
             // timer1
@@ -489,6 +491,12 @@
             // 
             this.myToolTip1.OwnerDraw = true;
             this.myToolTip1.ShowAlways = true;
+            // 
+            // o_SendToMap
+            // 
+            this.o_SendToMap.Name = "o_SendToMap";
+            this.o_SendToMap.Size = new System.Drawing.Size(180, 22);
+            this.o_SendToMap.Text = "Send To Map";
             // 
             // StartMenu
             // 
@@ -580,5 +588,6 @@
         public System.Windows.Forms.PictureBox pMyTooltipOffset;
         private MyToolTip myToolTip1;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.ToolStripMenuItem o_SendToMap;
     }
 }

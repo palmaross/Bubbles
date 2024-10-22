@@ -53,6 +53,7 @@
             this.pTopicWidth = new System.Windows.Forms.PictureBox();
             this.cmsTopicWidths = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.myToolTip1 = new Bubbles.MyToolTip();
+            this.WB = new System.Windows.Forms.WebBrowser();
             ((System.ComponentModel.ISupportInitialize)(this.PasteLink)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PasteNotes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pCopyTopicText)).BeginInit();
@@ -321,6 +322,16 @@
             this.myToolTip1.OwnerDraw = true;
             this.myToolTip1.ShowAlways = true;
             // 
+            // WB
+            // 
+            this.WB.Location = new System.Drawing.Point(43, 33);
+            this.WB.MinimumSize = new System.Drawing.Size(20, 20);
+            this.WB.Name = "WB";
+            this.WB.Size = new System.Drawing.Size(258, 156);
+            this.WB.TabIndex = 102;
+            this.WB.Visible = false;
+            this.WB.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.WB_Navigating);
+            // 
             // StixTextOps
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -328,6 +339,7 @@
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(350, 30);
             this.ControlBox = false;
+            this.Controls.Add(this.WB);
             this.Controls.Add(this.pTopicWidth);
             this.Controls.Add(this.OptionInternalLinks);
             this.Controls.Add(this.OptionSourceLink);
@@ -394,5 +406,6 @@
         private MyToolTip myToolTip1;
         public System.Windows.Forms.PictureBox pTopicWidth;
         public System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.WebBrowser WB;
     }
 }
