@@ -13,10 +13,12 @@ using AppManager;
 using System.IO;
 using NAudio.Wave;
 using Bubbles.AppManager;
+using System.Threading;
+using Timer = System.Windows.Forms.Timer;
 
 namespace Bubbles
 {
-    class StixMain : MMBase
+    public class StixMain : MMBase
     {
         public void Create()
         {
@@ -450,12 +452,12 @@ namespace Bubbles
         /// <param name="doc"></param>
         public static void UpdateTopicNotes(Document doc, List<string> topics = null)
         {
-            if (Utils.ActiveDocumentOrSelectionNull(false)) return;
+            if (doc == null || doc.Selection.OfType<Topic>().Count() == 0) return;
 
             if (topics == null)
             {
                 topics = new List<string>();
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                foreach (Topic t in doc.Selection.OfType<Topic>())
                     topics.Add(t.Guid);
             }
 
@@ -517,6 +519,9 @@ namespace Bubbles
 
         public override void onDocumentActivated(MMEventArgs aArgs)
         {
+            if (m_sendToMap != null && m_sendToMap.Visible)
+                m_sendToMap.SelectedTopicShow();
+
             // max. 150ms if there are many main topics
             if (m_MapNavigator != null && m_MapNavigator.Visible) m_MapNavigator.Init();
             else if (m_MapNavigatorDlg != null && m_MapNavigatorDlg.Visible) m_MapNavigatorDlg.Init();
@@ -572,9 +577,9 @@ namespace Bubbles
                 // Paste operation from MindManager.
                 else if (StixUtils.TopicAutoWidth) // Topic autowidth enabled
                 {
+                    StixUtils.TopicWidthList.Clear();
                     StixUtils.TopicWidthList.Add(t);
                     StixUtils.SetTopicWidth();
-                    StixUtils.TopicWidthList.Clear();
                 }
 
                 // Process MapNavigator Stix. It will also process MP window
@@ -622,6 +627,8 @@ namespace Bubbles
             // last visible document is closing
             if (MMUtils.MindManager.VisibleDocuments.Count == 1 && m_MapNavigator != null)
                 m_MapNavigator.Init();
+            if (m_sendToMap != null && m_sendToMap.Visible)
+                m_sendToMap.SelectedTopicShow();
         }
 
         public override void onDocumentClosed(MMEventArgs aArgs)
@@ -645,6 +652,11 @@ namespace Bubbles
                 {
                     // If map selection changed, change the dates in the TaskInfo stick with selected topic dates
                     SetDates();
+                }
+
+                if (m_sendToMap != null && m_sendToMap.Visible)
+                {
+                    m_sendToMap.SelectedTopicShow();
                 }
 
                 // Process FormatStix
@@ -1330,7 +1342,8 @@ namespace Bubbles
             StixTextOps.PasteOperations.Stop();
             StixTextOps.PasteOperations.Dispose(); StixTextOps.PasteOperations = null;
 
-            StixTextOps.PastedTopics.Clear(); StixTextOps.SelectedTopics.Clear();
+            StixTextOps.PastedTopics.Clear(); StixTextOps.SelectedTopics.Clear(); 
+            StixTextOps.SendToMap.Clear(); StixTextOps.Doc = null;
 
             DocumentStorage.Unsubscribe(this);
 
@@ -1343,6 +1356,15 @@ namespace Bubbles
             saveMapsTimer.Dispose(); saveMapsTimer = null;
 
             m_OmniSound.Destroy();
+
+            foreach (Document doc in MMUtils.MindManager.AllDocuments)
+            {
+                if (!doc.Window.IsVisible)
+                {
+                    doc.Save();
+                    Thread.Sleep(100); doc.Close();
+                }
+            }
 
             m_bCreated = false;
         }

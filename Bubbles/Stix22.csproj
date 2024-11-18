@@ -341,6 +341,9 @@
     <Compile Include="StixText\TopicWidthsDlg.Designer.cs">
       <DependentUpon>TopicWidthsDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="StixText\TreeViewNonHSB.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="StixTools\EditToolDlg.cs">
       <SubType>Form</SubType>
     </Compile>

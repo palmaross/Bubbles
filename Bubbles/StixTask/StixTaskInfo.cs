@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace Bubbles
 {
-    internal partial class StixTaskInfo : Form
+    public partial class StixTaskInfo : Form
     {
         public StixTaskInfo(int ID, string _orientation, string stickname = "")
         {

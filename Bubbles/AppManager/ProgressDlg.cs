@@ -20,7 +20,7 @@ namespace Bubbles
 		public bool m_abortPressed = false;
 	}
 
-	internal class ProgressDlgParams : Object
+    public class ProgressDlgParams : Object
 	{
 		public ProgressDlgParams() { }
 		public override string ToString()
@@ -40,7 +40,7 @@ namespace Bubbles
 		public string abortTitle = Utils.getString("dashboard.progressdialog.abort.caption");
 	}
 
-	internal class ThreadedProgressDlg : Object
+	public class ThreadedProgressDlg : Object
 	{
 		private ProgressDlg m_dlg = null;
 		private Thread m_thread = null;

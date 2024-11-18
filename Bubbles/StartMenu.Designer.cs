@@ -58,7 +58,7 @@
             this.panelBoxes = new System.Windows.Forms.Panel();
             this.pMyTooltipOffset = new System.Windows.Forms.PictureBox();
             this.boxQuickTopics = new System.Windows.Forms.PictureBox();
-            this.boxResources = new System.Windows.Forms.PictureBox();
+            this.Misc = new System.Windows.Forms.PictureBox();
             this.OmniSound = new System.Windows.Forms.PictureBox();
             this.Stickers = new System.Windows.Forms.PictureBox();
             this.p2 = new System.Windows.Forms.PictureBox();
@@ -71,9 +71,9 @@
             this.o_Navigator = new System.Windows.Forms.ToolStripMenuItem();
             this.o_SearchTopics = new System.Windows.Forms.ToolStripMenuItem();
             this.o_TopicNotes = new System.Windows.Forms.ToolStripMenuItem();
+            this.o_SendToMap = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.myToolTip1 = new Bubbles.MyToolTip();
-            this.o_SendToMap = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.stxAddTopics)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxTextOps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stxFormat)).BeginInit();
@@ -88,7 +88,7 @@
             this.panelBoxes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pMyTooltipOffset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxQuickTopics)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.boxResources)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Misc)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.OmniSound)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Stickers)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).BeginInit();
@@ -328,7 +328,7 @@
             this.panelBoxes.BackColor = System.Drawing.Color.Moccasin;
             this.panelBoxes.Controls.Add(this.pMyTooltipOffset);
             this.panelBoxes.Controls.Add(this.boxQuickTopics);
-            this.panelBoxes.Controls.Add(this.boxResources);
+            this.panelBoxes.Controls.Add(this.Misc);
             this.panelBoxes.Controls.Add(this.OmniSound);
             this.panelBoxes.Controls.Add(this.boxBookmarks);
             this.panelBoxes.Controls.Add(this.boxSources);
@@ -364,19 +364,19 @@
             this.boxQuickTopics.Tag = "1";
             this.boxQuickTopics.MouseDown += new System.Windows.Forms.MouseEventHandler(this.boxQuickTopics_MouseDown);
             // 
-            // boxResources
+            // Misc
             // 
-            this.boxResources.BackColor = System.Drawing.Color.Moccasin;
-            this.boxResources.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.boxResources.Image = ((System.Drawing.Image)(resources.GetObject("boxResources.Image")));
-            this.boxResources.Location = new System.Drawing.Point(144, 6);
-            this.boxResources.Name = "boxResources";
-            this.boxResources.Size = new System.Drawing.Size(24, 24);
-            this.boxResources.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.boxResources.TabIndex = 99;
-            this.boxResources.TabStop = false;
-            this.boxResources.Tag = "1";
-            this.boxResources.MouseDown += new System.Windows.Forms.MouseEventHandler(this.boxResources_MouseDown);
+            this.Misc.BackColor = System.Drawing.Color.Moccasin;
+            this.Misc.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Misc.Image = ((System.Drawing.Image)(resources.GetObject("Misc.Image")));
+            this.Misc.Location = new System.Drawing.Point(144, 6);
+            this.Misc.Name = "Misc";
+            this.Misc.Size = new System.Drawing.Size(24, 24);
+            this.Misc.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Misc.TabIndex = 99;
+            this.Misc.TabStop = false;
+            this.Misc.Tag = "1";
+            this.Misc.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Misc_MouseDown);
             // 
             // OmniSound
             // 
@@ -482,6 +482,13 @@
             this.o_TopicNotes.Size = new System.Drawing.Size(180, 22);
             this.o_TopicNotes.Text = "Topic Notes";
             // 
+            // o_SendToMap
+            // 
+            this.o_SendToMap.Name = "o_SendToMap";
+            this.o_SendToMap.Size = new System.Drawing.Size(180, 22);
+            this.o_SendToMap.Text = "Send To Map";
+            this.o_SendToMap.Visible = false;
+            // 
             // timer1
             // 
             this.timer1.Interval = 1000;
@@ -491,12 +498,6 @@
             // 
             this.myToolTip1.OwnerDraw = true;
             this.myToolTip1.ShowAlways = true;
-            // 
-            // o_SendToMap
-            // 
-            this.o_SendToMap.Name = "o_SendToMap";
-            this.o_SendToMap.Size = new System.Drawing.Size(180, 22);
-            this.o_SendToMap.Text = "Send To Map";
             // 
             // StartMenu
             // 
@@ -533,7 +534,7 @@
             this.panelBoxes.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pMyTooltipOffset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxQuickTopics)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.boxResources)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Misc)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.OmniSound)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Stickers)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.p2)).EndInit();
@@ -577,7 +578,7 @@
         private System.Windows.Forms.ContextMenuStrip cmsOmniSound;
         private System.Windows.Forms.ToolStripMenuItem TopicPlayer;
         private System.Windows.Forms.ToolStripMenuItem TopicRecorder;
-        private System.Windows.Forms.PictureBox boxResources;
+        private System.Windows.Forms.PictureBox Misc;
         private System.Windows.Forms.ContextMenuStrip cmsMisc;
         private System.Windows.Forms.ToolStripMenuItem o_Resources;
         private System.Windows.Forms.ToolStripMenuItem ManageAudio;

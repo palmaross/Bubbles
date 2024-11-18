@@ -7,7 +7,7 @@ namespace StixAppManager
     using Bubbles;
     using Community.CsharpSqlite;
 
-	internal class DatabaseWrapper : Object, IDisposable
+	public class DatabaseWrapper : Object, IDisposable
 	{
 		public virtual string getDatabaseName()
 		{

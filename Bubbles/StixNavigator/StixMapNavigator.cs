@@ -10,7 +10,7 @@ using Image = System.Drawing.Image;
 
 namespace Bubbles
 {
-    internal partial class StixMapNavigator : Form
+    public partial class StixMapNavigator : Form
     {
         public StixMapNavigator(int ID, string _orientation, string stickname)
         {
@@ -834,7 +834,7 @@ namespace Bubbles
         public static string ATTR_POSITION = "POSITION";
     }
 
-    internal class BookmarkItem
+    public class BookmarkItem
     {
         public BookmarkItem(string topicName, string topicGuid, string topicType = "")
         {
@@ -852,7 +852,7 @@ namespace Bubbles
         }
     }
 
-    internal class PositionItem
+    public class PositionItem
     {
         public PositionItem(string topicName, string topicGuid, int number)
         {

@@ -13,7 +13,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace Bubbles
 {
-    internal partial class TopicNotesDlg : Form
+    public partial class TopicNotesDlg : Form
     {
         private DOMListener Listener;
         public HtmlEditor editor;

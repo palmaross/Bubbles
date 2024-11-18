@@ -109,11 +109,15 @@ namespace Bubbles
                 {
                     if (MMUtils.MindManager.WindowState == MmWindowState.mmWindowStateNormal &&
                         StixMain.m_sendToMap != null && StixMain.m_sendToMap.Visible &&
-                        SendToMapDlg.MMHidding != true)
+                        SendToMapDlg.MMHidding == false)
                     {
-                        MMUtils.MindManager.Width = SendToMapDlg.MMWIdth; 
+                        if (SendToMapDlg.MMTop == StixMain.m_sendToMap.Top &&
+                            SendToMapDlg.MMWIdth == StixMain.m_sendToMap.Width - StixMain.m_sendToMap.MM.Width)
+                            return;
+
+                        MMUtils.MindManager.Width = SendToMapDlg.MMWIdth;
                         MMUtils.MindManager.Height = SendToMapDlg.MMHeight;
-                        MMUtils.MindManager.Top = SendToMapDlg.MMTop; 
+                        MMUtils.MindManager.Top = SendToMapDlg.MMTop;
                         MMUtils.MindManager.Left = SendToMapDlg.MMLeft;
                     }
                 }

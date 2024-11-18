@@ -103,6 +103,13 @@ namespace Bubbles
 
                 lblWait.Visible = true;
                 HtmlWeb web = new HtmlWeb();
+
+                web.PreRequest = delegate (System.Net.HttpWebRequest webReq)
+                {
+                    webReq.Timeout = 6000; // number of milliseconds
+                    return true;
+                };
+
                 try
                 {
                     htmlDoc = web.Load(link);
@@ -143,8 +150,15 @@ namespace Bubbles
                 catch { }
             }
 
-            if (!String.IsNullOrEmpty(title))
+            if (String.IsNullOrEmpty(title))
+            {
+                txtTitle.Text = Utils.getString("NewLinkDlg.title.fail");
+                txtTitle.SelectAll();
+            }
+            else
                 txtTitle.Text = title;
+
+            lblWait.Visible = false;
 
             if (grBoxDownload.Visible)
                 this.Height = thisHeight;
@@ -229,6 +243,11 @@ namespace Bubbles
             }
 
             SaveNewLink(title, link);
+            if (from == "InfoPicker")
+            {
+                StixMain.m_sendToMap.ShowSuccess(true);
+                this.Close();
+            }
 
             lblResult.Text = Utils.getString("NewLinkDlg.lblResult");
             if (!newLink)
@@ -263,7 +282,7 @@ namespace Bubbles
                     if (dt.Rows.Count > 0) return; // to do message to user
                     if (groupID == 0) return;
 
-                    //if (fromLinksDlg)
+                    if (LinksDialog != null)
                     {
                         LinksDialog.AddToTable(title, link, LinksDialog.selectedNode.Text, comment, groupID);
                         LinksDialog.txtComment.Text = comment;

@@ -45,6 +45,9 @@
     <OutputPath>bin\Win32\Release-OL\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Words">
+      <HintPath>C:\Program Files\MindManager 24\Aspose.Words.dll</HintPath>
+    </Reference>
     <Reference Include="Community.CsharpSqlite4">
       <HintPath>..\..\Common\Community.CsharpSqlite4.dll</HintPath>
     </Reference>
@@ -202,6 +205,9 @@
     </Compile>
     <Compile Include="StixText\SendToMapDlg.Designer.cs">
       <DependentUpon>SendToMapDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StixText\TreeViewNonHSB.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="StixTopic\AddTopicTemplateDlg.cs">
       <SubType>Form</SubType>
@@ -589,10 +595,22 @@
     <Content Include="images\empty_icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\fail.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\folder_opened.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\icon_selected.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\like.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\MindManager.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\MindManager_hide.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\notesSearchBlack.png">
@@ -622,7 +640,16 @@
     <Content Include="images\soundTopics.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\sourcelink_active_first.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\textstix_setting.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\tool.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\unformattedtext_links.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\AppsToIgnore.txt">

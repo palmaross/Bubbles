@@ -5,6 +5,7 @@ using PRAManager;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -15,10 +16,11 @@ using WindowsInput.Native;
 using Clipboard = System.Windows.Forms.Clipboard;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 using Timer = System.Windows.Forms.Timer;
+using Image = System.Drawing.Image;
 
 namespace Bubbles
 {
-    internal partial class StixTextOps : Form
+    public partial class StixTextOps : Form
     {
         public StixTextOps(int ID, string _orientation, string stickname = "")
         {
@@ -34,7 +36,8 @@ namespace Bubbles
             if (orientation == "V") {
                 orientation = "H"; Rotate(); }
 
-            toolTip1.SetToolTip(subtopic, Utils.getString("TextOpsStix.pastesubtopic"));
+            toolTip1.SetToolTip(subtopic, Utils.getString("TextOpsStix.pastesubtopic") +
+                Utils.getString("TextOpsStix.pastesubtopic2"));
             toolTip1.SetToolTip(pPasteToTopic, Utils.getString("TextOpsStix.pPaste.tooltip"));
             toolTip1.SetToolTip(pCopyTopicText, Utils.getString("TextOpsStix.pCopy.tooltip"));
             toolTip1.SetToolTip(PasteLink, Utils.getString("TextOpsStix.PasteLink.tooltip"));
@@ -50,16 +53,43 @@ namespace Bubbles
             toolTip1.SetToolTip(OptionSourceLink, Utils.getString("TextOpsStix.sourcelink_no"));
             toolTip1.SetToolTip(OptionInternalLinks, Utils.getString("TextOpsStix.internallinks_no"));
 
-            myToolTip1.SetToolTip(pictureHandle, stickname +
+            toolTip1.SetToolTip(pictureHandle, stickname +
                 Utils.getString("StixTextOps.description") + Utils.getString("HeadIcon.tooltip.tips"));
             toolTip1.SetToolTip(Manage, Utils.getString("ManageIcon.tooltip"));
 
             cmsTopicWidths.ItemClicked += ContextMenu_ItemClicked;
+            cmsOptions.ItemClicked += ContextMenu_ItemClicked;
             cmsCommon.ItemClicked += ContextMenu_ItemClicked;
+
+            ToolStripItem tsi = cmsCommon.Items.Add(Utils.getString("textops.manage.saveoptions"));
+            tsi.Name = "cm_saveoptions";
+            tsi.ImageScaling = ToolStripItemImageScaling.None;
+            tsi.Image = new Bitmap(Image.FromFile(Utils.ImagesPath + "textstix_setting.png"), cmiSize.Size);
 
             StixUtils.SetCommonContextMenu(cmsCommon, StixUtils.typetextops);
 
+            cmsOptions.Closing += CmsOptions_Closing;
+
             PopulateTopicWidths();
+
+            string[] options = Utils.getRegistry("PasteOptionsStix", "unformatted,textreplace,single,sourceno,linksno").Split(',');
+
+            OptionTextFormat.Tag = options.Contains(tag_unformatted) ? tag_formatted : 
+                options.Contains(tag_formatted) ? tag_unformatted_links : tag_unformatted;
+            OptionButton_MouseClick(OptionTextFormat, null);
+
+            OptionReplaceInsert.Tag = options.Contains(tag_textreplace) ? tag_textadd : tag_textreplace;
+            OptionButton_MouseClick(OptionReplaceInsert, null);
+
+            OptionMultipleTopics.Tag = options.Contains(tag_single) ? tag_multiple : tag_single;
+            OptionButton_MouseClick(OptionMultipleTopics, null);
+
+            OptionSourceLink.Tag = options.Contains(tag_sourceno) ? tag_source_first : 
+                options.Contains(tag_sourceyes) ? tag_sourceno : tag_sourceyes;
+            OptionButton_MouseClick(OptionSourceLink, null);
+
+            OptionInternalLinks.Tag = options.Contains(tag_linksyes) ? tag_linksno : tag_linksyes;
+            OptionButton_MouseClick(OptionInternalLinks, null);
 
             // Resizing window causes black strips...
             this.DoubleBuffered = true;
@@ -77,8 +107,17 @@ namespace Bubbles
             ScaleStick(100F, scaleFactor);
 
             editor = new HtmlEditor(WB, "<p>Some text</p>");
+
+            StixMain.m_stixText = this;
         }
-        HtmlEditor editor;
+
+        private void CmsOptions_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        {
+            if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
+                e.Cancel = true;
+        }
+
+        public HtmlEditor editor;
 
         public void ScaleStick(float fromScale, float toScale)
         {
@@ -147,6 +186,35 @@ namespace Bubbles
                     StixUtils.GetChildLocation(this, dlg.Bounds, orientation, "scale");
                 dlg.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
             }
+            else if (e.ClickedItem.Name == "cm_saveoptions")
+            {
+                string options = OptionTextFormat.Tag.ToString() + "," +
+                    OptionReplaceInsert.Tag.ToString() + "," +
+                    OptionMultipleTopics.Tag.ToString() + "," +
+                    OptionSourceLink.Tag.ToString() + "," +
+                    OptionInternalLinks.Tag.ToString();
+
+                Utils.setRegistry("PasteOptionsStix", options);
+            }
+            else if (e.ClickedItem.Name == "cm_highlightLinks")
+            {
+                if (cm_highlightLinks.Checked)
+                {
+                    OptionTextFormat.Image = Image.FromFile(Utils.ImagesPath + "unformattedtext.png");
+                    op_highlightlinks = false;
+                    OptionTextFormat.Tag = tag_unformatted;
+                }
+                else
+                {
+                    OptionTextFormat.Image = Image.FromFile(Utils.ImagesPath + "unformattedtext_links.png");
+                    op_highlightlinks = true;
+                    OptionTextFormat.Tag = tag_unformatted_links;
+                }
+            }
+            else if (e.ClickedItem.Name == "cm_firstTopicOnly")
+            {
+
+            }
         }
 
         public void Rotate()
@@ -175,17 +243,20 @@ namespace Bubbles
             SelectedTopics.Clear();
             SelectedTopics.AddRange(MMUtils.ActiveDocument.Selection.OfType<Topic>());
 
-            replace = OptionReplaceInsert.Tag.ToString() == "replace";
+            GetOptions();
+            ProcessTopicNotes(false, MMUtils.ActiveDocument);
+        }
 
-            // If there are affected by MM23 API bug topic notes, update them
-            if (!replace)
-                StixMain.UpdateTopicNotes(MMUtils.ActiveDocument);
+        void GetOptions()
+        {
+            op_formatted = OptionTextFormat.Tag.ToString() == tag_formatted;
+            op_replace = OptionReplaceInsert.Tag.ToString() == tag_textreplace;
+            op_single = OptionMultipleTopics.Tag.ToString() == tag_single;
+            op_source = OptionSourceLink.Tag.ToString() != tag_sourceno;
+            op_links = OptionInternalLinks.Tag.ToString() == tag_linksyes;
 
-            string rtf = Clipboard.GetText(TextDataFormat.Rtf);
-            string html = Clipboard.GetText(TextDataFormat.Html).Replace("Â", "");
-            string plain = Clipboard.GetText(TextDataFormat.UnicodeText);
-
-            ProcessTopicNotes(plain, html, rtf);
+            op_highlightlinks = OptionTextFormat.Tag.ToString() == tag_unformatted_links;
+            op_sourceonfirst = OptionSourceLink.Tag.ToString() == tag_source_first;
         }
 
         public string AdjustPixels(string html)
@@ -241,8 +312,16 @@ namespace Bubbles
             }
         }
 
-        void ProcessTopicNotes(string plain, string html, string rtf)
+        public void ProcessTopicNotes(bool sendtomap = false, Document doc = null)
         {
+            // If there are affected by MM23 API bug topic notes, update them
+            if (!op_replace)
+                StixMain.UpdateTopicNotes(doc);
+
+            string rtf = Clipboard.GetText(TextDataFormat.Rtf);
+            string html = Clipboard.GetText(TextDataFormat.Html).Replace("Â", "");
+            string plain = Clipboard.GetText(TextDataFormat.UnicodeText);
+
             Topic topictoselect = null;
             bool affected = false;
             //bool sourceproccessed = true, linksproccessed = true;
@@ -252,7 +331,7 @@ namespace Bubbles
 
             foreach (Topic t in SelectedTopics)
             {
-                if (OptionTextFormat.Tag.ToString() == "formatted")
+                if (op_formatted)
                 {
                     if (html != "" && rtf == "") // from web
                     {
@@ -277,7 +356,7 @@ namespace Bubbles
                 else // replace topic notes with plain text
                 {
                     // If preserve internal links
-                    if (OptionInternalLinks.Tag.ToString() == "yes" || OptionSourceLink.Tag.ToString() == "yes")
+                    if (op_links || op_source)
                     {
                         if (html != "") // web or word
                         {
@@ -296,7 +375,7 @@ namespace Bubbles
                         aPlain = true;
                 }
 
-                if (replace || t.Notes.IsEmpty) // replace topic notes
+                if (op_replace || t.Notes.IsEmpty) // replace topic notes
                 {
                     // From web. Source and links already proccessed
                     if (aHtml)
@@ -319,7 +398,7 @@ namespace Bubbles
                         t.Notes.TextRTF = rtf;
 
                         // Proccess source link
-                        if (OptionSourceLink.Tag.ToString() == "yes")
+                        if (op_source)
                             AppendToTopicNotes(t);
                     }
                     else if (aPdf)
@@ -347,7 +426,7 @@ namespace Bubbles
                         affected = true;
 #endif
                         // Proccess source link
-                        if (OptionSourceLink.Tag.ToString() == "yes")
+                        if (op_source)
                             AppendToTopicNotes(t);
                     }
                     else if (aPdf)
@@ -375,7 +454,7 @@ namespace Bubbles
 
                 //if (!linksproccessed || !sourceproccessed) // rtf or plain
                 //{
-                //    StixUtils.GetLinks(OptionSourceLink.Tag.ToString() == "yes", OptionInternalLinks.Tag.ToString() == "yes");
+                //    StixUtils.GetLinks(OptionSourceLink.Tag.ToString() == tag_linksyes, OptionInternalLinks.Tag.ToString() == tag_linksyes);
                 //    affected = AddLinksToTopicNotes(t, !linksproccessed);
                 //}
 
@@ -386,12 +465,16 @@ namespace Bubbles
                 if (failed) break;
             } // end foreach topic
 
-            if (topictoselect != null)
+            if (topictoselect != null && !sendtomap)
             {
                 topictoselect.SelectOnly();
                 topictoselect.SnapIntoView();
                 topictoselect = null;
             }
+
+            pastetext = true;
+            if (failed && sendtomap) pastetext = false;
+            failed = false;
         }
         public static bool falsealarm = false;
 
@@ -401,7 +484,7 @@ namespace Bubbles
 
             if (_html != "") html += _html;
 
-            if (OptionSourceLink.Tag.ToString() == "yes" && source)
+            if (op_source && source)
             {
                 StixUtils.GetSourceURL(Clipboard.GetText(TextDataFormat.Html));
                 if (StixUtils.SourceURL != "")
@@ -508,7 +591,7 @@ namespace Bubbles
 
                 List<string> links = new List<string>();
 
-                if (OptionInternalLinks.Tag.ToString() == "yes")
+                if (op_links)
                 {
                     // getting the non-anchor nodes
                     var nodes = htmlDoc.DocumentNode.SelectNodes("//*[name()='a']")?.ToList();
@@ -553,7 +636,7 @@ namespace Bubbles
                 // And convert it to html
                 html = "<p>" + plain.Replace("\r\n", "</p><p>") + "</p>";
 
-                if (OptionInternalLinks.Tag.ToString() == "yes")
+                if (op_links)
                 {
                     // Add links
                     foreach (var link in links)
@@ -570,7 +653,7 @@ namespace Bubbles
                     isPlain = true;
             }
 
-            if (OptionSourceLink.Tag.ToString() == "yes")
+            if (op_source)
             {
                 StixUtils.GetSourceURL(Clipboard.GetText(TextDataFormat.Html));
                 if (StixUtils.SourceURL != "")
@@ -639,7 +722,7 @@ namespace Bubbles
             //if (pb.Name == "pPasteTopic")
             //    StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste, "paste");
             //else
-            //    StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste, "add");
+            //    StickUtils.ShowCommandPopup(this, orientation, StickUtils.typepaste, tag_textadd);
         }
 
         private void pCopy_MouseClick(object sender, MouseEventArgs e)
@@ -648,7 +731,9 @@ namespace Bubbles
             {
                 if (Utils.ActiveDocumentOrSelectionNull()) return;
 
-                if (OptionTextFormat.Tag.ToString() == "unformatted")
+                GetOptions();
+
+                if (!op_formatted)
                 {
                     string text = "";
                     foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
@@ -679,7 +764,6 @@ namespace Bubbles
         }
 
         public static bool pastetext = false;
-        static bool replace = false;
 
         /// <summary>
         /// Paste text from clipboard to the selected topics
@@ -690,13 +774,13 @@ namespace Bubbles
             {
                 StixUtils.TopicWidthList.Clear();
 
-                // Get links from copied text
-                StixUtils.GetLinks(OptionSourceLink.Tag.ToString() == "yes", 
-                    OptionInternalLinks.Tag.ToString() == "yes");
-
                 if (Utils.ActiveDocumentOrSelectionNull()) return;
+                Doc = MMUtils.ActiveDocument;
 
-                replace = OptionReplaceInsert.Tag.ToString() == "replace";
+                GetOptions();
+
+                // Get links from copied text
+                StixUtils.GetLinks(op_source, op_links);
 
                 SelectedTopics.Clear();
                 SelectedTopics.AddRange(MMUtils.ActiveDocument.Selection.OfType<Topic>());
@@ -704,7 +788,7 @@ namespace Bubbles
                 bool singleforced = !Clipboard.ContainsData(System.Windows.DataFormats.Html) &&
                     !Clipboard.ContainsData(System.Windows.DataFormats.Rtf);
 
-                if (OptionTextFormat.Tag.ToString() == "formatted" && !singleforced)
+                if (op_formatted && !singleforced)
                 {
                     transFormatted = true;
                     if (Clipboard.ContainsData(System.Windows.DataFormats.Rtf)) // we have the rtf text already
@@ -718,13 +802,16 @@ namespace Bubbles
                     {
                         pastetext = true;
                         PastedTopics.Clear();
-
-                        StixUtils.ActivateMindManager();
                         pasteOperation = "pastetotopic";
-                        SelectedTopics[0].SelectOnly(); // select the first of selected topics
-                        PasteOperations.Start(); // start timer to process pasted topics
-                                                 // paste text from clipboard (in MM23 Selection.Paste() doesn't work!)
-                        sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
+//#if MINDJET23
+                        {
+                            StixUtils.ActivateMindManager();
+                            SelectedTopics[0].SelectOnly(); // select the first of selected topics
+                            PasteOperations.Start(); // start timer to process pasted topics
+                                                     // paste text from clipboard (in MM23 Selection.Paste() doesn't work!)
+                            sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
+                        }
+//#else
                     }
                 }
                 else // paste unformatted text
@@ -748,7 +835,7 @@ namespace Bubbles
 
             foreach (Topic t in SelectedTopics)
             {
-                if (replace || pastetopic) // replace topic text with formatted text from Clipboard
+                if (op_replace || pastetopic) // replace topic text with formatted text from Clipboard
                     t.Title.TextRTF = rtf;
                 else
                     t.Title.InsertTextRTF(t.Text.Length + 1, rtf);
@@ -776,7 +863,7 @@ namespace Bubbles
 
             foreach (Topic t in SelectedTopics)
             {
-                if (replace) // replace topic text with unformatted text from Clipboard
+                if (op_replace) // replace topic text with unformatted text from Clipboard
                     t.Text = text;
                 else // append unformatted text from Clipboard to
                      // (possibly formatted, we can't check it!) topic text
@@ -814,29 +901,37 @@ namespace Bubbles
                 StixUtils.SetTopicWidth();
         }
 
-        
-
         public void PasteOperations_Tick(object sender, EventArgs e)
         {
             PasteOperations.Stop();
+            SendToMapDlg.activate = true;
 
-            if (Utils.ActiveDocumentOrSelectionNull()) return;
+            if (Doc == null || Doc.Selection.OfType<Topic>().Count() == 0) return;
+
+            Document ActiveDocument = MMUtils.ActiveDocument;
+            if (Doc != ActiveDocument) Doc.Activate();
 
             if (pasteOperation == "pastetotopic")
-                PasteToTopic(MMUtils.ActiveDocument);
+                PasteToTopic(Doc);
             else if (pasteOperation == "pasteastopic")
-                PasteAsTopic();
+                TrsPasteAsTopic();
 
             pastetext = false;
 
-            //Transaction _tr = MMUtils.ActiveDocument.NewTransaction("Paste to Topic");
-            //_tr.IsUndoable = true;
-            //_tr.Execute += new ITransactionEvents_ExecuteEventHandler(PasteOperationsTick);
-            //_tr.Start();
+            Clipboard.Clear();
+            if (restoreClipboard != null)
+                Clipboard.SetDataObject(restoreClipboard); 
+            restoreClipboard = null;
+
+            if (ActiveDocument != Doc) ActiveDocument.Activate();
         }
+        public static Document Doc = null;
         public static List<Topic> PastedTopics = new List<Topic>();
         public static List<Topic> SelectedTopics = new List<Topic>();
+        public static List<Topic> SendToMap = new List<Topic>();
         static string pasteOperation = "";
+        static DataObject restoreClipboard = null;
+        static bool sendtomap = false;
 
         public void PasteToTopic(Document pDocument)
         {
@@ -860,7 +955,7 @@ namespace Bubbles
             {
                 if (pasteOperation == "pastetotopic") // Paste To Topic
                 {
-                    if (replace)
+                    if (op_replace)
                         t.Title.TextRTF = rtb.Rtf;
                     else // add text to the end of topic text
                     {
@@ -891,11 +986,26 @@ namespace Bubbles
             PastedTopics.Clear(); SelectedTopics.Clear();
         }
 
-        public void PasteAsTopic()
+        public void TrsPasteAsTopic()
         {
+            Transaction _tr = MMUtils.ActiveDocument.NewTransaction("Paste");
+            _tr.IsUndoable = true;
+            _tr.Execute += new ITransactionEvents_ExecuteEventHandler(PasteAsTopic);
+            _tr.Start();
+        }
+
+        /// <summary>
+        /// Proccess _pasted_ topics. Via Ctrl+V or Selection.Paste().
+        /// </summary>
+        public void PasteAsTopic(Document doc)
+        {
+            paste_success = false;
+
+            if (PastedTopics.Count == 0) return;
+            if (PastedTopics.Count == 1) op_single = true;
+
             // or <Paste as Callout> or <Paste as Parent>
-            bool onetopic = OptionMultipleTopics.Tag.ToString() == "single" || 
-                transTopicType == "Callout" || transTopicType == "ParentTopic";
+            bool onetopic = op_single || transTopicType == "Callout" || transTopicType == "ParentTopic";
 
             rtb.Clear();
             StixUtils.TopicWidthList.Clear();
@@ -908,48 +1018,78 @@ namespace Bubbles
                     rtb.Select(rtb.TextLength, 0);
                     //append the topic rtf
                     rtb.SelectedRtf = t.Title.TextRTF;
+                    rtb.AppendText("\r\n");
                 }
-            }
 
-            if (onetopic) // Delete pasted topics
+                string first = rtb.Rtf.Substring(0, rtb.Rtf.Length - 20);
+                string last = rtb.Rtf.Substring(rtb.Rtf.Length - 20).Replace("\\par", "");
+                rtb.Rtf = first + last;
+
+                // Delete pasted topics
                 foreach (Topic t in PastedTopics.Reverse<Topic>())
                     t.Delete();
+            }
 
             // Paste resulting (above) text to the selected topics
             int p = 0, i = 0; // selected topics count
             foreach (Topic t in SelectedTopics)
             {
                 p++; i++;
-                Topic frameTopic = null;
+                Topic addedTopic = null;
                 {
                     if (onetopic) // Also, Callout and Parent topic
                     {
-                        frameTopic = StixUtils.AddTopic(t, transTopicType, rtb.Rtf, true, true);
-                        if (!StixUtils.TopicWidthList.Contains(frameTopic))
-                            StixUtils.TopicWidthList.Add(frameTopic);
+                        string text = rtb.Rtf;
+                        if (Utils.MM21 || Utils.MM22)
+                        {
+                            List<string> l = new List<string>();
+                            text = StixUtils.CleanRtf(text, ref l);
+                        }
+                        addedTopic = StixUtils.AddTopic(t, transTopicType, text, true, true);
+                        if (!StixUtils.TopicWidthList.Contains(addedTopic))
+                            StixUtils.TopicWidthList.Add(addedTopic);
                     }
-                    else // Multiple topics to paste. Subtopic, Next Topic or Topic before
+                    else // We have multiple topics. Add them as Subtopic, Next Topic or Topic before
                     {
-                        foreach (Topic _t in StixTextOps.PastedTopics)
+                        bool sourcelink = true;
+                        foreach (Topic _t in PastedTopics)
                         {
                             if (!StixUtils.TopicWidthList.Contains(_t))
                                 StixUtils.TopicWidthList.Add(_t);
+#if MINDJET21 || MINDJET22  // MM21 and 22 
+                            // MM21 and 22 don't paste links. Add links topic per topic.
 
-                            // Add the Source URL to the FIRST topic
-                            // Other topics have links already
-                            if (i++ == 1 && StixUtils.SourceURL != "")
+                                string text = _t.Title.TextRTF;
+                                List<string> l = new List<string>();
+                                text = StixUtils.CleanRtf(text, ref l);
+                                _t.Title.TextRTF = text;
+
+                                if (op_links)
+                                    foreach (string link in l)
+                                        _t.Hyperlinks.AddHyperlink(link);
+#endif
+                            // Add the Source URL.
+                            // Other topics have links already.
+                            if (sourcelink && StixUtils.SourceURL != "")
                             {
                                 _t.Hyperlinks.AddHyperlink(StixUtils.SourceURL);
                                 if (_t.Hyperlinks.Count > 1)
                                     _t.Hyperlinks.MoveToTop(_t.Hyperlinks.Count);
+                                if (op_sourceonfirst) // Source Link is added on the first topic only.
+                                    sourcelink = false;
                             }
 
                             // FIRST selected topic. <subtopic> is already in the place.
                             // Move <next topic> or <topic before> to the appropiate place. 
                             if (transTopicType == "subtopic" && p == 1)
                             {
-                                if (OptionTextFormat.Tag.ToString() == "unformatted")
-                                    _t.Font.SetAutomatic(63);
+                                if (!op_formatted)
+                                {
+                                    if (!op_highlightlinks)
+                                        _t.Title.Text = _t.Text;
+                                    else
+                                        _t.Font.SetAttributeAutomatic(63);
+                                }
                                 if (!StixUtils.TopicWidthList.Contains(_t))
                                     StixUtils.TopicWidthList.Add(_t);
                             }
@@ -972,23 +1112,29 @@ namespace Bubbles
                                 foreach (Hyperlink link in _t.Hyperlinks)
                                     StixUtils.Links.Add(link.Address);
 
-                                if (OptionTextFormat.Tag.ToString() == "formatted")
-                                    frameTopic = StixUtils.AddTopic(t, transTopicType, _t.Title.TextRTF, true);
+                                if (op_formatted)
+                                    addedTopic = StixUtils.AddTopic(t, transTopicType, _t.Title.TextRTF, true);
                                 else
-                                    frameTopic = StixUtils.AddTopic(t, transTopicType, _t.Text);
+                                    addedTopic = StixUtils.AddTopic(t, transTopicType, _t.Text);
 
-                                if (!StixUtils.TopicWidthList.Contains(frameTopic))
-                                    StixUtils.TopicWidthList.Add(frameTopic);
+                                if (!StixUtils.TopicWidthList.Contains(addedTopic))
+                                    StixUtils.TopicWidthList.Add(addedTopic);
                             }
                         }
                     }
                 }
             }
 
+            SendToMap.Clear(); SendToMap.AddRange(StixUtils.TopicWidthList);
+
             if (StixUtils.TopicAutoWidth)
                 StixUtils.SetTopicWidth();
 
             PastedTopics.Clear(); SelectedTopics.Clear();
+            paste_success = true;
+
+            if (StixMain.m_sendToMap != null && !SendToMapDlg.endSubtopic_Click)
+                StixMain.m_sendToMap.EndSubtopic_Click();
         }
 
         private void UnformatText_Click(object sender, EventArgs e)
@@ -997,7 +1143,7 @@ namespace Bubbles
 
             foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
             {
-                t.Font.SetAutomatic(63);
+                t.Font.SetAttributeAutomatic(63);
                 t.TextColor.SetAutomatic();
             }
         }
@@ -1012,9 +1158,11 @@ namespace Bubbles
 
         public void PasteTopic_MouseClick(object sender, MouseEventArgs e)
         {
+            if (Utils.ActiveDocumentOrSelectionNull()) return;
+
             if (e.Button == MouseButtons.Left)
             {
-                PasteTopic("subtopic");
+                PasteTopic("subtopic", false, MMUtils.ActiveDocument);
             }
             else if (e.Button == MouseButtons.Right)
             {
@@ -1025,81 +1173,200 @@ namespace Bubbles
             }
         }
 
-        public void PasteTopic(string topicType)
+        public void PasteTopic(string topicType, bool sendtomap, Document doc)
         {
-            if (Utils.ActiveDocumentOrSelectionNull()) return;
+            if (doc == null) return; Doc = doc;
+
+            if (!sendtomap)
+            {
+                if (Utils.ActiveDocumentOrSelectionNull()) return;
+                GetOptions();
+
+                SelectedTopics.Clear(); TopicsToAdd.Clear();
+                SelectedTopics.AddRange(MMUtils.ActiveDocument.Selection.OfType<Topic>());
+            }
 
             transTopicType = topicType;
-            SelectedTopics.Clear(); TopicsToAdd.Clear();
-            SelectedTopics.AddRange(MMUtils.ActiveDocument.Selection.OfType<Topic>());
 
-            bool formatted = OptionTextFormat.Tag.ToString() == "formatted";
-            bool single = OptionMultipleTopics.Tag.ToString() == "single";
-            bool singleforced = !Clipboard.ContainsData(System.Windows.DataFormats.Html) &&
+            // Plain text only in the Clipboard.
+            bool plaintextonly = !Clipboard.ContainsData(System.Windows.DataFormats.Html) &&
                 !Clipboard.ContainsData(System.Windows.DataFormats.Rtf);
 
-            StixUtils.GetLinks(OptionSourceLink.Tag.ToString() == "yes",
-                OptionInternalLinks.Tag.ToString() == "yes");
+            StixUtils.GetLinks(op_source, op_links);
 
-            if (formatted && !singleforced)
+            if (op_formatted && !plaintextonly) // Paste formatted
             {
                 transFormatted = true;
-                if (single && Clipboard.ContainsData(System.Windows.DataFormats.Rtf)) // we have the rtf text already
-                {
-                    TopicsToAdd.Add(Clipboard.GetText(TextDataFormat.Rtf));
-                    TrsPasteTopic(Utils.getString("TextOpsStix.transactionname.insert"));
-                }
-                else // paste to format text
-                {
-                    pastetext = true; // for onObjectAdded event
-                    pasteOperation = "pasteastopic";
-                    PastedTopics.Clear();
 
-                    StixUtils.ActivateMindManager();
-                    SelectedTopics[0].SelectOnly(); // select the first of selected topics
-                    PasteOperations.Start(); // start timer to process pasted topics
-                                             // paste text from clipboard (in MM23 Selection.Paste() doesn't work!)
-                    sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
+                if (op_single && Clipboard.ContainsData(System.Windows.DataFormats.Rtf)) // we have the rtf text already
+                {
+                    string text = Clipboard.GetText(TextDataFormat.Rtf);
+
+                    List<string> l = new List<string>();
+                    text = StixUtils.CleanRtf(text, ref l);
+                    TopicsToAdd.Add(text);
+                    TrsPasteTopic(Utils.getString("TextOpsStix.transactionname.insert"));
+
+                    if (op_single) // paste as single topic
+                    {
+                        //if (Clipboard.ContainsData(System.Windows.DataFormats.Rtf))
+                        //{
+                        //    // We have the rtf text already.
+                        //    TopicsToAdd.Add(Clipboard.GetText(TextDataFormat.Rtf));
+                        //}
+                        //else // Convert HTML to RTF
+                        //{
+                        //    // Clean Stix browser
+                        //    editor.SelectAll();
+                        //    editor.Delete();
+
+                        //    // Paste html from clipboard to Stix browser
+                        //    IHTMLTxtRange rng = editor.doc.selection.createRange();
+                        //    rng.execCommand("Paste", false, null);
+                        //    WB.Document.Body.InnerHtml = WB.Document.Body.InnerHtml
+                        //        .Replace("<p><br></p>", "")
+                        //        .Replace("<span>&nbsp;</span>", "####");
+
+                        //    WB.Document.ExecCommand("SelectAll", false, null);
+                        //    WB.Document.ExecCommand("Copy", false, null);
+
+                        //    string text = Clipboard.GetText(TextDataFormat.Rtf).Replace("####", "\\~");
+
+                        //    TopicsToAdd.Add(text);
+                        //}
+                        // Paste one topic with formatted text from clipboard.
+                        //TrsPasteTopic(Utils.getString("TextOpsStix.transactionname.insert"));
+                    } // draft...
+                }
+                else // Paste as single topic. We can't convert html to rtf.
+                     // Paste as multiple topics. We can't split by topics.
+                {
+                    PasteTopicsViaMindManager(sendtomap);
                 }
             }
-            else // unformatted text
+            else // unformatted option or plain text in the clipboard
             {
                 transFormatted = false;
 
-                if (single || topicType == "callout" || topicType == "parenttopic") // paste as single topic with unformatted text from clipboard
+                // Paste unformatted text to a single topic.
+                if (op_single || topicType == "callout" || topicType == "parenttopic")
                 {
-                    TopicsToAdd.Add(Clipboard.GetText(TextDataFormat.UnicodeText));
-                    TrsPasteTopic(Utils.getString("TextOpsStix.transactionname.insert"));
-                }
-                else // paste as multiple topic with unformatted text from clipboard
-                {
-                    string text = Clipboard.GetText(TextDataFormat.UnicodeText);
-                    TopicsToAdd = text.Split(new[] { "\r\n", "\r", "\n" },
-                        StringSplitOptions.RemoveEmptyEntries).ToList();
-
-                    // We have formatted multiline text with links. MindManager, help!
-                    if (TopicsToAdd.Count > 1 && StixUtils.Links.Count > 1 && !singleforced)
+                    // If there are links and keep links (formatted text)
+                    if (op_highlightlinks &&  // user wants to add links and keep them highlighted
+                        op_links && StixUtils.Links.Count > 0 && // yes, there are links in the text
+                        !plaintextonly) // and text in th eclipboard is formatted
                     {
-                        pastetext = true; // for onObjectAdded event
-                        pasteOperation = "pasteastopic";
-                        PastedTopics.Clear();
+                        transFormatted = true;
 
-                        StixUtils.ActivateMindManager();
-                        SelectedTopics[0].SelectOnly(); // select the first of selected topics
-                        PasteOperations.Start(); // start timer to process pasted topics
-                                                 // paste text from clipboard (in MM23 Selection.Paste() doesn't work!)
-                        sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
+                        if (Clipboard.ContainsData(System.Windows.DataFormats.Rtf)) // good chance
+                        {
+                            string text = Clipboard.GetText(TextDataFormat.Rtf);
+                            if (Utils.MM21 || Utils.MM22)
+                            {
+                                List<string> l = new List<string>();
+                                text = StixUtils.CleanRtf(text, ref l);
+                            }
+                            TopicsToAdd.Add(text);
+                        }
+                        else
+                            PasteTopicsViaMindManager(sendtomap); // html format, we have to use MM pasting
                     }
                     else
+                        TopicsToAdd.Add(Clipboard.GetText(TextDataFormat.UnicodeText));
+
+                    TrsPasteTopic(Utils.getString("TextOpsStix.transactionname.insert"));
+                }
+                else // paste as multiple topics with unformatted text from clipboard
+                {
+                    // We have to keep links. MindManager, help!
+                    if (op_links && StixUtils.Links.Count > 0 && !plaintextonly)
+                    {
+                        PasteTopicsViaMindManager(sendtomap); // we can't convert *formatted* text to multiple topics
+                    }
+                    else // topics with plain text. No links.
+                    {
+                        string text = Clipboard.GetText(TextDataFormat.UnicodeText);
+                        TopicsToAdd = text.Split(new[] { "\r\n", "\r", "\n" },
+                            StringSplitOptions.RemoveEmptyEntries).ToList();
+
                         TrsPasteTopic(Utils.getString("TextOpsStix.transactionname.insert"));
+                    }
                 }
             }
         }
 
+        void PasteTopicsViaMindManager(bool sendtomap = false)
+        {
+            pastetext = true; // add pasted topics in the onObjectAdded event
+            pasteOperation = "pasteastopic";
+            PastedTopics.Clear();
+            SelectedTopics[0].SelectOnly(); // select the first of selected topics
+
+            if (Utils.MM21 || Utils.MM22 ||  // MM21 & 22 can't paste html
+                Utils.MM23 || // Doc.Selection.Paste() doesn't work in MM23!
+                (op_links && !op_single)) // Selection.Paste() doesn't keep links!
+            {
+                restoreClipboard = new DataObject();
+                if (Clipboard.ContainsData(DataFormats.Rtf))
+                    restoreClipboard.SetText(Clipboard.GetText(TextDataFormat.Rtf), TextDataFormat.Rtf);
+                if (Clipboard.ContainsData(DataFormats.Html))
+                    restoreClipboard.SetText(Clipboard.GetText(TextDataFormat.Html), TextDataFormat.Html);
+                if (restoreClipboard == null && Clipboard.ContainsData(DataFormats.UnicodeText))
+                    restoreClipboard.SetText(Clipboard.GetText(TextDataFormat.UnicodeText));
+
+                if (Utils.MM21 || Utils.MM22) // convert html to rtf
+                {
+                    // Clean Stix browser
+                    editor.SelectAll();
+                    editor.Delete();
+
+                    // Paste html from clipboard to Stix browser
+                    IHTMLTxtRange rng = editor.doc.selection.createRange();
+                    rng.execCommand("Paste", false, null);
+                    WB.Document.Body.InnerHtml = WB.Document.Body.InnerHtml
+                        .Replace("<p><br></p>", "")
+                        .Replace("<span>&nbsp;</span>", "####");
+
+                    WB.Document.ExecCommand("SelectAll", false, null);
+                    WB.Document.ExecCommand("Copy", false, null);
+
+                    string text = Clipboard.GetText(TextDataFormat.Rtf).Replace("####", "\\~");
+                    List<string> l = new List<string>();
+                    if (op_single)
+                        text = StixUtils.CleanRtf(text, ref l);
+
+                    Clipboard.SetText(text, TextDataFormat.Rtf);
+                }
+
+                // paste text from clipboard (in MM23 Selection.Paste() doesn't work!)
+                SendToMapDlg.activate = false;
+                if (sendtomap)
+                    SendToMapDlg.endSubtopic_Click = false;
+                StixUtils.ActivateMindManager();
+                if (Doc != MMUtils.ActiveDocument) Doc.Activate();
+                PasteOperations.Start(); // start timer to process pasted topics
+                sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
+            }
+            else // Only for MM24 without links (Selection.Paste doesn't add links)
+            {
+                //pastetext = false; // do not add pasted topics in the onObjectAdded event
+                Doc.Selection.Paste();
+
+                if (PastedTopics.Count == 0)
+                    foreach (Topic t in Doc.Selection.OfType<Topic>())
+                        PastedTopics.Add(t);
+
+                //if (PastedTopics.Count > 1)
+                //    PastedTopics.Reverse(); // Pasted topics stay selected. And selection is reversed.
+
+                TrsPasteAsTopic();
+            }
+        }
+
         /// <summary>
-        /// Topics we have to add  
+        /// Text for topics we have to add  
         /// </summary>
-        public List<string> TopicsToAdd = new List<string>();
+        public static List<string> TopicsToAdd = new List<string>();
 
         void TrsPasteTopic(string trname)
         {
@@ -1111,7 +1378,9 @@ namespace Bubbles
 
         public void PasteTopics(Document pDocument)
         {
-            if (Utils.ActiveDocumentOrSelectionNull()) return;
+            paste_success = false;
+
+            if (Doc == null || Doc.Selection.OfType<Topic>().Count() == 0) return;
 
             if (TopicsToAdd.Count > 1 && transTopicType == "nexttopic")
                 TopicsToAdd = TopicsToAdd.Reverse<string>().ToList();
@@ -1120,23 +1389,29 @@ namespace Bubbles
 
             if (transTopicType == "parenttopic") // selected topics will be subtopics of the future parent topic
             {
-                StixUtils.AddTopic(MMUtils.ActiveDocument.Selection.PrimaryTopic, transTopicType, TopicsToAdd[0], rtf, true);
+                StixUtils.AddTopic(Doc.Selection.PrimaryTopic, transTopicType, TopicsToAdd[0], rtf, true);
             }
             else
             {
                 StixUtils.TopicWidthList.Clear();
-                foreach (Topic t in MMUtils.ActiveDocument.Selection.OfType<Topic>())
+                foreach (Topic t in Doc.Selection.OfType<Topic>())
                 {
-                    bool firsttopic = true; // Source Link is added to the first topic only!
-                    foreach (var name in TopicsToAdd)
+                    bool sourcelink = true;
+                    foreach (var topictext in TopicsToAdd) // TopicsToAdd = topics' text list
                     {
-                        StixUtils.AddTopic(t, transTopicType, name, rtf, firsttopic);
-                        if (firsttopic) firsttopic = false;
+                        StixUtils.AddTopic(t, transTopicType, topictext, rtf, sourcelink);
+                        if (op_sourceonfirst) // Source Link is added on the first topic only.
+                            sourcelink = false;
                     }
                 }
             }
+
+            SendToMap.Clear(); SendToMap.AddRange(StixUtils.TopicWidthList);
+
             if (StixUtils.TopicAutoWidth)
                 StixUtils.SetTopicWidth();
+
+            paste_success = true;
         }
 
         public void OptionButton_MouseClick(object sender, MouseEventArgs e)
@@ -1144,90 +1419,128 @@ namespace Bubbles
             if (Utils.FreeVersionLimitExceeded(StixUtils.typetextops))
                 return;
 
-            if (e.Button == MouseButtons.Left)
+            PictureBox pb = sender as PictureBox;
+
+            if (e == null || e.Button == MouseButtons.Left)
             {
-                if (sender == OptionTextFormat || sender == StixMain.m_sendToMap.OptionTextFormat)
+                if (pb.Name == "OptionTextFormat")
                 {
-                    PictureBox pb = sender == OptionTextFormat ? OptionTextFormat : StixMain.m_sendToMap.OptionTextFormat;
-                    toolTip1 = sender == OptionTextFormat ? toolTip1 : StixMain.m_sendToMap.toolTip1;
+                    bool links;
 
-                    if (pb.Tag.ToString() == "formatted")
+                    if (sender == OptionTextFormat) links = OptionInternalLinks.Tag.ToString() == tag_linksyes;
+                    else links = StixMain.m_sendToMap.OptionInternalLinks.Tag.ToString() == tag_linksyes;
+
+                    if (pb.Tag.ToString() == tag_formatted)
                     {
-                        pb.Tag = "unformatted";
-                        pb.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "unformattedText.png");
-                        toolTip1.SetToolTip(pb, Utils.getString("TextOpsStix.workwith.unformatted"));
+                        pb.Tag = tag_unformatted;
+                        pb.Image = Image.FromFile(Utils.ImagesPath + "unformattedText.png");
+                        new ToolTip().SetToolTip(pb, Utils.getString("TextOpsStix.workwith.unformatted"));
+                    }
+                    else if (pb.Tag.ToString() == tag_unformatted && links)
+                    {
+                        pb.Tag = tag_unformatted_links;
+                        pb.Image = Image.FromFile(Utils.ImagesPath + "unformattedText_links.png");
+                        new ToolTip().SetToolTip(pb, Utils.getString("TextOpsStix.workwith.unformatted_options"));
                     }
                     else
                     {
-                        pb.Tag = "formatted";
-                        pb.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "formattedText.png");
-                        toolTip1.SetToolTip(pb, Utils.getString("TextOpsStix.workwith.formatted"));
+                        pb.Tag = tag_formatted;
+                        pb.Image = Image.FromFile(Utils.ImagesPath + "formattedText.png");
+                        new ToolTip().SetToolTip(pb, Utils.getString("TextOpsStix.workwith.formatted"));
                     }
                 }
-                else if (sender == OptionReplaceInsert)
+                else if (pb.Name == "OptionReplaceInsert")
                 {
-                    if (OptionReplaceInsert.Tag.ToString() == "replace")
-                    {
-                        OptionReplaceInsert.Tag = "insert";
-                        OptionReplaceInsert.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "inserttext.png");
-                        toolTip1.SetToolTip(OptionReplaceInsert, Utils.getString("textops.contextmenu.insert1"));
+                    PictureBox pPasteNotes = sender == OptionReplaceInsert ? 
+                        PasteNotes : StixMain.m_sendToMap.PasteNotes;
 
-                        PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotes.png");
-                        toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.AddNotes.tooltip"));
+                    if (pb.Tag.ToString() == tag_textreplace)
+                    {
+                        pb.Tag = "insert";
+                        pb.Image = Image.FromFile(Utils.ImagesPath + "inserttext.png");
+                        new ToolTip().SetToolTip(pb, Utils.getString("textops.contextmenu.insert1"));
+
+                        pPasteNotes.Image = Image.FromFile(Utils.ImagesPath + "PasteNotes.png");
+                        new ToolTip().SetToolTip(pPasteNotes, Utils.getString("TextOpsStix.AddNotes.tooltip"));
                     }
                     else
                     {
-                        OptionReplaceInsert.Tag = "replace";
-                        OptionReplaceInsert.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "replacetext.png");
-                        toolTip1.SetToolTip(OptionReplaceInsert, Utils.getString("textops.contextmenu.insert2"));
+                        pb.Tag = tag_textreplace;
+                        pb.Image = Image.FromFile(Utils.ImagesPath + "replacetext.png");
+                        new ToolTip().SetToolTip(pb, Utils.getString("textops.contextmenu.insert2"));
                         
-                        PasteNotes.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "PasteNotes.png");
-                        toolTip1.SetToolTip(PasteNotes, Utils.getString("TextOpsStix.PasteNotes.tooltip"));
+                        pPasteNotes.Image = Image.FromFile(Utils.ImagesPath + "PasteNotes.png");
+                        new ToolTip().SetToolTip(pPasteNotes, Utils.getString("TextOpsStix.PasteNotes.tooltip"));
                     }
                 }
-                else if (sender == OptionMultipleTopics)
+                else if (pb.Name == "OptionMultipleTopics")
                 {
-                    if (OptionMultipleTopics.Tag.ToString() == "single")
+                    if (pb.Tag.ToString() == tag_single)
                     {
-                        OptionMultipleTopics.Tag = "multiple";
-                        OptionMultipleTopics.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "cpTopicTemplate.png");
-                        toolTip1.SetToolTip(OptionMultipleTopics, Utils.getString("textops.contextmenu.multipletopics1"));
+                        pb.Tag = tag_multiple;
+                        pb.Image = Image.FromFile(Utils.ImagesPath + "cpTopicTemplate.png");
+                        new ToolTip().SetToolTip(pb, Utils.getString("textops.contextmenu.multipletopics1"));
                     }
                     else
                     {
-                        OptionMultipleTopics.Tag = "single";
-                        OptionMultipleTopics.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "cpAddSingle.png");
-                        toolTip1.SetToolTip(OptionMultipleTopics, Utils.getString("textops.contextmenu.multipletopics2"));
+                        pb.Tag = tag_single;
+                        pb.Image = Image.FromFile(Utils.ImagesPath + "cpAddSingle.png");
+                        new ToolTip().SetToolTip(pb, Utils.getString("textops.contextmenu.multipletopics2"));
                     }
                 }
-                else if (sender == OptionSourceLink)
+                else if (pb.Name == "OptionSourceLink")
                 {
-                    if (OptionSourceLink.Tag.ToString() == "no")
+                    if (pb.Tag.ToString() == tag_sourceno)
                     {
-                        OptionSourceLink.Tag = "yes";
-                        OptionSourceLink.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "sourcelink_active.png");
-                        toolTip1.SetToolTip(OptionSourceLink, Utils.getString("TextOpsStix.sourcelink_yes"));
+                        pb.Tag = tag_sourceyes;
+                        pb.Image = Image.FromFile(Utils.ImagesPath + "sourcelink_active.png");
+                        new ToolTip().SetToolTip(pb, Utils.getString("TextOpsStix.sourcelink_yes"));
+                    }
+                    else if (pb.Tag.ToString() == tag_sourceyes)
+                    {
+                        pb.Tag = tag_source_first;
+                        pb.Image = Image.FromFile(Utils.ImagesPath + "sourcelink_active_first.png");
+                        new ToolTip().SetToolTip(pb, Utils.getString("TextOpsStix.sourcelink_first"));
+                    }
+                    else if (pb.Tag.ToString() == tag_source_first)
+                    {
+                        pb.Tag = tag_sourceno;
+                        pb.Image = Image.FromFile(Utils.ImagesPath + "sourcelink.png");
+                        new ToolTip().SetToolTip(pb, Utils.getString("TextOpsStix.sourcelink_no"));
+                    }
+                }
+                else if (pb.Name == "OptionInternalLinks")
+                {
+                    if (pb.Tag.ToString() == tag_linksno)
+                    {
+                        pb.Tag = tag_linksyes;
+                        pb.Image = Image.FromFile(Utils.ImagesPath + "internallinks_active.png");
+                        new ToolTip().SetToolTip(pb, Utils.getString("TextOpsStix.internallinks_yes"));
                     }
                     else
                     {
-                        OptionSourceLink.Tag = "no";
-                        OptionSourceLink.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "sourcelink.png");
-                        toolTip1.SetToolTip(OptionSourceLink, Utils.getString("TextOpsStix.sourcelink_no"));
-                    }
-                }
-                else if (sender == OptionInternalLinks)
-                {
-                    if (OptionInternalLinks.Tag.ToString() == "no")
-                    {
-                        OptionInternalLinks.Tag = "yes";
-                        OptionInternalLinks.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "internallinks_active.png");
-                        toolTip1.SetToolTip(OptionInternalLinks, Utils.getString("TextOpsStix.internallinks_yes"));
-                    }
-                    else
-                    {
-                        OptionInternalLinks.Tag = "no";
-                        OptionInternalLinks.Image = System.Drawing.Image.FromFile(Utils.ImagesPath + "internallinks.png");
-                        toolTip1.SetToolTip(OptionInternalLinks, Utils.getString("TextOpsStix.internallinks_no"));
+                        pb.Tag = tag_linksno;
+                        pb.Image = Image.FromFile(Utils.ImagesPath + "internallinks.png");
+                        new ToolTip().SetToolTip(pb, Utils.getString("TextOpsStix.internallinks_no"));
+
+                        if (sender == OptionInternalLinks)
+                        {
+                            if (OptionTextFormat.Tag.ToString() == tag_unformatted_links)
+                            {
+                                OptionTextFormat.Tag = tag_unformatted;
+                                OptionTextFormat.Image = Image.FromFile(Utils.ImagesPath + "unformattedText.png");
+                                new ToolTip().SetToolTip(OptionTextFormat, Utils.getString("TextOpsStix.workwith.unformatted"));
+                            }
+                        }
+                        else
+                        {
+                            if (StixMain.m_sendToMap.OptionTextFormat.Tag.ToString() == tag_unformatted_links)
+                            {
+                                StixMain.m_sendToMap.OptionTextFormat.Tag = tag_unformatted;
+                                StixMain.m_sendToMap.OptionTextFormat.Image = Image.FromFile(Utils.ImagesPath + "unformattedText.png");
+                                new ToolTip().SetToolTip(StixMain.m_sendToMap.OptionTextFormat, Utils.getString("TextOpsStix.workwith.unformatted"));
+                            }
+                        }                   
                     }
                 }
             }
@@ -1323,6 +1636,23 @@ namespace Bubbles
         string orientation = "H";
         public float scaleFactor = 100;
 
+        public static bool op_formatted = false, op_replace = true, op_single = true, op_source = false, 
+            op_links = false, op_highlightlinks = true, op_sourceonfirst = false;
+
+        public const string 
+            tag_formatted = "formatted",
+            tag_unformatted = "unformatted",
+            tag_unformatted_links = "unformatted_links",
+            tag_textreplace = "textreplace",
+            tag_textadd = "textadd",
+            tag_single = "single",
+            tag_multiple = "multiple",
+            tag_sourceyes = "sourceyes",
+            tag_sourceno = "sourceno",
+            tag_source_first = "source_first",
+            tag_linksyes = "linksyes",
+            tag_linksno = "linksno";
+
         // For this_MouseDown
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
@@ -1335,6 +1665,11 @@ namespace Bubbles
         InputSimulator sim = new InputSimulator();
 
         public static Timer PasteOperations = new Timer();
+
+        /// <summary>
+        /// If the paste operation was successful
+        /// </summary>
+        public static bool paste_success = false;
 
         private void WB_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {

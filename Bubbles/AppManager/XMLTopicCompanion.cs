@@ -93,7 +93,7 @@ namespace Bubbles.AppManager
             return buf;
         }
 
-        protected XmlNamespaceManager NSManager
+        public XmlNamespaceManager NSManager
         {
             get
             {

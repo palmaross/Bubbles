@@ -3,7 +3,7 @@ using StixAppManager;
 
 namespace Bubbles
 {
-    internal class StixDB : DatabaseWrapper
+    public class StixDB : DatabaseWrapper
     {
         static string dbName, dbFile;
         public StixDB(string db) : base(db)
@@ -12,8 +12,8 @@ namespace Bubbles
             {
                 case "Audio":
                     dbName = "OmniStix Audio"; dbFile = "audio.db"; break;
-                //case "SendToMap":
-                //    dbName = "OmniStix SendToMap"; dbFile = "sentomap.db"; break;
+                case "SendToMap":
+                    dbName = "OmniStix SendToMap"; dbFile = "SendToMap.db"; break;
             }
         }
 
@@ -220,13 +220,13 @@ namespace Bubbles
                 );
         }
 
-        public void SendToMapAdd(string mapName, string mapPath, string topicGuid, string topicName, int groupID = 1)
+        public void SendToMapAdd(string mapName, string mapPath, string topicGuid, int orderID, int groupID = 1)
         {
             m_db.ExecuteNonQuery("insert into SENDTOMAP values(`"
                 + mapName + "`, `"
                 + mapPath + "`, `"
-                + topicGuid + "`, `"
-                + topicName + "`, "
+                + topicGuid + "`, "
+                + orderID + ", "
                 + groupID + ", "
                 + "'', 0"
                 + ");"
@@ -354,7 +354,7 @@ namespace Bubbles
                     m_db.ExecuteNonQuery("CREATE TABLE SENDTOMAPGROUPS(id INTEGER PRIMARY KEY, groupName text, " +
                         "reserved1 text, reserved2 integer);");
                     m_db.ExecuteNonQuery("CREATE TABLE SENDTOMAP(" +
-                        "mappath text, mapname text, topicguid text, topicname text, groupID integer, " +
+                        "mappath text, mapname text, topicguid text, orderID integer, groupID integer, " +
                         "reserved1 text, reserved2 integer);");
                     m_db.ExecuteNonQuery("END");
                     break;

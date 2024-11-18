@@ -183,7 +183,8 @@ namespace Bubbles
             if (e.Button == MouseButtons.Left)
             {
                 if (panelPasteTopic.Tag is Form ff)
-                    (ff as StixTextOps).PasteTopic((sender as PictureBox).Name.ToLower());
+                    (ff as StixTextOps).PasteTopic(
+                        (sender as PictureBox).Name.ToLower(), false, MMUtils.ActiveDocument);
             }
         }
 

@@ -4,13 +4,11 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Forms;
-using System.Windows.Threading;
 
 namespace Bubbles
 {
-    internal partial class StartMenu : Form
+    public partial class StartMenu : Form
     {
         public StartMenu()
         {
@@ -85,7 +83,7 @@ namespace Bubbles
             StixUtils.SetContextMenuImage(o_TopicNotes, "notes_detach.png");
             o_SendToMap.Text = Utils.getString("SendToMapDlg.Title");
             o_SendToMap.ToolTipText = Utils.getString("SendToMapDlg.tooltip");
-            StixUtils.SetContextMenuImage(o_SendToMap, "notes_detach.png");
+            StixUtils.SetContextMenuImage(o_SendToMap, "ql_map.png");
             cmsMisc.ItemClicked += CmsMisc_ItemClicked;
 
             Color c = ColorTranslator.FromHtml("#e0e5ed");
@@ -217,7 +215,10 @@ namespace Bubbles
             else if (e.ClickedItem == o_SendToMap)
             {
                 if (StixMain.m_sendToMap == null || StixMain.m_sendToMap.IsDisposed)
+                {
                     StixMain.m_sendToMap = new SendToMapDlg();
+                    StixMain.m_sendToMap.InitOptions();
+                }
 
                 if (!StixMain.m_sendToMap.Visible)
                     StixMain.m_sendToMap.Show(new WindowWrapper((IntPtr)MMUtils.MindManager.hWnd));
@@ -420,7 +421,7 @@ namespace Bubbles
             }
         }
 
-        private void boxResources_MouseDown(object sender, MouseEventArgs e)
+        private void Misc_MouseDown(object sender, MouseEventArgs e)
         {
             cmsMisc.Show(MousePosition);
         }
@@ -623,7 +624,9 @@ namespace Bubbles
             // 0,0 - screen2.Location, 2,358 - this.Location on the screen2
 
             if (String.IsNullOrEmpty(location))
-                thisLocation = new Point(StixMain.OmniStixButton.Location.X, this.Bottom);
+            {
+                thisLocation = new Point(StixMain.OmniStixButton.Location.X, MMUtils.MindManager.Top + this.Height);
+            }
             else
             {
                 // Location of the screen where center of MindManager is located

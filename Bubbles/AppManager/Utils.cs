@@ -18,7 +18,7 @@ using System.Threading;
 
 namespace Bubbles
 {
-    internal class Utils
+    public class Utils
     {
         public static void ErrorToSupport(string error)
         {
@@ -55,7 +55,7 @@ namespace Bubbles
             DirectoryInfo di = new DirectoryInfo(path);
 
             // Get stock icons.
-            foreach (FileInfo fi in di.GetFiles()) // perf!
+            foreach (FileInfo fi in di.GetFiles()) // perf! > 1000 ms
             {
                 string _path = fi.FullName;
                 string signature = MMUtils.MindManager.Utilities.GetCustomIconSignature(_path);
@@ -68,7 +68,7 @@ namespace Bubbles
                 StockIcons.Add(stockicon, MMstockicon);
             }
 
-            GetCustomIcons(di);  // perf!
+            GetCustomIcons(di);  // perf!!!
             StockIconsDupes.Clear();
 
             try
@@ -133,6 +133,18 @@ namespace Bubbles
 
             InitDatabases();
             InitStartedMaps(); // perf!
+
+#if MINDJET20
+    MM20 = true;
+#elif MINDJET21
+    MM21 = true;
+#elif MINDJET22
+    MM22 = true;
+#elif MINDJET23
+    MM23 = true;
+#elif MINDJET24
+    MM24 = true;
+#endif
         }
 
         public static float GetScalingFactor(int actual)
@@ -896,6 +908,8 @@ namespace Bubbles
 
         public static float scalingFactor = 1.0f;
         public static int WindowFontSize = 12;
+
+        public static bool MM20 = false, MM21 = false, MM22 = false, MM23 = false, MM24 = false;
     }
 
     class ScalingFactor

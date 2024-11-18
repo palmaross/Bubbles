@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Clipboard = System.Windows.Forms.Clipboard;
 using Color = System.Drawing.Color;
+using mshtml;
 
 namespace Bubbles
 {
@@ -474,8 +475,11 @@ namespace Bubbles
         /// <param name="text">New topic text. #default#" is a new topic default text</param>
         /// <returns>Added topic</returns>
         public static Topic AddTopic(Topic t, string topicType, string text = "#default#", 
-            bool rtf = false, bool sourceURL = false)
+            bool rtf = false, bool sourceURL = false, Document doc = null)
         {
+            if (doc == null) doc = MMUtils.ActiveDocument;
+            if (doc == null) return null;
+
             Topic newTopic;
 
             if (topicType == "subtopic")
@@ -485,10 +489,20 @@ namespace Bubbles
             else // next topic, topic before or parent topic
                 newTopic = t.ParentTopic.AllSubTopics.Add();
 
+            float fsize = newTopic.Font.Size;
+
             if (rtf)
                 newTopic.Title.TextRTF = text;
             else if (text != "#default#")
-                newTopic.Text = text;
+                newTopic.Text = text.TrimEnd(new char[] { '\r', '\n' });
+
+            if (!StixTextOps.op_formatted)
+            {
+                if (!StixTextOps.op_highlightlinks)
+                    newTopic.Title.Text = newTopic.Text;
+                else
+                    SetFontAutomatic(newTopic, fsize);
+            }
 
             if (sourceURL && SourceURL != "")
                 newTopic.Hyperlinks.AddHyperlink(SourceURL);
@@ -497,6 +511,7 @@ namespace Bubbles
 
             TopicWidthList.Add(newTopic);
 
+            // Next or Previous topic, or parent topic
             if (topicType != "subtopic" && topicType != "callout")
             {
                 // Get given topic index in the branch
@@ -511,17 +526,18 @@ namespace Bubbles
 
                 if (topicType == "parenttopic") // future parent just inserted (lines above)
                 {
-                    MMUtils.ActiveDocument.Selection.Cut();
+                    doc.Selection.Cut();
                     newTopic.SelectOnly();
 
                     // Paste copied topics. 
                     try
                     {
-                        MMUtils.ActiveDocument.Selection.Paste(); 
+                        doc.Selection.Paste(); 
                     }
                     catch // In MM23 Selection.Paste() doesn't work!
                     {
                         ActivateMindManager();
+                        if (doc != MMUtils.ActiveDocument) doc.Activate();
                         InputSimulator sim = new InputSimulator();
                         sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
                         // Text will be pasted after this (and previous) method is finished!!
@@ -529,6 +545,46 @@ namespace Bubbles
                 }
             }
             return newTopic;
+        }
+
+        public static void SetFontAutomatic(Topic t, float fsize)
+        {
+            int f = (int)MmFontAttributeFlags.mmFontAttributeFlagBold +
+                (int)MmFontAttributeFlags.mmFontAttributeFlagItalic +
+                (int)MmFontAttributeFlags.mmFontAttributeFlagName +
+                (int)MmFontAttributeFlags.mmFontAttributeFlagSize +
+                (int)MmFontAttributeFlags.mmFontAttributeFlagStrikethrough +
+                (int)MmFontAttributeFlags.mmFontAttributeFlagUnderline;
+
+            t.Font.SetAttributeAutomatic(f);
+            t.Font.Size = fsize;
+        }
+
+        public static string CleanRtf(string text, ref List<string> list)
+        {
+            // We have to handle the strings like: HYPERLINK "https://tra-ta-ta"
+            // Or: HYPERLINK "https://tra-ta-ta" \\l "cite_note-130"". \\l is a #
+
+            text = text.Replace(@""" \\l """, "#");
+
+            int index = text.IndexOf("HYPERLINK \"");
+            while (index != -1)
+            {
+                int start = text.IndexOf("\"", index + 10);
+                if (start != -1)
+                {
+                    int end = text.IndexOf("\"", start + 5);
+                    if (end != -1)
+                    {
+                        list.Add(text.Substring(start + 1, end - start - 1));
+                        text = text.Remove(index, end - index + 1);
+                    }
+                }
+
+                index = text.IndexOf("HYPERLINK \"", index);
+            }
+
+            return text.Replace("  ", " ");
         }
 
         public static List<Topic> TopicWidthList = new List<Topic>();
@@ -624,6 +680,8 @@ namespace Bubbles
                 // Get links from code. <a href="">
                 if (internal_links)
                 {
+                    InternalLinks = GetLinksFromHtml();
+
                     var r = new Regex("<a.*?href=\"(.*?)\".*?>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
                     var output = r.Matches(html).OfType<Match>().Select(x => x.Groups[1].Value);
                     foreach (var item in output)
@@ -662,6 +720,42 @@ namespace Bubbles
                 int k = html.IndexOf("\r\n", i);
                 if (k > 0) SourceURL = html.Substring(i, k - i);
             }
+        }
+
+        public static Dictionary<string, string> GetLinksFromHtml()
+        {
+            // Clean Stix browser
+            StixMain.m_stixText.editor.SelectAll();
+            StixMain.m_stixText.editor.Delete();
+
+            // Paste html from clipboard to Stix browser
+            IHTMLTxtRange rng = StixMain.m_stixText.editor.doc.selection.createRange();
+            rng.execCommand("Paste", false, null);
+            // Get clean html
+            string html = StixMain.m_stixText.WB.Document.Body.InnerHtml;
+
+            HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
+            htmlDoc.LoadHtml(html);
+
+            var a_nodes = htmlDoc.DocumentNode.SelectNodes("//*[name()='a']")?.ToList();
+            if (a_nodes != null)
+            {
+                foreach (var a_node in a_nodes)
+                {
+                    foreach (var attr in a_node.Attributes.Reverse())
+                    {
+                        string link = a_node.GetAttributeValue("href", "");
+                        string title = a_node.GetAttributeValue("title", "");
+
+                        if (String.IsNullOrEmpty(link)) continue;
+
+                        if (!InternalLinks.ContainsKey(link))
+                            InternalLinks.Add(link, title);
+                    }
+                }
+            }
+
+            return InternalLinks;
         }
 
         public static bool ActivateMindManager()
@@ -947,6 +1041,11 @@ namespace Bubbles
         public static List<IconItem> Icons = new List<IconItem>();
         public static List<BookmarkItem> Bookmarks = new List<BookmarkItem>();
         public static List<ToolItem> Tools = new List<ToolItem>();
+
+        /// <summary>
+        /// Key: link, Value: title
+        /// </summary>
+        public static Dictionary<string, string> InternalLinks = new Dictionary<string, string>();
 
         // types must match Stix names!
         public const string typestick = "stick", typebase = "StixBase",

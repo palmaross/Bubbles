@@ -9,7 +9,7 @@ using Color = System.Drawing.Color;
 
 namespace Bubbles
 {
-    internal partial class MapNavigatorDlg : Form
+    public partial class MapNavigatorDlg : Form
     {
         public MapNavigatorDlg()
         {

@@ -52,8 +52,10 @@
             this.OptionInternalLinks = new System.Windows.Forms.PictureBox();
             this.pTopicWidth = new System.Windows.Forms.PictureBox();
             this.cmsTopicWidths = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.myToolTip1 = new Bubbles.MyToolTip();
             this.WB = new System.Windows.Forms.WebBrowser();
+            this.cmsOptions = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cm_highlightLinks = new System.Windows.Forms.ToolStripMenuItem();
+            this.cm_firstTopicOnly = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.PasteLink)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PasteNotes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pCopyTopicText)).BeginInit();
@@ -70,6 +72,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.OptionSourceLink)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.OptionInternalLinks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pTopicWidth)).BeginInit();
+            this.cmsOptions.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -243,7 +246,7 @@
             this.OptionReplaceInsert.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.OptionReplaceInsert.TabIndex = 96;
             this.OptionReplaceInsert.TabStop = false;
-            this.OptionReplaceInsert.Tag = "replace";
+            this.OptionReplaceInsert.Tag = "textreplace";
             this.OptionReplaceInsert.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OptionButton_MouseClick);
             // 
             // OptionMultipleTopics
@@ -280,7 +283,7 @@
             this.OptionSourceLink.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.OptionSourceLink.TabIndex = 99;
             this.OptionSourceLink.TabStop = false;
-            this.OptionSourceLink.Tag = "no";
+            this.OptionSourceLink.Tag = "sourceno";
             this.OptionSourceLink.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OptionButton_MouseClick);
             // 
             // OptionInternalLinks
@@ -294,7 +297,7 @@
             this.OptionInternalLinks.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.OptionInternalLinks.TabIndex = 100;
             this.OptionInternalLinks.TabStop = false;
-            this.OptionInternalLinks.Tag = "no";
+            this.OptionInternalLinks.Tag = "linksno";
             this.OptionInternalLinks.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OptionButton_MouseClick);
             // 
             // pTopicWidth
@@ -317,11 +320,6 @@
             this.cmsTopicWidths.ShowImageMargin = false;
             this.cmsTopicWidths.Size = new System.Drawing.Size(36, 4);
             // 
-            // myToolTip1
-            // 
-            this.myToolTip1.OwnerDraw = true;
-            this.myToolTip1.ShowAlways = true;
-            // 
             // WB
             // 
             this.WB.Location = new System.Drawing.Point(43, 33);
@@ -331,6 +329,30 @@
             this.WB.TabIndex = 102;
             this.WB.Visible = false;
             this.WB.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.WB_Navigating);
+            // 
+            // cmsOptions
+            // 
+            this.cmsOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cm_highlightLinks,
+            this.cm_firstTopicOnly});
+            this.cmsOptions.Name = "cmsOptions";
+            this.cmsOptions.ShowCheckMargin = true;
+            this.cmsOptions.ShowImageMargin = false;
+            this.cmsOptions.Size = new System.Drawing.Size(155, 48);
+            // 
+            // cm_highlightLinks
+            // 
+            this.cm_highlightLinks.CheckOnClick = true;
+            this.cm_highlightLinks.Name = "cm_highlightLinks";
+            this.cm_highlightLinks.Size = new System.Drawing.Size(154, 22);
+            this.cm_highlightLinks.Text = "Highlight Links";
+            // 
+            // cm_firstTopicOnly
+            // 
+            this.cm_firstTopicOnly.CheckOnClick = true;
+            this.cm_firstTopicOnly.Name = "cm_firstTopicOnly";
+            this.cm_firstTopicOnly.Size = new System.Drawing.Size(154, 22);
+            this.cm_firstTopicOnly.Text = "First topic only";
             // 
             // StixTextOps
             // 
@@ -378,6 +400,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.OptionSourceLink)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.OptionInternalLinks)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pTopicWidth)).EndInit();
+            this.cmsOptions.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -403,9 +426,11 @@
         public System.Windows.Forms.PictureBox OptionSourceLink;
         public System.Windows.Forms.PictureBox OptionInternalLinks;
         private System.Windows.Forms.ContextMenuStrip cmsTopicWidths;
-        private MyToolTip myToolTip1;
         public System.Windows.Forms.PictureBox pTopicWidth;
         public System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.WebBrowser WB;
+        public System.Windows.Forms.WebBrowser WB;
+        private System.Windows.Forms.ContextMenuStrip cmsOptions;
+        private System.Windows.Forms.ToolStripMenuItem cm_highlightLinks;
+        private System.Windows.Forms.ToolStripMenuItem cm_firstTopicOnly;
     }
 }
