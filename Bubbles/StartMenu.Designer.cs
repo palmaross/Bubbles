@@ -487,7 +487,6 @@
             this.o_SendToMap.Name = "o_SendToMap";
             this.o_SendToMap.Size = new System.Drawing.Size(180, 22);
             this.o_SendToMap.Text = "Send To Map";
-            this.o_SendToMap.Visible = false;
             // 
             // timer1
             // 
