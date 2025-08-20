@@ -1163,7 +1163,7 @@ namespace Bubbles
                         if (parts.Length > 1)
                             attachGuid = parts[1];
 
-                        audioPath = ""; int groupID = 1; string filename = "";
+                        audioPath = ""; int groupID = 1;
                         DataTable dt = db.ExecuteQuery("select * from AUDIOS where id=" + id + "");
 
                         if (dt.Rows.Count > 0)

@@ -236,7 +236,6 @@ namespace Bubbles
         public override void CreateDatabase(string dbFile)
         {
             Random r = new Random();
-            int id;
 
             base.CreateDatabase(dbFile);
             m_db.ExecuteNonQuery("BEGIN EXCLUSIVE");

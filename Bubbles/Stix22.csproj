@@ -139,6 +139,9 @@
     <Compile Include="AppManager\XMLTopicCompanion.cs" />
     <Compile Include="AppManager\DatabaseWrapper.cs" />
     <Compile Include="Bubbles.cs" />
+    <Compile Include="MyToolTip.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="OmniButton.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -407,12 +410,6 @@
     <Compile Include="Topic Notes\TopicNotesDlg.Designer.cs">
       <DependentUpon>TopicNotesDlg.cs</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Stix23.csproj">
-      <Project>{243ABB0B-DD55-4E6E-8F67-ED9ACEB51A0E}</Project>
-      <Name>Stix23</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app21.config" />
