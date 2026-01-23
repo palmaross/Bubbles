@@ -37,19 +37,9 @@
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-OL|AnyCPU'">
-    <OutputPath>bin\Release-OL\</OutputPath>
-    <DefineConstants>MINDJET25, VENDOR_OL</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-OL|Win32'">
-    <OutputPath>bin\Win32\Release-OL\</OutputPath>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Aspose.Words">
-      <HintPath>C:\Program Files\MindManager 25\Aspose.Words.dll</HintPath>
-    </Reference>
     <Reference Include="Community.CsharpSqlite4">
-      <HintPath>..\..\Common\Community.CsharpSqlite4.dll</HintPath>
+      <HintPath>..\..\Community.CsharpSqlite4.dll</HintPath>
     </Reference>
     <Reference Include="CustomMarshalers" />
     <Reference Include="extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -103,7 +93,7 @@
     </Reference>
     <Reference Include="PalmaRossCommon25, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c65233492a5156a2, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Common\PalmaRossCommon\PalmaRossCommon25.dll</HintPath>
+      <HintPath>..\..\PalmaRossCommon\PalmaRossCommon\bin\Debug\PalmaRossCommon25.dll</HintPath>
     </Reference>
     <Reference Include="PopupControl">
       <HintPath>..\..\DLLs\PopupControl.dll</HintPath>

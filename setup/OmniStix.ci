@@ -727,7 +727,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                         <srclist >
                            <rows rel = unpack >
                               <_ >
-                                 <filename >d:\repos\Common\common\*.*</>
+                                 <filename >d:\repos\Common\*.*</>
                                  <recurse >0</>
                                  <justfile >0</>
                                  <emptydir >0</>
@@ -751,7 +751,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                         <runas >norm</>
                         <if ></>
                      </>
-                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
                         <children >
                            <_ tag = 0 id = unpack >
                               <desc ></>
@@ -765,7 +765,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <srclist >
                                  <rows >
                                     <_ >
-                                       <filename >d:\repos\Common\$commondll$\PalmaRossCommon21.dll</>
+                                       <filename >d:\repos\Common\PalmaRossCommon21.dll</>
                                        <recurse >0</>
                                        <justfile >1</>
                                        <emptydir >0</>
@@ -813,7 +813,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            </>
                         </>
                      </>
-                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
                         <children >
                            <_ tag = 0 id = unpack >
                               <desc ></>
@@ -827,7 +827,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <srclist >
                                  <rows >
                                     <_ >
-                                       <filename >d:\repos\Common\$commondll$\PalmaRossCommon22.dll</>
+                                       <filename >d:\repos\Common\PalmaRossCommon22.dll</>
                                        <recurse >0</>
                                        <justfile >1</>
                                        <emptydir >0</>
@@ -875,7 +875,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            </>
                         </>
                      </>
-                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
                         <children >
                            <_ tag = 0 id = unpack >
                               <desc ></>
@@ -889,7 +889,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <srclist >
                                  <rows >
                                     <_ >
-                                       <filename >d:\repos\Common\$commondll$\PalmaRossCommon23.dll</>
+                                       <filename >d:\repos\Common\PalmaRossCommon23.dll</>
                                        <recurse >0</>
                                        <justfile >1</>
                                        <emptydir >0</>
@@ -937,7 +937,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            </>
                         </>
                      </>
-                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
                         <children >
                            <_ tag = 0 id = unpack >
                               <desc ></>
@@ -951,7 +951,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <srclist >
                                  <rows >
                                     <_ >
-                                       <filename >d:\repos\Common\$commondll$\PalmaRossCommon24.dll</>
+                                       <filename >d:\repos\Common\PalmaRossCommon24.dll</>
                                        <recurse >0</>
                                        <justfile >1</>
                                        <emptydir >0</>
@@ -999,7 +999,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                            </>
                         </>
                      </>
-                     <_ tag = 0 id = if expanded = 2 disabled = 0 >
+                     <_ tag = 0 id = if expanded = 0 disabled = 0 >
                         <children >
                            <_ tag = 0 id = unpack >
                               <desc ></>
@@ -1013,7 +1013,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <srclist >
                                  <rows >
                                     <_ >
-                                       <filename >d:\repos\Common\$commondll$\PalmaRossCommon25.dll</>
+                                       <filename >d:\repos\Common\PalmaRossCommon25.dll</>
                                        <recurse >0</>
                                        <justfile >1</>
                                        <emptydir >0</>
@@ -2276,7 +2276,7 @@ Por favor, vuelva a ejecutar  la instalación de nuevo.</>
                               <_ >
                                  <valname >version</>
                                  <regtype >str</>
-                                 <value >1.0.9.4</>
+                                 <value >1.0.9.5</>
                                  <if ></>
                                  <comm ></>
                               </>
@@ -3682,7 +3682,7 @@ Please try further.</>
          <_ >
             <varname >exename</>
             <value1 >OmniStixSetup</>
-            <value2 >OmniStixOLSetup</>
+            <value2 ></>
             <value3 ></>
             <value4 ></>
             <value5 ></>
@@ -3705,7 +3705,7 @@ Please try further.</>
          <_ >
             <varname >appname</>
             <value1 >OmniStix</>
-            <value2 >OmniStixOL</>
+            <value2 ></>
             <value3 ></>
             <value4 ></>
             <value5 ></>
@@ -3728,7 +3728,7 @@ Please try further.</>
          <_ >
             <varname >commondll</>
             <value1 >PalmaRossCommon</>
-            <value2 >PalmaRossCommonOL</>
+            <value2 ></>
             <value3 ></>
             <value4 ></>
             <value5 ></>
@@ -3750,8 +3750,8 @@ Please try further.</>
          </>
          <_ >
             <varname >version</>
-            <value1 >1.0.9.4</>
-            <value2 >1.0.9.4</>
+            <value1 >1.0.9.5</>
+            <value2 ></>
             <value3 ></>
             <value4 ></>
             <value5 ></>

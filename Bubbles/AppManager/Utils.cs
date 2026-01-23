@@ -89,6 +89,8 @@ namespace Bubbles
                     Directory.CreateDirectory(m_dataPath + "ToolStixApps");
                 if (!Directory.Exists(m_dataPath + "AppIconDB"))
                     Directory.CreateDirectory(m_dataPath + "AppIconDB");
+                if (!Directory.Exists(m_localDataPath))
+                    Directory.CreateDirectory(m_localDataPath);
 
                 if (!File.Exists(m_dataPath + "AppsToIgnore.txt"))
                     File.Copy(dllPath + "AppsToIgnore.txt", m_dataPath + "AppsToIgnore.txt");
@@ -216,11 +218,7 @@ namespace Bubbles
                     db.AddLinkGroup("Group 1.1", 2, 1);
                     db.AddLinkGroup("Group 1.2", 2, 2);
 
-#if VENDOR_OL
-                    db.AddLink(getString("tools.demo1.title"), "http://www.olympic-limited.co.uk/", "http", "", "", 1);
-#else
                     db.AddLink(getString("tools.demo1.title"), "https://palmaross.com/", "http", "", "", 1);
-#endif
                     db.AddLink(getString("tools.demo2.title"), dllPath + "OmniStix.chm", "chm", "", "", 1);
                     db.AddLink(getString("tools.demo4.title"), "https://www.youtube.com/watch?v=U92A8H2rK2I", "youtube", "", "", 1);
                 }

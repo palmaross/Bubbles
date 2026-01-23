@@ -37,16 +37,10 @@
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-OL|AnyCPU'">
-    <OutputPath>bin\Release-OL\</OutputPath>
-    <DefineConstants>MINDJET23, VENDOR_OL</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-OL|Win32'">
-    <OutputPath>bin\Win32\Release-OL\</OutputPath>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Community.CsharpSqlite4">
-      <HintPath>..\..\Common\Community.CsharpSqlite4.dll</HintPath>
+    <Reference Include="Community.CsharpSqlite4, Version=3.7.7.1, Culture=neutral, PublicKeyToken=c3dfbcf789af31c4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Community.CsharpSqlite4.dll</HintPath>
     </Reference>
     <Reference Include="CustomMarshalers" />
     <Reference Include="extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -98,11 +92,11 @@
     <Reference Include="NAudio.WinMM, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.WinMM.2.2.1\lib\netstandard2.0\NAudio.WinMM.dll</HintPath>
     </Reference>
-    <Reference Include="PalmaRossCommon23, Version=1.0.0.0, Culture=neutral, PublicKeyToken=057dcba4e358e84f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Common\PalmaRossCommon\PalmaRossCommon23.dll</HintPath>
+    <Reference Include="PalmaRossCommon23">
+      <HintPath>..\..\PalmaRossCommon\PalmaRossCommon\bin\Release\PalmaRossCommon23.dll</HintPath>
     </Reference>
-    <Reference Include="PopupControl">
+    <Reference Include="PopupControl, Version=1.5.0.37336, Culture=neutral, PublicKeyToken=04c10344d6495b18, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\DLLs\PopupControl.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
